@@ -132,7 +132,6 @@ export function update_grid_from_cityio() {
     } else {
       // black outs the non-read pixels
       thisCell.position.z = 0;
-      thisCell.scale.x = 0.5;
       thisCell.material.color.set("rgb(255,255,255)");
     }
   }
