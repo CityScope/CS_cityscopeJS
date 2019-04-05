@@ -44,6 +44,9 @@ export async function getCityIO(url) {
     .then(function(cityIOdata) {
       // console.log("got cityIO table at " + cityIOdata.meta.timestamp);
       return cityIOdata;
+    })
+    .catch(err => {
+      console.log("Error from '" + this.apiName + "':", err);
     });
 }
 
