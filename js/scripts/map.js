@@ -77,6 +77,15 @@ export function makeMap() {
     Storage.threeGrid = threebox.scene.children[0].children[1].children[0];
   }
 
+  function rotateCamera(timestamp) {
+    // clamp the rotation between 0 -360 degrees
+    // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
+    map.rotateTo((timestamp / 300) % 360, { duration: 0 });
+    // Request the next frame of the animation.
+    requestAnimationFrame(rotateCamera);
+  }
+
+  /*
   function reset_camera_position(angle) {
     // clamp the rotation between 0 -360 degrees
     // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
@@ -91,13 +100,6 @@ export function makeMap() {
       });
   }
 
-  function rotateCamera(timestamp) {
-    // clamp the rotation between 0 -360 degrees
-    // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
-    map.rotateTo((timestamp / 100) % 360, { duration: 0 });
-    // Request the next frame of the animation.
-    requestAnimationFrame(rotateCamera);
-  }
 
   function find_middle_of_model(
     scence_origin_position,
@@ -134,6 +136,7 @@ export function makeMap() {
         reset_camera_position(-cityIOdata.header.spatial.rotation);
       }
     });
+    */
 
   Storage.map = map;
 }
