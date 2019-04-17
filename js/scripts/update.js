@@ -74,7 +74,7 @@ export function update_grid_from_cityio() {
     },
     {
       type: "Open Space",
-      color: "#13f797",
+      color: "#13a500",
       height: 0
     },
     {

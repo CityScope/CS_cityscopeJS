@@ -39,27 +39,55 @@ export function makeMap() {
       }
     });
 
-    //add the custom THREE layer
-    map.addLayer({
-      id: "custom_layer",
-      type: "custom",
-      onAdd: function(map, gl) {
-        onAdd(map, gl);
-      },
-      render: function(gl, matrix) {
-        threebox.update();
-      }
-    });
-
     //add the point simulation layer
     map.addLayer({
       id: "MultiPoint",
       source: "simData",
       type: "heatmap",
       paint: {
-        "heatmap-radius": 10
+        // Increase the heatmap weight based on frequency and property magnitude
+        "heatmap-weight": [
+          "interpolate",
+          ["linear"],
+          ["get", "mag"],
+          3,
+          0,
+          6,
+          1
+        ],
+
+        "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 0, 1, 9, 3],
+
+        "heatmap-color": [
+          "interpolate",
+          ["linear"],
+          ["heatmap-density"],
+          0,
+          "rgba(33,102,172,0)",
+          0.2,
+          "rgb(209,229,240)",
+          0.4,
+          "rgb(103,169,207)",
+          0.6,
+          "rgb(100,100,200)",
+          0.8,
+          "rgb(100,0,200)",
+          1,
+          "rgb(200,0,100)"
+        ]
       }
-    });
+    }),
+      //add the custom THREE layer
+      map.addLayer({
+        id: "custom_layer",
+        type: "custom",
+        onAdd: function(map, gl) {
+          onAdd(map, gl);
+        },
+        render: function(gl, matrix) {
+          threebox.update();
+        }
+      });
   });
 
   function onAdd(map, mbxContext) {
