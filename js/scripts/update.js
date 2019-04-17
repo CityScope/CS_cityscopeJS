@@ -1,5 +1,6 @@
 import "./Storage";
 import "babel-polyfill";
+import * as cityIOdemo from "./lib/cityio_demo.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
@@ -34,8 +35,9 @@ export async function update() {
  * @param cityIOtableURL cityIO API endpoint URL
  */
 export async function getCityIO(url) {
-  // let cityIOtableURL = Storage.cityIOurl;
+  return cityIOdemo;
 
+  // let cityIOtableURL = Storage.cityIOurl;
   // console.log("trying to fetch " + cityIOtableURL);
   return fetch(url)
     .then(function(response) {

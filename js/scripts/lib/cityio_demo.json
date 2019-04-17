@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "id": "demo",
+    "timestamp": 1550859322038,
+    "apiv": "2.1.0"
+  },
+  "header": {
+    "name": "grasbrook",
+    "spatial": {
+      "nrows": 25,
+      "ncols": 55,
+      "physical_longitude": 53.5369,
+      "physical_latitude": 10.00748,
+      "longitude": 53.536898,
+      "latitude": 10.007472,
+      "cellSize": 16,
+      "rotation": 325
+    },
+    "owner": {
+      "name": "Ariel Noyman",
+      "title": "",
+      "institute": "City Science MIT Media Lab"
+    },
+    "block": ["type"],
+    "mapping": {
+      "type": {
+        "0": "BLACK",
+        "1": "WHITE",
+        "2": "ROAD",
+        "3": "BUILDING"
+      }
+    }
+  },
+  "grid": [[0, 2], [2, 2], [3, 2], [2, 2], [1, 2], [1, 2]],
+  "objects": {}
+}
