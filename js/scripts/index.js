@@ -59,7 +59,7 @@ async function init() {
   makeMap();
   let mapbox_div_element = document.querySelector("#mapDIV");
   // maptastic the div
-  // Maptastic(mapbox_div_element);
+  Maptastic(mapbox_div_element);
 
   //run the update
   window.setInterval(update, update_interval);
