@@ -4,6 +4,8 @@ import { create_threeJS_grid_form_cityIO } from "./three";
 
 export function makeMap() {
   let cityIOdata = Storage.cityIOdata;
+  console.log(cityIOdata);
+
   // table physical loction
   let table_lat = cityIOdata.header.spatial.latitude;
   let table_lon = cityIOdata.header.spatial.longitude;
@@ -95,7 +97,7 @@ export function makeMap() {
     threebox.setupDefaultLights();
     // adds the 3d cityscope gemoerty
     threebox.addAtCoordinate(
-      create_threeJS_grid_form_cityIO()[0],
+      create_threeJS_grid_form_cityIO(),
       scence_origin_position,
       {
         preScale: 1

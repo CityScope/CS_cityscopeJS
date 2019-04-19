@@ -5,13 +5,6 @@ import * as ABMdemo from "./lib/abm_demo.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export async function update_abm_simulation() {
-  //deal with simulation data update and storage
-  Storage.simData = ABMdemo;
-  Storage.map.getSource("simData").setData(Storage.simData.objects.points);
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 /**
  * controls the cityIO streeam
  */
@@ -44,9 +37,9 @@ export async function update() {
  * @param cityIOtableURL cityIO API endpoint URL
  */
 export async function getCityIO(url) {
-  return cityIOdemo;
+  // return cityIOdemo;
 
-  // let cityIOtableURL = Storage.cityIOurl;
+  let cityIOtableURL = Storage.cityIOurl;
   // console.log("trying to fetch " + cityIOtableURL);
   return fetch(url)
     .then(function(response) {
@@ -124,30 +117,35 @@ export function update_grid_from_cityio() {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-export async function update_sumo_simulation() {
-  /*
-    https://github.com/samhermes/samhermes.github.io/blob/master/js/travel-map.js#L42
-    */
 
+export async function update_abm_simulation() {
   //deal with simulation data update and storage
-  Storage.simData = ABMdemo;
-  // await getCityIO(Storage.cityIOurl + "_sim");
-
-  // make json out of it
-  let sim_data_json = JSON.parse(Storage.simData.objects);
-
-  function sumo_to_geojson(sim_data_json) {
-    let coordinates_list = [];
-
-    sim_data_json.forEach(function(t) {
-      coordinates_list.push(t[1]);
-    });
-
-    return {
-      type: "MultiPoint",
-      coordinates: coordinates_list
-    };
-  }
-
-  Storage.map.getSource("simData").setData(sumo_to_geojson(sim_data_json));
+  Storage.simData =
+    "https://cityio.media.mit.edu/api/table/abm_service_Hamburg";
+  Storage.map.getSource("simData").setData(Storage.simData);
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// export async function update_sumo_simulation() {
+//   //deal with simulation data update and storage
+//   // Storage.simData = ABMdemo;
+//   // await getCityIO(Storage.cityIOurl + "_sim");
+
+//   // make json out of it
+//   let sim_data_json = JSON.parse(Storage.simData.features);
+
+//   function sumo_to_geojson(sim_data_json) {
+//     let coordinates_list = [];
+
+//     sim_data_json.forEach(function(t) {
+//       coordinates_list.push(t[1]);
+//     });
+
+//     return {
+//       type: "MultiPoint",
+//       coordinates: coordinates_list
+//     };
+//   }
+
+//   Storage.map.getSource("simData").setData(sumo_to_geojson(sim_data_json));
+// }

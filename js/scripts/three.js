@@ -10,13 +10,16 @@ export function create_threeJS_grid_form_cityIO() {
   //get table dims
   var grid_columns = cityIOdata.header.spatial.ncols;
   var grid_rows = cityIOdata.header.spatial.nrows;
-  var cell_size_in_meters = cityIOdata.header.spatial.cellsize;
+  var cell_size_in_meters = cityIOdata.header.spatial.cellSize;
 
   var cell_rescale_precentage = 0.85;
   var this_mesh = null;
   var three_grid_group = new THREE.Object3D();
   var geometry = null;
   var material = null;
+
+  console.log(cityIOdata.header.spatial);
+
   //converted 35deg to radians in an ugly way
   var grid_rotation_for_table = degree_to_rads(
     cityIOdata.header.spatial.rotation
@@ -53,7 +56,7 @@ export function create_threeJS_grid_form_cityIO() {
 
   // adds this groups to storage for later updates
   Storage.threeGrid = three_grid_group;
-  return [three_grid_group];
+  return three_grid_group;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
