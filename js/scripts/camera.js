@@ -4,9 +4,7 @@ export class Camera {
   constructor(map) {
     this.map = Storage.map;
     this.cityIOdata = Storage.cityIOdata;
-    let table_lat = this.cityIOdata.header.spatial.latitude;
-    let table_lon = this.cityIOdata.header.spatial.longitude;
-    this.scence_origin_position = [table_lat, table_lon, 0];
+    this.tableExtents = Storage.tableExtents;
   }
 
   getLatLon() {
@@ -20,44 +18,31 @@ export class Camera {
     // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
     this.map.rotateTo((timestamp / 300) % 360, { duration: 0 });
     // Request the next frame of the animation.
-    requestAnimationFrame(rotateCamera);
+    // requestAnimationFrame(this.rotateCamera);
+    requestAnimationFrame(() => this.rotateCamera);
   }
 
-  reset_camera_position(bool) {
+  reset_camera_position() {
     let angle;
-    if (bool) {
-      angle = -this.cityIOdata.header.spatial.rotation;
-      // clamp the rotation between 0 -360 degrees
-      // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
-      this.map.rotateTo(angle, { duration: 200 });
-
-      //   /*
-      this.map.flyTo({
-        center: this.find_middle_of_model(-600, 1300),
-        bearing: angle,
-        pitch: 0,
-        zoom: 15
-      });
-      //   */
-    } else {
-      angle = 0;
-      this.map.rotateTo(angle, { duration: 200 });
-    }
+    angle = 180 - this.cityIOdata.header.spatial.rotation;
+    this.map.rotateTo(angle, { duration: 200 });
+    this.map.flyTo({
+      center: this.findTableCenter(),
+      bearing: angle,
+      pitch: 0,
+      zoom: 15
+    });
   }
 
-  find_middle_of_model(offest_east, offest_north) {
-    //Earth’s radius, sphere
-    let earth_radius = 6378137;
-    //Coordinate offsets in radians
-    let dLat = offest_north / earth_radius;
-    let dLon =
-      offest_east /
-      (earth_radius *
-        Math.cos((Math.PI * this.scence_origin_position[0]) / 180));
-    //OffsetPosition, decimal degrees
-    let latO = this.scence_origin_position[0] + (dLat * 180) / Math.PI;
-    let lonO = this.scence_origin_position[1] + (dLon * 180) / Math.PI;
-    return [latO, lonO];
+  findTableCenter() {
+    let pnts = [
+      Math.abs(this.tableExtents[2][0] - this.tableExtents[0][0]),
+      Math.abs(this.tableExtents[2][1] - this.tableExtents[0][1])
+    ];
+    var dist = 0.5 * Math.sqrt(pnts[0] * pnts[0] + pnts[1] * pnts[1]);
+    console.log(dist);
+
+    return [this.tableExtents[2][0] - dist, this.tableExtents[2][1] + dist];
   }
 }
 
@@ -71,11 +56,9 @@ export function cameraControl() {
     .addEventListener("change", function(e) {
       if (e.target.checked) {
         // Start the animation
-        cam.reset_camera_position(true);
+        // cam.reset_camera_position();
       } else {
-        // Start the animation.
-        // converted 35deg to radians in an ugly way
-        cam.reset_camera_position(false);
+        // cam.rotateCamera(0);
       }
     });
 }
