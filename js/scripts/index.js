@@ -33,16 +33,13 @@ import "babel-polyfill";
 import "./Storage";
 import { Maptastic } from "./lib/maptastic";
 import { makeMap } from "./map";
-import { update, getCityIO } from "./update";
+import { getCityIO } from "./update";
 
 async function init() {
-  // cityio update interval
-  var update_interval = 200;
   //which cityIO endpoint to look for
   var cityio_table_name = window.location.search.substring(1);
   // otherwise, default to this table
   if (cityio_table_name == "") {
-    console.log("using default cityIO endpoint");
     cityio_table_name = "grasbrook";
   }
   let cityIOtableURL =
@@ -60,10 +57,6 @@ async function init() {
   let mapbox_div_element = document.querySelector("#mapDIV");
   // maptastic the div
   Maptastic(mapbox_div_element);
-
-  //run the update
-  window.setInterval(update, update_interval);
 }
-
 //start applet
 window.onload = init();

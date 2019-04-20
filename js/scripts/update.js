@@ -37,16 +37,11 @@ export async function update() {
  * @param cityIOtableURL cityIO API endpoint URL
  */
 export async function getCityIO(url) {
-  // return cityIOdemo;
-
-  let cityIOtableURL = Storage.cityIOurl;
-  // console.log("trying to fetch " + cityIOtableURL);
   return fetch(url)
     .then(function(response) {
       return response.json();
     })
     .then(function(cityIOdata) {
-      // console.log("got cityIO table at " + cityIOdata.meta.timestamp);
       return cityIOdata;
     })
     .catch(err => {
@@ -130,22 +125,17 @@ export async function update_abm_simulation() {
 //   //deal with simulation data update and storage
 //   // Storage.simData = ABMdemo;
 //   // await getCityIO(Storage.cityIOurl + "_sim");
-
 //   // make json out of it
 //   let sim_data_json = JSON.parse(Storage.simData.features);
-
 //   function sumo_to_geojson(sim_data_json) {
 //     let coordinates_list = [];
-
 //     sim_data_json.forEach(function(t) {
 //       coordinates_list.push(t[1]);
 //     });
-
 //     return {
 //       type: "MultiPoint",
 //       coordinates: coordinates_list
 //     };
 //   }
-
 //   Storage.map.getSource("simData").setData(sumo_to_geojson(sim_data_json));
 // }
