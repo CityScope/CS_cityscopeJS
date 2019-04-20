@@ -9,6 +9,10 @@ export function makeMap() {
   // table physical loction
   let table_lat = cityIOdata.header.spatial.latitude;
   let table_lon = cityIOdata.header.spatial.longitude;
+
+  table_lat = 10.014939010745564;
+  table_lon = 53.53350438522679;
+
   // define the mapbox div element
   var mapbox_dom_div = document.createElement("div");
   mapbox_dom_div.className = "mapDIV";
@@ -29,8 +33,16 @@ export function makeMap() {
     zoom: 14
   });
 
+  //
+
+  map.on("mousedown", function(e) {
+    console.log(e.lngLat);
+  });
+
+  //
+
   map.on("style.load", function() {
-    rotateCamera(0);
+    // rotateCamera(0);
 
     //add the dummy data of 1 point
     map.addSource("simData", {
@@ -40,6 +52,19 @@ export function makeMap() {
         coordinates: [0, 0]
       }
     });
+
+    //add the custom THREE layer
+    map.addLayer({
+      id: "custom_layer",
+      type: "custom",
+      onAdd: function(map, gl) {
+        onAdd(map, gl);
+      },
+      render: function(gl, matrix) {
+        threebox.update();
+      }
+    });
+    //
 
     //add the point simulation layer
     map.addLayer({
@@ -52,14 +77,18 @@ export function makeMap() {
           "interpolate",
           ["linear"],
           ["get", "mag"],
-          3,
+          0,
           0,
           6,
           1
         ],
-
+        // Increase the heatmap color weight weight by zoom level
+        // heatmap-intensity is a multiplier on top of heatmap-weight
         "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 0, 1, 9, 3],
-
+        //
+        "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 0, 1, 3, 15],
+        //
+        //
         "heatmap-color": [
           "interpolate",
           ["linear"],
@@ -73,23 +102,10 @@ export function makeMap() {
           0.6,
           "rgb(100,100,200)",
           0.8,
-          "rgb(100,0,200)",
-          1,
-          "rgb(200,0,100)"
+          "rgb(200,60,200)"
         ]
       }
-    }),
-      //add the custom THREE layer
-      map.addLayer({
-        id: "custom_layer",
-        type: "custom",
-        onAdd: function(map, gl) {
-          onAdd(map, gl);
-        },
-        render: function(gl, matrix) {
-          threebox.update();
-        }
-      });
+    });
   });
 
   function onAdd(map, mbxContext) {

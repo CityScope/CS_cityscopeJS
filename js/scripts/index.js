@@ -37,7 +37,7 @@ import { update, getCityIO } from "./update";
 
 async function init() {
   // cityio update interval
-  var update_interval = 250;
+  var update_interval = 200;
   //which cityIO endpoint to look for
   var cityio_table_name = window.location.search.substring(1);
   // otherwise, default to this table
