@@ -29,7 +29,7 @@ export function makeMap() {
     container: "mapDIV",
     style: "mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd",
     center: [tableExtents[2][0], tableExtents[2][1]],
-    zoom: 13
+    zoom: 15
   });
   Storage.map = map;
   map.on("style.load", function() {

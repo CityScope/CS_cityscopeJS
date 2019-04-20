@@ -80,7 +80,7 @@ export function layers() {
     },
     paint: {
       "line-color": "rgb(255,0,255)",
-      "line-width": 5,
+      "line-width": 1,
       "line-dasharray": [0, 4, 3]
     }
   });

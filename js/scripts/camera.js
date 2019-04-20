@@ -13,15 +13,6 @@ export class Camera {
     });
   }
 
-  rotateCamera(timestamp) {
-    // clamp the rotation between 0 -360 degrees
-    // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
-    this.map.rotateTo((timestamp / 300) % 360, { duration: 0 });
-    // Request the next frame of the animation.
-    // requestAnimationFrame(this.rotateCamera);
-    requestAnimationFrame(() => this.rotateCamera);
-  }
-
   reset_camera_position() {
     let angle;
     angle = 180 - this.cityIOdata.header.spatial.rotation;
@@ -30,7 +21,7 @@ export class Camera {
       center: this.findTableCenter(),
       bearing: angle,
       pitch: 0,
-      zoom: 15
+      zoom: 15.5
     });
   }
 
@@ -55,10 +46,21 @@ export function cameraControl() {
     .getElementById("listing-group")
     .addEventListener("change", function(e) {
       if (e.target.checked) {
-        // Start the animation
-        // cam.reset_camera_position();
+        if (Storage.reqAnimFrame !== null) {
+          cancelAnimationFrame(Storage.reqAnimFrame);
+        }
+        cam.reset_camera_position();
       } else {
-        // cam.rotateCamera(0);
+        rotateCamera(1);
       }
     });
+}
+
+// cant call inside class
+function rotateCamera(timestamp) {
+  // clamp the rotation between 0 -360 degrees
+  // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
+  Storage.map.rotateTo((timestamp / 300) % 360, { duration: 0 });
+  // Request the next frame of the animation.
+  Storage.reqAnimFrame = requestAnimationFrame(rotateCamera);
 }

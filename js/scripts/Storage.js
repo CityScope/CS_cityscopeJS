@@ -6,6 +6,14 @@ class Storage {
     this._cityIOurl = "";
   }
 
+  //reqAnimFrame
+  get reqAnimFrame() {
+    return this._reqAnimFrame;
+  }
+  set reqAnimFrame(value) {
+    this._reqAnimFrame = value;
+  }
+
   //cityIO url
   get cityIOurl() {
     return this._cityIOurl;
