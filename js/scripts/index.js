@@ -31,7 +31,6 @@ https://github.com/RELNO]
 // using https://github.com/peterqliu/threebox
 import "babel-polyfill";
 import "./Storage";
-import { Maptastic } from "./lib/maptastic";
 import { makeMap } from "./map";
 import { getCityIO } from "./update";
 
@@ -54,9 +53,6 @@ async function init() {
   Storage.cityIOdata = cityIOjson;
   //make the mapbox gl base map
   makeMap();
-  let mapbox_div_element = document.querySelector("#mapDIV");
-  // maptastic the div
-  Maptastic(mapbox_div_element);
 }
 //start applet
 window.onload = init();

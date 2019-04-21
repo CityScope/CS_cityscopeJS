@@ -20,7 +20,7 @@ export class Camera {
       center: this.findTableCenter(),
       bearing: angle,
       pitch: 0,
-      zoom: 15.6
+      zoom: 16
     });
   }
 

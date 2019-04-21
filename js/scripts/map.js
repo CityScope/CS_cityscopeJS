@@ -1,4 +1,6 @@
 import "babel-polyfill";
+import { Maptastic } from "./lib/maptastic";
+
 import "./Storage";
 import { layers } from "./layer";
 import { gui } from "./layer";
@@ -15,17 +17,20 @@ export function makeMap() {
 
   Storage.tableExtents = tableExtents;
   // define the mapbox div element
-  var mapbox_dom_div = document.createElement("div");
-  mapbox_dom_div.className = "mapDIV";
-  mapbox_dom_div.id = "mapDIV";
-  document.body.appendChild(mapbox_dom_div);
+  var keystoneDiv = document.createElement("div");
+  keystoneDiv.className = "keystoneDiv";
+  keystoneDiv.id = "keystoneDiv";
+  document.body.appendChild(keystoneDiv);
   mapboxgl.accessToken =
     "pk.eyJ1IjoicmVsbm94IiwiYSI6ImNpa2VhdzN2bzAwM2t0b2x5bmZ0czF6MzgifQ.KtqxBH_3rkMaHCn_Pm3Pag";
 
+  let mapbox_div_element = document.querySelector("#keystoneDiv");
+  // maptastic the div
+  Maptastic(mapbox_div_element);
   // set the map origin
   // make the map itself
   var map = new mapboxgl.Map({
-    container: "mapDIV",
+    container: "keystoneDiv",
     style: "mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd",
     center: [tableExtents[2][0], tableExtents[2][1]],
     zoom: 10
