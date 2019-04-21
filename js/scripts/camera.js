@@ -6,11 +6,11 @@ export class Camera {
     this.tableExtents = Storage.tableExtents;
   }
 
-  getLatLon() {
-    this.map.on("mousedown", function(e) {
-      console.log(e.lngLat);
-    });
-  }
+  // getLatLon() {
+  //   this.map.on("mousedown", function(e) {
+  //     console.log(e.lngLat);
+  //   });
+  // }
 
   reset_camera_position() {
     let angle;

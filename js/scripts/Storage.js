@@ -70,6 +70,14 @@ class Storage {
     this._threeGrid = value;
   }
 
+  //threeJs height state for projection
+  get threeState() {
+    return this._threeState;
+  }
+  set threeState(value) {
+    this._threeState = value;
+  }
+
   //threeJs text
   get threeText() {
     return this._threeText;

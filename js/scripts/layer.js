@@ -1,7 +1,7 @@
 import "./Storage";
 import { create_threeJS_grid_form_cityIO } from "./three";
 import { Camera, rotateCamera } from "./camera";
-import { update } from "./update";
+import { update, update_grid_from_cityio } from "./update";
 
 export function layers() {
   // cityio update interval
@@ -54,9 +54,9 @@ export function layers() {
       "line-cap": "round"
     },
     paint: {
-      "line-color": "rgb(255,0,255)",
-      "line-width": 1,
-      "line-dasharray": [0, 4, 3]
+      "line-color": "rgb(255,255,255)",
+      "line-width": 3,
+      "line-dasharray": [3, 2, 1]
     }
   });
   //
@@ -124,8 +124,6 @@ export function layers() {
 Gui function 
 */
 export function gui() {
-  console.log(Storage.map.getStyle().layers);
-
   const cam = new Camera(Storage.map);
   cam.getLatLon();
   cam.reset_camera_position(0);
@@ -147,7 +145,11 @@ export function gui() {
               cancelAnimationFrame(Storage.reqAnimFrame);
             }
             cam.reset_camera_position();
+            Storage.threeState = "flat";
+            update_grid_from_cityio();
           } else {
+            Storage.threeState = "height";
+            update_grid_from_cityio();
             rotateCamera(1);
           }
         default:
