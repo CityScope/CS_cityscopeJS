@@ -6,13 +6,11 @@ export class Camera {
     this.tableExtents = Storage.tableExtents;
   }
 
-  // cam.getLatLon();
-
-  // getLatLon() {
-  //   this.map.on("mousedown", function(e) {
-  //     console.log(e.lngLat);
-  //   });
-  // }
+  getLatLon() {
+    this.map.on("mousedown", function(e) {
+      console.log(e.lngLat);
+    });
+  }
 
   reset_camera_position() {
     let angle;
@@ -22,7 +20,7 @@ export class Camera {
       center: this.findTableCenter(),
       bearing: angle,
       pitch: 0,
-      zoom: 15.5
+      zoom: 15.6
     });
   }
 

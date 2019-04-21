@@ -90,6 +90,8 @@ export function layers() {
     paint: {}
   });
 
+  map.setPaintProperty("noiseMap", "raster-opacity", 0.75);
+
   //  add the point simulation layer
   map.addLayer({
     id: "simData",
@@ -145,6 +147,7 @@ Gui function
 */
 export function gui() {
   const cam = new Camera(Storage.map);
+  cam.getLatLon();
   cam.reset_camera_position(0);
   //bring map to projection postion
   document

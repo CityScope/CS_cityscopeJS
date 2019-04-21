@@ -19,13 +19,13 @@ body {
 
 .listing-group {
   font: 10px "Helvetica Neue", Helvetica, sans-serif;
-  font-weight: 600;
+  font-weight: 200;
   position: absolute;
-  top: 10px;
-  right: 10px;
+  bottom: 1%;
+  left: 1%;
   z-index: 1;
-  border-radius: 3px;
-  max-width: 20%;
+  border-radius: 10px;
+  max-width: 30%;
   color: rgb(255, 255, 255);
 }
 

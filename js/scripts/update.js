@@ -62,22 +62,22 @@ export function update_grid_from_cityio() {
     },
     {
       type: "Open Space",
-      color: "#13a500",
+      color: "rgb(56, 162, 252)",
       height: 0
     },
     {
       type: "live",
-      color: "#007fff",
+      color: "rgb(200,30,100)",
       height: 30
     },
     {
       type: "work",
-      color: "#cc28a2",
+      color: "rgb(100,0,100)",
       height: 100
     },
     {
       type: "Work 2",
-      color: "#ec0868",
+      color: "rgb(100,0,200)",
       height: 50
     }
   ];
