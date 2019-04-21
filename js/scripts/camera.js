@@ -26,6 +26,10 @@ export class Camera {
     });
   }
 
+  /**
+   * findTableCenter
+   * return center point pnts
+   */
   findTableCenter() {
     let pnts = [
       0.5 * Math.abs(this.tableExtents[2][0] + this.tableExtents[0][0]),

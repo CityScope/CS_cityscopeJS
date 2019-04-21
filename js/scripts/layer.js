@@ -1,4 +1,5 @@
 import "./Storage";
+import * as turf from "@turf/turf";
 import { create_threeJS_grid_form_cityIO } from "./three";
 import { Camera, rotateCamera } from "./camera";
 import { update, update_grid_from_cityio } from "./update";
@@ -116,6 +117,25 @@ export function layers() {
     }
   });
 
+  console.log(Storage.tableExtents);
+
+  var polygon = turf.polygon([Storage.tableExtents]);
+  var masked = turf.mask(polygon);
+
+  map.addLayer({
+    id: "mask",
+    type: "fill",
+    source: {
+      type: "geojson",
+      data: masked
+    },
+    layout: {},
+    paint: {
+      "fill-color": "#000000",
+      "fill-opacity": 1
+    }
+  });
+
   //run the layers update
   window.setInterval(update, update_interval);
 }
@@ -143,10 +163,15 @@ export function gui() {
             if (Storage.reqAnimFrame !== null) {
               cancelAnimationFrame(Storage.reqAnimFrame);
             }
+            Storage.map.setLayoutProperty("mask", "visibility", "visible");
+            Storage.map.setLayoutProperty("building", "visibility", "none");
+
             cam.reset_camera_position();
             Storage.threeState = "flat";
             update_grid_from_cityio();
           } else {
+            Storage.map.setLayoutProperty("mask", "visibility", "none");
+            Storage.map.setLayoutProperty("building", "visibility", "visible");
             Storage.threeState = "height";
             update_grid_from_cityio();
             rotateCamera(1);

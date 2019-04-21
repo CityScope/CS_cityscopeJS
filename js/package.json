@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@turf/turf": "^5.1.6",
     "@types/three": "^0.92.25",
     "babel-polyfill": "^6.26.0",
     "mapbox-gl": "^0.53.0",
