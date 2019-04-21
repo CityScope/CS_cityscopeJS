@@ -93,7 +93,7 @@ export function update_grid_from_cityio() {
     //clear the text obj
     // textHolder.children[i].text = " ";
     thisCell.position.z = 0;
-    thisCell.scale.z = 0.1;
+    thisCell.scale.z = 1;
 
     if (cityIOdata.grid[i][0] !== -1) {
       thisCell.material.color.set(
@@ -107,7 +107,7 @@ export function update_grid_from_cityio() {
         thisCell.position.z = this_cell_height / 2;
       } else if (Storage.threeState == "flat") {
         thisCell.position.z = 0;
-        thisCell.scale.z = 0.1;
+        thisCell.scale.z = 1;
       }
     } else {
       // black outs the non-read pixels

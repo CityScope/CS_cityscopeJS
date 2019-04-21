@@ -28,12 +28,10 @@ export class Camera {
 
   findTableCenter() {
     let pnts = [
-      Math.abs(this.tableExtents[2][0] - this.tableExtents[0][0]),
-      Math.abs(this.tableExtents[2][1] - this.tableExtents[0][1])
+      0.5 * Math.abs(this.tableExtents[2][0] + this.tableExtents[0][0]),
+      0.5 * Math.abs(this.tableExtents[2][1] + this.tableExtents[0][1])
     ];
-    var dist = 0.5 * Math.sqrt(pnts[0] * pnts[0] + pnts[1] * pnts[1]);
-    console.log(dist);
-    return [this.tableExtents[2][0] - dist, this.tableExtents[2][1] + dist];
+    return pnts;
   }
 }
 

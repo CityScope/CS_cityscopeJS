@@ -1,7 +1,7 @@
 {
-  "name": "csjs_sumapbox3js",
+  "name": "cs_hamburg",
   "version": "1.0.0",
-  "description": "",
+  "description": "csjsmapboxgljsthreejs",
   "main": "index.js",
   "scripts": {
     "test": "parcel index.html"
@@ -26,6 +26,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/CityScope/CS_choiceModels.git"
+    "url": "https://github.com/CityScope"
   }
 }
