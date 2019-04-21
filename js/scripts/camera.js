@@ -1,5 +1,4 @@
 import "./Storage";
-
 export class Camera {
   constructor(map) {
     this.map = Storage.map;
@@ -32,35 +31,12 @@ export class Camera {
     ];
     var dist = 0.5 * Math.sqrt(pnts[0] * pnts[0] + pnts[1] * pnts[1]);
     console.log(dist);
-
     return [this.tableExtents[2][0] - dist, this.tableExtents[2][1] + dist];
   }
 }
 
-export function cameraControl() {
-  const cam = new Camera(Storage.map);
-  cam.getLatLon();
-  cam.reset_camera_position(0);
-  //bring map to projection postion
-  document
-    .getElementById("listing-group")
-    .addEventListener("change", function(e) {
-      if (e.target.checked) {
-        if (Storage.reqAnimFrame !== null) {
-          cancelAnimationFrame(Storage.reqAnimFrame);
-        }
-        cam.reset_camera_position();
-      } else {
-        rotateCamera(1);
-      }
-    });
-}
-
 // cant call inside class
-function rotateCamera(timestamp) {
-  // clamp the rotation between 0 -360 degrees
-  // Divide timestamp by 100 to slow rotation to ~10 degrees / sec
+export function rotateCamera(timestamp) {
   Storage.map.rotateTo((timestamp / 300) % 360, { duration: 0 });
-  // Request the next frame of the animation.
   Storage.reqAnimFrame = requestAnimationFrame(rotateCamera);
 }

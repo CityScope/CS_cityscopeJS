@@ -1,7 +1,7 @@
 import "babel-polyfill";
 import "./Storage";
 import { layers } from "./layer";
-import { cameraControl } from "./camera";
+import { gui } from "./layer";
 
 export function makeMap() {
   // let cityIOdata = Storage.cityIOdata;
@@ -34,6 +34,6 @@ export function makeMap() {
   Storage.map = map;
   map.on("style.load", function() {
     layers();
-    cameraControl();
+    gui();
   });
 }

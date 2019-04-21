@@ -1,5 +1,6 @@
 import "./Storage";
 import { create_threeJS_grid_form_cityIO } from "./three";
+import { Camera, rotateCamera } from "./camera";
 import { update } from "./update";
 
 export function layers() {
@@ -33,32 +34,6 @@ export function layers() {
     }
   });
 
-  //   add the point simulation layer
-  map.addLayer({
-    id: "MultiPoint",
-    source: "simData",
-    type: "heatmap",
-    paint: {
-      "heatmap-weight": ["interpolate", ["linear"], ["get", "mag"], 0, 0, 6, 1],
-      "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 0, 1, 9, 3],
-      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 0, 1, 3, 15],
-      "heatmap-color": [
-        "interpolate",
-        ["linear"],
-        ["heatmap-density"],
-        0,
-        "rgba(33,102,172,0)",
-        0.2,
-        "rgb(209,229,240)",
-        0.4,
-        "rgb(103,169,207)",
-        0.6,
-        "rgb(100,100,200)",
-        0.8,
-        "rgb(200,60,200)"
-      ]
-    }
-  });
   //table extents
   map.addLayer({
     id: "route",
@@ -100,7 +75,83 @@ export function layers() {
     // add the scene objects to storage for later update
     Storage.threeGrid = threebox.scene.children[0].children[1].children[0];
   }
+  map.addLayer({
+    id: "noiseMap",
+    displayName: "Noise",
+    type: "raster",
+    source: {
+      type: "raster",
+      tiles: [
+        "https://geodienste.hamburg.de/HH_WMS_Strassenverkehr?format=image/png&service=WMS&version=1.3.0&STYLES=&bbox={bbox-epsg-3857}&request=GetMap&crs=EPSG:3857&transparent=true&width=512&height=512&layers=strassenverkehr_tag_abend_nacht_2017"
+      ],
+      tileSize: 512
+    },
+    paint: {}
+  });
+
+  //  add the point simulation layer
+  map.addLayer({
+    id: "simData",
+    source: "simData",
+    type: "heatmap",
+    paint: {
+      "heatmap-weight": ["interpolate", ["linear"], ["get", "mag"], 0, 0, 6, 1],
+      "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 0, 1, 9, 3],
+      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 0, 1, 3, 15],
+      "heatmap-color": [
+        "interpolate",
+        ["linear"],
+        ["heatmap-density"],
+        0,
+        "rgba(33,102,172,0)",
+        0.2,
+        "rgb(209,229,240)",
+        0.4,
+        "rgb(103,169,207)",
+        0.6,
+        "rgb(100,100,200)",
+        0.8,
+        "rgb(200,60,200)"
+      ]
+    }
+  });
 
   //run the layers update
   window.setInterval(update, update_interval);
+}
+
+/*
+Gui function 
+*/
+export function gui() {
+  console.log(Storage.map.getStyle().layers);
+
+  const cam = new Camera(Storage.map);
+  cam.getLatLon();
+  cam.reset_camera_position(0);
+  //bring map to projection postion
+  document
+    .getElementById("listing-group")
+    .addEventListener("change", function(e) {
+      switch (e.target.id) {
+        case "noiseMap":
+          if (e.target.checked) {
+            Storage.map.setLayoutProperty("noiseMap", "visibility", "visible");
+          } else {
+            Storage.map.setLayoutProperty("noiseMap", "visibility", "none");
+          }
+          break;
+        case "rotateTo":
+          if (e.target.checked) {
+            if (Storage.reqAnimFrame !== null) {
+              cancelAnimationFrame(Storage.reqAnimFrame);
+            }
+            cam.reset_camera_position();
+          } else {
+            rotateCamera(1);
+          }
+        default:
+          break;
+      }
+    });
 }
