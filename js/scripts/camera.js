@@ -6,6 +6,8 @@ export class Camera {
     this.tableExtents = Storage.tableExtents;
   }
 
+  // cam.getLatLon();
+
   // getLatLon() {
   //   this.map.on("mousedown", function(e) {
   //     console.log(e.lngLat);

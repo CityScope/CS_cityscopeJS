@@ -125,7 +125,6 @@ Gui function
 */
 export function gui() {
   const cam = new Camera(Storage.map);
-  cam.getLatLon();
   cam.reset_camera_position(0);
   //bring map to projection postion
   document
