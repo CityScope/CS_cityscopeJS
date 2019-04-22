@@ -13,7 +13,7 @@ export function layers() {
   let table_lat = cityIOdata.header.spatial.latitude;
   let table_lon = cityIOdata.header.spatial.longitude;
   var scence_origin_position = [table_lat, table_lon, 0];
-  scence_origin_position = [10.013196306515425, 53.53310758934592, 0];
+  scence_origin_position = [10.013586800974366, 53.53297429860049, 0];
 
   //add the dummy data of 1 point
   map.addSource("simData", {
@@ -117,37 +117,6 @@ export function layers() {
         0.8,
         "rgb(200,60,200)"
       ]
-    }
-  });
-
-  map.addLayer({
-    id: "points",
-    type: "symbol",
-    source: {
-      type: "geojson",
-      data: {
-        type: "FeatureCollection",
-        features: [
-          {
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: scence_origin_position
-            },
-            properties: {
-              title: "Mapbox DC",
-              icon: "monument"
-            }
-          }
-        ]
-      }
-    },
-    layout: {
-      "icon-image": "{icon}-15",
-      "text-field": "{title}",
-      "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-      "text-offset": [0, 0.6],
-      "text-anchor": "top"
     }
   });
 
