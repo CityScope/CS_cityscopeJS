@@ -21,7 +21,7 @@ export function create_threeJS_grid_form_cityIO() {
   );
   var z_height_of_mesh = 1;
   //loop through grid rows and cols and create the grid
-  for (var this_row = 0; this_row < grid_rows; this_row++) {
+  for (var this_row = grid_rows; this_row > 0; this_row--) {
     for (var this_column = 0; this_column < grid_columns; this_column++) {
       geometry = new THREE.BoxBufferGeometry(
         cell_size_in_meters * cell_rescale_precentage,
@@ -36,7 +36,7 @@ export function create_threeJS_grid_form_cityIO() {
       this_mesh = new THREE.Mesh(geometry, material);
 
       this_mesh.position.set(
-        this_column * -cell_size_in_meters,
+        this_column * cell_size_in_meters,
         this_row * cell_size_in_meters,
         0
       );
