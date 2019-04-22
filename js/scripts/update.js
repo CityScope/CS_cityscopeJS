@@ -57,27 +57,27 @@ export function update_grid_from_cityio() {
   var array_of_types_and_colors = [
     {
       type: "Road",
-      color: "rgb(100,100,100)",
+      color: "#373F51",
       height: 0
     },
     {
       type: "Open Space",
-      color: "rgb(56, 162, 252)",
+      color: "#DFBBB1",
       height: 0
     },
     {
       type: "live",
-      color: "rgb(200,30,100)",
+      color: "#008DD5",
       height: 30
     },
     {
       type: "work",
-      color: "rgb(100,0,100)",
+      color: "#E43F6F",
       height: 100
     },
     {
       type: "Work 2",
-      color: "rgb(100,0,200)",
+      color: "#F51476",
       height: 50
     }
   ];
@@ -109,10 +109,10 @@ export function update_grid_from_cityio() {
         thisCell.position.z = 0;
         thisCell.scale.z = 1;
       }
-    } else {
+    } else if (cityIOdata.grid[i][0] == -1) {
       // black outs the non-read pixels
       thisCell.position.z = 0;
-      thisCell.material.color.set("rgb(255,255,255)");
+      thisCell.material.color.set("#00D6B9");
     }
   }
 }

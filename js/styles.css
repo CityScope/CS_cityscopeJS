@@ -27,12 +27,14 @@ body {
 .listing-group {
   font: 10px "Helvetica Neue", Helvetica, sans-serif;
   font-weight: 200;
+  padding: 5px;
   position: absolute;
-  bottom: 1%;
-  left: 1%;
+  top: 50%;
+  left: 50%;
   z-index: 1;
   border-radius: 10px;
   max-width: 30%;
+  background-color: #000000;
   color: rgb(255, 255, 255);
 }
 
@@ -50,7 +52,7 @@ body {
 }
 
 .listing-group input[type="checkbox"] + label {
-  background-color: #000000;
+  background-color: #181818;
   display: block;
   cursor: pointer;
   padding: 10px;

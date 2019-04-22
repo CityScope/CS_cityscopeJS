@@ -13,6 +13,7 @@ export function layers() {
   let table_lat = cityIOdata.header.spatial.latitude;
   let table_lon = cityIOdata.header.spatial.longitude;
   var scence_origin_position = [table_lat, table_lon, 0];
+  // ! FOR NOW !!
   scence_origin_position = [10.013586800974366, 53.53297429860049, 0];
 
   //add the dummy data of 1 point
@@ -146,6 +147,20 @@ export function layers() {
 Gui function 
 */
 export function gui() {
+  document.getElementById("listing-group").style.display = "none";
+
+  document.addEventListener("keydown", keyDownTextField, false);
+  function keyDownTextField(e) {
+    if (e.keyCode == 32) {
+      let x = document.getElementById("listing-group");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+  }
+
   const cam = new Camera(Storage.map);
   cam.getLatLon();
   cam.reset_camera_position(0);
