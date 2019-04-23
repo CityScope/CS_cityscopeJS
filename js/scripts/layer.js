@@ -135,17 +135,17 @@ export function layers() {
         "interpolate",
         ["linear"],
         ["zoom"],
-        7,
-        ["interpolate", ["linear"], ["get", "mag"], 1, 1, 6, 4],
-        16,
-        ["interpolate", ["linear"], ["get", "mag"], 1, 5, 6, 50]
+        12,
+        ["interpolate", ["linear"], ["get", "mag"], 0.1, 0.5, 1, 2],
+        14,
+        ["interpolate", ["linear"], ["get", "mag"], 0.1, 0.5, 2, 1]
       ],
       // Color circle by earthquake magnitude
       "circle-color": "rgb(200,0,170)",
       "circle-stroke-color": "white",
       "circle-stroke-width": 1,
       // Transition from heatmap to circle layer by zoom level
-      "circle-opacity": ["interpolate", ["linear"], ["zoom"], 7, 0, 8, 1]
+      "circle-opacity": ["interpolate", ["linear"], ["zoom"], 3, 0, 8, 1]
     }
   });
 

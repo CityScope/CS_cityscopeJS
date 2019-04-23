@@ -56,10 +56,21 @@ export async function getCityIO(url) {
 export function update_grid_from_cityio() {
   var array_of_types_and_colors = [
     {
-      type: "Road",
-      color: "#373F51",
-      height: 0
+      type: "Work 2",
+      color: "#F51476",
+      height: 100
     },
+    {
+      type: "work",
+      color: "#E43F0F",
+      height: 50
+    },
+    {
+      type: "live2",
+      color: "#008DD5",
+      height: 50
+    },
+
     {
       type: "Open Space",
       color: "#13D031",
@@ -70,20 +81,11 @@ export function update_grid_from_cityio() {
       color: "#002DD5",
       height: 20
     },
+
     {
-      type: "live2",
-      color: "#008DD5",
-      height: 50
-    },
-    {
-      type: "work",
-      color: "#E43F6F",
-      height: 50
-    },
-    {
-      type: "Work 2",
-      color: "#F51476",
-      height: 100
+      type: "Road",
+      color: "#373F51",
+      height: 0
     }
   ];
 
