@@ -92,17 +92,19 @@ export function layers() {
     paint: {}
   });
 
-  map.setPaintProperty("noiseMap", "raster-opacity", 0.75);
+  map.setPaintProperty("noiseMap", "raster-opacity", 0.65);
 
   //  add the point simulation layer
   map.addLayer({
     id: "simData",
     source: "simData",
     type: "heatmap",
+    maxzoom: 20,
     paint: {
-      "heatmap-weight": ["interpolate", ["linear"], ["get", "mag"], 0, 0, 6, 1],
-      "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 0, 1, 9, 3],
-      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 0, 1, 3, 15],
+      "heatmap-weight": ["interpolate", ["linear"], ["get", "mag"], 0, 7, 1, 1],
+      "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 0, 7, 9, 3],
+      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 0, 0.5, 3, 15],
+      "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 7, 0, 8, 1],
       "heatmap-color": [
         "interpolate",
         ["linear"],
@@ -118,6 +120,32 @@ export function layers() {
         0.8,
         "rgb(200,60,200)"
       ]
+    }
+  });
+
+  map.addLayer({
+    id: "simData-point",
+    type: "circle",
+    source: "simData",
+    minzoom: 14,
+
+    paint: {
+      // Size circle radius by earthquake magnitude and zoom level
+      "circle-radius": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        7,
+        ["interpolate", ["linear"], ["get", "mag"], 1, 1, 6, 4],
+        16,
+        ["interpolate", ["linear"], ["get", "mag"], 1, 5, 6, 50]
+      ],
+      // Color circle by earthquake magnitude
+      "circle-color": "rgb(200,0,170)",
+      "circle-stroke-color": "white",
+      "circle-stroke-width": 1,
+      // Transition from heatmap to circle layer by zoom level
+      "circle-opacity": ["interpolate", ["linear"], ["zoom"], 7, 0, 8, 1]
     }
   });
 
@@ -174,6 +202,23 @@ export function gui() {
             Storage.map.setLayoutProperty("noiseMap", "visibility", "visible");
           } else {
             Storage.map.setLayoutProperty("noiseMap", "visibility", "none");
+          }
+          break;
+        case "simData":
+          if (e.target.checked) {
+            Storage.map.setLayoutProperty("simData", "visibility", "visible");
+            Storage.map.setLayoutProperty(
+              "simData-point",
+              "visibility",
+              "visible"
+            );
+          } else {
+            Storage.map.setLayoutProperty("simData", "visibility", "none");
+            Storage.map.setLayoutProperty(
+              "simData-point",
+              "visibility",
+              "none"
+            );
           }
           break;
         case "rotateTo":
