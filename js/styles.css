@@ -10,6 +10,55 @@ body {
   background: black;
 }
 
+.legend {
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  border-radius: 5px;
+  bottom: 5%;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  font: 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-weight: 900;
+  padding: 5px;
+  position: absolute;
+  right: 5%;
+  z-index: 100;
+}
+
+.legend ul {
+  list-style-type: none;
+  font-weight: 900;
+}
+
+.legend li:nth-child(1) {
+  color: #f51476;
+}
+
+.legend li:nth-child(2) {
+  color: #e43f0f;
+}
+
+.legend li:nth-child(3) {
+  color: #13d031;
+}
+
+.legend li:nth-child(4) {
+  color: #373f51;
+}
+
+.legend li:nth-child(5) {
+  color: #008dd5;
+}
+.legend li:nth-child(6) {
+  color: #002dd5;
+}
+
+.legend div span {
+  border-radius: 50%;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
+
 /* .mapDIV {
   position: fixed;
   top: 0%;
