@@ -22,7 +22,7 @@ export function makeMap() {
   keystoneDiv.id = "keystoneDiv";
   document.body.appendChild(keystoneDiv);
   mapboxgl.accessToken =
-    "pk.eyJ1IjoicmVsbm94IiwiYSI6ImNpa2VhdzN2bzAwM2t0b2x5bmZ0czF6MzgifQ.KtqxBH_3rkMaHCn_Pm3Pag";
+    "pk.eyJ1IjoicmVsbm94IiwiYSI6ImNqd2VwOTNtYjExaHkzeXBzYm1xc3E3dzQifQ.X8r8nj4-baZXSsFgctQMsg";
 
   let mapbox_div_element = document.querySelector("#keystoneDiv");
   // maptastic the div
