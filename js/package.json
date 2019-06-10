@@ -13,10 +13,10 @@
     "@turf/turf": "^5.1.6",
     "@types/three": "^0.92.25",
     "babel-polyfill": "^6.26.0",
-    "mapbox-gl": "^0.53.0",
+    "mapbox-gl": "^1.0.0",
     "regenerator-runtime": "^0.12.0",
     "three": "^0.97.0",
-    "three-orbitcontrols": "^2.101.1",
+    "three-orbitcontrols": "^2.102.1",
     "three-text2d": "^0.4.1"
   },
   "devDependencies": {
