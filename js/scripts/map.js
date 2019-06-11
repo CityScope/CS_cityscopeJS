@@ -1,6 +1,5 @@
 import "babel-polyfill";
 import { Maptastic } from "./lib/maptastic";
-
 import "./Storage";
 import { layers } from "./layer";
 import { gui } from "./layer";

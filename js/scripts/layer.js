@@ -65,19 +65,19 @@ export function layers() {
   //
   // Three
   function onAdd(map, mbxContext) {
-    window.threebox = new Threebox(map, mbxContext);
-    threebox.setupDefaultLights();
+    window.threebox = new Threebox(map, mbxContext, { defaultLights: true });
+    let csGrid = threebox
+      .Object3D({ obj: create_threeJS_grid_form_cityIO(), units: "meters" })
+      .setCoords(scence_origin_position);
     // adds the 3d cityscope gemoerty
-    threebox.addAtCoordinate(
-      create_threeJS_grid_form_cityIO(),
-      scence_origin_position,
-      {
-        preScale: 1
-      }
-    );
+
+    threebox.add(csGrid);
     // add the scene objects to storage for later update
     Storage.threeGrid = threebox.scene.children[0].children[1].children[0];
+    console.log(Storage.threeGrid);
   }
+
+  //
   map.addLayer({
     id: "noiseMap",
     displayName: "Noise",
