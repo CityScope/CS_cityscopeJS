@@ -10,7 +10,7 @@ export function create_threeJS_grid_form_cityIO() {
   var grid_columns = cityIOdata.header.spatial.ncols;
   var grid_rows = cityIOdata.header.spatial.nrows;
   var cell_size_in_meters = cityIOdata.header.spatial.cellSize;
-  var cell_rescale_precentage = 0.85;
+  var cell_rescale_precentage = 0.9;
   var this_mesh = null;
   var three_grid_group = new THREE.Object3D();
   var geometry = null;

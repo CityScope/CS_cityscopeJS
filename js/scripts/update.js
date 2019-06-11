@@ -99,7 +99,7 @@ export function update_grid_from_cityio() {
     let thisCell = grid.children[i];
     //clear the text obj
     // textHolder.children[i].text = " ";
-    thisCell.position.z = 0;
+    thisCell.position.z = 10;
     thisCell.scale.z = 1;
 
     if (cityIOdata.grid[i][0] !== -1) {
@@ -113,12 +113,12 @@ export function update_grid_from_cityio() {
         thisCell.scale.z = this_cell_height;
         thisCell.position.z = this_cell_height / 2;
       } else if (Storage.threeState == "flat") {
-        thisCell.position.z = 0;
+        thisCell.position.z = 10;
         thisCell.scale.z = 1;
       }
     } else if (cityIOdata.grid[i][0] == -1) {
       // black outs the non-read pixels
-      thisCell.position.z = 0;
+      thisCell.position.z = 10;
       thisCell.material.color.set("#000");
     }
   }
