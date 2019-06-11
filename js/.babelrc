@@ -5,15 +5,19 @@
       {
         "polyfill": false,
         "regenerator": true
-      }
+      },
+      "external-helpers",
+      "transform-class-properties"
     ]
   ],
   "presets": [
+    ["latest", { "es2015": { "modules": false } }],
     [
       "env",
       {
         "targets": {
-          "browsers": "last 2 Firefox versions, last 2 Chrome versions, last 2 Edge versions, last 2 Safari versions"
+          "browsers": "last 2 Firefox versions, last 2 Chrome versions, last 2 Edge versions, last 2 Safari versions",
+          "modules": false
         }
       }
     ]
