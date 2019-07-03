@@ -18,18 +18,18 @@ export async function update() {
   Storage.cityIOdata = await getCityIO(Storage.cityIOurl);
 
   // check for new cityIO data stream
-  if (
-    Storage.cityIOdata_OLD !== null &&
-    Storage.cityIOdata.meta.id.toString() ===
-      Storage.cityIOdata_OLD.meta.id.toString()
-  ) {
-    return;
-  } else {
-    // compare the two data sets
-    Storage.cityIOdata_OLD = Storage.cityIOdata;
-    //update the grid props
-    update_grid_from_cityio();
-  }
+  // if (
+  //   Storage.cityIOdata_OLD !== null &&
+  //   Storage.cityIOdata.meta.id.toString() ===
+  //     Storage.cityIOdata_OLD.meta.id.toString()
+  // ) {
+  //   return;
+  // } else {
+  //   // compare the two data sets
+  Storage.cityIOdata_OLD = Storage.cityIOdata;
+  //update the grid props
+  // update_grid_from_cityio();
+  // }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
@@ -91,7 +91,6 @@ export function update_grid_from_cityio() {
 
   let cityIOdata = Storage.cityIOdata;
   let grid = Storage.threeGrid;
-
   // let textHolder = Storage.threeText;
 
   for (let i = 0; i < grid.children.length; i++) {
