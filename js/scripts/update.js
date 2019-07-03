@@ -26,9 +26,9 @@ export async function update() {
   //   return;
   // } else {
   //   // compare the two data sets
-  Storage.cityIOdata_OLD = Storage.cityIOdata;
+  // Storage.cityIOdata_OLD = Storage.cityIOdata;
   //update the grid props
-  // update_grid_from_cityio();
+  update_grid_from_cityio();
   // }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
