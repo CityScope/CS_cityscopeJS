@@ -1,4 +1,6 @@
 import "./Storage";
+import { Maptastic } from "./lib/maptastic";
+
 import * as turf from "@turf/turf";
 import { create_threeJS_grid_form_cityIO } from "./three";
 import { Camera, rotateCamera } from "./camera";
@@ -101,51 +103,32 @@ export function layers() {
     type: "heatmap",
     maxzoom: 20,
     paint: {
-      "heatmap-weight": ["interpolate", ["linear"], ["get", "mag"], 0, 7, 1, 1],
-      "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 0, 7, 9, 3],
-      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 0, 0.5, 3, 15],
+      "heatmap-weight": [
+        "interpolate",
+        ["linear"],
+        ["get", "mag"],
+        0,
+        20,
+        3,
+        1
+      ],
+      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 2, 3, 5, 15],
       "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 7, 0, 8, 1],
       "heatmap-color": [
         "interpolate",
         ["linear"],
         ["heatmap-density"],
         0,
-        "rgba(33,102,172,0)",
-        0.2,
+        "rgba(255,255,255,0)",
+        0.1,
         "rgb(209,229,240)",
-        0.4,
+        0.25,
         "rgb(103,169,207)",
-        0.6,
+        0.4,
         "rgb(100,100,200)",
-        0.8,
-        "rgb(200,60,200)"
+        0.6,
+        "rgb(200,60,250)"
       ]
-    }
-  });
-
-  map.addLayer({
-    id: "simData-point",
-    type: "circle",
-    source: "simData",
-    minzoom: 14,
-
-    paint: {
-      // Size circle radius by earthquake magnitude and zoom level
-      "circle-radius": [
-        "interpolate",
-        ["linear"],
-        ["zoom"],
-        12,
-        ["interpolate", ["linear"], ["get", "mag"], 0.1, 0.5, 1, 2],
-        14,
-        ["interpolate", ["linear"], ["get", "mag"], 0.1, 0.5, 2, 1]
-      ],
-      // Color circle by earthquake magnitude
-      "circle-color": "rgb(200,0,170)",
-      "circle-stroke-color": "white",
-      "circle-stroke-width": 1,
-      // Transition from heatmap to circle layer by zoom level
-      "circle-opacity": ["interpolate", ["linear"], ["zoom"], 3, 0, 8, 1]
     }
   });
 
@@ -176,7 +159,6 @@ Gui function
 */
 export function gui() {
   document.getElementById("listing-group").style.display = "none";
-
   document.addEventListener("keydown", keyDownTextField, false);
   function keyDownTextField(e) {
     if (e.keyCode == 32) {
@@ -185,6 +167,39 @@ export function gui() {
         x.style.display = "block";
       } else {
         x.style.display = "none";
+      }
+      // else if clikced (p)rojection
+    } else if (e.keyCode == 80) {
+      let localStorage = window.localStorage;
+      if (localStorage["maptastic.layers"]) {
+        let storageJSON = JSON.parse(localStorage.getItem("maptastic.layers"));
+        //
+        var w = screen.width;
+        // 1920;
+        var h = screen.height;
+        //  1080;
+        let windowDims = [[0, 0], [w, 0], [w, h], [0, h]];
+        //
+        if (!storageJSON[0].mode || storageJSON[0].mode == "projection") {
+          storageJSON[0].mode = "screen";
+          storageJSON[0].sourcePoints_BU = storageJSON[0].sourcePoints;
+          storageJSON[0].targetPoints_BU = storageJSON[0].targetPoints;
+          //
+          storageJSON[0].sourcePoints = windowDims;
+          storageJSON[0].targetPoints = windowDims;
+          localStorage.setItem("maptastic.layers", [
+            JSON.stringify(storageJSON)
+          ]);
+          location.reload();
+        } else {
+          storageJSON[0].mode = "projection";
+          storageJSON[0].sourcePoints = storageJSON[0].sourcePoints_BU;
+          storageJSON[0].targetPoints = storageJSON[0].targetPoints_BU;
+          localStorage.setItem("maptastic.layers", [
+            JSON.stringify(storageJSON)
+          ]);
+          location.reload();
+        }
       }
     }
   }

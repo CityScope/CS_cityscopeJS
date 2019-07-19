@@ -26,6 +26,7 @@ export function makeMap() {
   let mapbox_div_element = document.querySelector("#keystoneDiv");
   // maptastic the div
   Maptastic(mapbox_div_element);
+
   // set the map origin
   // make the map itself
   var map = new mapboxgl.Map({
