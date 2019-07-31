@@ -1,0 +1,108 @@
+import { Camera, rotateCamera } from "./camera";
+import { update_grid_from_cityio } from "./update";
+
+/*
+Gui function 
+*/
+export function gui() {
+  document.getElementById("listing-group").style.display = "none";
+  document.addEventListener("keydown", keyDownTextField, false);
+  function keyDownTextField(e) {
+    if (e.keyCode == 32) {
+      let x = document.getElementById("listing-group");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+      // else if clikced (p)rojection
+    } else if (e.keyCode == 80) {
+      let localStorage = window.localStorage;
+      if (localStorage["maptastic.layers"]) {
+        let storageJSON = JSON.parse(localStorage.getItem("maptastic.layers"));
+        //
+        var w = screen.width;
+        // 1920;
+        var h = screen.height;
+        //  1080;
+        let windowDims = [[0, 0], [w, 0], [w, h], [0, h]];
+        //
+        if (!storageJSON[0].mode || storageJSON[0].mode == "projection") {
+          storageJSON[0].mode = "screen";
+          storageJSON[0].sourcePoints_BU = storageJSON[0].sourcePoints;
+          storageJSON[0].targetPoints_BU = storageJSON[0].targetPoints;
+          //
+          storageJSON[0].sourcePoints = windowDims;
+          storageJSON[0].targetPoints = windowDims;
+          localStorage.setItem("maptastic.layers", [
+            JSON.stringify(storageJSON)
+          ]);
+          location.reload();
+        } else {
+          storageJSON[0].mode = "projection";
+          storageJSON[0].sourcePoints = storageJSON[0].sourcePoints_BU;
+          storageJSON[0].targetPoints = storageJSON[0].targetPoints_BU;
+          localStorage.setItem("maptastic.layers", [
+            JSON.stringify(storageJSON)
+          ]);
+          location.reload();
+        }
+      }
+    }
+  }
+
+  const cam = new Camera(Storage.map);
+  cam.getLatLon();
+  cam.reset_camera_position(0);
+  //bring map to projection postion
+  document
+    .getElementById("listing-group")
+    .addEventListener("change", function(e) {
+      switch (e.target.id) {
+        case "noiseMap":
+          if (e.target.checked) {
+            Storage.map.setLayoutProperty("noiseMap", "visibility", "visible");
+          } else {
+            Storage.map.setLayoutProperty("noiseMap", "visibility", "none");
+          }
+          break;
+        case "simData":
+          if (e.target.checked) {
+            Storage.map.setLayoutProperty("simData", "visibility", "visible");
+            Storage.map.setLayoutProperty(
+              "simData-point",
+              "visibility",
+              "visible"
+            );
+          } else {
+            Storage.map.setLayoutProperty("simData", "visibility", "none");
+            Storage.map.setLayoutProperty(
+              "simData-point",
+              "visibility",
+              "none"
+            );
+          }
+          break;
+        case "rotateTo":
+          if (e.target.checked) {
+            if (Storage.reqAnimFrame !== null) {
+              cancelAnimationFrame(Storage.reqAnimFrame);
+            }
+            Storage.map.setLayoutProperty("mask", "visibility", "visible");
+            Storage.map.setLayoutProperty("building", "visibility", "none");
+
+            cam.reset_camera_position();
+            Storage.threeState = "flat";
+            update_grid_from_cityio();
+          } else {
+            Storage.map.setLayoutProperty("mask", "visibility", "none");
+            Storage.map.setLayoutProperty("building", "visibility", "visible");
+            Storage.threeState = "height";
+            update_grid_from_cityio();
+            rotateCamera(1);
+          }
+        default:
+          break;
+      }
+    });
+}

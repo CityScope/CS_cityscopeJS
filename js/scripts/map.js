@@ -2,7 +2,7 @@ import "babel-polyfill";
 import { Maptastic } from "./lib/maptastic";
 import "./Storage";
 import { layers } from "./layer";
-import { gui } from "./layer";
+import { gui } from "./gui";
 
 export function makeMap() {
   // let cityIOdata = Storage.cityIOdata;

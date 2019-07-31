@@ -1,10 +1,9 @@
 import "./Storage";
-import { Maptastic } from "./lib/maptastic";
 
 import * as turf from "@turf/turf";
 import { create_threeJS_grid_form_cityIO } from "./three";
-import { Camera, rotateCamera } from "./camera";
-import { update, update_grid_from_cityio } from "./update";
+import { update } from "./update";
+import { deck } from "./deck";
 
 export function layers() {
   // cityio update interval
@@ -38,6 +37,8 @@ export function layers() {
       threebox.update();
     }
   });
+
+  // map.addLayer({ deck });
 
   //table extents
   map.addLayer({
@@ -96,42 +97,6 @@ export function layers() {
 
   map.setPaintProperty("noiseMap", "raster-opacity", 0.65);
 
-  //  add the point simulation layer
-  map.addLayer({
-    id: "simData",
-    source: "simData",
-    type: "heatmap",
-    maxzoom: 20,
-    paint: {
-      "heatmap-weight": [
-        "interpolate",
-        ["linear"],
-        ["get", "mag"],
-        0,
-        20,
-        3,
-        1
-      ],
-      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 2, 3, 5, 15],
-      "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 7, 0, 8, 1],
-      "heatmap-color": [
-        "interpolate",
-        ["linear"],
-        ["heatmap-density"],
-        0,
-        "rgba(255,255,255,0)",
-        0.1,
-        "rgb(209,229,240)",
-        0.25,
-        "rgb(103,169,207)",
-        0.4,
-        "rgb(100,100,200)",
-        0.6,
-        "rgb(200,60,250)"
-      ]
-    }
-  });
-
   //! turf hidden area aroud
   var polygon = turf.polygon([Storage.tableExtents]);
   var masked = turf.mask(polygon);
@@ -150,112 +115,9 @@ export function layers() {
     }
   });
 
+  let deckLayer = deck();
+  map.addLayer(deckLayer);
+
   //run the layers update
   window.setInterval(update, update_interval);
-}
-
-/*
-Gui function 
-*/
-export function gui() {
-  document.getElementById("listing-group").style.display = "none";
-  document.addEventListener("keydown", keyDownTextField, false);
-  function keyDownTextField(e) {
-    if (e.keyCode == 32) {
-      let x = document.getElementById("listing-group");
-      if (x.style.display === "none") {
-        x.style.display = "block";
-      } else {
-        x.style.display = "none";
-      }
-      // else if clikced (p)rojection
-    } else if (e.keyCode == 80) {
-      let localStorage = window.localStorage;
-      if (localStorage["maptastic.layers"]) {
-        let storageJSON = JSON.parse(localStorage.getItem("maptastic.layers"));
-        //
-        var w = screen.width;
-        // 1920;
-        var h = screen.height;
-        //  1080;
-        let windowDims = [[0, 0], [w, 0], [w, h], [0, h]];
-        //
-        if (!storageJSON[0].mode || storageJSON[0].mode == "projection") {
-          storageJSON[0].mode = "screen";
-          storageJSON[0].sourcePoints_BU = storageJSON[0].sourcePoints;
-          storageJSON[0].targetPoints_BU = storageJSON[0].targetPoints;
-          //
-          storageJSON[0].sourcePoints = windowDims;
-          storageJSON[0].targetPoints = windowDims;
-          localStorage.setItem("maptastic.layers", [
-            JSON.stringify(storageJSON)
-          ]);
-          location.reload();
-        } else {
-          storageJSON[0].mode = "projection";
-          storageJSON[0].sourcePoints = storageJSON[0].sourcePoints_BU;
-          storageJSON[0].targetPoints = storageJSON[0].targetPoints_BU;
-          localStorage.setItem("maptastic.layers", [
-            JSON.stringify(storageJSON)
-          ]);
-          location.reload();
-        }
-      }
-    }
-  }
-
-  const cam = new Camera(Storage.map);
-  cam.getLatLon();
-  cam.reset_camera_position(0);
-  //bring map to projection postion
-  document
-    .getElementById("listing-group")
-    .addEventListener("change", function(e) {
-      switch (e.target.id) {
-        case "noiseMap":
-          if (e.target.checked) {
-            Storage.map.setLayoutProperty("noiseMap", "visibility", "visible");
-          } else {
-            Storage.map.setLayoutProperty("noiseMap", "visibility", "none");
-          }
-          break;
-        case "simData":
-          if (e.target.checked) {
-            Storage.map.setLayoutProperty("simData", "visibility", "visible");
-            Storage.map.setLayoutProperty(
-              "simData-point",
-              "visibility",
-              "visible"
-            );
-          } else {
-            Storage.map.setLayoutProperty("simData", "visibility", "none");
-            Storage.map.setLayoutProperty(
-              "simData-point",
-              "visibility",
-              "none"
-            );
-          }
-          break;
-        case "rotateTo":
-          if (e.target.checked) {
-            if (Storage.reqAnimFrame !== null) {
-              cancelAnimationFrame(Storage.reqAnimFrame);
-            }
-            Storage.map.setLayoutProperty("mask", "visibility", "visible");
-            Storage.map.setLayoutProperty("building", "visibility", "none");
-
-            cam.reset_camera_position();
-            Storage.threeState = "flat";
-            update_grid_from_cityio();
-          } else {
-            Storage.map.setLayoutProperty("mask", "visibility", "none");
-            Storage.map.setLayoutProperty("building", "visibility", "visible");
-            Storage.threeState = "height";
-            update_grid_from_cityio();
-            rotateCamera(1);
-          }
-        default:
-          break;
-      }
-    });
 }
