@@ -5,8 +5,11 @@ import "./Storage";
  * @param sizeX, sizeY of grid
  */
 export function create_threeJS_grid_form_cityIO() {
+  let cityIOdata = Storage.cityIOdata;
+  let table_lat = cityIOdata.header.spatial.latitude;
+  let table_lon = cityIOdata.header.spatial.longitude;
   // parameters to ensure the model is georeferenced correctly on the map
-  var modelOrigin = [19.050979614257812, 47.43630292431787];
+  var modelOrigin = [table_lon, table_lat];
   var modelAltitude = 0;
   var modelRotate = [0, 0, 0];
   var modelScale = 5.41843220338983e-8;
@@ -33,7 +36,7 @@ export function create_threeJS_grid_form_cityIO() {
 
   // configuration of the custom layer for a 3D model per the CustomLayerInterface
 
-  var customLayer = {
+  var threeLayer = {
     id: "3d-model",
     type: "custom",
     renderingMode: "3d",
@@ -102,12 +105,9 @@ export function create_threeJS_grid_form_cityIO() {
       this.map.triggerRepaint();
     }
   };
-  console.log(customLayer);
-
-  return customLayer;
+  return threeLayer;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 function makeGrid() {
   let cityIOdata = Storage.cityIOdata;
 

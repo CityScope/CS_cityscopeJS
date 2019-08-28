@@ -7,7 +7,7 @@ import "babel-polyfill";
  * controls the cityIO streeam
  */
 export async function update() {
-  Storage.cityIOdata = await getCityIO(Storage.cityIOurl);
+  Storage.gridCityIOData = await getCityIO(Storage.cityIOurl + "/grid");
   update_grid_from_cityio();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ export function update_grid_from_cityio() {
     }
   ];
 
-  let cityIOdata = Storage.cityIOdata;
+  let cityIOdata = Storage.gridCityIOData;
   let grid = Storage.threeGrid;
   // let textHolder = Storage.threeText;
 
@@ -80,21 +80,21 @@ export function update_grid_from_cityio() {
     thisCell.position.z = 10;
     thisCell.scale.z = 1;
 
-    if (cityIOdata.grid[i][0] !== -1) {
+    if (cityIOdata[i][0] !== -1) {
       thisCell.material.color.set(
-        array_of_types_and_colors[cityIOdata.grid[i][0]].color
+        array_of_types_and_colors[cityIOdata[i][0]].color
       );
 
       if (Storage.threeState == "height") {
         let this_cell_height =
-          array_of_types_and_colors[cityIOdata.grid[i][0]].height + 1;
+          array_of_types_and_colors[cityIOdata[i][0]].height + 1;
         thisCell.scale.z = this_cell_height;
         thisCell.position.z = this_cell_height / 2;
       } else if (Storage.threeState == "flat") {
         thisCell.position.z = 10;
         thisCell.scale.z = 1;
       }
-    } else if (cityIOdata.grid[i][0] == -1) {
+    } else if (cityIOdata[i][0] == -1) {
       // black outs the non-read pixels
       thisCell.position.z = 10;
       thisCell.material.color.set("#000");

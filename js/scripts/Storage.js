@@ -46,6 +46,14 @@ class Storage {
     this._cityIOdata = value;
   }
 
+  //grid CityIO data
+  get gridCityIOData() {
+    return this._gridCityIOData;
+  }
+  set gridCityIOData(value) {
+    this._gridCityIOData = value;
+  }
+
   //cityIO data
   get cityIOdata_OLD() {
     return this._cityIOdata;

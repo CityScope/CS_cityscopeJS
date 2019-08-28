@@ -58,6 +58,7 @@ async function init() {
   Storage.cityIOdata = cityIOjson;
   //make the mapbox gl base map
   makeMap();
+  // get map from storage
   let map = Storage.map;
   // wait for map to load
   map.on("style.load", function() {
@@ -65,7 +66,6 @@ async function init() {
     gui();
     // load layer
     layers();
-
     //run the layers update
     window.setInterval(update, update_interval);
   });
