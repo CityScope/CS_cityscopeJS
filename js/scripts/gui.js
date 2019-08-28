@@ -17,6 +17,8 @@ export function gui() {
       }
       // else if clikced (p)rojection
     } else if (e.keyCode == 80) {
+      console.log(e.keyCode);
+
       let localStorage = window.localStorage;
       if (localStorage["maptastic.layers"]) {
         let storageJSON = JSON.parse(localStorage.getItem("maptastic.layers"));
@@ -48,6 +50,7 @@ export function gui() {
           location.reload();
         }
       }
+      console.log("no older maptastic setup found");
     }
   }
 
