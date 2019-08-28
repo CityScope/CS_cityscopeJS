@@ -47,37 +47,35 @@ export function update_grid_from_cityio() {
     {
       type: "live2",
       color: "#008DD5",
-      height: 50
+      height: 100
     },
 
     {
       type: "Open Space",
       color: "#13D031",
-      height: 0
+      height: 1
     },
     {
       type: "Live1",
       color: "#002DD5",
-      height: 20
+      height: 50
     },
 
     {
       type: "Road",
       color: "#373F51",
-      height: 0
+      height: 1
     }
   ];
 
   let cityIOdata = Storage.gridCityIOData;
   let grid = Storage.threeGrid;
-  // let textHolder = Storage.threeText;
 
   for (let i = 0; i < grid.children.length; i++) {
     //cell edit
     let thisCell = grid.children[i];
-    //clear the text obj
-    // textHolder.children[i].text = " ";
-    thisCell.position.z = 10;
+
+    thisCell.position.z = 0;
     thisCell.scale.z = 1;
 
     if (cityIOdata[i][0] !== -1) {
@@ -87,12 +85,12 @@ export function update_grid_from_cityio() {
 
       if (Storage.threeState == "height") {
         let this_cell_height =
-          array_of_types_and_colors[cityIOdata[i][0]].height + 1;
+          array_of_types_and_colors[cityIOdata[i][0]].height;
         thisCell.scale.z = this_cell_height;
         thisCell.position.z = this_cell_height / 2;
       } else if (Storage.threeState == "flat") {
-        thisCell.position.z = 10;
-        thisCell.scale.z = 1;
+        thisCell.position.z = 0;
+        thisCell.scale.z = 0.1;
       }
     } else if (cityIOdata[i][0] == -1) {
       // black outs the non-read pixels
