@@ -11,13 +11,14 @@ export function layers() {
   */
   let threeLayer = create_threeJS_grid_form_cityIO();
   map.addLayer(threeLayer);
-
   /* 
   deck layer
   */
   let deckLayer = deck();
   map.addLayer(deckLayer);
-
+  /* 
+  noise layer 
+  */
   map.addLayer({
     id: "noisehh",
     displayName: "Noise",
@@ -32,6 +33,68 @@ export function layers() {
       tileSize: 512
     },
     paint: {}
+  });
+
+  /* 
+  3d buildings 
+  */
+  map.addLayer({
+    id: "3d Buildings",
+    displayName: "3d Buildings",
+    source: "composite",
+    "source-layer": "building",
+    filter: ["==", "extrude", "true"],
+    type: "fill-extrusion",
+    minzoom: 10,
+    paint: {
+      "fill-extrusion-color": "#fff",
+      "fill-extrusion-height": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        0.1,
+        10,
+        15.05,
+        ["get", "height"]
+      ],
+
+      "fill-extrusion-opacity": 0.8
+    },
+    showInLayerList: true,
+    addOnMapInitialisation: false
+  });
+
+  /* 
+  Access 
+  */
+  map.addLayer({
+    id: "Edu Access",
+    type: "circle",
+    source: {
+      type: "geojson",
+      data: "https://cityio.media.mit.edu/api/table/grasbrook/access"
+    },
+    paint: {
+      "circle-translate": [0, 0],
+      "circle-radius": {
+        property: "education",
+        stops: [
+          [{ zoom: 8, value: 0 }, 0.1],
+          [{ zoom: 8, value: 1 }, 1],
+          [{ zoom: 11, value: 0 }, 0.5],
+          [{ zoom: 11, value: 1 }, 2],
+          [{ zoom: 16, value: 0 }, 3],
+          [{ zoom: 16, value: 1 }, 9]
+        ]
+      },
+      "circle-color": {
+        property: "education",
+        stops: [[0, "red"], [0.5, "yellow"], [1, "green"]]
+      }
+    },
+    hasReloadInterval: false,
+    showInLayerList: true,
+    addOnMapInitialisation: false
   });
 
   // check if this table has table extents features
