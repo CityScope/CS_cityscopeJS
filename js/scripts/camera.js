@@ -3,12 +3,13 @@ export class Camera {
   constructor(map) {
     this.map = Storage.map;
     this.cityIOdata = Storage.cityIOdata;
-    this.tableExtents = Storage.tableExtents;
+    this.table_lat = this.cityIOdata.header.spatial.latitude;
+    this.table_lon = this.cityIOdata.header.spatial.longitude;
   }
 
   getLatLon() {
     this.map.on("mousedown", function(e) {
-      console.log(e.lngLat);
+      console.log(e);
     });
   }
 
@@ -20,7 +21,7 @@ export class Camera {
       center: this.findTableCenter(),
       bearing: angle,
       pitch: 0,
-      zoom: 16
+      zoom: 14
     });
   }
 
@@ -29,10 +30,19 @@ export class Camera {
    * return center point pnts
    */
   findTableCenter() {
-    let pnts = [
-      0.5 * Math.abs(this.tableExtents[2][0] + this.tableExtents[0][0]),
-      0.5 * Math.abs(this.tableExtents[2][1] + this.tableExtents[0][1])
-    ];
+    let pnts = [];
+    // check if this table has table extents features
+    if (Storage.tableExtents) {
+      console.log("table extents found", Storage.tableExtents);
+
+      pnts = [
+        0.5 * Math.abs(Storage.tableExtents[2][0] + Storage.tableExtents[0][0]),
+        0.5 * Math.abs(Storage.tableExtents[2][1] + Storage.tableExtents[0][1])
+      ];
+    } else {
+      console.log("no table extents found, defaulting to center");
+      pnts = [this.table_lon, this.table_lat];
+    }
     return pnts;
   }
 }

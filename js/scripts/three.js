@@ -126,8 +126,8 @@ function makeGrid() {
   );
   var z_height_of_mesh = 1;
   //loop through grid rows and cols and create the grid
-  for (var this_row = 0; this_row < grid_rows; this_row++) {
-    for (var this_column = 0; this_column < grid_columns; this_column++) {
+  for (var this_column = 0; this_column < grid_columns; this_column++) {
+    for (var this_row = 0; this_row < grid_rows; this_row++) {
       geometry = new THREE.BoxBufferGeometry(
         cell_size_in_meters * cell_rescale_precentage,
         cell_size_in_meters * cell_rescale_precentage,

@@ -3,20 +3,6 @@ import { Maptastic } from "./lib/maptastic";
 import "./Storage";
 
 export function makeMap() {
-  let cityIOdata = Storage.cityIOdata;
-  // let table_lat = cityIOdata.header.spatial.latitude;
-  // let table_lon = cityIOdata.header.spatial.longitude;
-
-  // let cityIOdata = Storage.cityIOdata;
-  let tableExtents = [
-    [19.050979614257812, 47.43630292431787],
-    [19.068617820739746, 47.435577210715834],
-    [19.063854217529297, 47.40990954349756],
-    [19.044928550720215, 47.41107124673388],
-    [19.050979614257812, 47.43630292431787]
-  ];
-
-  Storage.tableExtents = tableExtents;
   // define the mapbox div element
   var keystoneDiv = document.createElement("div");
   keystoneDiv.className = "keystoneDiv";
