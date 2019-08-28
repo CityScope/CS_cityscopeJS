@@ -10,6 +10,8 @@ export function deck() {
     // "https://cityio.media.mit.edu/api/table/grasbrook/cityIO_Gama_Hamburg"
   };
 
+  let timeStampDiv = document.getElementById("timeStamp");
+
   const tripLayer = new MapboxLayer({
     type: TripsLayer,
     id: "deck",
@@ -36,13 +38,15 @@ export function deck() {
 
   function renderLayers() {
     let loopLength = 4 * 60 * 60;
-    let animationSpeed = 250;
+    let animationSpeed = 50;
     const timestamp = Date.now() / 1000;
     const loopTime = loopLength / animationSpeed;
-    let time = 30000 + ((timestamp % loopTime) / loopTime) * loopLength;
+    let t = 30000 + ((timestamp % loopTime) / loopTime) * loopLength;
+
+    timeStampDiv.innerHTML = t;
 
     tripLayer.setProps({
-      currentTime: time
+      currentTime: t
     });
   }
 

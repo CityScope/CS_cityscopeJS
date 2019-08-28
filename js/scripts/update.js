@@ -13,21 +13,8 @@ export async function update() {
   //
   update_abm_simulation();
 
-  // get cityIO url from storage and
-  // put cityIO data to storage after it's updated
   Storage.cityIOdata = await getCityIO(Storage.cityIOurl);
 
-  // check for new cityIO data stream
-  // if (
-  //   Storage.cityIOdata_OLD !== null &&
-  //   Storage.cityIOdata.meta.id.toString() ===
-  //     Storage.cityIOdata_OLD.meta.id.toString()
-  // ) {
-  //   return;
-  // } else {
-  //   // compare the two data sets
-  // Storage.cityIOdata_OLD = Storage.cityIOdata;
-  //update the grid props
   update_grid_from_cityio();
   // }
 }
@@ -131,23 +118,3 @@ export async function update_abm_simulation() {
     "https://cityio.media.mit.edu/api/table/abm_service_Hamburg";
   Storage.map.getSource("simData").setData(Storage.simData);
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// export async function update_sumo_simulation() {
-//   //deal with simulation data update and storage
-//   // Storage.simData = ABMdemo;
-//   // await getCityIO(Storage.cityIOurl + "_sim");
-//   // make json out of it
-//   let sim_data_json = JSON.parse(Storage.simData.features);
-//   function sumo_to_geojson(sim_data_json) {
-//     let coordinates_list = [];
-//     sim_data_json.forEach(function(t) {
-//       coordinates_list.push(t[1]);
-//     });
-//     return {
-//       type: "MultiPoint",
-//       coordinates: coordinates_list
-//     };
-//   }
-//   Storage.map.getSource("simData").setData(sumo_to_geojson(sim_data_json));
-// }

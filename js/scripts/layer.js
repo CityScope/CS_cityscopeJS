@@ -13,9 +13,9 @@ export function layers() {
   // table physical loction
   let table_lat = cityIOdata.header.spatial.latitude;
   let table_lon = cityIOdata.header.spatial.longitude;
-  var scence_origin_position = [table_lat, table_lon, 0];
+  var scence_origin_position = [table_lon, table_lat, 0];
   // ! FOR NOW !!
-  scence_origin_position = [10.013586800974366, 53.53297429860049, 0];
+  // scence_origin_position = [10.013586800974366, 53.53297429860049, 0];
 
   //add the dummy data of 1 point
   map.addSource("simData", {
@@ -77,7 +77,7 @@ export function layers() {
     threebox.add(csGrid);
     // add the scene objects to storage for later update
     Storage.threeGrid = threebox.scene.children[0].children[1].children[0];
-    console.log(Storage.threeGrid);
+    // console.log(Storage.threeGrid);
   }
 
   //
@@ -97,23 +97,23 @@ export function layers() {
 
   map.setPaintProperty("noiseMap", "raster-opacity", 0.65);
 
-  //! turf hidden area aroud
-  var polygon = turf.polygon([Storage.tableExtents]);
-  var masked = turf.mask(polygon);
+  // //! turf hidden area aroud
+  // var polygon = turf.polygon([Storage.tableExtents]);
+  // var masked = turf.mask(polygon);
 
-  map.addLayer({
-    id: "mask",
-    type: "fill",
-    source: {
-      type: "geojson",
-      data: masked
-    },
-    layout: {},
-    paint: {
-      "fill-color": "#000000",
-      "fill-opacity": 1
-    }
-  });
+  // map.addLayer({
+  //   id: "mask",
+  //   type: "fill",
+  //   source: {
+  //     type: "geojson",
+  //     data: masked
+  //   },
+  //   layout: {},
+  //   paint: {
+  //     "fill-color": "#000000",
+  //     "fill-opacity": 1
+  //   }
+  // });
 
   let deckLayer = deck();
   map.addLayer(deckLayer);
