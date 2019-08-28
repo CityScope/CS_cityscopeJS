@@ -18,6 +18,22 @@ export function layers() {
   let deckLayer = deck();
   map.addLayer(deckLayer);
 
+  map.addLayer({
+    id: "noisehh",
+    displayName: "Noise",
+    showInLayerList: true,
+    metadata: "",
+    type: "raster",
+    source: {
+      type: "raster",
+      tiles: [
+        "https://geodienste.hamburg.de/HH_WMS_Strassenverkehr?format=image/png&service=WMS&version=1.3.0&STYLES=&bbox={bbox-epsg-3857}&request=GetMap&crs=EPSG:3857&transparent=true&width=512&height=512&layers=strassenverkehr_tag_abend_nacht_2017"
+      ],
+      tileSize: 512
+    },
+    paint: {}
+  });
+
   // check if this table has table extents features
   if (Storage.tableExtents) {
     console.log("table extents", Storage.tableExtents);
