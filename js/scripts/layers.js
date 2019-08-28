@@ -64,6 +64,22 @@ export function layers() {
     addOnMapInitialisation: false
   });
 
+  // fake shadow map
+  // map.addLayer({
+  //   id: "object-shadow",
+  //   source: "composite",
+  //   "source-layer": "building",
+  //   type: "line",
+  //   "line-join": "bevel",
+  //   "line-cap": "round",
+  //   paint: {
+  //     "line-color": "rgb(255,255,0)",
+  //     "line-width": 10,
+  //     "line-blur": 10,
+  //     "line-opacity": 0.9
+  //   }
+  // });
+
   /* 
   Access 
   */
