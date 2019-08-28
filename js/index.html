@@ -1,51 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css' rel='stylesheet' />
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
-
-
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
   </head>
-
+  <!--  -->
   <body>
-    <!-- start app -->
-
-    <div id="map">
-      <canvas id="deck-canvas"></canvas>
+    <div id="ui" class="ui">
+      <h1>CitySocpeJS</h1>
+      <h2>Display</h2>
+      <p>'Space' to hide <br />Shift+Z' to keystone</p>
+      <nav id="listing-group" class="listing-group">
+        <input type="checkbox" id="projectionMode" checked="checked" />
+        <label for="projectionMode">Toggle Camera Rotation</label>
+        <input type="checkbox" id="keystone" />
+        <label for="keystone">Toggle Keystone Mode (will refresh page)</label>
+        <!--  -->
+        <h2>Layers</h2>
+        <!--  -->
+        <input type="checkbox" id="3dBuildingsLayer" checked="checked" />
+        <label for="3dBuildingsLayer">3d Buildings</label>
+        <!--  -->
+        <!--  -->
+        <input type="checkbox" id="noiseLayer" checked="checked" />
+        <label for="noiseLayer">noise</label>
+        <!--  -->
+        <input type="checkbox" id="mobilityLayer" checked="checked" />
+        <label for="mobilityLayer"
+          >Mobility Layer | Time:
+          <div id="timeStamp" class="timeStamp"></div>
+        </label>
+      </nav>
     </div>
-
-
-    <nav id="listing-group" class="listing-group">
-      <p><h2>Layers</br> </h2>
-        hit 'Spacebar' to hide</p>
-      <input type="checkbox" id="rotateTo" checked="checked" />
-      <label for="rotateTo">project</label>
-      <input type="checkbox" id="noiseMap" checked="checked" />
-      <label for="noiseMap">noise</label>
-      <input type="checkbox" id="simData" checked="checked" />
-      <label for="simData">ABM</label>
-    </nav>
-    <!--  -->
-    <div id="legend" class="legend">
-    <h2>Legend</h2> 
-    <ul>
-        <li>Offices High</li>
-        <li>Offices Low</li>
-        <li>Open Space</li>
-        <li>Road</li>
-        <li>Residential High</li>
-        <li>Residential Low</li>
-     </ul>
-     <div id ="timeStamp" class= "timeStamp"></div>
-
-   </div>
-   <script src="./scripts/index.js"></script>
-
+    <script src="./scripts/index.js"></script>
   </body>
 </html>

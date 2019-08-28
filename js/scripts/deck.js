@@ -14,7 +14,7 @@ export function deck() {
 
   const tripLayer = new MapboxLayer({
     type: TripsLayer,
-    id: "deck",
+    id: "mobilityLayer",
     data: DATA_URL.TRIPS,
     getPath: d => d.segments,
     getColor: d => {

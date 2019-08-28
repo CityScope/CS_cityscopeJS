@@ -20,7 +20,7 @@ export function layers() {
   noise layer 
   */
   map.addLayer({
-    id: "noisehh",
+    id: "noiseLayer",
     displayName: "Noise",
     showInLayerList: true,
     metadata: "",
@@ -39,8 +39,8 @@ export function layers() {
   3d buildings 
   */
   map.addLayer({
-    id: "3d Buildings",
-    displayName: "3d Buildings",
+    id: "3dBuildingsLayer",
+    displayName: "3dBuildingsLayer",
     source: "composite",
     "source-layer": "building",
     filter: ["==", "extrude", "true"],
