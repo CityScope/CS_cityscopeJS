@@ -1,4 +1,5 @@
 import "babel-polyfill";
+import mapboxgl from "mapbox-gl";
 import { Maptastic } from "./lib/maptastic";
 import "./Storage";
 

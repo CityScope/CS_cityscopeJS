@@ -1,5 +1,7 @@
 import * as THREE from "THREE";
 import "./Storage";
+import mapboxgl from "mapbox-gl";
+
 /**
  * makes the initial 3js grid of meshes and texts
  * @param sizeX, sizeY of grid
