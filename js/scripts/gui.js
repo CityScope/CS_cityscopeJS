@@ -11,7 +11,7 @@ export function gui() {
   cam.reset_camera_position();
   // get UI div
   let uiDiv = document.getElementById("ui");
-  uiDiv.style.display = "none";
+  // uiDiv.style.display = "none";
   //
   document.addEventListener("keydown", keyEventOnMap, false);
   function keyEventOnMap(e) {

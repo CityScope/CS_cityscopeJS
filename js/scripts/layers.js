@@ -84,7 +84,7 @@ export function layers() {
   Access 
   */
   map.addLayer({
-    id: "Edu Access",
+    id: "AccessLayer",
     type: "circle",
     source: {
       type: "geojson",

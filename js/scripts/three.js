@@ -39,7 +39,7 @@ export function create_threeJS_grid_form_cityIO() {
   // configuration of the custom layer for a 3D model per the CustomLayerInterface
 
   var threeLayer = {
-    id: "3d-model",
+    id: "CityScopeGridLayer",
     type: "custom",
     renderingMode: "3d",
     onAdd: function(map, gl) {
