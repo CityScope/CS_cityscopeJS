@@ -1,7 +1,5 @@
 import "./Storage";
 import "babel-polyfill";
-import * as cityIOdemo from "./lib/cityio_demo.json";
-import * as ABMdemo from "./lib/abm_demo.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -9,14 +7,8 @@ import * as ABMdemo from "./lib/abm_demo.json";
  * controls the cityIO streeam
  */
 export async function update() {
-  //temp solution to call this here
-  //
-  update_abm_simulation();
-
   Storage.cityIOdata = await getCityIO(Storage.cityIOurl);
-
   update_grid_from_cityio();
-  // }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**

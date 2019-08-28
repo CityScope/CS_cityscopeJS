@@ -59,30 +59,6 @@ export function gui() {
     .getElementById("listing-group")
     .addEventListener("change", function(e) {
       switch (e.target.id) {
-        case "noiseMap":
-          if (e.target.checked) {
-            Storage.map.setLayoutProperty("noiseMap", "visibility", "visible");
-          } else {
-            Storage.map.setLayoutProperty("noiseMap", "visibility", "none");
-          }
-          break;
-        case "simData":
-          if (e.target.checked) {
-            Storage.map.setLayoutProperty("simData", "visibility", "visible");
-            Storage.map.setLayoutProperty(
-              "simData-point",
-              "visibility",
-              "visible"
-            );
-          } else {
-            Storage.map.setLayoutProperty("simData", "visibility", "none");
-            Storage.map.setLayoutProperty(
-              "simData-point",
-              "visibility",
-              "none"
-            );
-          }
-          break;
         case "rotateTo":
           if (e.target.checked) {
             if (Storage.reqAnimFrame !== null) {

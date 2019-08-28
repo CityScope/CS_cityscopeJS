@@ -33,8 +33,13 @@ import "babel-polyfill";
 import "./Storage";
 import { makeMap } from "./map";
 import { getCityIO } from "./update";
+import { layers } from "./layers";
+import { gui } from "./gui";
+import { update } from "./update";
 
 async function init() {
+  // cityio update interval
+  var update_interval = 200;
   //which cityIO endpoint to look for
   var cityio_table_name = window.location.search.substring(1);
   // otherwise, default to this table
@@ -53,6 +58,17 @@ async function init() {
   Storage.cityIOdata = cityIOjson;
   //make the mapbox gl base map
   makeMap();
+  let map = Storage.map;
+  // wait for map to load
+  map.on("style.load", function() {
+    // do gui
+    gui();
+    // load layer
+    layers();
+
+    //run the layers update
+    window.setInterval(update, update_interval);
+  });
 }
 //start applet
 window.onload = init();

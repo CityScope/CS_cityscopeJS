@@ -1,17 +1,19 @@
 import "babel-polyfill";
 import { Maptastic } from "./lib/maptastic";
 import "./Storage";
-import { layers } from "./layer";
-import { gui } from "./gui";
 
 export function makeMap() {
+  let cityIOdata = Storage.cityIOdata;
+  // let table_lat = cityIOdata.header.spatial.latitude;
+  // let table_lon = cityIOdata.header.spatial.longitude;
+
   // let cityIOdata = Storage.cityIOdata;
   let tableExtents = [
-    [10.00677491086256, 53.53789434597681],
-    [10.02223991398489, 53.531586825893925],
-    [10.016245501014993, 53.52640987365575],
-    [10.000748807171703, 53.53278372885845],
-    [10.00677491086256, 53.53789434597681]
+    [19.050979614257812, 47.43630292431787],
+    [19.068617820739746, 47.435577210715834],
+    [19.063854217529297, 47.40990954349756],
+    [19.044928550720215, 47.41107124673388],
+    [19.050979614257812, 47.43630292431787]
   ];
 
   Storage.tableExtents = tableExtents;
@@ -32,12 +34,8 @@ export function makeMap() {
   var map = new mapboxgl.Map({
     container: "keystoneDiv",
     style: "mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd",
-    center: [tableExtents[2][0], tableExtents[2][1]],
+    center: [0, 0],
     zoom: 10
   });
   Storage.map = map;
-  map.on("style.load", function() {
-    layers();
-    gui();
-  });
 }
