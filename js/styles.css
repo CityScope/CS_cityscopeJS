@@ -13,10 +13,10 @@ body {
 .ui {
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
-  border-radius: 5px;
+  border-radius: 1.5em;
   bottom: 5em;
   left: 5em;
-  font: 1em "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font: 0.8em "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 100;
   padding: 1em;
   position: absolute;
@@ -31,15 +31,18 @@ body {
   display: block;
   cursor: pointer;
   padding: 1em;
+  border-radius: 1em;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  margin: 1em;
 }
 
 .listing-group input[type="checkbox"] + label:hover {
   border: 1px solid rgb(255, 255, 255);
-  margin: -1px;
+  margin: 1em;
 }
 
 .listing-group input[type="checkbox"]:checked + label {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .listing-group input[type="checkbox"]:checked + label:before {
