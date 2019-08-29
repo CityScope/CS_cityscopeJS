@@ -5,7 +5,6 @@ class Storage {
   constructor() {
     this._cityIOurl = "";
   }
-
   //reqAnimFrame
   get reqAnimFrame() {
     return this._reqAnimFrame;
@@ -13,7 +12,6 @@ class Storage {
   set reqAnimFrame(value) {
     this._reqAnimFrame = value;
   }
-
   //cityIO url
   get cityIOurl() {
     return this._cityIOurl;
@@ -21,7 +19,6 @@ class Storage {
   set cityIOurl(value) {
     this._cityIOurl = value;
   }
-
   //map obj
   get map() {
     return this._map;
@@ -62,14 +59,6 @@ class Storage {
     this._cityIOdata = value;
   }
 
-  //sim data
-  get simData() {
-    return this._simData;
-  }
-  set simData(value) {
-    this._simData = value;
-  }
-
   //threeJs grid
   get threeGrid() {
     return this._threeGrid;
@@ -84,14 +73,6 @@ class Storage {
   }
   set threeState(value) {
     this._threeState = value;
-  }
-
-  //threeJs text
-  get threeText() {
-    return this._threeText;
-  }
-  set threeText(value) {
-    this._threeText = value;
   }
 }
 

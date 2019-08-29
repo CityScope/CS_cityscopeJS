@@ -22,7 +22,7 @@ export function mobilityServiceLayer() {
   // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
   function renderLayers() {
     let loopLength = 4 * 60 * 60;
-    let animationSpeed = 50;
+    let animationSpeed = 100;
     const timestamp = Date.now() / 1000;
     const loopTime = loopLength / animationSpeed;
     let time = 30000 + ((timestamp % loopTime) / loopTime) * loopLength;
@@ -45,10 +45,10 @@ export function mobilityServiceLayer() {
                 return [153, 180, 100];
             }
           },
-          opacity: 0.5,
-          widthMinPixels: 2,
+          opacity: 0.7,
+          widthMinPixels: 4,
           rounded: true,
-          trailLength: 500,
+          trailLength: 300,
           currentTime: time
         })
       ]
@@ -56,7 +56,6 @@ export function mobilityServiceLayer() {
 
     timeStampDiv.innerHTML = time;
   }
-  //
 
   // start animation loop
   setInterval(() => {

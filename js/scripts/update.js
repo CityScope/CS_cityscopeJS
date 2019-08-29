@@ -103,10 +103,22 @@ export function update_grid_from_cityio() {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 
-export async function update_abm_simulation() {
-  //deal with simulation data update and storage
-  Storage.simData =
-    "https://cityio.media.mit.edu/api/table/abm_service_Hamburg";
-  Storage.map.getSource("simData").setData(Storage.simData);
-}
+  //sim data
+  get simData() {
+    return this._simData;
+  }
+  set simData(value) {
+    this._simData = value;
+  }
+
+  export async function update_abm_simulation() {
+    //deal with simulation data update and storage
+    Storage.simData =
+      "https://cityio.media.mit.edu/api/table/abm_service_Hamburg";
+    Storage.map.getSource("simData").setData(Storage.simData);
+  }
+  
+
+  */
