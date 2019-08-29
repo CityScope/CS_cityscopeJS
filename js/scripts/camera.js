@@ -17,11 +17,12 @@ export class Camera {
     let angle;
     angle = 180 - this.cityIOdata.header.spatial.rotation;
     this.map.rotateTo(angle, { duration: 200 });
+
     this.map.flyTo({
       center: this.findTableCenter(),
       bearing: angle,
       pitch: 0,
-      zoom: 14
+      zoom: 16
     });
   }
 
@@ -30,20 +31,20 @@ export class Camera {
    * return center point pnts
    */
   findTableCenter() {
-    let pnts = [];
+    let tableCenter = [];
     // check if this table has table extents features
     if (Storage.tableExtents) {
       console.log("table extents found", Storage.tableExtents);
 
-      pnts = [
+      tableCenter = [
         0.5 * Math.abs(Storage.tableExtents[2][0] + Storage.tableExtents[0][0]),
         0.5 * Math.abs(Storage.tableExtents[2][1] + Storage.tableExtents[0][1])
       ];
     } else {
       console.log("no table extents found, defaulting to center");
-      pnts = [this.table_lon, this.table_lat];
+      tableCenter = [this.table_lon, this.table_lat];
     }
-    return pnts;
+    return tableCenter;
   }
 }
 

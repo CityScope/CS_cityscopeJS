@@ -78,8 +78,12 @@ export function gui() {
             ]);
             location.reload();
           }
+        } else {
+          let keystoneButtonDiv = document.getElementById("keystoneButton");
+          keystoneButtonDiv.innerHTML =
+            "No keystone found, click 'shift+z' to keystone";
+          console.log("no older maptastic setup found");
         }
-        console.log("no older maptastic setup found");
         break;
       default:
         if (e.target.checked) {

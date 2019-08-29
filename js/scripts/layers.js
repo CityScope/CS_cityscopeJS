@@ -5,17 +5,9 @@ import { deck } from "./deck";
 
 export function layers() {
   let map = Storage.map;
-
-  /*
-     threeJS layer
-  */
   let threeLayer = create_threeJS_grid_form_cityIO();
-  map.addLayer(threeLayer);
-  /* 
-  deck layer
-  */
   let deckLayer = deck();
-  map.addLayer(deckLayer);
+
   /* 
   noise layer 
   */
@@ -162,4 +154,13 @@ export function layers() {
       }
     });
   }
+
+  /*
+     threeJS layer
+  */
+  map.addLayer(threeLayer);
+  /* 
+deck layer
+*/
+  map.addLayer(deckLayer);
 }
