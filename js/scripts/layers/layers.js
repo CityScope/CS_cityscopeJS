@@ -1,14 +1,11 @@
 import "../Storage";
 import * as turf from "@turf/turf";
 import { create_threeJS_grid_form_cityIO } from "../three";
-
-import { deck } from "./deck";
-import { abmLayer } from "./abm";
+import { mobilityServiceLayer } from "./mobilityServiceLayer";
 
 export function layers() {
   let map = Storage.map;
   let threeLayer = create_threeJS_grid_form_cityIO();
-  let deckLayer = deck();
 
   /* 
   noise layer 
@@ -76,7 +73,7 @@ export function layers() {
 
   /* 
   Access 
-  */
+  
   map.addLayer({
     id: "AccessLayer",
     type: "circle",
@@ -106,6 +103,7 @@ export function layers() {
     showInLayerList: true,
     addOnMapInitialisation: false
   });
+  */
 
   // check if this table has table extents features
   if (Storage.tableExtents) {
@@ -162,10 +160,9 @@ export function layers() {
   */
   map.addLayer(threeLayer);
   /* 
-deck layer
-*/
-  abmLayer();
-  map.addLayer(deckLayer);
+  deck layer
+  */
+  mobilityServiceLayer();
 
   //
   console.log(map.getStyle().layers);
