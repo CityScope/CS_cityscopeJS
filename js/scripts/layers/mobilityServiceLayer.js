@@ -8,8 +8,8 @@ export function mobilityServiceLayer() {
   // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/overview.md?source=post_page---------------------------#using-with-pure-js
 
   const DATA_URL = {
-    TRIPS: "https://cityio.media.mit.edu/api/table/grasbrook/trips"
-    // "https://cityio.media.mit.edu/api/table/grasbrook/cityIO_Gama_Hamburg"
+    TRIPS: "https://cityio.media.mit.edu/api/table/grasbrook/trips",
+    GAMA: "https://cityio.media.mit.edu/api/table/grasbrook/cityIO_Gama_Hamburg"
   };
 
   let timeStampDiv = document.getElementById("timeStamp");
@@ -22,16 +22,19 @@ export function mobilityServiceLayer() {
   // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
   function renderLayers() {
     let loopLength = 4 * 60 * 60;
-    let animationSpeed = 100;
+    let animationSpeed = 500;
     const timestamp = Date.now() / 1000;
     const loopTime = loopLength / animationSpeed;
-    let time = 30000 + ((timestamp % loopTime) / loopTime) * loopLength;
+    let t = ((timestamp % loopTime) / loopTime) * loopLength;
+    var mobilitySlider = document.getElementById("mobilitySlider").value;
+
+    let time = t + mobilitySlider * 1000;
     //
     deckContext.setProps({
       layers: [
         new TripsLayer({
           id: "mobilityLayer",
-          data: DATA_URL.TRIPS,
+          data: DATA_URL.GAMA,
           getPath: d => d.segments,
           getColor: d => {
             switch (d.mode) {
@@ -47,9 +50,31 @@ export function mobilityServiceLayer() {
           },
           opacity: 0.7,
           widthMinPixels: 4,
-          rounded: true,
-          trailLength: 300,
-          currentTime: time
+          trailLength: 1000,
+          currentTime: time,
+          rounded: true
+        }),
+        new TripsLayer({
+          id: "mobilityLayer2",
+          data: DATA_URL.TRIPS,
+          getPath: d => d.segments,
+          getColor: d => {
+            switch (d.mode) {
+              case 0:
+                return [255, 0, 255];
+              case 1:
+                return [60, 128, 255];
+              case 2:
+                return [153, 255, 51];
+              case 3:
+                return [153, 180, 100];
+            }
+          },
+          opacity: 0.7,
+          widthMinPixels: 2,
+          trailLength: 1000,
+          currentTime: time + 30000,
+          rounded: true
         })
       ]
     });

@@ -20,7 +20,6 @@ export function gui() {
         uiDiv.style.display = "block";
       } else {
         uiDiv.style.display = "none";
-        Storage.map.removeSource("mobilityLayer");
       }
     }
   }
@@ -86,6 +85,7 @@ export function gui() {
           console.log("no older maptastic setup found");
         }
         break;
+      // any other layer
       default:
         if (e.target.checked) {
           Storage.map.setLayoutProperty(e.target.id, "visibility", "visible");

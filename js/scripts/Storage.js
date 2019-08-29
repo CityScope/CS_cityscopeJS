@@ -74,6 +74,14 @@ class Storage {
   set threeState(value) {
     this._threeState = value;
   }
+
+  //mobilitySliderState
+  get mobilitySliderState() {
+    return this._mobilitySliderState;
+  }
+  set mobilitySliderState(value) {
+    this._mobilitySliderState = value;
+  }
 }
 
 export default new Storage();
