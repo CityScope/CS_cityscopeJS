@@ -33,7 +33,7 @@ import "babel-polyfill";
 import "./Storage";
 import { makeMap } from "./map";
 import { getCityIO } from "./update";
-import { layers } from "./layers";
+import { layers } from "./layers/layers";
 import { gui } from "./gui";
 import { update } from "./update";
 

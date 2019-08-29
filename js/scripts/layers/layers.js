@@ -1,7 +1,9 @@
-import "./Storage";
+import "../Storage";
 import * as turf from "@turf/turf";
-import { create_threeJS_grid_form_cityIO } from "./three";
+import { create_threeJS_grid_form_cityIO } from "../three";
+
 import { deck } from "./deck";
+import { abmLayer } from "./abm";
 
 export function layers() {
   let map = Storage.map;
@@ -150,7 +152,7 @@ export function layers() {
       layout: {},
       paint: {
         "fill-color": "#000000",
-        "fill-opacity": 0.5
+        "fill-opacity": 0.9
       }
     });
   }
@@ -162,5 +164,9 @@ export function layers() {
   /* 
 deck layer
 */
+  abmLayer();
   map.addLayer(deckLayer);
+
+  //
+  console.log(map.getStyle().layers);
 }

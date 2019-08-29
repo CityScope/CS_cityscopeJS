@@ -50,7 +50,7 @@ export function deck() {
     });
   }
 
-  //   // start animation loop
+  //   start animation loop
   setInterval(() => {
     renderLayers();
   });

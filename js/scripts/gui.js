@@ -20,6 +20,7 @@ export function gui() {
         uiDiv.style.display = "block";
       } else {
         uiDiv.style.display = "none";
+        Storage.map.removeSource("mobilityLayer");
       }
     }
   }

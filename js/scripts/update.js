@@ -98,6 +98,8 @@ export function update_grid_from_cityio() {
       thisCell.material.color.set("#000");
     }
   }
+
+  // Storage.map.removeLayer("mobilityLayer");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
