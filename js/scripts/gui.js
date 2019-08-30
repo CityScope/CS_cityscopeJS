@@ -85,6 +85,10 @@ export function gui() {
           console.log("no older maptastic setup found");
         }
         break;
+      case "deckLayers":
+        Storage.uiBottonState = [e.target.id, e.target.checked];
+        break;
+
       // any other layer
       default:
         if (e.target.checked) {

@@ -12,11 +12,12 @@ body {
 }
 
 .loading {
-  font-size: 2em;
+  font-size: 4em;
+  font-weight: bold;
   color: white;
   z-index: 0;
-  max-width: 2em;
-  max-height: 2em;
+  max-width: 1em;
+  max-height: 1em;
   position: absolute;
   top: 0;
   bottom: 0;
