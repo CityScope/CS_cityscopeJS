@@ -32,7 +32,7 @@ export function mobilityServiceLayer() {
     deckContext.setProps({
       layers: [
         new TripsLayer({
-          id: "mobilityLayer",
+          id: "ABMLayer",
           data: DATA_URL.GAMA,
           getPath: d => d.segments,
           getColor: d => {
@@ -47,14 +47,14 @@ export function mobilityServiceLayer() {
                 return [153, 180, 100];
             }
           },
-          opacity: 0.7,
+          opacity: 0.3,
           widthMinPixels: 4,
-          trailLength: 1000,
+          trailLength: 100,
           currentTime: time,
           rounded: true
         }),
         new TripsLayer({
-          id: "mobilityLayer2",
+          id: "mobilityLayer",
           data: DATA_URL.TRIPS,
           getPath: d => d.segments,
           getColor: d => {
@@ -69,9 +69,9 @@ export function mobilityServiceLayer() {
                 return [153, 180, 100];
             }
           },
-          opacity: 0.7,
+          opacity: 0.3,
           widthMinPixels: 2,
-          trailLength: 1000,
+          trailLength: 180,
           currentTime: time + 30000,
           rounded: true
         })
@@ -87,6 +87,6 @@ export function mobilityServiceLayer() {
   });
 
   Storage.map.addLayer(
-    new MapboxLayer({ id: "mobilityLayer", deck: deckContext })
+    new MapboxLayer({ id: ["mobilityLayer", "ABMLayer"], deck: deckContext })
   );
 }

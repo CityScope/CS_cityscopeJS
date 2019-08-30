@@ -8,6 +8,21 @@ body {
   background-attachment: fixed;
   overflow: hidden;
   background: black;
+  font: 0.8em "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.loading {
+  font-size: 2em;
+  color: white;
+  z-index: 0;
+  max-width: 2em;
+  max-height: 2em;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
 .ui {
@@ -16,7 +31,6 @@ body {
   border-radius: 1.5em;
   bottom: 5em;
   left: 5em;
-  font: 0.8em "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 100;
   padding: 1em;
   position: absolute;
