@@ -163,7 +163,4 @@ export function layers() {
   deck layer
   */
   mobilityServiceLayer();
-
-  //
-  console.log(map.getStyle().layers);
 }

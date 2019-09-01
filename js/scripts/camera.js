@@ -15,20 +15,27 @@ export class Camera {
   }
 
   reset_camera_position() {
-    let zoomLevelForBounds = 17;
+    let zoomLevelForBounds;
     let angle;
     angle = 180 - this.cityIOdata.header.spatial.rotation;
 
     if (Storage.tableExtents) {
       zoomLevelForBounds = this.map.cameraForBounds(Storage.tableExtents);
+      console.log(zoomLevelForBounds);
+
+      zoomLevelForBounds = zoomLevelForBounds.zoom;
+    } else {
+      zoomLevelForBounds = 5;
     }
+
+    console.log(zoomLevelForBounds);
 
     this.map.rotateTo(angle, { duration: 200 });
     this.map.flyTo({
       center: this.findTableCenter(),
       bearing: angle,
       pitch: 0,
-      zoom: zoomLevelForBounds.zoom
+      zoom: zoomLevelForBounds
     });
   }
 
@@ -40,14 +47,11 @@ export class Camera {
     let tableCenter = [];
     // check if this table has table extents features
     if (Storage.tableExtents) {
-      console.log("table extents found", Storage.tableExtents);
-
       tableCenter = [
         0.5 * Math.abs(Storage.tableExtents[2][0] + Storage.tableExtents[0][0]),
         0.5 * Math.abs(Storage.tableExtents[2][1] + Storage.tableExtents[0][1])
       ];
     } else {
-      console.log("no table extents found, defaulting to center");
       tableCenter = [this.table_lon, this.table_lat];
     }
     return tableCenter;
