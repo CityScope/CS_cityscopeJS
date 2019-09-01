@@ -35,6 +35,7 @@ export function gui() {
           Storage.map.setLayoutProperty("building", "visibility", "none");
           cam.reset_camera_position();
           Storage.threeState = "flat";
+
           update_grid_from_cityio();
         } else {
           Storage.map.setLayoutProperty("mask", "visibility", "none");
@@ -47,6 +48,7 @@ export function gui() {
       // keystone mode
       case "keystone":
         let localStorage = window.localStorage;
+        // if there is a previous keystone
         if (localStorage["maptastic.layers"]) {
           let storageJSON = JSON.parse(
             localStorage.getItem("maptastic.layers")

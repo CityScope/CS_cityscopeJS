@@ -1,4 +1,5 @@
 import "./Storage";
+
 export class Camera {
   constructor(map) {
     this.map = Storage.map;
@@ -14,15 +15,20 @@ export class Camera {
   }
 
   reset_camera_position() {
+    let zoomLevelForBounds = 17;
     let angle;
     angle = 180 - this.cityIOdata.header.spatial.rotation;
-    this.map.rotateTo(angle, { duration: 200 });
 
+    if (Storage.tableExtents) {
+      zoomLevelForBounds = this.map.cameraForBounds(Storage.tableExtents);
+    }
+
+    this.map.rotateTo(angle, { duration: 200 });
     this.map.flyTo({
       center: this.findTableCenter(),
       bearing: angle,
       pitch: 0,
-      zoom: 16
+      zoom: zoomLevelForBounds.zoom
     });
   }
 
