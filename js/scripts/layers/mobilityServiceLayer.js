@@ -58,8 +58,8 @@ export function mobilityServiceLayer() {
           },
           // ! WIP
           opacity: 0.4,
-          widthMinPixels: 4,
-          trailLength: 100,
+          widthMinPixels: 3,
+          trailLength: 50,
           currentTime: time,
           rounded: true
         }),
@@ -81,7 +81,7 @@ export function mobilityServiceLayer() {
           },
           opacity: 0.3,
           widthMinPixels: 2,
-          trailLength: 180,
+          trailLength: 20,
           currentTime: time + 30000,
           rounded: true
         })

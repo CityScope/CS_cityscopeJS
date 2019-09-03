@@ -14,7 +14,12 @@ export function create_threeJS_grid_form_cityIO() {
   var modelOrigin = [table_lon, table_lat];
   var modelAltitude = 0;
   var modelRotate = [0, 0, 0];
-  var modelScale = 5.41843220338983e-8;
+
+  // https://github.com/mapbox/mapbox-gl-js/issues/8508
+  var scaleFactor = 1 / Math.cos((modelOrigin[1] * Math.PI) / 180);
+  var mercatorExtent = 2 * Math.PI * 6378137;
+  var modelScale = (1 / mercatorExtent) * scaleFactor;
+  //magic number  5.41843220338983e-8;
 
   // transformation parameters to position, rotate and scale the 3D model onto the map
   var modelTransform = {
@@ -117,6 +122,8 @@ function makeGrid() {
   var grid_columns = cityIOdata.header.spatial.ncols;
   var grid_rows = cityIOdata.header.spatial.nrows;
   var cell_size_in_meters = cityIOdata.header.spatial.cellSize;
+  console.log(grid_columns, grid_rows, cell_size_in_meters);
+
   var cell_rescale_precentage = 0.85;
   var this_mesh = null;
   var three_grid_group = new THREE.Object3D();
@@ -129,7 +136,7 @@ function makeGrid() {
   var z_height_of_mesh = 1;
   //loop through grid rows and cols and create the grid
   for (var this_column = 0; this_column < grid_columns; this_column++) {
-    for (var this_row = 0; this_row < grid_rows; this_row++) {
+    for (var this_row = grid_rows; this_row > 0; this_row--) {
       geometry = new THREE.BoxBufferGeometry(
         cell_size_in_meters * cell_rescale_precentage,
         cell_size_in_meters * cell_rescale_precentage,

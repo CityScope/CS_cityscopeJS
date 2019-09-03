@@ -8,7 +8,7 @@ body {
   background-attachment: fixed;
   overflow: hidden;
   background: black;
-  font: 0.8em "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font: 0.5em "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .loading {
@@ -30,8 +30,8 @@ body {
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
   border-radius: 1.5em;
-  bottom: 5em;
-  right: 20em;
+  top: 10em;
+  right: 10em;
   font-weight: 100;
   padding: 1em;
   position: absolute;
