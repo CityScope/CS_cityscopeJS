@@ -22,7 +22,7 @@ export function mobilityServiceLayer() {
   // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
   function renderLayers() {
     let loopLength = 4 * 60 * 60;
-    let animationSpeed = 250;
+    let animationSpeed = 50;
     const timestamp = Date.now() / 1000;
     const loopTime = loopLength / animationSpeed;
     let t = ((timestamp % loopTime) / loopTime) * loopLength;
