@@ -2,10 +2,29 @@ import "../Storage";
 import * as turf from "@turf/turf";
 import { create_threeJS_grid_form_cityIO } from "../three";
 import { mobilityServiceLayer } from "./mobilityServiceLayer";
+import * as gridGeojson from "../layers/grid.geojson";
 
 export function layers() {
   let map = Storage.map;
   let threeLayer = create_threeJS_grid_form_cityIO();
+
+  /* 
+  grid layer 
+  */
+
+  map.addSource("sample", {
+    type: "geojson",
+    data: gridGeojson.default
+  });
+  // one layer per GeoJSON feature type, see http://stackoverflow.com/a/36927026
+  map.addLayer({
+    id: "sample-line",
+    type: "line",
+    source: "sample",
+    paint: {
+      "line-color": "white"
+    }
+  });
 
   /* 
   noise layer 
