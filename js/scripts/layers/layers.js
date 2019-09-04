@@ -12,15 +12,15 @@ export function layers() {
   grid layer 
   */
 
-  map.addSource("sample", {
+  map.addSource("gridLayerSource", {
     type: "geojson",
     data: gridGeojson.default
   });
   // one layer per GeoJSON feature type, see http://stackoverflow.com/a/36927026
   map.addLayer({
-    id: "sample-line",
+    id: "gridLayer",
     type: "line",
-    source: "sample",
+    source: "gridLayerSource",
     paint: {
       "line-color": "white"
     }
