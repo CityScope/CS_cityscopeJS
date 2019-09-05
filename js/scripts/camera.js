@@ -18,12 +18,14 @@ export class Camera {
     let zoomLevelForBounds;
     let angle;
     angle = 180 - this.cityIOdata.header.spatial.rotation;
+    console.log(this.cityIOdata.header.spatial.rotation);
+
+    angle = 214;
 
     if (Storage.tableExtents) {
       zoomLevelForBounds = this.map.cameraForBounds(Storage.tableExtents);
-      console.log(zoomLevelForBounds);
 
-      zoomLevelForBounds = zoomLevelForBounds.zoom;
+      zoomLevelForBounds = zoomLevelForBounds.zoom - 0.5;
     } else {
       zoomLevelForBounds = 5;
     }
