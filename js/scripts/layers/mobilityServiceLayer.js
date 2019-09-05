@@ -47,19 +47,10 @@ export function mobilityServiceLayer() {
                 return [153, 180, 100];
             }
           },
-          // ! WIP
-          visible: function() {
-            if (
-              Storage.uiBottonState[0] == "deckLayer" &&
-              Storage.uiBottonState[1] == true
-            ) {
-              return true;
-            } else return false;
-          },
-          // ! WIP
+
           opacity: 0.4,
           widthMinPixels: 3,
-          trailLength: 300,
+          trailLength: 3000,
           currentTime: time,
           rounded: true
         }),

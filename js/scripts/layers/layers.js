@@ -22,7 +22,8 @@ export function layers() {
     type: "line",
     source: "gridLayerSource",
     paint: {
-      "line-color": "white"
+      "line-color": "rgba(255,255,255,0.5)",
+      "line-width": 1
     }
   });
 
@@ -42,7 +43,7 @@ export function layers() {
       ],
       tileSize: 512
     },
-    paint: {}
+    paint: { "raster-opacity": 0.7 }
   });
 
   /* 
@@ -126,7 +127,6 @@ export function layers() {
 
   // check if this table has table extents features
   if (Storage.tableExtents) {
-    console.log("table extents", Storage.tableExtents);
     //table extents
     map.addLayer({
       id: "route",
@@ -147,7 +147,7 @@ export function layers() {
         "line-cap": "round"
       },
       paint: {
-        "line-color": "rgb(255,255,255)",
+        "line-color": "rgba(255,255,255,1)",
         "line-width": 3,
         "line-dasharray": [3, 2, 1]
       }

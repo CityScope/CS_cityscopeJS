@@ -122,7 +122,6 @@ function makeGrid() {
   var grid_columns = cityIOdata.header.spatial.ncols;
   var grid_rows = cityIOdata.header.spatial.nrows;
   var cell_size_in_meters = cityIOdata.header.spatial.cellSize;
-  console.log(grid_columns, grid_rows, cell_size_in_meters);
 
   var cell_rescale_precentage = 0.85;
   var this_mesh = null;

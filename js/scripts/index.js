@@ -58,13 +58,6 @@ async function init() {
   Storage.cityIOdata = cityIOjson;
   // get the 4 points of the table extents on init
   Storage.tableExtents = Storage.cityIOdata.table_extents;
-  Storage.tableExtents = [
-    [10.00630,53.53811],
-    [10.00030,53.53289],
-    [10.01582,53.52655 ],
-    [10.02182,53.53177],
-    [10.00630,53.53811]
-  ];
 
   //make the mapbox gl base map
   makeMap();
