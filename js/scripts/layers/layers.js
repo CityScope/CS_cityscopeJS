@@ -91,9 +91,9 @@ export function layers() {
   //   }
   // });
 
-  /* 
-  Access 
-  
+  // /*
+  // Access
+
   map.addLayer({
     id: "AccessLayer",
     type: "circle",
@@ -123,7 +123,7 @@ export function layers() {
     showInLayerList: true,
     addOnMapInitialisation: false
   });
-  */
+  // */
 
   // check if this table has table extents features
   if (Storage.tableExtents) {
