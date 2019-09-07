@@ -9,6 +9,7 @@ import "babel-polyfill";
 export async function update() {
   Storage.gridCityIOData = await getCityIO(Storage.cityIOurl + "/grid");
   update_grid_from_cityio();
+  updateLayer();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
@@ -98,27 +99,13 @@ export function update_grid_from_cityio() {
       thisCell.material.color.set("#000");
     }
   }
-
-  // Storage.map.removeLayer("mobilityLayer");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
 
-  //sim data
-  get simData() {
-    return this._simData;
-  }
-  set simData(value) {
-    this._simData = value;
-  }
-
-  export async function update_abm_simulation() {
-    //deal with simulation data update and storage
-    Storage.simData =
-      "https://cityio.media.mit.edu/api/table/abm_service_Hamburg";
-    Storage.map.getSource("simData").setData(Storage.simData);
-  }
-  
-
-  */
+export async function updateLayer() {
+  //deal with simulation data update and storage
+  Storage.map
+    .getSource("accessSource")
+    .setData("https://cityio.media.mit.edu/api/table/grasbrook/access");
+}

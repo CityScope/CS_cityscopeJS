@@ -94,13 +94,15 @@ export function layers() {
   // /*
   // Access
 
+  map.addSource("accessSource", {
+    type: "geojson",
+    data: "https://cityio.media.mit.edu/api/table/grasbrook/access"
+  });
+
   map.addLayer({
     id: "AccessLayer",
     type: "circle",
-    source: {
-      type: "geojson",
-      data: "https://cityio.media.mit.edu/api/table/grasbrook/access"
-    },
+    source: "accessSource",
     paint: {
       "circle-translate": [0, 0],
       "circle-radius": {
