@@ -19,16 +19,28 @@ export function mobilityServiceLayer() {
     layers: []
   });
 
+  let time = 0;
+  let loopLength = 4 * 60 * 60;
+
+  // a day seconds
+  // 86400;
+
+  var mobilitySlider = document.getElementById("mobilitySlider");
+  mobilitySlider.min = 1;
+  mobilitySlider.max = 100;
+
+  mobilitySlider.addEventListener("change", function() {
+    time = (mobilitySlider.value / 100) * loopLength;
+  });
+
   // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
   function renderLayers() {
-    let loopLength = 4 * 60 * 60;
-    let animationSpeed = 50;
-    const timestamp = Date.now() / 1000;
-    const loopTime = loopLength / animationSpeed;
-    let t = ((timestamp % loopTime) / loopTime) * loopLength;
-    var mobilitySlider = document.getElementById("mobilitySlider").value;
-    let time = t + (mobilitySlider / 100) * loopLength;
-    //
+    if (time > loopLength) {
+      time = 0;
+    } else {
+      time = time + 1;
+    }
+
     deckContext.setProps({
       layers: [
         new TripsLayer({
@@ -73,13 +85,16 @@ export function mobilityServiceLayer() {
           opacity: 0.3,
           widthMinPixels: 2,
           trailLength: 50,
-          currentTime: time + 30000,
+          currentTime: 30000 + time,
           rounded: true
         })
       ]
     });
 
-    timeStampDiv.innerHTML = time;
+    var dateObject = new Date(null);
+    dateObject.setSeconds(time); // specify value for SECONDS here
+    var timeString = dateObject.toISOString().substr(11, 8);
+    timeStampDiv.innerHTML = timeString;
   }
 
   // start animation loop
