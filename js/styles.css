@@ -8,8 +8,7 @@ body {
   background-attachment: fixed;
   overflow: hidden;
   background: black;
-      font: 0.4em "Helvetica Neue", Arial, Helvetica, sans-serif;
-
+  font: 0.4em "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .loading {
@@ -28,7 +27,6 @@ body {
 }
 
 .ui {
-
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
   border-radius: 1.5em;
@@ -96,6 +94,10 @@ body {
   height: 2em;
   background: #ffffff;
   cursor: pointer;
+}
+
+.timeStamp {
+  font-size: 2em;
 }
 
 /* keystone div */

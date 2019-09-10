@@ -13,6 +13,7 @@ export function mobilityServiceLayer() {
   };
 
   let timeStampDiv = document.getElementById("timeStamp");
+  let simPaceDiv = document.getElementById("simPaceDiv");
 
   const deckContext = new Deck({
     gl: Storage.map.painter.context.gl,
@@ -20,25 +21,27 @@ export function mobilityServiceLayer() {
   });
 
   let time = 0;
-  let loopLength = 4 * 60 * 60;
-
-  // a day seconds
-  // 86400;
+  // a day in sec
+  let loopLength = 86400;
+  let simPaceValue = 1;
 
   var mobilitySlider = document.getElementById("mobilitySlider");
-  mobilitySlider.min = 1;
-  mobilitySlider.max = 100;
+  var simPaceSlider = document.getElementById("simPaceSlider");
 
-  mobilitySlider.addEventListener("change", function() {
+  mobilitySlider.addEventListener("input", function() {
     time = (mobilitySlider.value / 100) * loopLength;
+  });
+
+  simPaceSlider.addEventListener("input", function() {
+    simPaceValue = simPaceSlider.value / 100;
   });
 
   // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
   function renderLayers() {
-    if (time > loopLength) {
+    if (time >= loopLength - 1) {
       time = 0;
     } else {
-      time = time + 1;
+      time = time + simPaceValue;
     }
 
     deckContext.setProps({
@@ -85,7 +88,7 @@ export function mobilityServiceLayer() {
           opacity: 0.3,
           widthMinPixels: 2,
           trailLength: 50,
-          currentTime: 30000 + time,
+          currentTime: time,
           rounded: true
         })
       ]
@@ -94,7 +97,8 @@ export function mobilityServiceLayer() {
     var dateObject = new Date(null);
     dateObject.setSeconds(time); // specify value for SECONDS here
     var timeString = dateObject.toISOString().substr(11, 8);
-    timeStampDiv.innerHTML = timeString;
+    timeStampDiv.innerHTML = "time: " + timeString;
+    simPaceDiv.innerHTML = "Simulation pace: " + simPaceValue;
   }
 
   // start animation loop
