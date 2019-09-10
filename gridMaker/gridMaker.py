@@ -1,14 +1,14 @@
 
 # %%
 
+import json
 import os
 import sys
 
-file_dir = os.path.dirname('grid_geojson')  # nopep8
-sys.path.append(file_dir)  # nopep8
-import json
+file_dir = os.path.dirname('grid_geojson')
+sys.path.append(file_dir)
+from grid_geojson import *  # nopep8
 
-from grid_geojson import *
 
 # %% [markdown]
 # Specify the properties of the grid
@@ -23,9 +23,11 @@ nrows = 44
 ncols = 78
 
 cell_size = 16
-properties = {'usage': [0 for i in range(nrows*ncols)],
-              'height': [1 for i in range(nrows*ncols)],
-              'pop_density': [2 for i in range(nrows*ncols)]}
+properties = {
+    'id': [i for i in range(nrows*ncols)],
+    'usage': [0 for i in range(nrows*ncols)],
+    'height': [1 for i in range(nrows*ncols)],
+    'pop_density': [2 for i in range(nrows*ncols)]}
 crs_epsg = '31468'
 
 # %% [markdown]

@@ -51,22 +51,6 @@ class Storage {
     this._gridCityIOData = value;
   }
 
-  //cityIO data
-  get cityIOdata_OLD() {
-    return this._cityIOdata;
-  }
-  set cityIOdata_OLD(value) {
-    this._cityIOdata = value;
-  }
-
-  //threeJs grid
-  get threeGrid() {
-    return this._threeGrid;
-  }
-  set threeGrid(value) {
-    this._threeGrid = value;
-  }
-
   //threeJs height state for projection
   get threeState() {
     return this._threeState;

@@ -52,8 +52,7 @@ async function init() {
   Storage.cityIOurl = cityIOtableURL;
   //call server once at start, just to init the grid
   const cityIOjson = await getCityIO(cityIOtableURL);
-  //clear storage for old data holder
-  Storage.cityIOdata_OLD = null;
+
   //save to storage
   Storage.cityIOdata = cityIOjson;
   // get the 4 points of the table extents on init
