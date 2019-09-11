@@ -1,7 +1,7 @@
-import "../Storage";
+import "./Storage";
 import * as turf from "@turf/turf";
 import { mobilityServiceLayer } from "./mobilityServiceLayer";
-import * as gridGeojson from "../layers/grid.json";
+import * as gridGeojson from "./layers/grid.json";
 
 export function layers() {
   let map = Storage.map;

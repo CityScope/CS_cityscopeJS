@@ -1,7 +1,7 @@
 import "./Storage";
 
 export class Camera {
-  constructor(map) {
+  constructor() {
     this.map = Storage.map;
     this.cityIOdata = Storage.cityIOdata;
     this.table_lat = this.cityIOdata.header.spatial.latitude;
@@ -10,7 +10,7 @@ export class Camera {
 
   getLatLon() {
     this.map.on("mousedown", function(e) {
-      console.log(e);
+      // console.log(e);
     });
   }
 

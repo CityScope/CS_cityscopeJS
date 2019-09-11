@@ -66,14 +66,6 @@ class Storage {
   set mobilitySliderState(value) {
     this._mobilitySliderState = value;
   }
-
-  //uiBottonState
-  get uiBottonState() {
-    return this._uiBottonState;
-  }
-  set uiBottonState(value) {
-    this._uiBottonState = value;
-  }
 }
 
 export default new Storage();

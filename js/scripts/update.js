@@ -1,6 +1,7 @@
 import "./Storage";
 import "babel-polyfill";
 import * as gridGeojson from "./layers/grid.json";
+import "./Storage";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -30,7 +31,7 @@ export async function getCityIO(url) {
     });
 }
 
-function updateGeoJsonGrid() {
+export function updateGeoJsonGrid() {
   let cityIOdata = Storage.gridCityIOData;
   var cellsFeaturesArray = [
     {
@@ -77,8 +78,13 @@ function updateGeoJsonGrid() {
       gridGeojson.features[activeAreaArray[i]].properties.color =
         "rgba(0,0,0,0.1)";
     } else {
-      gridGeojson.features[activeAreaArray[i]].properties.height =
-        cellsFeaturesArray[cityIOdata[i][0]].height;
+      if ((Storage.threeState = "flat")) {
+        gridGeojson.features[activeAreaArray[i]].properties.height = 2;
+      } else {
+        gridGeojson.features[activeAreaArray[i]].properties.height =
+          cellsFeaturesArray[cityIOdata[i][0]].height;
+      }
+
       gridGeojson.features[activeAreaArray[i]].properties.color =
         cellsFeaturesArray[cityIOdata[i][0]].color;
     }
@@ -100,6 +106,7 @@ function createActiveGridLocationsArray() {
   let activeAreaArray = [];
   for (let celly = sy; celly < sy + 10; celly++) {
     for (let cellx = sx; cellx < sx + 10; cellx++) {
+      // !!!!!
       activeAreaArray.push(cellx + celly * 78);
     }
   }

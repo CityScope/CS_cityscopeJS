@@ -1,5 +1,5 @@
 import { Camera, rotateCamera } from "./camera";
-import { update_grid_from_cityio } from "./update";
+import { updateGeoJsonGrid } from "./update";
 
 /*
 Gui function 
@@ -35,13 +35,13 @@ export function gui() {
           Storage.map.setLayoutProperty("building", "visibility", "none");
           cam.reset_camera_position();
           Storage.threeState = "flat";
-
-          update_grid_from_cityio();
+          updateGeoJsonGrid();
         } else {
           Storage.map.setLayoutProperty("mask", "visibility", "none");
           Storage.map.setLayoutProperty("building", "visibility", "visible");
           Storage.threeState = "height";
-          update_grid_from_cityio();
+          updateGeoJsonGrid();
+          // start camera rotation
           rotateCamera(1);
         }
         break;
@@ -86,9 +86,6 @@ export function gui() {
             "No keystone found, click 'shift+z' to keystone";
           console.log("no older maptastic setup found");
         }
-        break;
-      case "deckLayers":
-        Storage.uiBottonState = [e.target.id, e.target.checked];
         break;
 
       // any other layer

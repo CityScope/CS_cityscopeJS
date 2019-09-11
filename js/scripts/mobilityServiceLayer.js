@@ -1,4 +1,4 @@
-import "../Storage";
+import "./Storage";
 import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
