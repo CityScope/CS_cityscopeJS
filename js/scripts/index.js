@@ -40,7 +40,7 @@ import { Maptastic } from "./lib/maptastic";
 
 async function init() {
   // cityio update interval
-  var update_interval = 200;
+  var update_interval = 2000;
   //which cityIO endpoint to look for
   var cityio_table_name = window.location.search.substring(1);
   // otherwise, default to this table
@@ -53,8 +53,7 @@ async function init() {
   Storage.cityIOurl = cityIOtableURL;
   //call server once at start, just to init the grid
   const cityIOjson = await getCityIO(cityIOtableURL);
-  //clear storage for old data holder
-  Storage.cityIOdata_OLD = null;
+
   //save to storage
   Storage.cityIOdata = cityIOjson;
   // get the 4 points of the table extents on init

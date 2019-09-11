@@ -1,5 +1,6 @@
 import "./Storage";
 import "babel-polyfill";
+import * as gridGeojson from "./layers/grid.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -8,8 +9,8 @@ import "babel-polyfill";
  */
 export async function update() {
   Storage.gridCityIOData = await getCityIO(Storage.cityIOurl + "/grid");
-  update_grid_from_cityio();
-  updateLayer();
+  // updateLayer();
+  updateGeoJsonGrid();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
@@ -29,12 +30,9 @@ export async function getCityIO(url) {
     });
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  Update the grid in fixed intervals
-// should adapt a more passive updating approach
-
-export function update_grid_from_cityio() {
-  var array_of_types_and_colors = [
+function updateGeoJsonGrid() {
+  let cityIOdata = Storage.gridCityIOData;
+  var cellsFeaturesArray = [
     {
       type: "Work 2",
       color: "#F51476",
@@ -69,43 +67,41 @@ export function update_grid_from_cityio() {
     }
   ];
 
-  let cityIOdata = Storage.gridCityIOData;
-  let grid = Storage.threeGrid;
+  let activeAreaArray = createActiveGridLocationsArray();
 
-  for (let i = 0; i < grid.children.length; i++) {
-    //cell edit
-    let thisCell = grid.children[i];
-
-    thisCell.position.z = 0;
-    thisCell.scale.z = 1;
-
-    if (cityIOdata[i][0] !== -1) {
-      thisCell.material.color.set(
-        array_of_types_and_colors[cityIOdata[i][0]].color
-      );
-
-      if (Storage.threeState == "height") {
-        let this_cell_height =
-          array_of_types_and_colors[cityIOdata[i][0]].height;
-        thisCell.scale.z = this_cell_height;
-        thisCell.position.z = this_cell_height / 2;
-      } else if (Storage.threeState == "flat") {
-        thisCell.position.z = 0;
-        thisCell.scale.z = 0.1;
-      }
-    } else if (cityIOdata[i][0] == -1) {
-      // black outs the non-read pixels
-      thisCell.position.z = 10;
-      thisCell.material.color.set("#000");
+  // go over all cells that are in active grid area
+  for (let i = 0; i < activeAreaArray.length; i++) {
+    // if the data for this cell is -1
+    if (cityIOdata[i][0] == -1) {
+      gridGeojson.features[activeAreaArray[i]].properties.height = 0;
+      gridGeojson.features[activeAreaArray[i]].properties.color =
+        "rgba(0,0,0,0.1)";
+    } else {
+      gridGeojson.features[activeAreaArray[i]].properties.height =
+        cellsFeaturesArray[cityIOdata[i][0]].height;
+      gridGeojson.features[activeAreaArray[i]].properties.color =
+        cellsFeaturesArray[cityIOdata[i][0]].color;
     }
   }
-}
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Storage.map.getSource("gridLayerSource").setData(gridGeojson);
+}
 
 export async function updateLayer() {
   //deal with simulation data update and storage
   Storage.map
     .getSource("accessSource")
     .setData("https://cityio.media.mit.edu/api/table/grasbrook/access");
+}
+
+function createActiveGridLocationsArray() {
+  let sx = 30;
+  let sy = 10;
+  let activeAreaArray = [];
+  for (let celly = sy; celly < sy + 10; celly++) {
+    for (let cellx = sx; cellx < sx + 10; cellx++) {
+      activeAreaArray.push(cellx + celly * 78);
+    }
+  }
+  return activeAreaArray;
 }
