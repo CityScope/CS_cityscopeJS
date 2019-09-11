@@ -8,12 +8,6 @@ export class Camera {
     this.table_lon = this.cityIOdata.header.spatial.longitude;
   }
 
-  getLatLon() {
-    this.map.on("mousedown", function(e) {
-      // console.log(e);
-    });
-  }
-
   reset_camera_position() {
     let zoomLevelForBounds;
     let angle;

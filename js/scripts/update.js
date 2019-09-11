@@ -1,6 +1,6 @@
 import "./Storage";
 import "babel-polyfill";
-import * as gridGeojson from "./layers/grid.json";
+import * as gridGeojson from "./assets/geojson_grid.json";
 import "./Storage";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 import "./Storage";
 import * as turf from "@turf/turf";
 import { mobilityServiceLayer } from "./mobilityServiceLayer";
-import * as gridGeojson from "./layers/grid.json";
+import * as gridGeojson from "./assets/geojson_grid.json";
 
 export function layers() {
   let map = Storage.map;
@@ -175,4 +175,8 @@ export function layers() {
   deck layer
   */
   mobilityServiceLayer();
+
+  Storage.map.on("click", "gridLayer", function(e) {
+    console.log(e);
+  });
 }

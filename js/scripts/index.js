@@ -36,7 +36,7 @@ import { getCityIO } from "./update";
 import { layers } from "./layers";
 import { gui } from "./gui";
 import { update } from "./update";
-import { Maptastic } from "./lib/maptastic";
+import { Maptastic } from "./assets/maptastic";
 
 async function init() {
   // cityio update interval
