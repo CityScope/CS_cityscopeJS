@@ -80,7 +80,6 @@ export function layers() {
         15.05,
         ["get", "height"]
       ],
-
       "fill-extrusion-opacity": 0.8
     },
     showInLayerList: true,
