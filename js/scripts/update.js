@@ -66,23 +66,21 @@ function updateGeoJsonGrid() {
       height: 1
     }
   ];
-  // gridGeojson.features.length
 
-  for (let i = 0; i < 10; i++) {
-    if (i < cityIOdata.length) {
-      if (cityIOdata[i][0] == -1) {
-        gridGeojson.features[i].properties.height = 10000;
-        gridGeojson.features[i].properties.color = "rgba(0,0,0,0.1)";
-      } else {
-        gridGeojson.features[i].properties.height =
-          cellsFeaturesArray[cityIOdata[i][0]].height;
-        gridGeojson.features[i].properties.color =
-          cellsFeaturesArray[cityIOdata[i][0]].color;
-      }
+  let activeAreaArray = createActiveGridLocationsArray();
+
+  // go over all cells that are in active grid area
+  for (let i = 0; i < activeAreaArray.length; i++) {
+    // if the data for this cell is -1
+    if (cityIOdata[i][0] == -1) {
+      gridGeojson.features[activeAreaArray[i]].properties.height = 0;
+      gridGeojson.features[activeAreaArray[i]].properties.color =
+        "rgba(0,0,0,0.1)";
     } else {
-      gridGeojson.features[i].properties.height = 0;
-      gridGeojson.features[i].properties.color = "rgb(0,0,0)";
-      gridGeojson.features[i]["opacity"] = 0.1;
+      gridGeojson.features[activeAreaArray[i]].properties.height =
+        cellsFeaturesArray[cityIOdata[i][0]].height;
+      gridGeojson.features[activeAreaArray[i]].properties.color =
+        cellsFeaturesArray[cityIOdata[i][0]].color;
     }
   }
 
@@ -94,4 +92,16 @@ export async function updateLayer() {
   Storage.map
     .getSource("accessSource")
     .setData("https://cityio.media.mit.edu/api/table/grasbrook/access");
+}
+
+function createActiveGridLocationsArray() {
+  let sx = 30;
+  let sy = 10;
+  let activeAreaArray = [];
+  for (let celly = sy; celly < sy + 10; celly++) {
+    for (let cellx = sx; cellx < sx + 10; cellx++) {
+      activeAreaArray.push(cellx + celly * 78);
+    }
+  }
+  return activeAreaArray;
 }

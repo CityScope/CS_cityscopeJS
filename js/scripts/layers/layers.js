@@ -28,13 +28,12 @@ export function layers() {
     }
   });
 
-  // one layer per GeoJSON feature type, see http://stackoverflow.com/a/36927026
   map.addLayer({
     id: "gridLayerLine",
     type: "line",
     source: "gridLayerSource",
     paint: {
-      "line-color": "rgba(255,255,255,1)",
+      "line-color": "rgb(255,255,255)",
       "line-width": 0.5
     }
   });

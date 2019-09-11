@@ -39,7 +39,7 @@ import { update } from "./update";
 
 async function init() {
   // cityio update interval
-  var update_interval = 200;
+  var update_interval = 2000;
   //which cityIO endpoint to look for
   var cityio_table_name = window.location.search.substring(1);
   // otherwise, default to this table
