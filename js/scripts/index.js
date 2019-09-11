@@ -40,7 +40,7 @@ import { Maptastic } from "./lib/maptastic";
 
 async function init() {
   // cityio update interval
-  var update_interval = 2000;
+  var update_interval = 200;
   //which cityIO endpoint to look for
   var cityio_table_name = window.location.search.substring(1);
   // otherwise, default to this table

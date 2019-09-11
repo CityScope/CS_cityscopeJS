@@ -25,8 +25,6 @@ export function layers() {
     }
   });
 
-  // set init mode for 3d grid
-  Storage.threeState = "height";
   // one layer per GeoJSON feature type, see http://stackoverflow.com/a/36927026
   map.addLayer({
     id: "gridLayer",

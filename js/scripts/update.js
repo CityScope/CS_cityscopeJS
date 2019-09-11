@@ -77,7 +77,7 @@ export function updateGeoJsonGrid() {
       gridGeojson.features[activeAreaArray[i]].properties.height = 0;
       gridGeojson.features[activeAreaArray[i]].properties.color = "rgb(0,0,0)";
     } else {
-      if (Storage.threeState == "flat") {
+      if (Storage.threeState == "flat" || Storage.threeState == null) {
         gridGeojson.features[activeAreaArray[i]].properties.height = 0.1;
       } else {
         gridGeojson.features[activeAreaArray[i]].properties.height =
@@ -100,8 +100,8 @@ export async function updateLayer() {
 }
 
 function createActiveGridLocationsArray() {
-  let sx = 30;
-  let sy = 10;
+  let sx = 34;
+  let sy = 13;
   let activeAreaArray = [];
   for (let celly = sy; celly < sy + 10; celly++) {
     for (let cellx = sx; cellx < sx + 10; cellx++) {
