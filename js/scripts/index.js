@@ -36,6 +36,7 @@ import { getCityIO } from "./update";
 import { layers } from "./layers/layers";
 import { gui } from "./gui";
 import { update } from "./update";
+import { Maptastic } from "./lib/maptastic";
 
 async function init() {
   // cityio update interval
@@ -72,6 +73,11 @@ async function init() {
     //run the layers update
     window.setInterval(update, update_interval);
   });
+
+  let mapbox_div = document.querySelector("#keystoneDiv");
+  let ui_div = document.querySelector("#ui");
+
+  Maptastic(ui_div, mapbox_div);
 }
 //start applet
 window.onload = init();

@@ -28,6 +28,8 @@ body {
 
 .ui {
   background-color: rgba(0, 0, 0, 0.8);
+  width: 20em;
+  height: 40em;
   color: white;
   border-radius: 1.5em;
   top: 20em;

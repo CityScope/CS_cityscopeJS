@@ -10,8 +10,11 @@ export function create_threeJS_grid_form_cityIO() {
   let cityIOdata = Storage.cityIOdata;
   let table_lat = cityIOdata.header.spatial.latitude;
   let table_lon = cityIOdata.header.spatial.longitude;
+
   // parameters to ensure the model is georeferenced correctly on the map
   var modelOrigin = [table_lon, table_lat];
+  modelOrigin = [10.014369847753528, 53.5325160642685];
+
   var modelAltitude = 0;
   var modelRotate = [0, 0, 0];
 
@@ -134,8 +137,8 @@ function makeGrid() {
   );
   var z_height_of_mesh = 1;
   //loop through grid rows and cols and create the grid
-  for (var this_column = 0; this_column < grid_columns; this_column++) {
-    for (var this_row = grid_rows; this_row > 0; this_row--) {
+  for (var this_column = grid_columns; this_column > 0; this_column--) {
+    for (var this_row = 0; this_row < grid_rows; this_row++) {
       geometry = new THREE.BoxBufferGeometry(
         cell_size_in_meters * cell_rescale_precentage,
         cell_size_in_meters * cell_rescale_precentage,

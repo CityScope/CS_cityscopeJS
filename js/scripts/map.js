@@ -1,6 +1,5 @@
 import "babel-polyfill";
 import mapboxgl from "mapbox-gl";
-import { Maptastic } from "./lib/maptastic";
 import "./Storage";
 
 export function makeMap() {
@@ -11,10 +10,6 @@ export function makeMap() {
   document.body.appendChild(keystoneDiv);
   mapboxgl.accessToken =
     "pk.eyJ1IjoicmVsbm94IiwiYSI6ImNqd2VwOTNtYjExaHkzeXBzYm1xc3E3dzQifQ.X8r8nj4-baZXSsFgctQMsg";
-
-  let mapbox_div_element = document.querySelector("#keystoneDiv");
-  // maptastic the div
-  Maptastic(mapbox_div_element);
 
   // set the map origin
   // make the map itself
