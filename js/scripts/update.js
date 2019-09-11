@@ -75,11 +75,10 @@ export function updateGeoJsonGrid() {
     // if the data for this cell is -1
     if (cityIOdata[i][0] == -1) {
       gridGeojson.features[activeAreaArray[i]].properties.height = 0;
-      gridGeojson.features[activeAreaArray[i]].properties.color =
-        "rgba(0,0,0,0.1)";
+      gridGeojson.features[activeAreaArray[i]].properties.color = "rgb(0,0,0)";
     } else {
-      if ((Storage.threeState = "flat")) {
-        gridGeojson.features[activeAreaArray[i]].properties.height = 2;
+      if (Storage.threeState == "flat") {
+        gridGeojson.features[activeAreaArray[i]].properties.height = 0.1;
       } else {
         gridGeojson.features[activeAreaArray[i]].properties.height =
           cellsFeaturesArray[cityIOdata[i][0]].height;

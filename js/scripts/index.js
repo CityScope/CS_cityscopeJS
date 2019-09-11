@@ -73,9 +73,9 @@ async function init() {
     window.setInterval(update, update_interval);
   });
 
+  // keystone the ui and map
   let mapbox_div = document.querySelector("#keystoneDiv");
   let ui_div = document.querySelector("#ui");
-
   Maptastic(ui_div, mapbox_div);
 }
 //start applet

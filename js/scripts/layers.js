@@ -15,6 +15,18 @@ export function layers() {
     data: gridGeojson.default
   });
 
+  map.addLayer({
+    id: "gridLayerLine",
+    type: "line",
+    source: "gridLayerSource",
+    paint: {
+      "line-color": "rgb(255,255,255)",
+      "line-width": 0.5
+    }
+  });
+
+  // set init mode for 3d grid
+  Storage.threeState = "height";
   // one layer per GeoJSON feature type, see http://stackoverflow.com/a/36927026
   map.addLayer({
     id: "gridLayer",
@@ -24,17 +36,7 @@ export function layers() {
       "fill-extrusion-color": ["get", "color"],
       "fill-extrusion-height": ["get", "height"],
       "fill-extrusion-opacity": 0.7,
-      "fill-extrusion-base": 1
-    }
-  });
-
-  map.addLayer({
-    id: "gridLayerLine",
-    type: "line",
-    source: "gridLayerSource",
-    paint: {
-      "line-color": "rgb(255,255,255)",
-      "line-width": 0.5
+      "fill-extrusion-base": 2
     }
   });
 
