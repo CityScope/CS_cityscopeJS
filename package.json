@@ -1,0 +1,34 @@
+{
+  "name": "cs_grasbrook",
+  "version": "1.0.0",
+  "description": "- clone or download zip - install node with npm - install `parcelJS` - `$ npm install` - `cd js && $ npm tst`",
+  "main": "index.html",
+  "scripts": {
+    "test": "parcel index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CityScope/CS_Grasbrook.git"
+  },
+  "author": "Ariel Noyman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CityScope/CS_Grasbrook/issues"
+  },
+  "homepage": "https://github.com/CityScope/CS_Grasbrook#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-latest": "^6.24.1"
+  },
+  "dependencies": {
+    "@deck.gl/core": "^7.2.3",
+    "@deck.gl/geo-layers": "^7.2.3",
+    "@deck.gl/layers": "^7.2.3",
+    "@deck.gl/mapbox": "^7.2.3",
+    "@turf/turf": "^5.1.6",
+    "babel-polyfill": "^6.26.0",
+    "mapbox-gl": "^1.3.1"
+  }
+}
