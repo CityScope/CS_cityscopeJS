@@ -2,8 +2,11 @@ import "./Storage";
 import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
+ import { getCityIO } from "./update";
 
-export function mobilityServiceLayer() {
+
+
+export async function mobilityServiceLayer() {
   // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
   // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/overview.md?source=post_page---------------------------#using-with-pure-js
 
@@ -11,11 +14,14 @@ export function mobilityServiceLayer() {
     GAMA: "https://cityio.media.mit.edu/api/table/grasbrook/gama"
   };
 
-  console.log(DATA_URL.GAMA);
+  let gamaData = await getCityIO(DATA_URL.GAMA);
+  gamaData = gamaData[0];
+  gamaData = "https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips-v7.json"
 
+  //
   let timeStampDiv = document.getElementById("timeStamp");
   let simPaceDiv = document.getElementById("simPaceDiv");
-
+  //
   const deckContext = new Deck({
     gl: Storage.map.painter.context.gl,
     layers: []
@@ -37,7 +43,6 @@ export function mobilityServiceLayer() {
     simPaceValue = simPaceSlider.value / 100;
   });
 
-  // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
   function renderLayers() {
     if (time >= loopLength - 1) {
       time = 0;
@@ -49,12 +54,23 @@ export function mobilityServiceLayer() {
       layers: [
         new TripsLayer({
           id: "ABMLayer",
-          data: DATA_URL.GAMA,
+          data: 
+           gamaData,
           getPath: d => d.path,
-          getTimestamps: d =>
-            // d.segments[3],
-            d.path.map(p => p.timestamp),
+          getTimestamps: d => d.timestamps,
+          getColor: d => (d.vendor === 0 ? [255, 0, 255] : [0, 255, 255]),
+          opacity: 0.3,
+          widthMinPixels: 2,
+          rounded: true,
+          trailLength: 50,
+          currentTime: time
 
+          // id: "ABMLayer",
+          // data: DATA_URL.GAMA,
+          // getPath: d => d.path,
+          // getTimestamps: d =>
+          // d.segments[3],
+          //   d.path.map(p => p.timestamp),
           // getColor: d => {
           //   switch (d.mode) {
           //     case 0:
@@ -67,11 +83,11 @@ export function mobilityServiceLayer() {
           //       return [153, 180, 100];
           //   }
           // },
-          opacity: 0.4,
-          widthMinPixels: 3,
-          trailLength: 3000,
-          currentTime: time,
-          rounded: true
+          //     opacity: 0.4,
+          //     widthMinPixels: 3,
+          //     trailLength: 3000,
+          //     currentTime: time,
+          //     rounded: true
         })
       ]
     });

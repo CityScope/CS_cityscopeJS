@@ -11,20 +11,6 @@ body {
   font: 0.6em "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.loading {
-  font-size: 4em;
-  font-weight: bold;
-  color: white;
-  z-index: 0;
-  max-width: 1em;
-  max-height: 1em;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-}
 
 .helpDiv {
   text-align: center;

@@ -30,8 +30,8 @@ export async function getCityIO(url) {
     .then(function(response) {
       return response.json();
     })
-    .then(function(cityIOdata) {
-      return cityIOdata;
+    .then(function(data) {
+      return data;
     })
     .catch(err => {
       console.log("Error from '" + this.apiName + "':", err);
