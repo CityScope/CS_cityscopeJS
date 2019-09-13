@@ -4,6 +4,7 @@
 import json
 import os
 import sys
+import random
 
 file_dir = os.path.dirname('grid_geojson')
 sys.path.append(file_dir)
@@ -16,17 +17,31 @@ from grid_geojson import *  # nopep8
 # %%
 
 
+# Full table
 top_left_lat = 53.53811
 top_left_lon = 10.00630
-rotation = 145.5
+
+# Active Area
+top_left_lon = 10.01129157249875
+top_left_lat = 53.53380541749196
+
+
+# Full table
 nrows = 44
 ncols = 78
+
+# Active Area
+nrows = 10
+ncols = 10
+
+rotation = 145.5
+
 
 cell_size = 16
 properties = {
     'id': [i for i in range(nrows*ncols)],
     'usage': [0 for i in range(nrows*ncols)],
-    'height': [1 for i in range(nrows*ncols)],
+    'height': [-100 for i in range(nrows*ncols)],
     'pop_density': [2 for i in range(nrows*ncols)]}
 crs_epsg = '31468'
 

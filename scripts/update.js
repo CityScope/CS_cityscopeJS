@@ -1,6 +1,6 @@
 import "./Storage";
 import "babel-polyfill";
-import * as gridGeojson from "./assets/geojson_grid.json";
+import * as activeAreaGeojson from "./assets/grid_interactive_area.json";
 import "./Storage";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,28 +77,25 @@ export function updateGeoJsonGrid() {
     }
   ];
 
-  let activeAreaArray = createActiveGridLocationsArray();
-
   // go over all cells that are in active grid area
-  for (let i = 0; i < activeAreaArray.length; i++) {
+  for (let i = 0; i < activeAreaGeojson.features.length; i++) {
     // if the data for this cell is -1
     if (cityIOdata[i][0] == -1) {
-      gridGeojson.features[activeAreaArray[i]].properties.height = 0;
-      gridGeojson.features[activeAreaArray[i]].properties.color = "rgb(0,0,0)";
+      activeAreaGeojson.features[i].properties.height = 0;
+      activeAreaGeojson.features[i].properties.color = "rgb(0,0,0)";
     } else {
       if (Storage.threeState == "flat" || Storage.threeState == null) {
-        gridGeojson.features[activeAreaArray[i]].properties.height = 0.1;
+        activeAreaGeojson.features[i].properties.height = 0.1;
       } else {
-        gridGeojson.features[activeAreaArray[i]].properties.height =
+        activeAreaGeojson.features[i].properties.height =
           cellsFeaturesArray[cityIOdata[i][0]].height;
       }
-
-      gridGeojson.features[activeAreaArray[i]].properties.color =
+      activeAreaGeojson.features[i].properties.color =
         cellsFeaturesArray[cityIOdata[i][0]].color;
     }
   }
 
-  Storage.map.getSource("gridLayerSource").setData(gridGeojson);
+  Storage.map.getSource("gridGeojsonActiveSource").setData(activeAreaGeojson);
 }
 
 export async function updateLayer() {
@@ -106,17 +103,4 @@ export async function updateLayer() {
   Storage.map
     .getSource("accessSource")
     .setData("https://cityio.media.mit.edu/api/table/grasbrook/access");
-}
-
-function createActiveGridLocationsArray() {
-  let sx = 34;
-  let sy = 13;
-  let activeAreaArray = [];
-  for (let celly = sy; celly < sy + 10; celly++) {
-    for (let cellx = sx; cellx < sx + 10; cellx++) {
-      // !!!!!
-      activeAreaArray.push(cellx + celly * 78);
-    }
-  }
-  return activeAreaArray;
 }

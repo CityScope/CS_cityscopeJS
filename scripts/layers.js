@@ -1,7 +1,8 @@
 import "./Storage";
 // import * as turf from "@turf/turf";
 import { mobilityServiceLayer } from "./mobilityServiceLayer";
-import * as gridGeojson from "./assets/geojson_grid.json";
+import * as gridGeojson from "./assets/grid_full_table.json";
+import * as gridGeojsonActive from "./assets/grid_interactive_area.json";
 
 export function layers() {
   let map = Storage.map;
@@ -9,12 +10,10 @@ export function layers() {
   /* 
   grid layer 
   */
-
   map.addSource("gridLayerSource", {
     type: "geojson",
     data: gridGeojson.default
   });
-
   map.addLayer({
     id: "gridLayerLine",
     type: "line",
@@ -25,16 +24,21 @@ export function layers() {
     }
   });
 
+  map.addSource("gridGeojsonActiveSource", {
+    type: "geojson",
+    data: gridGeojsonActive.default
+  });
+
   // one layer per GeoJSON feature type, see http://stackoverflow.com/a/36927026
   map.addLayer({
-    id: "gridLayer",
+    id: "gridGeojsonActive",
     type: "fill-extrusion",
-    source: "gridLayerSource",
+    source: "gridGeojsonActiveSource",
     paint: {
       "fill-extrusion-color": ["get", "color"],
       "fill-extrusion-height": ["get", "height"],
       "fill-extrusion-opacity": 0.7,
-      "fill-extrusion-base": 2
+      "fill-extrusion-base": 1
     }
   });
 
