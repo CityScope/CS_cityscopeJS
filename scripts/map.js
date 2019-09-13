@@ -15,8 +15,8 @@ export function makeMap() {
   // make the map itself
   var map = new mapboxgl.Map({
     container: "keystoneDiv",
-    style: "mapbox://styles/relnox/ck0h5xn701bpr1dqs3he2lecq?fresh=true",
-    // "mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd?fresh=true",
+    // style: "mapbox://styles/relnox/ck0h5xn701bpr1dqs3he2lecq?fresh=true",
+    style: "mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd?fresh=true",
     center: [-71.08768, 42.3608],
     zoom: 18
   });

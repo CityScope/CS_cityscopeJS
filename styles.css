@@ -11,11 +11,11 @@ body {
   font: 0.6em "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-
 .helpDiv {
   text-align: center;
   vertical-align: middle;
   margin: auto;
+  overflow: auto;
   font-size: 3em;
   line-height: auto;
   font-weight: bold;
@@ -31,7 +31,7 @@ body {
   color: white;
   border-radius: 1.5em;
   bottom: 5em;
-  left: 5em;
+  right: 10em;
   font-weight: 100;
   padding: 2em;
   position: absolute;
