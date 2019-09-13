@@ -1,5 +1,5 @@
 import "./Storage";
-import * as turf from "@turf/turf";
+// import * as turf from "@turf/turf";
 import { mobilityServiceLayer } from "./mobilityServiceLayer";
 import * as gridGeojson from "./assets/geojson_grid.json";
 
@@ -44,6 +44,7 @@ export function layers() {
   map.addLayer({
     id: "noiseLayer",
     displayName: "Noise",
+
     showInLayerList: true,
     metadata: "",
     type: "raster",
@@ -152,30 +153,33 @@ export function layers() {
     /*
    turf hidden area aroud
    */
-    var polygon = turf.polygon([Storage.tableExtents]);
-    var masked = turf.mask(polygon);
+    // var polygon = turf.polygon([Storage.tableExtents]);
+    // var masked = turf.mask(polygon);
 
-    map.addLayer({
-      id: "mask",
-      type: "fill",
-      source: {
-        type: "geojson",
-        data: masked
-      },
-      layout: {},
-      paint: {
-        "fill-color": "#000000",
-        "fill-opacity": 0.9
-      }
-    });
+    // map.addLayer({
+    //   id: "mask",
+    //   type: "fill",
+    //   source: {
+    //     type: "geojson",
+    //     data: masked
+    //   },
+    //   layout: {},
+    //   paint: {
+    //     "fill-color": "#000000",
+    //     "fill-opacity": 0.9
+    //   }
+    // });
   }
 
   /*
   deck layer
   */
-  mobilityServiceLayer();
+  // mobilityServiceLayer();
 
   Storage.map.on("click", "gridLayer", function(e) {
     console.log(e);
   });
+
+  let mapList = Storage.map.getStyle().layers;
+  console.log(mapList);
 }

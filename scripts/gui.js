@@ -30,19 +30,19 @@ export function gui() {
           if (Storage.reqAnimFrame !== null) {
             cancelAnimationFrame(Storage.reqAnimFrame);
           }
-          Storage.map.setLayoutProperty("mask", "visibility", "visible");
+          // Storage.map.setLayoutProperty("mask", "visibility", "visible");
           Storage.map.setLayoutProperty("building", "visibility", "none");
           cam.reset_camera_position();
           Storage.threeState = "flat";
-          updateGeoJsonGrid();
         } else {
-          Storage.map.setLayoutProperty("mask", "visibility", "none");
+          // Storage.map.setLayoutProperty("mask", "visibility", "none");
           Storage.map.setLayoutProperty("building", "visibility", "visible");
           Storage.threeState = "height";
-          updateGeoJsonGrid();
           // start camera rotation
           rotateCamera(1);
         }
+        updateGeoJsonGrid();
+
         break;
       // keystone mode
       case "keystone":

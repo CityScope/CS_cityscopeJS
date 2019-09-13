@@ -9,9 +9,16 @@ import "./Storage";
  * controls the cityIO streeam
  */
 export async function update() {
-  Storage.gridCityIOData = await getCityIO(Storage.cityIOurl + "/grid");
-  // updateLayer();
-  updateGeoJsonGrid();
+  let hashList = await getCityIO(Storage.cityIOurl + "/meta");
+  let hash = hashList.hashes.grid;
+  if (hash !== Storage.oldHash) {
+    // console.log("new grid", hash, Storage.oldHash);
+    Storage.gridCityIOData = await getCityIO(Storage.cityIOurl + "/grid");
+    updateGeoJsonGrid();
+    Storage.oldHash = hash;
+  } else {
+    // console.log("no new grid", hash, Storage.oldHash);
+  }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
@@ -32,33 +39,35 @@ export async function getCityIO(url) {
 }
 
 export function updateGeoJsonGrid() {
+  console.log("update grid");
+
   let cityIOdata = Storage.gridCityIOData;
   var cellsFeaturesArray = [
     {
       type: "Work 2",
       color: "#F51476",
-      height: 100
+      height: 50
     },
     {
       type: "work",
       color: "#E43F0F",
-      height: 50
+      height: 100
     },
     {
       type: "live2",
       color: "#008DD5",
-      height: 100
+      height: 30
     },
 
     {
       type: "Open Space",
       color: "#13D031",
-      height: 1
+      height: 3
     },
     {
       type: "Live1",
       color: "#002DD5",
-      height: 50
+      height: 20
     },
 
     {

@@ -4,7 +4,7 @@
 - install node with npm
 - install `parcelJS`
 - `$ npm install`
-- `cd js && $ npm tst`
+- `$ npm tst`
 
 # CS Table Extents
 

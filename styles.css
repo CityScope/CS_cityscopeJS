@@ -8,7 +8,7 @@ body {
   background-attachment: fixed;
   overflow: hidden;
   background: black;
-  font: 0.4em "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font: 0.6em "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .loading {
@@ -26,15 +26,28 @@ body {
   margin: auto;
 }
 
-.ui {
-  background-color: rgba(0, 0, 0, 0.8);
+.helpDiv {
+  text-align: center;
+  vertical-align: middle;
+  margin: auto;
+  font-size: 3em;
+  line-height: auto;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  width: 60%;
+  position: relative;
+  z-index: 100;
+}
 
+.ui {
+  background-color: rgba(0, 0, 0, 0.9);
   color: white;
   border-radius: 1.5em;
-  top: 20em;
-  right: 30em;
+  bottom: 5em;
+  left: 5em;
   font-weight: 100;
-  padding: 1em;
+  padding: 2em;
   position: absolute;
   z-index: 100;
 }

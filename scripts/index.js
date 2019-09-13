@@ -39,39 +39,38 @@ import { update } from "./update";
 import { Maptastic } from "./assets/maptastic";
 
 async function init() {
-  // cityio update interval
-  var update_interval = 200;
-  //which cityIO endpoint to look for
-  var cityio_table_name = window.location.search.substring(1);
-  // otherwise, default to this table
-  if (cityio_table_name == "") {
-    cityio_table_name = "grasbrook";
-  }
-  let cityIOtableURL =
-    "https://cityio.media.mit.edu/api/table/" + cityio_table_name.toString();
-  // store it for later updates from cityio
-  Storage.cityIOurl = cityIOtableURL;
-  //call server once at start, just to init the grid
-  const cityIOjson = await getCityIO(cityIOtableURL);
-
-  //save to storage
-  Storage.cityIOdata = cityIOjson;
-  // get the 4 points of the table extents on init
-  Storage.tableExtents = Storage.cityIOdata.table_extents;
-
   //make the mapbox gl base map
   makeMap();
-  // get map from storage
-  let map = Storage.map;
-  // wait for map to load
-  map.on("style.load", function() {
-    // do gui
-    gui();
-    // load layer
-    layers();
-    //run the layers update
-    window.setInterval(update, update_interval);
-  });
+  // cityio update interval
+  var update_interval = 100;
+  //which cityIO endpoint to look for
+  var cityio_table_name = window.location.search.substring(1);
+  if (cityio_table_name !== "") {
+    document.getElementById("helpDiv").style.display = "none";
+    let cityIOtableURL =
+      "https://cityio.media.mit.edu/api/table/" + cityio_table_name.toString();
+    // store it for later updates from cityio
+    Storage.cityIOurl = cityIOtableURL;
+    //call server once at start, just to init the grid
+    const cityIOjson = await getCityIO(cityIOtableURL);
+
+    //save to storage
+    Storage.cityIOdata = cityIOjson;
+    // get the 4 points of the table extents on init
+    Storage.tableExtents = Storage.cityIOdata.table_extents;
+
+    // get map from storage
+    let map = Storage.map;
+    // wait for map to load
+    map.on("style.load", function() {
+      // do gui
+      gui();
+      // load layer
+      layers();
+      //run the layers update
+      window.setInterval(update, update_interval);
+    });
+  }
 
   // keystone the ui and map
   let mapbox_div = document.querySelector("#keystoneDiv");

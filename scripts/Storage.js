@@ -43,6 +43,14 @@ class Storage {
     this._cityIOdata = value;
   }
 
+  //Old hash
+  get oldHash() {
+    return this._oldHash;
+  }
+  set oldHash(value) {
+    this._oldHash = value;
+  }
+
   //grid CityIO data
   get gridCityIOData() {
     return this._gridCityIOData;
