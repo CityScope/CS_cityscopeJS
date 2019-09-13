@@ -1,6 +1,5 @@
 import "./Storage";
 import "babel-polyfill";
-import * as activeAreaGeojson from "./assets/grid_interactive_area.json";
 import "./Storage";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,6 +41,9 @@ export function updateGeoJsonGrid() {
   console.log("update grid");
 
   let cityIOdata = Storage.gridCityIOData;
+  let gridGeojsonActive = Storage.gridGeojsonActive;
+  console.log(gridGeojsonActive);
+
   var cellsFeaturesArray = [
     {
       type: "Work 2",
@@ -78,24 +80,24 @@ export function updateGeoJsonGrid() {
   ];
 
   // go over all cells that are in active grid area
-  for (let i = 0; i < activeAreaGeojson.features.length; i++) {
+  for (let i = 0; i < gridGeojsonActive.features.length; i++) {
     // if the data for this cell is -1
     if (cityIOdata[i][0] == -1) {
-      activeAreaGeojson.features[i].properties.height = 0;
-      activeAreaGeojson.features[i].properties.color = "rgb(0,0,0)";
+      gridGeojsonActive.features[i].properties.height = 0;
+      gridGeojsonActive.features[i].properties.color = "rgb(0,0,0)";
     } else {
       if (Storage.threeState == "flat" || Storage.threeState == null) {
-        activeAreaGeojson.features[i].properties.height = 0.1;
+        gridGeojsonActive.features[i].properties.height = 0.1;
       } else {
-        activeAreaGeojson.features[i].properties.height =
+        gridGeojsonActive.features[i].properties.height =
           cellsFeaturesArray[cityIOdata[i][0]].height;
       }
-      activeAreaGeojson.features[i].properties.color =
+      gridGeojsonActive.features[i].properties.color =
         cellsFeaturesArray[cityIOdata[i][0]].color;
     }
   }
 
-  Storage.map.getSource("gridGeojsonActiveSource").setData(activeAreaGeojson);
+  Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);
 }
 
 export async function updateLayer() {

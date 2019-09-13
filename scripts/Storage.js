@@ -43,6 +43,14 @@ class Storage {
     this._cityIOdata = value;
   }
 
+  // gridGeojsonActive
+  get gridGeojsonActive() {
+    return this._gridGeojsonActive;
+  }
+  set gridGeojsonActive(value) {
+    this._gridGeojsonActive = value;
+  }
+
   //Old hash
   get oldHash() {
     return this._oldHash;

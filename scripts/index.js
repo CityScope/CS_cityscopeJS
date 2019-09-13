@@ -35,12 +35,9 @@ import { makeMap } from "./map";
 import { getCityIO } from "./update";
 import { layers } from "./layers";
 import { gui } from "./gui";
-import { update } from "./update";
 import { Maptastic } from "./assets/maptastic";
 
 async function init() {
-  // cityio update interval
-  var update_interval = 100;
   //which cityIO endpoint to look for
   var cityio_table_name = window.location.search.substring(1);
   if (cityio_table_name !== "") {
@@ -67,8 +64,6 @@ async function init() {
       gui();
       // load layer
       layers();
-      //run the layers update
-      window.setInterval(update, update_interval);
     });
   }
 

@@ -1,17 +1,28 @@
 import "./Storage";
 // import * as turf from "@turf/turf";
 import { mobilityServiceLayer } from "./mobilityServiceLayer";
-import * as gridGeojson from "./assets/grid_full_table.json";
-import * as gridGeojsonActive from "./assets/grid_interactive_area.json";
+import { update, getCityIO } from "./update";
 
-export function layers() {
+export async function layers() {
+  var update_interval = 100;
   let map = Storage.map;
+
+  // get two grid layers
+  let gridGeojson = await getCityIO(Storage.cityIOurl + "/grid_full_table");
+  gridGeojson = gridGeojson[0];
+  let gridGeojsonActive = await getCityIO(
+    Storage.cityIOurl + "/grid_interactive_area"
+  );
+  // save to global storage
+  gridGeojsonActive = gridGeojsonActive[0];
+  Storage.gridGeojsonActive = gridGeojsonActive;
+
   /* 
   grid layer 
   */
   map.addSource("gridLayerSource", {
     type: "geojson",
-    data: gridGeojson.default
+    data: gridGeojson
   });
   map.addLayer({
     id: "gridLayerLine",
@@ -25,7 +36,7 @@ export function layers() {
 
   map.addSource("gridGeojsonActiveSource", {
     type: "geojson",
-    data: gridGeojsonActive.default
+    data: gridGeojsonActive
   });
   map.addLayer({
     id: "gridGeojsonActive",
@@ -155,11 +166,10 @@ export function layers() {
   deck layer
   */
   mobilityServiceLayer();
-
   Storage.map.on("click", "gridLayer", function(e) {
     console.log(e);
   });
 
-  let mapList = Storage.map.getStyle().layers;
-  console.log(mapList);
+  //run the layers update
+  window.setInterval(update, update_interval);
 }
