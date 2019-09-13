@@ -39,8 +39,6 @@ import { update } from "./update";
 import { Maptastic } from "./assets/maptastic";
 
 async function init() {
-  //make the mapbox gl base map
-  makeMap();
   // cityio update interval
   var update_interval = 100;
   //which cityIO endpoint to look for
@@ -59,6 +57,8 @@ async function init() {
     // get the 4 points of the table extents on init
     Storage.tableExtents = Storage.cityIOdata.table_extents;
 
+    //make the mapbox gl base map
+    makeMap();
     // get map from storage
     let map = Storage.map;
     // wait for map to load

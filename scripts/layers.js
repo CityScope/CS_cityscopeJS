@@ -6,7 +6,6 @@ import * as gridGeojsonActive from "./assets/grid_interactive_area.json";
 
 export function layers() {
   let map = Storage.map;
-
   /* 
   grid layer 
   */
@@ -28,8 +27,6 @@ export function layers() {
     type: "geojson",
     data: gridGeojsonActive.default
   });
-
-  // one layer per GeoJSON feature type, see http://stackoverflow.com/a/36927026
   map.addLayer({
     id: "gridGeojsonActive",
     type: "fill-extrusion",
@@ -37,7 +34,7 @@ export function layers() {
     paint: {
       "fill-extrusion-color": ["get", "color"],
       "fill-extrusion-height": ["get", "height"],
-      "fill-extrusion-opacity": 0.7,
+      "fill-extrusion-opacity": 0.85,
       "fill-extrusion-base": 1
     }
   });
@@ -91,7 +88,6 @@ export function layers() {
     addOnMapInitialisation: false
   });
 
-  // /*
   // Access
 
   map.addSource("accessSource", {
@@ -153,32 +149,12 @@ export function layers() {
         "line-dasharray": [3, 2, 1]
       }
     });
-
-    /*
-   turf hidden area aroud
-   */
-    // var polygon = turf.polygon([Storage.tableExtents]);
-    // var masked = turf.mask(polygon);
-
-    // map.addLayer({
-    //   id: "mask",
-    //   type: "fill",
-    //   source: {
-    //     type: "geojson",
-    //     data: masked
-    //   },
-    //   layout: {},
-    //   paint: {
-    //     "fill-color": "#000000",
-    //     "fill-opacity": 0.9
-    //   }
-    // });
   }
 
   /*
   deck layer
   */
-  // mobilityServiceLayer();
+  mobilityServiceLayer();
 
   Storage.map.on("click", "gridLayer", function(e) {
     console.log(e);

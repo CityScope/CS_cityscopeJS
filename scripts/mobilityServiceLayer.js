@@ -11,6 +11,8 @@ export function mobilityServiceLayer() {
     GAMA: "https://cityio.media.mit.edu/api/table/grasbrook/gama"
   };
 
+  console.log(DATA_URL.GAMA);
+
   let timeStampDiv = document.getElementById("timeStamp");
   let simPaceDiv = document.getElementById("simPaceDiv");
 
@@ -48,22 +50,23 @@ export function mobilityServiceLayer() {
         new TripsLayer({
           id: "ABMLayer",
           data: DATA_URL.GAMA,
-          getPath: d => d.segments,
-          getTimestamps: d => d.segments[3],
-          //  d.segments.map(p => p.timestamp ),
+          getPath: d => d.path,
+          getTimestamps: d =>
+            // d.segments[3],
+            d.path.map(p => p.timestamp),
 
-          getColor: d => {
-            switch (d.mode) {
-              case 0:
-                return [255, 0, 255];
-              case 1:
-                return [60, 128, 255];
-              case 2:
-                return [153, 255, 51];
-              case 3:
-                return [153, 180, 100];
-            }
-          },
+          // getColor: d => {
+          //   switch (d.mode) {
+          //     case 0:
+          //       return [255, 0, 255];
+          //     case 1:
+          //       return [60, 128, 255];
+          //     case 2:
+          //       return [153, 255, 51];
+          //     case 3:
+          //       return [153, 180, 100];
+          //   }
+          // },
           opacity: 0.4,
           widthMinPixels: 3,
           trailLength: 3000,
@@ -77,7 +80,7 @@ export function mobilityServiceLayer() {
     dateObject.setSeconds(time); // specify value for SECONDS here
     var timeString = dateObject.toISOString().substr(11, 8);
     timeStampDiv.innerHTML = "time: " + timeString;
-    simPaceDiv.innerHTML = "Simulation pace: " + simPaceValue;
+    simPaceDiv.innerHTML = "simulation pace x" + simPaceValue;
   }
 
   // start animation loop
