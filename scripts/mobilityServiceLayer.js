@@ -2,21 +2,20 @@ import "./Storage";
 import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
- import { getCityIO } from "./update";
-
-
+import { getCityIO } from "./update";
 
 export async function mobilityServiceLayer() {
   // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
   // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/overview.md?source=post_page---------------------------#using-with-pure-js
 
   const DATA_URL = {
-    GAMA: "https://cityio.media.mit.edu/api/table/grasbrook/gama"
+    ABM: "https://cityio.media.mit.edu/api/table/grasbrook/gama"
   };
 
-  let gamaData = await getCityIO(DATA_URL.GAMA);
-  gamaData = gamaData[0];
-  gamaData = "https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips-v7.json"
+  let abmData = await getCityIO(DATA_URL.ABM);
+
+  abmData =
+    "https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips-v7.json";
 
   //
   let timeStampDiv = document.getElementById("timeStamp");
@@ -54,8 +53,7 @@ export async function mobilityServiceLayer() {
       layers: [
         new TripsLayer({
           id: "ABMLayer",
-          data: 
-           gamaData,
+          data: abmData,
           getPath: d => d.path,
           getTimestamps: d => d.timestamps,
           getColor: d => (d.vendor === 0 ? [255, 0, 255] : [0, 255, 255]),

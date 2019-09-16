@@ -27,14 +27,6 @@ class Storage {
     this._map = value;
   }
 
-  //tableExtents
-  get tableExtents() {
-    return this._tableExtents;
-  }
-  set tableExtents(value) {
-    this._tableExtents = value;
-  }
-
   //cityIO data
   get cityIOdata() {
     return this._cityIOdata;

@@ -132,36 +132,6 @@ export async function layers() {
     showInLayerList: true,
     addOnMapInitialisation: false
   });
-
-  // check if this table has table extents features
-  if (Storage.tableExtents) {
-    //table extents
-    map.addLayer({
-      id: "route",
-      type: "line",
-      source: {
-        type: "geojson",
-        data: {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "LineString",
-            coordinates: Storage.tableExtents
-          }
-        }
-      },
-      layout: {
-        "line-join": "round",
-        "line-cap": "round"
-      },
-      paint: {
-        "line-color": "rgba(255,255,255,1)",
-        "line-width": 3,
-        "line-dasharray": [3, 2, 1]
-      }
-    });
-  }
-
   /*
   deck layer
   */
