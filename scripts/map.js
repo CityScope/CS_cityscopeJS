@@ -8,6 +8,11 @@ export function makeMap() {
   keystoneDiv.className = "keystoneDiv";
   keystoneDiv.id = "keystoneDiv";
   document.body.appendChild(keystoneDiv);
+  let uiDiv = document.getElementById("ui");
+  keystoneDiv.appendChild(uiDiv);
+  // show ui
+  uiDiv.style.display = "block";
+
   mapboxgl.accessToken =
     "pk.eyJ1IjoicmVsbm94IiwiYSI6ImNqd2VwOTNtYjExaHkzeXBzYm1xc3E3dzQifQ.X8r8nj4-baZXSsFgctQMsg";
 
