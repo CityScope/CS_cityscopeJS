@@ -9,12 +9,12 @@ export async function layers() {
 
   // get two grid layers
   let gridGeojson = await getCityIO(Storage.cityIOurl + "/grid_full_table");
-  gridGeojson = gridGeojson[0];
+  gridGeojson = gridGeojson;
   let gridGeojsonActive = await getCityIO(
     Storage.cityIOurl + "/grid_interactive_area"
   );
   // save to global storage
-  gridGeojsonActive = gridGeojsonActive[0];
+  gridGeojsonActive = gridGeojsonActive;
   Storage.gridGeojsonActive = gridGeojsonActive;
 
   /* 

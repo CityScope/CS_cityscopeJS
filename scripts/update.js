@@ -9,20 +9,26 @@ import "./Storage";
  */
 export async function update() {
   let hashList = await getCityIO(Storage.cityIOurl + "/meta");
-  Storage.oldAHashList = hashList;
   // get the grid from hashes
   let gridHash = hashList.hashes.grid;
+
   // if we obseve a new hash
   if (gridHash !== Storage.oldGridHash) {
     // get the new grid
     Storage.gridCityIOData = await getCityIO(Storage.cityIOurl + "/grid");
+
     // update the grid geojson
     updateGeoJsonGrid();
-    // match the grid hash sotrage
+
+    // keep record of the grid hash
     Storage.oldGridHash = gridHash;
 
+    // save all hashes to store
+    Storage.oldAHashList = hashList;
+
+    //  clear loop before new one
     clearInterval(Storage.updateLayersInterval);
-    Storage.updateLayersInterval = setInterval(updateLayers, 3000);
+    Storage.updateLayersInterval = setInterval(updateLayers, 1000);
   }
 }
 //
@@ -36,6 +42,8 @@ async function updateLayers() {
 
   //  no new hash
   if (newAccessHash == oldAccessHash) {
+    console.log(newAccessHash, oldAccessHash);
+
     console.log("Same hash, still waiting for update on layer ...");
   }
   // if we got new hash
