@@ -13,17 +13,23 @@ body {
 
 .helpDiv {
   text-align: center;
-  vertical-align: middle;
-  margin: auto;
   overflow: auto;
-  font-size: 3em;
-  line-height: auto;
+  font-size: 2em;
   font-weight: bold;
-  background-color: rgba(0, 0, 0, 0.9);
-  color: white;
-  width: 60%;
-  position: relative;
+  color: black;
+  background-color: rgb(255, 255, 255);
   z-index: 100;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.helpdiv a,
+a:hover,
+a:visited {
+  color: black;
 }
 
 .ui {
