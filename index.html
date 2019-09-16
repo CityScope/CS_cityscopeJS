@@ -26,7 +26,6 @@
       <div id="ui" class="ui">
         <h1>CityScopeJS</h1>
         <p>Click 'Space' to hide | 'Shift+Z' to keystone</p>
-
         <h2>Display</h2>
         <nav id="uiList" class="uiList">
           <input type="checkbox" id="projectionMode" checked="checked" />
@@ -52,26 +51,30 @@
           <!--  -->
           <input type="checkbox" id="gridLayerLine" checked="checked" />
           <label for="gridLayerLine">Grid Layer</label>
+
+          <!--  -->
+          <div id="timeStamp" class="timeStamp"></div>
+          <input
+            type="range"
+            min="0"
+            max="99"
+            value="1"
+            class="slider"
+            id="mobilitySlider"
+          />
+          <div id="simPaceDiv" div class="timeStamp"></div>
+          <input
+            type="range"
+            min="0"
+            max="500"
+            value="50"
+            class="slider"
+            id="simPaceSlider"
+          />
+          <input type="checkbox" id="hciToggle" checked="checked" />
+          <label for="hciToggle">Gesture</label>
+          <div id="hci" class="hci"></div>
         </nav>
-        <!--  -->
-        <div id="timeStamp" class="timeStamp"></div>
-        <input
-          type="range"
-          min="0"
-          max="99"
-          value="1"
-          class="slider"
-          id="mobilitySlider"
-        />
-        <div id="simPaceDiv" div class="timeStamp"></div>
-        <input
-          type="range"
-          min="0"
-          max="500"
-          value="50"
-          class="slider"
-          id="simPaceSlider"
-        />
       </div>
     </section>
 

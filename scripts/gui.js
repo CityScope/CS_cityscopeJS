@@ -44,6 +44,7 @@ export function gui() {
         updateGeoJsonGrid();
 
         break;
+
       // keystone mode
       case "keystone":
         let localStorage = window.localStorage;
@@ -87,6 +88,13 @@ export function gui() {
         }
         break;
 
+      case "hciToggle":
+        if (e.target.checked) {
+          document.getElementById("hci").style.display = "block";
+        } else {
+          document.getElementById("hci").style.display = "none";
+        }
+        break;
       // any other layer
       default:
         if (e.target.checked) {
