@@ -9,16 +9,49 @@ import "./Storage";
  */
 export async function update() {
   let hashList = await getCityIO(Storage.cityIOurl + "/meta");
-  let hash = hashList.hashes.grid;
-  if (hash !== Storage.oldHash) {
-    // console.log("new grid", hash, Storage.oldHash);
+  Storage.oldAHashList = hashList;
+  // get the grid from hashes
+  let gridHash = hashList.hashes.grid;
+  // if we obseve a new hash
+  if (gridHash !== Storage.oldGridHash) {
+    // get the new grid
     Storage.gridCityIOData = await getCityIO(Storage.cityIOurl + "/grid");
+    // update the grid geojson
     updateGeoJsonGrid();
-    Storage.oldHash = hash;
-  } else {
-    // console.log("no new grid", hash, Storage.oldHash);
+    // match the grid hash sotrage
+    Storage.oldGridHash = gridHash;
+
+    clearInterval(Storage.updateLayersInterval);
+    Storage.updateLayersInterval = setInterval(updateLayers, 3000);
   }
 }
+//
+//deal with simulation data update and storage
+
+async function updateLayers() {
+  // get the current access hash
+  let oldAccessHash = Storage.oldAHashList.hashes.access;
+  let result = await getCityIO(Storage.cityIOurl + "/meta");
+  let newAccessHash = result.hashes.access;
+
+  //  no new hash
+  if (newAccessHash == oldAccessHash) {
+    console.log("Same hash, still waiting for update on layer ...");
+  }
+  // if we got new hash
+  else {
+    console.log("New access hash", newAccessHash);
+    Storage.oldAHashList.hashes.acesss = newAccessHash;
+    // and update the layers source
+    Storage.map
+      // update the layers
+      .getSource("accessSource")
+      .setData("https://cityio.media.mit.edu/api/table/grasbrook/access");
+    // stop the hash GET requests
+    clearInterval(Storage.updateLayersInterval);
+  }
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * get cityIO method [uses polyfill]
@@ -38,12 +71,9 @@ export async function getCityIO(url) {
 }
 
 export function updateGeoJsonGrid() {
-  console.log("update grid");
-
+  console.log("updating grid");
   let cityIOdata = Storage.gridCityIOData;
   let gridGeojsonActive = Storage.gridGeojsonActive;
-  console.log(gridGeojsonActive);
-
   var cellsFeaturesArray = [
     {
       type: "Work 2",
@@ -98,11 +128,4 @@ export function updateGeoJsonGrid() {
   }
 
   Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);
-}
-
-export async function updateLayer() {
-  //deal with simulation data update and storage
-  Storage.map
-    .getSource("accessSource")
-    .setData("https://cityio.media.mit.edu/api/table/grasbrook/access");
 }

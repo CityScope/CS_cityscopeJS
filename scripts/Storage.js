@@ -52,11 +52,19 @@ class Storage {
   }
 
   //Old hash
-  get oldHash() {
-    return this._oldHash;
+  get oldGridHash() {
+    return this._oldGridHash;
   }
-  set oldHash(value) {
-    this._oldHash = value;
+  set oldGridHash(value) {
+    this._oldGridHash = value;
+  }
+
+  //oldAHashList
+  get oldAHashList() {
+    return this._oldAHashList;
+  }
+  set oldAHashList(value) {
+    this._oldAHashList = value;
   }
 
   //grid CityIO data
@@ -65,6 +73,14 @@ class Storage {
   }
   set gridCityIOData(value) {
     this._gridCityIOData = value;
+  }
+
+  //updateLayersInterval
+  get updateLayersInterval() {
+    return this._updateLayersInterval;
+  }
+  set updateLayersInterval(value) {
+    this._updateLayersInterval = value;
   }
 
   //threeJs height state for projection

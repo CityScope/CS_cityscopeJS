@@ -64,6 +64,12 @@ async function init() {
       gui();
       // load layer
       layers();
+
+      // set up a connection chanels
+      const channel = new BroadcastChannel("hci");
+      channel.onmessage = function(e) {
+        console.log(e.data);
+      };
     });
   }
 

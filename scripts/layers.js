@@ -166,9 +166,6 @@ export async function layers() {
   deck layer
   */
   mobilityServiceLayer();
-  Storage.map.on("click", "gridLayer", function(e) {
-    console.log(e);
-  });
 
   //run the layers update
   window.setInterval(update, update_interval);
