@@ -26,10 +26,12 @@ export async function mobilityServiceLayer() {
     layers: []
   });
 
-  let time = 0;
+  let sevenAM = 25200;
+  let time = sevenAM;
   // a day in sec
-  let loopLength = 86400;
+  let fullDay = 86400;
   let simPaceValue = 1;
+  let loopLength = fullDay - sevenAM * 2;
 
   var mobilitySlider = document.getElementById("mobilitySlider");
   var simPaceSlider = document.getElementById("simPaceSlider");
@@ -44,7 +46,7 @@ export async function mobilityServiceLayer() {
 
   function renderLayers() {
     if (time >= loopLength - 1) {
-      time = 0;
+      time = sevenAM;
     } else {
       time = time + simPaceValue;
     }
@@ -56,36 +58,23 @@ export async function mobilityServiceLayer() {
           data: abmData,
           getPath: d => d.path,
           getTimestamps: d => d.timestamps,
-          getColor: d => (d.mode === 0 ? [255, 0, 255] : [0, 255, 255]),
+          getColor: d => {
+            switch (d.mode) {
+              case 0:
+                return [255, 0, 255];
+              case 1:
+                return [60, 128, 255];
+              case 2:
+                return [153, 255, 51];
+              case 3:
+                return [153, 180, 100];
+            }
+          },
           opacity: 0.3,
-          widthMinPixels: 2,
+          widthMinPixels: 5,
           rounded: true,
-          trailLength: 50,
+          trailLength: 10,
           currentTime: time
-
-          // id: "ABMLayer",
-          // data: DATA_URL.GAMA,
-          // getPath: d => d.path,
-          // getTimestamps: d =>
-          // d.segments[3],
-          //   d.path.map(p => p.timestamp),
-          // getColor: d => {
-          //   switch (d.mode) {
-          //     case 0:
-          //       return [255, 0, 255];
-          //     case 1:
-          //       return [60, 128, 255];
-          //     case 2:
-          //       return [153, 255, 51];
-          //     case 3:
-          //       return [153, 180, 100];
-          //   }
-          // },
-          //     opacity: 0.4,
-          //     widthMinPixels: 3,
-          //     trailLength: 3000,
-          //     currentTime: time,
-          //     rounded: true
         })
       ]
     });
