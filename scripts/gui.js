@@ -87,12 +87,30 @@ export function gui() {
           console.log("no older maptastic setup found");
         }
         break;
-
+      //
       case "hciToggle":
         if (e.target.checked) {
           document.getElementById("hci").style.display = "block";
         } else {
           document.getElementById("hci").style.display = "none";
+        }
+        break;
+      //
+      case "AccessLayer":
+        if (e.target.checked) {
+          Storage.map.setLayoutProperty("AccessLayer", "visibility", "visible");
+          Storage.map.setLayoutProperty(
+            "AccessLayerHeatmap",
+            "visibility",
+            "visible"
+          );
+        } else {
+          Storage.map.setLayoutProperty(
+            "AccessLayerHeatmap",
+            "visibility",
+            "none"
+          );
+          Storage.map.setLayoutProperty("AccessLayer", "visibility", "none");
         }
         break;
       // any other layer

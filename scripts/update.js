@@ -5,63 +5,6 @@ import "./Storage";
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * controls the cityIO streeam
- */
-export async function update() {
-  let hashList = await getCityIO(Storage.cityIOurl + "/meta");
-  // get the grid from hashes
-  let gridHash = hashList.hashes.grid;
-
-  // if we obseve a new hash
-  if (gridHash !== Storage.oldGridHash) {
-    // get the new grid
-    Storage.gridCityIOData = await getCityIO(Storage.cityIOurl + "/grid");
-
-    // update the grid geojson
-    updateGeoJsonGrid();
-
-    // keep record of the grid hash
-    Storage.oldGridHash = gridHash;
-
-    // save all hashes to store
-    Storage.oldAHashList = hashList;
-
-    //  clear loop before new one
-    clearInterval(Storage.updateLayersInterval);
-    Storage.updateLayersInterval = setInterval(updateLayers, 1000);
-  }
-}
-//
-//deal with simulation data update and storage
-
-async function updateLayers() {
-  // get the current access hash
-  let oldAccessHash = Storage.oldAHashList.hashes.access;
-  let result = await getCityIO(Storage.cityIOurl + "/meta");
-  let newAccessHash = result.hashes.access;
-
-  //  no new hash
-  if (newAccessHash == oldAccessHash) {
-    console.log(newAccessHash, oldAccessHash);
-
-    console.log("Same hash, still waiting for update on layer ...");
-  }
-  // if we got new hash
-  else {
-    console.log("New access hash", newAccessHash);
-    Storage.oldAHashList.hashes.acesss = newAccessHash;
-    // and update the layers source
-    Storage.map
-      // update the layers
-      .getSource("accessSource")
-      .setData("https://cityio.media.mit.edu/api/table/grasbrook/access");
-    // stop the hash GET requests
-    clearInterval(Storage.updateLayersInterval);
-  }
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
  * get cityIO method [uses polyfill]
  * @param cityIOtableURL cityIO API endpoint URL
  */
@@ -76,6 +19,62 @@ export async function getCityIO(url) {
     .catch(err => {
       console.log("Error from '" + this.apiName + "':", err);
     });
+}
+
+/**
+ * controls the cityIO streeam
+ */
+export async function update() {
+  let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
+  // get the grid from hashes
+  let gridHash = cityioHashes.hashes.grid;
+
+  // check if we obseve a new grid hash
+  if (gridHash !== Storage.oldGridHash) {
+    // get the new grid
+    Storage.gridCityIOData = await getCityIO(Storage.cityIOurl + "/grid");
+
+    // update the grid geojson
+    updateGeoJsonGrid();
+
+    // keep record of the grid hash
+    Storage.oldGridHash = gridHash;
+
+    // save all hashes to store
+    Storage.oldAHashList = cityioHashes;
+
+    //  clear loop before new one
+    clearInterval(Storage.updateLayersInterval);
+    // start looking for layer updates
+    Storage.updateLayersInterval = setInterval(updateLayers, 1000);
+  }
+}
+//
+//deal with simulation data update and storage
+
+async function updateLayers() {
+  // get the current access hash
+  let oldAccessHash = Storage.oldAHashList.hashes.access;
+  // get hashes again in loop
+  let result = await getCityIO(Storage.cityIOurl + "/meta");
+  let currentAccessHash = result.hashes.access;
+
+  //  check if it's the same hash
+  if (currentAccessHash == oldAccessHash) {
+    console.log("same", currentAccessHash, oldAccessHash, "\n");
+  }
+  // if we got new hash
+  else {
+    console.log("New access hash", currentAccessHash);
+    Storage.oldAHashList.hashes.acesss = currentAccessHash;
+    // and update the layers source
+    Storage.map
+      // update the layers
+      .getSource("accessSource")
+      .setData("https://cityio.media.mit.edu/api/table/grasbrook/access");
+    // stop the hash GET requests
+    clearInterval(Storage.updateLayersInterval);
+  }
 }
 
 export function updateGeoJsonGrid() {

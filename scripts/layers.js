@@ -1,6 +1,6 @@
 import "./Storage";
 // import * as turf from "@turf/turf";
-import { mobilityServiceLayer } from "./mobilityServiceLayer";
+import { mobilityServiceLayer } from "./abmLayer";
 import { update, getCityIO } from "./update";
 
 export async function layers() {
@@ -9,12 +9,11 @@ export async function layers() {
 
   // get two grid layers
   let gridGeojson = await getCityIO(Storage.cityIOurl + "/grid_full_table");
-  gridGeojson = gridGeojson;
   let gridGeojsonActive = await getCityIO(
     Storage.cityIOurl + "/grid_interactive_area"
   );
   // save to global storage
-  gridGeojsonActive = gridGeojsonActive;
+  Storage.gridGeojson = gridGeojson;
   Storage.gridGeojsonActive = gridGeojsonActive;
 
   /* 
@@ -108,6 +107,7 @@ export async function layers() {
 
   map.addLayer({
     id: "AccessLayer",
+    minzoom: 14,
     type: "circle",
     source: "accessSource",
     paint: {
@@ -132,6 +132,50 @@ export async function layers() {
     showInLayerList: true,
     addOnMapInitialisation: false
   });
+
+  map.addLayer({
+    id: "AccessLayerHeatmap",
+    type: "heatmap",
+    source: "accessSource",
+    maxzoom: 15,
+    paint: {
+      // Increase the heatmap weight based on frequency and property magnitude
+      "heatmap-weight": [
+        "interpolate",
+        ["linear"],
+        ["get", "education"],
+        0,
+        0,
+        6,
+        1
+      ],
+
+      // { type: "exponential", stops: [[1, 0], [62, 1]] },
+
+      "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 10, 5, 15, 20],
+      "heatmap-color": [
+        "interpolate",
+        ["linear"],
+        ["heatmap-density"],
+        0,
+        "rgba(0,0,0,0)",
+        0.2,
+        "red",
+        0.4,
+        "red",
+        0.6,
+        "yellow",
+        0.8,
+        "green",
+        1,
+        "green"
+      ],
+      // Adjust the heatmap radius by zoom level
+      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 10, 5, 14, 25],
+      "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 10, 1, 16, 0]
+    }
+  });
+
   /*
   deck layer
   */

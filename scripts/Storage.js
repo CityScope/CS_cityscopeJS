@@ -35,6 +35,14 @@ class Storage {
     this._cityIOdata = value;
   }
 
+  // gridGeojson
+  get gridGeojson() {
+    return this._gridGeojson;
+  }
+  set gridGeojson(value) {
+    this._gridGeojson = value;
+  }
+
   // gridGeojsonActive
   get gridGeojsonActive() {
     return this._gridGeojsonActive;
