@@ -45,6 +45,31 @@ a:visited {
   display: none;
 }
 
+button:focus {
+  outline: 0;
+}
+
+.accessButtons {
+  cursor: pointer;
+  width: 20%;
+  margin: 0.5em;
+  text-align: center;
+  border-radius: 1em;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.8em;
+  background: #383838;
+  color: white;
+  font: 0.8em "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-weight: 100;
+}
+
+.accessButtons:hover {
+  border: 1px solid rgb(255, 255, 255);
+}
+.accessButtons:active {
+  background: rgb(255, 255, 255);
+}
+
 .hci {
   display: none;
   background-color: rgb(255, 255, 255);

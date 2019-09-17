@@ -35,7 +35,7 @@ import { makeMap } from "./map";
 import { getCityIO } from "./update";
 import { layers } from "./layers";
 import { gui } from "./gui";
-import { Maptastic } from "./assets/maptastic";
+import { Maptastic } from "./maptastic";
 
 async function init() {
   //which cityIO endpoint to look for

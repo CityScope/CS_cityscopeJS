@@ -9,13 +9,13 @@ export async function mobilityServiceLayer() {
   // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/overview.md?source=post_page---------------------------#using-with-pure-js
 
   const DATA_URL = {
-    ABM: "https://cityio.media.mit.edu/api/table/grasbrook/gama"
+    ABM: "https://cityio.media.mit.edu/api/table/grasbrook/trips"
   };
 
   let abmData = await getCityIO(DATA_URL.ABM);
 
-  abmData =
-    "https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips-v7.json";
+  // abmData =
+  // "https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips-v7.json";
 
   //
   let timeStampDiv = document.getElementById("timeStamp");
@@ -56,7 +56,7 @@ export async function mobilityServiceLayer() {
           data: abmData,
           getPath: d => d.path,
           getTimestamps: d => d.timestamps,
-          getColor: d => (d.vendor === 0 ? [255, 0, 255] : [0, 255, 255]),
+          getColor: d => (d.mode === 0 ? [255, 0, 255] : [0, 255, 255]),
           opacity: 0.3,
           widthMinPixels: 2,
           rounded: true,
