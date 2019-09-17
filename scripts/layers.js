@@ -106,39 +106,39 @@ export async function layers() {
     data: "https://cityio.media.mit.edu/api/table/grasbrook/access"
   });
 
-  map.addLayer({
-    id: "AccessLayer",
-    minzoom: 14,
-    type: "circle",
-    source: "accessSource",
-    paint: {
-      "circle-translate": [0, 0],
-      "circle-radius": {
-        property: Storage.accessState,
-        stops: [
-          [{ zoom: 8, value: 0 }, 0.1],
-          [{ zoom: 8, value: 1 }, 1],
-          [{ zoom: 11, value: 0 }, 0.5],
-          [{ zoom: 11, value: 1 }, 2],
-          [{ zoom: 16, value: 0 }, 3],
-          [{ zoom: 16, value: 1 }, 9]
-        ]
-      },
-      "circle-color": {
-        property: Storage.accessState,
-        stops: [[0, "red"], [0.5, "yellow"], [1, "green"]]
-      }
-    },
-    hasReloadInterval: false,
-    showInLayerList: true,
-    addOnMapInitialisation: false
-  });
+  // map.addLayer({
+  //   id: "AccessLayer",
+  //   minzoom: 20,
+  //   type: "circle",
+  //   source: "accessSource",
+  //   paint: {
+  //     "circle-translate": [0, 0],
+  //     "circle-radius": {
+  //       property: Storage.accessState,
+  //       stops: [
+  //         [{ zoom: 8, value: 0 }, 0.1],
+  //         [{ zoom: 8, value: 1 }, 1],
+  //         [{ zoom: 11, value: 0 }, 0.5],
+  //         [{ zoom: 11, value: 1 }, 2],
+  //         [{ zoom: 16, value: 0 }, 3],
+  //         [{ zoom: 16, value: 1 }, 9]
+  //       ]
+  //     },
+  //     "circle-color": {
+  //       property: Storage.accessState,
+  //       stops: [[0, "red"], [0.5, "yellow"], [1, "green"]]
+  //     }
+  //   },
+  //   hasReloadInterval: false,
+  //   showInLayerList: true,
+  //   addOnMapInitialisation: false
+  // });
 
   map.addLayer({
     id: "AccessLayerHeatmap",
     type: "heatmap",
     source: "accessSource",
-    maxzoom: 15,
+    maxzoom: 19,
     paint: {
       // Increase the heatmap weight based on frequency and property magnitude
       "heatmap-weight": [
@@ -153,7 +153,7 @@ export async function layers() {
 
       // { type: "exponential", stops: [[1, 0], [62, 1]] },
 
-      "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 10, 5, 15, 20],
+      "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 10, 1, 15, 10],
       "heatmap-color": [
         "interpolate",
         ["linear"],
@@ -163,17 +163,17 @@ export async function layers() {
         0.2,
         "red",
         0.4,
-        "red",
+        "rgb(255, 124, 1)",
         0.6,
         "yellow",
         0.8,
-        "green",
+        "rgb(142, 255, 0)",
         1,
         "green"
       ],
       // Adjust the heatmap radius by zoom level
-      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 10, 5, 14, 25],
-      "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 10, 1, 16, 0]
+      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 1, 0, 15, 30],
+      "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 15, 1, 20, 0]
     }
   });
 

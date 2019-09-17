@@ -98,7 +98,7 @@ export function gui() {
       //
       case "AccessLayer":
         if (e.target.checked) {
-          Storage.map.setLayoutProperty("AccessLayer", "visibility", "visible");
+          // Storage.map.setLayoutProperty("AccessLayer", "visibility", "visible");
           Storage.map.setLayoutProperty(
             "AccessLayerHeatmap",
             "visibility",
@@ -110,7 +110,7 @@ export function gui() {
             "visibility",
             "none"
           );
-          Storage.map.setLayoutProperty("AccessLayer", "visibility", "none");
+          // Storage.map.setLayoutProperty("AccessLayer", "visibility", "none");
         }
         break;
       // any other layer
