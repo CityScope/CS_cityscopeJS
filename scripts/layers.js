@@ -72,7 +72,6 @@ export async function layers() {
   /*
   3d buildings
   */
-
   map.addLayer({
     id: "3dBuildingsLayer",
     displayName: "3dBuildingsLayer",
@@ -100,6 +99,8 @@ export async function layers() {
 
   // Access
 
+  Storage.accessState = "education";
+
   map.addSource("accessSource", {
     type: "geojson",
     data: "https://cityio.media.mit.edu/api/table/grasbrook/access"
@@ -113,7 +114,7 @@ export async function layers() {
     paint: {
       "circle-translate": [0, 0],
       "circle-radius": {
-        property: "education",
+        property: Storage.accessState,
         stops: [
           [{ zoom: 8, value: 0 }, 0.1],
           [{ zoom: 8, value: 1 }, 1],
@@ -124,7 +125,7 @@ export async function layers() {
         ]
       },
       "circle-color": {
-        property: "education",
+        property: Storage.accessState,
         stops: [[0, "red"], [0.5, "yellow"], [1, "green"]]
       }
     },
@@ -143,7 +144,7 @@ export async function layers() {
       "heatmap-weight": [
         "interpolate",
         ["linear"],
-        ["get", "education"],
+        ["get", Storage.accessState],
         0,
         0,
         6,
