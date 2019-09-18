@@ -71,7 +71,11 @@ async function updateLayers() {
     Storage.map
       // update the layers
       .getSource("accessSource")
-      .setData("https://cityio.media.mit.edu/api/table/grasbrook/access");
+      .setData(
+        "https://cityio.media.mit.edu/api/table/" +
+          Storage.cityIOdata.header.name.toString() +
+          "/access"
+      );
     // stop the hash GET requests
     clearInterval(Storage.updateLayersInterval);
   }
