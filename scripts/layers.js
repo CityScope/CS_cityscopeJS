@@ -83,9 +83,13 @@ export async function layers() {
   //
   // Access
   //
+
   map.addSource("accessSource", {
     type: "geojson",
-    data: "https://cityio.media.mit.edu/api/table/grasbrook/access"
+    data:
+      "https://cityio.media.mit.edu/api/table/" +
+      Storage.cityIOdata.header.name.toString() +
+      "/access"
   });
 
   map.addLayer({
