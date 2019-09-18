@@ -1,5 +1,6 @@
 html {
   height: 100%;
+  font: 0.8em "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 body {
   margin: 0;
@@ -8,7 +9,6 @@ body {
   background-attachment: fixed;
   overflow: hidden;
   background: black;
-  font: 0.6em "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .helpDiv {
@@ -49,17 +49,19 @@ button:focus {
   outline: 0;
 }
 
+.accessButtonsContanier {
+  display: flex;
+  justify-content: space-around;
+}
+
 .accessButtons {
   cursor: pointer;
-  width: 20%;
-  margin: 0.5em;
-  text-align: center;
-  border-radius: 1em;
+  margin: 0.8em;
+  border-radius: 0.7em;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 0.8em;
+  font-size: 0.5em;
   background: #383838;
   color: white;
-  font: 0.8em "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 100;
 }
 

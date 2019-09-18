@@ -33,22 +33,6 @@ export async function layers() {
     }
   });
 
-  map.addSource("gridGeojsonActiveSource", {
-    type: "geojson",
-    data: gridGeojsonActive
-  });
-  map.addLayer({
-    id: "gridGeojsonActive",
-    type: "fill-extrusion",
-    source: "gridGeojsonActiveSource",
-    paint: {
-      "fill-extrusion-color": ["get", "color"],
-      "fill-extrusion-height": ["get", "height"],
-      "fill-extrusion-opacity": 0.85,
-      "fill-extrusion-base": 1
-    }
-  });
-
   /*
   noise layer
   */
@@ -150,8 +134,8 @@ export async function layers() {
         ["linear"],
         ["heatmap-density"],
         0,
-        "rgba(0,0,0,0)",
-        0.2,
+        "rgba(255,0,0,0)",
+        0.1,
         "red",
         0.4,
         "rgb(255, 124, 1)",
@@ -172,6 +156,23 @@ export async function layers() {
   deck layer
   */
   mobilityServiceLayer();
+
+  // Active layer
+  map.addSource("gridGeojsonActiveSource", {
+    type: "geojson",
+    data: gridGeojsonActive
+  });
+  map.addLayer({
+    id: "gridGeojsonActive",
+    type: "fill-extrusion",
+    source: "gridGeojsonActiveSource",
+    paint: {
+      "fill-extrusion-color": ["get", "color"],
+      "fill-extrusion-height": ["get", "height"],
+      "fill-extrusion-opacity": 0.85,
+      "fill-extrusion-base": 1
+    }
+  });
 
   //run the layers update
   window.setInterval(update, update_interval);
