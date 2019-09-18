@@ -1700,4 +1700,4 @@ var A=arguments[3];Object.defineProperty(exports,"__esModule",{value:!0}),export
 },{}],"g2Hq":[function(require,module,exports) {
 "use strict";require("babel-polyfill"),require("./Storage");var e=require("./map"),t=require("./update"),a=require("./layers"),i=require("./gui"),r=require("./maptastic");async function o(){var o=window.location.search.substring(1);if(""!==o){document.getElementById("helpDiv").style.display="none";let r="https://cityio.media.mit.edu/api/table/"+o.toString();Storage.cityIOurl=r;const n=await(0,t.getCityIO)(r);Storage.cityIOdata=n,(0,e.makeMap)(),Storage.map.on("style.load",function(){(0,i.gui)(),(0,a.layers)(),new BroadcastChannel("hci").onmessage=function(e){console.log(e.data)}})}let n=document.querySelector("#keystoneDiv");(0,r.Maptastic)(n)}window.onload=o();
 },{"babel-polyfill":"JIy0","./Storage":"uuHj","./map":"q47k","./update":"C+WB","./layers":"/mDa","./gui":"3afL","./maptastic":"Abij"}]},{},["g2Hq"], null)
-//# sourceMappingURL=https://cityscope.media.mit.edu/CS_CityScopeJS/scripts.1f62d5dd.js.map
+//# sourceMappingURL=https://cityscope.media.mit.edu/CS_cityscopeJS/scripts.1f62d5dd.js.map
