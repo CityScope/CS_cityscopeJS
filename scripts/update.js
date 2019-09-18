@@ -61,7 +61,7 @@ async function updateLayers() {
 
   //  check if it's the same hash
   if (currentAccessHash == oldAccessHash) {
-    console.log("same", currentAccessHash, oldAccessHash, "\n");
+    console.log("same hash, waiting for new..");
   }
   // if we got new hash
   else {

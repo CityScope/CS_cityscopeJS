@@ -96,11 +96,9 @@ export async function layers() {
     showInLayerList: true,
     addOnMapInitialisation: false
   });
-
+  //
   // Access
-
-  Storage.accessState = "education";
-
+  //
   map.addSource("accessSource", {
     type: "geojson",
     data: "https://cityio.media.mit.edu/api/table/grasbrook/access"
@@ -114,7 +112,7 @@ export async function layers() {
     paint: {
       "circle-translate": [0, 0],
       "circle-radius": {
-        property: Storage.accessState,
+        property: "education",
         stops: [
           [{ zoom: 8, value: 0 }, 0.1],
           [{ zoom: 8, value: 1 }, 1],
@@ -125,31 +123,27 @@ export async function layers() {
         ]
       },
       "circle-color": {
-        property: Storage.accessState,
+        property: "education",
         stops: [[0, "red"], [0.5, "yellow"], [1, "green"]]
       }
     }
   });
-
+  // Access
   map.addLayer({
     id: "AccessLayerHeatmap",
     type: "heatmap",
     source: "accessSource",
     maxzoom: 15,
     paint: {
-      // Increase the heatmap weight based on frequency and property magnitude
       "heatmap-weight": [
         "interpolate",
         ["linear"],
-        ["get", Storage.accessState],
+        ["get", "education"],
         0,
         0,
         6,
         1
       ],
-
-      // { type: "exponential", stops: [[1, 0], [62, 1]] },
-
       "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 10, 1, 15, 15],
       "heatmap-color": [
         "interpolate",

@@ -43,14 +43,6 @@ class Storage {
     this._gridGeojson = value;
   }
 
-  // access State
-  get accessState() {
-    return this._accessState;
-  }
-  set accessState(value) {
-    this._accessState = value;
-  }
-
   // gridGeojsonActive
   get gridGeojsonActive() {
     return this._gridGeojsonActive;
