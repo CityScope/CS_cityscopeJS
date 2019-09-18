@@ -63,7 +63,7 @@ async function init() {
       // load layer
       layers();
 
-      // set up a connection chanels
+      // set up a connection channels
       const channel = new BroadcastChannel("hci");
       channel.onmessage = function(e) {
         console.log(e.data);
