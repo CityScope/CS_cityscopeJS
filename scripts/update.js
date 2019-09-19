@@ -24,7 +24,7 @@ export async function getCityIO(url) {
 /**
  * controls the cityIO streeam
  */
-export async function update() {
+export async function cityioListener() {
   let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
   // get the grid from hashes
   let gridHash = cityioHashes.hashes.grid;
@@ -33,9 +33,6 @@ export async function update() {
   if (gridHash !== Storage.oldGridHash) {
     // get the new grid
     Storage.gridCityIOData = await getCityIO(Storage.cityIOurl + "/grid");
-
-    // update the grid geojson
-    updateGeoJsonGrid();
 
     // keep record of the grid hash
     Storage.oldGridHash = gridHash;
@@ -47,6 +44,8 @@ export async function update() {
     clearInterval(Storage.updateLayersInterval);
     // start looking for layer updates
     Storage.updateLayersInterval = setInterval(updateLayers, 1000);
+
+    updateGeoJsonGrid();
   }
 }
 
@@ -64,11 +63,13 @@ async function updateLayers() {
   let result = await getCityIO(Storage.cityIOurl + "/meta");
   let currentAccessHash = result.hashes.access;
   //  check if it's the same hash
-  if (currentAccessHash == oldAccessHash) {
+  if (currentAccessHash == oldAccessHash && Storage.firstLoadFlag !== true) {
     console.log("same hash, waiting for new..");
   }
   // if we got new hash
   else {
+    Storage.firstLoadFlag = false;
+
     console.log("New access hash", currentAccessHash);
     Storage.oldAHashList.hashes.acesss = currentAccessHash;
     // and update the layers source
@@ -90,7 +91,10 @@ async function updateLayers() {
 export function updateGeoJsonGrid() {
   console.log("updating grid");
   let cityIOdata = Storage.gridCityIOData;
+
   let gridGeojsonActive = Storage.gridGeojsonActive;
+
+  // ! to be replaced with dynmaic data
   var cellsFeaturesArray = [
     {
       type: "Work 2",
@@ -126,23 +130,26 @@ export function updateGeoJsonGrid() {
     }
   ];
 
-  // go over all cells that are in active grid area
-  for (let i = 0; i < gridGeojsonActive.features.length; i++) {
-    // if the data for this cell is -1
-    if (cityIOdata[i][0] == -1) {
-      gridGeojsonActive.features[i].properties.height = 0;
-      gridGeojsonActive.features[i].properties.color = "rgb(0,0,0)";
-    } else {
-      if (Storage.threeState == "flat" || Storage.threeState == null) {
-        gridGeojsonActive.features[i].properties.height = 0.1;
-      } else {
-        gridGeojsonActive.features[i].properties.height =
-          cellsFeaturesArray[cityIOdata[i][0]].height;
-      }
-      gridGeojsonActive.features[i].properties.color =
-        cellsFeaturesArray[cityIOdata[i][0]].color;
-    }
-  }
+  // check loaded
 
-  Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);
+  if (gridGeojsonActive !== null) {
+    // go over all cells that are in active grid area
+    for (let i = 0; i < gridGeojsonActive.features.length; i++) {
+      // if the data for this cell is -1
+      if (cityIOdata[i][0] == -1) {
+        gridGeojsonActive.features[i].properties.height = 0;
+        gridGeojsonActive.features[i].properties.color = "rgb(0,0,0)";
+      } else {
+        if (Storage.threeState == "flat" || Storage.threeState == null) {
+          gridGeojsonActive.features[i].properties.height = 0.1;
+        } else {
+          gridGeojsonActive.features[i].properties.height =
+            cellsFeaturesArray[cityIOdata[i][0]].height;
+        }
+        gridGeojsonActive.features[i].properties.color =
+          cellsFeaturesArray[cityIOdata[i][0]].color;
+      }
+    }
+    Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);
+  }
 }

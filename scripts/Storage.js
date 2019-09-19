@@ -67,6 +67,14 @@ class Storage {
     this._oldAHashList = value;
   }
 
+  //firstLoadFlag
+  get firstLoadFlag() {
+    return this._firstLoadFlag;
+  }
+  set firstLoadFlag(value) {
+    this._firstLoadFlag = value;
+  }
+
   //grid CityIO data
   get gridCityIOData() {
     return this._gridCityIOData;

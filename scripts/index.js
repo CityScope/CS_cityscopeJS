@@ -32,12 +32,13 @@ https://github.com/RELNO]
 import "babel-polyfill";
 import "./Storage";
 import { makeMap } from "./map";
-import { getCityIO } from "./update";
+import { getCityIO, cityioListener } from "./update";
 import { layers } from "./layers";
 import { gui } from "./gui";
 import { Maptastic } from "./maptastic";
 
 async function init() {
+  var update_interval = 100;
   //which cityIO endpoint to look for
   var cityio_table_name = window.location.search.substring(1);
   if (cityio_table_name !== "") {
@@ -57,11 +58,15 @@ async function init() {
     // get map from storage
     let map = Storage.map;
     // wait for map to load
-    map.on("style.load", function() {
+    map.on("load", function() {
       // do gui
       gui();
       // load layer
-      layers();
+      layers().then(
+        console.log("loaded layers"),
+        //run the layers update
+        window.setInterval(cityioListener, update_interval)
+      );
 
       // set up a connection channels
       const channel = new BroadcastChannel("hci");

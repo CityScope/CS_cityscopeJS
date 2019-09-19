@@ -1,10 +1,9 @@
 import "./Storage";
 // import * as turf from "@turf/turf";
 import { mobilityServiceLayer } from "./abmLayer";
-import { update, getCityIO } from "./update";
+import { getCityIO } from "./update";
 
 export async function layers() {
-  var update_interval = 100;
   let map = Storage.map;
 
   // get two grid layers
@@ -179,8 +178,7 @@ export async function layers() {
     }
   });
 
-  //run the layers update
-  window.setInterval(update, update_interval);
+  Storage.firstLoadFlag = true;
 }
 
 // access layer update function
