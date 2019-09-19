@@ -33,6 +33,8 @@ a:visited {
 }
 
 .ui {
+  transition: transform 1s linear;
+  transform-origin: top left;
   background-color: rgba(0, 0, 0, 0.9);
   color: white;
   border-radius: 1.5em;
@@ -145,4 +147,36 @@ button:focus {
   height: 1080px; */
   width: 100%;
   height: 100%;
+}
+
+/* Spinner  */
+.spinner {
+  width: 2em;
+  height: 2em;
+  border: 1em solid #ffffff4d;
+  border-radius: 100%;
+  border-top: 1em solid rgba(255, 255, 255, 0);
+  -webkit-animation: spin 0.5s linear infinite; /* Safari */
+  animation: spin 0.5s linear infinite;
+
+  display: inline-block;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

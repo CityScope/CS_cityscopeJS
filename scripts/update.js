@@ -49,16 +49,20 @@ export async function update() {
     Storage.updateLayersInterval = setInterval(updateLayers, 1000);
   }
 }
+
 //
 //deal with simulation data update and storage
-
 async function updateLayers() {
+  let spinnerDiv = document.querySelector("#spinner");
+  if (spinnerDiv.style.display !== "inline-block") {
+    spinnerDiv.style.display = "inline-block";
+  }
+
   // get the current access hash
   let oldAccessHash = Storage.oldAHashList.hashes.access;
   // get hashes again in loop
   let result = await getCityIO(Storage.cityIOurl + "/meta");
   let currentAccessHash = result.hashes.access;
-
   //  check if it's the same hash
   if (currentAccessHash == oldAccessHash) {
     console.log("same hash, waiting for new..");
@@ -78,6 +82,8 @@ async function updateLayers() {
       );
     // stop the hash GET requests
     clearInterval(Storage.updateLayersInterval);
+    // hide spinner
+    spinnerDiv.style.display = "none";
   }
 }
 

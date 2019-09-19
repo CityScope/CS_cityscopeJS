@@ -24,6 +24,7 @@
 
     <section id="uiSection">
       <div id="ui" class="ui">
+        <div id="spinner" class="spinner"></div>
         <h1>CityScopeJS</h1>
         <p>Click 'Space' to hide | 'Shift+Z' to keystone</p>
         <h2>Display</h2>
@@ -36,14 +37,15 @@
             <div id="keystoneButton"></div
           ></label>
           <!--  -->
-          <h2>Layers</h2>
+          <h2 id="Layers Title">Layers</h2>
           <!--  -->
           <input type="checkbox" id="3dBuildingsLayer" checked="checked" />
           <label for="3dBuildingsLayer">3d Buildings</label>
 
           <!--  -->
           <input type="checkbox" id="AccessLayer" checked="checked" />
-          <label for="AccessLayer">Access Layer</label>
+          <label for="AccessLayer">Access</label>
+
           <!--  -->
           <div class="accessButtonsContanier">
             <button type="button" class="accessButtons" id="education">
@@ -66,8 +68,8 @@
           <label for="gridLayerLine">Grid Layer</label>
 
           <input type="checkbox" id="hciToggle" />
-          <label for="hciToggle">Gesture</label>
-          <div id="hci" class="hci"></div>
+          <!-- <label for="hciToggle">Gesture</label>
+          <div id="hci" class="hci"></div> -->
         </nav>
 
         <!--  -->
