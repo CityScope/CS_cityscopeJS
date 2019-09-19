@@ -116,6 +116,7 @@ export async function layers() {
       }
     }
   });
+
   // Access
   map.addLayer({
     id: "AccessLayerHeatmap",
@@ -139,7 +140,7 @@ export async function layers() {
         ["heatmap-density"],
         0,
         "rgba(255,0,0,0)",
-        0.1,
+        0.05,
         "red",
         0.4,
         "rgb(255, 124, 1)",
@@ -151,8 +152,8 @@ export async function layers() {
         "green"
       ],
       // Adjust the heatmap radius by zoom level
-      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 1, 0, 15, 10],
-      "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 10, 1, 15, 0.7]
+      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 1, 0, 15, 30],
+      "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 10, 1, 15, 0.6]
     }
   });
 
@@ -180,4 +181,32 @@ export async function layers() {
 
   //run the layers update
   window.setInterval(update, update_interval);
+}
+
+// access layer update function
+export function updateAccessLayers(accessLayer) {
+  Storage.accessState = accessLayer.toString();
+  //
+  Storage.map.setPaintProperty("AccessLayer", "circle-radius", {
+    property: accessLayer,
+    stops: [
+      [{ zoom: 8, value: 0 }, 0.1],
+      [{ zoom: 8, value: 1 }, 1],
+      [{ zoom: 11, value: 0 }, 0.5],
+      [{ zoom: 11, value: 1 }, 5],
+      [{ zoom: 16, value: 0 }, 5],
+      [{ zoom: 16, value: 1 }, 30]
+    ]
+  });
+  //
+
+  Storage.map.setPaintProperty("AccessLayerHeatmap", "heatmap-weight", [
+    "interpolate",
+    ["linear"],
+    ["get", accessLayer],
+    0,
+    0,
+    6,
+    1
+  ]);
 }

@@ -1,5 +1,6 @@
 import { Camera, rotateCamera } from "./camera";
 import { updateGeoJsonGrid } from "./update";
+import { updateAccessLayers } from "./layers";
 
 /*
 Gui function 
@@ -132,28 +133,7 @@ export function gui() {
       "click",
       function(e) {
         console.log(e.target.id);
-        Storage.accessState = e.target.id.toString();
-        Storage.map.setPaintProperty("AccessLayer", "circle-radius", {
-          property: e.target.id,
-          stops: [
-            [{ zoom: 8, value: 0 }, 0.1],
-            [{ zoom: 8, value: 1 }, 1],
-            [{ zoom: 11, value: 0 }, 0.5],
-            [{ zoom: 11, value: 1 }, 2],
-            [{ zoom: 16, value: 0 }, 3],
-            [{ zoom: 16, value: 1 }, 10]
-          ]
-        });
-
-        Storage.map.setPaintProperty("AccessLayerHeatmap", "heatmap-weight", [
-          "interpolate",
-          ["linear"],
-          ["get", e.target.id],
-          0,
-          0,
-          6,
-          1
-        ]);
+        updateAccessLayers(e.target.id);
       },
       false
     );
