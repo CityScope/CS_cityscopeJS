@@ -12,9 +12,12 @@ body {
 }
 
 .helpDiv {
+  border-radius: 1.5em;
+
   text-align: center;
   overflow: auto;
   font-size: 2em;
+  padding: 1em;
   font-weight: bold;
   color: black;
   background-color: rgb(255, 255, 255);
