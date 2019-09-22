@@ -13,14 +13,13 @@ body {
 
 .helpDiv {
   border-radius: 1.5em;
-
   text-align: center;
   overflow: auto;
   font-size: 2em;
   padding: 1em;
   font-weight: bold;
-  color: black;
-  background-color: rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
+  backdrop-filter: blur(1em);
   z-index: 100;
   position: fixed;
   top: 50%;
@@ -29,10 +28,31 @@ body {
   transform: translate(-50%, -50%);
 }
 
+.helpDivFont {
+  font-size: 0.6em;
+}
 .helpdiv a,
 a:hover,
 a:visited {
-  color: black;
+  color: white;
+}
+
+.bg {
+  position: fixed;
+  top: -100%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+}
+.bg img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  min-width: 100%;
+  min-height: 100%;
 }
 
 .ui {
