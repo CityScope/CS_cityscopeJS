@@ -3,6 +3,15 @@ import "./Storage";
 import { mobilityServiceLayer } from "./abmLayer";
 import { getCityIO } from "./update";
 
+let accessLayerStops = [
+  [{ zoom: 8, value: 0 }, 0.1],
+  [{ zoom: 8, value: 1 }, 1],
+  [{ zoom: 11, value: 0 }, 0.5],
+  [{ zoom: 11, value: 1 }, 2],
+  [{ zoom: 16, value: 0 }, 3],
+  [{ zoom: 16, value: 1 }, 10]
+];
+
 export async function layers() {
   let map = Storage.map;
 
@@ -79,9 +88,10 @@ export async function layers() {
     showInLayerList: true,
     addOnMapInitialisation: false
   });
-  //
-  // Access
-  //
+
+  /*
+   Access
+  */
 
   map.addSource("accessSource", {
     type: "geojson",
@@ -91,48 +101,35 @@ export async function layers() {
       "/access"
   });
 
-  map.addLayer({
-    id: "AccessLayer",
-    minzoom: 15,
-    type: "circle",
-    source: "accessSource",
-    paint: {
-      "circle-translate": [0, 0],
-      "circle-radius": {
-        property: "education",
-        stops: [
-          [{ zoom: 8, value: 0 }, 0.1],
-          [{ zoom: 8, value: 1 }, 1],
-          [{ zoom: 11, value: 0 }, 0.5],
-          [{ zoom: 11, value: 1 }, 2],
-          [{ zoom: 16, value: 0 }, 3],
-          [{ zoom: 16, value: 1 }, 10]
-        ]
-      },
-      "circle-color": {
-        property: "education",
-        stops: [[0, "red"], [0.5, "yellow"], [1, "green"]]
-      }
-    }
-  });
-
   // Access
   map.addLayer({
     id: "AccessLayerHeatmap",
     type: "heatmap",
     source: "accessSource",
-    maxzoom: 15,
+    // maxzoom: 15,
     paint: {
       "heatmap-weight": [
         "interpolate",
         ["linear"],
         ["get", "education"],
         0,
-        0,
-        6,
+        0.1,
+        0.5,
+        0.8,
+        1,
         1
       ],
-      "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 10, 1, 15, 15],
+      "heatmap-intensity": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        10,
+        0.1,
+        15,
+        1,
+        22,
+        2
+      ],
       "heatmap-color": [
         "interpolate",
         ["linear"],
@@ -151,8 +148,18 @@ export async function layers() {
         "green"
       ],
       // Adjust the heatmap radius by zoom level
-      "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 1, 0, 15, 30],
-      "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 10, 1, 15, 0.6]
+      "heatmap-radius": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        10,
+        1,
+        15,
+        100,
+        22,
+        100
+      ],
+      "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 1, 1, 15, 0.7]
     }
   });
 
@@ -183,28 +190,117 @@ export async function layers() {
 
 // access layer update function
 export function updateAccessLayers(accessLayer) {
-  Storage.accessState = accessLayer.toString();
-  //
-  Storage.map.setPaintProperty("AccessLayer", "circle-radius", {
-    property: accessLayer,
-    stops: [
-      [{ zoom: 8, value: 0 }, 0.1],
-      [{ zoom: 8, value: 1 }, 1],
-      [{ zoom: 11, value: 0 }, 0.5],
-      [{ zoom: 11, value: 1 }, 5],
-      [{ zoom: 16, value: 0 }, 5],
-      [{ zoom: 16, value: 1 }, 30]
-    ]
-  });
-  //
+  accessLayer = accessLayer.toString();
+  Storage.accessState = accessLayer;
 
   Storage.map.setPaintProperty("AccessLayerHeatmap", "heatmap-weight", [
     "interpolate",
     ["linear"],
     ["get", accessLayer],
     0,
-    0,
-    6,
+    0.02,
+    1,
     1
   ]);
+
+  let accessHeatmapColorsArray = {
+    food: [
+      "interpolate",
+      ["linear"],
+      ["heatmap-density"],
+
+      0,
+      "rgba(255,0,0,0)",
+      0.05,
+      " rgba(112, 100, 179, 1)",
+      0.4,
+      "rgba(178, 219, 191, 1)",
+      0.6,
+      " rgba(243, 255, 189, 1)",
+      0.8,
+      " rgba(255, 150, 189, 1)",
+      1,
+      " rgba(255, 22, 84, 1)"
+    ],
+    groceries: [
+      "interpolate",
+      ["linear"],
+      ["heatmap-density"],
+      0,
+      "rgba(255,0,0,0)",
+      0.05,
+      "#1d4877",
+      0.3,
+      "#1b8a5a",
+      0.6,
+      "#fbb021",
+      0.8,
+      "#EE3E32"
+    ],
+    nightlife: [
+      "interpolate",
+      ["linear"],
+      ["heatmap-density"],
+      0,
+      "rgba(255,0,0,0)",
+      0.05,
+      "#5681b9",
+      0.4,
+      "#93c4d2",
+      0.6,
+      "#ffa59e",
+      0.8,
+      "#dd4c65",
+      0.9,
+      "#93003a"
+    ],
+    education: [
+      "interpolate",
+      ["linear"],
+      ["heatmap-density"],
+      0,
+      "rgba(255,0,0,0)",
+      0.05,
+      "red",
+      0.4,
+      "rgb(255, 124, 1)",
+      0.6,
+      "yellow",
+      0.8,
+      "rgb(142, 255, 0)",
+      1,
+      "green"
+    ]
+  };
+
+  Storage.map.setPaintProperty(
+    "AccessLayerHeatmap",
+    "heatmap-color",
+    accessHeatmapColorsArray[accessLayer]
+  );
 }
+
+// map.addLayer({
+//   id: "AccessLayer",
+//   minzoom: 15,
+//   type: "circle",
+//   source: "accessSource",
+//   paint: {
+//     "circle-translate": [0, 0],
+//     "circle-radius": {
+//       property: "education",
+//       stops: accessLayerStops
+//     },
+//     "circle-color": {
+//       property: "education",
+//       stops: [[0, "red"], [0.5, "yellow"], [1, "green"]]
+//     }
+//   }
+// });
+
+//
+// Storage.map.setPaintProperty("AccessLayer", "circle-radius", {
+//   property: accessLayer,
+//   stops: accessLayerStops
+// });
+//

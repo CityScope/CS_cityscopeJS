@@ -16,7 +16,7 @@ export class Camera {
     zoomLevelForBounds = 15;
 
     this.map.rotateTo(angle, { duration: 200 });
-    this.map.flyTo({
+    this.map.jumpTo({
       center: [this.table_lon, this.table_lat],
       bearing: angle,
       pitch: 0,
