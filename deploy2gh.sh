@@ -7,8 +7,8 @@ sudo parcel build index.html --public-url https://cityscope.media.mit.edu/CS_cit
 git add dist -f
 #commit the GH pages changes 
 git commit -m "gh-pages commit"
-#push to subtree remote [Force and remove all] 
+#push dist folder to subtree remote [Force overwtire all] 
 git push origin `git subtree split --prefix dist master`:gh-pages --force
 # finally remove dist from git 
-sudo git rm -r --cached --ignore-unmatch dist
-sudo rm -r  dist
+# sudo git rm -r --cached --ignore-unmatch dist
+# sudo rm -r  dist
