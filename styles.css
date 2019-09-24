@@ -57,7 +57,7 @@ a:visited {
 
 .ui {
   background-color: rgba(0, 0, 0, 0.9);
-  color: rgb(224, 200, 200);
+  color: rgb(255, 255, 255);
   border-radius: 1.5em;
   bottom: 5em;
   right: 5em;
@@ -70,8 +70,8 @@ a:visited {
 
 .layerTitle {
   z-index: 100;
-  bottom: 0.5em;
-  right: 0.5em;
+  bottom: 1em;
+  right: 1em;
   position: absolute;
   font-size: 5em;
   font-weight: 100;

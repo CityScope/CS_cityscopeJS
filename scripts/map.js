@@ -8,8 +8,10 @@ export function makeMap() {
   keystoneDiv.className = "keystoneDiv";
   keystoneDiv.id = "keystoneDiv";
   document.body.appendChild(keystoneDiv);
+  let spinnerTitleHolder = document.getElementById("spinnerTitleHolder");
   let uiDiv = document.getElementById("ui");
   keystoneDiv.appendChild(uiDiv);
+  keystoneDiv.appendChild(spinnerTitleHolder);
   // show ui
   uiDiv.style.display = "block";
 
