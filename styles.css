@@ -174,15 +174,18 @@ button:focus {
 
 /* Spinner  */
 .spinner {
-  width: 2em;
-  height: 2em;
-  border: 1em solid #ffffff4d;
+  width: 4em;
+  height: 4em;
+  border: 1em solid #ffffffb4;
   border-radius: 100%;
-  border-top: 1em solid rgba(255, 255, 255, 0);
+  border-top: 1em solid rgba(255, 255, 255, 0.1);
   -webkit-animation: spin 0.5s linear infinite; /* Safari */
   animation: spin 0.5s linear infinite;
-
-  display: inline-block;
+  z-index: 1000;
+  position: fixed;
+  bottom: 5em;
+  right: 5em;
+  /* display: inline-block; */
 }
 
 /* Safari */

@@ -12,16 +12,32 @@ export function gui() {
   // get UI div
   let uiDiv = document.getElementById("ui");
   // uiDiv.style.display = "none";
+  // interval for demo layer
+  let demoAccessLayerInterval = null;
   //
   document.addEventListener("keydown", keyEventOnMap, false);
   function keyEventOnMap(e) {
     if (e.keyCode == 32) {
+      var zoom = Storage.map.getZoom();
+      // print zoom
+      console.log(zoom);
+
       if (uiDiv.style.display === "none") {
         uiDiv.style.display = "block";
+        clearInterval(demoAccessLayerInterval);
       } else {
         uiDiv.style.display = "none";
+        demoAccessLayerInterval = window.setInterval(demoLayer, 2000);
       }
     }
+  }
+
+  function demoLayer() {
+    // when hidden, go to demo mode for layers
+    let AccessLayersNames = ["education", "food", "nightlife", "groceries"];
+    let res =
+      AccessLayersNames[Math.floor(Math.random() * AccessLayersNames.length)];
+    updateAccessLayers(res);
   }
 
   document.getElementById("uiList").addEventListener("change", function(e) {

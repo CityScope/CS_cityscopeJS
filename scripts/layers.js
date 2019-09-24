@@ -3,15 +3,6 @@ import "./Storage";
 import { mobilityServiceLayer } from "./abmLayer";
 import { getCityIO } from "./update";
 
-let accessLayerStops = [
-  [{ zoom: 8, value: 0 }, 0.1],
-  [{ zoom: 8, value: 1 }, 1],
-  [{ zoom: 11, value: 0 }, 0.5],
-  [{ zoom: 11, value: 1 }, 2],
-  [{ zoom: 16, value: 0 }, 3],
-  [{ zoom: 16, value: 1 }, 10]
-];
-
 export async function layers() {
   let map = Storage.map;
 
@@ -127,8 +118,20 @@ export async function layers() {
         0.1,
         15,
         1,
-        22,
-        2
+        16,
+        3
+      ],
+      // Adjust the heatmap radius by zoom level
+      "heatmap-radius": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        10,
+        1,
+        15,
+        100,
+        16,
+        300
       ],
       "heatmap-color": [
         "interpolate",
@@ -147,18 +150,7 @@ export async function layers() {
         1,
         "green"
       ],
-      // Adjust the heatmap radius by zoom level
-      "heatmap-radius": [
-        "interpolate",
-        ["linear"],
-        ["zoom"],
-        10,
-        1,
-        15,
-        100,
-        22,
-        100
-      ],
+
       "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 1, 1, 15, 0.7]
     }
   });
@@ -229,13 +221,13 @@ export function updateAccessLayers(accessLayer) {
       0,
       "rgba(255,0,0,0)",
       0.05,
-      "#1d4877",
+      "#EE3E32",
       0.3,
-      "#1b8a5a",
-      0.6,
       "#fbb021",
+      0.6,
+      "#1b8a5a",
       0.8,
-      "#EE3E32"
+      "#1d4877"
     ],
     nightlife: [
       "interpolate",
@@ -304,3 +296,12 @@ export function updateAccessLayers(accessLayer) {
 //   stops: accessLayerStops
 // });
 //
+
+// let accessLayerStops = [
+//   [{ zoom: 8, value: 0 }, 0.1],
+//   [{ zoom: 8, value: 1 }, 1],
+//   [{ zoom: 11, value: 0 }, 0.5],
+//   [{ zoom: 11, value: 1 }, 2],
+//   [{ zoom: 16, value: 0 }, 3],
+//   [{ zoom: 16, value: 1 }, 10]
+// ];
