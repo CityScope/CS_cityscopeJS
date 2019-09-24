@@ -14,6 +14,7 @@
   </head>
   <!--  -->
   <body>
+
     <div id="bg" class="bg">
       <img src="./DOCS/csbg.jpg" alt="" />
       <div id="helpDiv" class="helpDiv">
@@ -33,11 +34,11 @@
       </div>
     </div>
 
+
+    <div id="spinner" class="spinner"></div>
+
     <section id="uiSection">
-        <div id="spinner" class="spinner"></div>
-
       <div id="ui" class="ui">
-
         <h1>CityScopeJS</h1>
         <p>Click 'Space' to hide | 'Shift+Z' to keystone</p>
         <h2>Display</h2>
@@ -54,11 +55,9 @@
           <!--  -->
           <input type="checkbox" id="3dBuildingsLayer" checked="checked" />
           <label for="3dBuildingsLayer">3d Buildings</label>
-
           <!--  -->
           <input type="checkbox" id="AccessLayer" checked="checked" />
           <label for="AccessLayer">Access</label>
-
           <!--  -->
           <div class="accessButtonsContanier">
             <button type="button" class="accessButtons" id="education">
@@ -106,6 +105,9 @@
         />
       </div>
     </section>
+
+    <div id="layerTitle" class="layerTitle"></div>
+
 
     <script src="./scripts/index.js"></script>
   </body>

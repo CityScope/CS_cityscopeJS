@@ -25,6 +25,7 @@ export function gui() {
       if (uiDiv.style.display === "none") {
         uiDiv.style.display = "block";
         clearInterval(demoAccessLayerInterval);
+        document.querySelector("#layerTitle").innerHTML = "";
       } else {
         uiDiv.style.display = "none";
         demoAccessLayerInterval = window.setInterval(demoLayer, 2000);
@@ -38,6 +39,7 @@ export function gui() {
     let res =
       AccessLayersNames[Math.floor(Math.random() * AccessLayersNames.length)];
     updateAccessLayers(res);
+    document.querySelector("#layerTitle").innerHTML = res;
   }
 
   document.getElementById("uiList").addEventListener("change", function(e) {
@@ -47,12 +49,10 @@ export function gui() {
           if (Storage.reqAnimFrame !== null) {
             cancelAnimationFrame(Storage.reqAnimFrame);
           }
-          // Storage.map.setLayoutProperty("mask", "visibility", "visible");
           Storage.map.setLayoutProperty("building", "visibility", "none");
           cam.reset_camera_position();
           Storage.threeState = "flat";
         } else {
-          // Storage.map.setLayoutProperty("mask", "visibility", "none");
           Storage.map.setLayoutProperty("building", "visibility", "visible");
           Storage.threeState = "height";
           // start camera rotation

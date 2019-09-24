@@ -56,10 +56,8 @@ a:visited {
 }
 
 .ui {
-  transition: transform 1s linear;
-  transform-origin: top left;
   background-color: rgba(0, 0, 0, 0.9);
-  color: white;
+  color: rgb(224, 200, 200);
   border-radius: 1.5em;
   bottom: 5em;
   right: 5em;
@@ -68,6 +66,16 @@ a:visited {
   position: absolute;
   z-index: 100;
   display: none;
+}
+
+.layerTitle {
+  z-index: 100;
+  bottom: 0.5em;
+  right: 0.5em;
+  position: absolute;
+  font-size: 5em;
+  font-weight: 100;
+  color: white;
 }
 
 button:focus {
