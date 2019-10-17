@@ -91,7 +91,7 @@ class Storage {
     this._updateLayersInterval = value;
   }
 
-  //threeJs height state for projection
+  //3d height state for projection
   get threeState() {
     return this._threeState;
   }
