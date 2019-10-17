@@ -1,26 +1,21 @@
+// https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
+// https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/overview.md?source=post_page---------------------------#using-with-pure-js
+
 import "./Storage";
 import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import { getCityIO } from "./update";
 
-export async function mobilityServiceLayer() {
-  // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
-  // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/overview.md?source=post_page---------------------------#using-with-pure-js
-
+export async function ABMlayer() {
   const DATA_URL = {
-    ABM: "https://cityio.media.mit.edu/api/table/grasbrook/trips"
+    // RONAN ABM: "https://cityio.media.mit.edu/api/table/grasbrook/trips"
+    ABM: Storage.cityIOurl + "/ABM"
   };
 
   let abmData = await getCityIO(DATA_URL.ABM);
-
-  // abmData =
-  // "https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips-v7.json";
-
-  //
   let timeStampDiv = document.getElementById("timeStamp");
   let simPaceDiv = document.getElementById("simPaceDiv");
-  //
   const deckContext = new Deck({
     gl: Storage.map.painter.context.gl,
     layers: []
@@ -44,7 +39,7 @@ export async function mobilityServiceLayer() {
     simPaceValue = simPaceSlider.value / 100;
   });
 
-  function renderLayers() {
+  function renderDeck() {
     if (time >= loopLength - 1) {
       time = sevenAM;
     } else {
@@ -88,7 +83,7 @@ export async function mobilityServiceLayer() {
 
   // start animation loop
   setInterval(() => {
-    renderLayers();
+    renderDeck();
   });
 
   Storage.map.addLayer(

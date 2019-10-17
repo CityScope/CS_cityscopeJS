@@ -1,6 +1,6 @@
 import "./Storage";
 // import * as turf from "@turf/turf";
-import { mobilityServiceLayer } from "./abmLayer";
+import { ABMlayer } from "./abmLayer";
 import { getCityIO } from "./update";
 
 export async function layers() {
@@ -158,7 +158,7 @@ export async function layers() {
   /*
   deck layer
   */
-  mobilityServiceLayer();
+  ABMlayer();
 
   // Active layer
   map.addSource("gridGeojsonActiveSource", {
