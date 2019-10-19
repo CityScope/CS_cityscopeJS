@@ -66,9 +66,9 @@ export async function ABMlayer() {
             }
           },
           opacity: 0.3,
-          widthMinPixels: 5,
+          widthMinPixels: 1,
           rounded: true,
-          trailLength: 10,
+          trailLength: 10000,
           currentTime: time
         })
       ]

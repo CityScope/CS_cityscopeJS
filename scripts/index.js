@@ -28,7 +28,6 @@ https://github.com/RELNO]
 */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// using https://github.com/peterqliu/threebox
 import "babel-polyfill";
 import "./Storage";
 import { makeMap } from "./map";
