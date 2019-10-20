@@ -12,32 +12,32 @@ export async function ABMlayer() {
     // RONAN ABM: "https://cityio.media.mit.edu/api/table/grasbrook/trips"
     ABM: Storage.cityIOurl + "/ABM"
   };
-
   let abmData = await getCityIO(DATA_URL.ABM);
   let timeStampDiv = document.getElementById("timeStamp");
   let simPaceDiv = document.getElementById("simPaceDiv");
+  let startSimHour = 60 * 60 * 7;
+  let endSimHour = 60 * 60 * 12;
+  let time = startSimHour;
+  // a day in sec = 86400;
+  let simPaceValue = 5;
+  let loopLength = endSimHour - startSimHour;
+  var mobilitySlider = document.getElementById("mobilitySlider");
+  var simPaceSlider = document.getElementById("simPaceSlider");
+  mobilitySlider.addEventListener("input", function() {
+    time = startSimHour + (mobilitySlider.value / 100) * loopLength;
+  });
+  simPaceSlider.addEventListener("input", function() {
+    simPaceValue = simPaceSlider.value / 100;
+  });
+
   const deckContext = new Deck({
     gl: Storage.map.painter.context.gl,
     layers: []
   });
 
-  let startSimHour = 60 * 60 * 7;
-  let endSimHour = 60 * 60 * 14;
-  let time = startSimHour;
-  // a day in sec = 86400;
-  let simPaceValue = 5;
-  let loopLength = endSimHour - startSimHour;
-
-  var mobilitySlider = document.getElementById("mobilitySlider");
-  var simPaceSlider = document.getElementById("simPaceSlider");
-
-  mobilitySlider.addEventListener("input", function() {
-    time = startSimHour + (mobilitySlider.value / 100) * loopLength;
-  });
-
-  simPaceSlider.addEventListener("input", function() {
-    simPaceValue = simPaceSlider.value / 100;
-  });
+  Storage.map.addLayer(
+    new MapboxLayer({ id: ["ABMLayer"], deck: deckContext })
+  );
 
   function renderDeck() {
     if (time >= startSimHour + loopLength - 1) {
@@ -65,15 +65,15 @@ export async function ABMlayer() {
                 return [153, 180, 100];
             }
           },
-          opacity: 0.3,
-          widthMinPixels: 2,
+          widthMinPixels: 3,
           rounded: true,
-          trailLength: 100,
+          trailLength: 100 + Math.random() * 20,
           currentTime: time
         })
       ]
     });
 
+    // print the time on div
     var dateObject = new Date(null);
     dateObject.setSeconds(time); // specify value for SECONDS here
     var timeString = dateObject.toISOString().substr(11, 8);
@@ -85,8 +85,4 @@ export async function ABMlayer() {
   setInterval(() => {
     renderDeck();
   });
-
-  Storage.map.addLayer(
-    new MapboxLayer({ id: ["ABMLayer"], deck: deckContext })
-  );
 }
