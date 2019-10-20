@@ -21,18 +21,18 @@ export async function ABMlayer() {
     layers: []
   });
 
-  let sevenAM = 25200;
-  let time = sevenAM;
-  // a day in sec
-  let fullDay = 86400;
-  let simPaceValue = 1;
-  let loopLength = fullDay - sevenAM * 2;
+  let startSimHour = 60 * 60 * 7;
+  let endSimHour = 60 * 60 * 14;
+  let time = startSimHour;
+  // a day in sec = 86400;
+  let simPaceValue = 5;
+  let loopLength = endSimHour - startSimHour;
 
   var mobilitySlider = document.getElementById("mobilitySlider");
   var simPaceSlider = document.getElementById("simPaceSlider");
 
   mobilitySlider.addEventListener("input", function() {
-    time = (mobilitySlider.value / 100) * loopLength;
+    time = startSimHour + (mobilitySlider.value / 100) * loopLength;
   });
 
   simPaceSlider.addEventListener("input", function() {
@@ -40,8 +40,8 @@ export async function ABMlayer() {
   });
 
   function renderDeck() {
-    if (time >= loopLength - 1) {
-      time = sevenAM;
+    if (time >= startSimHour + loopLength - 1) {
+      time = startSimHour;
     } else {
       time = time + simPaceValue;
     }
@@ -66,9 +66,9 @@ export async function ABMlayer() {
             }
           },
           opacity: 0.3,
-          widthMinPixels: 1,
+          widthMinPixels: 2,
           rounded: true,
-          trailLength: 10000,
+          trailLength: 100,
           currentTime: time
         })
       ]
