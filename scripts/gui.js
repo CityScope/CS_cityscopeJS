@@ -11,26 +11,31 @@ export function gui() {
   cam.reset_camera_position();
   // get UI div
   let uiDiv = document.getElementById("ui");
-  // uiDiv.style.display = "none";
   // interval for demo layer
   let demoAccessLayerInterval = null;
   //
-  document.addEventListener("keydown", keyEventOnMap, false);
-  function keyEventOnMap(e) {
-    if (e.keyCode == 32) {
-      var zoom = Storage.map.getZoom();
-      // print zoom
-      console.log(zoom);
 
-      if (uiDiv.style.display === "none") {
-        uiDiv.style.display = "block";
-        clearInterval(demoAccessLayerInterval);
-        document.querySelector("#layerTitle").innerHTML = "";
-      } else {
-        uiDiv.style.display = "none";
-        demoAccessLayerInterval = window.setInterval(demoLayer, 2000);
-      }
+  document.addEventListener(
+    "contextmenu",
+    function(ev) {
+      ev.preventDefault();
+      keyEventOnMap();
+      return false;
+    },
+    false
+  );
+
+  function keyEventOnMap(e) {
+    if (uiDiv.style.display === "none") {
+      uiDiv.style.display = "block";
+      clearInterval(demoAccessLayerInterval);
+      document.querySelector("#layerTitle").innerHTML = "";
+    } else {
+      uiDiv.style.display = "none";
+      // add here test if layer is even on
+      demoAccessLayerInterval = window.setInterval(demoLayer, 2000);
     }
+    // }
   }
 
   function demoLayer() {
