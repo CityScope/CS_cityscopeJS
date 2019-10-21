@@ -5,6 +5,7 @@ import "./Storage";
 import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
+
 import { getCityIO } from "./update";
 
 export async function ABMlayer() {
@@ -54,7 +55,8 @@ export async function ABMlayer() {
           getPath: d => d.path,
           getTimestamps: d => d.timestamps,
           getColor: d => {
-            switch (d.mode) {
+            //switch between modes or types of users
+            switch (d.mode[0]) {
               case 0:
                 return [255, 0, 255];
               case 1:
@@ -65,9 +67,20 @@ export async function ABMlayer() {
                 return [153, 180, 100];
             }
           },
-          widthMinPixels: 3,
+          getWidth: d => {
+            switch (d.mode[0]) {
+              case 0:
+                return 2;
+              case 1:
+                return 2;
+              case 2:
+                return 10;
+              case 3:
+                return 2;
+            }
+          },
           rounded: true,
-          trailLength: 100,
+          trailLength: 150,
           currentTime: time
         })
       ]
