@@ -11,4 +11,5 @@ git commit -m "gh-pages commit"
 git push origin `git subtree split --prefix dist master`:gh-pages --force
 # finally remove dist from git 
 # sudo git rm -r --cached --ignore-unmatch dist
-# sudo rm -r  dist
+git rm -r --cached dist
+sudo rm -r  dist

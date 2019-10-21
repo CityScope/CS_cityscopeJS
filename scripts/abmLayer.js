@@ -67,7 +67,7 @@ export async function ABMlayer() {
           },
           widthMinPixels: 3,
           rounded: true,
-          trailLength: 100 + Math.random() * 20,
+          trailLength: 100,
           currentTime: time
         })
       ]

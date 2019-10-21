@@ -2,7 +2,6 @@
 /.cache
 .DS_Store
 .vscode
-dist
-/dist
 /node_modules
-dist/
+/dist
+dist
