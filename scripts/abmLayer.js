@@ -58,25 +58,29 @@ export async function ABMlayer() {
             //switch between modes or types of users
             switch (d.mode[0]) {
               case 0:
+                //purple
                 return [255, 0, 255];
               case 1:
+                //blue
                 return [60, 128, 255];
               case 2:
+                // green
                 return [153, 255, 51];
               case 3:
-                return [153, 180, 100];
+                // yellow
+                return [255, 255, 0];
             }
           },
           getWidth: d => {
             switch (d.mode[0]) {
               case 0:
-                return 2;
+                return 1;
               case 1:
-                return 2;
+                return 1;
               case 2:
-                return 4;
+                return 3;
               case 3:
-                return 2;
+                return 1;
             }
           },
           rounded: true,
