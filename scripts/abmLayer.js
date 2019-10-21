@@ -74,7 +74,7 @@ export async function ABMlayer() {
               case 1:
                 return 2;
               case 2:
-                return 10;
+                return 4;
               case 3:
                 return 2;
             }
