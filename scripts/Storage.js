@@ -5,6 +5,15 @@ class Storage {
   constructor() {
     this._cityIOurl = "";
   }
+
+  //ABMmodeType
+  get ABMmodeType() {
+    return this._ABMmodeType;
+  }
+  set ABMmodeType(value) {
+    this._ABMmodeType = value;
+  }
+
   //reqAnimFrame
   get reqAnimFrame() {
     return this._reqAnimFrame;

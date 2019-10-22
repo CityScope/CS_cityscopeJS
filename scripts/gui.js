@@ -135,6 +135,12 @@ export function gui() {
           Storage.map.setLayoutProperty("AccessLayer", "visibility", "none");
         }
         break;
+      // ABM mode or type
+      case "ABMmodeType":
+        Storage.ABMmodeType = e.target.checked;
+        console.log(Storage.ABMmodeType);
+        break;
+
       // any other layer
       default:
         if (e.target.checked) {

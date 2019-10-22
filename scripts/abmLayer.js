@@ -41,54 +41,72 @@ export async function ABMlayer() {
   );
 
   function renderDeck() {
+    let ABMmodeType = Storage.ABMmodeType;
+
     if (time >= startSimHour + loopLength - 1) {
       time = startSimHour;
     } else {
       time = time + simPaceValue;
     }
-
-    deckContext.setProps({
-      layers: [
-        new TripsLayer({
-          id: "ABMLayer",
-          data: abmData,
-          getPath: d => d.path,
-          getTimestamps: d => d.timestamps,
-          getColor: d => {
-            //switch between modes or types of users
-            switch (d.mode[0]) {
-              case 0:
-                //purple
-                return [255, 0, 255];
-              case 1:
-                //blue
-                return [60, 128, 255];
-              case 2:
-                // green
-                return [153, 255, 51];
-              case 3:
-                // yellow
-                return [255, 255, 0];
-            }
-          },
-          getWidth: d => {
-            switch (d.mode[0]) {
-              case 0:
-                return 1;
-              case 1:
-                return 1;
-              case 2:
-                return 3;
-              case 3:
-                return 1;
-            }
-          },
-          rounded: true,
-          trailLength: 150,
-          currentTime: time
-        })
-      ]
-    });
+    // toggle abm layer mode or type
+    if (ABMmodeType) {
+      deckContext.setProps({
+        layers: [
+          new TripsLayer({
+            id: "ABMLayer",
+            data: abmData,
+            getPath: d => d.path,
+            getTimestamps: d => d.timestamps,
+            getColor: d => {
+              switch (d.mode[0]) {
+                case 0:
+                  //purple
+                  return [255, 0, 255];
+                case 1:
+                  //blue
+                  return [60, 128, 255];
+                case 2:
+                  // green
+                  return [153, 255, 51];
+                case 3:
+                  // yellow
+                  return [255, 255, 0];
+              }
+            },
+            getWidth: 1,
+            rounded: true,
+            trailLength: 80,
+            currentTime: time
+          })
+        ]
+      });
+    } else {
+      deckContext.setProps({
+        layers: [
+          new TripsLayer({
+            id: "ABMLayer2",
+            data: abmData,
+            getPath: d => d.path,
+            getTimestamps: d => d.timestamps,
+            getColor: d => {
+              //switch between modes or types of users
+              switch (d.mode[1]) {
+                case 0:
+                  return [255, 0, 0];
+                case 1:
+                  return [0, 0, 255];
+                case 2:
+                  return [0, 255, 0];
+              }
+            },
+            getWidth: 1,
+            rounded: true,
+            trailLength: 10000,
+            currentTime: time
+          })
+        ]
+      });
+    }
 
     // print the time on div
     var dateObject = new Date(null);
