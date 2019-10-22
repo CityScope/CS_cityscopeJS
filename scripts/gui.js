@@ -138,7 +138,12 @@ export function gui() {
       // ABM mode or type
       case "ABMmodeType":
         Storage.ABMmodeType = e.target.checked;
-        console.log(Storage.ABMmodeType);
+        if (e.target.checked) {
+          document.getElementById("ABMmodeTypeLabel").innerHTML = "ABM Mode";
+        } else {
+          document.getElementById("ABMmodeTypeLabel").innerHTML = "ABM Type";
+        }
+
         break;
 
       // any other layer

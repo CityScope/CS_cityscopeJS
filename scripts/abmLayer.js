@@ -53,7 +53,7 @@ export async function ABMlayer() {
       deckContext.setProps({
         layers: [
           new TripsLayer({
-            id: "ABMLayer",
+            id: "ABMmodes",
             data: abmData,
             getPath: d => d.path,
             getTimestamps: d => d.timestamps,
@@ -84,7 +84,7 @@ export async function ABMlayer() {
       deckContext.setProps({
         layers: [
           new TripsLayer({
-            id: "ABMLayer2",
+            id: "ABMtypes",
             data: abmData,
             getPath: d => d.path,
             getTimestamps: d => d.timestamps,
