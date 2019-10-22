@@ -101,7 +101,7 @@ export async function ABMlayer() {
             },
             getWidth: 1,
             rounded: true,
-            trailLength: 10000,
+            trailLength: 1000,
             currentTime: time
           })
         ]
