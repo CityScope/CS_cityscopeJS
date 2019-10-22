@@ -75,7 +75,7 @@ export async function ABMlayer() {
             },
             getWidth: 1,
             rounded: true,
-            trailLength: 80,
+            trailLength: 100,
             currentTime: time
           })
         ]
@@ -99,9 +99,9 @@ export async function ABMlayer() {
                   return [0, 255, 0];
               }
             },
-            getWidth: 1,
+            getWidth: 0.5,
             rounded: true,
-            trailLength: 1000,
+            trailLength: 200,
             currentTime: time
           })
         ]
