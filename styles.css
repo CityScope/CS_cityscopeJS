@@ -176,14 +176,14 @@ button:focus {
 .spinner {
   width: 4em;
   height: 4em;
-  border: 1em solid #ffffffb4;
+  border: 1em solid #ffffff;
   border-radius: 100%;
-  border-top: 1em solid rgba(255, 255, 255, 0.1);
+  border-top: 1em solid rgba(255, 255, 255, 0.24);
   -webkit-animation: spin 0.5s linear infinite; /* Safari */
   animation: spin 0.5s linear infinite;
   z-index: 1000;
   position: fixed;
-  bottom: 5em;
+  top: 5em;
   right: 5em;
   /* display: inline-block; */
 }
@@ -194,7 +194,7 @@ button:focus {
     -webkit-transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(360deg);
+    -webkit-transform: rotate(180deg);
   }
 }
 
@@ -203,6 +203,6 @@ button:focus {
     transform: rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: rotate(359deg);
   }
 }
