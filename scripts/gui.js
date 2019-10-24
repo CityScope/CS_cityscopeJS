@@ -110,14 +110,6 @@ export function gui() {
         }
         break;
       //
-      case "hciToggle":
-        if (e.target.checked) {
-          document.getElementById("hci").style.display = "block";
-        } else {
-          document.getElementById("hci").style.display = "none";
-        }
-        break;
-      //
       case "AccessLayer":
         if (e.target.checked) {
           Storage.map.setLayoutProperty("AccessLayer", "visibility", "visible");

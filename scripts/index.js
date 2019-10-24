@@ -69,12 +69,6 @@ async function init() {
         //run the layers update
         window.setInterval(cityIOMetaListener, update_interval)
       );
-
-      // set up a connection channels
-      const channel = new BroadcastChannel("hci");
-      channel.onmessage = function(e) {
-        console.log(e.data);
-      };
     });
   }
 
