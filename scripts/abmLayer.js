@@ -21,6 +21,7 @@ export async function ABMlayer() {
   // a day in sec = 86400;
   let simPaceValue = 5;
   let loopLength = endSimHour - startSimHour;
+
   var mobilitySlider = document.getElementById("mobilitySlider");
   var simPaceSlider = document.getElementById("simPaceSlider");
   mobilitySlider.addEventListener("input", function() {
@@ -33,6 +34,18 @@ export async function ABMlayer() {
   const deckContext = new Deck({
     gl: Storage.map.painter.context.gl,
     layers: []
+  });
+
+  let ABMlayerNames = {
+    0: "Off",
+    1: "Mobilty Mode",
+    2: "User Type"
+  };
+  var ABMmodeSlider = document.getElementById("ABMslider");
+  ABMmodeSlider.addEventListener("input", function() {
+    Storage.ABMmodeType = ABMmodeSlider.value;
+    document.getElementById("ABMmodeType").innerHTML =
+      ABMlayerNames[Storage.ABMmodeType];
   });
 
   Storage.map.addLayer(
@@ -48,11 +61,16 @@ export async function ABMlayer() {
       time = time + simPaceValue;
     }
     // toggle abm layer mode or type
-    if (ABMmodeType) {
+    if (ABMmodeType == 0) {
+      deckContext.setProps({
+        layers: []
+      });
+      //
+    } else if (ABMmodeType == 1) {
       deckContext.setProps({
         layers: [
           new TripsLayer({
-            id: "ABMmodes",
+            id: "modes",
             data: abmData,
             getPath: d => d.path,
             getTimestamps: d => d.timestamps,
@@ -79,11 +97,11 @@ export async function ABMlayer() {
           })
         ]
       });
-    } else {
+    } else if (ABMmodeType == 2) {
       deckContext.setProps({
         layers: [
           new TripsLayer({
-            id: "ABMtypes",
+            id: "types",
             data: abmData,
             getPath: d => d.path,
             getTimestamps: d => d.timestamps,

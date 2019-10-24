@@ -1,6 +1,6 @@
 import { Camera, rotateCamera } from "./camera";
 import { updateGeoJsonGrid } from "./update";
-import { updateAccessLayers } from "./layers";
+import { updateAccessLayers } from "./update";
 
 /*
 Gui function 
@@ -126,16 +126,6 @@ export function gui() {
           );
           Storage.map.setLayoutProperty("AccessLayer", "visibility", "none");
         }
-        break;
-      // ABM mode or type
-      case "ABMmodeType":
-        Storage.ABMmodeType = e.target.checked;
-        if (e.target.checked) {
-          document.getElementById("ABMmodeTypeLabel").innerHTML = "ABM Mode";
-        } else {
-          document.getElementById("ABMmodeTypeLabel").innerHTML = "ABM Type";
-        }
-
         break;
 
       // any other layer

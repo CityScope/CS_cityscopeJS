@@ -67,15 +67,15 @@
           <input type="checkbox" id="gridLayerLine" checked="checked">
           <label for="gridLayerLine">Grid Layer</label>
           <!--  -->
-
-          <input type="checkbox" id="ABMmodeType" checked="checked">
-          <label id="ABMmodeTypeLabel" for="ABMmodeType">ABM Type</label>
         </nav>
 
         <!--  -->
-        <div id="timeStamp" class="timeStamp"></div>
+        <h2>ABM mode</h2>
+        <div id="ABMmodeType" class="ABMtext">Off</div>
+        <input type="range" min="0" max="2" value="0" class="slider" id="ABMslider">
+        <div id="timeStamp" class="ABMtext"></div>
         <input type="range" min="0" max="99" value="1" class="slider" id="mobilitySlider">
-        <div id="simPaceDiv" div="" class="timeStamp"></div>
+        <div id="simPaceDiv" div="" class="ABMtext"></div>
         <input type="range" min="0" max="1000" value="500" class="slider" id="simPaceSlider">
       </div>
     </section>
