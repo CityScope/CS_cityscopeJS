@@ -10,7 +10,6 @@ import { getCityIO } from "./update";
 
 export async function ABMlayer() {
   const DATA_URL = {
-    // RONAN ABM: "https://cityio.media.mit.edu/api/table/grasbrook/trips"
     ABM: Storage.cityIOurl + "/ABM"
   };
   let abmData = await getCityIO(DATA_URL.ABM);

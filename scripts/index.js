@@ -31,7 +31,7 @@ https://github.com/RELNO]
 import "babel-polyfill";
 import "./Storage";
 import { makeMap } from "./map";
-import { getCityIO, cityioListener } from "./update";
+import { getCityIO, cityIOMetaListener } from "./update";
 import { layers } from "./layers";
 import { gui } from "./gui";
 import { Maptastic } from "./maptastic";
@@ -47,6 +47,9 @@ async function init() {
     // store it for later updates from cityio
     Storage.cityIOurl = cityIOtableURL;
     //call server once at start, just to init the grid
+
+    cityIOMetaListener();
+
     const cityIOjson = await getCityIO(cityIOtableURL);
 
     //save to storage
@@ -64,7 +67,7 @@ async function init() {
       layers().then(
         console.log("loaded layers"),
         //run the layers update
-        window.setInterval(cityioListener, update_interval)
+        window.setInterval(cityIOMetaListener, update_interval)
       );
 
       // set up a connection channels
