@@ -10,29 +10,75 @@ export class Layers {
     this.map = Storage.map;
   }
 
-  async gridLayers() {
+  async layersLoader() {
+    console.log("loading layers data..");
+    let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
+    // load 3d buildingLayer
+    this.buildingLayer();
+
+    for (let hash in cityioHashes.hashes) {
+      console.log(hash);
+      switch (hash) {
+        case "grid_full_table":
+          this.fullGridLayer();
+          break;
+        case "grid_interactive_area":
+          this.activeGridLayer();
+          break;
+        case "ABM":
+          this.ABMlayer();
+          break;
+        case "access":
+          this.accessLayer();
+          break;
+      }
+    }
+  }
+
+  async fullGridLayer() {
     // get two grid layers
     let gridGeojson = await getCityIO(Storage.cityIOurl + "/grid_full_table");
-    let gridGeojsonActive = await getCityIO(
-      Storage.cityIOurl + "/grid_interactive_area"
-    );
     // save to global storage
     Storage.gridGeojson = gridGeojson;
-    Storage.gridGeojsonActive = gridGeojsonActive;
     // grid layer
-    map.addSource("gridLayerSource", {
+    this.map.addSource("gridLayerSource", {
       type: "geojson",
       data: gridGeojson
     });
-    map.addLayer({
+    this.map.addLayer({
       id: "gridLayerLine",
       type: "line",
       source: "gridLayerSource",
       paint: {
         "line-color": "rgb(255,255,255)",
-        "line-width": 0.5
+        "line-width": 0.2
       }
     });
+  }
+
+  async activeGridLayer() {
+    let gridGeojsonActive = await getCityIO(
+      Storage.cityIOurl + "/grid_interactive_area"
+    );
+    // Active layer
+    this.map.addSource("gridGeojsonActiveSource", {
+      type: "geojson",
+      data: gridGeojsonActive
+    });
+    Storage.gridGeojsonActive = gridGeojsonActive;
+
+    this.map.addLayer({
+      id: "gridGeojsonActive",
+      type: "fill-extrusion",
+      source: "gridGeojsonActiveSource",
+      paint: {
+        "fill-extrusion-color": ["get", "color"],
+        "fill-extrusion-height": ["get", "height"],
+        "fill-extrusion-opacity": 0.85,
+        "fill-extrusion-base": 1
+      }
+    });
+    Storage.firstLoadFlag = true;
   }
 
   noiseLayer() {
@@ -56,11 +102,11 @@ export class Layers {
     });
   }
 
-  /*
+  buildingLayer() {
+    /*
   3d buildings
   */
-  buildingLayer() {
-    map.addLayer({
+    this.map.addLayer({
       id: "3dBuildingsLayer",
       displayName: "3dBuildingsLayer",
       source: "composite",
@@ -79,19 +125,16 @@ export class Layers {
           15.05,
           ["get", "height"]
         ],
-        "fill-extrusion-opacity": 0.8
-      },
-      showInLayerList: true,
-      addOnMapInitialisation: false
+        "fill-extrusion-opacity": 0.7
+      }
     });
   }
 
-  /*
+  accessLayer() {
+    /*
    Access
   */
-
-  accessLayer() {
-    map.addSource("accessSource", {
+    this.map.addSource("accessSource", {
       type: "geojson",
       data:
         "https://cityio.media.mit.edu/api/table/" +
@@ -100,7 +143,7 @@ export class Layers {
     });
 
     // Access
-    map.addLayer({
+    this.map.addLayer({
       id: "AccessLayerHeatmap",
       type: "heatmap",
       source: "accessSource",
@@ -169,11 +212,10 @@ export class Layers {
     https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
     https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/overview.md?source=post_page---------------------------#using-with-pure-js
   */
-
     const DATA_URL = {
       ABM: Storage.cityIOurl + "/ABM"
     };
-    let abmData = getCityIO(DATA_URL.ABM);
+    let abmData = await getCityIO(DATA_URL.ABM);
     let timeStampDiv = document.getElementById("timeStamp");
     let simPaceDiv = document.getElementById("simPaceDiv");
     let startSimHour = 60 * 60 * 7;
@@ -182,7 +224,8 @@ export class Layers {
     // a day in sec = 86400;
     let simPaceValue = 5;
     let loopLength = endSimHour - startSimHour;
-
+    let refreshIntervalId;
+    // ! GUI
     var mobilitySlider = document.getElementById("mobilitySlider");
     var simPaceSlider = document.getElementById("simPaceSlider");
     mobilitySlider.addEventListener("input", function() {
@@ -193,7 +236,7 @@ export class Layers {
     });
 
     const deckContext = new Deck({
-      gl: Storage.map.painter.context.gl,
+      gl: this.map.painter.context.gl,
       layers: []
     });
 
@@ -294,29 +337,11 @@ export class Layers {
       simPaceDiv.innerHTML = "simulation pace x" + simPaceValue;
     }
 
+    //! cancel by: clearInterval(refreshIntervalId);
+
     // start animation loop
-    setInterval(() => {
+    refreshIntervalId = setInterval(() => {
       renderDeck();
     });
-  }
-
-  activeLayer() {
-    // Active layer
-    map.addSource("gridGeojsonActiveSource", {
-      type: "geojson",
-      data: gridGeojsonActive
-    });
-    map.addLayer({
-      id: "gridGeojsonActive",
-      type: "fill-extrusion",
-      source: "gridGeojsonActiveSource",
-      paint: {
-        "fill-extrusion-color": ["get", "color"],
-        "fill-extrusion-height": ["get", "height"],
-        "fill-extrusion-opacity": 0.85,
-        "fill-extrusion-base": 1
-      }
-    });
-    Storage.firstLoadFlag = true;
   }
 }

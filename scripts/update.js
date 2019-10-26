@@ -4,6 +4,9 @@ import "./Storage";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//run the layers update
+// window.setInterval(cityIOMetaListener, update_interval);
+
 /**
  * get cityIO method [uses polyfill]
  * @param cityIOtableURL cityIO API endpoint URL
@@ -131,7 +134,6 @@ export function updateGeoJsonGrid() {
   ];
 
   // check loaded
-
   if (gridGeojsonActive !== null) {
     // go over all cells that are in active grid area
     for (let i = 0; i < gridGeojsonActive.features.length; i++) {

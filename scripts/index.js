@@ -32,12 +32,11 @@ import "babel-polyfill";
 import "./Storage";
 import { makeMap } from "./map";
 import { getCityIO, cityIOMetaListener } from "./update";
-import { layers } from "./layers";
+import { Layers } from "./layers";
 import { gui } from "./gui";
 import { Maptastic } from "./maptastic";
 
 async function init() {
-  var update_interval = 100;
   //which cityIO endpoint to look for
   var cityio_table_name = window.location.search.substring(1);
   if (cityio_table_name !== "") {
@@ -47,8 +46,6 @@ async function init() {
     // store it for later updates from cityio
     Storage.cityIOurl = cityIOtableURL;
     //call server once at start, just to init the grid
-
-    cityIOMetaListener();
 
     const cityIOjson = await getCityIO(cityIOtableURL);
 
@@ -61,14 +58,11 @@ async function init() {
     let map = Storage.map;
     // wait for map to load
     map.on("load", function() {
+      const layers = new Layers();
+      // load layer
+      layers.layersLoader();
       // do gui
       gui();
-      // load layer
-      layers().then(
-        console.log("loaded layers"),
-        //run the layers update
-        window.setInterval(cityIOMetaListener, update_interval)
-      );
     });
   }
 
