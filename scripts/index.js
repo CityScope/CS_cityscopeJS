@@ -31,10 +31,11 @@ https://github.com/RELNO]
 import "babel-polyfill";
 import "./Storage";
 import { makeMap } from "./map";
-import { getCityIO, cityIOMetaListener } from "./update";
+import { getCityIO } from "./cityio";
 import { Layers } from "./layers";
 import { gui } from "./gui";
 import { Maptastic } from "./maptastic";
+import { Camera } from "./camera";
 
 async function init() {
   //which cityIO endpoint to look for
@@ -45,14 +46,9 @@ async function init() {
       "https://cityio.media.mit.edu/api/table/" + cityio_table_name.toString();
     // store it for later updates from cityio
     Storage.cityIOurl = cityIOtableURL;
-    //call server once at start, just to init the grid
-
-    const cityIOjson = await getCityIO(cityIOtableURL);
-
-    //save to storage
-    Storage.cityIOdata = cityIOjson;
-
-    //make the mapbox gl base map
+    // get the header to locate the map
+    Storage.cityioHeader = await getCityIO(cityIOtableURL + "/header");
+    //make the mapbox base map
     makeMap();
     // get map from storage
     let map = Storage.map;

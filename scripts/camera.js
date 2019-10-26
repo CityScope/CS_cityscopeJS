@@ -3,15 +3,14 @@ import "./Storage";
 export class Camera {
   constructor() {
     this.map = Storage.map;
-    this.cityIOdata = Storage.cityIOdata;
-    this.table_lat = this.cityIOdata.header.spatial.latitude;
-    this.table_lon = this.cityIOdata.header.spatial.longitude;
+    this.table_lat = Storage.cityioHeader.spatial.latitude;
+    this.table_lon = Storage.cityioHeader.spatial.longitude;
   }
 
-  reset_camera_position() {
+  async reset_camera_position() {
     let zoomLevelForBounds;
     let angle;
-    angle = 360 - this.cityIOdata.header.spatial.rotation;
+    angle = 360 - Storage.cityioHeader.spatial.rotation;
 
     zoomLevelForBounds = 15;
 
@@ -27,6 +26,6 @@ export class Camera {
 
 // cant call inside class
 export function rotateCamera(timestamp) {
-  Storage.map.rotateTo((timestamp / 300) % 360, { duration: 0 });
+  Storage.map.rotateTo((timestamp / 500) % 360, { duration: 0 });
   Storage.reqAnimFrame = requestAnimationFrame(rotateCamera);
 }

@@ -185,7 +185,6 @@ button:focus {
   position: fixed;
   top: 5em;
   right: 5em;
-  /* display: inline-block; */
 }
 
 /* Safari */
@@ -194,7 +193,7 @@ button:focus {
     -webkit-transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(180deg);
+    -webkit-transform: rotate(360deg);
   }
 }
 

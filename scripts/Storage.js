@@ -36,20 +36,12 @@ class Storage {
     this._map = value;
   }
 
-  //cityIO data
-  get cityIOdata() {
-    return this._cityIOdata;
+  //cityIO header
+  get cityioHeader() {
+    return this._cityioHeader;
   }
-  set cityIOdata(value) {
-    this._cityIOdata = value;
-  }
-
-  // gridGeojson
-  get gridGeojson() {
-    return this._gridGeojson;
-  }
-  set gridGeojson(value) {
-    this._gridGeojson = value;
+  set cityioHeader(value) {
+    this._cityioHeader = value;
   }
 
   // gridGeojsonActive
@@ -60,28 +52,12 @@ class Storage {
     this._gridGeojsonActive = value;
   }
 
-  //Old hash
-  get oldGridHash() {
-    return this._oldGridHash;
-  }
-  set oldGridHash(value) {
-    this._oldGridHash = value;
-  }
-
   //oldAHashList
   get oldAHashList() {
     return this._oldAHashList;
   }
   set oldAHashList(value) {
     this._oldAHashList = value;
-  }
-
-  //firstLoadFlag
-  get firstLoadFlag() {
-    return this._firstLoadFlag;
-  }
-  set firstLoadFlag(value) {
-    this._firstLoadFlag = value;
   }
 
   //grid CityIO data

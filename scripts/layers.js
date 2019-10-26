@@ -1,45 +1,56 @@
 import "./Storage";
 // import * as turf from "@turf/turf";
-import { getCityIO } from "./update";
+import { getCityIO } from "./cityio";
 import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
+import { Update, updateGeoJsonGrid } from "./update";
 
 export class Layers {
   constructor() {
     this.map = Storage.map;
+    this.updateableLayersList = [];
   }
 
   async layersLoader() {
     console.log("loading layers data..");
     let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
+
     // load 3d buildingLayer
     this.buildingLayer();
-
-    for (let hash in cityioHashes.hashes) {
-      console.log(hash);
-      switch (hash) {
+    for (let hashName in cityioHashes.hashes) {
+      switch (hashName) {
         case "grid_full_table":
           this.fullGridLayer();
           break;
         case "grid_interactive_area":
           this.activeGridLayer();
+          this.updateableLayersList.push({
+            hashName: hashName,
+            hash: cityioHashes.hashes[hashName]
+          });
           break;
         case "ABM":
           this.ABMlayer();
           break;
         case "access":
           this.accessLayer();
+          this.updateableLayersList.push({
+            hashName: hashName,
+            hash: cityioHashes.hashes[hashName]
+          });
+          break;
+        default:
+          console.log(hashName, " not a layer.");
           break;
       }
     }
+    new Update(this.updateableLayersList);
   }
 
   async fullGridLayer() {
     // get two grid layers
     let gridGeojson = await getCityIO(Storage.cityIOurl + "/grid_full_table");
-    // save to global storage
-    Storage.gridGeojson = gridGeojson;
     // grid layer
     this.map.addSource("gridLayerSource", {
       type: "geojson",
@@ -74,11 +85,10 @@ export class Layers {
       paint: {
         "fill-extrusion-color": ["get", "color"],
         "fill-extrusion-height": ["get", "height"],
-        "fill-extrusion-opacity": 0.85,
+        "fill-extrusion-opacity": 0.8,
         "fill-extrusion-base": 1
       }
     });
-    Storage.firstLoadFlag = true;
   }
 
   noiseLayer() {
@@ -136,10 +146,7 @@ export class Layers {
   */
     this.map.addSource("accessSource", {
       type: "geojson",
-      data:
-        "https://cityio.media.mit.edu/api/table/" +
-        Storage.cityIOdata.header.name.toString() +
-        "/access"
+      data: Storage.cityIOurl + "/access"
     });
 
     // Access

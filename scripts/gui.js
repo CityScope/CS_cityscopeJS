@@ -1,4 +1,4 @@
-import { Camera, rotateCamera } from "./camera";
+import { rotateCamera, Camera } from "./camera";
 import { updateGeoJsonGrid } from "./update";
 import { updateAccessLayers } from "./update";
 
