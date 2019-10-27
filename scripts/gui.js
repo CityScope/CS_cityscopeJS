@@ -1,11 +1,28 @@
 import { rotateCamera, Camera } from "./camera";
-import { updateGeoJsonGrid } from "./update";
-import { updateAccessLayers } from "./update";
+import { updateGeoJsonGrid, c } from "./update";
+import "./Storage";
 
 /*
 Gui function 
 */
 export function gui() {
+  // ! TEMP INTERACTION
+  Storage.map.on("click", "gridGeojsonActive", function(e) {
+    Storage.map.getCanvas().style.cursor = "pointer";
+    let gridGeojsonActive = Storage.gridGeojsonActive;
+    let id = e.features[0].properties.id;
+    let props = gridGeojsonActive.features[id].properties;
+    if (props.clicked != true) {
+      props.clicked = true;
+      props.oldColor = props.color;
+      props.color = "white";
+    } else {
+      props.clicked = false;
+      props.color = props.oldColor;
+    }
+    Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);
+  });
+  // ! ------
   const cam = new Camera(Storage.map);
   //bring map to projection postion
   cam.reset_camera_position();
@@ -15,37 +32,21 @@ export function gui() {
   let demoAccessLayerInterval = null;
   //
 
+  // right key interaction
   document.addEventListener(
     "contextmenu",
-    function(ev) {
-      ev.preventDefault();
-      keyEventOnMap();
+    function(rightClicked) {
+      rightClicked.preventDefault();
+      if (uiDiv.style.display === "none") {
+        uiDiv.style.display = "block";
+        clearInterval(demoAccessLayerInterval);
+      } else {
+        uiDiv.style.display = "none";
+      }
       return false;
     },
     false
   );
-
-  function keyEventOnMap(e) {
-    if (uiDiv.style.display === "none") {
-      uiDiv.style.display = "block";
-      clearInterval(demoAccessLayerInterval);
-      document.querySelector("#layerTitle").innerHTML = "";
-    } else {
-      uiDiv.style.display = "none";
-      // add here test if layer is even on
-      demoAccessLayerInterval = window.setInterval(demoLayer, 2000);
-    }
-    // }
-  }
-
-  function demoLayer() {
-    // when hidden, go to demo mode for layers
-    let AccessLayersNames = ["education", "food", "nightlife", "groceries"];
-    let res =
-      AccessLayersNames[Math.floor(Math.random() * AccessLayersNames.length)];
-    updateAccessLayers(res);
-    document.querySelector("#layerTitle").innerHTML = res;
-  }
 
   document.getElementById("uiList").addEventListener("change", function(e) {
     switch (e.target.id) {
@@ -54,17 +55,24 @@ export function gui() {
           if (Storage.reqAnimFrame !== null) {
             cancelAnimationFrame(Storage.reqAnimFrame);
           }
-          Storage.map.setLayoutProperty("building", "visibility", "none");
+          Storage.map.setLayoutProperty(
+            "3dBuildingsLayer",
+            "visibility",
+            "none"
+          );
           cam.reset_camera_position();
           Storage.threeState = "flat";
         } else {
-          Storage.map.setLayoutProperty("building", "visibility", "visible");
+          Storage.map.setLayoutProperty(
+            "3dBuildingsLayer",
+            "visibility",
+            "visible"
+          );
           Storage.threeState = "height";
           // start camera rotation
           rotateCamera(1);
         }
         updateGeoJsonGrid();
-
         break;
 
       // keystone mode

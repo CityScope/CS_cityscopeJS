@@ -16,7 +16,7 @@ export class Layers {
     console.log("loading layers data..");
     let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
 
-    // load 3d buildingLayer
+    // load 3d building Layer
     this.buildingLayer();
     for (let hashName in cityioHashes.hashes) {
       switch (hashName) {
@@ -65,6 +65,8 @@ export class Layers {
         "line-width": 0.2
       }
     });
+
+    this.map.setLayoutProperty("gridLayerLine", "visibility", "none");
   }
 
   async activeGridLayer() {
@@ -110,6 +112,8 @@ export class Layers {
       },
       paint: { "raster-opacity": 0.7 }
     });
+
+    this.map.setLayoutProperty("noiseLayer", "visibility", "none");
   }
 
   buildingLayer() {
@@ -138,6 +142,8 @@ export class Layers {
         "fill-extrusion-opacity": 0.7
       }
     });
+
+    this.map.setLayoutProperty("3dBuildingsLayer", "visibility", "none");
   }
 
   accessLayer() {
@@ -211,6 +217,8 @@ export class Layers {
         "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 1, 1, 15, 0.7]
       }
     });
+
+    this.map.setLayoutProperty("AccessLayerHeatmap", "visibility", "none");
   }
 
   async ABMlayer() {
