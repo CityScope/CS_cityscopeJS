@@ -6,14 +6,16 @@ export class UI {
   constructor() {
     this.map = Storage.map;
     this.update = new Update();
-    this.cam = new Camera(Storage.map);
-    //bring map to projection postion
-    cam.reset_camera_position();
-    // get UI div
-    this.uiDiv = document.getElementById("ui");
     // interval for demo layer
     this.demoAccessLayerInterval = null;
     //
+  }
+
+  init() {
+    this.rightClickIteraction();
+    this.cam = new Camera(Storage.map);
+    //bring map to projection postion
+    this.cam.reset_camera_position();
   }
 
   selectOnMap() {
@@ -47,6 +49,9 @@ export class UI {
   }
 
   rightClickIteraction() {
+    // get UI div
+    let uiDiv = document.querySelector("#ui");
+
     // right key interaction
     document.addEventListener(
       "contextmenu",
@@ -54,7 +59,6 @@ export class UI {
         rightClicked.preventDefault();
         if (uiDiv.style.display === "none") {
           uiDiv.style.display = "block";
-          clearInterval(demoAccessLayerInterval);
         } else {
           uiDiv.style.display = "none";
         }
@@ -89,7 +93,7 @@ export class UI {
             // start camera rotation
             rotateCamera(1);
           }
-          update.updateInteractiveGrid();
+          this.update.updateInteractiveGrid();
           break;
 
         // keystone mode

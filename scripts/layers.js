@@ -5,6 +5,7 @@ import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import { Update } from "./update";
+import { UI } from "./ui";
 
 export class Layers {
   constructor() {
@@ -13,6 +14,10 @@ export class Layers {
   }
 
   async layersLoader() {
+    // start UI
+    let ui = new UI();
+    ui.init();
+
     console.log("loading layers data..");
     let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
 
@@ -32,6 +37,7 @@ export class Layers {
           break;
         case "ABM":
           this.ABMlayer();
+          ui.ABMinteraction();
           break;
         case "access":
           this.accessLayer();
