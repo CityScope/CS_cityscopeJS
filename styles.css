@@ -13,11 +13,11 @@ body {
 
 .helpDiv {
   border-radius: 1.5em;
-  text-align: center;
+  text-align: left;
   overflow: auto;
   font-size: 2em;
   padding: 1em;
-  font-weight: bold;
+  font-weight: lighter;
   color: rgb(255, 255, 255);
   backdrop-filter: blur(1em);
   z-index: 100;
@@ -29,22 +29,23 @@ body {
 }
 
 .helpDivFont {
-  font-size: 0.6em;
+  font-size: 1em;
 }
 .helpdiv a,
 a:hover,
 a:visited {
   color: white;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.bg {
+.landingPage {
   position: fixed;
   top: -100%;
   left: -50%;
   width: 200%;
   height: 200%;
 }
-.bg img {
+.landingPage img {
   position: absolute;
   top: 0;
   left: 0;
@@ -185,6 +186,7 @@ button:focus {
   position: fixed;
   top: 5em;
   right: 5em;
+  display: none;
 }
 
 /* Safari */

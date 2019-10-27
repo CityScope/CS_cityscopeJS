@@ -14,36 +14,38 @@
   </head>
   <!--  -->
   <body>
-    <div id="bg" class="bg">
+    <div id="landingPage" class="landingPage">
       <img src="./DOCS/csbg.jpg" alt="" />
       <div id="helpDiv" class="helpDiv">
         <h1>CityScopeJS</h1>
-        Start by adding CityScope table name<br />
-        to the URL, for example:<br />
+        CityScopeJS is a part of the
+        <a href="https://cityscope.media.mit.edu/">MIT CityScope</a> project, an
+        <a href="https://github.com/CityScope/CS_cityscopeJS">open-source</a>
+        urban modeling and simulation tool. cityscopeJS is meant to be a unified
+        front-end for CityScope instanecs around the world. Start by adding
+        CityScope table name to the URL
+        <small>(in the form of: '...URL/?yourTableName') </small>, for example:
         <br />
         <div class="helpDivFont">
           <a href="https://cityscope.media.mit.edu/CS_cityscopeJS/?grasbrook"
             >CityScopeJS Hamburg</a
-          >
-          <br /><br />
-          or click
-          <a href="https://cityio.media.mit.edu"> here</a> for a list of active
-          CityScope tables
+          >, or click <a href="https://cityio.media.mit.edu"> here</a> for a
+          list of active CityScope tables. <br /><br />
         </div>
       </div>
     </div>
 
-    <div id="spinnerTitleHolder">
-      <div id="spinner" class="spinner"></div>
-      <div id="layerTitle" class="layerTitle"></div>
-    </div>
-
-    <section id="uiSection">
-      <div id="ui" class="ui">
-        <h1>CityScopeJS</h1>
-        <p>Right click to hide UI | 'Shift+Z' to keystone</p>
-        <h2>Display</h2>
-        <nav id="uiList" class="uiList">
+    <div id="ui" class="ui">
+      <div id="spinnerTitleHolder">
+        <div id="spinner" class="spinner"></div>
+        <div id="layerTitle" class="layerTitle"></div>
+      </div>
+      <h1>CityScopeJS</h1>
+      <p>Right click to hide UI | 'Shift+Z' to keystone</p>
+      <h2>Display</h2>
+      <nav id="uiList" class="uiList">
+        <!--  -->
+        <section id="displayControlsSection">
           <input type="checkbox" id="projectionMode" checked="checked" />
           <label for="projectionMode">Toggle Camera Rotation</label>
           <input type="checkbox" id="keystone" />
@@ -51,15 +53,19 @@
             Toggle Keystone Mode
             <div id="keystoneButton"></div
           ></label>
-          <!--  -->
-          <h2 id="Layers Title">Layers</h2>
-          <!--  -->
+        </section>
+        <!--  -->
+        <h2 id="Layers Title">Layers</h2>
+        <section id="CommonlayersSection">
           <input type="checkbox" id="3dBuildingsLayer" checked="checked" />
           <label for="3dBuildingsLayer">3d Buildings</label>
-          <!--  -->
+          <input type="checkbox" id="gridLayerLine" checked="checked" />
+          <label for="gridLayerLine">Grid Layer</label>
+        </section>
+        <!--  -->
+        <section id="AccesslayerSection">
           <input type="checkbox" id="AccessLayer" checked="checked" />
           <label for="AccessLayer">Access</label>
-          <!--  -->
           <div class="accessButtonsContanier">
             <button type="button" class="accessButtons" id="education">
               education
@@ -71,16 +77,15 @@
               nightlife
             </button>
           </div>
-          <!--  -->
+        </section>
+        <!--  -->
+        <section id="NoiselayerSection">
           <input type="checkbox" id="noiseLayer" checked="checked" />
           <label for="noiseLayer">noise</label>
-          <!--  -->
-          <input type="checkbox" id="gridLayerLine" checked="checked" />
-          <label for="gridLayerLine">Grid Layer</label>
-          <!--  -->
-        </nav>
-
-        <!--  -->
+        </section>
+      </nav>
+      <!--  -->
+      <section id="ABMlayerSection">
         <h2>ABM mode</h2>
         <div id="ABMmodeType" class="ABMtext">Off</div>
         <input
@@ -109,9 +114,9 @@
           class="slider"
           id="simPaceSlider"
         />
-      </div>
-    </section>
-
+      </section>
+      <!--  -->
+    </div>
     <script src="./scripts/index.js"></script>
   </body>
 </html>

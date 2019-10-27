@@ -41,7 +41,7 @@ async function init() {
   //which cityIO endpoint to look for
   var cityio_table_name = window.location.search.substring(1);
   if (cityio_table_name !== "") {
-    document.getElementById("bg").style.display = "none";
+    document.getElementById("landingPage").style.display = "none";
     let cityIOtableURL =
       "https://cityio.media.mit.edu/api/table/" + cityio_table_name.toString();
     // store it for later updates from cityio
