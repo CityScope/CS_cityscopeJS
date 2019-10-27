@@ -27,5 +27,5 @@ export class Camera {
 // cant call inside class
 export function rotateCamera(timestamp) {
   Storage.map.rotateTo((timestamp / 500) % 360, { duration: 0 });
-  Storage.reqAnimFrame = requestAnimationFrame(rotateCamera);
+  Storage.cameraRotationAnimFrame = requestAnimationFrame(rotateCamera);
 }

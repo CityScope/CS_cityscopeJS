@@ -6,6 +6,9 @@ export class Update {
   constructor(updateableLayersList) {
     this.hashListenInterval = 1000;
     this.updateableLayersList = updateableLayersList;
+  }
+
+  startUpdate() {
     // start looking for layer updates
     Storage.updateLayersInterval = setInterval(
       this.listenForHashUpdate.bind(this),
@@ -13,27 +16,14 @@ export class Update {
     );
   }
 
-  /*
-  go through updateableLayersList 
-  get each hash 
-  for each hash
-    if it's hash is new
-      call this layer(hash name) to update 
-      show spinner till all layers are done 
-  repeat 
-*/
-
-  /*
-let spinnerDiv = document.querySelector("#spinner");
-    if (spinnerDiv.style.display !== "inline-block") {
-      spinnerDiv.style.display = "inline-block";
-    } else {
-      spinnerDiv.style.display = "none";
-    }
-    */
-
   async listenForHashUpdate() {
+    // loading spinner UI
+    let spinnerDiv = document.querySelector("#spinner");
     if (Storage.oldAHashList !== this.updateableLayersList) {
+      // show spinner on loading
+      if (spinnerDiv.style.display !== "inline-block")
+        spinnerDiv.style.display = "inline-block";
+
       console.log("layers need updating...");
       for (let i in this.updateableLayersList) {
         let layerToUpdate = this.updateableLayersList[i].hashName;
@@ -54,6 +44,10 @@ let spinnerDiv = document.querySelector("#spinner");
       for (let i in this.updateableLayersList) {
         let thisHashName = this.updateableLayersList[i].hashName;
         this.updateableLayersList[i].hash = cityioHashes.hashes[thisHashName];
+      }
+      // hide spinner on done loading
+      if (spinnerDiv.style.display !== "none") {
+        spinnerDiv.style.display = "none";
       }
     }
   }

@@ -4,7 +4,7 @@ import { getCityIO } from "./cityio";
 import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
-import { Update, updateGeoJsonGrid } from "./update";
+import { Update } from "./update";
 
 export class Layers {
   constructor() {
@@ -45,7 +45,8 @@ export class Layers {
           break;
       }
     }
-    new Update(this.updateableLayersList);
+    let update = new Update(this.updateableLayersList);
+    update.startUpdate();
   }
 
   async fullGridLayer() {
@@ -167,9 +168,7 @@ export class Layers {
           ["linear"],
           ["get", "education"],
           0,
-          0.1,
-          0.5,
-          0.8,
+          0.02,
           1,
           1
         ],

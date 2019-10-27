@@ -1,5 +1,5 @@
 import { rotateCamera, Camera } from "./camera";
-import { updateGeoJsonGrid, c } from "./update";
+import { Update } from "./update";
 import "./Storage";
 
 /*
@@ -23,6 +23,9 @@ export function gui() {
     Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);
   });
   // ! ------
+
+  let update = new Update();
+
   const cam = new Camera(Storage.map);
   //bring map to projection postion
   cam.reset_camera_position();
@@ -52,8 +55,8 @@ export function gui() {
     switch (e.target.id) {
       case "projectionMode":
         if (e.target.checked) {
-          if (Storage.reqAnimFrame !== null) {
-            cancelAnimationFrame(Storage.reqAnimFrame);
+          if (Storage.cameraRotationAnimFrame !== null) {
+            cancelAnimationFrame(Storage.cameraRotationAnimFrame);
           }
           Storage.map.setLayoutProperty(
             "3dBuildingsLayer",
@@ -72,7 +75,7 @@ export function gui() {
           // start camera rotation
           rotateCamera(1);
         }
-        updateGeoJsonGrid();
+        update.updateInteractiveGrid();
         break;
 
       // keystone mode
@@ -155,7 +158,7 @@ export function gui() {
       "click",
       function(e) {
         console.log(e.target.id);
-        updateAccessLayers(e.target.id);
+        update.cycleAccessLayers(e.target.id);
       },
       false
     );
