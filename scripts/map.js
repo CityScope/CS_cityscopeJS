@@ -2,7 +2,7 @@ import "babel-polyfill";
 import mapboxgl from "mapbox-gl";
 import "./Storage";
 
-export function makeMap() {
+export function createBaseMap() {
   // define the mapbox div element
   var keystoneDiv = document.createElement("div");
   keystoneDiv.className = "keystoneDiv";

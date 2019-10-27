@@ -259,12 +259,6 @@ export class Layers {
       1: "Mobilty Mode",
       2: "User Type"
     };
-    var ABMmodeSlider = document.getElementById("ABMslider");
-    ABMmodeSlider.addEventListener("input", function() {
-      Storage.ABMmodeType = ABMmodeSlider.value;
-      document.getElementById("ABMmodeType").innerHTML =
-        ABMlayerNames[Storage.ABMmodeType];
-    });
 
     Storage.map.addLayer(
       new MapboxLayer({ id: ["ABMLayer"], deck: deckContext })
@@ -279,12 +273,12 @@ export class Layers {
         time = time + simPaceValue;
       }
       // toggle abm layer mode or type
-      if (ABMmodeType == 0) {
+      if (ABMmodeType == "Off") {
         deckContext.setProps({
           layers: []
         });
         //
-      } else if (ABMmodeType == 1) {
+      } else if (ABMmodeType == "Modes") {
         deckContext.setProps({
           layers: [
             new TripsLayer({
@@ -315,7 +309,7 @@ export class Layers {
             })
           ]
         });
-      } else if (ABMmodeType == 2) {
+      } else if (ABMmodeType == "OD") {
         deckContext.setProps({
           layers: [
             new TripsLayer({

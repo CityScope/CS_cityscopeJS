@@ -66,14 +66,14 @@
         <section id="AccesslayerSection">
           <input type="checkbox" id="AccessLayer" checked="checked" />
           <label for="AccessLayer">Access</label>
-          <div class="accessButtonsContanier">
-            <button type="button" class="accessButtons" id="education">
+          <div class="UIButtonsContanier">
+            <button type="button" class="UIButtons" id="education">
               education
             </button>
-            <button type="button" class="accessButtons" id="food">food</button
-            ><button type="button" class="accessButtons" id="groceries">
+            <button type="button" class="UIButtons" id="food">food</button
+            ><button type="button" class="UIButtons" id="groceries">
               groceries</button
-            ><button type="button" class="accessButtons" id="nightlife">
+            ><button type="button" class="UIButtons" id="nightlife">
               nightlife
             </button>
           </div>
@@ -86,16 +86,19 @@
       </nav>
       <!--  -->
       <section id="ABMlayerSection">
-        <h2>ABM mode</h2>
-        <div id="ABMmodeType" class="ABMtext">Off</div>
-        <input
-          type="range"
-          min="0"
-          max="2"
-          value="0"
-          class="slider"
-          id="ABMslider"
-        />
+        <h2>ABM</h2>
+
+        <div class="ABMButtonsDiv">
+          <button type="button" class="UIButtons" id="Off">
+            Off
+          </button>
+          <button type="button" class="UIButtons" id="Modes">
+            Modes</button
+          ><button type="button" class="UIButtons" id="OD">
+            OD
+          </button>
+        </div>
+
         <div id="timeStamp" class="ABMtext"></div>
         <input
           type="range"

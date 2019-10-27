@@ -30,12 +30,10 @@ https://github.com/RELNO]
 
 import "babel-polyfill";
 import "./Storage";
-import { makeMap } from "./map";
+import { createBaseMap } from "./map";
 import { getCityIO } from "./cityio";
 import { Layers } from "./layers";
-import { gui } from "./gui";
 import { Maptastic } from "./maptastic";
-import { Camera } from "./camera";
 
 async function init() {
   //which cityIO endpoint to look for
@@ -49,7 +47,7 @@ async function init() {
     // get the header to locate the map
     Storage.cityioHeader = await getCityIO(cityIOtableURL + "/header");
     //make the mapbox base map
-    makeMap();
+    createBaseMap();
     // get map from storage
     let map = Storage.map;
     // wait for map to load
@@ -57,8 +55,6 @@ async function init() {
       const layers = new Layers();
       // load layer
       layers.layersLoader();
-      // do gui
-      gui();
     });
   }
 
