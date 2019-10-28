@@ -6,14 +6,26 @@ import "./Storage";
 export class UI {
   constructor() {}
 
-  init() {
+  init(updateableLayersList) {
+    console.log(updateableLayersList);
+    for (let i in updateableLayersList) {
+      console.log(updateableLayersList[i].hashName);
+      switch (updateableLayersList[i].hashName) {
+        case "access":
+          this.accessButtonsInteraction();
+          break;
+
+        default:
+          break;
+      }
+    }
+
     //bring map to projection postion
     new Camera().reset_camera_position();
     // interval for demo layer
     this.demoAccessLayerInterval = null;
     this.rightClickIteraction();
     this.uiButtonsInteraction();
-    this.accessButtonsInteraction();
   }
 
   selectOnMap() {
@@ -85,7 +97,6 @@ export class UI {
   uiButtonsInteraction() {
     let cam = new Camera();
     let update = new Update();
-    console.log(this.cam);
     //
     document.getElementById("uiList").addEventListener("change", function(e) {
       this.uiListInteraction = e.target.id;
@@ -93,6 +104,15 @@ export class UI {
       switch (this.uiListInteraction) {
         case "projectionMode":
           if (e.target.checked) {
+            Storage.map.setLayoutProperty(
+              "3dBuildingsLayer",
+              "visibility",
+              "visible"
+            );
+            Storage.threeState = "height";
+            // start camera rotation
+            rotateCamera(1);
+          } else {
             if (Storage.cameraRotationAnimFrame !== null) {
               cancelAnimationFrame(Storage.cameraRotationAnimFrame);
             }
@@ -103,15 +123,6 @@ export class UI {
             );
             cam.reset_camera_position();
             Storage.threeState = "flat";
-          } else {
-            Storage.map.setLayoutProperty(
-              "3dBuildingsLayer",
-              "visibility",
-              "visible"
-            );
-            Storage.threeState = "height";
-            // start camera rotation
-            rotateCamera(1);
           }
           update.updateInteractiveGrid();
           break;
