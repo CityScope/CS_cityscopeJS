@@ -1,6 +1,7 @@
 import "./Storage";
 import "babel-polyfill";
 import { getCityIO } from "./cityio";
+var loEqual = require("lodash/isEqual");
 
 export class Update {
   constructor(updateableLayersList) {
@@ -19,16 +20,16 @@ export class Update {
   async listenForHashUpdate() {
     // loading spinner UI
     let spinnerDiv = document.querySelector("#spinner");
-    if (Storage.oldAHashList !== this.updateableLayersList) {
+    // if the old hash holder and the new one are not the same
+    if (loEqual(Storage.oldAHashList, this.updateableLayersList) == false) {
       // show spinner on loading
       if (spinnerDiv.style.display !== "inline-block")
         spinnerDiv.style.display = "inline-block";
-
-      console.log("layers need updating...");
+      //
       for (let i in this.updateableLayersList) {
         let layerToUpdate = this.updateableLayersList[i].hashName;
         switch (layerToUpdate) {
-          case "grid_interactive_area":
+          case "grid":
             this.updateInteractiveGrid();
             break;
           case "access":
@@ -36,14 +37,17 @@ export class Update {
             break;
         }
       }
-      Storage.oldAHashList = this.updateableLayersList;
-    } else {
-      console.log("layers are updated.");
-      // get refreshed hashes
+      // Storage.oldAHashList = this.updateableLayersList;
+    } else if (alreadyUpdated == true) {
+      //
+      // listen to refreshed hashes
+      // and populate 'updateableLayersList'
       let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
       for (let i in this.updateableLayersList) {
         let thisHashName = this.updateableLayersList[i].hashName;
         this.updateableLayersList[i].hash = cityioHashes.hashes[thisHashName];
+        if (thisHashName == "grid") {
+        }
       }
       // hide spinner on done loading
       if (spinnerDiv.style.display !== "none") {

@@ -7,9 +7,8 @@ export class UI {
   constructor() {}
 
   init(updateableLayersList) {
-    console.log(updateableLayersList);
     for (let i in updateableLayersList) {
-      console.log(updateableLayersList[i].hashName);
+      // console.log(updateableLayersList[i].hashName);
       switch (updateableLayersList[i].hashName) {
         case "access":
           this.accessButtonsInteraction();

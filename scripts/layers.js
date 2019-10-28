@@ -30,8 +30,8 @@ export class Layers {
         case "grid_interactive_area":
           this.activeGridLayer();
           this.updateableLayersList.push({
-            hashName: hashName,
-            hash: cityioHashes.hashes[hashName]
+            hashName: "grid",
+            hash: cityioHashes.hashes["grid"]
           });
           break;
         case "ABM":
