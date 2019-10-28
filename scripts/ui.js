@@ -1,26 +1,26 @@
 import { rotateCamera, Camera } from "./camera";
 import { Update } from "./update";
+import { cycleAccessLayers } from "./layers";
 import "./Storage";
 
 export class UI {
-  constructor() {
-    this.map = Storage.map;
-    this.update = new Update();
-    // interval for demo layer
-    this.demoAccessLayerInterval = null;
-    //
-  }
+  constructor() {}
 
   init() {
-    this.rightClickIteraction();
-    this.cam = new Camera(Storage.map);
     //bring map to projection postion
-    this.cam.reset_camera_position();
+    new Camera().reset_camera_position();
+    // interval for demo layer
+    this.demoAccessLayerInterval = null;
+    this.rightClickIteraction();
+    this.uiButtonsInteraction();
+    this.accessButtonsInteraction();
   }
 
   selectOnMap() {
     // ! TEMP INTERACTION
     this.map.on("click", "gridGeojsonActive", function(e) {
+      console.log(this.uiListInteraction);
+
       Storage.map.getCanvas().style.cursor = "pointer";
       let gridGeojsonActive = Storage.gridGeojsonActive;
       let id = e.features[0].properties.id;
@@ -48,6 +48,20 @@ export class UI {
     });
   }
 
+  accessButtonsInteraction() {
+    // select access layer
+    let accessButtons = document.getElementsByClassName("accessButton");
+    for (var i = 0; i < accessButtons.length; i++) {
+      accessButtons[i].addEventListener(
+        "click",
+        function(e) {
+          cycleAccessLayers(e.target.id);
+        },
+        false
+      );
+    }
+  }
+
   rightClickIteraction() {
     // get UI div
     let uiDiv = document.querySelector("#ui");
@@ -68,9 +82,15 @@ export class UI {
     );
   }
 
-  uiButtonListInteraction() {
+  uiButtonsInteraction() {
+    let cam = new Camera();
+    let update = new Update();
+    console.log(this.cam);
+    //
     document.getElementById("uiList").addEventListener("change", function(e) {
-      switch (e.target.id) {
+      this.uiListInteraction = e.target.id;
+      //
+      switch (this.uiListInteraction) {
         case "projectionMode":
           if (e.target.checked) {
             if (Storage.cameraRotationAnimFrame !== null) {
@@ -93,59 +113,15 @@ export class UI {
             // start camera rotation
             rotateCamera(1);
           }
-          this.update.updateInteractiveGrid();
+          update.updateInteractiveGrid();
           break;
-
         // keystone mode
         case "keystone":
-          let localStorage = window.localStorage;
-          // if there is a previous keystone
-          if (localStorage["maptastic.layers"]) {
-            let storageJSON = JSON.parse(
-              localStorage.getItem("maptastic.layers")
-            );
-            //
-            var w = screen.width;
-            // 1920;
-            var h = screen.height;
-            //  1080;
-            let windowDims = [[0, 0], [w, 0], [w, h], [0, h]];
-            //
-            if (!storageJSON[0].mode || storageJSON[0].mode == "projection") {
-              storageJSON[0].mode = "screen";
-              storageJSON[0].sourcePoints_BU = storageJSON[0].sourcePoints;
-              storageJSON[0].targetPoints_BU = storageJSON[0].targetPoints;
-              //
-              storageJSON[0].sourcePoints = windowDims;
-              storageJSON[0].targetPoints = windowDims;
-              localStorage.setItem("maptastic.layers", [
-                JSON.stringify(storageJSON)
-              ]);
-              location.reload();
-            } else {
-              storageJSON[0].mode = "projection";
-              storageJSON[0].sourcePoints = storageJSON[0].sourcePoints_BU;
-              storageJSON[0].targetPoints = storageJSON[0].targetPoints_BU;
-              localStorage.setItem("maptastic.layers", [
-                JSON.stringify(storageJSON)
-              ]);
-              location.reload();
-            }
-          } else {
-            let keystoneButtonDiv = document.getElementById("keystoneButton");
-            keystoneButtonDiv.innerHTML =
-              "No keystone found, click 'shift+z' to keystone";
-            console.log("no older maptastic setup found");
-          }
+          keystoneHandler();
           break;
-        //
+        // access
         case "AccessLayer":
           if (e.target.checked) {
-            Storage.map.setLayoutProperty(
-              "AccessLayer",
-              "visibility",
-              "visible"
-            );
             Storage.map.setLayoutProperty(
               "AccessLayerHeatmap",
               "visibility",
@@ -157,10 +133,8 @@ export class UI {
               "visibility",
               "none"
             );
-            Storage.map.setLayoutProperty("AccessLayer", "visibility", "none");
           }
           break;
-
         // any other layer
         default:
           if (e.target.checked) {
@@ -171,19 +145,41 @@ export class UI {
           break;
       }
     });
+  }
+}
 
+function keystoneHandler() {
+  let localStorage = window.localStorage;
+  // if there is a previous keystone
+  if (localStorage["maptastic.layers"]) {
+    let storageJSON = JSON.parse(localStorage.getItem("maptastic.layers"));
     //
-    // select access layer
-    let accessButtons = document.getElementsByClassName("accessButtons");
-    for (var i = 0; i < accessButtons.length; i++) {
-      accessButtons[i].addEventListener(
-        "click",
-        function(e) {
-          console.log(e.target.id);
-          update.cycleAccessLayers(e.target.id);
-        },
-        false
-      );
+    var w = screen.width;
+    // 1920;
+    var h = screen.height;
+    //  1080;
+    let windowDims = [[0, 0], [w, 0], [w, h], [0, h]];
+
+    if (!storageJSON[0].mode || storageJSON[0].mode == "projection") {
+      storageJSON[0].mode = "screen";
+      storageJSON[0].sourcePoints_BU = storageJSON[0].sourcePoints;
+      storageJSON[0].targetPoints_BU = storageJSON[0].targetPoints;
+      //
+      storageJSON[0].sourcePoints = windowDims;
+      storageJSON[0].targetPoints = windowDims;
+      localStorage.setItem("maptastic.layers", [JSON.stringify(storageJSON)]);
+      location.reload();
+    } else {
+      storageJSON[0].mode = "projection";
+      storageJSON[0].sourcePoints = storageJSON[0].sourcePoints_BU;
+      storageJSON[0].targetPoints = storageJSON[0].targetPoints_BU;
+      localStorage.setItem("maptastic.layers", [JSON.stringify(storageJSON)]);
+      location.reload();
     }
+  } else {
+    let keystoneButtonDiv = document.getElementById("keystoneButton");
+    keystoneButtonDiv.innerHTML =
+      "No keystone found, click 'shift+z' to keystone";
+    console.log("no older maptastic setup found");
   }
 }

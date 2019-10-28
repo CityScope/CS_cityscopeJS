@@ -38,7 +38,7 @@
       <nav id="uiList" class="uiList">
         <!--  -->
         <section id="displayControlsSection">
-          <input type="checkbox" id="projectionMode" checked="checked">
+          <input type="checkbox" id="projectionMode">
           <label for="projectionMode">Toggle Camera Rotation</label>
           <input type="checkbox" id="keystone">
           <label for="keystone">
@@ -48,28 +48,29 @@
         <!--  -->
         <h2 id="Layers Title">Layers</h2>
         <section id="CommonlayersSection">
-          <input type="checkbox" id="3dBuildingsLayer" checked="checked">
+          <input type="checkbox" id="3dBuildingsLayer">
           <label for="3dBuildingsLayer">3d Buildings</label>
-          <input type="checkbox" id="gridLayerLine" checked="checked">
+          <input type="checkbox" id="gridLayerLine">
           <label for="gridLayerLine">Grid Layer</label>
         </section>
         <!--  -->
         <section id="AccesslayerSection">
-          <input type="checkbox" id="AccessLayer" checked="checked">
+          <input type="checkbox" id="AccessLayer">
           <label for="AccessLayer">Access</label>
           <div class="UIButtonsContanier">
-            <button type="button" class="UIButtons" id="education">
+            <button type="button" class="UIButtons accessButton" id="education">
               education
             </button>
-            <button type="button" class="UIButtons" id="food">food</button><button type="button" class="UIButtons" id="groceries">
-              groceries</button><button type="button" class="UIButtons" id="nightlife">
+            <button type="button" class="UIButtons accessButton" id="food">
+              food</button><button type="button" class="UIButtons accessButton" id="groceries">
+              groceries</button><button type="button" class="UIButtons accessButton" id="nightlife">
               nightlife
             </button>
           </div>
         </section>
         <!--  -->
         <section id="NoiselayerSection">
-          <input type="checkbox" id="noiseLayer" checked="checked">
+          <input type="checkbox" id="noiseLayer">
           <label for="noiseLayer">noise</label>
         </section>
       </nav>
