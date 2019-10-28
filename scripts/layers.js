@@ -10,7 +10,7 @@ import { UI } from "./ui";
 export class Layers {
   constructor() {
     this.map = Storage.map;
-    this.updateableLayersList = [];
+    this.updateableLayersList = {};
   }
 
   async layersLoader() {
@@ -20,8 +20,9 @@ export class Layers {
     console.log("loading layers data..");
     let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
 
-    // load 3d building Layer
+    // load 3d building Layer first
     this.buildingLayer();
+    // then cycle between known layers
     for (let hashName in cityioHashes.hashes) {
       switch (hashName) {
         case "grid_full_table":
@@ -29,10 +30,10 @@ export class Layers {
           break;
         case "grid_interactive_area":
           this.activeGridLayer();
-          this.updateableLayersList.push({
-            hashName: "grid",
-            hash: cityioHashes.hashes["grid"]
-          });
+          break;
+        case "grid":
+          this.updateableLayersList.grid = cityioHashes.hashes["grid"];
+
           break;
         case "ABM":
           this.ABMlayer();
@@ -40,16 +41,14 @@ export class Layers {
           break;
         case "access":
           this.accessLayer();
-          this.updateableLayersList.push({
-            hashName: hashName,
-            hash: cityioHashes.hashes[hashName]
-          });
+          this.updateableLayersList.access = cityioHashes.hashes["access"];
+
           break;
         default:
-          console.log(hashName, " not a layer.");
           break;
       }
     }
+
     let update = new Update(this.updateableLayersList);
     ui.init(this.updateableLayersList);
     update.startUpdate();
@@ -267,7 +266,10 @@ export class Layers {
     };
 
     Storage.map.addLayer(
-      new MapboxLayer({ id: ["ABMLayer"], deck: deckContext })
+      new MapboxLayer({
+        id: ["ABMLayer"],
+        deck: deckContext
+      })
     );
 
     function renderDeck() {

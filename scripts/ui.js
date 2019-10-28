@@ -123,7 +123,7 @@ export class UI {
             cam.reset_camera_position();
             Storage.threeState = "flat";
           }
-          update.updateInteractiveGrid();
+          update.update_grid();
           break;
         // keystone mode
         case "keystone":

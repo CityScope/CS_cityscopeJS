@@ -1,63 +1,71 @@
 import "./Storage";
 import "babel-polyfill";
 import { getCityIO } from "./cityio";
+import layer from "@deck.gl/core/dist/es5/lib/layer";
 var loEqual = require("lodash/isEqual");
 
 export class Update {
   constructor(updateableLayersList) {
-    this.hashListenInterval = 1000;
+    // init the hash list holder
+    Storage.oldAHashList = {};
+    this.loopInterval = 1000;
     this.updateableLayersList = updateableLayersList;
+    // loading spinner UI
+    this.spinnerDiv = document.querySelector("#spinner");
   }
 
   startUpdate() {
     // start looking for layer updates
     Storage.updateLayersInterval = setInterval(
-      this.listenForHashUpdate.bind(this),
-      this.hashListenInterval
+      this.compareHashes.bind(this),
+      this.loopInterval
     );
   }
 
-  async listenForHashUpdate() {
-    // loading spinner UI
-    let spinnerDiv = document.querySelector("#spinner");
-    // if the old hash holder and the new one are not the same
+  async compareHashes() {
+    // deep compare old hash holder and the new one are not the same
     if (loEqual(Storage.oldAHashList, this.updateableLayersList) == false) {
-      // show spinner on loading
-      if (spinnerDiv.style.display !== "inline-block")
-        spinnerDiv.style.display = "inline-block";
-      //
-      for (let i in this.updateableLayersList) {
-        let layerToUpdate = this.updateableLayersList[i].hashName;
-        switch (layerToUpdate) {
-          case "grid":
-            this.updateInteractiveGrid();
-            break;
-          case "access":
-            this.updateAccessLayer();
-            break;
+      for (let layerToUpdate in this.updateableLayersList) {
+        // check each layer indeviduשly
+        if (
+          Storage.oldAHashList == null ||
+          this.updateableLayersList[layerToUpdate] !==
+            Storage.oldAHashList[layerToUpdate]
+        ) {
+          Storage.oldAHashList[layerToUpdate] = this.updateableLayersList[
+            layerToUpdate
+          ];
+          let funcName = "update_" + layerToUpdate;
+          this[funcName]();
         }
       }
-      // Storage.oldAHashList = this.updateableLayersList;
-    } else if (alreadyUpdated == true) {
       //
+      // show spinner on loading
+      if (this.spinnerDiv.style.display !== "inline-block")
+        this.spinnerDiv.style.display = "inline-block";
+      //
+    } else if (
+      loEqual(Storage.oldAHashList, this.updateableLayersList) == true
+    ) {
       // listen to refreshed hashes
       // and populate 'updateableLayersList'
       let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
-      for (let i in this.updateableLayersList) {
-        let thisHashName = this.updateableLayersList[i].hashName;
-        this.updateableLayersList[i].hash = cityioHashes.hashes[thisHashName];
-        if (thisHashName == "grid") {
-        }
+      // populate updateableLayersList with new hashes from cityIO
+      for (let layerToUpdate in this.updateableLayersList) {
+        this.updateableLayersList[layerToUpdate] =
+          cityioHashes.hashes[layerToUpdate];
       }
+      //
       // hide spinner on done loading
-      if (spinnerDiv.style.display !== "none") {
-        spinnerDiv.style.display = "none";
+      if (this.spinnerDiv.style.display !== "none") {
+        this.spinnerDiv.style.display = "none";
       }
+      //
     }
   }
 
-  async updateAccessLayer() {
-    console.log("updating access layer");
+  async update_access() {
+    console.log("updating access layer...");
 
     //  update the layers source
     Storage.map
@@ -65,8 +73,8 @@ export class Update {
       .setData(Storage.cityIOurl + "/access");
   }
 
-  async updateInteractiveGrid() {
-    console.log("updating grid");
+  async update_grid() {
+    console.log("updating grid layer...");
 
     let gridData = await getCityIO(Storage.cityIOurl + "/grid");
     this.cellsFeaturesArray = [
