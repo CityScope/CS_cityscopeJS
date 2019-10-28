@@ -32,16 +32,18 @@ export class Layers {
           this.activeGridLayer();
           break;
         case "grid":
-          this.updateableLayersList.grid = cityioHashes.hashes["grid"];
+          this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
 
           break;
         case "ABM":
           this.ABMlayer();
           ui.ABMinteraction();
+          this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
+
           break;
         case "access":
           this.accessLayer();
-          this.updateableLayersList.access = cityioHashes.hashes["access"];
+          this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
 
           break;
         default:
@@ -231,10 +233,9 @@ export class Layers {
     https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
     https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/overview.md?source=post_page---------------------------#using-with-pure-js
   */
-    const DATA_URL = {
-      ABM: Storage.cityIOurl + "/ABM"
-    };
-    let abmData = await getCityIO(DATA_URL.ABM);
+    // get data at init
+    Storage.ABMdata = await getCityIO(Storage.cityIOurl + "/ABM");
+
     let timeStampDiv = document.getElementById("timeStamp");
     let simPaceDiv = document.getElementById("simPaceDiv");
     let startSimHour = 60 * 60 * 7;
@@ -258,12 +259,6 @@ export class Layers {
       gl: this.map.painter.context.gl,
       layers: []
     });
-
-    let ABMlayerNames = {
-      0: "Off",
-      1: "Mobilty Mode",
-      2: "User Type"
-    };
 
     Storage.map.addLayer(
       new MapboxLayer({
@@ -291,7 +286,7 @@ export class Layers {
           layers: [
             new TripsLayer({
               id: "modes",
-              data: abmData,
+              data: Storage.ABMdata,
               getPath: d => d.path,
               getTimestamps: d => d.timestamps,
               getColor: d => {
@@ -322,7 +317,7 @@ export class Layers {
           layers: [
             new TripsLayer({
               id: "types",
-              data: abmData,
+              data: Storage.ABMdata,
               getPath: d => d.path,
               getTimestamps: d => d.timestamps,
               getColor: d => {

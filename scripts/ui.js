@@ -4,16 +4,20 @@ import { cycleAccessLayers } from "./layers";
 import "./Storage";
 
 export class UI {
-  constructor() {}
-
   init(updateableLayersList) {
-    for (let i in updateableLayersList) {
-      // console.log(updateableLayersList[i].hashName);
-      switch (updateableLayersList[i].hashName) {
+    document.getElementById("AccesslayerSection").style.display = "none";
+    document.getElementById("ABMlayerSection").style.display = "none";
+
+    for (let layer in updateableLayersList) {
+      switch (layer) {
         case "access":
           this.accessButtonsInteraction();
+          document.getElementById("AccesslayerSection").style.display = "block";
           break;
-
+        case "ABM":
+          this.accessButtonsInteraction();
+          document.getElementById("ABMlayerSection").style.display = "block";
+          break;
         default:
           break;
       }
@@ -54,7 +58,6 @@ export class UI {
     // intercation with UI
     var ABMButtonsDiv = document.getElementsByClassName("ABMButtonsDiv");
     ABMButtonsDiv[0].addEventListener("click", function(e) {
-      console.log(e.target.id);
       Storage.ABMmodeType = e.target.id;
     });
   }

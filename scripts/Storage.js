@@ -14,6 +14,14 @@ class Storage {
     this._ABMmodeType = value;
   }
 
+  //ABMmodeType
+  get ABMdata() {
+    return this._ABMdata;
+  }
+  set ABMdata(value) {
+    this._ABMdata = value;
+  }
+
   //reqAnimFrame
   get reqAnimFrame() {
     return this._reqAnimFrame;

@@ -64,6 +64,11 @@ export class Update {
     }
   }
 
+  async update_ABM() {
+    console.log("updating ABM layer...");
+    Storage.ABMdata = await getCityIO(Storage.cityIOurl + "/ABM");
+  }
+
   async update_access() {
     console.log("updating access layer...");
 
