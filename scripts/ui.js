@@ -22,7 +22,6 @@ export class UI {
           break;
       }
     }
-
     //bring map to projection postion
     new Camera().reset_camera_position();
     // interval for demo layer
@@ -31,79 +30,23 @@ export class UI {
     this.uiButtonsInteraction();
   }
 
-  selectOnMap() {
-    // ! TEMP INTERACTION
-    this.map.on("click", "gridGeojsonActive", function(e) {
-      console.log(this.uiListInteraction);
-
-      Storage.map.getCanvas().style.cursor = "pointer";
-      let gridGeojsonActive = Storage.gridGeojsonActive;
-      let id = e.features[0].properties.id;
-      let props = gridGeojsonActive.features[id].properties;
-      if (props.clicked != true) {
-        props.clicked = true;
-        props.oldColor = props.color;
-        props.color = "white";
-      } else {
-        props.clicked = false;
-        props.color = props.oldColor;
-      }
-      Storage.map
-        .getSource("gridGeojsonActiveSource")
-        .setData(gridGeojsonActive);
-    });
-  }
-
-  ABMinteraction() {
-    // intercation with UI
-    var ABMButtonsDiv = document.getElementsByClassName("ABMButtonsDiv");
-    ABMButtonsDiv[0].addEventListener("click", function(e) {
-      Storage.ABMmodeType = e.target.id;
-    });
-  }
-
-  accessButtonsInteraction() {
-    // select access layer
-    let accessButtons = document.getElementsByClassName("accessButton");
-    for (var i = 0; i < accessButtons.length; i++) {
-      accessButtons[i].addEventListener(
-        "click",
-        function(e) {
-          cycleAccessLayers(e.target.id);
-        },
-        false
-      );
-    }
-  }
-
-  rightClickIteraction() {
-    // get UI div
-    let uiDiv = document.querySelector("#ui");
-
-    // right key interaction
-    document.addEventListener(
-      "contextmenu",
-      function(rightClicked) {
-        rightClicked.preventDefault();
-        if (uiDiv.style.display === "none") {
-          uiDiv.style.display = "block";
-        } else {
-          uiDiv.style.display = "none";
-        }
-        return false;
-      },
-      false
-    );
-  }
-
   uiButtonsInteraction() {
     let cam = new Camera();
     let update = new Update();
+    Storage.selectedGridCells = {};
     //
-    document.getElementById("uiList").addEventListener("change", function(e) {
-      this.uiListInteraction = e.target.id;
-      //
-      switch (this.uiListInteraction) {
+    document.getElementById("uiList").addEventListener("change", e => {
+      switch (e.target.id) {
+        case "toggleInteraction":
+          if (e.target.checked) {
+            Storage.map.on("click", "gridGeojsonActive", e =>
+              this.selectOnMap(e)
+            );
+          } else if (e.target.checked == false || !e.target) {
+            Storage.map.off("click", "gridGeojsonActive", this.selectOnMap());
+          }
+          break;
+        //
         case "projectionMode":
           if (e.target.checked) {
             Storage.map.setLayoutProperty(
@@ -150,14 +93,79 @@ export class UI {
           break;
         // any other layer
         default:
-          if (e.target.checked) {
-            Storage.map.setLayoutProperty(e.target.id, "visibility", "visible");
-          } else {
-            Storage.map.setLayoutProperty(e.target.id, "visibility", "none");
-          }
+          // if (e.target.checked) {
+          //   Storage.map.setLayoutProperty(e.target.id, "visibility", "visible");
+          // } else {
+          //   Storage.map.setLayoutProperty(e.target.id, "visibility", "none");
+          // }
           break;
       }
     });
+  }
+
+  selectOnMap(e) {
+    let featureDiv = document.getElementById("InteractionModeSection");
+    Storage.map.getCanvas().style.cursor = "pointer";
+    let grid = Storage.gridGeojsonActive;
+    let selectedId = e.features[0].properties.id;
+    let props = grid.features[selectedId].properties;
+    if (props.clicked) {
+      props.clicked = false;
+      props.color = props.oldColor;
+      delete Storage.selectedGridCells[selectedId];
+    } else {
+      props.clicked = true;
+      // store old color
+      props.oldColor = props.color;
+      props.color = "white";
+      Storage.selectedGridCells[selectedId] = grid.features[selectedId];
+    }
+    featureDiv.innerHTML = Object.keys(Storage.selectedGridCells).length;
+    console.log(Storage.selectedGridCells);
+
+    Storage.map.getSource("gridGeojsonActiveSource").setData(grid);
+  }
+
+  ABMinteraction() {
+    // intercation with UI
+    var ABMButtonsDiv = document.getElementsByClassName("ABMButtonsDiv");
+    ABMButtonsDiv[0].addEventListener("click", function(e) {
+      Storage.ABMmodeType = e.target.id;
+    });
+  }
+
+  accessButtonsInteraction() {
+    // select access layer
+    let accessButtons = document.getElementsByClassName("accessButton");
+    for (var i = 0; i < accessButtons.length; i++) {
+      accessButtons[i].addEventListener(
+        "click",
+        function(e) {
+          cycleAccessLayers(e.target.id);
+        },
+        false
+      );
+    }
+  }
+
+  rightClickIteraction() {
+    // get UI div
+    let uiDiv = document.querySelector("#ui");
+
+    // right key interaction
+    document.addEventListener(
+      "contextmenu",
+      function(rightClicked) {
+        rightClicked.preventDefault();
+        if (uiDiv.style.display === "none") {
+          uiDiv.style.display = "block";
+        } else {
+          uiDiv.style.display = "none";
+        }
+        return false;
+      },
+      false
+    );
   }
 }
 

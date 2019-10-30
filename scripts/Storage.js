@@ -6,6 +6,14 @@ class Storage {
     this._cityIOurl = "";
   }
 
+  //selected Grid Cells
+  get selectedGridCells() {
+    return this._selectedGridCells;
+  }
+  set selectedGridCells(value) {
+    this._selectedGridCells = value;
+  }
+
   //ABMmodeType
   get ABMmodeType() {
     return this._ABMmodeType;
