@@ -6,6 +6,22 @@ class Storage {
     this._cityIOurl = "";
   }
 
+  //boolGridDataSource (cityio vs local)
+  get boolGridDataSource() {
+    return this._boolGridDataSource;
+  }
+  set boolGridDataSource(value) {
+    this._boolGridDataSource = value;
+  }
+
+  //girdLocalDataSource
+  get girdLocalDataSource() {
+    return this._girdLocalDataSource;
+  }
+  set girdLocalDataSource(value) {
+    this._girdLocalDataSource = value;
+  }
+
   //selected Grid Cells
   get selectedGridCells() {
     return this._selectedGridCells;

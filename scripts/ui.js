@@ -38,14 +38,15 @@ export class UI {
     document.getElementById("uiList").addEventListener("change", e => {
       switch (e.target.id) {
         case "toggleInteraction":
+          // data for gird is local
+          Storage.boolGridDataSource = false;
           if (e.target.checked) {
             Storage.map.on("click", "gridGeojsonActive", e =>
               this.selectOnMap(e)
             );
           } else {
-            Storage.map.on("click", "gridGeojsonActive", e =>
-              e.preventDefault()
-            );
+            // data for gird is cityIO
+            Storage.boolGridDataSource = true;
           }
           break;
         //
@@ -118,8 +119,6 @@ export class UI {
     Storage.map.getCanvas().style.cursor = "pointer";
     let grid = Storage.gridGeojsonActive;
     let selectedId = e.features[0].properties.id;
-
-    console.log(e.features[0]);
 
     let props = grid.features[selectedId].properties;
     if (props.clicked) {

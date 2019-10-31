@@ -115,7 +115,19 @@ export class Update {
 
   async update_grid() {
     console.log("updating grid layer...");
-    let gridData = await getCityIO(Storage.cityIOurl + "/grid");
+    let gridData;
+    switch (Storage.boolGridDataSource) {
+      case true:
+        gridData = await getCityIO(Storage.cityIOurl + "/grid");
+        break;
+      case false:
+        gridData = Storage.girdLocalDataSource;
+        break;
+      default:
+        gridData = await getCityIO(Storage.cityIOurl + "/grid");
+        break;
+    }
+
     let gridGeojsonActive = Storage.gridGeojsonActive;
     // go over all cells that are in active grid area
     for (let i = 0; i < gridGeojsonActive.features.length; i++) {
