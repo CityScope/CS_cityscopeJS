@@ -12,6 +12,41 @@ export class Update {
     this.updateableLayersList = updateableLayersList;
     // loading spinner UI
     this.spinnerDiv = document.querySelector("#spinner");
+
+    this.cellsFeaturesArray = [
+      {
+        type: "Work 2",
+        color: "#F51476",
+        height: 50
+      },
+      {
+        type: "work",
+        color: "#E43F0F",
+        height: 20
+      },
+      {
+        type: "live2",
+        color: "#008DD5",
+        height: 30
+      },
+
+      {
+        type: "Open Space",
+        color: "#13D031",
+        height: 3
+      },
+      {
+        type: "Live1",
+        color: "#002DD5",
+        height: 50
+      },
+
+      {
+        type: "Road",
+        color: "#373F51",
+        height: 1
+      }
+    ];
   }
 
   startUpdate() {
@@ -80,60 +115,47 @@ export class Update {
 
   async update_grid() {
     console.log("updating grid layer...");
-
     let gridData = await getCityIO(Storage.cityIOurl + "/grid");
-    this.cellsFeaturesArray = [
-      {
-        type: "Work 2",
-        color: "#F51476",
-        height: 50
-      },
-      {
-        type: "work",
-        color: "#E43F0F",
-        height: 20
-      },
-      {
-        type: "live2",
-        color: "#008DD5",
-        height: 30
-      },
-
-      {
-        type: "Open Space",
-        color: "#13D031",
-        height: 3
-      },
-      {
-        type: "Live1",
-        color: "#002DD5",
-        height: 50
-      },
-
-      {
-        type: "Road",
-        color: "#373F51",
-        height: 1
-      }
-    ];
     let gridGeojsonActive = Storage.gridGeojsonActive;
     // go over all cells that are in active grid area
     for (let i = 0; i < gridGeojsonActive.features.length; i++) {
       // if the data for this cell is -1
       if (gridData[i][0] == -1) {
-        gridGeojsonActive.features[i].properties.height = 0;
         gridGeojsonActive.features[i].properties.color = "rgb(0,0,0)";
+        // inject type from cityIO grid to GeoJSON layer
+        gridGeojsonActive.features[i].properties.type = -1;
+        gridGeojsonActive.features[i].properties.flat_value = 0;
+        gridGeojsonActive.features[i].properties.height = 0;
       } else {
-        if (Storage.threeState == "flat" || Storage.threeState == null) {
-          gridGeojsonActive.features[i].properties.height = 0.1;
-        } else {
-          gridGeojsonActive.features[
-            i
-          ].properties.height = this.cellsFeaturesArray[gridData[i][0]].height;
-        }
         gridGeojsonActive.features[
           i
         ].properties.color = this.cellsFeaturesArray[gridData[i][0]].color;
+        // inject type from cityIO grid to GeoJSON layer
+        gridGeojsonActive.features[i].properties.type = gridData[i][0];
+        gridGeojsonActive.features[i].properties.flat_value = 0;
+        gridGeojsonActive.features[
+          i
+        ].properties.height = this.cellsFeaturesArray[gridData[i][0]].height;
+        gridGeojsonActive.features[
+          i
+        ].properties.height_value = this.cellsFeaturesArray[
+          gridData[i][0]
+        ].height;
+      }
+    }
+    Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);
+  }
+
+  toggle_grid_height() {
+    let gridGeojsonActive = Storage.gridGeojsonActive;
+
+    for (let i in gridGeojsonActive.features) {
+      if (Storage.threeState == "flat" || Storage.threeState == null) {
+        gridGeojsonActive.features[i].properties.height =
+          gridGeojsonActive.features[i].properties.flat_value;
+      } else {
+        gridGeojsonActive.features[i].properties.height =
+          gridGeojsonActive.features[i].properties.height_value;
       }
     }
     Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);

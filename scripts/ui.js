@@ -42,18 +42,15 @@ export class UI {
             Storage.map.on("click", "gridGeojsonActive", e =>
               this.selectOnMap(e)
             );
-          } else if (e.target.checked == false || !e.target) {
-            Storage.map.off("click", "gridGeojsonActive", this.selectOnMap());
+          } else {
+            Storage.map.on("click", "gridGeojsonActive", e =>
+              e.preventDefault()
+            );
           }
           break;
         //
         case "projectionMode":
           if (e.target.checked) {
-            Storage.map.setLayoutProperty(
-              "3dBuildingsLayer",
-              "visibility",
-              "visible"
-            );
             Storage.threeState = "height";
             // start camera rotation
             rotateCamera(1);
@@ -61,15 +58,28 @@ export class UI {
             if (Storage.cameraRotationAnimFrame !== null) {
               cancelAnimationFrame(Storage.cameraRotationAnimFrame);
             }
+
+            cam.reset_camera_position();
+          }
+          break;
+        //
+        case "3dBuildingsLayer":
+          if (e.target.checked) {
+            Storage.map.setLayoutProperty(
+              "3dBuildingsLayer",
+              "visibility",
+              "visible"
+            );
+            Storage.threeState = "height";
+          } else {
             Storage.map.setLayoutProperty(
               "3dBuildingsLayer",
               "visibility",
               "none"
             );
-            cam.reset_camera_position();
             Storage.threeState = "flat";
           }
-          update.update_grid();
+          update.toggle_grid_height();
           break;
         // keystone mode
         case "keystone":
@@ -104,10 +114,13 @@ export class UI {
   }
 
   selectOnMap(e) {
-    let featureDiv = document.getElementById("InteractionModeSection");
+    let featureDiv = document.getElementById("InteractionModeDiv");
     Storage.map.getCanvas().style.cursor = "pointer";
     let grid = Storage.gridGeojsonActive;
     let selectedId = e.features[0].properties.id;
+
+    console.log(e.features[0]);
+
     let props = grid.features[selectedId].properties;
     if (props.clicked) {
       props.clicked = false;
@@ -117,10 +130,11 @@ export class UI {
       props.clicked = true;
       // store old color
       props.oldColor = props.color;
-      props.color = "white";
+      props.color = "red";
       Storage.selectedGridCells[selectedId] = grid.features[selectedId];
     }
-    featureDiv.innerHTML = Object.keys(Storage.selectedGridCells).length;
+    featureDiv.innerHTML =
+      Object.keys(Storage.selectedGridCells).length + " selected cells.";
     console.log(Storage.selectedGridCells);
 
     Storage.map.getSource("gridGeojsonActiveSource").setData(grid);
