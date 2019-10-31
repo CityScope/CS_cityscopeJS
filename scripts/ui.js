@@ -39,8 +39,8 @@ export class UI {
       switch (e.target.id) {
         case "toggleInteraction":
           // data for gird is local
-          Storage.boolGridDataSource = false;
           if (e.target.checked) {
+            Storage.boolGridDataSource = false;
             Storage.map.on("click", "gridGeojsonActive", e =>
               this.selectOnMap(e)
             );
@@ -115,6 +115,8 @@ export class UI {
   }
 
   selectOnMap(e) {
+    let update = new Update();
+
     let featureDiv = document.getElementById("InteractionModeDiv");
     Storage.map.getCanvas().style.cursor = "pointer";
     let grid = Storage.gridGeojsonActive;
@@ -134,8 +136,14 @@ export class UI {
     }
     featureDiv.innerHTML =
       Object.keys(Storage.selectedGridCells).length + " selected cells.";
-    console.log(Storage.selectedGridCells);
 
+    // slider for types
+    var cellTypeSlider = document.getElementById("cellTypeSlider");
+    cellTypeSlider.addEventListener("input", e => {
+      if (Object.keys(Storage.selectedGridCells).length > 0) {
+        update.update_grid();
+      }
+    });
     Storage.map.getSource("gridGeojsonActiveSource").setData(grid);
   }
 

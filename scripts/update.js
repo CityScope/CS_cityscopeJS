@@ -119,12 +119,15 @@ export class Update {
     switch (Storage.boolGridDataSource) {
       case true:
         gridData = await getCityIO(Storage.cityIOurl + "/grid");
+        console.log("cityIO grid data");
         break;
       case false:
         gridData = Storage.girdLocalDataSource;
+        console.log("local grid data");
         break;
       default:
         gridData = await getCityIO(Storage.cityIOurl + "/grid");
+        console.log("cityIO grid data");
         break;
     }
 
