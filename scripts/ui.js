@@ -1,6 +1,7 @@
 import { rotateCamera, Camera } from "./camera";
 import { Update } from "./update";
 import { cycleAccessLayers } from "./layers";
+import { postCityIO } from "./cityio";
 import "./Storage";
 
 export class UI {
@@ -8,6 +9,8 @@ export class UI {
     document.getElementById("AccesslayerSection").style.display = "none";
     document.getElementById("ABMlayerSection").style.display = "none";
     document.getElementById("InteractionModeSection").style.display = "none";
+    this.featureDiv = document.getElementById("InteractionModeDiv");
+
     this.update = new Update();
   }
 
@@ -45,10 +48,17 @@ export class UI {
             document.getElementById("InteractionModeSection").style.display =
               "block";
             Storage.boolGridDataSource = false;
+            Storage.selectedGridCells = {};
             Storage.map.on("click", "gridGeojsonActive", e =>
               this.selectOnMap(e)
             );
           } else {
+            this.featureDiv.innerHTML = "";
+            postCityIO(
+              Storage.cityIOPostURL + "/grid",
+              Storage.girdLocalDataSource
+            );
+            Storage.girdLocalDataSource;
             document.getElementById("InteractionModeSection").style.display =
               "none";
             // data for gird is cityIO
@@ -134,6 +144,7 @@ export class UI {
     Storage.selectedGridCells = {};
     // slider for types
     var cellTypeSlider = document.getElementById("cellTypeSlider");
+
     cellTypeSlider.addEventListener("input", e => {
       if (Object.keys(Storage.selectedGridCells).length > 0) {
         for (let cell in Storage.girdLocalDataSource) {
@@ -148,7 +159,6 @@ export class UI {
   }
 
   selectOnMap(e) {
-    let featureDiv = document.getElementById("InteractionModeDiv");
     let grid = Storage.gridGeojsonActive;
     let selectedId = e.features[0].properties.id;
 
@@ -164,7 +174,7 @@ export class UI {
       props.color = "red";
       Storage.selectedGridCells[selectedId] = grid.features[selectedId];
     }
-    featureDiv.innerHTML =
+    this.featureDiv.innerHTML =
       Object.keys(Storage.selectedGridCells).length + " selected cells.";
 
     Storage.map.getSource("gridGeojsonActiveSource").setData(grid);

@@ -16,3 +16,12 @@ export async function getCityIO(url) {
       console.log("Error:", err);
     });
 }
+
+export async function postCityIO(url, data) {
+  const rawResponse = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+  const content = await rawResponse.json();
+  console.log(content.status);
+}

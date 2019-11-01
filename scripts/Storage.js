@@ -72,6 +72,15 @@ class Storage {
   set cityIOurl(value) {
     this._cityIOurl = value;
   }
+
+  // cityIOPostURL
+  get cityIOPostURL() {
+    return this._cityIOPostURL;
+  }
+  set cityIOPostURL(value) {
+    this._cityIOPostURL = value;
+  }
+
   //map obj
   get map() {
     return this._map;

@@ -17,17 +17,17 @@ export class Update {
       {
         type: "Work 2",
         color: "#F51476",
-        height: 50
+        height: 100
       },
       {
         type: "work",
         color: "#E43F0F",
-        height: 20
+        height: 50
       },
       {
         type: "live2",
         color: "#008DD5",
-        height: 30
+        height: 60
       },
 
       {
@@ -38,7 +38,7 @@ export class Update {
       {
         type: "Live1",
         color: "#002DD5",
-        height: 50
+        height: 25
       },
 
       {
@@ -60,6 +60,12 @@ export class Update {
   async compareHashes() {
     // deep compare old hash holder and the new one are not the same
     if (loEqual(Storage.oldAHashList, this.updateableLayersList) == false) {
+      //
+      // show spinner on loading
+      if (this.spinnerDiv.style.display !== "inline-block")
+        this.spinnerDiv.style.display = "inline-block";
+      //
+
       for (let layerToUpdate in this.updateableLayersList) {
         // check each layer indeviduשly
         if (
@@ -74,11 +80,6 @@ export class Update {
           this[funcName]();
         }
       }
-      //
-      // show spinner on loading
-      if (this.spinnerDiv.style.display !== "inline-block")
-        this.spinnerDiv.style.display = "inline-block";
-      //
     } else if (
       loEqual(Storage.oldAHashList, this.updateableLayersList) == true
     ) {
@@ -142,7 +143,8 @@ export class Update {
     // go over all cells that are in active grid area
     for (let i = 0; i < gridGeojsonActive.features.length; i++) {
       let props = gridGeojsonActive.features[i].properties;
-
+      let interactiveMode = document.getElementById("InteractionModeSection")
+        .style.display;
       // if the data for this cell is -1
       if (gridData[i][0] == -1) {
         gridGeojsonActive.features[i].properties.color = "rgb(0,0,0)";
@@ -165,13 +167,9 @@ export class Update {
         ].properties.height_value = this.cellsFeaturesArray[
           gridData[i][0]
         ].height;
-
-        let interactiveMode = document.getElementById("InteractionModeSection")
-          .style.display;
-
-        if (props.clicked && interactiveMode == "block") {
-          props.color = "red";
-        }
+      }
+      if (props.clicked && interactiveMode == "block") {
+        props.color = "red";
       }
     }
     Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);

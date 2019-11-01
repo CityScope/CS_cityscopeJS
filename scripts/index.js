@@ -40,12 +40,15 @@ async function init() {
   var cityio_table_name = window.location.search.substring(1);
   if (cityio_table_name !== "") {
     document.getElementById("landingPage").style.display = "none";
-    let cityIOtableURL =
+    Storage.cityIOurl =
       "https://cityio.media.mit.edu/api/table/" + cityio_table_name.toString();
     // store it for later updates from cityio
-    Storage.cityIOurl = cityIOtableURL;
+
+    Storage.cityIOPostURL =
+      "https://cityio.media.mit.edu/api/table/update/" +
+      cityio_table_name.toString();
     // get the header to locate the map
-    Storage.cityioHeader = await getCityIO(cityIOtableURL + "/header");
+    Storage.cityioHeader = await getCityIO(Storage.cityIOurl + "/header");
     //make the mapbox base map
     createBaseMap();
     // get map from storage
