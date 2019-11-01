@@ -10,12 +10,12 @@ class Storage {
     return Storage.instance;
   }
 
-  //boolGridDataSource (cityio vs local)
-  get boolGridDataSource() {
-    return this._boolGridDataSource;
+  //interactiveMode (cityio vs local)
+  get interactiveMode() {
+    return this._interactiveMode;
   }
-  set boolGridDataSource(value) {
-    this._boolGridDataSource = value;
+  set interactiveMode(value) {
+    this._interactiveMode = value;
   }
 
   //girdLocalDataSource

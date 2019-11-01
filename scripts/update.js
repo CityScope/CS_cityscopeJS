@@ -115,16 +115,16 @@ export class Update {
     console.log("updating grid layer...");
     let gridData;
 
-    switch (Storage.boolGridDataSource) {
-      case true:
+    switch (Storage.interactiveMode) {
+      case false:
       case undefined:
         gridData = await getCityIO(Storage.cityIOurl + "/grid");
         // store cityio grid data
         Storage.girdCityIODataSource = gridData;
-
         console.log("grid data source: cityIO");
         break;
-      case false:
+
+      case true:
         // init local interaction with latest cityIO
         // grid data
         if (Storage.girdLocalDataSource == undefined) {
@@ -165,7 +165,7 @@ export class Update {
           gridData[i][0]
         ].height;
       }
-      if (props.clicked && interactiveMode == "block") {
+      if (props.color == "red" && interactiveMode == "block") {
         props.color = "red";
       }
     }

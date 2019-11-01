@@ -2,6 +2,7 @@ import { rotateCamera, Camera } from "./camera";
 import { Update } from "./update";
 import { cycleAccessLayers } from "./layers";
 import { postCityIO } from "./cityio";
+import { MouseInteraction } from "./mouseInteraction";
 import "./Storage";
 
 export class UI {
@@ -9,9 +10,12 @@ export class UI {
     document.getElementById("AccesslayerSection").style.display = "none";
     document.getElementById("ABMlayerSection").style.display = "none";
     document.getElementById("InteractionModeSection").style.display = "none";
-    this.featureDiv = document.getElementById("InteractionModeDiv");
-
+    this.InteractionModeDiv = document.getElementById("InteractionModeDiv");
     this.update = new Update();
+    this.mouseInteraction = new MouseInteraction();
+    this.mouseInteraction.boxSelection();
+    Object.freeze(this.update);
+    Object.freeze(this.mouseInteraction);
   }
 
   init(updateableLayersList) {
@@ -22,7 +26,6 @@ export class UI {
           document.getElementById("AccesslayerSection").style.display = "block";
           break;
         case "ABM":
-          this.accessButtonsInteraction();
           document.getElementById("ABMlayerSection").style.display = "block";
           break;
         default:
@@ -33,37 +36,44 @@ export class UI {
     new Camera().reset_camera_position();
     this.rightClickIteraction();
     this.uiButtonsInteraction();
+    this.mouseInteraction.mouseInteraction();
   }
 
   uiButtonsInteraction() {
     let cam = new Camera();
     // start listenining to gird editing
-    this.gridCellTypeEditing();
-
+    this.mouseInteraction.gridCellTypeEditing();
     document.getElementById("uiList").addEventListener("change", e => {
       switch (e.target.id) {
+        // Interaction mode
         case "toggleInteraction":
-          // data for gird is local
           if (e.target.checked) {
+            // data for gird is local
+            Storage.interactiveMode = true;
+            // reset the selected grid holder
+            Storage.selectedGridCells = {};
+
+            // disply interaction controls
             document.getElementById("InteractionModeSection").style.display =
               "block";
-            Storage.boolGridDataSource = false;
-            Storage.selectedGridCells = {};
-            Storage.map.on("click", "gridGeojsonActive", e =>
-              this.selectOnMap(e)
-            );
           } else {
-            this.featureDiv.innerHTML = "";
-            postCityIO(
-              Storage.cityIOPostURL + "/grid",
-              Storage.girdLocalDataSource
-            );
-            Storage.girdLocalDataSource;
+            // data for gird is cityIO
+            Storage.interactiveMode = false;
+            //
+            this.InteractionModeDiv.innerHTML = "";
+            // post edited grid to cityIO if not empty
+            if (Storage.girdLocalDataSource) {
+              postCityIO(
+                Storage.cityIOPostURL + "/grid",
+                Storage.girdLocalDataSource
+              );
+            }
             document.getElementById("InteractionModeSection").style.display =
               "none";
-            // data for gird is cityIO
-            Storage.boolGridDataSource = true;
+
             this.update.update_grid();
+            // reset the edits holder
+            Storage.selectedGridCells = {};
           }
           break;
         //
@@ -140,46 +150,6 @@ export class UI {
     });
   }
 
-  gridCellTypeEditing() {
-    Storage.selectedGridCells = {};
-    // slider for types
-    var cellTypeSlider = document.getElementById("cellTypeSlider");
-
-    cellTypeSlider.addEventListener("input", e => {
-      if (Object.keys(Storage.selectedGridCells).length > 0) {
-        for (let cell in Storage.girdLocalDataSource) {
-          if (Storage.selectedGridCells[cell]) {
-            Storage.girdLocalDataSource[cell][0] = cellTypeSlider.value;
-          }
-        }
-
-        this.update.update_grid();
-      }
-    });
-  }
-
-  selectOnMap(e) {
-    let grid = Storage.gridGeojsonActive;
-    let selectedId = e.features[0].properties.id;
-
-    let props = grid.features[selectedId].properties;
-    if (props.clicked) {
-      props.clicked = false;
-      props.color = props.oldColor;
-      delete Storage.selectedGridCells[selectedId];
-    } else {
-      props.clicked = true;
-      // store old color
-      props.oldColor = props.color;
-      props.color = "red";
-      Storage.selectedGridCells[selectedId] = grid.features[selectedId];
-    }
-    this.featureDiv.innerHTML =
-      Object.keys(Storage.selectedGridCells).length + " selected cells.";
-
-    Storage.map.getSource("gridGeojsonActiveSource").setData(grid);
-  }
-
   ABMinteraction() {
     // intercation with UI
     var ABMButtonsDiv = document.getElementsByClassName("ABMButtonsDiv");
@@ -205,7 +175,6 @@ export class UI {
   rightClickIteraction() {
     // get UI div
     let uiDiv = document.querySelector("#ui");
-
     // right key interaction
     document.addEventListener(
       "contextmenu",
