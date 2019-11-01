@@ -1,7 +1,6 @@
 import "./Storage";
 import "babel-polyfill";
 import { getCityIO } from "./cityio";
-import layer from "@deck.gl/core/dist/es5/lib/layer";
 var loEqual = require("lodash/isEqual");
 
 export class Update {
@@ -58,16 +57,14 @@ export class Update {
   }
 
   async compareHashes() {
-    // deep compare old hash holder and the new one are not the same
+    // deep compare old hash holder and the new cityIO one
     if (loEqual(Storage.oldAHashList, this.updateableLayersList) == false) {
-      //
       // show spinner on loading
       if (this.spinnerDiv.style.display !== "inline-block")
         this.spinnerDiv.style.display = "inline-block";
-      //
-
+      // go through hashes
       for (let layerToUpdate in this.updateableLayersList) {
-        // check each layer indeviduשly
+        // and check each layer indeviduly
         if (
           Storage.oldAHashList == null ||
           this.updateableLayersList[layerToUpdate] !==
