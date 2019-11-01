@@ -4,10 +4,14 @@ import { cycleAccessLayers } from "./layers";
 import "./Storage";
 
 export class UI {
-  init(updateableLayersList) {
+  constructor() {
     document.getElementById("AccesslayerSection").style.display = "none";
     document.getElementById("ABMlayerSection").style.display = "none";
+    document.getElementById("InteractionModeSection").style.display = "none";
+    this.update = new Update();
+  }
 
+  init(updateableLayersList) {
     for (let layer in updateableLayersList) {
       switch (layer) {
         case "access":
@@ -24,29 +28,32 @@ export class UI {
     }
     //bring map to projection postion
     new Camera().reset_camera_position();
-    // interval for demo layer
-    this.demoAccessLayerInterval = null;
     this.rightClickIteraction();
     this.uiButtonsInteraction();
   }
 
   uiButtonsInteraction() {
     let cam = new Camera();
-    let update = new Update();
-    Storage.selectedGridCells = {};
-    //
+    // start listenining to gird editing
+    this.gridCellTypeEditing();
+
     document.getElementById("uiList").addEventListener("change", e => {
       switch (e.target.id) {
         case "toggleInteraction":
           // data for gird is local
           if (e.target.checked) {
+            document.getElementById("InteractionModeSection").style.display =
+              "block";
             Storage.boolGridDataSource = false;
             Storage.map.on("click", "gridGeojsonActive", e =>
               this.selectOnMap(e)
             );
           } else {
+            document.getElementById("InteractionModeSection").style.display =
+              "none";
             // data for gird is cityIO
             Storage.boolGridDataSource = true;
+            this.update.update_grid();
           }
           break;
         //
@@ -80,7 +87,7 @@ export class UI {
             );
             Storage.threeState = "flat";
           }
-          update.toggle_grid_height();
+          this.update.toggle_grid_height();
           break;
         // keystone mode
         case "keystone":
@@ -102,23 +109,46 @@ export class UI {
             );
           }
           break;
-        // any other layer
-        default:
-          // if (e.target.checked) {
-          //   Storage.map.setLayoutProperty(e.target.id, "visibility", "visible");
-          // } else {
-          //   Storage.map.setLayoutProperty(e.target.id, "visibility", "none");
-          // }
+
+        // full grid
+        case "gridLayerLine":
+          if (e.target.checked) {
+            Storage.map.setLayoutProperty(
+              "gridLayerLine",
+              "visibility",
+              "visible"
+            );
+          } else {
+            Storage.map.setLayoutProperty(
+              "gridLayerLine",
+              "visibility",
+              "none"
+            );
+          }
           break;
       }
     });
   }
 
-  selectOnMap(e) {
-    let update = new Update();
+  gridCellTypeEditing() {
+    Storage.selectedGridCells = {};
+    // slider for types
+    var cellTypeSlider = document.getElementById("cellTypeSlider");
+    cellTypeSlider.addEventListener("input", e => {
+      if (Object.keys(Storage.selectedGridCells).length > 0) {
+        for (let cell in Storage.girdLocalDataSource) {
+          if (Storage.selectedGridCells[cell]) {
+            Storage.girdLocalDataSource[cell][0] = cellTypeSlider.value;
+          }
+        }
 
+        this.update.update_grid();
+      }
+    });
+  }
+
+  selectOnMap(e) {
     let featureDiv = document.getElementById("InteractionModeDiv");
-    Storage.map.getCanvas().style.cursor = "pointer";
     let grid = Storage.gridGeojsonActive;
     let selectedId = e.features[0].properties.id;
 
@@ -137,13 +167,6 @@ export class UI {
     featureDiv.innerHTML =
       Object.keys(Storage.selectedGridCells).length + " selected cells.";
 
-    // slider for types
-    var cellTypeSlider = document.getElementById("cellTypeSlider");
-    cellTypeSlider.addEventListener("input", e => {
-      if (Object.keys(Storage.selectedGridCells).length > 0) {
-        update.update_grid();
-      }
-    });
     Storage.map.getSource("gridGeojsonActiveSource").setData(grid);
   }
 

@@ -1,9 +1,13 @@
-// https://www.sitepoint.com/javascript-design-patterns-singleton/
+// https://www.sitepoint.com/javascript-design-patterns-Storage/
 //https://gist.github.com/dmnsgn/4a6ad76de1b5928f13f68f406c70bb09
 
 class Storage {
   constructor() {
-    this._cityIOurl = "";
+    if (!Storage.instance) {
+      Storage.instance = this;
+    }
+    // Initialize object
+    return Storage.instance;
   }
 
   //boolGridDataSource (cityio vs local)
@@ -20,6 +24,14 @@ class Storage {
   }
   set girdLocalDataSource(value) {
     this._girdLocalDataSource = value;
+  }
+
+  //gird CityIO Data Source
+  get girdCityIODataSource() {
+    return this._girdCityIODataSource;
+  }
+  set girdCityIODataSource(value) {
+    this._girdCityIODataSource = value;
   }
 
   //selected Grid Cells

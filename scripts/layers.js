@@ -16,6 +16,9 @@ export class Layers {
   async layersLoader() {
     // start UI
     let ui = new UI();
+    Object.freeze(ui);
+
+    let r = new UI();
 
     console.log("loading layers data..");
     let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");

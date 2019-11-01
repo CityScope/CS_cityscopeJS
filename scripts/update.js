@@ -116,38 +116,47 @@ export class Update {
   async update_grid() {
     console.log("updating grid layer...");
     let gridData;
+
     switch (Storage.boolGridDataSource) {
       case true:
+      case undefined:
         gridData = await getCityIO(Storage.cityIOurl + "/grid");
-        console.log("cityIO grid data");
+        // store cityio grid data
+        Storage.girdCityIODataSource = gridData;
+
+        console.log("grid data source: cityIO");
         break;
       case false:
+        // init local interaction with latest cityIO
+        // grid data
+        if (Storage.girdLocalDataSource == undefined) {
+          console.log("first interaction, copying grid data");
+          Storage.girdLocalDataSource = Storage.girdCityIODataSource;
+        }
         gridData = Storage.girdLocalDataSource;
-        console.log("local grid data");
-        break;
-      default:
-        gridData = await getCityIO(Storage.cityIOurl + "/grid");
-        console.log("cityIO grid data");
+        console.log("grid data source: local");
         break;
     }
 
     let gridGeojsonActive = Storage.gridGeojsonActive;
     // go over all cells that are in active grid area
     for (let i = 0; i < gridGeojsonActive.features.length; i++) {
+      let props = gridGeojsonActive.features[i].properties;
+
       // if the data for this cell is -1
       if (gridData[i][0] == -1) {
         gridGeojsonActive.features[i].properties.color = "rgb(0,0,0)";
         // inject type from cityIO grid to GeoJSON layer
-        gridGeojsonActive.features[i].properties.type = -1;
-        gridGeojsonActive.features[i].properties.flat_value = 0;
-        gridGeojsonActive.features[i].properties.height = 0;
+        props.type = -1;
+        props.flat_value = 0;
+        props.height = 0;
       } else {
         gridGeojsonActive.features[
           i
         ].properties.color = this.cellsFeaturesArray[gridData[i][0]].color;
         // inject type from cityIO grid to GeoJSON layer
-        gridGeojsonActive.features[i].properties.type = gridData[i][0];
-        gridGeojsonActive.features[i].properties.flat_value = 0;
+        props.type = gridData[i][0];
+        props.flat_value = 0;
         gridGeojsonActive.features[
           i
         ].properties.height = this.cellsFeaturesArray[gridData[i][0]].height;
@@ -156,6 +165,13 @@ export class Update {
         ].properties.height_value = this.cellsFeaturesArray[
           gridData[i][0]
         ].height;
+
+        let interactiveMode = document.getElementById("InteractionModeSection")
+          .style.display;
+
+        if (props.clicked && interactiveMode == "block") {
+          props.color = "red";
+        }
       }
     }
     Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);
