@@ -15,7 +15,7 @@ export class UI {
     this.mouseInteraction = new MouseInteraction();
     this.mouseInteraction.boxSelection();
     Object.freeze(this.update);
-    Object.freeze(this.mouseInteraction);
+    // Object.freeze(this.mouseInteraction);
   }
 
   init(updateableLayersList) {

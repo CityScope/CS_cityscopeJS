@@ -31,11 +31,15 @@ body {
 .helpDivFont {
   font-size: 1em;
 }
-.helpdiv a,
-a:hover,
+
+.helpDiv a:link,
 a:visited {
   color: white;
-  background-color: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  font-weight: 400;
+}
+.helpDiv a:hover {
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .landingPage {
@@ -206,4 +210,14 @@ button:focus {
   100% {
     transform: rotate(359deg);
   }
+}
+
+.boxdraw {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px dashed #ffffff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
 }

@@ -1,5 +1,6 @@
 import "./Storage";
 import { Update } from "./update";
+import mapboxgl from "mapbox-gl";
 
 export class MouseInteraction {
   constructor() {
@@ -10,14 +11,15 @@ export class MouseInteraction {
 
     // Variable to hold the starting xy coordinates
     // when `mousedown` occured.
-    this.start;
+    this.start = null;
 
     // Variable to hold the current xy coordinates
     // when `mousemove` or `mouseup` occurs.
-    this.current;
+    this.current = null;
 
     // Variable for the draw box element.
-    this.box;
+    this.box = null;
+    this.boudingBox = null;
   }
 
   mouseInteraction() {
@@ -64,12 +66,15 @@ export class MouseInteraction {
   }
 
   boxSelection() {
+    this.mapCanvas = Storage.map.getCanvasContainer();
+
     // Disable default box zooming.
     Storage.map.boxZoom.disable();
     // Set `true` to dispatch the event before other functions
     // call it. This is necessary for disabling the default map
     // dragging behaviour.
-    this.mapCanvas.addEventListener("mousedown", this.mouseDown, true);
+
+    this.mapCanvas.addEventListener("mousedown", e => this.mouseDown(e), true);
 
     Storage.map.on("mousemove", function(e) {
       var features = Storage.map.queryRenderedFeatures(e.point, {
@@ -86,12 +91,10 @@ export class MouseInteraction {
 
   // Return the xy coordinates of the mouse position
   mousePos(e) {
-    console.log(e);
-
-    var rect = mapCanvas.getBoundingClientRect();
+    var rect = this.mapCanvas.getBoundingClientRect();
     return new mapboxgl.Point(
-      e.clientX - rect.left - mapCanvas.clientLeft,
-      e.clientY - rect.top - mapCanvas.clientTop
+      e.clientX - rect.left - this.mapCanvas.clientLeft,
+      e.clientY - rect.top - this.mapCanvas.clientTop
     );
   }
 
@@ -101,11 +104,10 @@ export class MouseInteraction {
 
     // Disable default drag zooming when the shift key is held down.
     Storage.map.dragPan.disable();
-
-    // Call functions for the following events
-    document.addEventListener("mousemove", this.onMouseMove);
-    document.addEventListener("mouseup", this.onMouseUp);
-    document.addEventListener("keydown", this.onKeyDown);
+    //
+    document.addEventListener("mousemove", e => this.onMouseMove(e));
+    document.addEventListener("mouseup", e => this.onMouseUp(e));
+    document.addEventListener("keydown", e => this.onKeyDown(e));
 
     // Capture the first xy coordinates
     this.start = this.mousePos(e);
@@ -116,67 +118,62 @@ export class MouseInteraction {
     this.current = this.mousePos(e);
 
     // Append the box element if it doesnt exist
-    if (!box) {
-      box = document.createElement("div");
-      box.classList.add("boxdraw");
-      mapCanvas.appendChild(box);
+    if (!this.box) {
+      this.box = document.createElement("div");
+      this.box.classList.add("boxdraw");
+      this.mapCanvas.appendChild(this.box);
     }
 
-    var minX = Math.min(start.x, current.x),
-      maxX = Math.max(start.x, current.x),
-      minY = Math.min(start.y, current.y),
-      maxY = Math.max(start.y, current.y);
+    var minX = Math.min(this.start.x, this.current.x),
+      maxX = Math.max(this.start.x, this.current.x),
+      minY = Math.min(this.start.y, this.current.y),
+      maxY = Math.max(this.start.y, this.current.y);
 
     // Adjust width and xy position of the box element ongoing
     var pos = "translate(" + minX + "px," + minY + "px)";
-    box.style.transform = pos;
-    box.style.WebkitTransform = pos;
-    box.style.width = maxX - minX + "px";
-    box.style.height = maxY - minY + "px";
+    this.box.style.transform = pos;
+    this.box.style.WebkitTransform = pos;
+    this.box.style.width = maxX - minX + "px";
+    this.box.style.height = maxY - minY + "px";
   }
 
-  finish(bbox) {
+  finish() {
     // Remove these events now that finish has been called.
-    document.removeEventListener("mousemove", this.onMouseMove);
-    document.removeEventListener("keydown", this.onKeyDown);
-    document.removeEventListener("mouseup", this.onMouseUp);
+    document.removeEventListener("mousemove", e => this.onMouseMove(e));
+    document.removeEventListener("keydown", e => this.onKeyDown(e));
+    document.removeEventListener("mouseup", e => this.onMouseUp(e));
 
-    if (box) {
-      box.parentNode.removeChild(box);
-      box = null;
+    if (this.box) {
+      this.box.parentNode.removeChild(this.box);
+      this.box = null;
     }
 
     // If bbox exists. use this value as the argument for `queryRenderedFeatures`
-    if (bbox) {
-      var features = map.queryRenderedFeatures(bbox, {
-        layers: ["counties"]
+    if (this.boudingBox !== null) {
+      console.log(this.boudingBox);
+
+      var features = Storage.map.queryRenderedFeatures(this.boudingBox, {
+        layers: ["gridGeojsonActive"]
       });
-      if (features.length >= 1000) {
+      if (features.length >= 200) {
         return window.alert("Select a smaller number of features");
       }
-      // Run through the selected features and set a filter
-      // to match features with unique FIPS codes to activate
-      // the `counties-highlighted` layer.
-      var filter = features.reduce(
-        function(memo, feature) {
-          memo.push(feature.properties.FIPS);
-          return memo;
-        },
-        ["in", "FIPS"]
-      );
-
-      map.setFilter("counties-highlighted", filter);
     }
-    map.dragPan.enable();
+    console.log(features);
+
+    Storage.map.dragPan.enable();
   }
 
   onMouseUp(e) {
+    console.log(e);
+
     // Capture xy coordinates
-    finish([start, this.mousePos(e)]);
+    this.boudingBox = [this.start, this.mousePos(e)];
+    this.finish();
   }
 
   onKeyDown(e) {
     // If the ESC key is pressed
-    if (e.keyCode === 27) finish();
+    if (e.keyCode === 27) this.finish();
   }
 }
