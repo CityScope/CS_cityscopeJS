@@ -1,3 +1,18 @@
+/*
+! Binding addeventlistener:
+! https://stackoverflow.com/questions/49091584/javascript-es6-addeventlistener-inside-class
+! https://stackoverflow.com/questions/30446622/es6-class-access-to-this-with-addeventlistener-applied-on-method/30448329#30448329
+
+! save the function that will be bound to the event, so you can remove it later
+! ----
+! this.scrollBoundFunction = this.scroll.bind(this);
+! window.addEventListener("scroll", this.scrollBoundFunction);
+! ----
+! and later
+! ----
+! window.removeEventListener("scroll", this.scrollBoundFunction);
+*/
+
 import "./Storage";
 import { Update } from "./update";
 import mapboxgl from "mapbox-gl";
@@ -20,18 +35,20 @@ export class MouseInteraction {
     // Variable for the draw box element.
     this.box = null;
     this.boudingBox = null;
+    this.selectedFeatures = [];
   }
 
-  mouseInteraction() {
+  singleCellSelection() {
     // listen to clicks on map
-    Storage.map.on("click", "gridGeojsonActive", e => this.selectOnMap(e));
+    Storage.map.on("click", "gridGeojsonActive", e =>
+      this.handleSelectedCells([e])
+    );
   }
 
-  gridCellTypeEditing() {
+  editCellTypes() {
     Storage.selectedGridCells = {};
     // slider for types
     var cellTypeSlider = document.getElementById("cellTypeSlider");
-
     cellTypeSlider.addEventListener("input", e => {
       if (Object.keys(Storage.selectedGridCells).length > 0) {
         for (let cell in Storage.girdLocalDataSource) {
@@ -39,54 +56,42 @@ export class MouseInteraction {
             Storage.girdLocalDataSource[cell][0] = cellTypeSlider.value;
           }
         }
-
         this.update.update_grid();
       }
     });
   }
 
-  selectOnMap(e) {
+  handleSelectedCells() {
     if (Storage.interactiveMode == true) {
-      let grid = Storage.gridGeojsonActive;
-      let selectedId = e.features[0].properties.id;
-      let props = grid.features[selectedId].properties;
-      if (props.color == "red") {
-        props.color = props.oldColor;
-        delete Storage.selectedGridCells[selectedId];
-      } else {
-        // store old color
-        props.oldColor = props.color;
-        props.color = "red";
-        Storage.selectedGridCells[selectedId] = grid.features[selectedId];
-      }
-      this.InteractionModeDiv.innerHTML =
-        Object.keys(Storage.selectedGridCells).length + " selected cells.";
-      Storage.map.getSource("gridGeojsonActiveSource").setData(grid);
+      this.selectedFeatures.forEach(e => {
+        let grid = Storage.gridGeojsonActive;
+        let selectedId = e.properties.id;
+        let props = grid.features[selectedId].properties;
+        // if already slected
+        if (props.color == "red") {
+          // deselect
+          props.color = props.oldColor;
+          delete Storage.selectedGridCells[selectedId];
+        } else {
+          // store old color
+          props.oldColor = props.color;
+          props.color = "red";
+          Storage.selectedGridCells[selectedId] = grid.features[selectedId];
+        }
+        this.InteractionModeDiv.innerHTML =
+          Object.keys(Storage.selectedGridCells).length + " selected cells.";
+        Storage.map.getSource("gridGeojsonActiveSource").setData(grid);
+      });
     }
   }
 
   boxSelection() {
-    this.mapCanvas = Storage.map.getCanvasContainer();
-
     // Disable default box zooming.
     Storage.map.boxZoom.disable();
     // Set `true` to dispatch the event before other functions
     // call it. This is necessary for disabling the default map
     // dragging behaviour.
-
     this.mapCanvas.addEventListener("mousedown", e => this.mouseDown(e), true);
-
-    Storage.map.on("mousemove", function(e) {
-      var features = Storage.map.queryRenderedFeatures(e.point, {
-        layers: ["gridGeojsonActive"]
-      });
-      // Change the cursor style as a UI indicator.
-      Storage.map.getCanvas().style.cursor = features.length ? "pointer" : "";
-      if (!features.length) {
-        return;
-      }
-      var feature = features[0];
-    });
   }
 
   // Return the xy coordinates of the mouse position
@@ -104,10 +109,15 @@ export class MouseInteraction {
 
     // Disable default drag zooming when the shift key is held down.
     Storage.map.dragPan.disable();
-    //
-    document.addEventListener("mousemove", e => this.onMouseMove(e));
-    document.addEventListener("mouseup", e => this.onMouseUp(e));
-    document.addEventListener("keydown", e => this.onKeyDown(e));
+
+    // ! bind listener to class obj for later removal
+    this.onMouseMove = this.onMouseMove.bind(this);
+    this.onMouseUp = this.onMouseUp.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+
+    document.addEventListener("mousemove", this.onMouseMove);
+    document.addEventListener("mouseup", this.onMouseUp);
+    document.addEventListener("keydown", this.onKeyDown);
 
     // Capture the first xy coordinates
     this.start = this.mousePos(e);
@@ -137,11 +147,22 @@ export class MouseInteraction {
     this.box.style.height = maxY - minY + "px";
   }
 
-  finish() {
-    // Remove these events now that finish has been called.
-    document.removeEventListener("mousemove", e => this.onMouseMove(e));
-    document.removeEventListener("keydown", e => this.onKeyDown(e));
-    document.removeEventListener("mouseup", e => this.onMouseUp(e));
+  onMouseUp(e) {
+    // Capture xy coordinates
+    this.boudingBox = [this.start, this.mousePos(e)];
+    this.finishBoxSelection();
+  }
+
+  onKeyDown(e) {
+    // If the ESC key is pressed
+    if (e.keyCode === 27) this.finishBoxSelection();
+  }
+
+  finishBoxSelection() {
+    // Remove bounded events now that finish has been called.
+    document.removeEventListener("mousemove", this.onMouseMove);
+    document.removeEventListener("keydown", this.onKeyDown);
+    document.removeEventListener("mouseup", this.onMouseUp);
 
     if (this.box) {
       this.box.parentNode.removeChild(this.box);
@@ -150,30 +171,16 @@ export class MouseInteraction {
 
     // If bbox exists. use this value as the argument for `queryRenderedFeatures`
     if (this.boudingBox !== null) {
-      console.log(this.boudingBox);
-
       var features = Storage.map.queryRenderedFeatures(this.boudingBox, {
         layers: ["gridGeojsonActive"]
       });
-      if (features.length >= 200) {
+      if (features.length >= 250) {
+        Storage.map.dragPan.enable();
         return window.alert("Select a smaller number of features");
       }
+      Storage.map.dragPan.enable();
+      this.selectedFeatures = features;
+      this.handleSelectedCells();
     }
-    console.log(features);
-
-    Storage.map.dragPan.enable();
-  }
-
-  onMouseUp(e) {
-    console.log(e);
-
-    // Capture xy coordinates
-    this.boudingBox = [this.start, this.mousePos(e)];
-    this.finish();
-  }
-
-  onKeyDown(e) {
-    // If the ESC key is pressed
-    if (e.keyCode === 27) this.finish();
   }
 }

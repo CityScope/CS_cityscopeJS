@@ -13,9 +13,7 @@ export class UI {
     this.InteractionModeDiv = document.getElementById("InteractionModeDiv");
     this.update = new Update();
     this.mouseInteraction = new MouseInteraction();
-    this.mouseInteraction.boxSelection();
     Object.freeze(this.update);
-    // Object.freeze(this.mouseInteraction);
   }
 
   init(updateableLayersList) {
@@ -36,13 +34,13 @@ export class UI {
     new Camera().reset_camera_position();
     this.rightClickIteraction();
     this.uiButtonsInteraction();
-    this.mouseInteraction.mouseInteraction();
+    this.mouseInteraction.boxSelection();
   }
 
   uiButtonsInteraction() {
     let cam = new Camera();
     // start listenining to gird editing
-    this.mouseInteraction.gridCellTypeEditing();
+    this.mouseInteraction.editCellTypes();
     document.getElementById("uiList").addEventListener("change", e => {
       switch (e.target.id) {
         // Interaction mode
