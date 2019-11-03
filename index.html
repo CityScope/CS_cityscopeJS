@@ -5,6 +5,11 @@
       href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.1/mapbox-gl.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="./node_modules/material-icons/iconfont/material-icons.css"
+    />
+
     <link rel="stylesheet" href="styles.css" />
     <meta charset="utf-8" />
     <meta
@@ -38,7 +43,6 @@
     <div id="ui" class="ui">
       <div id="spinnerTitleHolder">
         <div id="spinner" class="spinner"></div>
-        <div id="layerTitle" class="layerTitle"></div>
       </div>
       <h1>CityScopeJS</h1>
       <p>Right click to hide UI | 'Shift+Z' to keystone</p>
@@ -48,42 +52,58 @@
         <!--  -->
         <section id="displayControlsSection">
           <input type="checkbox" id="projectionMode" />
-          <label for="projectionMode">Toggle Camera Rotation</label>
+          <label for="projectionMode"
+            >Rotate cam<br />
+            <i class="material-icons">flip_camera_ios</i>
+          </label>
           <input type="checkbox" id="keystone" />
           <label for="keystone">
-            Toggle Keystone Mode
+            Keystone
+            <br />
+            <i class="material-icons">control_point_duplicate</i>
             <div id="keystoneButton"></div
           ></label>
-
           <input type="checkbox" id="toggleInteraction" />
           <label for="toggleInteraction"
-            >Interaction mode
-            <section id="InteractionModeSection">
-              <div id="InteractionModeDiv" class="InteractionModeDiv"></div>
-              <div id="EditedTypeDiv"></div>
-              <input
-                type="range"
-                min="0"
-                max="5"
-                value="0"
-                class="slider"
-                id="cellTypeSlider"
-              />
-            </section>
+            >Interaction
+            <br />
+            <i class="material-icons">touch_app</i>
           </label>
+          <section id="InteractionModeSection">
+            <div id="InteractionModeDiv" class="InteractionModeDiv"></div>
+            <!--  -->
+            <div id="EditedTypeDiv"></div>
+            <input
+              type="range"
+              min="0"
+              max="5"
+              value="0"
+              class="slider"
+              id="cellTypeSlider"
+            />
+          </section>
         </section>
         <!--  -->
         <h2 id="Layers Title">Layers</h2>
         <section id="CommonlayersSection">
           <input type="checkbox" id="3dBuildingsLayer" />
-          <label for="3dBuildingsLayer">3d Buildings</label>
+          <label for="3dBuildingsLayer"
+            >3d Buildings <br />
+            <i class="material-icons">filter_3</i></label
+          >
           <input type="checkbox" id="gridLayerLine" />
-          <label for="gridLayerLine">Grid Layer</label>
+          <label for="gridLayerLine"
+            >Grid Layer <br />
+            <i class="material-icons">grid_on</i></label
+          >
+          <input type="checkbox" id="AccessLayer" />
+          <label for="AccessLayer"
+            >Access <br />
+            <i class="material-icons">gesture</i></label
+          >
         </section>
         <!--  -->
         <section id="AccesslayerSection">
-          <input type="checkbox" id="AccessLayer" />
-          <label for="AccessLayer">Access</label>
           <div class="UIButtonsContanier">
             <button type="button" class="UIButtons accessButton" id="education">
               education
@@ -105,11 +125,6 @@
             </button>
           </div>
         </section>
-        <!--  -->
-        <!-- <section id="NoiselayerSection">
-          <input type="checkbox" id="noiseLayer" />
-          <label for="noiseLayer">noise</label>
-        </section> -->
       </nav>
       <!--  -->
       <section id="ABMlayerSection">

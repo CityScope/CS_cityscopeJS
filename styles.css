@@ -67,20 +67,10 @@ a:visited {
   bottom: 5em;
   right: 5em;
   font-weight: 100;
-  padding: 2em;
+  padding: 1em;
   position: absolute;
   z-index: 100;
   display: none;
-}
-
-.layerTitle {
-  z-index: 100;
-  bottom: 1em;
-  right: 1em;
-  position: absolute;
-  font-size: 5em;
-  font-weight: 100;
-  color: white;
 }
 
 button:focus {
@@ -104,7 +94,7 @@ button:focus {
 }
 
 .UIButtons:hover {
-  border: 1px solid rgb(255, 255, 255);
+  border: 1px solid rgb(143, 143, 143);
 }
 .UIButtons:active {
   background: rgb(255, 255, 255);
@@ -115,13 +105,15 @@ button:focus {
 }
 
 .uiList input[type="checkbox"] + label {
-  display: block;
+  display: inline-block;
   cursor: pointer;
   text-align: center;
-  padding: 0.1em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
   border-radius: 1em;
   border: 1px solid rgba(255, 255, 255, 0.5);
   margin: 0.2em;
+  max-width: 10em;
 }
 
 .uiList input[type="checkbox"] + label:hover {

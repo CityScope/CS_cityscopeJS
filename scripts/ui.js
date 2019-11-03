@@ -32,7 +32,7 @@ export class UI {
     }
     //bring map to projection postion
     new Camera().reset_camera_position();
-    this.rightClickIteraction();
+    this.hideUI();
     this.uiButtonsInteraction();
     this.mouseInteraction.boxSelection();
   }
@@ -170,7 +170,7 @@ export class UI {
     }
   }
 
-  rightClickIteraction() {
+  hideUI() {
     // get UI div
     let uiDiv = document.querySelector("#ui");
     // right key interaction
