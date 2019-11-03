@@ -38,17 +38,11 @@ export class MouseInteraction {
     this.selectedFeatures = [];
   }
 
-  singleCellSelection() {
-    // listen to clicks on map
-    Storage.map.on("click", "gridGeojsonActive", e =>
-      this.handleSelectedCells([e])
-    );
-  }
-
   editCellTypes() {
     Storage.selectedGridCells = {};
     // slider for types
-    var cellTypeSlider = document.getElementById("cellTypeSlider");
+    let cellTypeSlider = document.getElementById("cellTypeSlider");
+    let EditedTypeDiv = document.getElementById("EditedTypeDiv");
     cellTypeSlider.addEventListener("input", e => {
       if (Object.keys(Storage.selectedGridCells).length > 0) {
         for (let cell in Storage.girdLocalDataSource) {
@@ -58,14 +52,15 @@ export class MouseInteraction {
         }
         this.update.update_grid();
       }
+      EditedTypeDiv.innerHTML = "Selected type: " + cellTypeSlider.value;
     });
   }
 
   handleSelectedCells() {
     if (Storage.interactiveMode == true) {
-      this.selectedFeatures.forEach(e => {
+      for (let i in this.selectedFeatures) {
         let grid = Storage.gridGeojsonActive;
-        let selectedId = e.properties.id;
+        let selectedId = this.selectedFeatures[i].properties.id;
         let props = grid.features[selectedId].properties;
         // if already slected
         if (props.color == "red") {
@@ -81,7 +76,7 @@ export class MouseInteraction {
         this.InteractionModeDiv.innerHTML =
           Object.keys(Storage.selectedGridCells).length + " selected cells.";
         Storage.map.getSource("gridGeojsonActiveSource").setData(grid);
-      });
+      }
     }
   }
 
@@ -104,9 +99,18 @@ export class MouseInteraction {
   }
 
   mouseDown(e) {
+    // handle one key press
+    if (!(e.shiftKey && e.button === 0)) {
+      var oneCell = Storage.map.queryRenderedFeatures(this.mousePos(e), {
+        layers: ["gridGeojsonActive"]
+      });
+      if (oneCell[0]) {
+        this.selectedFeatures = [oneCell[0]];
+        this.handleSelectedCells();
+      }
+      return;
+    }
     // Continue the rest of the function if the shiftkey is pressed.
-    if (!(e.shiftKey && e.button === 0)) return;
-
     // Disable default drag zooming when the shift key is held down.
     Storage.map.dragPan.disable();
 

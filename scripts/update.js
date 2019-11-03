@@ -14,9 +14,19 @@ export class Update {
 
     this.cellsFeaturesArray = [
       {
-        type: "Work 2",
-        color: "#F51476",
-        height: 100
+        type: "Road",
+        color: "#373F51",
+        height: 1
+      },
+      {
+        type: "Open Space",
+        color: "#13D031",
+        height: 3
+      },
+      {
+        type: "Live1",
+        color: "#002DD5",
+        height: 25
       },
       {
         type: "work",
@@ -28,22 +38,10 @@ export class Update {
         color: "#008DD5",
         height: 60
       },
-
       {
-        type: "Open Space",
-        color: "#13D031",
-        height: 3
-      },
-      {
-        type: "Live1",
-        color: "#002DD5",
-        height: 25
-      },
-
-      {
-        type: "Road",
-        color: "#373F51",
-        height: 1
+        type: "Work 2",
+        color: "#F51476",
+        height: 100
       }
     ];
   }
