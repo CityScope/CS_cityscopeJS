@@ -7,8 +7,6 @@ import "./Storage";
 
 export class UI {
   constructor() {
-    document.getElementById("AccesslayerSection").style.display = "none";
-    document.getElementById("ABMlayerSection").style.display = "none";
     document.getElementById("InteractionModeSection").style.display = "none";
     this.InteractionModeDiv = document.getElementById("InteractionModeDiv");
     this.update = new Update();
@@ -21,7 +19,8 @@ export class UI {
       switch (layer) {
         case "access":
           this.accessButtonsInteraction();
-          document.getElementById("AccesslayerSection").style.display = "block";
+          document.getElementById("AccesslayerSection").style.display =
+            "inline";
           break;
         case "ABM":
           document.getElementById("ABMlayerSection").style.display = "block";
@@ -119,12 +118,20 @@ export class UI {
               "visibility",
               "visible"
             );
+
+            document.getElementById(
+              "AccesslayersButtonsSection"
+            ).style.display = "inline-block";
           } else {
             Storage.map.setLayoutProperty(
               "AccessLayerHeatmap",
               "visibility",
               "none"
             );
+
+            document.getElementById(
+              "AccesslayersButtonsSection"
+            ).style.display = "none";
           }
           break;
 
@@ -163,7 +170,7 @@ export class UI {
       accessButtons[i].addEventListener(
         "click",
         function(e) {
-          cycleAccessLayers(e.target.id);
+          cycleAccessLayers(e.currentTarget.id);
         },
         false
       );
