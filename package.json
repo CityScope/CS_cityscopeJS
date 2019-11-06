@@ -30,6 +30,7 @@
     "@deck.gl/mapbox": "^7.3.3",
     "@deck.gl/mesh-layers": "^7.3.3",
     "@turf/centroid": "^6.0.2",
+    "@turf/transform-scale": "^5.1.5",
     "babel-polyfill": "^6.26.0",
     "deck.gl": "^7.3.3",
     "lodash": "^4.17.15",

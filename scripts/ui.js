@@ -141,19 +141,15 @@ export class UI {
           break;
 
         // full grid
-        case "gridLayerLine":
+        case "gridLayer":
           if (e.target.checked) {
             Storage.map.setLayoutProperty(
-              "gridLayerLine",
+              "gridGeoJSON",
               "visibility",
               "visible"
             );
           } else {
-            Storage.map.setLayoutProperty(
-              "gridLayerLine",
-              "visibility",
-              "none"
-            );
+            Storage.map.setLayoutProperty("gridGeoJSON", "visibility", "none");
           }
           break;
       }

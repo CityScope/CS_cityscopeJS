@@ -5,6 +5,7 @@ import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import { Update } from "./update";
 import { UI } from "./ui";
+import transformScale from "@turf/transform-scale";
 
 export class Layers {
   constructor() {
@@ -54,39 +55,18 @@ export class Layers {
     update.startUpdate();
   }
 
-  async metaGrid() {
-    // get two grid layers
-    let gridGeojson = await getCityIO(Storage.cityIOurl + "/grid_full_table");
-    // grid layer
-    this.map.addSource("gridLayerSource", {
-      type: "geojson",
-      data: gridGeojson
-    });
-    this.map.addLayer({
-      id: "gridLayerLine",
-      type: "line",
-      source: "gridLayerSource",
-      paint: {
-        "line-color": "rgb(255,255,255)",
-        "line-width": 0.2
-      }
-    });
-
-    this.map.setLayoutProperty("gridLayerLine", "visibility", "none");
-  }
-
   async gridLayer() {
+    // get the mapping of the grid
     Storage.interactiveGridMapping = await getCityIO(
       Storage.cityIOurl + "/interactive_grid_mapping"
     );
-
-    let gridGeoJSON = await getCityIO(Storage.cityIOurl + "/meta_grid");
+    // get  the grid GEOjson itself
+    Storage.gridGeoJSON = await getCityIO(Storage.cityIOurl + "/meta_grid");
     // Active layer
     this.map.addSource("gridGeoJSONSource", {
       type: "geojson",
-      data: gridGeoJSON
+      data: Storage.gridGeoJSON
     });
-    Storage.gridGeoJSON = gridGeoJSON;
 
     this.map.addLayer({
       id: "gridGeoJSON",
@@ -99,6 +79,15 @@ export class Layers {
         "fill-extrusion-base": 1
       }
     });
+
+    for (let i = 0; i < Storage.gridGeoJSON.features.length; i++) {
+      if (Storage.gridGeoJSON.features[i].properties.interactive_id == null) {
+        transformScale(Storage.gridGeoJSON.features[i], 0.3, { mutate: true });
+      } else {
+        transformScale(Storage.gridGeoJSON.features[i], 0.8, { mutate: true });
+      }
+    }
+    Storage.map.getSource("gridGeoJSONSource").setData(Storage.gridGeoJSON);
   }
 
   noiseLayer() {

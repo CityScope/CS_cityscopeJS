@@ -161,9 +161,7 @@ export class Update {
     //
     let gridGeoJSON = Storage.gridGeoJSON;
     let interactiveGridMapping = Storage.interactiveGridMapping;
-    // go over all cells that are in active grid area
-
-    // for (let i = 0; i < gridGeoJSON.features.length; i++) {
+    // go over interactive cells that are in active grid area
     for (let i in interactiveGridMapping) {
       let interactiveCell = interactiveGridMapping[i];
       let props = gridGeoJSON.features[interactiveCell].properties;
@@ -172,7 +170,7 @@ export class Update {
 
       // if the data for this cell is -1
       if (gridData[i][0] == -1) {
-        gridGeoJSON.features[interactiveCell].properties.color = "rgb(0,0,0)";
+        props.color = "rgb(0,0,0)";
         // inject type from cityIO grid to GeoJSON layer
         props.type = -1;
         props.flat_value = 0;
@@ -184,9 +182,15 @@ export class Update {
         // inject type from cityIO grid to GeoJSON layer
         props.type = gridData[i][0];
         props.flat_value = 0;
-        props.height = this.cellsFeaturesDict[gridData[i][0]].height;
-        props.height_value = this.cellsFeaturesDict[gridData[i][0]].height;
+
+        if (Storage.threeState == "flat" || Storage.threeState == null) {
+          props.height = props.flat_value;
+        } else {
+          props.height = this.cellsFeaturesDict[gridData[i][0]].height;
+          props.height_value = this.cellsFeaturesDict[gridData[i][0]].height;
+        }
       }
+
       if (props.color == "red" && interactiveMode == "block") {
         props.color = "red";
       }
@@ -194,19 +198,5 @@ export class Update {
     Storage.map.getSource("gridGeoJSONSource").setData(gridGeoJSON);
     // make markers and clean the past ones
     this.cellTypeMarkers();
-  }
-
-  toggle_grid_height() {
-    let gridGeoJSON = Storage.gridGeoJSON;
-
-    for (let i in gridGeoJSON.features) {
-      if (Storage.threeState == "flat" || Storage.threeState == null) {
-        gridGeoJSON.features[i].properties.height =
-          gridGeoJSON.features[i].properties.flat_value;
-      } else {
-        gridGeoJSON.features[i].properties.height =
-          gridGeoJSON.features[i].properties.height_value;
-      }
-    }
   }
 }

@@ -58,10 +58,19 @@ export class MouseInteraction {
 
   handleSelectedCells() {
     if (Storage.interactiveMode == true) {
+      let gridGeoJSON = Storage.gridGeoJSON;
+      let interactiveGridMapping = Storage.interactiveGridMapping;
+
       for (let i in this.selectedFeatures) {
-        let grid = Storage.gridGeoJSON;
-        let selectedId = this.selectedFeatures[i].properties.id;
-        let props = grid.features[selectedId].properties;
+        let selected = this.selectedFeatures[i].properties.interactive_id;
+        // ! this flag should be agreed upon
+        if (selected === "null") {
+          return;
+        }
+
+        let selectedId = interactiveGridMapping[selected];
+        let props = gridGeoJSON.features[selectedId].properties;
+
         // if already slected
         if (props.color == "red") {
           // deselect
@@ -71,11 +80,12 @@ export class MouseInteraction {
           // store old color
           props.oldColor = props.color;
           props.color = "red";
-          Storage.selectedGridCells[selectedId] = grid.features[selectedId];
+          Storage.selectedGridCells[selectedId] =
+            gridGeoJSON.features[selectedId];
         }
         this.InteractionModeDiv.innerHTML =
           Object.keys(Storage.selectedGridCells).length + " selected cells.";
-        Storage.map.getSource("gridGeoJSONSource").setData(grid);
+        Storage.map.getSource("gridGeoJSONSource").setData(gridGeoJSON);
       }
     }
   }
