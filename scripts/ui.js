@@ -77,6 +77,7 @@ export class UI {
         case "projectionMode":
           if (e.target.checked) {
             Storage.threeState = "height";
+
             // start camera rotation
             rotateCamera(1);
           } else {
@@ -90,6 +91,8 @@ export class UI {
         //
         case "3dBuildingsLayer":
           if (e.target.checked) {
+            // hide markers
+            this.toggleMarkers("TypesMarkers", "none");
             Storage.map.setLayoutProperty(
               "3dBuildingsLayer",
               "visibility",
@@ -97,6 +100,8 @@ export class UI {
             );
             Storage.threeState = "height";
           } else {
+            // show markers
+            this.toggleMarkers("TypesMarkers", "block");
             Storage.map.setLayoutProperty(
               "3dBuildingsLayer",
               "visibility",
@@ -153,6 +158,13 @@ export class UI {
           break;
       }
     });
+  }
+
+  toggleMarkers(className, displayState) {
+    var elements = document.getElementsByClassName(className);
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].style.display = displayState;
+    }
   }
 
   ABMinteraction() {

@@ -18,6 +18,14 @@ class Storage {
     this._interactiveMode = value;
   }
 
+  // marker Holder
+  get markerHolder() {
+    return this._markerHolder;
+  }
+  set markerHolder(value) {
+    this._markerHolder = value;
+  }
+
   //girdLocalDataSource
   get girdLocalDataSource() {
     return this._girdLocalDataSource;

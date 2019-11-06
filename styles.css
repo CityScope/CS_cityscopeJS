@@ -216,3 +216,25 @@ button:focus {
   width: 0;
   height: 0;
 }
+
+.TypesMarkers {
+  /* -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto; */
+  hyphens: auto;
+  /* padding: 1em; */
+  text-align: center;
+  line-height: normal;
+  width: 2em;
+  height: 2em;
+  padding: 1em;
+  border-radius: 50%;
+  border: 1px solid rgb(0, 0, 0);
+  font-size: 0.7em;
+  font-weight: bolder;
+  background: rgba(255, 255, 255, 0.5);
+  color: black;
+  display: none;
+}

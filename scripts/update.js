@@ -1,10 +1,13 @@
+import mapboxgl from "mapbox-gl";
 import "./Storage";
 import "babel-polyfill";
 import { getCityIO } from "./cityio";
 var loEqual = require("lodash/isEqual");
+import centroid from "@turf/centroid";
 
 export class Update {
   constructor(updateableLayersList) {
+    Storage.markerHolder = [];
     // init the hash list holder
     Storage.oldAHashList = {};
     this.loopInterval = 1000;
@@ -19,7 +22,7 @@ export class Update {
         height: 1
       },
       {
-        type: "Open Space",
+        type: "Green",
         color: "#13D031",
         height: 3
       },
@@ -109,6 +112,30 @@ export class Update {
       .setData(Storage.cityIOurl + "/access");
   }
 
+  cellTypeMarkers() {
+    if (Storage.markerHolder !== null) {
+      for (var i = Storage.markerHolder.length - 1; i >= 0; i--) {
+        Storage.markerHolder[i].remove();
+      }
+    }
+    Storage.gridGeojsonActive.features.forEach(feature => {
+      const markerDiv = document.createElement("div");
+      markerDiv.className = "TypesMarkers";
+
+      var c = centroid(feature);
+      let center = c.geometry.coordinates;
+
+      markerDiv.innerHTML = this.cellsFeaturesArray[
+        feature.properties.type
+      ].type;
+      let marker = new mapboxgl.Marker(markerDiv)
+        .setLngLat(center)
+        // feature.geometry.coordinates[0][2])
+        .addTo(Storage.map);
+      Storage.markerHolder.push(marker);
+    });
+  }
+
   async update_grid() {
     console.log("updating grid layer...");
     let gridData;
@@ -168,6 +195,8 @@ export class Update {
       }
     }
     Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);
+    // make markers and clean the past ones
+    this.cellTypeMarkers();
   }
 
   toggle_grid_height() {
