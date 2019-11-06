@@ -18,6 +18,14 @@ class Storage {
     this._interactiveMode = value;
   }
 
+  //updateableLayersList
+  get updateableLayersList() {
+    return this._updateableLayersList;
+  }
+  set updateableLayersList(value) {
+    this._updateableLayersList = value;
+  }
+
   //interactive Grid Mapping
   get interactiveGridMapping() {
     return this._interactiveGridMapping;

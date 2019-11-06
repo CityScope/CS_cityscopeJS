@@ -30,6 +30,8 @@ https://github.com/RELNO]
 
 import "babel-polyfill";
 import "./Storage";
+import { Update } from "./update";
+import { UI } from "./ui";
 import { createBaseMap } from "./map";
 import { getCityIO } from "./cityio";
 import { Layers } from "./layers";
@@ -53,11 +55,22 @@ async function init() {
     createBaseMap();
     // get map from storage
     let map = Storage.map;
+
     // wait for map to load
     map.on("load", function() {
+      Storage.interactiveMode = false;
       const layers = new Layers();
+      // start UI
+      let ui = new UI();
+      Object.freeze(ui);
+      // load UI for updateable Layers List
+
+      // ! THIS IS OFF!!!!
       // load layer
-      layers.layersLoader();
+      layers.layersLoader().then(ui.init(Storage.updateableLayersList));
+
+      let update = new Update(Storage.updateableLayersList);
+      update.startUpdate();
     });
   }
 

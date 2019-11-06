@@ -111,6 +111,24 @@ export class Update {
       .setData(Storage.cityIOurl + "/access");
   }
 
+  editCellTypes() {
+    Storage.selectedGridCells = {};
+    // slider for types
+    let cellTypeSlider = document.getElementById("cellTypeSlider");
+    let EditedTypeDiv = document.getElementById("EditedTypeDiv");
+    cellTypeSlider.addEventListener("input", e => {
+      if (Object.keys(Storage.selectedGridCells).length > 0) {
+        for (let i in Storage.selectedGridCells) {
+          let gridPosition =
+            Storage.selectedGridCells[i].properties.interactive_id;
+          Storage.girdLocalDataSource[gridPosition][0] = cellTypeSlider.value;
+        }
+        this.update_grid();
+      }
+      EditedTypeDiv.innerHTML = "Selected type: " + cellTypeSlider.value;
+    });
+  }
+
   cellTypeMarkers() {
     if (Storage.markerHolder !== null) {
       for (var i = Storage.markerHolder.length - 1; i >= 0; i--) {
@@ -138,26 +156,24 @@ export class Update {
   async update_grid() {
     console.log("updating grid layer...");
     let gridData;
-    //
-    switch (Storage.interactiveMode) {
-      case false:
-      case undefined:
-        gridData = await getCityIO(Storage.cityIOurl + "/grid");
-        // store cityio grid data
-        Storage.girdCityIODataSource = gridData;
-        console.log("grid data source: cityIO");
-        break;
-      case true:
-        // init local interaction with latest cityIO
-        // grid data
-        if (Storage.girdLocalDataSource == undefined) {
-          console.log("first interaction, copying grid data");
-          Storage.girdLocalDataSource = Storage.girdCityIODataSource;
-        }
-        gridData = Storage.girdLocalDataSource;
-        console.log("grid data source: local");
-        break;
+    if (Storage.interactiveMode == false) {
+      gridData = await getCityIO(Storage.cityIOurl + "/grid");
+
+      // store cityio grid data
+      Storage.girdCityIODataSource = gridData;
+      console.log("grid data source: cityIO");
+    } else {
+      // init local interaction with latest cityIO
+      // grid data
+      if (Storage.girdLocalDataSource == undefined) {
+        console.log("first interaction, copying grid data");
+
+        Storage.girdLocalDataSource = Storage.girdCityIODataSource;
+      }
+      gridData = Storage.girdLocalDataSource;
+      console.log("grid data source: local");
     }
+
     //
     let gridGeoJSON = Storage.gridGeoJSON;
     let interactiveGridMapping = Storage.interactiveGridMapping;

@@ -38,24 +38,6 @@ export class MouseInteraction {
     this.selectedFeatures = [];
   }
 
-  editCellTypes() {
-    Storage.selectedGridCells = {};
-    // slider for types
-    let cellTypeSlider = document.getElementById("cellTypeSlider");
-    let EditedTypeDiv = document.getElementById("EditedTypeDiv");
-    cellTypeSlider.addEventListener("input", e => {
-      if (Object.keys(Storage.selectedGridCells).length > 0) {
-        for (let cell in Storage.girdLocalDataSource) {
-          if (Storage.selectedGridCells[cell]) {
-            Storage.girdLocalDataSource[cell][0] = cellTypeSlider.value;
-          }
-        }
-        this.update.update_grid();
-      }
-      EditedTypeDiv.innerHTML = "Selected type: " + cellTypeSlider.value;
-    });
-  }
-
   handleSelectedCells() {
     if (Storage.interactiveMode == true) {
       let gridGeoJSON = Storage.gridGeoJSON;

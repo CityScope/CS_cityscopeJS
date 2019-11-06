@@ -3,24 +3,17 @@ import { getCityIO } from "./cityio";
 import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
-import { Update } from "./update";
-import { UI } from "./ui";
 import transformScale from "@turf/transform-scale";
 
 export class Layers {
   constructor() {
     this.map = Storage.map;
-    this.updateableLayersList = {};
+    Storage.updateableLayersList = {};
   }
 
   async layersLoader() {
-    // start UI
-    let ui = new UI();
-    Object.freeze(ui);
-
     console.log("loading layers data..");
     let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
-
     // load 3d building Layer first
     this.buildingLayer();
     // then cycle between known layers
@@ -31,28 +24,26 @@ export class Layers {
           break;
         //
         case "grid":
-          this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
+          Storage.updateableLayersList[hashName] =
+            cityioHashes.hashes[hashName];
           break;
         //
         case "ABM":
           this.ABMlayer();
-          ui.ABMinteraction();
-          this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
+          Storage.updateableLayersList[hashName] =
+            cityioHashes.hashes[hashName];
           break;
         //
         case "access":
           this.accessLayer();
-          this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
+          Storage.updateableLayersList[hashName] =
+            cityioHashes.hashes[hashName];
           break;
         //
         default:
           break;
       }
     }
-
-    let update = new Update(this.updateableLayersList);
-    ui.init(this.updateableLayersList);
-    update.startUpdate();
   }
 
   async gridLayer() {
@@ -143,7 +134,7 @@ export class Layers {
     this.map.setLayoutProperty("3dBuildingsLayer", "visibility", "none");
   }
 
-  accessLayer() {
+  async accessLayer() {
     /*
    Access
   */
@@ -222,6 +213,9 @@ export class Layers {
     https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/mapbox-layer.md
     https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/overview.md?source=post_page---------------------------#using-with-pure-js
   */
+
+    console.log("starting ABM..");
+
     // get data at init
     Storage.ABMdata = await getCityIO(Storage.cityIOurl + "/ABM");
 
@@ -256,7 +250,7 @@ export class Layers {
       })
     );
 
-    function renderDeck() {
+    async function renderDeck() {
       let ABMmodeType = Storage.ABMmodeType;
 
       if (time >= startSimHour + loopLength - 1) {

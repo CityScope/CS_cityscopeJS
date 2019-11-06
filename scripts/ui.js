@@ -24,11 +24,13 @@ export class UI {
           break;
         case "ABM":
           document.getElementById("ABMlayerSection").style.display = "block";
+          this.ABMinteraction();
           break;
         default:
           break;
       }
     }
+
     //bring map to projection postion
     new Camera().reset_camera_position();
     this.hideUI();
@@ -39,7 +41,7 @@ export class UI {
   uiButtonsInteraction() {
     let cam = new Camera();
     // start listenining to gird editing
-    this.mouseInteraction.editCellTypes();
+    this.update.editCellTypes();
     document.getElementById("uiList").addEventListener("change", e => {
       switch (e.target.id) {
         // Interaction mode
@@ -47,7 +49,7 @@ export class UI {
           if (e.target.checked) {
             // data for gird is local
             Storage.interactiveMode = true;
-            // reset the selected grid holder
+            // empty the selected grid holder
             Storage.selectedGridCells = {};
 
             // disply interaction controls
