@@ -18,6 +18,14 @@ class Storage {
     this._interactiveMode = value;
   }
 
+  //interactive Grid Mapping
+  get interactiveGridMapping() {
+    return this._interactiveGridMapping;
+  }
+  set interactiveGridMapping(value) {
+    this._interactiveGridMapping = value;
+  }
+
   // marker Holder
   get markerHolder() {
     return this._markerHolder;
@@ -105,12 +113,12 @@ class Storage {
     this._cityioHeader = value;
   }
 
-  // gridGeojsonActive
-  get gridGeojsonActive() {
-    return this._gridGeojsonActive;
+  // gridGeoJSON
+  get gridGeoJSON() {
+    return this._gridGeoJSON;
   }
-  set gridGeojsonActive(value) {
-    this._gridGeojsonActive = value;
+  set gridGeoJSON(value) {
+    this._gridGeoJSON = value;
   }
 
   //oldAHashList

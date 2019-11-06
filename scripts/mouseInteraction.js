@@ -59,7 +59,7 @@ export class MouseInteraction {
   handleSelectedCells() {
     if (Storage.interactiveMode == true) {
       for (let i in this.selectedFeatures) {
-        let grid = Storage.gridGeojsonActive;
+        let grid = Storage.gridGeoJSON;
         let selectedId = this.selectedFeatures[i].properties.id;
         let props = grid.features[selectedId].properties;
         // if already slected
@@ -75,7 +75,7 @@ export class MouseInteraction {
         }
         this.InteractionModeDiv.innerHTML =
           Object.keys(Storage.selectedGridCells).length + " selected cells.";
-        Storage.map.getSource("gridGeojsonActiveSource").setData(grid);
+        Storage.map.getSource("gridGeoJSONSource").setData(grid);
       }
     }
   }
@@ -102,7 +102,7 @@ export class MouseInteraction {
     // handle one key press
     if (!(e.shiftKey && e.button === 0)) {
       var oneCell = Storage.map.queryRenderedFeatures(this.mousePos(e), {
-        layers: ["gridGeojsonActive"]
+        layers: ["gridGeoJSON"]
       });
       if (oneCell[0]) {
         this.selectedFeatures = [oneCell[0]];
@@ -176,7 +176,7 @@ export class MouseInteraction {
     // If bbox exists. use this value as the argument for `queryRenderedFeatures`
     if (this.boudingBox !== null) {
       var features = Storage.map.queryRenderedFeatures(this.boudingBox, {
-        layers: ["gridGeojsonActive"]
+        layers: ["gridGeoJSON"]
       });
       if (features.length >= 250) {
         Storage.map.dragPan.enable();

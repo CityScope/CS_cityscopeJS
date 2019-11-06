@@ -25,27 +25,25 @@ export class Layers {
     // then cycle between known layers
     for (let hashName in cityioHashes.hashes) {
       switch (hashName) {
-        case "grid_full_table":
-          this.fullGridLayer();
+        case "meta_grid":
+          this.gridLayer();
           break;
-        case "grid_interactive_area":
-          this.activeGridLayer();
-          break;
+        //
         case "grid":
           this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
-
           break;
+        //
         case "ABM":
           this.ABMlayer();
           ui.ABMinteraction();
           this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
-
           break;
+        //
         case "access":
           this.accessLayer();
           this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
-
           break;
+        //
         default:
           break;
       }
@@ -56,7 +54,7 @@ export class Layers {
     update.startUpdate();
   }
 
-  async fullGridLayer() {
+  async metaGrid() {
     // get two grid layers
     let gridGeojson = await getCityIO(Storage.cityIOurl + "/grid_full_table");
     // grid layer
@@ -77,21 +75,23 @@ export class Layers {
     this.map.setLayoutProperty("gridLayerLine", "visibility", "none");
   }
 
-  async activeGridLayer() {
-    let gridGeojsonActive = await getCityIO(
-      Storage.cityIOurl + "/grid_interactive_area"
+  async gridLayer() {
+    Storage.interactiveGridMapping = await getCityIO(
+      Storage.cityIOurl + "/interactive_grid_mapping"
     );
+
+    let gridGeoJSON = await getCityIO(Storage.cityIOurl + "/meta_grid");
     // Active layer
-    this.map.addSource("gridGeojsonActiveSource", {
+    this.map.addSource("gridGeoJSONSource", {
       type: "geojson",
-      data: gridGeojsonActive
+      data: gridGeoJSON
     });
-    Storage.gridGeojsonActive = gridGeojsonActive;
+    Storage.gridGeoJSON = gridGeoJSON;
 
     this.map.addLayer({
-      id: "gridGeojsonActive",
+      id: "gridGeoJSON",
       type: "fill-extrusion",
-      source: "gridGeojsonActiveSource",
+      source: "gridGeoJSONSource",
       paint: {
         "fill-extrusion-color": ["get", "color"],
         "fill-extrusion-height": ["get", "height"],

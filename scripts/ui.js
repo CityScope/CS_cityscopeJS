@@ -109,7 +109,7 @@ export class UI {
             );
             Storage.threeState = "flat";
           }
-          this.update.toggle_grid_height();
+          this.update.update_grid();
           break;
         // keystone mode
         case "keystone":

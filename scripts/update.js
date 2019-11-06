@@ -14,8 +14,7 @@ export class Update {
     this.updateableLayersList = updateableLayersList;
     // loading spinner UI
     this.spinnerDiv = document.querySelector("#spinner");
-
-    this.cellsFeaturesArray = [
+    this.cellsFeaturesDict = [
       {
         type: "Road",
         color: "#373F51",
@@ -118,14 +117,14 @@ export class Update {
         Storage.markerHolder[i].remove();
       }
     }
-    Storage.gridGeojsonActive.features.forEach(feature => {
+    let interactiveGridMapping = Storage.interactiveGridMapping;
+    for (let i in interactiveGridMapping) {
+      let feature = Storage.gridGeoJSON.features[interactiveGridMapping[i]];
       const markerDiv = document.createElement("div");
       markerDiv.className = "TypesMarkers";
-
       var c = centroid(feature);
       let center = c.geometry.coordinates;
-
-      markerDiv.innerHTML = this.cellsFeaturesArray[
+      markerDiv.innerHTML = this.cellsFeaturesDict[
         feature.properties.type
       ].type;
       let marker = new mapboxgl.Marker(markerDiv)
@@ -133,13 +132,13 @@ export class Update {
         // feature.geometry.coordinates[0][2])
         .addTo(Storage.map);
       Storage.markerHolder.push(marker);
-    });
+    }
   }
 
   async update_grid() {
     console.log("updating grid layer...");
     let gridData;
-
+    //
     switch (Storage.interactiveMode) {
       case false:
       case undefined:
@@ -148,7 +147,6 @@ export class Update {
         Storage.girdCityIODataSource = gridData;
         console.log("grid data source: cityIO");
         break;
-
       case true:
         // init local interaction with latest cityIO
         // grid data
@@ -160,57 +158,55 @@ export class Update {
         console.log("grid data source: local");
         break;
     }
-
-    let gridGeojsonActive = Storage.gridGeojsonActive;
+    //
+    let gridGeoJSON = Storage.gridGeoJSON;
+    let interactiveGridMapping = Storage.interactiveGridMapping;
     // go over all cells that are in active grid area
-    for (let i = 0; i < gridGeojsonActive.features.length; i++) {
-      let props = gridGeojsonActive.features[i].properties;
+
+    // for (let i = 0; i < gridGeoJSON.features.length; i++) {
+    for (let i in interactiveGridMapping) {
+      let interactiveCell = interactiveGridMapping[i];
+      let props = gridGeoJSON.features[interactiveCell].properties;
       let interactiveMode = document.getElementById("InteractionModeSection")
         .style.display;
+
       // if the data for this cell is -1
       if (gridData[i][0] == -1) {
-        gridGeojsonActive.features[i].properties.color = "rgb(0,0,0)";
+        gridGeoJSON.features[interactiveCell].properties.color = "rgb(0,0,0)";
         // inject type from cityIO grid to GeoJSON layer
         props.type = -1;
         props.flat_value = 0;
         props.height = 0;
       } else {
-        gridGeojsonActive.features[
-          i
-        ].properties.color = this.cellsFeaturesArray[gridData[i][0]].color;
+        gridGeoJSON.features[
+          interactiveCell
+        ].properties.color = this.cellsFeaturesDict[gridData[i][0]].color;
         // inject type from cityIO grid to GeoJSON layer
         props.type = gridData[i][0];
         props.flat_value = 0;
-        gridGeojsonActive.features[
-          i
-        ].properties.height = this.cellsFeaturesArray[gridData[i][0]].height;
-        gridGeojsonActive.features[
-          i
-        ].properties.height_value = this.cellsFeaturesArray[
-          gridData[i][0]
-        ].height;
+        props.height = this.cellsFeaturesDict[gridData[i][0]].height;
+        props.height_value = this.cellsFeaturesDict[gridData[i][0]].height;
       }
       if (props.color == "red" && interactiveMode == "block") {
         props.color = "red";
       }
     }
-    Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);
+    Storage.map.getSource("gridGeoJSONSource").setData(gridGeoJSON);
     // make markers and clean the past ones
     this.cellTypeMarkers();
   }
 
   toggle_grid_height() {
-    let gridGeojsonActive = Storage.gridGeojsonActive;
+    let gridGeoJSON = Storage.gridGeoJSON;
 
-    for (let i in gridGeojsonActive.features) {
+    for (let i in gridGeoJSON.features) {
       if (Storage.threeState == "flat" || Storage.threeState == null) {
-        gridGeojsonActive.features[i].properties.height =
-          gridGeojsonActive.features[i].properties.flat_value;
+        gridGeoJSON.features[i].properties.height =
+          gridGeoJSON.features[i].properties.flat_value;
       } else {
-        gridGeojsonActive.features[i].properties.height =
-          gridGeojsonActive.features[i].properties.height_value;
+        gridGeoJSON.features[i].properties.height =
+          gridGeoJSON.features[i].properties.height_value;
       }
     }
-    Storage.map.getSource("gridGeojsonActiveSource").setData(gridGeojsonActive);
   }
 }
