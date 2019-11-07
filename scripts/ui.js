@@ -18,12 +18,9 @@ export class UI {
       switch (layer) {
         case "access":
           this.accessButtonsInteraction();
-          document.getElementById("AccesslayerSection").style.display = "block";
           break;
         case "ABM":
           this.ABMinteraction();
-          document.getElementById("ABMlayerSection").style.display = "block";
-
           break;
         default:
           break;
@@ -160,6 +157,15 @@ export class UI {
             );
           } else {
             Storage.map.setLayoutProperty("gridGeoJSON", "visibility", "none");
+          }
+          break;
+
+        // ABM Layer
+        case "ABMLayer":
+          if (e.target.checked) {
+            document.getElementById("ABMlayerSection").style.display = "block";
+          } else {
+            document.getElementById("ABMlayerSection").style.display = "none";
           }
           break;
       }

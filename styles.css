@@ -218,17 +218,16 @@ button:focus {
 }
 
 .typesMarkersStyle {
-  hyphens: auto;
-  text-align: center;
-  line-height: normal;
-  width: 2em;
-  height: 2em;
-  padding: 1em;
-  padding: 0.6em;
-  border-radius: 50%;
+  text-align: left;
+  width: 1em;
+  height: 1em;
+  padding: 0.2em;
+  padding: 0.5em;
+  border-radius: 40%;
   border: 1px solid rgb(0, 0, 0);
-  font-size: 1em;
+  font-size: 1.5em;
   font-weight: bolder;
   background: rgba(255, 255, 255, 0.5);
   color: black;
+  display: none;
 }

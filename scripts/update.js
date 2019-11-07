@@ -16,32 +16,32 @@ export class Update {
     this.spinnerDiv = document.querySelector("#spinner");
     this.cellsFeaturesDict = [
       {
-        type: "Road",
+        type: "R",
         color: "#373F51",
         height: 1
       },
       {
-        type: "Green",
+        type: "G",
         color: "#13D031",
         height: 3
       },
       {
-        type: "Live1",
+        type: "L1",
         color: "#002DD5",
         height: 25
       },
       {
-        type: "work",
+        type: "W1",
         color: "#E43F0F",
         height: 50
       },
       {
-        type: "live2",
+        type: "L2",
         color: "#008DD5",
         height: 60
       },
       {
-        type: "Work 2",
+        type: "W2",
         color: "#F51476",
         height: 100
       }
