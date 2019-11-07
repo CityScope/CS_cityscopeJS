@@ -11,20 +11,19 @@ export class UI {
     this.InteractionModeDiv = document.getElementById("InteractionModeDiv");
     this.update = new Update();
     this.mouseInteraction = new MouseInteraction();
-    Object.freeze(this.update);
   }
 
-  init(updateableLayersList) {
-    for (let layer in updateableLayersList) {
+  init() {
+    for (let layer in Storage.updateableLayersList) {
       switch (layer) {
         case "access":
           this.accessButtonsInteraction();
-          document.getElementById("AccesslayerSection").style.display =
-            "inline";
+          document.getElementById("AccesslayerSection").style.display = "block";
           break;
         case "ABM":
-          document.getElementById("ABMlayerSection").style.display = "block";
           this.ABMinteraction();
+          document.getElementById("ABMlayerSection").style.display = "block";
+
           break;
         default:
           break;
@@ -51,7 +50,10 @@ export class UI {
             Storage.interactiveMode = true;
             // empty the selected grid holder
             Storage.selectedGridCells = {};
-
+            // init local interaction with latest cityIO
+            // grid data
+            console.log("copying grid data");
+            Storage.girdLocalDataSource = Storage.girdCityIODataSource;
             // disply interaction controls
             document.getElementById("InteractionModeSection").style.display =
               "block";
@@ -91,19 +93,25 @@ export class UI {
           }
           break;
         //
-        case "3dBuildingsLayer":
+        case "markers":
           if (e.target.checked) {
             // hide markers
-            this.toggleMarkers("TypesMarkers", "none");
+            this.toggleMarkers("typesMarkersStyle", "block");
+          } else {
+            // show markers
+            this.toggleMarkers("typesMarkersStyle", "none");
+          }
+          break;
+        //
+        case "3dBuildingsLayer":
+          if (e.target.checked) {
+            Storage.threeState = "height";
             Storage.map.setLayoutProperty(
               "3dBuildingsLayer",
               "visibility",
               "visible"
             );
-            Storage.threeState = "height";
           } else {
-            // show markers
-            this.toggleMarkers("TypesMarkers", "block");
             Storage.map.setLayoutProperty(
               "3dBuildingsLayer",
               "visibility",

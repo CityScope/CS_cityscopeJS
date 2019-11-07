@@ -35,6 +35,7 @@
     "deck.gl": "^7.3.3",
     "lodash": "^4.17.15",
     "mapbox-gl": "^1.5.0",
-    "material-icons": "^0.3.1"
+    "material-icons": "^0.3.1",
+    "winjs": "^4.4.3"
   }
 }

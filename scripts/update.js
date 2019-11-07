@@ -130,6 +130,8 @@ export class Update {
   }
 
   cellTypeMarkers() {
+    console.log("making markers...");
+
     if (Storage.markerHolder !== null) {
       for (var i = Storage.markerHolder.length - 1; i >= 0; i--) {
         Storage.markerHolder[i].remove();
@@ -137,17 +139,18 @@ export class Update {
     }
     let interactiveGridMapping = Storage.interactiveGridMapping;
     for (let i in interactiveGridMapping) {
-      let feature = Storage.gridGeoJSON.features[interactiveGridMapping[i]];
-      const markerDiv = document.createElement("div");
-      markerDiv.className = "TypesMarkers";
+      let cellPos = interactiveGridMapping[i];
+      let feature = Storage.gridGeoJSON.features[cellPos];
       var c = centroid(feature);
       let center = c.geometry.coordinates;
+
+      const markerDiv = document.createElement("div");
+      markerDiv.className = "typesMarkersStyle";
       markerDiv.innerHTML = this.cellsFeaturesDict[
         feature.properties.type
       ].type;
       let marker = new mapboxgl.Marker(markerDiv)
         .setLngLat(center)
-        // feature.geometry.coordinates[0][2])
         .addTo(Storage.map);
       Storage.markerHolder.push(marker);
     }
@@ -157,21 +160,14 @@ export class Update {
     console.log("updating grid layer...");
     let gridData;
     if (Storage.interactiveMode == false) {
+      console.log("grid data source: cityIO");
       gridData = await getCityIO(Storage.cityIOurl + "/grid");
-
       // store cityio grid data
       Storage.girdCityIODataSource = gridData;
-      console.log("grid data source: cityIO");
     } else {
-      // init local interaction with latest cityIO
-      // grid data
-      if (Storage.girdLocalDataSource == undefined) {
-        console.log("first interaction, copying grid data");
-
-        Storage.girdLocalDataSource = Storage.girdCityIODataSource;
-      }
-      gridData = Storage.girdLocalDataSource;
       console.log("grid data source: local");
+      // eventually assign data soruce to grid data
+      gridData = Storage.girdLocalDataSource;
     }
 
     //

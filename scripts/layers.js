@@ -4,46 +4,47 @@ import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import transformScale from "@turf/transform-scale";
+import { Update } from "./update";
+import { UI } from "./ui";
 
 export class Layers {
   constructor() {
     this.map = Storage.map;
-    Storage.updateableLayersList = {};
+    this.updateableLayersList = {};
   }
 
   async layersLoader() {
     console.log("loading layers data..");
     let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
+
     // load 3d building Layer first
     this.buildingLayer();
     // then cycle between known layers
     for (let hashName in cityioHashes.hashes) {
       switch (hashName) {
         case "meta_grid":
-          this.gridLayer();
           break;
-        //
         case "grid":
-          Storage.updateableLayersList[hashName] =
-            cityioHashes.hashes[hashName];
+          this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
           break;
-        //
         case "ABM":
-          this.ABMlayer();
-          Storage.updateableLayersList[hashName] =
-            cityioHashes.hashes[hashName];
+          this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
           break;
-        //
         case "access":
-          this.accessLayer();
-          Storage.updateableLayersList[hashName] =
-            cityioHashes.hashes[hashName];
+          this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
           break;
-        //
         default:
           break;
       }
     }
+    await Promise.all([this.gridLayer(), this.ABMlayer(), this.accessLayer()]);
+    Storage.updateableLayersList = this.updateableLayersList;
+
+    // load UI for updateable Layers List
+    let ui = new UI();
+    ui.init();
+    let update = new Update(Storage.updateableLayersList);
+    update.startUpdate();
   }
 
   async gridLayer() {
@@ -73,65 +74,12 @@ export class Layers {
 
     for (let i = 0; i < Storage.gridGeoJSON.features.length; i++) {
       if (Storage.gridGeoJSON.features[i].properties.interactive_id == null) {
-        transformScale(Storage.gridGeoJSON.features[i], 0.3, { mutate: true });
+        transformScale(Storage.gridGeoJSON.features[i], 0.05, { mutate: true });
       } else {
         transformScale(Storage.gridGeoJSON.features[i], 0.8, { mutate: true });
       }
     }
     Storage.map.getSource("gridGeoJSONSource").setData(Storage.gridGeoJSON);
-  }
-
-  noiseLayer() {
-    /*
-  noise layer
-  */
-    map.addLayer({
-      id: "noiseLayer",
-      displayName: "Noise",
-      showInLayerList: true,
-      metadata: "",
-      type: "raster",
-      source: {
-        type: "raster",
-        tiles: [
-          "https://geodienste.hamburg.de/HH_WMS_Strassenverkehr?format=image/png&service=WMS&version=1.3.0&STYLES=&bbox={bbox-epsg-3857}&request=GetMap&crs=EPSG:3857&transparent=true&width=512&height=512&layers=strassenverkehr_tag_abend_nacht_2017"
-        ],
-        tileSize: 512
-      },
-      paint: { "raster-opacity": 0.7 }
-    });
-
-    this.map.setLayoutProperty("noiseLayer", "visibility", "none");
-  }
-
-  buildingLayer() {
-    /*
-  3d buildings
-  */
-    this.map.addLayer({
-      id: "3dBuildingsLayer",
-      displayName: "3dBuildingsLayer",
-      source: "composite",
-      "source-layer": "building",
-      filter: ["==", "extrude", "true"],
-      type: "fill-extrusion",
-      minzoom: 10,
-      paint: {
-        "fill-extrusion-color": "#fff",
-        "fill-extrusion-height": [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          0.1,
-          10,
-          15.05,
-          ["get", "height"]
-        ],
-        "fill-extrusion-opacity": 0.7
-      }
-    });
-
-    this.map.setLayoutProperty("3dBuildingsLayer", "visibility", "none");
   }
 
   async accessLayer() {
@@ -337,6 +285,36 @@ export class Layers {
     refreshIntervalId = setInterval(() => {
       renderDeck();
     });
+  }
+
+  buildingLayer() {
+    /*
+  3d buildings
+  */
+    this.map.addLayer({
+      id: "3dBuildingsLayer",
+      displayName: "3dBuildingsLayer",
+      source: "composite",
+      "source-layer": "building",
+      filter: ["==", "extrude", "true"],
+      type: "fill-extrusion",
+      minzoom: 10,
+      paint: {
+        "fill-extrusion-color": "#fff",
+        "fill-extrusion-height": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          0.1,
+          10,
+          15.05,
+          ["get", "height"]
+        ],
+        "fill-extrusion-opacity": 0.7
+      }
+    });
+
+    this.map.setLayoutProperty("3dBuildingsLayer", "visibility", "none");
   }
 }
 
