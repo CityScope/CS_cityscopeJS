@@ -147,9 +147,11 @@ export class Update {
 
       const markerDiv = document.createElement("div");
       markerDiv.className = "typesMarkersStyle";
-      markerDiv.innerHTML = this.cellsFeaturesDict[
-        feature.properties.type
-      ].type;
+      markerDiv.innerHTML =
+        feature.properties.type == -1
+          ? "null"
+          : this.cellsFeaturesDict[feature.properties.type].type;
+
       let marker = new mapboxgl.Marker(markerDiv)
         .setLngLat(center)
         .addTo(Storage.map);
