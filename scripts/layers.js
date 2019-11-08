@@ -3,6 +3,9 @@ import { getCityIO } from "./cityio";
 import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
+import { LineLayer } from "@deck.gl/layers";
+var randomColor = require("randomcolor"); // import the script
+
 import transformScale from "@turf/transform-scale";
 import { Update } from "./update";
 import { UI } from "./ui";
@@ -163,9 +166,15 @@ export class Layers {
   */
 
     console.log("starting ABM..");
+    let colorsArray = randomColor({
+      luminosity: "bright",
+      format: "rgb",
+      count: 150
+    });
 
     // get data at init
     Storage.ABMdata = await getCityIO(Storage.cityIOurl + "/ABM");
+    let lineData = await getCityIO(Storage.cityIOurl + "/test_line");
 
     let timeStampDiv = document.getElementById("timeStamp");
     let simPaceDiv = document.getElementById("simPaceDiv");
@@ -207,9 +216,30 @@ export class Layers {
         time = time + simPaceValue;
       }
       // toggle abm layer mode or type
-      if (ABMmodeType == "Off") {
+      if (ABMmodeType == "All") {
         deckContext.setProps({
-          layers: []
+          layers: [
+            new LineLayer({
+              id: "line",
+              data: lineData,
+              pickable: true,
+              getSourcePosition: d => d.start,
+              getTargetPosition: d => d.end,
+              getColor: d => {
+                let dInt = parseInt(d.name);
+                let rgbString = colorsArray[dInt]
+                  .replace(/[^\d,]/g, "")
+                  .split(",");
+
+                return [
+                  parseInt(rgbString[0]),
+                  parseInt(rgbString[1]),
+                  parseInt(rgbString[2])
+                ];
+              },
+              getWidth: 3
+            })
+          ]
         });
         //
       } else if (ABMmodeType == "Modes") {
@@ -243,7 +273,7 @@ export class Layers {
             })
           ]
         });
-      } else if (ABMmodeType == "OD") {
+      } else if (ABMmodeType == "Types") {
         deckContext.setProps({
           layers: [
             new TripsLayer({
@@ -268,6 +298,10 @@ export class Layers {
               currentTime: time
             })
           ]
+        });
+      } else {
+        deckContext.setProps({
+          layers: []
         });
       }
 

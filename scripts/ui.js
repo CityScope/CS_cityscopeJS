@@ -164,8 +164,10 @@ export class UI {
         case "ABMLayer":
           if (e.target.checked) {
             document.getElementById("ABMlayerSection").style.display = "block";
+            Storage.ABMmodeType = "All";
           } else {
             document.getElementById("ABMlayerSection").style.display = "none";
+            Storage.ABMmodeType = null;
           }
           break;
       }
