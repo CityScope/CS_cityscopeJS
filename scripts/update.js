@@ -14,36 +14,37 @@ export class Update {
     this.updateableLayersList = updateableLayersList;
     // loading spinner UI
     this.spinnerDiv = document.querySelector("#spinner");
+    // ["street","housing","housing2","working","working_2"]
     this.cellsFeaturesDict = [
       {
-        type: "R",
+        type: "st",
         color: "#373F51",
         height: 1
       },
       {
-        type: "G",
-        color: "#13D031",
-        height: 3
+        type: "H1",
+        color: "#002DD5",
+        height: 20
       },
       {
-        type: "L1",
-        color: "#002DD5",
-        height: 25
+        type: "H2",
+        color: "#008DD5",
+        height: 50
       },
       {
         type: "W1",
         color: "#E43F0F",
-        height: 50
-      },
-      {
-        type: "L2",
-        color: "#008DD5",
         height: 60
       },
       {
         type: "W2",
         color: "#F51476",
-        height: 100
+        height: 80
+      },
+      {
+        type: "G",
+        color: "#13D031",
+        height: 3
       }
     ];
   }

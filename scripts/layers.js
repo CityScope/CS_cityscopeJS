@@ -3,7 +3,7 @@ import { getCityIO } from "./cityio";
 import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
-import { LineLayer } from "@deck.gl/layers";
+import { LineLayer, PathLayer } from "@deck.gl/layers";
 var randomColor = require("randomcolor"); // import the script
 
 import transformScale from "@turf/transform-scale";
@@ -219,25 +219,22 @@ export class Layers {
       if (ABMmodeType == "All") {
         deckContext.setProps({
           layers: [
-            new LineLayer({
+            new PathLayer({
               id: "line",
-              data: lineData,
-              pickable: true,
-              getSourcePosition: d => d.start,
-              getTargetPosition: d => d.end,
+              data: Storage.ABMdata,
+              getPath: d => d.path,
               getColor: d => {
-                let dInt = parseInt(d.name);
-                let rgbString = colorsArray[dInt]
-                  .replace(/[^\d,]/g, "")
-                  .split(",");
-
-                return [
-                  parseInt(rgbString[0]),
-                  parseInt(rgbString[1]),
-                  parseInt(rgbString[2])
-                ];
+                //switch between modes or types of users
+                switch (d.mode[1]) {
+                  case 0:
+                    return [255, 0, 0];
+                  case 1:
+                    return [0, 0, 255];
+                  case 2:
+                    return [0, 255, 0];
+                }
               },
-              getWidth: 3
+              getWidth: 0.5
             })
           ]
         });
