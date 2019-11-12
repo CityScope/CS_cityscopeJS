@@ -160,7 +160,7 @@ export class Update {
   }
 
   loadingSpinner() {
-    console.log("load state:", this.loadingState);
+    // console.log("load state:", this.loadingState);
     if (this.loadingState.awaitingUpdate) {
       // show spinner on loading
       if (this.spinnerDiv.style.display !== "inline-block")
@@ -206,11 +206,14 @@ export class Update {
   }
 
   cellTypeMarkers() {
-    if (Storage.markerHolder !== null) {
+    // clear old markers and holder
+    if (Storage.markerHolder.length > 0) {
       for (var i = Storage.markerHolder.length - 1; i >= 0; i--) {
         Storage.markerHolder[i].remove();
       }
+      Storage.markerHolder = [];
     }
+
     let interactiveGridMapping = Storage.interactiveGridMapping;
     for (let i in interactiveGridMapping) {
       let cellPos = interactiveGridMapping[i];
@@ -234,6 +237,7 @@ export class Update {
 
   async update_grid() {
     console.log("updating grid layer...");
+
     let gridData;
     if (Storage.interactiveMode == false) {
       gridData = await getCityIO(Storage.cityIOurl + "/grid");
@@ -282,7 +286,10 @@ export class Update {
       }
     }
     Storage.map.getSource("gridGeoJSONSource").setData(gridGeoJSON);
+
     // make markers and clean the past ones
-    this.cellTypeMarkers();
+    let markersButton = document.getElementById("markers");
+    if (markersButton.checked == true || Storage.markerHolder.length < 1)
+      this.cellTypeMarkers();
   }
 }
