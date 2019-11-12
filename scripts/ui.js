@@ -11,6 +11,7 @@ export class UI {
     this.InteractionModeDiv = document.getElementById("InteractionModeDiv");
     this.update = new Update();
     this.mouseInteraction = new MouseInteraction();
+    this.cam = new Camera();
   }
 
   init() {
@@ -28,14 +29,13 @@ export class UI {
     }
 
     //bring map to projection postion
-    new Camera().reset_camera_position();
+    this.cam.reset_camera_position();
     this.hideUI();
     this.uiButtonsInteraction();
     this.mouseInteraction.boxSelection();
   }
 
   uiButtonsInteraction() {
-    let cam = new Camera();
     // start listenining to gird editing
     this.update.editCellTypes();
     document.getElementById("uiList").addEventListener("change", e => {
@@ -86,7 +86,7 @@ export class UI {
               cancelAnimationFrame(Storage.cameraRotationAnimFrame);
             }
 
-            cam.reset_camera_position();
+            this.cam.reset_camera_position();
           }
           break;
         //
@@ -224,6 +224,15 @@ export class UI {
 }
 
 function keystoneHandler() {
+  let storeCameraParms = {
+    center: Storage.map.getCenter(),
+    zoom: Storage.map.getZoom(),
+    bearing: Storage.map.getBearing(),
+    pitch: Storage.map.getPitch()
+  };
+
+  console.log(storeCameraParms);
+
   let localStorage = window.localStorage;
   // if there is a previous keystone
   if (localStorage["maptastic.layers"]) {
@@ -233,28 +242,34 @@ function keystoneHandler() {
     // 1920;
     var h = screen.height;
     //  1080;
-    let windowDims = [[0, 0], [w, 0], [w, h], [0, h]];
+    let windowDims = [
+      [0, 0],
+      [w, 0],
+      [w, h],
+      [0, h]
+    ];
 
     if (!storageJSON[0].mode || storageJSON[0].mode == "projection") {
       storageJSON[0].mode = "screen";
       storageJSON[0].sourcePoints_BU = storageJSON[0].sourcePoints;
       storageJSON[0].targetPoints_BU = storageJSON[0].targetPoints;
-      //
       storageJSON[0].sourcePoints = windowDims;
       storageJSON[0].targetPoints = windowDims;
       localStorage.setItem("maptastic.layers", [JSON.stringify(storageJSON)]);
-      location.reload();
+      localStorage.setItem("cameraParams", [JSON.stringify(storeCameraParms)]);
+      alert("Saving camera position...reloading app into screen mode...");
     } else {
       storageJSON[0].mode = "projection";
       storageJSON[0].sourcePoints = storageJSON[0].sourcePoints_BU;
       storageJSON[0].targetPoints = storageJSON[0].targetPoints_BU;
       localStorage.setItem("maptastic.layers", [JSON.stringify(storageJSON)]);
-      location.reload();
+      alert("Reloading app into keystone mode...");
     }
+    location.reload();
   } else {
     let keystoneButtonDiv = document.getElementById("keystoneButton");
     keystoneButtonDiv.innerHTML =
-      "No keystone found, click 'shift+z' to keystone";
+      "No keystone found, click 'shift+z' to init keystone";
     console.log("no older maptastic setup found");
   }
 }

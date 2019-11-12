@@ -225,7 +225,7 @@ button:focus {
   padding: 0.5em;
   border-radius: 40%;
   border: 1px solid rgb(0, 0, 0);
-  font-size: 1.5em;
+  font-size: 1em;
   font-weight: bolder;
   background: rgba(255, 255, 255, 0.5);
   color: black;

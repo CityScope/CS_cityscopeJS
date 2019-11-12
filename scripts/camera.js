@@ -2,24 +2,34 @@ import "./Storage";
 
 export class Camera {
   constructor() {
+    this.storageCameraParams = JSON.parse(localStorage.getItem("cameraParams"));
+    console.log(this.storageCameraParams);
+
     this.map = Storage.map;
     this.table_lat = Storage.cityioHeader.spatial.latitude;
     this.table_lon = Storage.cityioHeader.spatial.longitude;
   }
 
   async reset_camera_position() {
-    let zoomLevelForBounds;
+    if (this.storageCameraParams != null) {
+      this.map.jumpTo({
+        center: this.storageCameraParams.center,
+        bearing: this.storageCameraParams.bearing,
+        pitch: this.storageCameraParams.pitch,
+        zoom: this.storageCameraParams.zoom
+      });
+      return;
+    }
+
     let angle;
     angle = 360 - Storage.cityioHeader.spatial.rotation;
 
-    zoomLevelForBounds = 15;
-
-    this.map.rotateTo(angle, { duration: 200 });
+    this.map.rotateTo(angle);
     this.map.jumpTo({
       center: [this.table_lon, this.table_lat],
       bearing: angle,
       pitch: 0,
-      zoom: zoomLevelForBounds
+      zoom: 14
     });
   }
 }
