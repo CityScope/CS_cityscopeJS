@@ -3,8 +3,6 @@ import "./Storage";
 export class Camera {
   constructor() {
     this.storageCameraParams = JSON.parse(localStorage.getItem("cameraParams"));
-    console.log(this.storageCameraParams);
-
     this.map = Storage.map;
     this.table_lat = Storage.cityioHeader.spatial.latitude;
     this.table_lon = Storage.cityioHeader.spatial.longitude;

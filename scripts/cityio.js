@@ -23,5 +23,5 @@ export async function postCityIO(url, data) {
     body: JSON.stringify(data)
   });
   const content = await rawResponse.json();
-  console.log(content.status);
+  console.log("cityIO post:", content.status);
 }

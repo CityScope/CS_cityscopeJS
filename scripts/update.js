@@ -7,13 +7,15 @@ import centroid from "@turf/centroid";
 
 export class Update {
   constructor(updateableLayersList) {
+    // loading spinner UI
+    this.spinnerDiv = document.querySelector("#spinner");
+    //
+    this.loadingState = {};
     Storage.markerHolder = [];
     // init the hash list holder
     Storage.oldAHashList = {};
     this.loopInterval = 1000;
-    this.updateableLayersList = updateableLayersList;
-    // loading spinner UI
-    this.spinnerDiv = document.querySelector("#spinner");
+    this.updateableLayers = updateableLayersList;
     // ["street","housing","housing2","working","working_2"]
     this.cellsFeaturesDict = [
       {
@@ -57,23 +59,29 @@ export class Update {
     );
   }
 
+  /*
   async compareHashes() {
+    // visulize the loading
+    this.loadingSpinner();
     // deep compare old hash holder and the new cityIO one
     if (loEqual(Storage.oldAHashList, this.updateableLayersList) == false) {
-      // show spinner on loading
-      if (this.spinnerDiv.style.display !== "inline-block")
-        this.spinnerDiv.style.display = "inline-block";
+      this.loadingState.awaitingUpdate = true;
       // go through hashes
       for (let layerToUpdate in this.updateableLayersList) {
         // and check each layer indeviduly
         if (
+          // if the case is new table
           Storage.oldAHashList == null ||
+          // or if one of the layers don't match
           this.updateableLayersList[layerToUpdate] !==
             Storage.oldAHashList[layerToUpdate]
         ) {
+          // update the loading state
+          this.loadingState[layerToUpdate] = true;
           Storage.oldAHashList[layerToUpdate] = this.updateableLayersList[
             layerToUpdate
           ];
+          // update the layer needed update
           let funcName = "update_" + layerToUpdate;
           this[funcName]();
         }
@@ -81,6 +89,9 @@ export class Update {
     } else if (
       loEqual(Storage.oldAHashList, this.updateableLayersList) == true
     ) {
+      this.loadingState = {};
+      this.loadingState.awaitingUpdate = false;
+
       // listen to refreshed hashes
       // and populate 'updateableLayersList'
       let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
@@ -89,12 +100,76 @@ export class Update {
         this.updateableLayersList[layerToUpdate] =
           cityioHashes.hashes[layerToUpdate];
       }
-      //
-      // hide spinner on done loading
-      if (this.spinnerDiv.style.display !== "none") {
-        this.spinnerDiv.style.display = "none";
+    }
+  }
+  */
+
+  async compareHashes() {
+    // Edge case: if this is a new user window/table
+    if (Object.keys(Storage.oldAHashList).length === 0) {
+      // update all layers
+      for (let layerToUpdate in this.updateableLayers) {
+        // update the layer needed update
+        let funcName = "update_" + layerToUpdate;
+        this[funcName]();
+        // update hashes of now updated layers
+        Storage.oldAHashList[layerToUpdate] = this.updateableLayers[
+          layerToUpdate
+        ];
       }
-      //
+      console.log("updating layer in new table...");
+      return;
+    }
+
+    // deep compare old hash holder and the new cityIO one
+    if (loEqual(Storage.oldAHashList, this.updateableLayers) == false) {
+      this.loadingState.awaitingUpdate = true;
+      // and check each layer indeviduly
+      for (let layerToUpdate in this.updateableLayers) {
+        // update the loading state
+        if (
+          this.updateableLayers[layerToUpdate] !==
+          Storage.oldAHashList[layerToUpdate]
+        ) {
+          // which layer is now wating
+          this.loadingState[layerToUpdate] = true;
+          // update the layer needed update
+          let funcName = "update_" + layerToUpdate;
+          this[funcName]();
+          // update hashes of now updated layers
+          Storage.oldAHashList[layerToUpdate] = this.updateableLayers[
+            layerToUpdate
+          ];
+        }
+      }
+    } else {
+      this.loadingState = {};
+      this.loadingState.awaitingUpdate = false;
+      // listen to refreshed hashes
+      // and populate 'updateableLayersList'
+      let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
+      // populate updateableLayersList with new hashes from cityIO
+      for (let layerToUpdate in this.updateableLayers) {
+        this.updateableLayers[layerToUpdate] =
+          cityioHashes.hashes[layerToUpdate];
+      }
+    }
+
+    // visulize the loading
+    this.loadingSpinner();
+  }
+
+  loadingSpinner() {
+    console.log("load state:", this.loadingState);
+    if (this.loadingState.awaitingUpdate) {
+      // show spinner on loading
+      if (this.spinnerDiv.style.display !== "inline-block")
+        this.spinnerDiv.style.display = "inline-block";
+      return;
+    }
+    // hide spinner on done loading
+    if (this.spinnerDiv.style.display !== "none") {
+      this.spinnerDiv.style.display = "none";
     }
   }
 
@@ -131,8 +206,6 @@ export class Update {
   }
 
   cellTypeMarkers() {
-    console.log("making markers...");
-
     if (Storage.markerHolder !== null) {
       for (var i = Storage.markerHolder.length - 1; i >= 0; i--) {
         Storage.markerHolder[i].remove();
@@ -163,12 +236,10 @@ export class Update {
     console.log("updating grid layer...");
     let gridData;
     if (Storage.interactiveMode == false) {
-      console.log("grid data source: cityIO");
       gridData = await getCityIO(Storage.cityIOurl + "/grid");
       // store cityio grid data
       Storage.girdCityIODataSource = gridData;
     } else {
-      console.log("grid data source: local");
       // eventually assign data soruce to grid data
       gridData = Storage.girdLocalDataSource;
     }
