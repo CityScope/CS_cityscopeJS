@@ -3,9 +3,8 @@ import { getCityIO } from "./cityio";
 import { Deck } from "@deck.gl/core";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import { TripsLayer } from "@deck.gl/geo-layers";
-import { LineLayer, PathLayer } from "@deck.gl/layers";
-var randomColor = require("randomcolor"); // import the script
-
+import { PathLayer } from "@deck.gl/layers";
+import {} from "module";
 import transformScale from "@turf/transform-scale";
 import { Update } from "./update";
 import { UI } from "./ui";
@@ -57,6 +56,10 @@ export class Layers {
     );
     // get  the grid GEOjson itself
     Storage.gridGeoJSON = await getCityIO(Storage.cityIOurl + "/meta_grid");
+
+    // Storage.interactiveGridMapping = gbFullMap;
+    // Storage.gridGeoJSON = gbFullGrid;
+
     // Active layer
     this.map.addSource("gridGeoJSONSource", {
       type: "geojson",
@@ -77,7 +80,7 @@ export class Layers {
 
     for (let i = 0; i < Storage.gridGeoJSON.features.length; i++) {
       if (Storage.gridGeoJSON.features[i].properties.interactive_id == null) {
-        transformScale(Storage.gridGeoJSON.features[i], 0.05, { mutate: true });
+        transformScale(Storage.gridGeoJSON.features[i], 0.2, { mutate: true });
       } else {
         transformScale(Storage.gridGeoJSON.features[i], 0.8, { mutate: true });
       }
@@ -166,15 +169,9 @@ export class Layers {
   */
 
     console.log("starting ABM..");
-    let colorsArray = randomColor({
-      luminosity: "bright",
-      format: "rgb",
-      count: 150
-    });
 
     // get data at init
     Storage.ABMdata = await getCityIO(Storage.cityIOurl + "/ABM");
-    let lineData = await getCityIO(Storage.cityIOurl + "/test_line");
 
     let timeStampDiv = document.getElementById("timeStamp");
     let simPaceDiv = document.getElementById("simPaceDiv");
@@ -210,6 +207,9 @@ export class Layers {
     async function renderDeck() {
       let ABMmodeType = Storage.ABMmodeType;
 
+      var mapZoom =
+        Storage.map.getZoom() > 14 ? 1.5 : Storage.map.getZoom() / 1.5;
+
       if (time >= startSimHour + loopLength - 1) {
         time = startSimHour;
       } else {
@@ -234,7 +234,7 @@ export class Layers {
                     return [0, 255, 0];
                 }
               },
-              getWidth: 0.5
+              getWidth: mapZoom
             })
           ]
         });
@@ -263,7 +263,7 @@ export class Layers {
                     return [255, 255, 0];
                 }
               },
-              getWidth: 1,
+              getWidth: mapZoom,
               rounded: true,
               trailLength: 100,
               currentTime: time
@@ -289,7 +289,7 @@ export class Layers {
                     return [0, 255, 0];
                 }
               },
-              getWidth: 0.5,
+              getWidth: mapZoom,
               rounded: true,
               trailLength: 200,
               currentTime: time

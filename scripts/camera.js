@@ -9,7 +9,10 @@ export class Camera {
   }
 
   async reset_camera_position() {
-    if (this.storageCameraParams != null) {
+    if (
+      this.storageCameraParams != null &&
+      Storage.cityIOurl == this.storageCameraParams.url
+    ) {
       this.map.jumpTo({
         center: this.storageCameraParams.center,
         bearing: this.storageCameraParams.bearing,

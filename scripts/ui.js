@@ -225,6 +225,7 @@ export class UI {
 
 function keystoneHandler() {
   let storeCameraParms = {
+    url: Storage.cityIOurl,
     center: Storage.map.getCenter(),
     zoom: Storage.map.getZoom(),
     bearing: Storage.map.getBearing(),
