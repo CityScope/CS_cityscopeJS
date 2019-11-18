@@ -222,7 +222,19 @@ export class Layers {
             new PathLayer({
               id: "line",
               data: Storage.ABMdata,
-              getPath: d => d.path,
+              getPath: d => {
+                const noisePath =
+                  Math.random() < 0.5
+                    ? Math.random() * 0.00005
+                    : Math.random() * -0.00005;
+
+                for (let i in d.path) {
+                  d.path[i][0] = d.path[i][0] + noisePath;
+                  d.path[i][1] = d.path[i][1] + noisePath;
+                }
+
+                return d.path;
+              },
               getColor: d => {
                 //switch between modes or types of users
                 switch (d.mode[1]) {
@@ -234,7 +246,7 @@ export class Layers {
                     return [0, 255, 0];
                 }
               },
-              getWidth: mapZoom
+              getWidth: mapZoom / 5
             })
           ]
         });
