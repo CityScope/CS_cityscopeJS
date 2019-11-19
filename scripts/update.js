@@ -197,7 +197,10 @@ export class Update {
         for (let i in Storage.selectedGridCells) {
           let gridPosition =
             Storage.selectedGridCells[i].properties.interactive_id;
-          Storage.girdLocalDataSource[gridPosition][0] = cellTypeSlider.value;
+          // get the slider value as int and put it to grid array
+          Storage.girdLocalDataSource[gridPosition][0] = parseInt(
+            cellTypeSlider.value
+          );
         }
         this.update_grid();
       }
