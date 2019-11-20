@@ -4,7 +4,7 @@
   "description": "- clone or download zip - install node with npm - install `parcelJS` - `$ npm install` - `cd js && $ npm tst`",
   "main": "index.html",
   "scripts": {
-    "test": "parcel index.html"
+    "start": "parcel index.html"
   },
   "repository": {
     "type": "git",
@@ -24,15 +24,15 @@
     "cssnano": "^4.1.10"
   },
   "dependencies": {
-    "@deck.gl/core": "^7.3.4",
-    "@deck.gl/geo-layers": "^7.3.4",
-    "@deck.gl/layers": "^7.3.4",
-    "@deck.gl/mapbox": "^7.3.4",
-    "@deck.gl/mesh-layers": "^7.3.4",
+    "@deck.gl/core": "^7.3.6",
+    "@deck.gl/geo-layers": "^7.3.6",
+    "@deck.gl/layers": "^7.3.6",
+    "@deck.gl/mapbox": "^7.3.6",
+    "@deck.gl/mesh-layers": "^7.3.6",
     "@turf/centroid": "^6.0.2",
     "@turf/transform-scale": "^5.1.5",
     "babel-polyfill": "^6.26.0",
-    "deck.gl": "^7.3.4",
+    "deck.gl": "^7.3.6",
     "lodash": "^4.17.15",
     "mapbox-gl": "^1.5.0",
     "material-icons": "^0.3.1",

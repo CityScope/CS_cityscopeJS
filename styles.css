@@ -172,6 +172,26 @@ button:focus {
   height: 100%;
 }
 
+.radarDiv {
+  position: fixed;
+  z-index: 1000;
+  padding: 1em;
+  display: none;
+  border-radius: 10em;
+  margin: auto;
+  height: 90%;
+  width: 80%;
+  background-color: transparent !important;
+}
+
+.resp-iframe {
+  background-color: transparent !important;
+  width: 70%;
+  height: 90%;
+  border: 0;
+  border-radius: 1em;
+}
+
 /* Spinner  */
 .spinner {
   width: 4em;

@@ -46,6 +46,7 @@
       </div>
       <h1>CityScopeJS</h1>
       <p>Right click to hide UI | 'Shift+Z' to keystone</p>
+
       <nav id="uiList" class="uiList">
         <!--  -->
         <section id="displayControlsSection">
@@ -66,6 +67,13 @@
             >Interaction
             <br />
             <i class="material-icons">touch_app</i>
+          </label>
+          <!--  -->
+          <input type="checkbox" id="toggleRadar" />
+          <label for="toggleRadar"
+            >Radar
+            <br />
+            <i class="material-icons">bar_chart</i>
           </label>
           <section id="InteractionModeSection">
             <div id="InteractionModeDiv" class="InteractionModeDiv"></div>
@@ -166,6 +174,8 @@
       </section>
       <!--  -->
     </div>
+
+    <div id="radarDiv" class="radarDiv"></div>
 
     <script src="./scripts/index.js"></script>
   </body>

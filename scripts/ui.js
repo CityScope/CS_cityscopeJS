@@ -12,6 +12,7 @@ export class UI {
     this.update = new Update();
     this.mouseInteraction = new MouseInteraction();
     this.cam = new Camera();
+    this.createRadarIframe();
   }
 
   init() {
@@ -87,6 +88,15 @@ export class UI {
             }
 
             this.cam.reset_camera_position();
+          }
+          break;
+        //
+        case "toggleRadar":
+          if (e.target.checked) {
+            document.getElementById("radarDiv").style.display = "block";
+            console.log(document.getElementById("radarDiv"));
+          } else {
+            document.getElementById("radarDiv").style.display = "none";
           }
           break;
         //
@@ -172,6 +182,18 @@ export class UI {
           break;
       }
     });
+  }
+
+  createRadarIframe() {
+    var link = "https://cityscope.media.mit.edu/CS_cityscopeJS_UI/";
+    var iframe = document.createElement("iframe");
+    iframe.frameBorder = 0;
+    iframe.allowtransparency = "true";
+    iframe.id = "radar";
+    iframe.className = "resp-iframe";
+    iframe.setAttribute("src", link);
+    var r = document.querySelector("#radarDiv");
+    r.appendChild(iframe);
   }
 
   toggleMarkers(className, displayState) {
