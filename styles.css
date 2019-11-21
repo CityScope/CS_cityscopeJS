@@ -186,6 +186,23 @@ button:focus {
   height: 100%;
 }
 
+.exitIframe {
+  position: fixed;
+  margin: 1em;
+  z-index: 1000;
+  color: white;
+  font-size: 2em;
+  text-align: center;
+  border: thin solid white;
+  border-radius: 50%;
+  height: 1.5em;
+  width: 1.5em;
+  display: none;
+}
+.exitIframe:hover {
+  background-color: rgba(255, 255, 255, 0.185);
+}
+
 /* Spinner  */
 .spinner {
   width: 4em;

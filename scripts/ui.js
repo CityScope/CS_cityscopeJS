@@ -94,8 +94,10 @@ export class UI {
         case "toggleRadar":
           if (e.target.checked) {
             document.getElementById("radarIframe").style.display = "block";
+            document.getElementById("exitIframe").style.display = "block";
           } else {
             document.getElementById("radarIframe").style.display = "none";
+            document.getElementById("exitIframe").style.display = "none";
           }
           break;
         //
@@ -184,22 +186,25 @@ export class UI {
   }
 
   createRadarIframe() {
+    let exitIframe = document.createElement("div");
+    exitIframe.id = "exitIframe";
+    exitIframe.innerHTML = "x";
+    exitIframe.className = "exitIframe";
+    document.body.appendChild(exitIframe);
+
     var link = "https://cityscope.media.mit.edu/CS_cityscopeJS_UI/";
     var iframe = document.createElement("iframe");
     iframe.id = "radarIframe";
     iframe.className = "radarIframe";
     iframe.setAttribute("src", link);
     document.body.appendChild(iframe);
+
+    exitIframe.addEventListener("click", function() {
+      iframe.style.display = "none";
+      exitIframe.style.display = "none";
+    });
+
     iframe.style.display = "none";
-
-    document.onkeydown = function(evt) {
-      evt = evt || window.event;
-      if (evt.keyCode == 27 && iframe.style.display !== "none") {
-        console.log("d");
-
-        iframe.style.display = "none";
-      }
-    };
   }
 
   toggleMarkers(className, displayState) {
