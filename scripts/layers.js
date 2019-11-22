@@ -16,30 +16,39 @@ export class Layers {
   }
 
   async layersLoader() {
-    console.log("loading layers data..");
+    console.log("Getting list of existing layers form ciytIO..");
     let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
-
-    // load 3d building Layer first
+    cityioHashes = cityioHashes.hashes;
+    // load 3d building Layer first, from MAPBOX api
     this.buildingLayer();
     // then cycle between known layers
-    for (let hashName in cityioHashes.hashes) {
+    for (let hashName in cityioHashes) {
       switch (hashName) {
         case "meta_grid":
+          // check if there is mapping hash
+          if (!Object.keys(cityioHashes).includes("interactive_grid_mapping")) {
+            console.log("missing grid mapping..stopping CityScopeJS");
+            return;
+          }
+          await this.gridLayer();
+
           break;
         case "grid":
-          this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
+          this.updateableLayersList[hashName] = cityioHashes[hashName];
           break;
         case "ABM":
-          this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
+          await this.ABMlayer();
+          this.updateableLayersList[hashName] = cityioHashes[hashName];
           break;
         case "access":
-          this.updateableLayersList[hashName] = cityioHashes.hashes[hashName];
+          await this.accessLayer();
+          this.updateableLayersList[hashName] = cityioHashes[hashName];
           break;
         default:
           break;
       }
     }
-    await Promise.all([this.gridLayer(), this.ABMlayer(), this.accessLayer()]);
+    // await Promise.all([this.gridLayer(), this.ABMlayer(), this.accessLayer()]);
     Storage.updateableLayersList = this.updateableLayersList;
 
     // load UI for updateable Layers List
@@ -56,9 +65,6 @@ export class Layers {
     );
     // get  the grid GEOjson itself
     Storage.gridGeoJSON = await getCityIO(Storage.cityIOurl + "/meta_grid");
-
-    // Storage.interactiveGridMapping = gbFullMap;
-    // Storage.gridGeoJSON = gbFullGrid;
 
     // Active layer
     this.map.addSource("gridGeoJSONSource", {
