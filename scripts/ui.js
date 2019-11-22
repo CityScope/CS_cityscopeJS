@@ -223,10 +223,16 @@ export class UI {
   }
 
   accessButtonsInteraction() {
-    // select access layer
-    let accessButtons = document.getElementsByClassName("accessButton");
-    for (var i = 0; i < accessButtons.length; i++) {
-      accessButtons[i].addEventListener(
+    let accessSection = document.getElementById("AccesslayersButtonsSection");
+    for (var i in Object.keys(Storage.accessLayerProps)) {
+      let accessPropName = Object.keys(Storage.accessLayerProps)[i];
+
+      var accessButtons = document.createElement("BUTTON"); // Create a <button> element
+      accessButtons.innerHTML = accessPropName; // Insert text
+      accessButtons.id = accessPropName;
+      accessButtons.className = "accessButtons UIButtons";
+      accessSection.appendChild(accessButtons); // Append <button> to <body>
+      accessButtons.addEventListener(
         "click",
         function(e) {
           cycleAccessLayers(e.currentTarget.id);

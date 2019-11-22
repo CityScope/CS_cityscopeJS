@@ -107,6 +107,18 @@ button:focus {
   display: none;
 }
 
+.AccesslayersButtonsSection {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: rgb(255, 255, 255);
+  border-radius: 1.5em;
+  bottom: 20em;
+  left: 0em;
+  padding: 1em;
+  position: absolute;
+  z-index: 1000;
+  display: none;
+}
+
 .uiList input[type="checkbox"] + label {
   display: inline-block;
   cursor: pointer;

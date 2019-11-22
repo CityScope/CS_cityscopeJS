@@ -10,6 +10,14 @@ class Storage {
     return Storage.instance;
   }
 
+  // access Layer Props
+  get accessLayerProps() {
+    return this._accessLayerProps;
+  }
+  set accessLayerProps(value) {
+    this._accessLayerProps = value;
+  }
+
   //interactiveMode (cityio vs local)
   get interactiveMode() {
     return this._interactiveMode;

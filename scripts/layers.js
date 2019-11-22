@@ -94,79 +94,6 @@ export class Layers {
     Storage.map.getSource("gridGeoJSONSource").setData(Storage.gridGeoJSON);
   }
 
-  async accessLayer() {
-    /*
-   Access
-  */
-    this.map.addSource("accessSource", {
-      type: "geojson",
-      data: Storage.cityIOurl + "/access"
-    });
-
-    // Access
-    this.map.addLayer({
-      id: "AccessLayerHeatmap",
-      type: "heatmap",
-      source: "accessSource",
-      // maxzoom: 15,
-      paint: {
-        "heatmap-weight": [
-          "interpolate",
-          ["linear"],
-          ["get", "education"],
-          0,
-          0.02,
-          1,
-          1
-        ],
-        "heatmap-intensity": [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          10,
-          0.1,
-          15,
-          1,
-          16,
-          3
-        ],
-        // Adjust the heatmap radius by zoom level
-        "heatmap-radius": [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          10,
-          1,
-          15,
-          100,
-          16,
-          300
-        ],
-        "heatmap-color": [
-          "interpolate",
-          ["linear"],
-          ["heatmap-density"],
-          0,
-          "rgba(255,0,0,0)",
-          0.05,
-          "red",
-          0.4,
-          "rgb(255, 124, 1)",
-          0.6,
-          "yellow",
-          0.8,
-          "rgb(142, 255, 0)",
-          1,
-          "green"
-        ],
-
-        "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 1, 1, 15, 0.7]
-      }
-    });
-
-    this.map.setLayoutProperty("AccessLayerHeatmap", "visibility", "none");
-  }
-
   async ABMlayer() {
     /*
   deck layer
@@ -364,6 +291,80 @@ export class Layers {
     });
 
     this.map.setLayoutProperty("3dBuildingsLayer", "visibility", "none");
+  }
+
+  async accessLayer() {
+    /*
+   Access
+  */
+    let accessData = await getCityIO(Storage.cityIOurl + "/access");
+    Storage.accessLayerProps = accessData.features[0].properties;
+
+    this.map.addSource("accessSource", {
+      type: "geojson",
+      data: Storage.cityIOurl + "/access"
+    });
+
+    // Access
+    this.map.addLayer({
+      id: "AccessLayerHeatmap",
+      type: "heatmap",
+      source: "accessSource",
+      paint: {
+        "heatmap-weight": [
+          "interpolate",
+          ["linear"],
+          ["get", Object.keys(Storage.accessLayerProps)[0]],
+          0,
+          0.02,
+          1,
+          1
+        ],
+        "heatmap-intensity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          10,
+          0.1,
+          15,
+          1,
+          16,
+          3
+        ],
+        // Adjust the heatmap radius by zoom level
+        "heatmap-radius": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          10,
+          1,
+          15,
+          100,
+          16,
+          300
+        ],
+        "heatmap-color": [
+          "interpolate",
+          ["linear"],
+          ["heatmap-density"],
+          0,
+          "rgba(255,0,0,0)",
+          0.05,
+          "red",
+          0.4,
+          "rgb(255, 124, 1)",
+          0.6,
+          "yellow",
+          0.8,
+          "rgb(142, 255, 0)",
+          1,
+          "green"
+        ],
+
+        "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 1, 1, 15, 0.7]
+      }
+    });
+    this.map.setLayoutProperty("AccessLayerHeatmap", "visibility", "none");
   }
 }
 
