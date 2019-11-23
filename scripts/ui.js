@@ -192,7 +192,9 @@ export class UI {
     exitIframe.className = "exitIframe";
     document.body.appendChild(exitIframe);
 
-    var link = "https://cityscope.media.mit.edu/CS_cityscopeJS_UI/";
+    let tableName = window.location.search.substring(1).toString();
+    var link =
+      "https://cityscope.media.mit.edu/CS_cityscopeJS_UI/?" + tableName;
     var iframe = document.createElement("iframe");
     iframe.id = "radarIframe";
     iframe.className = "radarIframe";
