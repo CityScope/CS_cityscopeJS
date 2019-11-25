@@ -1,10 +1,20 @@
 # CityScopeJS
 
-## CityScope platform for the web
+#### CityScope platform for the web
 
-This repo contains web-based frontend interface for CityScope platforms.
+CityScopeJS is a modular, open-ended architecture for MIT CityScope project.
 
-![alt text](DOCS/CityScopeJS.jpg)
+## Architecture
+
+![CityScopeJS Architecture](DOCS/CityScopeJS_arch.png)
+
+CityScopeJS includes several modules for building, testing and deploying an end-to-end CityScope platform. Each module is developed as a standalone part of the system with minimal dependency on others. Data flow between modules is achieved using [cityIO](https://cityio.media.mit.edu), which operates between the different modules.
+
+![TUI](DOCS/CityScopeJS.jpg)
+
+# CityScopeJS Frontend
+
+This repo contains the web frontend interface for CityScope platform.
 
 ## Development
 
@@ -12,37 +22,22 @@ This repo contains web-based frontend interface for CityScope platforms.
 - install node with `npm`
 - install `parcelJS`
 - `$ npm install`
-- `$ npm tst`
+- `$ npm start`
 
-## CS Hamburg Table Extents
+## Usage
 
-```
-top_left_lat = 53.53811
-top_left_lon = 10.00630
-rotation = 145.5 deg
-nrows = 44 cells
-ncols = 78 cells
-cellSize = 16 meter
-```
+- Run the web app
+- Start by adding CityScope table name to the URL (in the form of: `...URL/?__yourTableName__`)
+- Look for other active tables in cityIO
 
-#### Projection system
+# CityScopeJS Auxiliary Tools
 
-#### DHDN / Gauss-Kruger zone 4
+CityScopeJS is being constantly developed through its frontend, backend and modules. These tools extend CityScopeJS:
 
-`Proj4`
-: `+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +ellps=bessel +towgs84=598.1,73.7,418.2,0.202,0.045,-2.455,6.7 +units=m +no_defs`
-
----
-
-## auxiliary Tools
-
-These tool are web modules for CityScope platform:
-
-- CityScopeJS Scanner: https://github.com/CityScope/CS_cityscopeJS_Scanner
+- CityScopeJS Scanner: https://github.com/CityScope/CS_CityScoPy
 - CityScopeJS Data Visualization and UI: https://github.com/CityScope/CS_CityScopeJS_UI
+
+Not actively maintained:
+
 - CityScopeJS specific project modules: https://github.com/CityScope/CS_cityscopeJS_Modules
 - CityScopeJS generic tool for projecting websites, images or video slideshows on a physical table: https://github.com/CityScope/CS_CityScopeJS_Projection
-
-## Architecture
-
-CityScopeJS includes several modules for building, testing and deploying an end-to-end CityScope platform. Each module operates as a standalone part of the system and is not dependent on other parts. Data flow between modules is achieved using [cityIO](https://cityio.media.mit.edu), as server system that acts as an operator between the different modules.
