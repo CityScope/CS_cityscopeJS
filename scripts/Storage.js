@@ -11,6 +11,14 @@ class Storage {
   }
 
   // access Layer Props
+  get demoCounter() {
+    return this._demoCounter;
+  }
+  set demoCounter(value) {
+    this._demoCounter = value;
+  }
+
+  // access Layer Props
   get accessLayerProps() {
     return this._accessLayerProps;
   }

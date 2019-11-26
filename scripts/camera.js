@@ -13,7 +13,7 @@ export class Camera {
       this.storageCameraParams != null &&
       Storage.cityIOurl == this.storageCameraParams.url
     ) {
-      this.map.jumpTo({
+      this.map.flyTo({
         center: this.storageCameraParams.center,
         bearing: this.storageCameraParams.bearing,
         pitch: this.storageCameraParams.pitch,
@@ -26,11 +26,12 @@ export class Camera {
     angle = 360 - Storage.cityioHeader.spatial.rotation;
 
     this.map.rotateTo(angle);
-    this.map.jumpTo({
+    this.map.flyTo({
       center: [this.table_lon, this.table_lat],
       bearing: angle,
       pitch: 0,
-      zoom: 14
+      zoom: 14,
+      speed: 5
     });
   }
 }

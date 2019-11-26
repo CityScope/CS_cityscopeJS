@@ -59,52 +59,9 @@ export class Update {
     );
   }
 
-  /*
   async compareHashes() {
-    // visulize the loading
-    this.loadingSpinner();
-    // deep compare old hash holder and the new cityIO one
-    if (loEqual(Storage.oldAHashList, this.updateableLayersList) == false) {
-      this.loadingState.awaitingUpdate = true;
-      // go through hashes
-      for (let layerToUpdate in this.updateableLayersList) {
-        // and check each layer indeviduly
-        if (
-          // if the case is new table
-          Storage.oldAHashList == null ||
-          // or if one of the layers don't match
-          this.updateableLayersList[layerToUpdate] !==
-            Storage.oldAHashList[layerToUpdate]
-        ) {
-          // update the loading state
-          this.loadingState[layerToUpdate] = true;
-          Storage.oldAHashList[layerToUpdate] = this.updateableLayersList[
-            layerToUpdate
-          ];
-          // update the layer needed update
-          let funcName = "update_" + layerToUpdate;
-          this[funcName]();
-        }
-      }
-    } else if (
-      loEqual(Storage.oldAHashList, this.updateableLayersList) == true
-    ) {
-      this.loadingState = {};
-      this.loadingState.awaitingUpdate = false;
+    // this.demoModeHandler();
 
-      // listen to refreshed hashes
-      // and populate 'updateableLayersList'
-      let cityioHashes = await getCityIO(Storage.cityIOurl + "/meta");
-      // populate updateableLayersList with new hashes from cityIO
-      for (let layerToUpdate in this.updateableLayersList) {
-        this.updateableLayersList[layerToUpdate] =
-          cityioHashes.hashes[layerToUpdate];
-      }
-    }
-  }
-  */
-
-  async compareHashes() {
     // Edge case: if this is a new user window/table
     if (Object.keys(Storage.oldAHashList).length === 0) {
       // update all layers
@@ -294,5 +251,21 @@ export class Update {
     let markersButton = document.getElementById("markers");
     if (markersButton.checked == true || Storage.markerHolder.length < 1)
       this.cellTypeMarkers();
+
+    // start counting time
+    // Storage.demoCounter = new Date();
+  }
+
+  demoModeHandler() {
+    let endTime = new Date();
+    let timeDiff = endTime - Storage.demoCounter; //in ms
+    timeDiff /= 1000;
+    var seconds = Math.round(timeDiff);
+    let i;
+    if (seconds > 3) {
+      let accessPropName = Object.keys(Storage.accessLayerProps)[i];
+
+      console.log(Storage.accessLayerProps);
+    }
   }
 }

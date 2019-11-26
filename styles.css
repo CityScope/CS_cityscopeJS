@@ -264,11 +264,10 @@ button:focus {
   text-align: left;
   width: 1em;
   height: 1em;
-  padding: 0.2em;
   padding: 0.5em;
   border-radius: 40%;
   border: 1px solid rgb(0, 0, 0);
-  font-size: 1em;
+  font-size: 0.9em;
   font-weight: bolder;
   background: rgba(255, 255, 255, 0.5);
   color: black;

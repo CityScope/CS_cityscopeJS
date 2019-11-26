@@ -4,7 +4,7 @@
   "description": "- clone or download zip - install node with npm - install `parcelJS` - `$ npm install` - `cd js && $ npm tst`",
   "main": "index.html",
   "scripts": {
-    "r": "parcel index.html"
+    "start": "parcel index.html"
   },
   "repository": {
     "type": "git",
