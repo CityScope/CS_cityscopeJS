@@ -7,9 +7,9 @@ import "./Map.css";
 export class Map extends Component {
     state = {
         viewport: {
-            longitude: -74,
-            latitude: 40.72,
-            zoom: 10,
+            longitude: 9.9937,
+            latitude: 53.5511,
+            zoom: 12,
             pitch: 45,
             bearing: 0
         },
