@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import DeckContext from "./components/DeckContext/DeckContext";
+import Map from "./components/Map";
 import * as serviceWorker from "./serviceWorker";
 
-ReactDOM.render(<DeckContext />, document.getElementById("root"));
+ReactDOM.render(<Map />, document.getElementById("root"));
 
 serviceWorker.unregister();
