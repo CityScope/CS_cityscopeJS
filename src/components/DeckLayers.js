@@ -6,7 +6,7 @@ import {
 } from "@deck.gl/core";
 
 import React, { Component } from "react";
-import CityIO from "./CityIO";
+// import CityIO from "./CityIO";
 
 export default class DeckLayers extends Component {
     constructor(props) {
@@ -54,12 +54,6 @@ export default class DeckLayers extends Component {
         );
     }
 
-    componentWillUnmount() {
-        if (this.animationFrame != null) {
-            window.cancelAnimationFrame(this.animationFrame);
-        }
-    }
-
     componentDidMount() {
         fetch("https://cityio.media.mit.edu/api/table/grasbrook/meta_grid")
             .then(response => response.json())
@@ -82,6 +76,12 @@ export default class DeckLayers extends Component {
             });
 
         this.animate();
+    }
+
+    componentWillUnmount() {
+        if (this.animationFrame != null) {
+            window.cancelAnimationFrame(this.animationFrame);
+        }
     }
 
     _calculateSunPosition() {
@@ -107,7 +107,7 @@ export default class DeckLayers extends Component {
             .properties;
         console.log(thisFeature);
 
-        if (!thisFeature.picked || thisFeature.picked == false) {
+        if (!thisFeature.picked || thisFeature.picked === false) {
             thisFeature.old_height = thisFeature.height;
             thisFeature.picked = true;
             thisFeature.color = [255, 255, 0, 200];
@@ -123,13 +123,25 @@ export default class DeckLayers extends Component {
         });
     };
 
+    multiSelect(e) {
+        console.log(e);
+        //! https://tgorkin.github.io/docs/developer-guide/interactivity
+        // let objects = this.deck.pickObjects({
+        //     x: 0,
+        //     y: 0,
+        //     width: 100,
+        //     height: 100
+        // });
+        // console.log(objects);
+    }
+
     render() {
         // this._calculateSunPosition();
         // get viewport as prop from parent
         const { viewport } = this.props;
         let layers = [
             new TripsLayer({
-                // visible: false,
+                visible: false,
                 id: "modes",
                 data: this.state.ABMdata,
                 getPath: d => d.path,
@@ -143,6 +155,8 @@ export default class DeckLayers extends Component {
                             return [0, 0, 255];
                         case 2:
                             return [0, 255, 0];
+                        default:
+                            return [0, 0, 0];
                     }
                 },
                 getWidth: 2,
@@ -175,6 +189,8 @@ export default class DeckLayers extends Component {
                             return [0, 0, 255];
                         case 2:
                             return [0, 255, 0];
+                        default:
+                            return [0, 0, 0];
                     }
                 },
                 getWidth: 0.5
@@ -219,6 +235,7 @@ export default class DeckLayers extends Component {
         ];
         return (
             <DeckGL
+                onClick={this.multiSelect}
                 effects={this._effects}
                 viewState={viewport}
                 layers={layers}
