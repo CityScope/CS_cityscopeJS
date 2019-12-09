@@ -23,11 +23,11 @@ export default class DeckLayers extends Component {
 
         const ambientLight = new AmbientLight({
             color: [255, 255, 255],
-            intensity: 1.0
+            intensity: 1
         });
 
         const dirLight = new SunLight({
-            timestamp: Date.UTC(2019, 7, 1, this.state.time),
+            timestamp: Date.UTC(2019, 7, 1, 10),
             color: [255, 255, 255],
             intensity: 1.0,
             _shadow: true
@@ -102,8 +102,29 @@ export default class DeckLayers extends Component {
         );
     }
 
+    _handlePicking = picked => {
+        const thisFeature = this.state.geoJsonData.features[picked.index]
+            .properties;
+        console.log(thisFeature);
+
+        if (!thisFeature.picked || thisFeature.picked == false) {
+            thisFeature.old_height = thisFeature.height;
+            thisFeature.picked = true;
+            thisFeature.color = [255, 255, 0, 200];
+            thisFeature.height = 200;
+        } else {
+            thisFeature.height = thisFeature.old_height;
+            thisFeature.picked = false;
+            thisFeature.color = [255, 0, 255, 200];
+        }
+
+        this.setState({
+            geoJsonData: this.state.geoJsonData
+        });
+    };
+
     render() {
-        this._calculateSunPosition();
+        // this._calculateSunPosition();
         // get viewport as prop from parent
         const { viewport } = this.props;
         let layers = [
@@ -160,6 +181,10 @@ export default class DeckLayers extends Component {
             }),
 
             new GeoJsonLayer({
+                // ! Edit geojson
+                // ! https://codesandbox.io/s/7y3qk00o0q
+                // !
+
                 id: "GEOJSON_GRID",
                 data: this.state.geoJsonData,
                 visible: true,
@@ -169,14 +194,27 @@ export default class DeckLayers extends Component {
                 extruded: true,
                 lineWidthScale: 20,
                 lineWidthMinPixels: 2,
+                getElevation: d =>
+                    d.properties.land_use === "M1" ? d.properties.height : 1,
                 getFillColor: d =>
-                    d.properties.land_use === "M1"
+                    d.properties.color
+                        ? d.properties.color
+                        : d.properties.land_use === "M1"
                         ? [255, 0, 255, 200]
                         : [255, 255, 255, 100],
+
+                updateTriggers: {
+                    getElevation: d => d.properties.height,
+                    getFillColor: d => d.properties.color
+                },
+                transitions: { getElevation: 500, getFillColor: 500 },
+
                 getRadius: 100,
                 getLineWidth: 1,
-                getElevation: d =>
-                    d.properties.land_use === "M1" ? Math.random() * 100 : 1
+                onClick: picked => {
+                    if (picked.object.properties.land_use === "M1")
+                        this._handlePicking(picked);
+                }
             })
         ];
         return (
