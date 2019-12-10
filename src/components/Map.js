@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ReactMapGL from "react-map-gl";
+import MapGL from "react-map-gl";
 import DeckLayers from "./DeckLayers";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./Map.css";
@@ -27,8 +27,7 @@ export class Map extends Component {
     render() {
         return (
             <div className="Map">
-                <ReactMapGL
-                    dragRotate={true}
+                <MapGL
                     {...this.state.viewport}
                     onViewportChange={this._onViewportChange}
                     width="100%"
@@ -37,7 +36,7 @@ export class Map extends Component {
                     mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
                 >
                     <DeckLayers viewport={this.state.viewport} />
-                </ReactMapGL>
+                </MapGL>
             </div>
         );
     }

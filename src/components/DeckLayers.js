@@ -1,4 +1,9 @@
-import DeckGL, { PathLayer, GeoJsonLayer, TripsLayer } from "deck.gl";
+import DeckGL, {
+    HeatmapLayer,
+    PathLayer,
+    GeoJsonLayer,
+    TripsLayer
+} from "deck.gl";
 import {
     LightingEffect,
     AmbientLight,
@@ -6,13 +11,15 @@ import {
 } from "@deck.gl/core";
 
 import React, { Component } from "react";
-// import CityIO from "./CityIO";
+import { getCityIO } from "../services/cityIO";
 
 export default class DeckLayers extends Component {
     constructor(props) {
         super(props);
         this.state = {
             geoJsonData: null,
+            accessDataCoordinates: null,
+            accessDataValue: null,
             ABMdata: null,
             animationFrame: null,
             startSimHour: 60 * 60 * 7,
@@ -38,6 +45,14 @@ export default class DeckLayers extends Component {
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });
         lightingEffect.shadowColor = [0, 0, 0, 0.3];
         this._effects = [lightingEffect];
+
+        this.cityIObaseURL = "https://cityio.media.mit.edu/api/table/";
+
+        this.colors = {
+            white: [255, 255, 255, 200],
+            picked: [255, 255, 0, 200],
+            water: [0, 0, 255, 100]
+        };
     }
 
     animate() {
@@ -55,27 +70,23 @@ export default class DeckLayers extends Component {
     }
 
     componentDidMount() {
-        fetch("https://cityio.media.mit.edu/api/table/grasbrook/meta_grid")
-            .then(response => response.json())
-            .then(result => {
-                this.setState({ geoJsonData: result });
-            })
-            .catch(e => {
-                console.log(e);
-                this.setState({ ...this.state });
-            });
+        getCityIO(this.cityIObaseURL + "grasbrook/meta_grid").then(d =>
+            this.setState({ geoJsonData: d })
+        );
 
-        fetch("https://cityio.media.mit.edu/api/table/grasbrook/ABM")
-            .then(response => response.json())
-            .then(result => {
-                this.setState({ ABMdata: result });
-            })
-            .catch(e => {
-                console.log(e);
-                this.setState({ ...this.state });
-            });
+        getCityIO(this.cityIObaseURL + "grasbrook/ABM").then(d =>
+            this.setState({ ABMdata: d })
+        );
 
-        this.animate();
+        getCityIO(this.cityIObaseURL + "grasbrook/access").then(d => {
+            const coordinates = d.features.map(d => d.geometry.coordinates);
+            const value = d.features.map(d => d.properties);
+
+            this.setState({ accessDataCoordinates: coordinates });
+            this.setState({ accessDataValue: value });
+        });
+
+        // this.animate();
     }
 
     componentWillUnmount() {
@@ -110,12 +121,12 @@ export default class DeckLayers extends Component {
         if (!thisFeature.picked || thisFeature.picked === false) {
             thisFeature.old_height = thisFeature.height;
             thisFeature.picked = true;
-            thisFeature.color = [255, 255, 0, 200];
+            thisFeature.color = this.colors.picked;
             thisFeature.height = 200;
         } else {
             thisFeature.height = thisFeature.old_height;
             thisFeature.picked = false;
-            thisFeature.color = [255, 0, 255, 200];
+            thisFeature.color = this.colors.white;
         }
 
         this.setState({
@@ -138,9 +149,56 @@ export default class DeckLayers extends Component {
     render() {
         // this._calculateSunPosition();
         // get viewport as prop from parent
-        const { viewport } = this.props;
+
+        const { accessDataCoordinates } = this.state;
+
         let layers = [
+            new HeatmapLayer({
+                id: "heatmapLayer",
+                visible: true,
+                data: accessDataCoordinates,
+                getPosition: d => d
+            }),
+
+            new GeoJsonLayer({
+                // ! Edit geojson
+                // ! https://codesandbox.io/s/7y3qk00o0q
+                // !
+
+                id: "GEOJSON_GRID",
+                data: this.state.geoJsonData,
+                visible: false,
+                pickable: true,
+                stroked: true,
+                filled: true,
+                extruded: true,
+                lineWidthScale: 20,
+                lineWidthMinPixels: 2,
+                getElevation: d =>
+                    d.properties.land_use === "M1" ? d.properties.height : 1,
+                getFillColor: d =>
+                    d.properties.color
+                        ? d.properties.color
+                        : d.properties.land_use === "M1"
+                        ? this.colors.white
+                        : this.colors.water,
+
+                updateTriggers: {
+                    getElevation: d => d.properties.height,
+                    getFillColor: d => d.properties.color
+                },
+                transitions: { getElevation: 500, getFillColor: 500 },
+
+                getRadius: 100,
+                getLineWidth: 1,
+                onClick: picked => {
+                    if (picked.object.properties.land_use === "M1")
+                        this._handlePicking(picked);
+                }
+            }),
+
             new TripsLayer({
+                _shadow: false,
                 visible: false,
                 id: "modes",
                 data: this.state.ABMdata,
@@ -166,7 +224,9 @@ export default class DeckLayers extends Component {
             }),
 
             new PathLayer({
-                visible: false,
+                _shadow: false,
+
+                visible: true,
                 id: "line",
                 data: this.state.ABMdata,
                 getPath: d => {
@@ -194,50 +254,13 @@ export default class DeckLayers extends Component {
                     }
                 },
                 getWidth: 0.5
-            }),
-
-            new GeoJsonLayer({
-                // ! Edit geojson
-                // ! https://codesandbox.io/s/7y3qk00o0q
-                // !
-
-                id: "GEOJSON_GRID",
-                data: this.state.geoJsonData,
-                visible: true,
-                pickable: true,
-                stroked: true,
-                filled: true,
-                extruded: true,
-                lineWidthScale: 20,
-                lineWidthMinPixels: 2,
-                getElevation: d =>
-                    d.properties.land_use === "M1" ? d.properties.height : 1,
-                getFillColor: d =>
-                    d.properties.color
-                        ? d.properties.color
-                        : d.properties.land_use === "M1"
-                        ? [255, 0, 255, 200]
-                        : [255, 255, 255, 100],
-
-                updateTriggers: {
-                    getElevation: d => d.properties.height,
-                    getFillColor: d => d.properties.color
-                },
-                transitions: { getElevation: 500, getFillColor: 500 },
-
-                getRadius: 100,
-                getLineWidth: 1,
-                onClick: picked => {
-                    if (picked.object.properties.land_use === "M1")
-                        this._handlePicking(picked);
-                }
             })
         ];
         return (
             <DeckGL
                 onClick={this.multiSelect}
                 effects={this._effects}
-                viewState={viewport}
+                viewState={this.props.viewport}
                 layers={layers}
             ></DeckGL>
         );
