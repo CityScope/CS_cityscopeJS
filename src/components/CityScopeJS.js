@@ -108,7 +108,18 @@ export class CityScopeJS extends Component {
         );
 
         getCityIO(this.cityIObaseURL + "grasbrook/access").then(d => {
-            this.setState({ accessData: d });
+            let coordinates = d.features.map(d => d.geometry.coordinates);
+            let values = d.features.map(d => d.properties);
+            let arr = [];
+
+            for (let i = 0; i < coordinates.length; i++) {
+                arr.push({
+                    coordinates: coordinates[i],
+                    values: values[i]
+                });
+            }
+
+            this.setState({ accessData: arr });
         });
     }
 
@@ -265,54 +276,41 @@ export class CityScopeJS extends Component {
             })
         ];
 
-        // layers.push(this._accessLayer());
+        layers.push(this._accessLayer());
         return layers;
     }
 
     _accessLayer() {
         const accessData = this.state.accessData;
-        if (accessData !== null) {
-            let coordinates = accessData.features.map(
-                d => d.geometry.coordinates
-            );
-            let values = accessData.features.map(d => d.properties);
-            let arr = [];
 
-            for (let i = 0; i < coordinates.length; i++) {
-                arr.push({
-                    coordinates: coordinates[i],
-                    values: values[i]
-                });
-            }
+        return [
+            // new LineLayer({
+            //     id: "accessMap",
+            //     data: arr,
+            //     getSourcePosition: d => [
+            //         d.coordinates[0],
+            //         d.coordinates[1],
+            //         0
+            //     ],
+            //     getTargetPosition: d => [
+            //         d.coordinates[0],
+            //         d.coordinates[1],
+            //         // to be repalced with UI prop
+            //         d.values.education * 100
+            //     ],
+            //     getWidth: 10,
+            //     pickable: true
+            // }),
 
-            return [
-                // new LineLayer({
-                //     id: "accessMap",
-                //     data: arr,
-                //     getSourcePosition: d => [
-                //         d.coordinates[0],
-                //         d.coordinates[1],
-                //         0
-                //     ],
-                //     getTargetPosition: d => [
-                //         d.coordinates[0],
-                //         d.coordinates[1],
-                //         // to be repalced with UI prop
-                //         d.values.education * 100
-                //     ],
-                //     getWidth: 10,
-                //     pickable: true
-                // }),
-
-                new HeatmapLayer({
-                    id: "heatmapLayer",
-                    visible: true,
-                    data: arr,
-                    getPosition: d => d.coordinates,
-                    getWeight: d => d.values.education
-                })
-            ];
-        }
+            new HeatmapLayer({
+                id: "heatmapLayer",
+                radiusPixels: 100,
+                visible: true,
+                data: accessData,
+                getPosition: d => d.coordinates,
+                getWeight: d => d.values.nightlife
+            })
+        ];
     }
 
     render() {
