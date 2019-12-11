@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import Map from "./components/Map";
+import CityScopeJS from "./components/CityScopeJS";
 import * as serviceWorker from "./serviceWorker";
 
-ReactDOM.render(<Map />, document.getElementById("root"));
+ReactDOM.render(<CityScopeJS />, document.getElementById("root"));
 
 serviceWorker.unregister();

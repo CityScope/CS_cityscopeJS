@@ -1,31 +1,35 @@
-import DeckGL, {
-    HeatmapLayer,
-    PathLayer,
-    GeoJsonLayer,
-    TripsLayer
-} from "deck.gl";
+/* global window */
+import React, { Component } from "react";
+import { StaticMap } from "react-map-gl";
+import DeckGL from "@deck.gl/react";
+import { TripsLayer } from "@deck.gl/geo-layers";
+import "mapbox-gl/dist/mapbox-gl.css";
+
+import { LineLayer, HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import {
     LightingEffect,
     AmbientLight,
     _SunLight as SunLight
 } from "@deck.gl/core";
 
-import React, { Component } from "react";
 import { getCityIO } from "../services/cityIO";
 
-export default class DeckLayers extends Component {
+export class CityScopeJS extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             geoJsonData: null,
-            accessDataCoordinates: null,
-            accessDataValue: null,
+            accessData: null,
             ABMdata: null,
-            animationFrame: null,
-            startSimHour: 60 * 60 * 7,
-            endSimHour: 60 * 60 * 14,
-            simPaceValue: 10,
-            time: 60 * 60 * 7
+            viewport: {
+                longitude: 9.9937,
+                latitude: 53.5511,
+                zoom: 13,
+                pitch: 45,
+                bearing: 0
+            },
+            componentDidMount: false
         };
 
         const ambientLight = new AmbientLight({
@@ -53,23 +57,48 @@ export default class DeckLayers extends Component {
             picked: [255, 255, 0, 200],
             water: [0, 0, 255, 100]
         };
+
+        this.animationFrame = null;
+        this.startSimHour = 60 * 60 * 7;
+        this.endSimHour = 60 * 60 * 14;
+        this.simPaceValue = 1000;
     }
 
     animate() {
-        const { time, startSimHour, simPaceValue } = this.state;
-        let loopLength = this.state.endSimHour - this.state.startSimHour;
-        if (time >= startSimHour + loopLength - 1) {
-            this.setState({ time: this.state.startSimHour });
-        } else {
-            this.setState({ time: time + simPaceValue });
-        }
+        const { startSimHour, simPaceValue, endSimHour } = this;
+        // console.log(startSimHour, simPaceValue, endSimHour);
 
-        this.animationFrame = window.requestAnimationFrame(
+        let loopLength = endSimHour - startSimHour;
+        const animationSpeed = simPaceValue;
+        const timestamp = Date.now() / 1000;
+        const loopTime = loopLength / animationSpeed;
+        let time =
+            ((timestamp % loopTime) / loopTime) * loopLength + startSimHour;
+        if (time > endSimHour) time = startSimHour;
+        this.setState({
+            time: time
+        });
+        this._animationFrame = window.requestAnimationFrame(
             this.animate.bind(this)
         );
     }
 
+    componentWillUnmount() {
+        if (this.animationFrame) {
+            window.cancelAnimationFrame(this.animationFrame);
+        }
+    }
+
     componentDidMount() {
+        // hack  to allow view rotatae
+        this._rightClickViewRotate();
+        //  get data
+        this._getLayersData();
+        // Animate
+        this.animate();
+    }
+
+    _getLayersData() {
         getCityIO(this.cityIObaseURL + "grasbrook/meta_grid").then(d =>
             this.setState({ geoJsonData: d })
         );
@@ -79,20 +108,8 @@ export default class DeckLayers extends Component {
         );
 
         getCityIO(this.cityIObaseURL + "grasbrook/access").then(d => {
-            const coordinates = d.features.map(d => d.geometry.coordinates);
-            const value = d.features.map(d => d.properties);
-
-            this.setState({ accessDataCoordinates: coordinates });
-            this.setState({ accessDataValue: value });
+            this.setState({ accessData: d });
         });
-
-        // this.animate();
-    }
-
-    componentWillUnmount() {
-        if (this.animationFrame != null) {
-            window.cancelAnimationFrame(this.animationFrame);
-        }
     }
 
     _calculateSunPosition() {
@@ -111,6 +128,12 @@ export default class DeckLayers extends Component {
             minutes,
             seconds
         );
+    }
+
+    _rightClickViewRotate() {
+        document
+            .getElementById("deckgl-wrapper")
+            .addEventListener("contextmenu", evt => evt.preventDefault());
     }
 
     _handlePicking = picked => {
@@ -146,33 +169,20 @@ export default class DeckLayers extends Component {
         // console.log(objects);
     }
 
-    render() {
-        // this._calculateSunPosition();
-        // get viewport as prop from parent
-
-        const { accessDataCoordinates } = this.state;
-
+    _renderLayers() {
         let layers = [
-            new HeatmapLayer({
-                id: "heatmapLayer",
-                visible: true,
-                data: accessDataCoordinates,
-                getPosition: d => d
-            }),
-
             new GeoJsonLayer({
                 // ! Edit geojson
                 // ! https://codesandbox.io/s/7y3qk00o0q
                 // !
-
                 id: "GEOJSON_GRID",
                 data: this.state.geoJsonData,
-                visible: false,
+                visible: true,
                 pickable: true,
                 stroked: true,
                 filled: true,
                 extruded: true,
-                lineWidthScale: 20,
+                lineWidthScale: 1,
                 lineWidthMinPixels: 2,
                 getElevation: d =>
                     d.properties.land_use === "M1" ? d.properties.height : 1,
@@ -198,8 +208,7 @@ export default class DeckLayers extends Component {
             }),
 
             new TripsLayer({
-                _shadow: false,
-                visible: false,
+                visible: true,
                 id: "modes",
                 data: this.state.ABMdata,
                 getPath: d => d.path,
@@ -225,7 +234,6 @@ export default class DeckLayers extends Component {
 
             new PathLayer({
                 _shadow: false,
-
                 visible: true,
                 id: "line",
                 data: this.state.ABMdata,
@@ -256,13 +264,79 @@ export default class DeckLayers extends Component {
                 getWidth: 0.5
             })
         ];
+
+        // layers.push(this._accessLayer());
+        return layers;
+    }
+
+    _accessLayer() {
+        const accessData = this.state.accessData;
+        if (accessData !== null) {
+            let coordinates = accessData.features.map(
+                d => d.geometry.coordinates
+            );
+            let values = accessData.features.map(d => d.properties);
+            let arr = [];
+
+            for (let i = 0; i < coordinates.length; i++) {
+                arr.push({
+                    coordinates: coordinates[i],
+                    values: values[i]
+                });
+            }
+
+            return [
+                // new LineLayer({
+                //     id: "accessMap",
+                //     data: arr,
+                //     getSourcePosition: d => [
+                //         d.coordinates[0],
+                //         d.coordinates[1],
+                //         0
+                //     ],
+                //     getTargetPosition: d => [
+                //         d.coordinates[0],
+                //         d.coordinates[1],
+                //         // to be repalced with UI prop
+                //         d.values.education * 100
+                //     ],
+                //     getWidth: 10,
+                //     pickable: true
+                // }),
+
+                new HeatmapLayer({
+                    id: "heatmapLayer",
+                    visible: true,
+                    data: arr,
+                    getPosition: d => d.coordinates,
+                    getWeight: d => d.values.education
+                })
+            ];
+        }
+    }
+
+    render() {
+        // this._calculateSunPosition();
+        // get viewport as prop from parent
+
         return (
             <DeckGL
-                onClick={this.multiSelect}
+                layers={this._renderLayers()}
                 effects={this._effects}
-                viewState={this.props.viewport}
-                layers={layers}
-            ></DeckGL>
+                initialViewState={this.state.viewport}
+                viewState={this.state.viewport}
+                controller={true}
+            >
+                <StaticMap
+                    dragRotate={true}
+                    reuseMaps
+                    mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+                    mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
+                    preventStyleDiffing={true}
+                />
+            </DeckGL>
         );
     }
 }
+
+export default CityScopeJS;
