@@ -5,7 +5,7 @@ import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import { LineLayer, HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
+import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import {
     LightingEffect,
     AmbientLight,
@@ -66,7 +66,6 @@ export class CityScopeJS extends Component {
 
     animate() {
         const { startSimHour, simPaceValue, endSimHour } = this;
-        // console.log(startSimHour, simPaceValue, endSimHour);
 
         let loopLength = endSimHour - startSimHour;
         const animationSpeed = simPaceValue;
@@ -98,10 +97,31 @@ export class CityScopeJS extends Component {
         this.animate();
     }
 
-    _getLayersData() {
-        getCityIO(this.cityIObaseURL + "grasbrook/meta_grid").then(d =>
-            this.setState({ geoJsonData: d })
-        );
+    async _getLayersData() {
+        let gridData = null;
+        let interactiveGridMappingData = null;
+        let geoJsonData = null;
+
+        await getCityIO(this.cityIObaseURL + "grasbrook/grid").then(d => {
+            gridData = d;
+        });
+
+        await getCityIO(
+            this.cityIObaseURL + "grasbrook/interactive_grid_mapping"
+        ).then(d => {
+            interactiveGridMappingData = d;
+        });
+
+        await getCityIO(this.cityIObaseURL + "grasbrook/meta_grid").then(d => {
+            geoJsonData = d;
+        });
+
+        for (let i in interactiveGridMappingData) {
+            geoJsonData.features[
+                interactiveGridMappingData[i]
+            ].properties.type = gridData[i][0];
+        }
+        this.setState({ geoJsonData: geoJsonData });
 
         getCityIO(this.cityIObaseURL + "grasbrook/ABM").then(d =>
             this.setState({ ABMdata: d })
@@ -150,7 +170,6 @@ export class CityScopeJS extends Component {
     _handlePicking = picked => {
         const thisFeature = this.state.geoJsonData.features[picked.index]
             .properties;
-        console.log(thisFeature);
 
         if (!thisFeature.picked || thisFeature.picked === false) {
             thisFeature.old_height = thisFeature.height;
@@ -169,7 +188,6 @@ export class CityScopeJS extends Component {
     };
 
     multiSelect(e) {
-        console.log(e);
         //! https://tgorkin.github.io/docs/developer-guide/interactivity
         // let objects = this.deck.pickObjects({
         //     x: 0,
@@ -177,7 +195,6 @@ export class CityScopeJS extends Component {
         //     width: 100,
         //     height: 100
         // });
-        // console.log(objects);
     }
 
     _renderLayers() {
@@ -198,7 +215,9 @@ export class CityScopeJS extends Component {
                 getElevation: d =>
                     d.properties.land_use === "M1" ? d.properties.height : 1,
                 getFillColor: d =>
-                    d.properties.color
+                    d.properties.type !== undefined
+                        ? [255, 180, 0, 100]
+                        : d.properties.color
                         ? d.properties.color
                         : d.properties.land_use === "M1"
                         ? this.colors.white
@@ -208,7 +227,7 @@ export class CityScopeJS extends Component {
                     getElevation: d => d.properties.height,
                     getFillColor: d => d.properties.color
                 },
-                transitions: { getElevation: 500, getFillColor: 500 },
+                transitions: { getElevation: 100, getFillColor: 500 },
 
                 getRadius: 100,
                 getLineWidth: 1,
@@ -256,7 +275,7 @@ export class CityScopeJS extends Component {
                     for (let i in d.path) {
                         d.path[i][0] = d.path[i][0] + noisePath;
                         d.path[i][1] = d.path[i][1] + noisePath;
-                        d.path[i][2] = 100;
+                        d.path[i][2] = 200;
                     }
                     return d.path;
                 },
@@ -272,6 +291,8 @@ export class CityScopeJS extends Component {
                             return [0, 0, 0];
                     }
                 },
+                opacity: 0.2,
+
                 getWidth: 0.5
             })
         ];
@@ -303,6 +324,15 @@ export class CityScopeJS extends Component {
             // }),
 
             new HeatmapLayer({
+                colorRange: [
+                    [213, 62, 79],
+                    [252, 141, 89],
+                    [254, 224, 139],
+                    [230, 245, 152],
+                    [153, 213, 148],
+                    [50, 136, 189]
+                ],
+
                 id: "heatmapLayer",
                 radiusPixels: 100,
                 visible: true,
@@ -315,8 +345,6 @@ export class CityScopeJS extends Component {
 
     render() {
         // this._calculateSunPosition();
-        // get viewport as prop from parent
-
         return (
             <DeckGL
                 layers={this._renderLayers()}
@@ -327,7 +355,7 @@ export class CityScopeJS extends Component {
             >
                 <StaticMap
                     dragRotate={true}
-                    reuseMaps
+                    reuseMaps={true}
                     mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
                     mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
                     preventStyleDiffing={true}
