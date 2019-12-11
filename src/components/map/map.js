@@ -26,8 +26,8 @@ export default class Map extends Component {
                 longitude: 9.9937,
                 latitude: 53.5511,
                 zoom: 13,
-                pitch: 45,
-                bearing: 0
+                pitch: 0,
+                bearing: -325
             },
             componentDidMount: false
         };
@@ -115,19 +115,19 @@ export default class Map extends Component {
         await getCityIO(this.cityIObaseURL + "grasbrook/meta_grid").then(d => {
             geoJsonData = d;
         });
-
+        //
         for (let i in interactiveGridMappingData) {
             geoJsonData.features[
                 interactiveGridMappingData[i]
             ].properties.type = gridData[i][0];
         }
         this.setState({ geoJsonData: geoJsonData });
-
-        getCityIO(this.cityIObaseURL + "grasbrook/ABM").then(d =>
+        //
+        await getCityIO(this.cityIObaseURL + "grasbrook/ABM").then(d =>
             this.setState({ ABMdata: d })
         );
 
-        getCityIO(this.cityIObaseURL + "grasbrook/access").then(d => {
+        await getCityIO(this.cityIObaseURL + "grasbrook/access").then(d => {
             let coordinates = d.features.map(d => d.geometry.coordinates);
             let values = d.features.map(d => d.properties);
             let arr = [];
