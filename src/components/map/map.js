@@ -4,17 +4,17 @@ import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
-
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import {
     LightingEffect,
     AmbientLight,
     _SunLight as SunLight
 } from "@deck.gl/core";
+// import "./map.css";
 
-import { getCityIO } from "../services/cityIO";
+import { getCityIO } from "../../services/cityIO";
 
-export class CityScopeJS extends Component {
+export default class Map extends Component {
     constructor(props) {
         super(props);
 
@@ -347,6 +347,7 @@ export class CityScopeJS extends Component {
         // this._calculateSunPosition();
         return (
             <DeckGL
+                className="map"
                 layers={this._renderLayers()}
                 effects={this._effects}
                 initialViewState={this.state.viewport}
@@ -364,5 +365,3 @@ export class CityScopeJS extends Component {
         );
     }
 }
-
-export default CityScopeJS;
