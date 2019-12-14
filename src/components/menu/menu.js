@@ -7,6 +7,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import Switch from "@material-ui/core/Switch";
 import Map from "../map/map";
+import EditMenu from "./editMenu";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -63,6 +64,8 @@ export default function Menu() {
                 subheader={<ListSubheader>Layers</ListSubheader>}
                 className={classes.root}
             >
+                <EditMenu />
+
                 {togglesArray}
             </List>
         </div>

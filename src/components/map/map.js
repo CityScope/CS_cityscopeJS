@@ -4,20 +4,19 @@ import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
+
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import {
     LightingEffect,
     AmbientLight,
     _SunLight as SunLight
 } from "@deck.gl/core";
-// import "./map.css";
 
 import { getCityIO } from "../../services/cityIO";
 
 export default class Map extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             geoJsonData: null,
             accessData: null,
@@ -54,7 +53,7 @@ export default class Map extends Component {
 
         this.colors = {
             white: [255, 255, 255, 200],
-            picked: [255, 255, 0, 200],
+            picked: [255, 191, 0, 200],
             water: [0, 0, 255, 100]
         };
 
@@ -127,6 +126,12 @@ export default class Map extends Component {
             this.setState({ ABMdata: d })
         );
 
+        // await getCityIO(
+        //     this.cityIObaseURL + "grasbrook_test/noise_result"
+        // ).then(d => {
+        //     console.log(d);
+        // });
+
         await getCityIO(this.cityIObaseURL + "grasbrook/access").then(d => {
             let coordinates = d.features.map(d => d.geometry.coordinates);
             let values = d.features.map(d => d.properties);
@@ -167,35 +172,37 @@ export default class Map extends Component {
             .addEventListener("contextmenu", evt => evt.preventDefault());
     }
 
-    _handlePicking = picked => {
-        const thisFeature = this.state.geoJsonData.features[picked.index]
-            .properties;
+    _handlePicking = (event, picked) => {
+        // console.log(event);
 
-        if (!thisFeature.picked || thisFeature.picked === false) {
-            thisFeature.old_height = thisFeature.height;
-            thisFeature.picked = true;
-            thisFeature.color = this.colors.picked;
-            thisFeature.height = 200;
-        } else {
-            thisFeature.height = thisFeature.old_height;
-            thisFeature.picked = false;
-            thisFeature.color = this.colors.white;
-        }
+        // https://github.com/uber/deck.gl/blob/master/docs/api-reference/deck.md#pickobjects
+        const mulipleObjPicked = this.deckGL.pickObjects({
+            x: event.x - 50,
+            y: event.y - 50,
+            width: 100,
+            height: 100
+        });
+
+        mulipleObjPicked.forEach(picked => {
+            if (picked.object.properties.land_use === "M1") {
+                const pickedProps = this.state.geoJsonData.features[
+                    picked.index
+                ].properties;
+                pickedProps.old_height = pickedProps.height;
+                pickedProps.color = this.colors.picked;
+                if (!pickedProps.picked) {
+                    pickedProps.height = 20;
+                    pickedProps.picked = true;
+                } else {
+                    pickedProps.height = pickedProps.old_height;
+                }
+            }
+        });
 
         this.setState({
             geoJsonData: this.state.geoJsonData
         });
     };
-
-    multiSelect(e) {
-        //! https://tgorkin.github.io/docs/developer-guide/interactivity
-        // let objects = this.deck.pickObjects({
-        //     x: 0,
-        //     y: 0,
-        //     width: 100,
-        //     height: 100
-        // });
-    }
 
     _renderLayers() {
         let layers = [
@@ -205,6 +212,9 @@ export default class Map extends Component {
                 // !
                 id: "GEOJSON_GRID",
                 data: this.state.geoJsonData,
+                onClick: (event, picked) => {
+                    this._handlePicking(event, picked);
+                },
                 visible: true,
                 pickable: true,
                 stroked: true,
@@ -230,11 +240,7 @@ export default class Map extends Component {
                 transitions: { getElevation: 100, getFillColor: 500 },
 
                 getRadius: 100,
-                getLineWidth: 1,
-                onClick: picked => {
-                    if (picked.object.properties.land_use === "M1")
-                        this._handlePicking(picked);
-                }
+                getLineWidth: 1
             }),
 
             new TripsLayer({
@@ -294,35 +300,7 @@ export default class Map extends Component {
                 opacity: 0.2,
 
                 getWidth: 0.5
-            })
-        ];
-
-        layers.push(this._accessLayer());
-        return layers;
-    }
-
-    _accessLayer() {
-        const accessData = this.state.accessData;
-
-        return [
-            // new LineLayer({
-            //     id: "accessMap",
-            //     data: arr,
-            //     getSourcePosition: d => [
-            //         d.coordinates[0],
-            //         d.coordinates[1],
-            //         0
-            //     ],
-            //     getTargetPosition: d => [
-            //         d.coordinates[0],
-            //         d.coordinates[1],
-            //         // to be repalced with UI prop
-            //         d.values.education * 100
-            //     ],
-            //     getWidth: 10,
-            //     pickable: true
-            // }),
-
+            }),
             new HeatmapLayer({
                 colorRange: [
                     [213, 62, 79],
@@ -335,18 +313,24 @@ export default class Map extends Component {
 
                 id: "heatmapLayer",
                 radiusPixels: 100,
-                visible: true,
-                data: accessData,
+                visible: false,
+                data: this.state.accessData,
                 getPosition: d => d.coordinates,
                 getWeight: d => d.values.nightlife
             })
         ];
+
+        return layers;
     }
 
     render() {
         // this._calculateSunPosition();
+
         return (
             <DeckGL
+                ref={deck => {
+                    this.deckGL = deck;
+                }}
                 className="map"
                 layers={this._renderLayers()}
                 effects={this._effects}
