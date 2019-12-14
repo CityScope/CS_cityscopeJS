@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -9,15 +8,26 @@ import ListItemText from "@material-ui/core/ListItemText";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import ImportExportIcon from "@material-ui/icons/ImportExport";
 import SaveIcon from "@material-ui/icons/Save";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@material-ui/icons/Edit";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     list: {
         width: 200
     },
     fullList: {
         width: "auto"
+    },
+    root: {
+        "& > *": {
+            margin: theme.spacing(1)
+        }
+    },
+    extendedIcon: {
+        marginRight: theme.spacing(1)
     }
-});
+}));
 
 export default function EditMenu() {
     const classes = useStyles();
@@ -69,9 +79,7 @@ export default function EditMenu() {
     );
 
     return (
-        <div>
-            <Button onClick={toggleDrawer("right", true)}>Editing Menu</Button>
-
+        <div className={classes.root}>
             <Drawer
                 anchor="right"
                 open={state.right}
@@ -79,6 +87,14 @@ export default function EditMenu() {
             >
                 {sideList("right")}
             </Drawer>
+
+            <Fab aria-label="add" onClick={toggleDrawer("right", true)}>
+                <AddIcon />
+            </Fab>
+
+            <Fab aria-label="add">
+                <EditIcon />
+            </Fab>
         </div>
     );
 }

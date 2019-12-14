@@ -59,15 +59,13 @@ export default function Menu() {
     return (
         <div>
             <Map />
-
             <List
                 subheader={<ListSubheader>Layers</ListSubheader>}
                 className={classes.root}
             >
-                <EditMenu />
-
                 {togglesArray}
             </List>
+            <EditMenu />
         </div>
     );
 }
