@@ -4,7 +4,6 @@ import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
-
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import {
     LightingEffect,
@@ -18,19 +17,20 @@ export default class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            toggleBuildingShow: "none",
             geoJsonData: null,
             accessData: null,
             ABMdata: null,
             viewport: {
                 longitude: 9.9937,
                 latitude: 53.5511,
-                zoom: 13,
+                zoom: 15,
                 pitch: 0,
                 bearing: -325
             },
             componentDidMount: false
         };
-
+        
         const ambientLight = new AmbientLight({
             color: [255, 255, 255],
             intensity: 1
@@ -322,14 +322,53 @@ export default class Map extends Component {
 
         return layers;
     }
+    _onWebGLInitialized = (gl) => {
+        this.setState({gl});
+      }
+    _onMapLoad = () => {
+        const map = this._map;
+    
+        map.addLayer(
+            {
+                id: "3dBuildingsLayer",
+                displayName: "3dBuildingsLayer",
+                source: "composite",
+                "source-layer": "building",
+                filter: ["==", "extrude", "true"],
+                type: "fill-extrusion",
+                minzoom: 10,
+                paint: {
+                  "fill-extrusion-color": "#fff",
+                  "fill-extrusion-height": [
+                    "interpolate",
+                    ["linear"],
+                    ["zoom"],
+                    0.1,
+                    10,
+                    15.05,
+                    ["get", "height"]
+                  ],
+                  "fill-extrusion-opacity": 0.7
+                }
+              }
+        );
+        // this.setState({toggleBuildingShow : "1" in this.props.menu ? "show" : "none"});
+         map.setLayoutProperty("3dBuildingsLayer", "visibility", "none");
+      }
+    componentWillReceiveProps(newProps) {
+        const map = this._map;
+        console.log("Buildings" in newProps.menu ? "visible" : "none");
+        map.setLayoutProperty("3dBuildingsLayer", "visibility", "1" in newProps.menu ? "visible" : "none");
+    }
 
     render() {
         // this._calculateSunPosition();
-
+        const {gl} = this.state;
         return (
             <DeckGL
-                ref={deck => {
-                    this.deckGL = deck;
+                ref={ref => {
+                    // save a reference to the Deck instance
+                    this._deck = ref && ref.deck;
                 }}
                 className="map"
                 layers={this._renderLayers()}
@@ -339,11 +378,17 @@ export default class Map extends Component {
                 controller={true}
             >
                 <StaticMap
+                    ref={ref => {
+                        // save a reference to the mapboxgl.Map instance
+                        this._map = ref && ref.getMap();
+                    }}
+                    gl={gl}
                     dragRotate={true}
                     reuseMaps={true}
                     mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
                     mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
                     preventStyleDiffing={true}
+                    onLoad={this._onMapLoad}
                 />
             </DeckGL>
         );

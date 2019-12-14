@@ -31,9 +31,9 @@ export default function Menu() {
             newChecked.splice(currentIndex, 1);
         }
         setChecked(newChecked);
-        console.log(newChecked);
+        //console.log(newChecked);
     };
-    const layersID = ["1", "2", "3"];
+    const layersID = ["Buildings", "2", "3"];
 
     let togglesArray = [];
 
@@ -58,7 +58,7 @@ export default function Menu() {
 
     return (
         <div>
-            <Map />
+            <Map menu={checked}/>
             <List
                 subheader={<ListSubheader>Layers</ListSubheader>}
                 className={classes.root}
