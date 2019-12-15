@@ -12,14 +12,16 @@ import EditMenu from "./editMenu";
 const useStyles = makeStyles(theme => ({
     root: {
         width: "100%",
-        maxWidth: "15%",
+        maxWidth: "25%",
         backgroundColor: "rgba(255,255,255,0.8)"
     }
 }));
 
+const layersID = ["PATHS", "ABM", "GEOJSON_GRID", "ACCESS", "SUN"];
+
 export default function Menu() {
     const classes = useStyles();
-    const [checked, setChecked] = React.useState(["toggles"]);
+    const [checked, setChecked] = React.useState([]);
 
     const handleToggle = value => () => {
         const currentIndex = checked.indexOf(value);
@@ -31,9 +33,7 @@ export default function Menu() {
             newChecked.splice(currentIndex, 1);
         }
         setChecked(newChecked);
-        console.log(newChecked);
     };
-    const layersID = ["1", "2", "3"];
 
     let togglesArray = [];
 
@@ -46,9 +46,11 @@ export default function Menu() {
                         edge="end"
                         onChange={handleToggle(layersID[i])}
                         checked={checked.indexOf(layersID[i]) !== -1}
-                        inputProps={{
-                            "aria-labelledby": "switch-list-label-wifi"
-                        }}
+                        // inputProps={
+                        //     {
+                        // "aria-labelledby": "switch-list-label-wifi"
+                        //     }
+                        // }
                     />
                 </ListItemSecondaryAction>
             </ListItem>
@@ -58,7 +60,7 @@ export default function Menu() {
 
     return (
         <div>
-            <Map />
+            <Map menu={checked} />
             <List
                 subheader={<ListSubheader>Layers</ListSubheader>}
                 className={classes.root}

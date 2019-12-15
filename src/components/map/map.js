@@ -19,6 +19,7 @@ export default class Map extends Component {
         super(props);
         this.state = {
             geoJsonData: null,
+            time: 0,
             accessData: null,
             ABMdata: null,
             viewport: {
@@ -60,24 +61,51 @@ export default class Map extends Component {
         this.animationFrame = null;
         this.startSimHour = 60 * 60 * 7;
         this.endSimHour = 60 * 60 * 14;
-        this.simPaceValue = 1000;
+        this.animationSpeed = 10;
     }
 
-    animate() {
-        const { startSimHour, simPaceValue, endSimHour } = this;
+    _animate() {
+        // stop animation on toggle
+        if (
+            this.animationFrame &&
+            !this.props.menu.includes("ABM") &&
+            !this.props.menu.includes("SUN")
+        ) {
+            window.cancelAnimationFrame(this.animationFrame);
+            return;
+        }
 
-        let loopLength = endSimHour - startSimHour;
-        const animationSpeed = simPaceValue;
-        const timestamp = Date.now() / 1000;
-        const loopTime = loopLength / animationSpeed;
-        let time =
-            ((timestamp % loopTime) / loopTime) * loopLength + startSimHour;
-        if (time > endSimHour) time = startSimHour;
+        const { startSimHour, animationSpeed, endSimHour } = this;
+        let t = this.state.time + animationSpeed;
+        if (this.state.time > endSimHour || this.state.time < startSimHour) {
+            t = startSimHour;
+        }
         this.setState({
-            time: time
+            time: t
         });
         this._animationFrame = window.requestAnimationFrame(
-            this.animate.bind(this)
+            this._animate.bind(this)
+        );
+        this._calculateSunPosition();
+    }
+
+    _calculateSunPosition() {
+        const layersProps = this.props.menu;
+        if (!layersProps.includes("SUN")) return;
+        var date = new Date(this.state.time * 1000);
+        // Hours part from the timestamp
+        var hours = date.getHours();
+        // Minutes part from the timestamp
+        var minutes = "0" + date.getMinutes();
+        // Seconds part from the timestamp
+        var seconds = "0" + date.getSeconds();
+        this._effects[0].directionalLights[0].timestamp = Date.UTC(
+            2019,
+            7,
+            1,
+            hours,
+            minutes,
+            seconds
         );
     }
 
@@ -88,12 +116,12 @@ export default class Map extends Component {
     }
 
     componentDidMount() {
+        this._animate();
+
         // hack  to allow view rotatae
         this._rightClickViewRotate();
         //  get data
         this._getLayersData();
-        // Animate
-        this.animate();
     }
 
     async _getLayersData() {
@@ -126,12 +154,6 @@ export default class Map extends Component {
             this.setState({ ABMdata: d })
         );
 
-        // await getCityIO(
-        //     this.cityIObaseURL + "grasbrook_test/noise_result"
-        // ).then(d => {
-        //     console.log(d);
-        // });
-
         await getCityIO(this.cityIObaseURL + "grasbrook/access").then(d => {
             let coordinates = d.features.map(d => d.geometry.coordinates);
             let values = d.features.map(d => d.properties);
@@ -143,27 +165,10 @@ export default class Map extends Component {
                     values: values[i]
                 });
             }
-
             this.setState({ accessData: arr });
         });
-    }
 
-    _calculateSunPosition() {
-        var date = new Date(this.state.time * 1000);
-        // Hours part from the timestamp
-        var hours = date.getHours();
-        // Minutes part from the timestamp
-        var minutes = "0" + date.getMinutes();
-        // Seconds part from the timestamp
-        var seconds = "0" + date.getSeconds();
-        this._effects[0].directionalLights[0].timestamp = Date.UTC(
-            2019,
-            7,
-            1,
-            hours,
-            minutes,
-            seconds
-        );
+        //     this.cityIObaseURL + "grasbrook_test/noise_result"
     }
 
     _rightClickViewRotate() {
@@ -183,15 +188,24 @@ export default class Map extends Component {
             height: 100
         });
 
+        const rndheight = Math.random() * 200;
         mulipleObjPicked.forEach(picked => {
-            if (picked.object.properties.land_use === "M1") {
+            /*
+            allow only to pick cells that are
+            not of CityScope TUI & that are interactable
+            so to not overlap TUI activity  
+            */
+            if (
+                picked.object.properties.land_use === "M1" &&
+                !picked.object.properties.interactive
+            ) {
                 const pickedProps = this.state.geoJsonData.features[
                     picked.index
                 ].properties;
                 pickedProps.old_height = pickedProps.height;
                 pickedProps.color = this.colors.picked;
                 if (!pickedProps.picked) {
-                    pickedProps.height = 20;
+                    pickedProps.height = rndheight;
                     pickedProps.picked = true;
                 } else {
                     pickedProps.height = pickedProps.old_height;
@@ -205,17 +219,21 @@ export default class Map extends Component {
     };
 
     _renderLayers() {
+        const layersProps = this.props.menu;
+
         let layers = [
             new GeoJsonLayer({
-                // ! Edit geojson
-                // ! https://codesandbox.io/s/7y3qk00o0q
-                // !
+                /*
+                Edit geojson: 
+                https://codesandbox.io/s/7y3qk00o0q
+                */
+
                 id: "GEOJSON_GRID",
                 data: this.state.geoJsonData,
                 onClick: (event, picked) => {
                     this._handlePicking(event, picked);
                 },
-                visible: true,
+                visible: layersProps.includes("GEOJSON_GRID") ? true : false,
                 pickable: true,
                 stroked: true,
                 filled: true,
@@ -226,7 +244,7 @@ export default class Map extends Component {
                     d.properties.land_use === "M1" ? d.properties.height : 1,
                 getFillColor: d =>
                     d.properties.type !== undefined
-                        ? [255, 180, 0, 100]
+                        ? [255, 0, 0, 100]
                         : d.properties.color
                         ? d.properties.color
                         : d.properties.land_use === "M1"
@@ -244,8 +262,12 @@ export default class Map extends Component {
             }),
 
             new TripsLayer({
-                visible: true,
-                id: "modes",
+                id: "ABM",
+                visible:
+                    // Animate
+                    // this._animate();
+                    layersProps.includes("ABM") ? true : false,
+
                 data: this.state.ABMdata,
                 getPath: d => d.path,
                 getTimestamps: d => d.timestamps,
@@ -263,15 +285,16 @@ export default class Map extends Component {
                     }
                 },
                 getWidth: 2,
+                opacity: 0.8,
                 rounded: true,
-                trailLength: 100,
+                trailLength: 200,
                 currentTime: this.state.time
             }),
 
             new PathLayer({
+                id: "PATHS",
+                visible: layersProps.includes("PATHS") ? true : false,
                 _shadow: false,
-                visible: true,
-                id: "line",
                 data: this.state.ABMdata,
                 getPath: d => {
                     const noisePath =
@@ -299,9 +322,11 @@ export default class Map extends Component {
                 },
                 opacity: 0.2,
 
-                getWidth: 0.5
+                getWidth: 1
             }),
             new HeatmapLayer({
+                id: "ACCESS",
+                visible: layersProps.includes("ACCESS") ? true : false,
                 colorRange: [
                     [213, 62, 79],
                     [252, 141, 89],
@@ -310,10 +335,7 @@ export default class Map extends Component {
                     [153, 213, 148],
                     [50, 136, 189]
                 ],
-
-                id: "heatmapLayer",
                 radiusPixels: 100,
-                visible: false,
                 data: this.state.accessData,
                 getPosition: d => d.coordinates,
                 getWeight: d => d.values.nightlife
@@ -324,8 +346,6 @@ export default class Map extends Component {
     }
 
     render() {
-        // this._calculateSunPosition();
-
         return (
             <DeckGL
                 ref={deck => {
