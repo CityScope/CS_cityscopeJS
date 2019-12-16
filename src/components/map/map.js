@@ -53,9 +53,10 @@ export default class Map extends Component {
         this.cityIObaseURL = "https://cityio.media.mit.edu/api/table/";
 
         this.colors = {
-            white: [255, 255, 255, 200],
-            picked: [255, 191, 0, 200],
-            water: [0, 0, 255, 100]
+            idle: [255, 255, 255, 200],
+            picked: [77, 195, 255, 200],
+            hovered: [255, 51, 204, 200],
+            water: [100, 100, 100, 200]
         };
 
         this.animationFrame = null;
@@ -178,8 +179,6 @@ export default class Map extends Component {
     }
 
     _handlePicking = (event, picked) => {
-        // console.log(event);
-
         // https://github.com/uber/deck.gl/blob/master/docs/api-reference/deck.md#pickobjects
         const mulipleObjPicked = this.deckGL.pickObjects({
             x: event.x - 50,
@@ -218,6 +217,23 @@ export default class Map extends Component {
         });
     };
 
+    _handleHovered = (hovered, event) => {
+        if (
+            hovered.object &&
+            hovered.object.properties.land_use === "M1" &&
+            !hovered.object.properties.interactive
+        ) {
+            const hoveredProps = this.state.geoJsonData.features[hovered.index]
+                .properties;
+            hoveredProps.oldColor = hoveredProps.color;
+            // color the hovered object and wait
+            hoveredProps.color = this.colors.hovered;
+            setTimeout(() => {
+                hoveredProps.color = hoveredProps.oldColor;
+            }, 500);
+        }
+    };
+
     _renderLayers() {
         const layersProps = this.props.menu;
 
@@ -233,6 +249,10 @@ export default class Map extends Component {
                 onClick: (event, picked) => {
                     this._handlePicking(event, picked);
                 },
+                onHover: (event, hovered) => {
+                    this._handleHovered(event, hovered);
+                },
+
                 visible: layersProps.includes("GEOJSON_GRID") ? true : false,
                 pickable: true,
                 stroked: true,
@@ -244,11 +264,11 @@ export default class Map extends Component {
                     d.properties.land_use === "M1" ? d.properties.height : 1,
                 getFillColor: d =>
                     d.properties.type !== undefined
-                        ? [255, 0, 0, 100]
+                        ? this.colors.picked
                         : d.properties.color
                         ? d.properties.color
                         : d.properties.land_use === "M1"
-                        ? this.colors.white
+                        ? this.colors.idle
                         : this.colors.water,
 
                 updateTriggers: {
