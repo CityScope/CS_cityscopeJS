@@ -17,52 +17,60 @@ import { getCityIO } from "../../services/cityIO";
 export default class Map extends Component {
     constructor(props) {
         super(props);
+        //
         this.state = {
+            cityIOheader: null,
             geoJsonData: null,
             time: 0,
             accessData: null,
             ABMdata: null,
-            viewport: {
-                longitude: 9.9937,
-                latitude: 53.5511,
-                zoom: 13,
+            viewState: {
+                longitude: -71.0894527,
+                latitude: 42.3603609,
+                zoom: 17,
                 pitch: 0,
-                bearing: -325
-            },
-            componentDidMount: false
+                bearing: 0
+            }
         };
-
+        //
         const ambientLight = new AmbientLight({
             color: [255, 255, 255],
             intensity: 1
         });
-
+        //
         const dirLight = new SunLight({
             timestamp: Date.UTC(2019, 7, 1, 10),
             color: [255, 255, 255],
             intensity: 1.0,
             _shadow: true
         });
-
+        //
         this.day = Date.UTC(2019, 7, 1, this.state.time);
-
+        //
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });
         lightingEffect.shadowColor = [0, 0, 0, 0.3];
         this._effects = [lightingEffect];
-
+        //
         this.cityIObaseURL = "https://cityio.media.mit.edu/api/table/";
-
+        //
         this.colors = {
             idle: [255, 255, 255, 200],
             picked: [77, 195, 255, 200],
             hovered: [255, 51, 204, 200],
             water: [100, 100, 100, 200]
         };
-
+        //
         this.animationFrame = null;
         this.startSimHour = 60 * 60 * 7;
         this.endSimHour = 60 * 60 * 14;
         this.animationSpeed = 10;
+
+        //
+        this._onViewStateChange = this._onViewStateChange.bind(this);
+    }
+
+    _onViewStateChange({ viewState }) {
+        this.setState({ viewState });
     }
 
     _animate() {
@@ -130,6 +138,12 @@ export default class Map extends Component {
         let interactiveGridMappingData = null;
         let geoJsonData = null;
 
+        await getCityIO(this.cityIObaseURL + "grasbrook/header").then(d => {
+            this.setState({ cityIOheader: d });
+            // then set the view to the table's header
+            this._setViewStateToTableHeader();
+        });
+
         await getCityIO(this.cityIObaseURL + "grasbrook/grid").then(d => {
             gridData = d;
         });
@@ -187,7 +201,6 @@ export default class Map extends Component {
             height: 100
         });
 
-        const rndheight = Math.random() * 200;
         mulipleObjPicked.forEach(picked => {
             /*
             allow only to pick cells that are
@@ -204,6 +217,8 @@ export default class Map extends Component {
                 pickedProps.old_height = pickedProps.height;
                 pickedProps.color = this.colors.picked;
                 if (!pickedProps.picked) {
+                    const rndheight = Math.random() * 200;
+
                     pickedProps.height = rndheight;
                     pickedProps.picked = true;
                 } else {
@@ -225,9 +240,12 @@ export default class Map extends Component {
         ) {
             const hoveredProps = this.state.geoJsonData.features[hovered.index]
                 .properties;
-            hoveredProps.oldColor = hoveredProps.color;
             // color the hovered object and wait
             hoveredProps.color = this.colors.hovered;
+
+            hoveredProps.oldColor = hoveredProps.picked
+                ? this.colors.picked
+                : this.colors.idle;
             setTimeout(() => {
                 hoveredProps.color = hoveredProps.oldColor;
             }, 500);
@@ -240,7 +258,7 @@ export default class Map extends Component {
         let layers = [
             new GeoJsonLayer({
                 /*
-                Edit geojson: 
+                Edit geojson:
                 https://codesandbox.io/s/7y3qk00o0q
                 */
 
@@ -255,8 +273,6 @@ export default class Map extends Component {
 
                 visible: layersProps.includes("GEOJSON_GRID") ? true : false,
                 pickable: true,
-                stroked: true,
-                filled: true,
                 extruded: true,
                 lineWidthScale: 1,
                 lineWidthMinPixels: 2,
@@ -275,19 +291,15 @@ export default class Map extends Component {
                     getElevation: d => d.properties.height,
                     getFillColor: d => d.properties.color
                 },
-                transitions: { getElevation: 100, getFillColor: 500 },
-
-                getRadius: 100,
-                getLineWidth: 1
+                transitions: {
+                    getElevation: 250,
+                    getFillColor: 250
+                }
             }),
 
             new TripsLayer({
                 id: "ABM",
-                visible:
-                    // Animate
-                    // this._animate();
-                    layersProps.includes("ABM") ? true : false,
-
+                visible: layersProps.includes("ABM") ? true : false,
                 data: this.state.ABMdata,
                 getPath: d => d.path,
                 getTimestamps: d => d.timestamps,
@@ -365,20 +377,34 @@ export default class Map extends Component {
         return layers;
     }
 
+    _setViewStateToTableHeader() {
+        this.setState({
+            viewState: {
+                ...this.state.viewState,
+                longitude: this.state.cityIOheader.spatial.longitude,
+                latitude: this.state.cityIOheader.spatial.latitude,
+                zoom: 14,
+                pitch: 0,
+                bearing: 180 - this.state.cityIOheader.spatial.rotation
+            }
+        });
+    }
+
     render() {
         return (
             <DeckGL
                 ref={deck => {
                     this.deckGL = deck;
                 }}
+                viewState={this.state.viewState}
+                onViewStateChange={this._onViewStateChange}
                 className="map"
                 layers={this._renderLayers()}
                 effects={this._effects}
-                initialViewState={this.state.viewport}
-                viewState={this.state.viewport}
                 controller={true}
             >
                 <StaticMap
+                    asyncRender={true}
                     dragRotate={true}
                     reuseMaps={true}
                     mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
