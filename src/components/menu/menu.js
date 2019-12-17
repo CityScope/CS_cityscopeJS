@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const layersID = ["PATHS", "ABM", "GEOJSON_GRID", "ACCESS", "SUN"];
+const layersID = ["PATHS", "ABM", "GEOJSON_GRID", "ACCESS", "SUN","BUILDINGS"];
 
 export default function Menu() {
     const classes = useStyles();

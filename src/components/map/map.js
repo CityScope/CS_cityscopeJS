@@ -125,6 +125,7 @@ export default class Map extends Component {
     }
 
     componentDidMount() {
+        console.log("one")
         this._animate();
 
         // hack  to allow view rotatae
@@ -132,6 +133,24 @@ export default class Map extends Component {
         //  get data
         this._getLayersData();
     }
+
+
+    // Update visibility of buildings layer when toggled on menu
+    // https://hackernoon.com/replacing-componentwillreceiveprops-with-getderivedstatefromprops-c3956f7ce607
+    static getDerivedStateFromProps(props,state){
+        if(props.menu !== state.menu) {
+            return { menu: props.menu }
+          } else return null;
+      }
+
+    componentDidUpdate(prevProps, prevState){
+        if(this.props.menu !== prevProps.menu) {
+            const map = this._map;
+             map.setLayoutProperty("BUILDINGS", "visibility", this.props.menu.includes("BUILDINGS") ? "visible" : "none");
+            this.setState({menu : prevProps.menu});
+            }   
+        }
+
 
     async _getLayersData() {
         let gridData = null;
@@ -377,6 +396,44 @@ export default class Map extends Component {
         return layers;
     }
 
+
+    // Reference couple b/w Mapbox api & DeckGL
+    // https://github.com/uber/deck.gl/blob/master/docs/api-reference/mapbox/overview.md
+    _onWebGLInitialized = (gl) => {
+        this.setState({gl});
+      }
+    _onMapLoad = () => {
+        let map = this._map;
+
+        map.addLayer(
+            {
+                id: "BUILDINGS",
+                source: "composite",
+                "source-layer": "building",
+                filter: ["==", "extrude", "true"],
+                type: "fill-extrusion",
+                minzoom: 10,
+                'layout': {
+                    'visibility': "none"
+                    },
+                paint: {
+                  "fill-extrusion-color": "#fff",
+                  "fill-extrusion-height": [
+                    "interpolate",
+                    ["linear"],
+                    ["zoom"],
+                    0.1,
+                    10,
+                    15.05,
+                    ["get", "height"]
+                  ],
+                  "fill-extrusion-opacity": 0.7
+                }
+              }
+        );
+
+    }
+
     _setViewStateToTableHeader() {
         this.setState({
             viewState: {
@@ -390,11 +447,14 @@ export default class Map extends Component {
         });
     }
 
+
+
     render() {
+        const {gl} = this.state;
         return (
             <DeckGL
-                ref={deck => {
-                    this.deckGL = deck;
+                ref={ref => {
+                    this._deck = ref && ref.deck;
                 }}
                 viewState={this.state.viewState}
                 onViewStateChange={this._onViewStateChange}
@@ -404,12 +464,17 @@ export default class Map extends Component {
                 controller={true}
             >
                 <StaticMap
+                    ref={ref => {
+                            this._map = ref && ref.getMap();
+                        }}
+                    gl={gl}
                     asyncRender={true}
                     dragRotate={true}
                     reuseMaps={true}
                     mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
                     mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
                     preventStyleDiffing={true}
+                    onLoad={this._onMapLoad}
                 />
             </DeckGL>
         );
