@@ -19,6 +19,8 @@ export default class Map extends Component {
         super(props);
         //
         this.state = {
+            hoveredCellsState: null,
+            pickedCellsState: null,
             cityIOheader: null,
             geoJsonData: null,
             time: 0,
@@ -192,7 +194,7 @@ export default class Map extends Component {
             .addEventListener("contextmenu", evt => evt.preventDefault());
     }
 
-    _handlePicking = (event, picked) => {
+    _handlePicking = event => {
         // https://github.com/uber/deck.gl/blob/master/docs/api-reference/deck.md#pickobjects
         const mulipleObjPicked = this.deckGL.pickObjects({
             x: event.x - 50,
@@ -211,9 +213,7 @@ export default class Map extends Component {
                 picked.object.properties.land_use === "M1" &&
                 !picked.object.properties.interactive
             ) {
-                const pickedProps = this.state.geoJsonData.features[
-                    picked.index
-                ].properties;
+                const pickedProps = picked.object.properties;
                 pickedProps.old_height = pickedProps.height;
                 pickedProps.color = this.colors.picked;
                 if (!pickedProps.picked) {
@@ -228,7 +228,7 @@ export default class Map extends Component {
         });
 
         this.setState({
-            geoJsonData: this.state.geoJsonData
+            pickedCellsState: mulipleObjPicked
         });
     };
 
@@ -238,18 +238,20 @@ export default class Map extends Component {
             hovered.object.properties.land_use === "M1" &&
             !hovered.object.properties.interactive
         ) {
-            const hoveredProps = this.state.geoJsonData.features[hovered.index]
-                .properties;
+            const hoveredProps = hovered.object.properties;
             // color the hovered object and wait
             hoveredProps.color = this.colors.hovered;
-
+            setTimeout(() => {
+                hoveredProps.color = hoveredProps.oldColor;
+            }, 250);
             hoveredProps.oldColor = hoveredProps.picked
                 ? this.colors.picked
                 : this.colors.idle;
-            setTimeout(() => {
-                hoveredProps.color = hoveredProps.oldColor;
-            }, 500);
         }
+
+        this.setState({
+            hoveredCellsState: hovered
+        });
     };
 
     _renderLayers() {
@@ -264,13 +266,6 @@ export default class Map extends Component {
 
                 id: "GEOJSON_GRID",
                 data: this.state.geoJsonData,
-                onClick: (event, picked) => {
-                    this._handlePicking(event, picked);
-                },
-                onHover: (event, hovered) => {
-                    this._handleHovered(event, hovered);
-                },
-
                 visible: layersProps.includes("GEOJSON_GRID") ? true : false,
                 pickable: true,
                 extruded: true,
@@ -286,10 +281,15 @@ export default class Map extends Component {
                         : d.properties.land_use === "M1"
                         ? this.colors.idle
                         : this.colors.water,
-
+                onClick: (event, picked) => {
+                    this._handlePicking(event, picked);
+                },
+                onHover: (event, hovered) => {
+                    this._handleHovered(event, hovered);
+                },
                 updateTriggers: {
-                    getElevation: d => d.properties.height,
-                    getFillColor: d => d.properties.color
+                    getElevation: this.state.pickedCellsState,
+                    getFillColor: this.state.hoveredCellsState
                 },
                 transitions: {
                     getElevation: 250,
