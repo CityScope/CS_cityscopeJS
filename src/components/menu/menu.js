@@ -13,7 +13,11 @@ const useStyles = makeStyles(theme => ({
     root: {
         width: "100%",
         maxWidth: "25%",
-        backgroundColor: "rgba(255,255,255,0.8)"
+        position: "absolute",
+        backgroundColor: "rgba(255,255,255,0.8)",
+        left: theme.spacing(2),
+        bottom: theme.spacing(10),
+        borderRadius: "5%"
     }
 }));
 
@@ -46,11 +50,6 @@ export default function Menu() {
                         edge="end"
                         onChange={handleToggle(layersID[i])}
                         checked={checked.indexOf(layersID[i]) !== -1}
-                        // inputProps={
-                        //     {
-                        // "aria-labelledby": "switch-list-label-wifi"
-                        //     }
-                        // }
                     />
                 </ListItemSecondaryAction>
             </ListItem>
@@ -61,12 +60,7 @@ export default function Menu() {
     return (
         <div>
             <Map menu={checked} />
-            <List
-                subheader={<ListSubheader>Layers</ListSubheader>}
-                className={classes.root}
-            >
-                {togglesArray}
-            </List>
+            <List className={classes.root}>{togglesArray}</List>
             <EditMenu />
         </div>
     );

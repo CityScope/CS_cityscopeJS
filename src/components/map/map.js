@@ -232,25 +232,34 @@ export default class Map extends Component {
         });
     };
 
-    _handleHovered = (hovered, event) => {
-        if (
-            hovered.object &&
-            hovered.object.properties.land_use === "M1" &&
-            !hovered.object.properties.interactive
-        ) {
-            const hoveredProps = hovered.object.properties;
-            // color the hovered object and wait
-            hoveredProps.color = this.colors.hovered;
-            setTimeout(() => {
-                hoveredProps.color = hoveredProps.oldColor;
-            }, 250);
-            hoveredProps.oldColor = hoveredProps.picked
-                ? this.colors.picked
-                : this.colors.idle;
-        }
+    _handleHovered = event => {
+        const mulipleObjHovered = this.deckGL.pickObjects({
+            x: event.x - 50,
+            y: event.y - 50,
+            width: 100,
+            height: 100
+        });
+
+        mulipleObjHovered.forEach(hovered => {
+            if (
+                hovered.object &&
+                hovered.object.properties.land_use === "M1" &&
+                !hovered.object.properties.interactive
+            ) {
+                const hoveredProps = hovered.object.properties;
+                // color the hovered object and wait
+                hoveredProps.color = this.colors.hovered;
+                setTimeout(() => {
+                    hoveredProps.color = hoveredProps.oldColor;
+                }, 250);
+                hoveredProps.oldColor = hoveredProps.picked
+                    ? this.colors.picked
+                    : this.colors.idle;
+            }
+        });
 
         this.setState({
-            hoveredCellsState: hovered
+            hoveredCellsState: mulipleObjHovered
         });
     };
 

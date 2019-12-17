@@ -9,8 +9,7 @@ import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import ImportExportIcon from "@material-ui/icons/ImportExport";
 import SaveIcon from "@material-ui/icons/Save";
 import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import EditIcon from "@material-ui/icons/Edit";
+import MenuIcon from "@material-ui/icons/Menu";
 
 const useStyles = makeStyles(theme => ({
     list: {
@@ -26,6 +25,11 @@ const useStyles = makeStyles(theme => ({
     },
     extendedIcon: {
         marginRight: theme.spacing(1)
+    },
+    menuButton: {
+        position: "absolute",
+        top: theme.spacing(2),
+        left: theme.spacing(2)
     }
 }));
 
@@ -61,7 +65,7 @@ export default function EditMenu() {
                     <ListItemText primary="Save" />
                 </ListItem>
 
-                <ListItem button key="Compute">
+                <ListItem button key="Recompute">
                     <ListItemIcon>
                         <ImportExportIcon />
                     </ListItemIcon>
@@ -88,12 +92,12 @@ export default function EditMenu() {
                 {sideList("right")}
             </Drawer>
 
-            <Fab aria-label="add" onClick={toggleDrawer("right", true)}>
-                <AddIcon />
-            </Fab>
-
-            <Fab aria-label="add">
-                <EditIcon />
+            <Fab
+                aria-label="add"
+                className={classes.menuButton}
+                onClick={toggleDrawer("right", true)}
+            >
+                <MenuIcon />
             </Fab>
         </div>
     );
