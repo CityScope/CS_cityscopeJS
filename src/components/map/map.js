@@ -10,8 +10,8 @@ import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 export default class Map extends Component {
     constructor(props) {
         super(props);
-        //
         this.state = {
+            cityIOmodulesData: {},
             menu: [],
             isDragging: false,
             pickedCellsState: null,
@@ -23,48 +23,51 @@ export default class Map extends Component {
                 zoom: 17,
                 pitch: 0,
                 bearing: 0
-            },
-            cityIOmodulesData: {}
+            }
         };
-        //
         const ambientLight = new AmbientLight({
             color: [255, 255, 255],
             intensity: 1
         });
-        //
         const dirLight = new _SunLight({
             timestamp: Date.UTC(2019, 7, 1, 10),
             color: [255, 255, 255],
             intensity: 1.0,
             _shadow: true
         });
-        //
         this.day = Date.UTC(2019, 7, 1, this.state.time);
-        //
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });
         lightingEffect.shadowColor = [0, 0, 0, 0.3];
         this._effects = [lightingEffect];
-        //
-        this.cityIObaseURL = "https://cityio.media.mit.edu/api/table/";
-        //
         this.colors = {
             idle: [255, 255, 255, 200],
             hovered: [77, 195, 255, 200],
             picked: [255, 51, 204, 200],
             water: [100, 100, 100, 200]
         };
-        //
         this.animationFrame = null;
         this.startSimHour = 60 * 60 * 7;
         this.endSimHour = 60 * 60 * 14;
         this.animationSpeed = 10;
-
-        //
         this._onViewStateChange = this._onViewStateChange.bind(this);
     }
 
     _onViewStateChange({ viewState }) {
         this.setState({ viewState });
+    }
+
+    _setViewStateToTableHeader() {
+        const header = this.props.cityIOmodulesData.header;
+        this.setState({
+            viewState: {
+                ...this.state.viewState,
+                longitude: header.spatial.longitude,
+                latitude: header.spatial.latitude,
+                zoom: 14,
+                pitch: 0,
+                bearing: 180 - header.spatial.rotation
+            }
+        });
     }
 
     _animate() {
@@ -77,7 +80,6 @@ export default class Map extends Component {
             window.cancelAnimationFrame(this.animationFrame);
             return;
         }
-
         const { startSimHour, animationSpeed, endSimHour } = this;
         let t = this.state.time + animationSpeed;
         if (this.state.time > endSimHour || this.state.time < startSimHour) {
@@ -92,6 +94,10 @@ export default class Map extends Component {
         this._calculateSunPosition();
     }
 
+    /**
+     * Description. calculates the sun position
+     * to fit the `_animate` time
+     */
     _calculateSunPosition() {
         // const menu = this.state.menu;
         // if (!menu.includes("SUN")) return;
@@ -121,62 +127,69 @@ export default class Map extends Component {
 
     componentDidMount() {
         this._animate();
-        // hack  to allow view rotatae
         this._rightClickViewRotate();
         this._setViewStateToTableHeader();
     }
 
-    // async _getLayersData() {
-    //     let gridData = null;
-    //     let interactiveGridMappingData = null;
-    //     let geoJsonData = null;
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.cityIOmodulesData !== prevProps.cityIOmodulesData) {
+            this.setState({ cityIOmodulesData: this.props.cityIOmodulesData });
+            this._proccessGridData();
+            this._proccessAccessData();
+        }
+    }
 
-    //     await getCityIO(this.cityIObaseURL + "grasbrook/header").then(d => {
-    //         this.setState({ cityIOheader: d });
-    //         // then set the view to the table's header
-    //
-    //     });
+    /**
+     * Description. sets `data` to a state of nested prop
+     *  in object while keeping the rest the same
+     */
+    _setStateInObj = (object, prop, data) => {
+        this.setState(prevState => ({
+            [object]: {
+                ...prevState[object],
+                [prop]: data
+            }
+        }));
+    };
 
-    //     await getCityIO(this.cityIObaseURL + "grasbrook/grid").then(d => {
-    //         gridData = d;
-    //     });
+    /**
+     * Description. gets `props` with geojson
+     * and procces the interactive area
+     */
+    _proccessGridData() {
+        let d = this.props.cityIOmodulesData;
+        const grid = d.grid;
+        const geojson = d.meta_grid;
+        const interactiveMapping = d.interactive_grid_mapping;
+        for (let i in interactiveMapping) {
+            geojson.features[interactiveMapping[i]].properties.type =
+                grid[i][0];
+        }
+        this._setStateInObj(this.state.cityIOmodulesData, "meta_grid", geojson);
+    }
 
-    //     await getCityIO(
-    //         this.cityIObaseURL + "grasbrook/interactive_grid_mapping"
-    //     ).then(d => {
-    //         interactiveGridMappingData = d;
-    //     });
+    /**
+     * Description. gets `props` with geojson
+     * and procces the access layer data
+     */
+    _proccessAccessData() {
+        const a = this.props.cityIOmodulesData.access;
+        let coordinates = a.features.map(d => d.geometry.coordinates);
+        let values = a.features.map(d => d.properties);
+        let d = [];
+        for (let i = 0; i < coordinates.length; i++) {
+            d.push({
+                coordinates: coordinates[i],
+                values: values[i]
+            });
+        }
+        this._setStateInObj(this.state.cityIOmodulesData, "access", d);
+    }
 
-    //     await getCityIO(this.cityIObaseURL + "grasbrook/meta_grid").then(d => {
-    //         geoJsonData = d;
-    //     });
-    //     //
-    //     for (let i in interactiveGridMappingData) {
-    //         geoJsonData.features[
-    //             interactiveGridMappingData[i]
-    //         ].properties.type = gridData[i][0];
-    //     }
-    //     this.setState({ geoJsonData: geoJsonData });
-    //     //
-    //     await getCityIO(this.cityIObaseURL + "grasbrook/ABM").then(d =>
-    //         this.setState({ ABMdata: d })
-    //     );
-
-    //     await getCityIO(this.cityIObaseURL + "grasbrook/access").then(d => {
-    //         let coordinates = d.features.map(d => d.geometry.coordinates);
-    //         let values = d.features.map(d => d.properties);
-    //         let arr = [];
-
-    //         for (let i = 0; i < coordinates.length; i++) {
-    //             arr.push({
-    //                 coordinates: coordinates[i],
-    //                 values: values[i]
-    //             });
-    //         }
-    //         this.setState({ accessData: arr });
-    //     });
-    // }
-
+    /**
+     * Description. fix deck issue
+     * with rotate right botton
+     */
     _rightClickViewRotate() {
         document
             .getElementById("deckgl-wrapper")
@@ -220,16 +233,13 @@ export default class Map extends Component {
     };
 
     _renderLayers() {
-        const menu = this.state.menu;
+        // const menu = this.state.menu;
+        const cityIOmodulesData = this.state.cityIOmodulesData;
 
         let layers = [
             new GeoJsonLayer({
-                /*
-                Edit geojson:
-                https://codesandbox.io/s/7y3qk00o0q
-                */
                 id: "GRID",
-                data: this.state.geoJsonData,
+                data: cityIOmodulesData.meta_grid,
                 visible: true,
                 // menu.includes("GRID") ? true : false,
                 pickable: true,
@@ -268,82 +278,85 @@ export default class Map extends Component {
                     getFillColor: 500,
                     getElevation: 250
                 }
+            }),
+
+            new TripsLayer({
+                id: "ABM",
+                visible: true,
+                // menu.includes("ABM") ? true : false,
+                data: cityIOmodulesData.ABM,
+                getPath: d => d.path,
+                getTimestamps: d => d.timestamps,
+                getColor: d => {
+                    //switch between modes or types of users
+                    switch (d.mode[1]) {
+                        case 0:
+                            return [255, 0, 0];
+                        case 1:
+                            return [0, 0, 255];
+                        case 2:
+                            return [0, 255, 0];
+                        default:
+                            return [0, 0, 0];
+                    }
+                },
+                getWidth: 2,
+                opacity: 0.8,
+                rounded: true,
+                trailLength: 200,
+                currentTime: this.state.time
+            }),
+            new PathLayer({
+                id: "PATHS",
+                visible: true,
+                // menu.includes("PATHS") ? true : false,
+                _shadow: false,
+                data: cityIOmodulesData.ABM,
+                getPath: d => {
+                    const noisePath =
+                        Math.random() < 0.5
+                            ? Math.random() * 0.00005
+                            : Math.random() * -0.00005;
+                    for (let i in d.path) {
+                        d.path[i][0] = d.path[i][0] + noisePath;
+                        d.path[i][1] = d.path[i][1] + noisePath;
+                        d.path[i][2] = 200;
+                    }
+                    return d.path;
+                },
+                getColor: d => {
+                    switch (d.mode[1]) {
+                        case 0:
+                            return [255, 0, 0];
+                        case 1:
+                            return [0, 0, 255];
+                        case 2:
+                            return [0, 255, 0];
+                        default:
+                            return [0, 0, 0];
+                    }
+                },
+                opacity: 0.2,
+                getWidth: 1
+            }),
+
+            new HeatmapLayer({
+                id: "ACCESS",
+                visible: true,
+                // menu.includes("ACCESS") ? true : false,
+                colorRange: [
+                    [213, 62, 79],
+                    [252, 141, 89],
+                    [254, 224, 139],
+                    [230, 245, 152],
+                    [153, 213, 148],
+                    [50, 136, 189]
+                ],
+                radiusPixels: 100,
+                data: cityIOmodulesData.access,
+                getPosition: d => d.coordinates,
+                getWeight: d => d.values.housing
             })
-
-            // new TripsLayer({
-            //     id: "ABM",
-            //     visible: menu.includes("ABM") ? true : false,
-            //     data: this.state.ABMdata,
-            //     getPath: d => d.path,
-            //     getTimestamps: d => d.timestamps,
-            //     getColor: d => {
-            //         //switch between modes or types of users
-            //         switch (d.mode[1]) {
-            //             case 0:
-            //                 return [255, 0, 0];
-            //             case 1:
-            //                 return [0, 0, 255];
-            //             case 2:
-            //                 return [0, 255, 0];
-            //             default:
-            //                 return [0, 0, 0];
-            //         }
-            //     },
-            //     getWidth: 2,
-            //     opacity: 0.8,
-            //     rounded: true,
-            //     trailLength: 200,
-            //     currentTime: this.state.time
-            // }),
-            // new PathLayer({
-            //     id: "PATHS",
-            //     visible: menu.includes("PATHS") ? true : false,
-            //     _shadow: false,
-            //     data: this.state.ABMdata,
-            //     getPath: d => {
-            //         const noisePath =
-            //             Math.random() < 0.5
-            //                 ? Math.random() * 0.00005
-            //                 : Math.random() * -0.00005;
-            //         for (let i in d.path) {
-            //             d.path[i][0] = d.path[i][0] + noisePath;
-            //             d.path[i][1] = d.path[i][1] + noisePath;
-            //             d.path[i][2] = 200;
-            //         }
-            //         return d.path;
-            //     },
-            //     getColor: d => {
-            //         switch (d.mode[1]) {
-            //             case 0:
-            //                 return [255, 0, 0];
-            //             case 1:
-            //                 return [0, 0, 255];
-            //             case 2:
-            //                 return [0, 255, 0];
-            //             default:
-            //                 return [0, 0, 0];
-            //         }
-            //     },
-            //     opacity: 0.2,
-
-            //     getWidth: 1
-            // }),
-            // new HeatmapLayer({
-            //     id: "ACCESS",
-            //     visible: menu.includes("ACCESS") ? true : false,
-            //     colorRange: [
-            //         [213, 62, 79],
-            //         [252, 141, 89],
-            //         [254, 224, 139],
-            //         [230, 245, 152],
-            //         [153, 213, 148],
-            //         [50, 136, 189]
-            //     ],
-            //     radiusPixels: 100,
-            //     data: this.state.accessData,
-            //     getPosition: d => d.coordinates,
-            //     getWeight: d => d.values.nightlife
-            // })
         ];
         return layers;
     }
@@ -378,26 +391,6 @@ export default class Map extends Component {
         });
         map.setLayoutProperty("3dBuildingsLayer", "visibility", "visible");
     };
-
-    static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.menu !== prevState.menu) {
-            return { menu: nextProps.menu };
-        } else return null;
-    }
-
-    _setViewStateToTableHeader() {
-        const header = this.props.cityIOmodulesData.header;
-        this.setState({
-            viewState: {
-                ...this.state.viewState,
-                longitude: header.spatial.longitude,
-                latitude: header.spatial.latitude,
-                zoom: 14,
-                pitch: 0,
-                bearing: 180 - header.spatial.rotation
-            }
-        });
-    }
 
     render() {
         const { gl } = this.state;

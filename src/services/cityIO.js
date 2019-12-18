@@ -8,7 +8,7 @@ export default class CityIO extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            oldHash: "nope hash",
+            oldHash: null,
             doneFetching: false,
             cityIOmodulesData: {
                 header: null,
