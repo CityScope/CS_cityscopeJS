@@ -1,0 +1,6 @@
+.rv-xy-plot__axis__line {
+    stroke-width: 1;
+}
+.rv-xy-plot__axis__tick__line {
+    stroke-width: 0.5;
+}

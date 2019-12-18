@@ -2,12 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
-import Menu from "./components/menu/menu";
+import CityIO from "./services/cityIO";
 
-ReactDOM.render(
-    <Menu />,
-
-    document.getElementById("root")
-);
-
+ReactDOM.render(<CityIO />, document.getElementById("root"));
 serviceWorker.unregister();

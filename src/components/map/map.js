@@ -6,7 +6,7 @@ import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
-import { getCityIO } from "../../services/cityIO";
+import { getCityIO } from "../../archive/old_cityIO";
 
 export default class Map extends Component {
     constructor(props) {
@@ -407,33 +407,37 @@ export default class Map extends Component {
     render() {
         const { gl } = this.state;
         return (
-            <DeckGL
-                ref={ref => {
-                    // save a reference to the Deck instance
-                    this.deckGL = ref && ref.deck;
-                }}
-                viewState={this.state.viewState}
-                onViewStateChange={this._onViewStateChange}
-                className="map"
-                layers={this._renderLayers()}
-                effects={this._effects}
-                controller={{ dragPan: !this.state.isDragging }}
-            >
-                <StaticMap
-                    asyncRender={true}
+            <div>
+                <DeckGL
                     ref={ref => {
-                        // save a reference to the mapboxgl.Map instance
-                        this._map = ref && ref.getMap();
+                        // save a reference to the Deck instance
+                        this.deckGL = ref && ref.deck;
                     }}
-                    gl={gl}
-                    dragRotate={true}
-                    reuseMaps={true}
-                    mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-                    mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
-                    preventStyleDiffing={true}
-                    onLoad={this._onMapLoad}
-                />
-            </DeckGL>
+                    viewState={this.state.viewState}
+                    onViewStateChange={this._onViewStateChange}
+                    className="map"
+                    layers={this._renderLayers()}
+                    effects={this._effects}
+                    controller={{ dragPan: !this.state.isDragging }}
+                >
+                    <StaticMap
+                        asyncRender={true}
+                        ref={ref => {
+                            // save a reference to the mapboxgl.Map instance
+                            this._map = ref && ref.getMap();
+                        }}
+                        gl={gl}
+                        dragRotate={true}
+                        reuseMaps={true}
+                        mapboxApiAccessToken={
+                            process.env.REACT_APP_MAPBOX_TOKEN
+                        }
+                        mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
+                        preventStyleDiffing={true}
+                        onLoad={this._onMapLoad}
+                    />
+                </DeckGL>
+            </div>
         );
     }
 }

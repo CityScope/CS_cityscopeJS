@@ -1,0 +1,12 @@
+.SunburstWithTooltips {
+  margin: auto;
+  border: 1px solid white;
+  border-radius: 3em;
+  margin: 1em;
+}
+
+.rv-xy-plot__series--label-text {
+  fill: white;
+  font-size: 12px;
+  font-weight: 100;
+}

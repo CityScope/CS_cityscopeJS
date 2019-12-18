@@ -1,0 +1,15 @@
+.TreeMap {
+  margin: auto;
+  border: 1px solid white;
+  border-radius: 3em;
+  margin: 1em;
+}
+
+.rv-treemap__leaf__content {
+  font-size: 8px;
+  color: white;
+}
+
+.rv-treemap__leaf--circle {
+  border: none !important;
+}
