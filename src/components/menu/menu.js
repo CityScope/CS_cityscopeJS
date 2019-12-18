@@ -5,7 +5,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import Switch from "@material-ui/core/Switch";
-import Map from "../map/map";
 import Drawer from "@material-ui/core/Drawer";
 import Fab from "@material-ui/core/Fab";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -97,7 +96,6 @@ export default function Menu() {
     }
     return (
         <div>
-            <Map menu={toggleStateArray} />
             <div className={classes.root}>
                 <Drawer
                     anchor="left"

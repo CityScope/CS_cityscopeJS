@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Loader from "../components/Loader";
+import Menu from "../components/menu/menu";
+import Map from "../components/map/map";
 import axios from "axios";
 
 export default class CityIO extends Component {
@@ -8,14 +10,17 @@ export default class CityIO extends Component {
         this.state = {
             oldHash: "nope hash",
             doneFetching: false,
-
             cityIOmodulesData: {
+                header: null,
+                interactive_grid_mapping: null,
+                meta_grid: null,
                 ABM: null,
                 grid: null,
                 access: null
             }
         };
 
+        this.interval = 1000;
         this.tableName = window.location.search.substring(1);
         this.cityioURL = null;
         if (this.tableName !== "") {
@@ -24,11 +29,11 @@ export default class CityIO extends Component {
                 this.tableName.toString();
         }
     }
-
     componentDidMount() {
+        // start interval
         this.timer = setInterval(
             () => this.getCityIOHash(this.cityioURL + "/meta"),
-            1000
+            this.interval
         );
     }
     getCityIOHash = URL => {
@@ -54,8 +59,6 @@ export default class CityIO extends Component {
             });
         } else {
             console.log("...same hash at", this.cityioURL);
-            console.log(this.state.cityIOmodulesData);
-
             this.setState({ doneFetching: true });
         }
     };
@@ -93,9 +96,30 @@ export default class CityIO extends Component {
             });
     };
 
-    render = () => (
-        <div>
-            <Loader loading={!this.state.doneFetching} />
-        </div>
-    );
+    _checkStillLoading = () => {
+        // gor through each module to check it is not empty
+        let bool = false;
+        for (let module in this.state.cityIOmodulesData) {
+            if (this.state.cityIOmodulesData[module] === null) {
+                bool = true;
+            }
+        }
+        return bool;
+    };
+
+    render() {
+        // check if cityIO still gets modules data
+        // don't init the map before so
+        if (this._checkStillLoading()) {
+            return <Loader loading={!this.state.doneFetching} />;
+        } else {
+            return (
+                <div>
+                    <Map cityIOmodulesData={this.state.cityIOmodulesData} />
+                    <Loader loading={!this.state.doneFetching} />
+                    <Menu />
+                </div>
+            );
+        }
+    }
 }
