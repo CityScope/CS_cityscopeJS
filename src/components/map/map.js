@@ -4,7 +4,6 @@ import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
-
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import {
     LightingEffect,
@@ -19,9 +18,11 @@ export default class Map extends Component {
         super(props);
         //
         this.state = {
+            menu: [],
             isDragging: false,
             pickedCellsState: null,
             cityIOheader: null,
+            toggleBuildingShow: "none",
             geoJsonData: null,
             time: 0,
             accessData: null,
@@ -240,9 +241,9 @@ export default class Map extends Component {
                 https://codesandbox.io/s/7y3qk00o0q
                 */
 
-                id: "GEOJSON_GRID",
+                id: "GRID",
                 data: this.state.geoJsonData,
-                visible: layersProps.includes("GEOJSON_GRID") ? true : false,
+                visible: layersProps.includes("GRID") ? true : false,
                 pickable: true,
                 extruded: true,
                 lineWidthScale: 1,
@@ -357,8 +358,59 @@ export default class Map extends Component {
                 getWeight: d => d.values.nightlife
             })
         ];
-
         return layers;
+    }
+
+    _onWebGLInitialized = gl => {
+        this.setState({ gl });
+    };
+
+    _onMapLoad = () => {
+        const map = this._map;
+        map.addLayer({
+            id: "3dBuildingsLayer",
+            displayName: "3dBuildingsLayer",
+            source: "composite",
+            "source-layer": "building",
+            filter: ["==", "extrude", "true"],
+            type: "fill-extrusion",
+            minzoom: 10,
+            paint: {
+                "fill-extrusion-color": "#fff",
+                "fill-extrusion-height": [
+                    "interpolate",
+                    ["linear"],
+                    ["zoom"],
+                    0.1,
+                    10,
+                    15.05,
+                    ["get", "height"]
+                ],
+                "fill-extrusion-opacity": 0.7
+            }
+        });
+        map.setLayoutProperty("3dBuildingsLayer", "visibility", "visible");
+    };
+
+    _handleMapboxLayer = () => {
+        const map = this._map;
+        map.setLayoutProperty(
+            "3dBuildingsLayer",
+            "visibility",
+            "3D_BUILDING" in this.state.menu ? "visible" : "none"
+        );
+    };
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.menu !== prevState.menu) {
+            return { menu: nextProps.menu };
+        } else return null;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.menu !== this.state.menu) {
+            this._handleMapboxLayer();
+        }
     }
 
     _setViewStateToTableHeader() {
@@ -375,10 +427,13 @@ export default class Map extends Component {
     }
 
     render() {
+        const { gl } = this.state;
+
         return (
             <DeckGL
-                ref={deck => {
-                    this.deckGL = deck;
+                ref={ref => {
+                    // save a reference to the Deck instance
+                    this._deck = ref && ref.deck;
                 }}
                 viewState={this.state.viewState}
                 onViewStateChange={this._onViewStateChange}
@@ -389,10 +444,17 @@ export default class Map extends Component {
             >
                 <StaticMap
                     asyncRender={true}
+                    ref={ref => {
+                        // save a reference to the mapboxgl.Map instance
+                        this._map = ref && ref.getMap();
+                    }}
+                    gl={gl}
+                    dragRotate={true}
                     reuseMaps={true}
                     mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
                     mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
                     preventStyleDiffing={true}
+                    onLoad={this._onMapLoad}
                 />
             </DeckGL>
         );

@@ -11,7 +11,15 @@ import Fab from "@material-ui/core/Fab";
 import MenuIcon from "@material-ui/icons/Menu";
 
 export default function Menu() {
-    const toggleID = ["PATHS", "ABM", "GEOJSON_GRID", "ACCESS", "SUN", "EDIT"];
+    const toggleID = [
+        "PATHS",
+        "ABM",
+        "GRID",
+        "ACCESS",
+        "SUN",
+        "3D_BUILDING",
+        "EDIT"
+    ];
     const useStyles = makeStyles(theme => ({
         root: {
             width: "100%",
@@ -69,7 +77,7 @@ export default function Menu() {
             newChecked.splice(currentIndex, 1);
         }
         setChecked(newChecked);
-        console.log(newChecked);
+        //console.log(newChecked);
     };
     let togglesArray = [];
     for (let i = 0; i < toggleID.length; i++) {
