@@ -19,7 +19,7 @@ export default class Map extends Component {
         super(props);
         //
         this.state = {
-            hoveredCellsState: null,
+            isDragging: false,
             pickedCellsState: null,
             cityIOheader: null,
             geoJsonData: null,
@@ -57,8 +57,8 @@ export default class Map extends Component {
         //
         this.colors = {
             idle: [255, 255, 255, 200],
-            picked: [77, 195, 255, 200],
-            hovered: [255, 51, 204, 200],
+            hovered: [77, 195, 255, 200],
+            picked: [255, 51, 204, 200],
             water: [100, 100, 100, 200]
         };
         //
@@ -194,73 +194,40 @@ export default class Map extends Component {
             .addEventListener("contextmenu", evt => evt.preventDefault());
     }
 
-    _handlePicking = event => {
-        // https://github.com/uber/deck.gl/blob/master/docs/api-reference/deck.md#pickobjects
-        const mulipleObjPicked = this.deckGL.pickObjects({
-            x: event.x - 50,
-            y: event.y - 50,
-            width: 100,
-            height: 100
+    _mulipleObjPicked = e => {
+        return this.deckGL.pickObjects({
+            x: e.x - 10,
+            y: e.y - 10,
+            width: 20,
+            height: 20
         });
+    };
 
-        mulipleObjPicked.forEach(picked => {
-            /*
+    _handlePicking = e => {
+        /*
             allow only to pick cells that are
             not of CityScope TUI & that are interactable
             so to not overlap TUI activity  
             */
-            if (
-                picked.object.properties.land_use === "M1" &&
-                !picked.object.properties.interactive
-            ) {
-                const pickedProps = picked.object.properties;
-                pickedProps.old_height = pickedProps.height;
-                pickedProps.color = this.colors.picked;
-                if (!pickedProps.picked) {
-                    const rndheight = Math.random() * 200;
 
-                    pickedProps.height = rndheight;
-                    pickedProps.picked = true;
-                } else {
-                    pickedProps.height = pickedProps.old_height;
-                }
+        const multiSelectedObj = this._mulipleObjPicked(e);
+
+        multiSelectedObj.forEach(picked => {
+            const pickedProps = picked.object.properties;
+            if (pickedProps.land_use === "M1" && !pickedProps.interactive) {
+                pickedProps.old_height = pickedProps.height;
+                pickedProps.old_color = pickedProps.color;
+                pickedProps.color = this.colors.picked;
+                pickedProps.height = 50;
             }
         });
-
         this.setState({
-            pickedCellsState: mulipleObjPicked
+            pickedCellsState: multiSelectedObj
         });
     };
 
-    _handleHovered = event => {
-        const mulipleObjHovered = this.deckGL.pickObjects({
-            x: event.x - 50,
-            y: event.y - 50,
-            width: 100,
-            height: 100
-        });
-
-        mulipleObjHovered.forEach(hovered => {
-            if (
-                hovered.object &&
-                hovered.object.properties.land_use === "M1" &&
-                !hovered.object.properties.interactive
-            ) {
-                const hoveredProps = hovered.object.properties;
-                // color the hovered object and wait
-                hoveredProps.color = this.colors.hovered;
-                setTimeout(() => {
-                    hoveredProps.color = hoveredProps.oldColor;
-                }, 250);
-                hoveredProps.oldColor = hoveredProps.picked
-                    ? this.colors.picked
-                    : this.colors.idle;
-            }
-        });
-
-        this.setState({
-            hoveredCellsState: mulipleObjHovered
-        });
+    _handleDrag = bool => {
+        this.setState({ isDragging: bool });
     };
 
     _renderLayers() {
@@ -290,19 +257,27 @@ export default class Map extends Component {
                         : d.properties.land_use === "M1"
                         ? this.colors.idle
                         : this.colors.water,
-                onClick: (event, picked) => {
-                    this._handlePicking(event, picked);
+
+                onDrag: event => {
+                    if (this.props.menu.includes("EDIT")) {
+                        this._handlePicking(event);
+                    }
                 },
-                onHover: (event, hovered) => {
-                    this._handleHovered(event, hovered);
+                onDragStart: () => {
+                    if (this.props.menu.includes("EDIT"))
+                        this._handleDrag(true);
                 },
+                onDragEnd: () => {
+                    this._handleDrag(false);
+                },
+
                 updateTriggers: {
-                    getElevation: this.state.pickedCellsState,
-                    getFillColor: this.state.hoveredCellsState
+                    getFillColor: this.state.pickedCellsState,
+                    getElevation: this.state.pickedCellsState
                 },
                 transitions: {
-                    getElevation: 250,
-                    getFillColor: 250
+                    getFillColor: 500,
+                    getElevation: 250
                 }
             }),
 
@@ -410,11 +385,10 @@ export default class Map extends Component {
                 className="map"
                 layers={this._renderLayers()}
                 effects={this._effects}
-                controller={true}
+                controller={{ dragPan: !this.state.isDragging }}
             >
                 <StaticMap
                     asyncRender={true}
-                    dragRotate={true}
                     reuseMaps={true}
                     mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
                     mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
