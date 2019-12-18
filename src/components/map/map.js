@@ -5,12 +5,7 @@ import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
-import {
-    LightingEffect,
-    AmbientLight,
-    _SunLight as SunLight
-} from "@deck.gl/core";
-
+import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import { getCityIO } from "../../services/cityIO";
 
 export default class Map extends Component {
@@ -41,7 +36,7 @@ export default class Map extends Component {
             intensity: 1
         });
         //
-        const dirLight = new SunLight({
+        const dirLight = new _SunLight({
             timestamp: Date.UTC(2019, 7, 1, 10),
             color: [255, 255, 255],
             intensity: 1.0,
@@ -80,8 +75,8 @@ export default class Map extends Component {
         // stop animation on toggle
         if (
             this.animationFrame &&
-            !this.props.menu.includes("ABM") &&
-            !this.props.menu.includes("SUN")
+            !this.state.menu.includes("ABM") &&
+            !this.state.menu.includes("SUN")
         ) {
             window.cancelAnimationFrame(this.animationFrame);
             return;
@@ -102,8 +97,8 @@ export default class Map extends Component {
     }
 
     _calculateSunPosition() {
-        const layersProps = this.props.menu;
-        if (!layersProps.includes("SUN")) return;
+        const menu = this.state.menu;
+        if (!menu.includes("SUN")) return;
         var date = new Date(this.state.time * 1000);
         // Hours part from the timestamp
         var hours = date.getHours();
@@ -232,7 +227,7 @@ export default class Map extends Component {
     };
 
     _renderLayers() {
-        const layersProps = this.props.menu;
+        const menu = this.state.menu;
 
         let layers = [
             new GeoJsonLayer({
@@ -240,10 +235,9 @@ export default class Map extends Component {
                 Edit geojson:
                 https://codesandbox.io/s/7y3qk00o0q
                 */
-
                 id: "GRID",
                 data: this.state.geoJsonData,
-                visible: layersProps.includes("GRID") ? true : false,
+                visible: menu.includes("GRID") ? true : false,
                 pickable: true,
                 extruded: true,
                 lineWidthScale: 1,
@@ -260,12 +254,12 @@ export default class Map extends Component {
                         : this.colors.water,
 
                 onDrag: event => {
-                    if (this.props.menu.includes("EDIT")) {
+                    if (this.state.menu.includes("EDIT")) {
                         this._handlePicking(event);
                     }
                 },
                 onDragStart: () => {
-                    if (this.props.menu.includes("EDIT"))
+                    if (this.state.menu.includes("EDIT"))
                         this._handleDrag(true);
                 },
                 onDragEnd: () => {
@@ -284,7 +278,7 @@ export default class Map extends Component {
 
             new TripsLayer({
                 id: "ABM",
-                visible: layersProps.includes("ABM") ? true : false,
+                visible: menu.includes("ABM") ? true : false,
                 data: this.state.ABMdata,
                 getPath: d => d.path,
                 getTimestamps: d => d.timestamps,
@@ -307,10 +301,9 @@ export default class Map extends Component {
                 trailLength: 200,
                 currentTime: this.state.time
             }),
-
             new PathLayer({
                 id: "PATHS",
-                visible: layersProps.includes("PATHS") ? true : false,
+                visible: menu.includes("PATHS") ? true : false,
                 _shadow: false,
                 data: this.state.ABMdata,
                 getPath: d => {
@@ -343,7 +336,7 @@ export default class Map extends Component {
             }),
             new HeatmapLayer({
                 id: "ACCESS",
-                visible: layersProps.includes("ACCESS") ? true : false,
+                visible: menu.includes("ACCESS") ? true : false,
                 colorRange: [
                     [213, 62, 79],
                     [252, 141, 89],
@@ -386,31 +379,16 @@ export default class Map extends Component {
                     15.05,
                     ["get", "height"]
                 ],
-                "fill-extrusion-opacity": 0.7
+                "fill-extrusion-opacity": 0.5
             }
         });
         map.setLayoutProperty("3dBuildingsLayer", "visibility", "visible");
-    };
-
-    _handleMapboxLayer = () => {
-        const map = this._map;
-        map.setLayoutProperty(
-            "3dBuildingsLayer",
-            "visibility",
-            "3D_BUILDING" in this.state.menu ? "visible" : "none"
-        );
     };
 
     static getDerivedStateFromProps(nextProps, prevState) {
         if (nextProps.menu !== prevState.menu) {
             return { menu: nextProps.menu };
         } else return null;
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.menu !== this.state.menu) {
-            this._handleMapboxLayer();
-        }
     }
 
     _setViewStateToTableHeader() {
@@ -428,12 +406,11 @@ export default class Map extends Component {
 
     render() {
         const { gl } = this.state;
-
         return (
             <DeckGL
                 ref={ref => {
                     // save a reference to the Deck instance
-                    this._deck = ref && ref.deck;
+                    this.deckGL = ref && ref.deck;
                 }}
                 viewState={this.state.viewState}
                 onViewStateChange={this._onViewStateChange}
