@@ -7,6 +7,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import typesDefinition from "../../settings/settings.json";
+import "./map.css";
 
 export default class Map extends Component {
     constructor(props) {
@@ -53,11 +54,11 @@ export default class Map extends Component {
 
     _handleKeyDown = e => {
         // shift == 16
-        this.setState({ keyDown: e.nativeEvent.keyCode });
+        this.setState({ keyDownState: e.nativeEvent.keyCode });
     };
 
     _handleKeyUp = () => {
-        this.setState({ keyDown: null });
+        this.setState({ keyDownState: null });
     };
 
     _setViewStateToTableHeader() {
@@ -275,12 +276,13 @@ export default class Map extends Component {
 
                 onDrag: event => {
                     // if (!this.state.menu.includes("EDIT")) {
-                    if (this.state.keyDown === 16) this._handleSelection(event);
+                    if (this.state.keyDownState === 16)
+                        this._handleSelection(event);
                     // }
                 },
                 onDragStart: () => {
                     // if (!this.state.menu.includes("EDIT"))
-                    if (this.state.keyDown === 16) {
+                    if (this.state.keyDownState === 16) {
                         // compute rnd color for now
                         this._rndType();
                         this._handleDrag(true);
@@ -411,7 +413,15 @@ export default class Map extends Component {
     render() {
         const { gl } = this.state;
         return (
-            <div onKeyDown={this._handleKeyDown} onKeyUp={this._handleKeyUp}>
+            <div
+                className={
+                    this.state.keyDownState === 16
+                        ? "cursorDrag"
+                        : "cursorNormal"
+                }
+                onKeyDown={this._handleKeyDown}
+                onKeyUp={this._handleKeyUp}
+            >
                 <DeckGL
                     ref={ref => {
                         // save a reference to the Deck instance

@@ -30,6 +30,7 @@ export default class CityIO extends Component {
         }
     }
     componentDidMount() {
+        this.getCityIOHash(this.cityioURL + "/meta");
         // start interval
         this.timer = setInterval(
             () => this.getCityIOHash(this.cityioURL + "/meta"),
