@@ -43,7 +43,15 @@ export default class Map extends Component {
             idle: [255, 255, 255, 200],
             hovered: [77, 195, 255, 200],
             picked: [255, 51, 204, 200],
-            water: [100, 100, 100, 200]
+            water: [100, 100, 100, 200],
+            scale: [
+                [213, 62, 79],
+                [252, 141, 89],
+                [254, 224, 139],
+                [230, 245, 152],
+                [153, 213, 148],
+                [50, 136, 189]
+            ]
         };
         this.animationFrame = null;
         this.startSimHour = 60 * 60 * 7;
@@ -91,7 +99,7 @@ export default class Map extends Component {
         this._animationFrame = window.requestAnimationFrame(
             this._animate.bind(this)
         );
-        this._calculateSunPosition();
+        // this._calculateSunPosition();
     }
 
     /**
@@ -140,19 +148,6 @@ export default class Map extends Component {
     }
 
     /**
-     * Description. sets `data` to a state of nested prop
-     *  in object while keeping the rest the same
-     */
-    _setStateInObj = (object, prop, data) => {
-        this.setState(prevState => ({
-            [object]: {
-                ...prevState[object],
-                [prop]: data
-            }
-        }));
-    };
-
-    /**
      * Description. gets `props` with geojson
      * and procces the interactive area
      */
@@ -164,8 +159,12 @@ export default class Map extends Component {
         for (let i in interactiveMapping) {
             geojson.features[interactiveMapping[i]].properties.type =
                 grid[i][0];
+
+            geojson.features[
+                interactiveMapping[i]
+            ].properties.color = this.colors.scale[grid[i][0]];
         }
-        this._setStateInObj(this.state.cityIOmodulesData, "meta_grid", geojson);
+        this.setState({ meta_grid: geojson });
     }
 
     /**
@@ -173,17 +172,17 @@ export default class Map extends Component {
      * and procces the access layer data
      */
     _proccessAccessData() {
-        const a = this.props.cityIOmodulesData.access;
-        let coordinates = a.features.map(d => d.geometry.coordinates);
-        let values = a.features.map(d => d.properties);
-        let d = [];
+        const p = this.props.cityIOmodulesData.access;
+        let coordinates = p.features.map(d => d.geometry.coordinates);
+        let values = p.features.map(d => d.properties);
+        let heatmap = [];
         for (let i = 0; i < coordinates.length; i++) {
-            d.push({
+            heatmap.push({
                 coordinates: coordinates[i],
                 values: values[i]
             });
         }
-        this._setStateInObj(this.state.cityIOmodulesData, "access", d);
+        this.setState({ access: heatmap });
     }
 
     /**
@@ -234,12 +233,12 @@ export default class Map extends Component {
 
     _renderLayers() {
         // const menu = this.state.menu;
-        const cityIOmodulesData = this.state.cityIOmodulesData;
+        const cityIOmodulesData = this.props.cityIOmodulesData;
 
         let layers = [
             new GeoJsonLayer({
                 id: "GRID",
-                data: cityIOmodulesData.meta_grid,
+                data: this.state.meta_grid,
                 visible: true,
                 // menu.includes("GRID") ? true : false,
                 pickable: true,
@@ -250,7 +249,7 @@ export default class Map extends Component {
                     d.properties.land_use === "M1" ? d.properties.height : 1,
                 getFillColor: d =>
                     d.properties.type !== undefined
-                        ? this.colors.picked
+                        ? d.properties.color
                         : d.properties.color
                         ? d.properties.color
                         : d.properties.land_use === "M1"
@@ -306,6 +305,7 @@ export default class Map extends Component {
                 trailLength: 200,
                 currentTime: this.state.time
             }),
+
             new PathLayer({
                 id: "PATHS",
                 visible: true,
@@ -344,16 +344,10 @@ export default class Map extends Component {
                 id: "ACCESS",
                 visible: true,
                 // menu.includes("ACCESS") ? true : false,
-                colorRange: [
-                    [213, 62, 79],
-                    [252, 141, 89],
-                    [254, 224, 139],
-                    [230, 245, 152],
-                    [153, 213, 148],
-                    [50, 136, 189]
-                ],
-                radiusPixels: 100,
-                data: cityIOmodulesData.access,
+                colorRange: this.colors.scale,
+                radiusPixels: 200,
+                opacity: 0.25,
+                data: this.state.access,
                 getPosition: d => d.coordinates,
                 getWeight: d => d.values.housing
             })
