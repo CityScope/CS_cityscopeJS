@@ -51,6 +51,15 @@ export default class Map extends Component {
         this.setState({ viewState });
     }
 
+    _handleKeyDown = e => {
+        // shift == 16
+        this.setState({ keyDown: e.nativeEvent.keyCode });
+    };
+
+    _handleKeyUp = () => {
+        this.setState({ keyDown: null });
+    };
+
     _setViewStateToTableHeader() {
         const header = this.props.cityIOmodulesData.header;
         this.setState({
@@ -183,6 +192,11 @@ export default class Map extends Component {
             .addEventListener("contextmenu", evt => evt.preventDefault());
     }
 
+    /**
+     * Description. uses deck api to
+     * collect objects in a region
+     * @argument{object} e  picking event
+     */
     _mulipleObjPicked = e => {
         return this.deckGL.pickObjects({
             x: e.x - 5,
@@ -261,13 +275,16 @@ export default class Map extends Component {
 
                 onDrag: event => {
                     // if (!this.state.menu.includes("EDIT")) {
-                    this._handleSelection(event);
+                    if (this.state.keyDown === 16) this._handleSelection(event);
                     // }
                 },
                 onDragStart: () => {
-                    this._rndType();
                     // if (!this.state.menu.includes("EDIT"))
-                    this._handleDrag(true);
+                    if (this.state.keyDown === 16) {
+                        // compute rnd color for now
+                        this._rndType();
+                        this._handleDrag(true);
+                    }
                 },
 
                 onDragEnd: () => {
@@ -394,7 +411,7 @@ export default class Map extends Component {
     render() {
         const { gl } = this.state;
         return (
-            <div>
+            <div onKeyDown={this._handleKeyDown} onKeyUp={this._handleKeyUp}>
                 <DeckGL
                     ref={ref => {
                         // save a reference to the Deck instance
@@ -405,7 +422,10 @@ export default class Map extends Component {
                     className="map"
                     layers={this._renderLayers()}
                     effects={this._effects}
-                    controller={{ dragPan: !this.state.isDragging }}
+                    controller={{
+                        dragPan: !this.state.isDragging,
+                        dragRotate: !this.state.isDragging
+                    }}
                 >
                     <StaticMap
                         asyncRender={true}
