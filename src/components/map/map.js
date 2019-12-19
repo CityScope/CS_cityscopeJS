@@ -6,6 +6,7 @@ import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
+import typesDefinition from "../../settings/settings.json";
 
 export default class Map extends Component {
     constructor(props) {
@@ -14,7 +15,7 @@ export default class Map extends Component {
             cityIOmodulesData: {},
             menu: [],
             isDragging: false,
-            pickedCellsState: null,
+            selectedCellsState: null,
             toggleBuildingShow: "none",
             time: 0,
             viewState: {
@@ -39,20 +40,6 @@ export default class Map extends Component {
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });
         lightingEffect.shadowColor = [0, 0, 0, 0.3];
         this._effects = [lightingEffect];
-        this.colors = {
-            idle: [255, 255, 255, 200],
-            hovered: [77, 195, 255, 200],
-            picked: [255, 51, 204, 200],
-            water: [100, 100, 100, 200],
-            scale: [
-                [213, 62, 79],
-                [252, 141, 89],
-                [254, 224, 139],
-                [230, 245, 152],
-                [153, 213, 148],
-                [50, 136, 189]
-            ]
-        };
         this.animationFrame = null;
         this.startSimHour = 60 * 60 * 7;
         this.endSimHour = 60 * 60 * 14;
@@ -159,10 +146,8 @@ export default class Map extends Component {
         for (let i in interactiveMapping) {
             geojson.features[interactiveMapping[i]].properties.type =
                 grid[i][0];
-
-            geojson.features[
-                interactiveMapping[i]
-            ].properties.color = this.colors.scale[grid[i][0]];
+            geojson.features[interactiveMapping[i]].properties.color =
+                typesDefinition[grid[i][0]].color;
         }
         this.setState({ meta_grid: geojson });
     }
@@ -172,6 +157,8 @@ export default class Map extends Component {
      * and procces the access layer data
      */
     _proccessAccessData() {
+        // get colors from settings
+        const colors = Object.values(typesDefinition).map(d => d.color);
         const p = this.props.cityIOmodulesData.access;
         let coordinates = p.features.map(d => d.geometry.coordinates);
         let values = p.features.map(d => d.properties);
@@ -182,6 +169,7 @@ export default class Map extends Component {
                 values: values[i]
             });
         }
+        this.setState({ accessColors: colors });
         this.setState({ access: heatmap });
     }
 
@@ -197,36 +185,51 @@ export default class Map extends Component {
 
     _mulipleObjPicked = e => {
         return this.deckGL.pickObjects({
-            x: e.x - 10,
-            y: e.y - 10,
-            width: 20,
-            height: 20
+            x: e.x - 5,
+            y: e.y - 5,
+            width: 10,
+            height: 10
         });
     };
 
-    _handlePicking = e => {
-        /*
-            allow only to pick cells that are
-            not of CityScope TUI & that are interactable
-            so to not overlap TUI activity  
-            */
+    /**
+     * Description.
+     * Temp def. for color selection
+     */
+    _rndType = () => {
+        var keys = Object.keys(typesDefinition);
+        let randomType =
+            typesDefinition[keys[(keys.length * Math.random()) << 0]];
+        this.setState({ randomType: randomType });
+    };
+    /**
+     * Description. allow only to pick cells that are
+     *  not of CityScope TUI & that are interactable
+     * so to not overlap TUI activity
+     */
+    _handleSelection = e => {
+        let rndType = this.state.randomType;
 
         const multiSelectedObj = this._mulipleObjPicked(e);
-
-        multiSelectedObj.forEach(picked => {
-            const pickedProps = picked.object.properties;
-            if (pickedProps.land_use === "M1" && !pickedProps.interactive) {
-                pickedProps.old_height = pickedProps.height;
-                pickedProps.old_color = pickedProps.color;
-                pickedProps.color = this.colors.picked;
-                pickedProps.height = 50;
+        multiSelectedObj.forEach(selected => {
+            const selectedProps = selected.object.properties;
+            if (selectedProps.land_use === "M1" && !selectedProps.interactive) {
+                selectedProps.old_height = selectedProps.height;
+                selectedProps.old_color = selectedProps.color;
+                selectedProps.color = rndType.color;
+                selectedProps.height = rndType.height;
             }
         });
+
         this.setState({
-            pickedCellsState: multiSelectedObj
+            selectedCellsState: multiSelectedObj
         });
     };
 
+    /**
+     * Description.
+     * control state of deckgl `drag`
+     */
     _handleDrag = bool => {
         this.setState({ isDragging: bool });
     };
@@ -253,25 +256,27 @@ export default class Map extends Component {
                         : d.properties.color
                         ? d.properties.color
                         : d.properties.land_use === "M1"
-                        ? this.colors.idle
-                        : this.colors.water,
+                        ? typesDefinition.white.color
+                        : typesDefinition.water.color,
 
                 onDrag: event => {
-                    if (this.state.menu.includes("EDIT")) {
-                        this._handlePicking(event);
-                    }
+                    // if (!this.state.menu.includes("EDIT")) {
+                    this._handleSelection(event);
+                    // }
                 },
                 onDragStart: () => {
-                    if (this.state.menu.includes("EDIT"))
-                        this._handleDrag(true);
+                    this._rndType();
+                    // if (!this.state.menu.includes("EDIT"))
+                    this._handleDrag(true);
                 },
+
                 onDragEnd: () => {
                     this._handleDrag(false);
                 },
 
                 updateTriggers: {
-                    getFillColor: this.state.pickedCellsState,
-                    getElevation: this.state.pickedCellsState
+                    getFillColor: this.state.selectedCellsState,
+                    getElevation: this.state.selectedCellsState
                 },
                 transitions: {
                     getFillColor: 500,
@@ -344,7 +349,7 @@ export default class Map extends Component {
                 id: "ACCESS",
                 visible: true,
                 // menu.includes("ACCESS") ? true : false,
-                colorRange: this.colors.scale,
+                colorRange: this.state.accessColors,
                 radiusPixels: 200,
                 opacity: 0.25,
                 data: this.state.access,
