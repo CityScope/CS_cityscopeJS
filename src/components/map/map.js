@@ -12,7 +12,7 @@ export default class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mapStyle: process.env.REACT_APP_MAPBOX_STYLE_SAT,
+            mapStyle: process.env.REACT_APP_MAPBOX_STYLE_BLUE,
             cityIOmodulesData: {},
             menu: [], // ! menu.includes("GRID") ? true : false,
             isDragging: false,
@@ -231,13 +231,23 @@ export default class Map extends Component {
      * draw target area around mouse
      */
     _renderSelectionTarget() {
+        let rt = this.state.randomType;
+
         if (this.state.keyDownState === 16) {
             const mousePos = this.state.mousePos;
             const divSize = 30;
             return (
                 <div
                     style={{
-                        border: "2px solid white",
+                        border: "2px solid",
+                        borderColor:
+                            "rgb(" +
+                            rt.color[0] +
+                            "," +
+                            rt.color[1] +
+                            "," +
+                            rt.color[2] +
+                            ")",
                         borderRadius: "15%",
                         position: "fixed",
                         zIndex: 1,
@@ -297,7 +307,7 @@ export default class Map extends Component {
                 lineWidthScale: 1,
                 lineWidthMinPixels: 2,
                 getElevation: d =>
-                    d.properties.land_use === "M1" ? d.properties.height : 1,
+                    d.properties.land_use === "M1" ? d.properties.height : 0,
                 getFillColor: d =>
                     d.properties.type !== undefined
                         ? d.properties.color
