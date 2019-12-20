@@ -6,26 +6,20 @@ import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
-import typesDefinition from "../../settings/settings.json";
-import "./map.css";
+import settings from "../../settings/settings.json";
 
 export default class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            mapStyle: process.env.REACT_APP_MAPBOX_STYLE_SAT,
             cityIOmodulesData: {},
             menu: [],
             isDragging: false,
             selectedCellsState: null,
             toggleBuildingShow: "none",
             time: 0,
-            viewState: {
-                longitude: -71.0894527,
-                latitude: 42.3603609,
-                zoom: 17,
-                pitch: 0,
-                bearing: 0
-            }
+            viewState: settings.initialViewState
         };
         const ambientLight = new AmbientLight({
             color: [255, 255, 255],
@@ -55,6 +49,15 @@ export default class Map extends Component {
     _handleKeyDown = e => {
         // shift == 16
         this.setState({ keyDownState: e.nativeEvent.keyCode });
+
+        // compute rnd color for now
+        if (e.nativeEvent.keyCode === 16) {
+            this.setState({
+                mapStyle: null
+            });
+            // TEMP
+            this._rndType();
+        }
     };
 
     _handleKeyUp = () => {
@@ -150,6 +153,7 @@ export default class Map extends Component {
      */
     _proccessGridData() {
         let d = this.props.cityIOmodulesData;
+        let types = settings.types;
         const grid = d.grid;
         const geojson = d.meta_grid;
         const interactiveMapping = d.interactive_grid_mapping;
@@ -157,7 +161,9 @@ export default class Map extends Component {
             geojson.features[interactiveMapping[i]].properties.type =
                 grid[i][0];
             geojson.features[interactiveMapping[i]].properties.color =
-                typesDefinition[grid[i][0]].color;
+                types[grid[i][0]].color;
+            geojson.features[interactiveMapping[i]].properties.height =
+                types[grid[i][0]].height;
         }
         this.setState({ meta_grid: geojson });
     }
@@ -168,7 +174,7 @@ export default class Map extends Component {
      */
     _proccessAccessData() {
         // get colors from settings
-        const colors = Object.values(typesDefinition).map(d => d.color);
+        const colors = Object.values(settings.types).map(d => d.color);
         const p = this.props.cityIOmodulesData.access;
         let coordinates = p.features.map(d => d.geometry.coordinates);
         let values = p.features.map(d => d.properties);
@@ -212,9 +218,10 @@ export default class Map extends Component {
      * Temp def. for color selection
      */
     _rndType = () => {
-        var keys = Object.keys(typesDefinition);
+        var keys = Object.keys(settings.types);
         let randomType =
-            typesDefinition[keys[(keys.length * Math.random()) << 0]];
+            settings.types[keys[(keys.length * Math.random()) << 0]];
+        console.log(randomType);
         this.setState({ randomType: randomType });
     };
     /**
@@ -271,8 +278,8 @@ export default class Map extends Component {
                         : d.properties.color
                         ? d.properties.color
                         : d.properties.land_use === "M1"
-                        ? typesDefinition.white.color
-                        : typesDefinition.water.color,
+                        ? settings.types.white.color
+                        : settings.types.water.color,
 
                 onDrag: event => {
                     // if (!this.state.menu.includes("EDIT")) {
@@ -283,8 +290,6 @@ export default class Map extends Component {
                 onDragStart: () => {
                     // if (!this.state.menu.includes("EDIT"))
                     if (this.state.keyDownState === 16) {
-                        // compute rnd color for now
-                        this._rndType();
                         this._handleDrag(true);
                     }
                 },
@@ -298,14 +303,14 @@ export default class Map extends Component {
                     getElevation: this.state.selectedCellsState
                 },
                 transitions: {
-                    getFillColor: 500,
+                    getFillColor: 100,
                     getElevation: 250
                 }
             }),
 
             new TripsLayer({
                 id: "ABM",
-                visible: true,
+                visible: false,
                 // menu.includes("ABM") ? true : false,
                 data: cityIOmodulesData.ABM,
                 getPath: d => d.path,
@@ -332,7 +337,7 @@ export default class Map extends Component {
 
             new PathLayer({
                 id: "PATHS",
-                visible: true,
+                visible: false,
                 // menu.includes("PATHS") ? true : false,
                 _shadow: false,
                 data: cityIOmodulesData.ABM,
@@ -366,7 +371,7 @@ export default class Map extends Component {
 
             new HeatmapLayer({
                 id: "ACCESS",
-                visible: true,
+                visible: false,
                 // menu.includes("ACCESS") ? true : false,
                 colorRange: this.state.accessColors,
                 radiusPixels: 200,
@@ -383,6 +388,7 @@ export default class Map extends Component {
         this.setState({ gl });
     };
 
+    // map.getCanvas().style.cursor = features.length ? 'pointer' : '';
     _onMapLoad = () => {
         const map = this._map;
         map.addLayer({
@@ -413,23 +419,20 @@ export default class Map extends Component {
     render() {
         const { gl } = this.state;
         return (
-            <div
-                className={
-                    this.state.keyDownState === 16
-                        ? "cursorDrag"
-                        : "cursorNormal"
-                }
-                onKeyDown={this._handleKeyDown}
-                onKeyUp={this._handleKeyUp}
-            >
+            <div onKeyDown={this._handleKeyDown} onKeyUp={this._handleKeyUp}>
                 <DeckGL
+                    // sets the cursor on paint
+                    getCursor={() =>
+                        this.state.keyDownState === 16
+                            ? "crosshair"
+                            : "all-scroll"
+                    }
                     ref={ref => {
                         // save a reference to the Deck instance
                         this.deckGL = ref && ref.deck;
                     }}
                     viewState={this.state.viewState}
                     onViewStateChange={this._onViewStateChange}
-                    className="map"
                     layers={this._renderLayers()}
                     effects={this._effects}
                     controller={{
@@ -449,7 +452,7 @@ export default class Map extends Component {
                         mapboxApiAccessToken={
                             process.env.REACT_APP_MAPBOX_TOKEN
                         }
-                        mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
+                        mapStyle={this.state.mapStyle}
                         preventStyleDiffing={true}
                         onLoad={this._onMapLoad}
                     />

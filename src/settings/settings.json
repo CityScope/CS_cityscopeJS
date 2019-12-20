@@ -1,11 +1,20 @@
 {
-    "0": { "height": 1, "color": [213, 62, 79] },
-    "1": { "height": 10, "color": [252, 141, 89] },
-    "2": { "height": 20, "color": [254, 224, 139] },
-    "3": { "height": 30, "color": [230, 245, 152] },
-    "4": { "height": 40, "color": [153, 213, 148] },
-    "5": { "height": 50, "color": [50, 136, 189] },
-    "white": { "height": 10, "color": [255, 255, 255, 200] },
-    "picked": { "height": 1, "color": [255, 51, 204, 200] },
-    "water": { "height": 1, "color": [100, 100, 100, 200] }
+    "types": {
+        "0": { "height": 1, "color": [213, 62, 79] },
+        "1": { "height": 10, "color": [252, 141, 89] },
+        "2": { "height": 20, "color": [254, 224, 139] },
+        "3": { "height": 30, "color": [230, 245, 152] },
+        "4": { "height": 40, "color": [153, 213, 148] },
+        "5": { "height": 50, "color": [50, 136, 189] },
+        "white": { "height": 10, "color": [255, 255, 255, 200] },
+        "picked": { "height": 1, "color": [255, 51, 204, 200] },
+        "water": { "height": 1, "color": [100, 100, 100, 200] }
+    },
+    "initialViewState": {
+        "longitude": -71.0894527,
+        "latitude": 42.3603609,
+        "zoom": 17,
+        "pitch": 0,
+        "bearing": 0
+    }
 }
