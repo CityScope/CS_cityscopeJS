@@ -14,7 +14,7 @@ export default class Map extends Component {
         this.state = {
             mapStyle: process.env.REACT_APP_MAPBOX_STYLE_SAT,
             cityIOmodulesData: {},
-            menu: [],
+            menu: [], // ! menu.includes("GRID") ? true : false,
             isDragging: false,
             selectedCellsState: null,
             toggleBuildingShow: "none",
@@ -79,27 +79,28 @@ export default class Map extends Component {
     }
 
     _animate() {
-        // stop animation on toggle
-        if (
-            this.animationFrame &&
-            !this.state.menu.includes("ABM") &&
-            !this.state.menu.includes("SUN")
-        ) {
+        // stop animation on state
+        if (true || this._animationFrame) {
+            console.log("no animation for now..");
             window.cancelAnimationFrame(this.animationFrame);
             return;
+        } else {
+            const { startSimHour, animationSpeed, endSimHour } = this;
+            let t = this.state.time + animationSpeed;
+            if (
+                this.state.time > endSimHour ||
+                this.state.time < startSimHour
+            ) {
+                t = startSimHour;
+            }
+            this.setState({
+                time: t
+            });
+            this._animationFrame = window.requestAnimationFrame(
+                this._animate.bind(this)
+            );
+            this._calculateSunPosition();
         }
-        const { startSimHour, animationSpeed, endSimHour } = this;
-        let t = this.state.time + animationSpeed;
-        if (this.state.time > endSimHour || this.state.time < startSimHour) {
-            t = startSimHour;
-        }
-        this.setState({
-            time: t
-        });
-        this._animationFrame = window.requestAnimationFrame(
-            this._animate.bind(this)
-        );
-        // this._calculateSunPosition();
     }
 
     /**
@@ -107,9 +108,6 @@ export default class Map extends Component {
      * to fit the `_animate` time
      */
     _calculateSunPosition() {
-        // const menu = this.state.menu;
-        // if (!menu.includes("SUN")) return;
-
         var date = new Date(this.state.time * 1000);
         // Hours part from the timestamp
         var hours = date.getHours();
@@ -200,20 +198,6 @@ export default class Map extends Component {
     }
 
     /**
-     * Description. uses deck api to
-     * collect objects in a region
-     * @argument{object} e  picking event
-     */
-    _mulipleObjPicked = e => {
-        return this.deckGL.pickObjects({
-            x: e.x - 5,
-            y: e.y - 5,
-            width: 10,
-            height: 10
-        });
-    };
-
-    /**
      * Description.
      * Temp def. for color selection
      */
@@ -221,9 +205,53 @@ export default class Map extends Component {
         var keys = Object.keys(settings.types);
         let randomType =
             settings.types[keys[(keys.length * Math.random()) << 0]];
-        console.log(randomType);
         this.setState({ randomType: randomType });
     };
+
+    /**
+     * Description. uses deck api to
+     * collect objects in a region
+     * @argument{object} e  picking event
+     */
+    _mulipleObjPicked = e => {
+        const dim = 10;
+        const x = e.x - dim / 2;
+        const y = e.y - dim / 2;
+        let mulipleObj = this.deckGL.pickObjects({
+            x: x,
+            y: y,
+            width: dim,
+            height: dim
+        });
+        return mulipleObj;
+    };
+
+    /**
+     * Description.
+     * draw target area around mouse
+     */
+    _renderSelectionTarget() {
+        if (this.state.keyDownState === 16) {
+            const mousePos = this.state.mousePos;
+            const divSize = 30;
+            return (
+                <div
+                    style={{
+                        border: "2px solid white",
+                        borderRadius: "15%",
+                        position: "fixed",
+                        zIndex: 1,
+                        pointerEvents: "none",
+                        width: divSize,
+                        height: divSize,
+                        left: mousePos.clientX - divSize / 2,
+                        top: mousePos.clientY - divSize / 2
+                    }}
+                ></div>
+            );
+        }
+    }
+
     /**
      * Description. allow only to pick cells that are
      *  not of CityScope TUI & that are interactable
@@ -234,12 +262,12 @@ export default class Map extends Component {
 
         const multiSelectedObj = this._mulipleObjPicked(e);
         multiSelectedObj.forEach(selected => {
-            const selectedProps = selected.object.properties;
-            if (selectedProps.land_use === "M1" && !selectedProps.interactive) {
-                selectedProps.old_height = selectedProps.height;
-                selectedProps.old_color = selectedProps.color;
-                selectedProps.color = rndType.color;
-                selectedProps.height = rndType.height;
+            const thisCellProps = selected.object.properties;
+            if (thisCellProps.land_use === "M1" && !thisCellProps.interactive) {
+                thisCellProps.old_height = thisCellProps.height;
+                thisCellProps.old_color = thisCellProps.color;
+                thisCellProps.color = rndType.color;
+                thisCellProps.height = rndType.height;
             }
         });
 
@@ -257,7 +285,6 @@ export default class Map extends Component {
     };
 
     _renderLayers() {
-        // const menu = this.state.menu;
         const cityIOmodulesData = this.props.cityIOmodulesData;
 
         let layers = [
@@ -265,7 +292,6 @@ export default class Map extends Component {
                 id: "GRID",
                 data: this.state.meta_grid,
                 visible: true,
-                // menu.includes("GRID") ? true : false,
                 pickable: true,
                 extruded: true,
                 lineWidthScale: 1,
@@ -282,18 +308,14 @@ export default class Map extends Component {
                         : settings.types.water.color,
 
                 onDrag: event => {
-                    // if (!this.state.menu.includes("EDIT")) {
                     if (this.state.keyDownState === 16)
                         this._handleSelection(event);
-                    // }
                 },
                 onDragStart: () => {
-                    // if (!this.state.menu.includes("EDIT"))
                     if (this.state.keyDownState === 16) {
                         this._handleDrag(true);
                     }
                 },
-
                 onDragEnd: () => {
                     this._handleDrag(false);
                 },
@@ -303,15 +325,15 @@ export default class Map extends Component {
                     getElevation: this.state.selectedCellsState
                 },
                 transitions: {
-                    getFillColor: 100,
-                    getElevation: 250
+                    getFillColor: 500,
+
+                    getElevation: 500
                 }
             }),
 
             new TripsLayer({
                 id: "ABM",
                 visible: false,
-                // menu.includes("ABM") ? true : false,
                 data: cityIOmodulesData.ABM,
                 getPath: d => d.path,
                 getTimestamps: d => d.timestamps,
@@ -338,7 +360,6 @@ export default class Map extends Component {
             new PathLayer({
                 id: "PATHS",
                 visible: false,
-                // menu.includes("PATHS") ? true : false,
                 _shadow: false,
                 data: cityIOmodulesData.ABM,
                 getPath: d => {
@@ -372,7 +393,6 @@ export default class Map extends Component {
             new HeatmapLayer({
                 id: "ACCESS",
                 visible: false,
-                // menu.includes("ACCESS") ? true : false,
                 colorRange: this.state.accessColors,
                 radiusPixels: 200,
                 opacity: 0.25,
@@ -387,8 +407,6 @@ export default class Map extends Component {
     _onWebGLInitialized = gl => {
         this.setState({ gl });
     };
-
-    // map.getCanvas().style.cursor = features.length ? 'pointer' : '';
     _onMapLoad = () => {
         const map = this._map;
         map.addLayer({
@@ -419,13 +437,21 @@ export default class Map extends Component {
     render() {
         const { gl } = this.state;
         return (
-            <div onKeyDown={this._handleKeyDown} onKeyUp={this._handleKeyUp}>
+            <div
+                onKeyDown={this._handleKeyDown}
+                onKeyUp={this._handleKeyUp}
+                onMouseMove={e =>
+                    this.setState({
+                        mousePos: e.nativeEvent
+                    })
+                }
+            >
+                <div>{this._renderSelectionTarget()}</div>
+
                 <DeckGL
                     // sets the cursor on paint
                     getCursor={() =>
-                        this.state.keyDownState === 16
-                            ? "crosshair"
-                            : "all-scroll"
+                        this.state.keyDownState === 16 ? "none" : "all-scroll"
                     }
                     ref={ref => {
                         // save a reference to the Deck instance
