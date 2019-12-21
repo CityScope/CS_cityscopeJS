@@ -15,5 +15,21 @@
         "zoom": 17,
         "pitch": 0,
         "bearing": 0
+    },
+
+    "radar": {
+        "domain": [
+            { "name": "amazing city", "domain": [0, 1] },
+            { "name": "validated innovation", "domain": [0, 1] },
+            { "name": "predicted happiness", "domain": [0, 1] },
+            { "name": "wow mix-use", "domain": [0, 1] },
+            { "name": "ok buildings", "domain": [0, 1] },
+            { "name": "fun crime rates", "domain": [0, 1] },
+            { "name": "success urbanism", "domain": [0, 1] },
+            { "name": "happy AI", "domain": [0, 1] },
+            { "name": "free parking", "domain": [0, 1] },
+            { "name": "deep chainy", "domain": [0, 1] }
+        ],
+        "colorRange": ["#fc03ec", "#79C7E3"]
     }
 }

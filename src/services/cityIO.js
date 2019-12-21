@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Loader from "../components/Loader";
 import Menu from "../components/menu/menu";
 import Map from "../components/map/map";
+import Radar from "../components/vis/Radar/Radar";
 import axios from "axios";
 
 export default class CityIO extends Component {
@@ -118,6 +119,7 @@ export default class CityIO extends Component {
                 <div>
                     <Map cityIOmodulesData={this.state.cityIOmodulesData} />
                     <Loader loading={!this.state.doneFetching} />
+                    <Radar cityIOmodulesData={this.state.cityIOmodulesData} />
                     <Menu />
                 </div>
             );

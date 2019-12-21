@@ -231,23 +231,24 @@ export default class Map extends Component {
      * draw target area around mouse
      */
     _renderSelectionTarget() {
-        let rt = this.state.randomType;
-
         if (this.state.keyDownState === 16) {
+            const rt = this.state.randomType;
+            const color =
+                "rgb(" +
+                rt.color[0] +
+                "," +
+                rt.color[1] +
+                "," +
+                rt.color[2] +
+                ")";
             const mousePos = this.state.mousePos;
             const divSize = 30;
+
             return (
                 <div
                     style={{
                         border: "2px solid",
-                        borderColor:
-                            "rgb(" +
-                            rt.color[0] +
-                            "," +
-                            rt.color[1] +
-                            "," +
-                            rt.color[2] +
-                            ")",
+                        borderColor: color,
                         borderRadius: "15%",
                         position: "fixed",
                         zIndex: 1,
