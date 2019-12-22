@@ -28,6 +28,8 @@ export default class Radar extends Component {
 
     componentDidUpdate() {
         if (this.props.cityIOmodulesData !== this.state.cityIOmodulesData) {
+            console.log("new radar data");
+
             this.setState({ cityIOmodulesData: this.props.cityIOmodulesData });
             this.generateData();
         }
@@ -36,7 +38,7 @@ export default class Radar extends Component {
     render() {
         return (
             <RadarChart
-                className="Radar"
+                className="Radar blur"
                 animation
                 data={this.state.data}
                 domains={this.domain}
@@ -67,8 +69,8 @@ export default class Radar extends Component {
                     bottom: 100,
                     right: 100
                 }}
-                width={400}
-                height={400}
+                width={700}
+                height={700}
             >
                 <CircularGridLines
                     style={{
