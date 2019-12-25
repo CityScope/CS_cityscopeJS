@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import Loader from "../components/Loader";
-import Menu from "../components/menu/menu";
-import Map from "../components/map/map";
-import Radar from "../components/vis/Radar/Radar";
+// import Menu from "../components/menu/menu";
+// import Map from "../components/map/map";
+// import Radar from "../components/vis/Radar/Radar";
 import axios from "axios";
 
 export default class CityIO extends Component {
@@ -20,7 +20,6 @@ export default class CityIO extends Component {
                 access: null
             }
         };
-
         this.interval = 1000;
         this.tableName = window.location.search.substring(1);
         this.cityioURL = null;
@@ -31,6 +30,7 @@ export default class CityIO extends Component {
         }
     }
     componentDidMount() {
+        // inital call to cityIO
         this.getCityIOHash(this.cityioURL + "/meta");
         // start interval
         this.timer = setInterval(
@@ -117,10 +117,10 @@ export default class CityIO extends Component {
         } else {
             return (
                 <div>
-                    <Map cityIOmodulesData={this.state.cityIOmodulesData} />
+                    {/* <Map cityIOmodulesData={this.state.cityIOmodulesData} /> */}
                     <Loader loading={!this.state.doneFetching} />
-                    <Radar cityIOmodulesData={this.state.cityIOmodulesData} />
-                    <Menu />
+                    {/* <Radar cityIOmodulesData={this.state.cityIOmodulesData} /> */}
+                    {/* <Menu /> */}
                 </div>
             );
         }

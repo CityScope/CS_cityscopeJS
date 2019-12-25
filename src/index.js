@@ -1,8 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
 import "./index.css";
-import * as serviceWorker from "./serviceWorker";
+import store from "./redux/store";
+
 import CityIO from "./services/cityIO";
 
-ReactDOM.render(<CityIO />, document.getElementById("root"));
-serviceWorker.unregister();
+const rootDiv = document.getElementById("root");
+
+ReactDOM.render(
+    <Provider store={store}>
+        <CityIO />
+    </Provider>,
+    rootDiv
+);
