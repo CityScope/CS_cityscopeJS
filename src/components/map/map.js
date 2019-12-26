@@ -13,14 +13,12 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mapStyle: process.env.REACT_APP_MAPBOX_STYLE_BLUE,
-            cityIOmodulesData: {},
-            menu: [], // ! menu.includes("GRID") ? true : false,
+            cityioData: {},
             isDragging: false,
             selectedCellsState: null,
             toggleBuildingShow: "none",
             time: 0,
-            viewState: settings.initialViewState
+            viewState: settings.map.initialViewState
         };
         const ambientLight = new AmbientLight({
             color: [255, 255, 255],
@@ -37,9 +35,7 @@ class Map extends Component {
         lightingEffect.shadowColor = [0, 0, 0, 0.3];
         this._effects = [lightingEffect];
         this.animationFrame = null;
-        this.startSimHour = 60 * 60 * 7;
-        this.endSimHour = 60 * 60 * 14;
-        this.animationSpeed = 10;
+
         this._onViewStateChange = this._onViewStateChange.bind(this);
     }
 
@@ -65,8 +61,7 @@ class Map extends Component {
         this.setState({ keyDownState: null });
     };
 
-    _setViewStateToTableHeader() {
-        const header = this.props.cityIOmodulesData.header;
+    _setViewStateToTableHeader(header) {
         this.setState({
             viewState: {
                 ...this.state.viewState,
@@ -81,12 +76,14 @@ class Map extends Component {
 
     _animate() {
         // stop animation on state
-        if (true || this._animationFrame) {
-            console.log("no animation for now..");
+        if (this._animationFrame) {
             window.cancelAnimationFrame(this.animationFrame);
-            return;
         } else {
-            const { startSimHour, animationSpeed, endSimHour } = this;
+            const {
+                startSimHour,
+                animationSpeed,
+                endSimHour
+            } = settings.map.layers.ABM;
             let t = this.state.time + animationSpeed;
             if (
                 this.state.time > endSimHour ||
@@ -134,28 +131,27 @@ class Map extends Component {
 
     componentDidMount() {
         // this._animate();
-        // this._rightClickViewRotate();
-        // this._setViewStateToTableHeader();
+        this._rightClickViewRotate();
     }
 
     componentDidUpdate(prevProps, prevState) {
-        // if (prevState.cityIOmodulesData !== prevProps.cityIOmodulesData) {
-        // this.setState({ cityIOmodulesData: this.props.cityIOmodulesData });
-        // this._proccessGridData();
-        // this._proccessAccessData();
-        // }
+        if (prevProps.cityioData !== this.state.cityioData) {
+            this.setState({ cityioData: this.props.cityioData });
+            this._proccessGridData(this.props.cityioData);
+            this._proccessAccessData(this.props.cityioData.access);
+            this._setViewStateToTableHeader(this.props.cityioData.header);
+        }
     }
 
     /**
      * Description. gets `props` with geojson
      * and procces the interactive area
      */
-    _proccessGridData() {
-        let d = this.props.cityIOmodulesData;
-        let types = settings.types;
-        const grid = d.grid;
-        const geojson = d.meta_grid;
-        const interactiveMapping = d.interactive_grid_mapping;
+    _proccessGridData(cityioData) {
+        let types = settings.map.types;
+        const grid = cityioData.grid;
+        const geojson = cityioData.meta_grid;
+        const interactiveMapping = cityioData.interactive_grid_mapping;
         for (let i in interactiveMapping) {
             geojson.features[interactiveMapping[i]].properties.type =
                 grid[i][0];
@@ -171,12 +167,11 @@ class Map extends Component {
      * Description. gets `props` with geojson
      * and procces the access layer data
      */
-    _proccessAccessData() {
+    _proccessAccessData(accessData) {
         // get colors from settings
-        const colors = Object.values(settings.types).map(d => d.color);
-        const p = this.props.cityIOmodulesData.access;
-        let coordinates = p.features.map(d => d.geometry.coordinates);
-        let values = p.features.map(d => d.properties);
+        const colors = Object.values(settings.map.types).map(d => d.color);
+        let coordinates = accessData.features.map(d => d.geometry.coordinates);
+        let values = accessData.features.map(d => d.properties);
         let heatmap = [];
         for (let i = 0; i < coordinates.length; i++) {
             heatmap.push({
@@ -203,9 +198,9 @@ class Map extends Component {
      * Temp def. for color selection
      */
     _rndType = () => {
-        var keys = Object.keys(settings.types);
+        var keys = Object.keys(settings.map.types);
         let randomType =
-            settings.types[keys[(keys.length * Math.random()) << 0]];
+            settings.map.types[keys[(keys.length * Math.random()) << 0]];
         this.setState({ randomType: randomType });
     };
 
@@ -297,7 +292,7 @@ class Map extends Component {
     };
 
     _renderLayers() {
-        const cityIOmodulesData = this.props.cityIOmodulesData;
+        const cityioData = this.props.cityioData;
 
         let layers = [
             new GeoJsonLayer({
@@ -316,8 +311,8 @@ class Map extends Component {
                         : d.properties.color
                         ? d.properties.color
                         : d.properties.land_use === "M1"
-                        ? settings.types.white.color
-                        : settings.types.water.color,
+                        ? settings.map.types.white.color
+                        : settings.map.types.water.color,
 
                 onDrag: event => {
                     if (this.state.keyDownState === 16)
@@ -346,7 +341,7 @@ class Map extends Component {
             new TripsLayer({
                 id: "ABM",
                 visible: false,
-                data: cityIOmodulesData.ABM,
+                data: cityioData.ABM,
                 getPath: d => d.path,
                 getTimestamps: d => d.timestamps,
                 getColor: d => {
@@ -373,7 +368,7 @@ class Map extends Component {
                 id: "PATHS",
                 visible: false,
                 _shadow: false,
-                data: cityIOmodulesData.ABM,
+                data: cityioData.ABM,
                 getPath: d => {
                     const noisePath =
                         Math.random() < 0.5
@@ -419,35 +414,8 @@ class Map extends Component {
     _onWebGLInitialized = gl => {
         this.setState({ gl });
     };
-    _onMapLoad = () => {
-        const map = this._map;
-        map.addLayer({
-            id: "3dBuildingsLayer",
-            displayName: "3dBuildingsLayer",
-            source: "composite",
-            "source-layer": "building",
-            filter: ["==", "extrude", "true"],
-            type: "fill-extrusion",
-            minzoom: 10,
-            paint: {
-                "fill-extrusion-color": "#fff",
-                "fill-extrusion-height": [
-                    "interpolate",
-                    ["linear"],
-                    ["zoom"],
-                    0.1,
-                    10,
-                    15.05,
-                    ["get", "height"]
-                ],
-                "fill-extrusion-opacity": 0.5
-            }
-        });
-        map.setLayoutProperty("3dBuildingsLayer", "visibility", "visible");
-    };
 
     render() {
-        return null;
         const { gl } = this.state;
         return (
             <div
@@ -481,19 +449,14 @@ class Map extends Component {
                 >
                     <StaticMap
                         asyncRender={true}
-                        ref={ref => {
-                            // save a reference to the mapboxgl.Map instance
-                            this._map = ref && ref.getMap();
-                        }}
                         gl={gl}
                         dragRotate={true}
                         reuseMaps={true}
                         mapboxApiAccessToken={
                             process.env.REACT_APP_MAPBOX_TOKEN
                         }
-                        mapStyle={this.state.mapStyle}
+                        mapStyle={settings.map.mapStyle.blue}
                         preventStyleDiffing={true}
-                        onLoad={this._onMapLoad}
                     />
                 </DeckGL>
             </div>

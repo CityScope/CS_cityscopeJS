@@ -29,8 +29,8 @@ class Radar extends Component {
         this.setState({ radarData: [data, dataStatic] });
     }
 
-    componentDidUpdate(prevProp) {
-        if (prevProp.cityioData !== this.state.cityioData) {
+    componentDidUpdate(prevProps) {
+        if (prevProps.cityioData !== this.state.cityioData) {
             this.setState({ cityioData: this.props.cityioData });
             this.generateData();
             console.log("new radar data..");
