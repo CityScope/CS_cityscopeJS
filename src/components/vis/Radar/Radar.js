@@ -1,18 +1,19 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+
 import { CircularGridLines, RadarChart } from "react-vis";
 import "../../../../node_modules/react-vis/dist/style.css";
 import "./Radar.css";
 import settings from "../../../settings/settings.json";
 
-export default class Radar extends Component {
+class Radar extends Component {
     constructor(props) {
         super(props);
-
         this.domain = settings.radar.domain;
         this.colorRange = settings.radar.colorRange;
         this.state = {
-            cityIOmodulesData: null,
-            data: []
+            cityioData: null,
+            radarData: []
         };
     }
 
@@ -23,15 +24,14 @@ export default class Radar extends Component {
             data[this.domain[i].name] = Math.random();
             dataStatic[this.domain[i].name] = Math.random();
         }
-        this.setState({ data: [data, dataStatic] });
+        this.setState({ radarData: [data, dataStatic] });
     }
 
-    componentDidUpdate() {
-        if (this.props.cityIOmodulesData !== this.state.cityIOmodulesData) {
-            console.log("new radar data");
-
-            this.setState({ cityIOmodulesData: this.props.cityIOmodulesData });
+    componentDidUpdate(prevProp) {
+        if (prevProp.cityioData !== this.state.cityioData) {
+            this.setState({ cityioData: this.props.cityioData });
             this.generateData();
+            console.log("new radar data:", this.state);
         }
     }
 
@@ -40,7 +40,7 @@ export default class Radar extends Component {
             <RadarChart
                 className="Radar blur"
                 animation
-                data={this.state.data}
+                data={this.state.radarData}
                 domains={this.domain}
                 colorRange={this.colorRange}
                 style={{
@@ -87,3 +87,13 @@ export default class Radar extends Component {
         );
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        // b/c of shallow checking
+        // this must be specifc value
+        cityioData: state
+    };
+};
+
+export default connect(mapStateToProps, null)(Radar);

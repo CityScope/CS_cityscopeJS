@@ -28,8 +28,25 @@
             { "name": "success urbanism", "domain": [0, 1] },
             { "name": "happy AI", "domain": [0, 1] },
             { "name": "free parking", "domain": [0, 1] },
+            { "name": "deep chainy", "domain": [0, 1] },
+            { "name": "failed urbanism", "domain": [0, 1] },
+            { "name": "Data for free", "domain": [0, 1] },
+            { "name": "vapor energy", "domain": [0, 1] },
             { "name": "deep chainy", "domain": [0, 1] }
         ],
         "colorRange": ["#fc03ec", "#79C7E3"]
+    },
+
+    "cityIO": {
+        "baseURL": "https://cityio.media.mit.edu/api/table/",
+        "interval": 1000,
+        "cityIOmodules": [
+            "header",
+            "interactive_grid_mapping",
+            "meta_grid",
+            "ABM",
+            "grid",
+            "access"
+        ]
     }
 }

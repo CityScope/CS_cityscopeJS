@@ -1,17 +1,29 @@
-import { GET_CITYIO } from "./actions";
+/**
+ * ACTIONS
+ */
+export const GET_CITYIO_DATA = "GET_CITYIO_DATA";
 
+export function getCityioData(data) {
+    return { type: GET_CITYIO_DATA, cityioData: data };
+}
+
+/**
+ * INIT STATE
+ */
 const initialState = {
-    cityio_data: { cityio_data: null }
+    cityioData: null
 };
 
-function rootReducer(state = initialState, action) {
+/**
+ * REDUCER
+ */
+export default function reducer(state = initialState, action) {
     switch (action.type) {
-        case GET_CITYIO:
+        case GET_CITYIO_DATA:
             return {
-                cityio_data: action.cityio_data
+                cityioData: action.cityioData
             };
         default:
             return state;
     }
 }
-export default rootReducer;

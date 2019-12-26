@@ -1,43 +1,50 @@
 import React, { Component } from "react";
-import Loader from "../components/Loader";
-// import Menu from "../components/menu/menu";
-// import Map from "../components/map/map";
-// import Radar from "../components/vis/Radar/Radar";
 import axios from "axios";
+import { connect } from "react-redux";
+import { getCityioData } from "../redux/reducer";
+import settings from "../settings/settings.json";
 
-export default class CityIO extends Component {
+class CityIO extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            oldHash: null,
-            doneFetching: false,
-            cityIOmodulesData: {
-                header: null,
-                interactive_grid_mapping: null,
-                meta_grid: null,
-                ABM: null,
-                grid: null,
-                access: null
-            }
+            oldIdHash: null,
+            finishedThisRequest: false,
+            userEnteredCityioEndpoint: false
         };
-        this.interval = 1000;
-        this.tableName = window.location.search.substring(1);
         this.cityioURL = null;
-        if (this.tableName !== "") {
-            this.cityioURL =
-                "https://cityio.media.mit.edu/api/table/" +
-                this.tableName.toString();
-        }
     }
+
+    /**
+     * start fetching API hashes to check for new data
+     */
     componentDidMount() {
-        // inital call to cityIO
-        this.getCityIOHash(this.cityioURL + "/meta");
-        // start interval
-        this.timer = setInterval(
-            () => this.getCityIOHash(this.cityioURL + "/meta"),
-            this.interval
-        );
+        this.handleURL();
     }
+
+    handleURL = () => {
+        this.tableName = window.location.search.substring(1);
+
+        if (this.tableName !== "") {
+            this.setState({ userEnteredCityioEndpoint: true });
+            this.cityioURL =
+                settings.cityIO.baseURL + this.tableName.toString();
+            // get the hashes first
+            this.getCityIOHash(this.cityioURL + "/meta");
+            // and every interval
+            this.timer = setInterval(
+                () => this.getCityIOHash(this.cityioURL + "/meta"),
+                settings.cityIO.interval
+            );
+        } else {
+            // not URL provided
+            this.setState({ userEnteredCityioEndpoint: false });
+        }
+    };
+
+    /**
+     * returns only the hasees from API
+     */
     getCityIOHash = URL => {
         fetch(URL)
             .then(response => response.json())
@@ -49,24 +56,31 @@ export default class CityIO extends Component {
             });
     };
 
+    /**
+     * check for updated hashes.
+     * if new hashes exist,
+     * fetch !! WHOLE API (for now)
+     */
     handleCityIOHashes = result => {
-        if (result.hashes.grid !== this.state.oldHash) {
-            // new data in table, get:
-            Object.keys(this.state.cityIOmodulesData).forEach(module => {
-                this.getCityIO(module, this.cityioURL + "/" + module);
+        // if master hash ID has changed (cityIO table state)
+        if (result.id !== this.state.oldIdHash) {
+            // new data in table, get all modules
+            // that are listed in settings
+            settings.cityIO.cityIOmodules.forEach(module => {
+                this.getCityIOmoduleData(module, this.cityioURL + "/" + module);
             });
             // move this hash to old one
             this.setState({
-                oldHash: result.hashes.grid
+                oldIdHash: result.id
             });
         } else {
-            console.log("...same hash at", this.cityioURL);
-            this.setState({ doneFetching: true });
+            // console.log("same hash");
+            this.props.getCityioData(this.state.cityIOmodulesData);
         }
     };
 
-    getCityIO = (moduleName, URL) => {
-        this.setState({ doneFetching: false });
+    getCityIOmoduleData = (moduleName, URL) => {
+        this.setState({ finishedThisRequest: false });
         axios
             .get(URL)
             .then(response => {
@@ -74,8 +88,7 @@ export default class CityIO extends Component {
                     cityIOmodulesData: {
                         ...prevState.cityIOmodulesData,
                         [moduleName]: response.data
-                    },
-                    doneFetching: true
+                    }
                 }));
             })
             .catch(error => {
@@ -98,31 +111,30 @@ export default class CityIO extends Component {
             });
     };
 
-    _checkStillLoading = () => {
-        // gor through each module to check it is not empty
-        let bool = false;
-        for (let module in this.state.cityIOmodulesData) {
-            if (this.state.cityIOmodulesData[module] === null) {
-                bool = true;
-            }
-        }
-        return bool;
-    };
-
     render() {
-        // check if cityIO still gets modules data
-        // don't init the map before so
-        if (this._checkStillLoading()) {
-            return <Loader loading={!this.state.doneFetching} />;
-        } else {
+        if (this.state.userEnteredCityioEndpoint === false) {
             return (
                 <div>
-                    {/* <Map cityIOmodulesData={this.state.cityIOmodulesData} /> */}
-                    <Loader loading={!this.state.doneFetching} />
-                    {/* <Radar cityIOmodulesData={this.state.cityIOmodulesData} /> */}
-                    {/* <Menu /> */}
+                    <h1
+                        style={{
+                            fontSize: 100,
+                            color: "white",
+                            position: "fixed",
+                            zIndex: 1000
+                        }}
+                    >
+                        No CityIO endpoint was provided..
+                    </h1>
                 </div>
             );
+        } else {
+            return null;
         }
     }
 }
+
+const mapDispatchToProprs = {
+    getCityioData: getCityioData
+};
+
+export default connect(null, mapDispatchToProprs)(CityIO);
