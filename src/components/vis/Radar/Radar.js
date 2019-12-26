@@ -12,7 +12,7 @@ class Radar extends Component {
         this.domain = settings.radar.domain;
         this.colorRange = settings.radar.colorRange;
         this.state = {
-            cityioData: null,
+            cityioData: {},
             radarData: []
         };
     }
@@ -30,6 +30,8 @@ class Radar extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        console.log(this.props);
+
         if (prevProps.cityioData !== this.state.cityioData) {
             this.setState({ cityioData: this.props.cityioData });
             this.generateData();

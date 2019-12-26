@@ -78,7 +78,7 @@ class Map extends Component {
 
     _animate() {
         // stop animation on state
-        if (this._animationFrame) {
+        if (this.animationFrame) {
             window.cancelAnimationFrame(this.animationFrame);
         } else {
             const {
@@ -96,7 +96,7 @@ class Map extends Component {
             this.setState({
                 time: t
             });
-            this._animationFrame = window.requestAnimationFrame(
+            this.animationFrame = window.requestAnimationFrame(
                 this._animate.bind(this)
             );
             this._calculateSunPosition();
@@ -115,14 +115,15 @@ class Map extends Component {
         var minutes = "0" + date.getMinutes();
         // Seconds part from the timestamp
         var seconds = "0" + date.getSeconds();
-        this._effects[0].directionalLights[0].timestamp = Date.UTC(
-            2019,
-            7,
-            1,
-            hours,
-            minutes,
-            seconds
-        );
+        if (this._effects)
+            this._effects[0].directionalLights[0].timestamp = Date.UTC(
+                2019,
+                7,
+                1,
+                hours,
+                minutes,
+                seconds
+            );
     }
 
     componentWillUnmount() {
@@ -132,7 +133,7 @@ class Map extends Component {
     }
 
     componentDidMount() {
-        // this._animate();
+        this._animate();
         this._rightClickViewRotate();
         this._setupEffects();
     }

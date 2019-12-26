@@ -1,18 +1,20 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getCityioData, cityioIsLoading } from "../redux/reducer";
+import { getCityioData } from "../redux/reducer";
 import settings from "../settings/settings.json";
 
 class CityIO extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            oldIdHash: null,
-            finishedThisRequest: false,
-            userEnteredCityioEndpoint: false
+            oldHashs: {},
+            userEnteredCityioEndpoint: false,
+            cityIOmodulesData: {}
         };
         this.cityioURL = null;
+        // number of modules to load
+        this.counter = settings.cityIO.cityIOmodules.length;
     }
 
     /**
@@ -63,33 +65,64 @@ class CityIO extends Component {
      */
     handleCityIOHashes = result => {
         // if master hash ID has changed (cityIO table state)
-        if (result.id !== this.state.oldIdHash) {
+        if (result.id !== this.state.oldHashs.id) {
             // new data in table, get all modules
             // that are listed in settings
             settings.cityIO.cityIOmodules.forEach(module => {
-                this.getCityIOmoduleData(module, this.cityioURL + "/" + module);
+                if (result.hashes[module] !== this.state.oldHashs[module]) {
+                    this.getCityIOmoduleData(
+                        module,
+                        this.cityioURL + "/" + module
+                    );
+
+                    this.setNestedState(
+                        "oldHashs",
+                        module,
+                        result.hashes[module]
+                    );
+                }
             });
-            // move this hash to old one
-            this.setState({
-                oldIdHash: result.id
-            });
-        } else {
-            console.log("done updating from cityIO..");
+            // finally, put to state the hashes master id
+            this.setNestedState("oldHashs", "id", result.id);
         }
     };
 
+    checkDoneCityIO = () => {
+        this.counter = this.counter - 1;
+        // count if we've updated all modules already
+        if (this.counter === 0) {
+            console.log("done updating from cityIO..");
+            this.setState({ readyForRedux: true });
+        }
+    };
+
+    sharePropsWithRedux = data => {
+        if (this.state.readyForRedux === true) {
+            this.props.getCityioData(data);
+            this.setState({ readyForRedux: false });
+        }
+    };
+
+    setNestedState = (parent, child, data) => {
+        var holder = { ...this.state[parent] };
+        holder[child] = data;
+        this.setState({ [parent]: holder });
+    };
+
     getCityIOmoduleData = (moduleName, URL) => {
-        this.setState({ finishedThisRequest: false });
         axios
             .get(URL)
             .then(response => {
-                this.setState(prevState => ({
-                    cityIOmodulesData: {
-                        ...prevState.cityIOmodulesData,
-                        [moduleName]: response.data
-                    }
-                }));
+                // put response to state obj
+                this.setNestedState(
+                    "cityIOmodulesData",
+                    moduleName,
+                    response.data
+                );
+                console.log("...updating module:", moduleName);
+                this.checkDoneCityIO();
             })
+
             .catch(error => {
                 if (error.response) {
                     console.log(
@@ -110,26 +143,6 @@ class CityIO extends Component {
             });
     };
 
-    /**
-     * an idotic way to make sure all modules are
-     * loaded from cityIO
-     * probably not safe if a `key` is there but it's empty
-     */
-    componentDidUpdate() {
-        if ("cityIOmodulesData" in this.state) {
-            let counter = 0;
-            settings.cityIO.cityIOmodules.forEach(module => {
-                if (module in this.state.cityIOmodulesData) {
-                    counter += 1;
-                }
-            });
-            // only load state to `store` if cityio get is done
-            if (counter === settings.cityIO.cityIOmodules.length) {
-                this.props.getCityioData(this.state.cityIOmodulesData);
-            }
-        }
-    }
-
     render() {
         if (this.state.userEnteredCityioEndpoint === false) {
             return (
@@ -147,6 +160,7 @@ class CityIO extends Component {
                 </div>
             );
         } else {
+            this.sharePropsWithRedux(this.state.cityIOmodulesData);
             return null;
         }
     }
