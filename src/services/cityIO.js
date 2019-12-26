@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getCityioData } from "../redux/reducer";
+import { getCityioData, cityioIsLoading } from "../redux/reducer";
 import settings from "../settings/settings.json";
 
 class CityIO extends Component {
@@ -37,7 +37,7 @@ class CityIO extends Component {
                 settings.cityIO.interval
             );
         } else {
-            // not URL provided
+            // no URL provided
             this.setState({ userEnteredCityioEndpoint: false });
         }
     };
@@ -74,8 +74,8 @@ class CityIO extends Component {
                 oldIdHash: result.id
             });
         } else {
-            // console.log("same hash");
-            this.props.getCityioData(this.state.cityIOmodulesData);
+            console.log("done updating from cityIO..");
+            // this.props.getCityioData(this.state.cityIOmodulesData);
         }
     };
 
@@ -111,6 +111,15 @@ class CityIO extends Component {
             });
     };
 
+    componentDidUpdate() {
+        if ("cityIOmodulesData" in this.state) {
+            if ("grid" in this.state.cityIOmodulesData) {
+                this.props.getCityioData(this.state.cityIOmodulesData);
+            }
+        }
+        // }
+    }
+
     render() {
         if (this.state.userEnteredCityioEndpoint === false) {
             return (
@@ -133,8 +142,8 @@ class CityIO extends Component {
     }
 }
 
-const mapDispatchToProprs = {
+const mapDispatchToProps = {
     getCityioData: getCityioData
 };
 
-export default connect(null, mapDispatchToProprs)(CityIO);
+export default connect(null, mapDispatchToProps)(CityIO);

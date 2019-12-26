@@ -21,8 +21,10 @@ class Radar extends Component {
         let data = {};
         let dataStatic = {};
         for (let i in this.domain) {
-            data[this.domain[i].name] = Math.random();
-            dataStatic[this.domain[i].name] = Math.random();
+            // b/s data for now
+            data[this.domain[i].name] = this.props.cityioData.grid[i][0] / 10;
+            // compared with other b/s data
+            dataStatic[this.domain[i].name] = i / this.domain.length;
         }
         this.setState({ radarData: [data, dataStatic] });
     }
@@ -31,7 +33,7 @@ class Radar extends Component {
         if (prevProp.cityioData !== this.state.cityioData) {
             this.setState({ cityioData: this.props.cityioData });
             this.generateData();
-            console.log("new radar data:", this.state);
+            console.log("new radar data..");
         }
     }
 

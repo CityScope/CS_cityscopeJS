@@ -4,7 +4,7 @@
 export const GET_CITYIO_DATA = "GET_CITYIO_DATA";
 
 export function getCityioData(data) {
-    return { type: GET_CITYIO_DATA, cityioData: data };
+    return { type: GET_CITYIO_DATA, data };
 }
 
 /**
@@ -20,9 +20,8 @@ const initialState = {
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case GET_CITYIO_DATA:
-            return {
-                cityioData: action.cityioData
-            };
+            return action.data;
+
         default:
             return state;
     }
