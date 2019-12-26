@@ -1,5 +1,10 @@
 /* global window */
 import React, { Component } from "react";
+import {
+    _proccessAccessData,
+    _proccessGridData,
+    _renderSelectionTarget
+} from "./mapUtils";
 import { connect } from "react-redux";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
@@ -46,7 +51,8 @@ class Map extends Component {
         this.setState({ keyDownState: null });
     };
 
-    _setViewStateToTableHeader(header) {
+    _setViewStateToTableHeader() {
+        const header = this.props.cityioData.header;
         this.setState({
             viewState: {
                 ...this.state.viewState,
@@ -133,58 +139,29 @@ class Map extends Component {
     }
 
     componentDidMount() {
-        this._animate();
+        // this._animate();
         this._rightClickViewRotate();
         this._setupEffects();
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.cityioData !== this.state.cityioData) {
-            this.setState({ cityioData: this.props.cityioData });
-            this._proccessGridData(this.props.cityioData);
-            this._proccessAccessData(this.props.cityioData.access);
-            this._setViewStateToTableHeader(this.props.cityioData.header);
-        }
-    }
+            if ("grid" in this.props.cityioData) {
+                const data = this.props.cityioData;
+                this.setState({ cityioData: data });
+                const gridData = _proccessGridData(data);
+                this.setState({
+                    meta_grid: gridData
+                });
+                const accessData = _proccessAccessData(data);
+                this.setState({
+                    accessColors: accessData.colors
+                });
+                this.setState({ access: accessData.heatmap });
 
-    /**
-     * Description. gets `props` with geojson
-     * and procces the interactive area
-     */
-    _proccessGridData(cityioData) {
-        let types = settings.map.types;
-        const grid = cityioData.grid;
-        const geojson = cityioData.meta_grid;
-        const interactiveMapping = cityioData.interactive_grid_mapping;
-        for (let i in interactiveMapping) {
-            geojson.features[interactiveMapping[i]].properties.type =
-                grid[i][0];
-            geojson.features[interactiveMapping[i]].properties.color =
-                types[grid[i][0]].color;
-            geojson.features[interactiveMapping[i]].properties.height =
-                types[grid[i][0]].height;
+                this._setViewStateToTableHeader();
+            }
         }
-        this.setState({ meta_grid: geojson });
-    }
-
-    /**
-     * Description. gets `props` with geojson
-     * and procces the access layer data
-     */
-    _proccessAccessData(accessData) {
-        // get colors from settings
-        const colors = Object.values(settings.map.types).map(d => d.color);
-        let coordinates = accessData.features.map(d => d.geometry.coordinates);
-        let values = accessData.features.map(d => d.properties);
-        let heatmap = [];
-        for (let i = 0; i < coordinates.length; i++) {
-            heatmap.push({
-                coordinates: coordinates[i],
-                values: values[i]
-            });
-        }
-        this.setState({ accessColors: colors });
-        this.setState({ access: heatmap });
     }
 
     /**
@@ -225,43 +202,6 @@ class Map extends Component {
         });
         return mulipleObj;
     };
-
-    /**
-     * Description.
-     * draw target area around mouse
-     */
-    _renderSelectionTarget() {
-        if (this.state.keyDownState === 16) {
-            const rt = this.state.randomType;
-            const color =
-                "rgb(" +
-                rt.color[0] +
-                "," +
-                rt.color[1] +
-                "," +
-                rt.color[2] +
-                ")";
-            const mousePos = this.state.mousePos;
-            const divSize = 30;
-
-            return (
-                <div
-                    style={{
-                        border: "2px solid",
-                        borderColor: color,
-                        borderRadius: "15%",
-                        position: "fixed",
-                        zIndex: 1,
-                        pointerEvents: "none",
-                        width: divSize,
-                        height: divSize,
-                        left: mousePos.clientX - divSize / 2,
-                        top: mousePos.clientY - divSize / 2
-                    }}
-                ></div>
-            );
-        }
-    }
 
     /**
      * Description. allow only to pick cells that are
@@ -420,7 +360,6 @@ class Map extends Component {
     };
 
     render() {
-        const { gl } = this.state;
         return (
             <div
                 onKeyDown={this._handleKeyDown}
@@ -431,7 +370,7 @@ class Map extends Component {
                     })
                 }
             >
-                <div>{this._renderSelectionTarget()}</div>
+                <div>{_renderSelectionTarget(this.state.keyDownState)}</div>
 
                 <DeckGL
                     // sets the cursor on paint
@@ -453,7 +392,6 @@ class Map extends Component {
                 >
                     <StaticMap
                         asyncRender={true}
-                        gl={gl}
                         dragRotate={true}
                         reuseMaps={true}
                         mapboxApiAccessToken={
@@ -469,8 +407,6 @@ class Map extends Component {
 }
 
 const mapStateToProps = reduxState => {
-    console.log(reduxState);
-
     return {
         cityioData: reduxState
     };
