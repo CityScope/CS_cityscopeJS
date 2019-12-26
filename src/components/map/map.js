@@ -20,22 +20,7 @@ class Map extends Component {
             time: 0,
             viewState: settings.map.initialViewState
         };
-        const ambientLight = new AmbientLight({
-            color: [255, 255, 255],
-            intensity: 1
-        });
-        const dirLight = new _SunLight({
-            timestamp: Date.UTC(2019, 7, 1, 10),
-            color: [255, 255, 255],
-            intensity: 1.0,
-            _shadow: true
-        });
-        this.day = Date.UTC(2019, 7, 1, this.state.time);
-        const lightingEffect = new LightingEffect({ ambientLight, dirLight });
-        lightingEffect.shadowColor = [0, 0, 0, 0.3];
-        this._effects = [lightingEffect];
         this.animationFrame = null;
-
         this._onViewStateChange = this._onViewStateChange.bind(this);
     }
 
@@ -72,6 +57,23 @@ class Map extends Component {
                 bearing: 180 - header.spatial.rotation
             }
         });
+    }
+
+    _setupEffects() {
+        const ambientLight = new AmbientLight({
+            color: [255, 255, 255],
+            intensity: 1
+        });
+        const dirLight = new _SunLight({
+            timestamp: Date.UTC(2019, 7, 1, 10),
+            color: [255, 255, 255],
+            intensity: 1.0,
+            _shadow: true
+        });
+        this.day = Date.UTC(2019, 7, 1, this.state.time);
+        const lightingEffect = new LightingEffect({ ambientLight, dirLight });
+        lightingEffect.shadowColor = [0, 0, 0, 0.3];
+        this._effects = [lightingEffect];
     }
 
     _animate() {
@@ -132,6 +134,7 @@ class Map extends Component {
     componentDidMount() {
         // this._animate();
         this._rightClickViewRotate();
+        this._setupEffects();
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -464,9 +467,11 @@ class Map extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = reduxState => {
+    console.log(reduxState);
+
     return {
-        cityioData: state
+        cityioData: reduxState
     };
 };
 
