@@ -1,5 +1,6 @@
 /* global window */
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
@@ -8,7 +9,7 @@ import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../settings/settings.json";
 
-export default class Map extends Component {
+class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -132,17 +133,17 @@ export default class Map extends Component {
     }
 
     componentDidMount() {
-        this._animate();
-        this._rightClickViewRotate();
-        this._setViewStateToTableHeader();
+        // this._animate();
+        // this._rightClickViewRotate();
+        // this._setViewStateToTableHeader();
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.cityIOmodulesData !== prevProps.cityIOmodulesData) {
-            this.setState({ cityIOmodulesData: this.props.cityIOmodulesData });
-            this._proccessGridData();
-            this._proccessAccessData();
-        }
+        // if (prevState.cityIOmodulesData !== prevProps.cityIOmodulesData) {
+        // this.setState({ cityIOmodulesData: this.props.cityIOmodulesData });
+        // this._proccessGridData();
+        // this._proccessAccessData();
+        // }
     }
 
     /**
@@ -446,6 +447,7 @@ export default class Map extends Component {
     };
 
     render() {
+        return null;
         const { gl } = this.state;
         return (
             <div
@@ -498,3 +500,11 @@ export default class Map extends Component {
         );
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        cityioData: state
+    };
+};
+
+export default connect(mapStateToProps, null)(Map);

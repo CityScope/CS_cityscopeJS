@@ -75,7 +75,6 @@ class CityIO extends Component {
             });
         } else {
             console.log("done updating from cityIO..");
-            // this.props.getCityioData(this.state.cityIOmodulesData);
         }
     };
 
@@ -111,13 +110,24 @@ class CityIO extends Component {
             });
     };
 
+    /**
+     * an idotic way to make sure all modules are
+     * loaded from cityIO
+     * probably not safe if a `key` is there but it's empty
+     */
     componentDidUpdate() {
         if ("cityIOmodulesData" in this.state) {
-            if ("grid" in this.state.cityIOmodulesData) {
+            let counter = 0;
+            settings.cityIO.cityIOmodules.forEach(module => {
+                if (module in this.state.cityIOmodulesData) {
+                    counter += 1;
+                }
+            });
+            // only load state to `store` if cityio get is done
+            if (counter === settings.cityIO.cityIOmodules.length) {
                 this.props.getCityioData(this.state.cityIOmodulesData);
             }
         }
-        // }
     }
 
     render() {
