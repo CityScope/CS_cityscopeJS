@@ -13,8 +13,6 @@ class CityIO extends Component {
             cityIOmodulesData: {}
         };
         this.cityioURL = null;
-        // number of modules to load
-        this.counter = settings.cityIO.cityIOmodules.length;
     }
 
     /**
@@ -26,7 +24,6 @@ class CityIO extends Component {
 
     handleURL = () => {
         this.tableName = window.location.search.substring(1);
-
         if (this.tableName !== "") {
             this.setState({ userEnteredCityioEndpoint: true });
             this.cityioURL =
@@ -66,36 +63,60 @@ class CityIO extends Component {
     handleCityIOHashes = result => {
         // if master hash ID has changed (cityIO table state)
         if (result.id !== this.state.oldHashs.id) {
+            // reset the cityIOmodulesStatus
+            this.setState({ cityIOmodulesStatus: {} });
+
+            // reset the state of this flag
+            this.setState({ readyToShareWithRedux: false });
+
             // new data in table, get all modules
             // that are listed in settings
             settings.cityIO.cityIOmodules.forEach(module => {
-                // if (result.hashes[module] !== this.state.oldHashs[module]) {
-                this.getCityIOmoduleData(module, this.cityioURL + "/" + module);
-
-                this.setNestedState("oldHashs", module, result.hashes[module]);
-                // }
+                // only update modules that have new data
+                if (result.hashes[module] !== this.state.oldHashs[module]) {
+                    // set this module as not ready
+                    this.setNestedState("cityIOmodulesStatus", module, false);
+                    // get the module data from cityIO
+                    this.getCityIOmoduleData(
+                        module,
+                        this.cityioURL + "/" + module
+                    );
+                    // update this new module hash in state
+                    this.setNestedState(
+                        "oldHashs",
+                        module,
+                        result.hashes[module]
+                    );
+                } else {
+                    // update module name with ok
+                    this.setNestedState("cityIOmodulesStatus", module, true);
+                }
             });
             // finally, put to state the hashes master id
             this.setNestedState("oldHashs", "id", result.id);
         }
     };
 
-    checkDoneCityIO = () => {
-        this.counter = this.counter - 1;
+    checkDoneCityIO = moduleName => {
+        this.setNestedState("cityIOmodulesStatus", moduleName, true);
 
-        // count if we've updated all modules already
-        if (this.counter === 0) {
-            console.log("done updating from cityIO..");
-            this.setState({ readyForRedux: true });
-            // reset to the number of modules to load
-            this.counter = settings.cityIO.cityIOmodules.length;
+        // check if all modules are done
+        for (const status in this.state.cityIOmodulesStatus) {
+            if (this.state.cityIOmodulesStatus[status] !== true) {
+                // we still need to update some module, stop
+                return;
+            }
         }
+        //  if so, change the state of 'readyToShareWithRedux'
+        this.setState({ readyToShareWithRedux: true });
     };
 
-    sharePropsWithRedux = data => {
-        if (this.state.readyForRedux === true) {
+    sharePropsWithRedux = () => {
+        if (this.state.readyToShareWithRedux) {
+            const data = this.state.cityIOmodulesData;
+            console.log("done updating from cityIO..");
+            // finally, send data to redux
             this.props.getCityioData(data);
-            this.setState({ readyForRedux: false });
         }
     };
 
@@ -116,7 +137,7 @@ class CityIO extends Component {
                     response.data
                 );
                 console.log("...updating module:", moduleName);
-                this.checkDoneCityIO();
+                this.checkDoneCityIO(moduleName);
             })
 
             .catch(error => {
@@ -155,10 +176,11 @@ class CityIO extends Component {
                     </h1>
                 </div>
             );
-        } else {
-            this.sharePropsWithRedux(this.state.cityIOmodulesData);
-            return null;
         }
+
+        this.sharePropsWithRedux();
+
+        return null;
     }
 }
 

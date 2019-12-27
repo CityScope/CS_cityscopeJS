@@ -13,8 +13,8 @@ const rootDiv = document.getElementById("root");
 ReactDOM.render(
     <Provider store={store}>
         <CityIO />
-        <Map />
-        <Radar />
+        {/* <Map /> */}
+        {/* <Radar /> */}
         <Menu />
     </Provider>,
     rootDiv
