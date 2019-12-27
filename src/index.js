@@ -5,16 +5,17 @@ import "./index.css";
 import store from "./redux/store";
 import CityIO from "./services/cityIO";
 import Menu from "./components/menu/menu";
-import Radar from "./components/vis/Radar/Radar";
-import Map from "./components/map/map";
+import MapContainer from "./components/map/mapContainer";
+import VisContainer from "./components/vis/visContainer";
 
 const rootDiv = document.getElementById("root");
 
 ReactDOM.render(
     <Provider store={store}>
         <CityIO />
-        <Map />
-        <Radar />
+        <MapContainer />
+        <VisContainer />
+
         <Menu />
     </Provider>,
     rootDiv

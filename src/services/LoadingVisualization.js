@@ -2,7 +2,7 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import { css } from "@emotion/core";
 import React, { Component } from "react";
 
-class Loader extends Component {
+class LoadingVisualization extends Component {
     render = () => (
         <ScaleLoader
             css={css`
@@ -20,4 +20,4 @@ class Loader extends Component {
     );
 }
 
-export default Loader;
+export default LoadingVisualization;

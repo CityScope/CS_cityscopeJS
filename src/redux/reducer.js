@@ -10,9 +10,7 @@ export function getCityioData(data) {
 /**
  * INIT STATE
  */
-const initialState = {
-    cityioData: null
-};
+const initialState = {};
 
 /**
  * REDUCER

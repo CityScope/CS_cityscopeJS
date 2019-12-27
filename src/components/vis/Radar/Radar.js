@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-
 import { CircularGridLines, RadarChart } from "react-vis";
+import settings from "../../../settings/settings.json";
 import "../../../../node_modules/react-vis/dist/style.css";
 import "./Radar.css";
-import settings from "../../../settings/settings.json";
 
 class Radar extends Component {
     constructor(props) {
@@ -15,6 +13,8 @@ class Radar extends Component {
             cityioData: {},
             radarData: []
         };
+
+        this.radarSize = 500;
     }
 
     generateData() {
@@ -29,11 +29,17 @@ class Radar extends Component {
         this.setState({ radarData: [data, dataStatic] });
     }
 
-    componentDidUpdate(prevProps) {
-        if (prevProps.cityioData !== this.state.cityioData) {
+    componentDidMount() {
+        console.log(">> init radar");
+
+        this.generateData();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.cityioData !== this.props.cityioData) {
             this.setState({ cityioData: this.props.cityioData });
-            this.generateData();
             console.log("new radar data..");
+            this.generateData();
         }
     }
 
@@ -66,13 +72,13 @@ class Radar extends Component {
                     }
                 }}
                 margin={{
-                    left: 50,
-                    top: 50,
-                    bottom: 50,
-                    right: 50
+                    left: this.radarSize / 6,
+                    top: this.radarSize / 6,
+                    bottom: this.radarSize / 6,
+                    right: this.radarSize / 6
                 }}
-                width={400}
-                height={400}
+                width={this.radarSize}
+                height={this.radarSize}
             >
                 <CircularGridLines
                     style={{
@@ -90,12 +96,4 @@ class Radar extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        // b/c of shallow checking
-        // this must be specifc value
-        cityioData: state
-    };
-};
-
-export default connect(mapStateToProps, null)(Radar);
+export default Radar;

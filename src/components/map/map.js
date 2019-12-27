@@ -1,7 +1,6 @@
 /* global window */
 import React, { Component } from "react";
 import { _proccessAccessData, _proccessGridData } from "./mapUtils";
-import { connect } from "react-redux";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
@@ -14,7 +13,6 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            firstLoad: true,
             cityioData: {},
             isDragging: false,
             selectedCellsState: null,
@@ -48,8 +46,8 @@ class Map extends Component {
         this.setState({ keyDownState: null });
     };
 
-    _setViewStateToTableHeader(data) {
-        const header = data.header;
+    _setViewStateToTableHeader() {
+        const header = this.props.cityioData.header;
         this.setState({
             viewState: {
                 ...this.state.viewState,
@@ -68,12 +66,11 @@ class Map extends Component {
             intensity: 1
         });
         const dirLight = new _SunLight({
-            timestamp: Date.UTC(2019, 7, 1, 10),
+            timestamp: Date.UTC(2019, 7, 1, 12),
             color: [255, 255, 255],
             intensity: 1.0,
             _shadow: true
         });
-        this.day = Date.UTC(2019, 7, 1, this.state.time);
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });
         lightingEffect.shadowColor = [0, 0, 0, 0.3];
         this._effects = [lightingEffect];
@@ -97,7 +94,7 @@ class Map extends Component {
         this.animationFrame = window.requestAnimationFrame(
             this._animate.bind(this)
         );
-        // this._calculateSunPosition();
+        this._calculateSunPosition();
         // }
     }
 
@@ -133,6 +130,8 @@ class Map extends Component {
     componentDidMount() {
         this._rightClickViewRotate();
         this._setupEffects();
+        this._setViewStateToTableHeader();
+        this._animate();
     }
 
     /**
@@ -142,7 +141,9 @@ class Map extends Component {
      * @param {*} prevState
      */
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.cityioData !== this.state.cityioData) {
+        if (prevState.cityioData !== this.props.cityioData) {
+            console.log("...new map data");
+
             const data = this.props.cityioData;
             this.setState({ cityioData: data });
             const gridData = _proccessGridData(data);
@@ -154,14 +155,6 @@ class Map extends Component {
                 accessColors: accessData.colors
             });
             this.setState({ access: accessData.heatmap });
-
-            // only do this once after props are here
-            if (this.state.firstLoad && this.props.cityioData.grid) {
-                this._setViewStateToTableHeader(data);
-                this.setState({ firstLoad: false });
-
-                this._animate();
-            }
         }
     }
 
@@ -454,10 +447,12 @@ class Map extends Component {
     }
 }
 
-const mapStateToProps = reduxState => {
-    return {
-        cityioData: reduxState
-    };
-};
+// const mapStateToProps = reduxState => {
+//     return {
+//         cityioData: reduxState
+//     };
+// };
 
-export default connect(mapStateToProps, null)(Map);
+// export default connect(mapStateToProps, null)(Map);
+
+export default Map;
