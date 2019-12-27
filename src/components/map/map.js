@@ -14,6 +14,7 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            firstLoad: true,
             cityioData: {},
             isDragging: false,
             selectedCellsState: null,
@@ -47,8 +48,8 @@ class Map extends Component {
         this.setState({ keyDownState: null });
     };
 
-    _setViewStateToTableHeader() {
-        const header = this.props.cityioData.header;
+    _setViewStateToTableHeader(data) {
+        const header = data.header;
         this.setState({
             viewState: {
                 ...this.state.viewState,
@@ -140,23 +141,30 @@ class Map extends Component {
         this._setupEffects();
     }
 
+    /**
+     * ! This is not safe yet
+     * ! props are not yet here when executed
+     * @param {*} prevProps
+     * @param {*} prevState
+     */
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.cityioData !== this.state.cityioData) {
-            // ! SHOULD BE FIXED WITH `container.comp`
-            if ("grid" in this.props.cityioData) {
-                const data = this.props.cityioData;
-                this.setState({ cityioData: data });
-                const gridData = _proccessGridData(data);
-                this.setState({
-                    meta_grid: gridData
-                });
-                const accessData = _proccessAccessData(data);
-                this.setState({
-                    accessColors: accessData.colors
-                });
-                this.setState({ access: accessData.heatmap });
+            const data = this.props.cityioData;
+            this.setState({ cityioData: data });
+            const gridData = _proccessGridData(data);
+            this.setState({
+                meta_grid: gridData
+            });
+            const accessData = _proccessAccessData(data);
+            this.setState({
+                accessColors: accessData.colors
+            });
+            this.setState({ access: accessData.heatmap });
 
-                this._setViewStateToTableHeader();
+            // only do this once after props are here
+            if (this.state.firstLoad && this.props.cityioData.grid) {
+                this._setViewStateToTableHeader(data);
+                this.setState({ firstLoad: false });
             }
         }
     }
@@ -207,7 +215,6 @@ class Map extends Component {
      */
     _handleSelection = e => {
         let rndType = this.state.randomType;
-
         const multiSelectedObj = this._mulipleObjPicked(e);
         multiSelectedObj.forEach(selected => {
             const thisCellProps = selected.object.properties;
