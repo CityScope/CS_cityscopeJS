@@ -1,5 +1,4 @@
 import settings from "../../settings/settings.json";
-import React, { Component } from "react";
 
 /**
  * Description. gets `props` with geojson
@@ -39,34 +38,4 @@ export const _proccessAccessData = data => {
         });
     }
     return { colors: colors, heatmap: heatmap };
-};
-
-/**
- * Description.
- * draw target area around mouse
- */
-export const _renderSelectionTarget = keyDownState => {
-    if (keyDownState === 16) {
-        const rt = this.state.randomType;
-        const color =
-            "rgb(" + rt.color[0] + "," + rt.color[1] + "," + rt.color[2] + ")";
-        const mousePos = this.state.mousePos;
-        const divSize = 30;
-        return (
-            <div
-                style={{
-                    border: "2px solid",
-                    borderColor: color,
-                    borderRadius: "15%",
-                    position: "fixed",
-                    zIndex: 1,
-                    pointerEvents: "none",
-                    width: divSize,
-                    height: divSize,
-                    left: mousePos.clientX - divSize / 2,
-                    top: mousePos.clientY - divSize / 2
-                }}
-            ></div>
-        );
-    }
 };

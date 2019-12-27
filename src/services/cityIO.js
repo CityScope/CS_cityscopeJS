@@ -69,18 +69,11 @@ class CityIO extends Component {
             // new data in table, get all modules
             // that are listed in settings
             settings.cityIO.cityIOmodules.forEach(module => {
-                if (result.hashes[module] !== this.state.oldHashs[module]) {
-                    this.getCityIOmoduleData(
-                        module,
-                        this.cityioURL + "/" + module
-                    );
+                // if (result.hashes[module] !== this.state.oldHashs[module]) {
+                this.getCityIOmoduleData(module, this.cityioURL + "/" + module);
 
-                    this.setNestedState(
-                        "oldHashs",
-                        module,
-                        result.hashes[module]
-                    );
-                }
+                this.setNestedState("oldHashs", module, result.hashes[module]);
+                // }
             });
             // finally, put to state the hashes master id
             this.setNestedState("oldHashs", "id", result.id);
@@ -89,10 +82,13 @@ class CityIO extends Component {
 
     checkDoneCityIO = () => {
         this.counter = this.counter - 1;
+
         // count if we've updated all modules already
         if (this.counter === 0) {
             console.log("done updating from cityIO..");
             this.setState({ readyForRedux: true });
+            // reset to the number of modules to load
+            this.counter = settings.cityIO.cityIOmodules.length;
         }
     };
 

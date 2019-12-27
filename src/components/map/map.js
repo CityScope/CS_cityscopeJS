@@ -1,10 +1,6 @@
 /* global window */
 import React, { Component } from "react";
-import {
-    _proccessAccessData,
-    _proccessGridData,
-    _renderSelectionTarget
-} from "./mapUtils";
+import { _proccessAccessData, _proccessGridData } from "./mapUtils";
 import { connect } from "react-redux";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
@@ -146,6 +142,7 @@ class Map extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.cityioData !== this.state.cityioData) {
+            // ! SHOULD BE FIXED WITH `container.comp`
             if ("grid" in this.props.cityioData) {
                 const data = this.props.cityioData;
                 this.setState({ cityioData: data });
@@ -359,6 +356,42 @@ class Map extends Component {
         this.setState({ gl });
     };
 
+    /**
+     * Description.
+     * draw target area around mouse
+     */
+    _renderSelectionTarget = keyDownState => {
+        if (keyDownState === 16) {
+            const rt = this.state.randomType;
+            const color =
+                "rgb(" +
+                rt.color[0] +
+                "," +
+                rt.color[1] +
+                "," +
+                rt.color[2] +
+                ")";
+            const mousePos = this.state.mousePos;
+            const divSize = 30;
+            return (
+                <div
+                    style={{
+                        border: "2px solid",
+                        borderColor: color,
+                        borderRadius: "15%",
+                        position: "fixed",
+                        zIndex: 1,
+                        pointerEvents: "none",
+                        width: divSize,
+                        height: divSize,
+                        left: mousePos.clientX - divSize / 2,
+                        top: mousePos.clientY - divSize / 2
+                    }}
+                ></div>
+            );
+        }
+    };
+
     render() {
         return (
             <div
@@ -370,7 +403,9 @@ class Map extends Component {
                     })
                 }
             >
-                <div>{_renderSelectionTarget(this.state.keyDownState)}</div>
+                <div>
+                    {this._renderSelectionTarget(this.state.keyDownState)}
+                </div>
 
                 <DeckGL
                     // sets the cursor on paint
