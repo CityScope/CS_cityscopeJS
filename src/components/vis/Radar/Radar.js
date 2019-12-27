@@ -66,10 +66,10 @@ class Radar extends Component {
                     }
                 }}
                 margin={{
-                    left: 100,
-                    top: 100,
-                    bottom: 100,
-                    right: 100
+                    left: 50,
+                    top: 50,
+                    bottom: 50,
+                    right: 50
                 }}
                 width={400}
                 height={400}

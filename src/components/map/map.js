@@ -81,29 +81,24 @@ class Map extends Component {
 
     _animate() {
         // stop animation on state
-        if (this.animationFrame) {
-            window.cancelAnimationFrame(this.animationFrame);
-        } else {
-            const {
-                startSimHour,
-                animationSpeed,
-                endSimHour
-            } = settings.map.layers.ABM;
-            let t = this.state.time + animationSpeed;
-            if (
-                this.state.time > endSimHour ||
-                this.state.time < startSimHour
-            ) {
-                t = startSimHour;
-            }
-            this.setState({
-                time: t
-            });
-            this.animationFrame = window.requestAnimationFrame(
-                this._animate.bind(this)
-            );
-            this._calculateSunPosition();
+        // if (this.animationFrame) {
+        //     window.cancelAnimationFrame(this.animationFrame);
+        // } else {
+        const {
+            startSimHour,
+            animationSpeed,
+            endSimHour
+        } = settings.map.layers.ABM;
+        let t = this.state.time + animationSpeed;
+        if (this.state.time > endSimHour || this.state.time < startSimHour) {
+            t = startSimHour;
         }
+        this.setState({ time: t });
+        this.animationFrame = window.requestAnimationFrame(
+            this._animate.bind(this)
+        );
+        // this._calculateSunPosition();
+        // }
     }
 
     /**
@@ -136,7 +131,6 @@ class Map extends Component {
     }
 
     componentDidMount() {
-        // this._animate();
         this._rightClickViewRotate();
         this._setupEffects();
     }
@@ -165,6 +159,8 @@ class Map extends Component {
             if (this.state.firstLoad && this.props.cityioData.grid) {
                 this._setViewStateToTableHeader(data);
                 this.setState({ firstLoad: false });
+
+                this._animate();
             }
         }
     }
@@ -218,7 +214,10 @@ class Map extends Component {
         const multiSelectedObj = this._mulipleObjPicked(e);
         multiSelectedObj.forEach(selected => {
             const thisCellProps = selected.object.properties;
-            if (thisCellProps.land_use === "M1" && !thisCellProps.interactive) {
+            if (
+                thisCellProps.land_use !== "None" &&
+                !thisCellProps.interactive
+            ) {
                 thisCellProps.old_height = thisCellProps.height;
                 thisCellProps.old_color = thisCellProps.color;
                 thisCellProps.color = rndType.color;
@@ -252,13 +251,13 @@ class Map extends Component {
                 lineWidthScale: 1,
                 lineWidthMinPixels: 2,
                 getElevation: d =>
-                    d.properties.land_use === "M1" ? d.properties.height : 0,
+                    d.properties.land_use !== "None" ? d.properties.height : 0,
                 getFillColor: d =>
                     d.properties.type !== undefined
                         ? d.properties.color
                         : d.properties.color
                         ? d.properties.color
-                        : d.properties.land_use === "M1"
+                        : d.properties.land_use !== "None"
                         ? settings.map.types.white.color
                         : settings.map.types.water.color,
 
@@ -288,9 +287,16 @@ class Map extends Component {
 
             new TripsLayer({
                 id: "ABM",
-                visible: false,
+                visible: true,
                 data: cityioData.ABM,
-                getPath: d => d.path,
+                // getPath: d => d.path,
+                getPath: d => {
+                    for (let i in d.path) {
+                        d.path[i][2] = 50;
+                    }
+                    return d.path;
+                },
+
                 getTimestamps: d => d.timestamps,
                 getColor: d => {
                     //switch between modes or types of users
