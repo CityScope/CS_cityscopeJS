@@ -13,6 +13,7 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            menu: [],
             cityioData: {},
             isDragging: false,
             selectedCellsState: null,
@@ -27,24 +28,6 @@ class Map extends Component {
     _onViewStateChange({ viewState }) {
         this.setState({ viewState });
     }
-
-    _handleKeyDown = e => {
-        // shift == 16
-        this.setState({ keyDownState: e.nativeEvent.keyCode });
-
-        // compute rnd color for now
-        if (e.nativeEvent.keyCode === 16) {
-            this.setState({
-                mapStyle: null
-            });
-            // TEMP
-            this._rndType();
-        }
-    };
-
-    _handleKeyUp = () => {
-        this.setState({ keyDownState: null });
-    };
 
     _setViewStateToTableHeader() {
         const header = this.props.cityioData.header;
@@ -94,6 +77,7 @@ class Map extends Component {
         this.animationFrame = window.requestAnimationFrame(
             this._animate.bind(this)
         );
+
         this._calculateSunPosition();
         // }
     }
@@ -155,6 +139,11 @@ class Map extends Component {
                 accessColors: accessData.colors
             });
             this.setState({ access: accessData.heatmap });
+
+            this._rndType();
+        }
+
+        if (this.props.menu.includes("EDIT")) {
         }
     }
 
@@ -167,17 +156,6 @@ class Map extends Component {
             .getElementById("deckgl-wrapper")
             .addEventListener("contextmenu", evt => evt.preventDefault());
     }
-
-    /**
-     * Description.
-     * Temp def. for color selection
-     */
-    _rndType = () => {
-        var keys = Object.keys(settings.map.types);
-        let randomType =
-            settings.map.types[keys[(keys.length * Math.random()) << 0]];
-        this.setState({ randomType: randomType });
-    };
 
     /**
      * Description. uses deck api to
@@ -255,11 +233,11 @@ class Map extends Component {
                         : settings.map.types.water.color,
 
                 onDrag: event => {
-                    if (this.state.keyDownState === 16)
+                    if (this.props.menu.includes("EDIT"))
                         this._handleSelection(event);
                 },
                 onDragStart: () => {
-                    if (this.state.keyDownState === 16) {
+                    if (this.props.menu.includes("EDIT")) {
                         this._handleDrag(true);
                     }
                 },
@@ -346,7 +324,7 @@ class Map extends Component {
 
             new HeatmapLayer({
                 id: "ACCESS",
-                visible: false,
+                visible: this.props.menu.includes("ACCESS") ? true : false,
                 colorRange: this.state.accessColors,
                 radiusPixels: 200,
                 opacity: 0.25,
@@ -364,10 +342,21 @@ class Map extends Component {
 
     /**
      * Description.
+     * Temp def. for color selection
+     */
+    _rndType = () => {
+        var keys = Object.keys(settings.map.types);
+        let randomType =
+            settings.map.types[keys[(keys.length * Math.random()) << 0]];
+        this.setState({ randomType: randomType });
+    };
+
+    /**
+     * Description.
      * draw target area around mouse
      */
-    _renderSelectionTarget = keyDownState => {
-        if (keyDownState === 16) {
+    _renderSelectionTarget = () => {
+        if (this.props.menu.includes("EDIT")) {
             const rt = this.state.randomType;
             const color =
                 "rgb(" +
@@ -401,8 +390,6 @@ class Map extends Component {
     render() {
         return (
             <div
-                onKeyDown={this._handleKeyDown}
-                onKeyUp={this._handleKeyUp}
                 onMouseMove={e =>
                     this.setState({
                         mousePos: e.nativeEvent
@@ -416,7 +403,7 @@ class Map extends Component {
                 <DeckGL
                     // sets the cursor on paint
                     getCursor={() =>
-                        this.state.keyDownState === 16 ? "none" : "all-scroll"
+                        this.props.menu.includes("EDIT") ? "none" : "all-scroll"
                     }
                     ref={ref => {
                         // save a reference to the Deck instance
@@ -427,8 +414,8 @@ class Map extends Component {
                     layers={this._renderLayers()}
                     effects={this._effects}
                     controller={{
-                        dragPan: !this.state.isDragging,
-                        dragRotate: !this.state.isDragging
+                        dragPan: !this.state.isDragging
+                        // dragRotate: !this.state.isDragging
                     }}
                 >
                     <StaticMap

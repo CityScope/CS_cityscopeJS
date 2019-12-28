@@ -16,7 +16,7 @@ export function listenToMenuUI(data) {
 /**
  * INIT STATE
  */
-const initialState = {};
+const initialState = { MENU: [], CITYIO: {} };
 
 /**
  * REDUCER

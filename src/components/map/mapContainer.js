@@ -9,7 +9,12 @@ class MapContainer extends Component {
             this.props.cityioData &&
             this.props.cityioData.header
         ) {
-            return <MAP cityioData={this.props.cityioData} />;
+            return (
+                <MAP
+                    cityioData={this.props.cityioData}
+                    menu={this.props.menu}
+                />
+            );
         } else {
             return null;
         }
@@ -18,7 +23,8 @@ class MapContainer extends Component {
 
 const mapStateToProps = state => {
     return {
-        cityioData: state.CITYIO
+        cityioData: state.CITYIO,
+        menu: state.MENU
     };
 };
 

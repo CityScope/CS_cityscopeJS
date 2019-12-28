@@ -5,8 +5,8 @@ import Radar from "./Radar/Radar";
 class VisContainer extends Component {
     render() {
         if (
-            this.props.menuToggle &&
-            this.props.menuToggle.includes("RADAR") &&
+            this.props.menu &&
+            this.props.menu.includes("RADAR") &&
             this.props.cityioData &&
             this.props.cityioData.grid
         ) {
@@ -20,7 +20,7 @@ class VisContainer extends Component {
 const mapStateToProps = state => {
     return {
         cityioData: state.CITYIO,
-        menuToggle: state.MENU
+        menu: state.MENU
     };
 };
 
