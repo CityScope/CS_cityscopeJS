@@ -1,6 +1,7 @@
 /* global window */
 import React, { Component } from "react";
 import { _proccessAccessData, _proccessGridData } from "./mapUtils";
+import MapStats from "./MapStats/MapStats";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
@@ -13,11 +14,10 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            menu: [],
-            cityioData: {},
+            menu: null,
+            cityioData: null,
             isDragging: false,
             selectedCellsState: null,
-            toggleBuildingShow: "none",
             time: 0,
             viewState: settings.map.initialViewState
         };
@@ -63,7 +63,7 @@ class Map extends Component {
         // stop animation on state
         // if (this.animationFrame) {
         //     window.cancelAnimationFrame(this.animationFrame);
-        // } else {
+        // }
         const {
             startSimHour,
             animationSpeed,
@@ -77,9 +77,6 @@ class Map extends Component {
         this.animationFrame = window.requestAnimationFrame(
             this._animate.bind(this)
         );
-
-        this._calculateSunPosition();
-        // }
     }
 
     /**
@@ -87,22 +84,19 @@ class Map extends Component {
      * to fit the `_animate` time
      */
     _calculateSunPosition() {
-        var date = new Date(this.state.time * 1000);
-        // Hours part from the timestamp
-        var hours = date.getHours();
-        // Minutes part from the timestamp
-        var minutes = "0" + date.getMinutes();
-        // Seconds part from the timestamp
-        var seconds = "0" + date.getSeconds();
-        if (this._effects)
+        const { startSimHour } = settings.map.layers.ABM;
+        var date = new Date((startSimHour + this.state.time) * 1000);
+        if (this._effects) {
             this._effects[0].directionalLights[0].timestamp = Date.UTC(
-                2019,
-                7,
-                1,
-                hours,
-                minutes,
-                seconds
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDay(),
+                date.getHours(),
+                date.getMinutes(),
+                date.getSeconds()
             );
+        }
+        return date.getHours().toString() + ":" + date.getMinutes().toString();
     }
 
     componentWillUnmount() {
@@ -119,10 +113,7 @@ class Map extends Component {
     }
 
     /**
-     * ! This is not safe yet
-     * ! props are not yet here when executed
-     * @param {*} prevProps
-     * @param {*} prevState
+     * handels events as they derived from redux props
      */
     componentDidUpdate(prevProps, prevState) {
         if (prevState.cityioData !== this.props.cityioData) {
@@ -141,9 +132,6 @@ class Map extends Component {
             this.setState({ access: accessData.heatmap });
 
             this._rndType();
-        }
-
-        if (this.props.menu.includes("EDIT")) {
         }
     }
 
@@ -201,14 +189,6 @@ class Map extends Component {
         });
     };
 
-    /**
-     * Description.
-     * control state of deckgl `drag`
-     */
-    _handleDrag = bool => {
-        this.setState({ isDragging: bool });
-    };
-
     _renderLayers() {
         const cityioData = this.props.cityioData;
 
@@ -216,7 +196,7 @@ class Map extends Component {
             new GeoJsonLayer({
                 id: "GRID",
                 data: this.state.meta_grid,
-                visible: true,
+                visible: this.props.menu.includes("GRID") ? true : false,
                 pickable: true,
                 extruded: true,
                 lineWidthScale: 1,
@@ -238,11 +218,11 @@ class Map extends Component {
                 },
                 onDragStart: () => {
                     if (this.props.menu.includes("EDIT")) {
-                        this._handleDrag(true);
+                        this.setState({ isDragging: true });
                     }
                 },
                 onDragEnd: () => {
-                    this._handleDrag(false);
+                    this.setState({ isDragging: false });
                 },
 
                 updateTriggers: {
@@ -258,12 +238,12 @@ class Map extends Component {
 
             new TripsLayer({
                 id: "ABM",
-                visible: true,
+                visible: this.props.menu.includes("ABM") ? true : false,
                 data: cityioData.ABM,
                 // getPath: d => d.path,
                 getPath: d => {
                     for (let i in d.path) {
-                        d.path[i][2] = 50;
+                        d.path[i][2] = 20;
                     }
                     return d.path;
                 },
@@ -285,13 +265,13 @@ class Map extends Component {
                 getWidth: 2,
                 opacity: 0.8,
                 rounded: true,
-                trailLength: 200,
+                trailLength: 500,
                 currentTime: this.state.time
             }),
 
             new PathLayer({
                 id: "PATHS",
-                visible: false,
+                visible: this.props.menu.includes("PATHS") ? true : false,
                 _shadow: false,
                 data: cityioData.ABM,
                 getPath: d => {
@@ -396,8 +376,11 @@ class Map extends Component {
                     })
                 }
             >
+                <div>{this._renderSelectionTarget()}</div>
                 <div>
-                    {this._renderSelectionTarget(this.state.keyDownState)}
+                    {this.props.menu.includes("ABM") ? (
+                        <MapStats time={this._calculateSunPosition()} />
+                    ) : null}
                 </div>
 
                 <DeckGL
@@ -414,8 +397,8 @@ class Map extends Component {
                     layers={this._renderLayers()}
                     effects={this._effects}
                     controller={{
-                        dragPan: !this.state.isDragging
-                        // dragRotate: !this.state.isDragging
+                        dragPan: !this.state.isDragging,
+                        dragRotate: !this.state.isDragging
                     }}
                 >
                     <StaticMap
@@ -433,13 +416,5 @@ class Map extends Component {
         );
     }
 }
-
-// const mapStateToProps = reduxState => {
-//     return {
-//         cityioData: reduxState
-//     };
-// };
-
-// export default connect(mapStateToProps, null)(Map);
 
 export default Map;

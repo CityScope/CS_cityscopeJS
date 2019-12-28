@@ -1,0 +1,15 @@
+.blur {
+    border-radius: 15%;
+    -webkit-backdrop-filter: blur(1em);
+    backdrop-filter: blur(1em);
+}
+.mapStats {
+    color: white;
+    z-index: 100;
+    position: fixed;
+    padding: 2em;
+    max-width: 15em;
+    bottom: 2em;
+    text-align: center;
+    left: 2em;
+}

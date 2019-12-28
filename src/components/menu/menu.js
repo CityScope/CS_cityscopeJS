@@ -10,18 +10,10 @@ import Fab from "@material-ui/core/Fab";
 import MenuIcon from "@material-ui/icons/Menu";
 import { connect } from "react-redux";
 import { listenToMenuUI } from "../../redux/reducer";
+import settings from "../../settings/settings.json";
 
 function Menu(props) {
-    const toggleID = [
-        "PATHS",
-        "ABM",
-        "GRID",
-        "ACCESS",
-        "SUN",
-        "3D_BUILDING",
-        "EDIT",
-        "RADAR"
-    ];
+    const listOfToggles = Object.keys(settings.menu.toggles);
     const useStyles = makeStyles(theme => ({
         root: {
             width: "100%",
@@ -51,6 +43,7 @@ function Menu(props) {
     const [state, setState] = React.useState({
         left: false
     });
+
     const toggleDrawer = (side, open) => event => {
         if (
             event.type === "keydown" &&
@@ -61,6 +54,7 @@ function Menu(props) {
 
         setState({ ...state, [side]: open });
     };
+
     const sideList = side => (
         <div
             className={classes.list}
@@ -79,24 +73,25 @@ function Menu(props) {
             newChecked.splice(currentIndex, 1);
         }
         setChecked(newChecked);
-        //console.log(newChecked);
         props.listenToMenuUI(newChecked);
     };
-    let togglesArray = [];
-    for (let i = 0; i < toggleID.length; i++) {
+    let togglesCompsArray = [];
+    for (let i = 0; i < listOfToggles.length; i++) {
         const thisToggle = (
-            <ListItem key={toggleID[i]}>
-                <ListItemText primary={toggleID[i]} />
+            <ListItem key={listOfToggles[i]}>
+                <ListItemText primary={listOfToggles[i]} />
                 <ListItemSecondaryAction>
                     <Switch
                         edge="end"
-                        onChange={handleToggle(toggleID[i])}
-                        checked={toggleStateArray.indexOf(toggleID[i]) !== -1}
+                        onChange={handleToggle(listOfToggles[i])}
+                        checked={
+                            toggleStateArray.indexOf(listOfToggles[i]) !== -1
+                        }
                     />
                 </ListItemSecondaryAction>
             </ListItem>
         );
-        togglesArray.push(thisToggle);
+        togglesCompsArray.push(thisToggle);
     }
     return (
         <div>
@@ -107,7 +102,7 @@ function Menu(props) {
                     onClose={toggleDrawer("left", false)}
                 >
                     {sideList("left")}
-                    <List className={classes.root}>{togglesArray}</List>
+                    <List className={classes.root}>{togglesCompsArray}</List>
                 </Drawer>
                 <Fab
                     aria-label="add"

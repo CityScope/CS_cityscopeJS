@@ -61,5 +61,15 @@
             "white": { "height": 10, "color": [255, 255, 255, 200] },
             "water": { "height": 0, "color": [40, 70, 100, 200] }
         }
+    },
+    "menu": {
+        "toggles": {
+            "GRID": true,
+            "EDIT": false,
+            "PATHS": false,
+            "ABM": false,
+            "ACCESS": false,
+            "RADAR": false
+        }
     }
 }

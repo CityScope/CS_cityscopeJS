@@ -14,7 +14,7 @@ class Radar extends Component {
             radarData: []
         };
 
-        this.radarSize = 500;
+        this.radarSize = 700;
     }
 
     generateData() {
@@ -89,7 +89,7 @@ class Radar extends Component {
                         stroke: "white",
                         width: 0.1
                     }}
-                    tickValues={[...new Array(10)].map((v, i) => i / 10 - 1)}
+                    tickValues={[...new Array(11)].map((v, i) => i / 10 - 1)}
                 />
             </RadarChart>
         );
