@@ -16,9 +16,9 @@ class MapContainer extends Component {
     }
 }
 
-const mapStateToProps = reduxState => {
+const mapStateToProps = state => {
     return {
-        cityioData: reduxState
+        cityioData: state.CITYIO
     };
 };
 

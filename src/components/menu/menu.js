@@ -8,8 +8,10 @@ import Switch from "@material-ui/core/Switch";
 import Drawer from "@material-ui/core/Drawer";
 import Fab from "@material-ui/core/Fab";
 import MenuIcon from "@material-ui/icons/Menu";
+import { connect } from "react-redux";
+import { listenToMenuUI } from "../../redux/reducer";
 
-export default function Menu() {
+function Menu(props) {
     const toggleID = [
         "PATHS",
         "ABM",
@@ -17,7 +19,8 @@ export default function Menu() {
         "ACCESS",
         "SUN",
         "3D_BUILDING",
-        "EDIT"
+        "EDIT",
+        "RADAR"
     ];
     const useStyles = makeStyles(theme => ({
         root: {
@@ -77,6 +80,7 @@ export default function Menu() {
         }
         setChecked(newChecked);
         //console.log(newChecked);
+        props.listenToMenuUI(newChecked);
     };
     let togglesArray = [];
     for (let i = 0; i < toggleID.length; i++) {
@@ -116,3 +120,9 @@ export default function Menu() {
         </div>
     );
 }
+
+const mapDispatchToProps = {
+    listenToMenuUI: listenToMenuUI
+};
+
+export default connect(null, mapDispatchToProps)(Menu);
