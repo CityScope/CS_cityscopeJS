@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getCityioData } from "../redux/reducer";
-import settings from "../settings/settings.json";
+import { getCityioData } from "../../redux/reducer";
+import settings from "../../settings/settings.json";
+import CityioFail from "./cityioFail";
 
 class CityIO extends Component {
     constructor(props) {
@@ -162,25 +163,11 @@ class CityIO extends Component {
 
     render() {
         if (this.state.userEnteredCityioEndpoint === false) {
-            return (
-                <div>
-                    <h1
-                        style={{
-                            fontSize: 100,
-                            color: "white",
-                            position: "fixed",
-                            zIndex: 1000
-                        }}
-                    >
-                        No CityIO endpoint was provided..
-                    </h1>
-                </div>
-            );
+            return <CityioFail />;
+        } else {
+            this.sharePropsWithRedux();
+            return null;
         }
-
-        this.sharePropsWithRedux();
-
-        return null;
     }
 }
 

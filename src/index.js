@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import "./index.css";
 import store from "./redux/store";
-import CityIO from "./services/cityIO";
-import Menu from "./components/menu/menu";
+import CityIO from "./services/cityIO/cityIO";
+import MenuContainer from "./components/menu/menuContainer";
 import MapContainer from "./components/map/mapContainer";
 import VisContainer from "./components/vis/visContainer";
 
@@ -15,8 +15,7 @@ ReactDOM.render(
         <CityIO />
         <MapContainer />
         <VisContainer />
-
-        <Menu />
+        <MenuContainer />
     </Provider>,
     rootDiv
 );
