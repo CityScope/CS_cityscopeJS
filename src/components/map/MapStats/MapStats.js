@@ -5,8 +5,8 @@ class MapStats extends Component {
     render() {
         return (
             <div className="blur mapStats">
-                <h2>simulation time</h2>
-                <h4>{this.props.time}</h4>
+                <h2>Info</h2>
+                <p>{this.props.stats}</p>
             </div>
         );
     }

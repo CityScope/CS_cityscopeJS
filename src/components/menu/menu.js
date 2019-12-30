@@ -19,11 +19,15 @@ function Menu(props) {
             width: "100%",
             maxWidth: "15em",
             position: "absolute",
-            backgroundColor: "rgba(255,255,255,0.8)",
             "& > *": {
                 margin: theme.spacing(1)
             }
         },
+        paper: {
+            background: "black",
+            color: "white"
+        },
+
         list: {
             width: "15em"
         },
@@ -102,7 +106,10 @@ function Menu(props) {
                     onClose={toggleDrawer("left", false)}
                 >
                     {sideList("left")}
-                    <List className={classes.root}>{togglesCompsArray}</List>
+                    <List className={classes.root}>
+                        <h2>cityscopeJS</h2>
+                        {togglesCompsArray}
+                    </List>
                 </Drawer>
                 <Fab
                     aria-label="add"

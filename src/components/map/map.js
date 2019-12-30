@@ -14,6 +14,7 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            showStats: false,
             menu: null,
             cityioData: null,
             isDragging: false,
@@ -116,6 +117,15 @@ class Map extends Component {
      * handels events as they derived from redux props
      */
     componentDidUpdate(prevProps, prevState) {
+        if (prevProps.menu !== prevState.menu) {
+            this.setState({ menu: this.props.menu });
+            //
+            const menu = this.props.menu;
+            menu.includes("ABM") || menu.includes("GRID")
+                ? this.setState({ showStats: true })
+                : this.setState({ showStats: false });
+        }
+
         if (prevState.cityioData !== this.props.cityioData) {
             console.log("...new map data");
 
@@ -128,6 +138,7 @@ class Map extends Component {
             const accessData = _proccessAccessData(data);
             this.setState({ access: accessData });
 
+            // FOR NOW FAKE TYPE
             this._rndType();
         }
     }
@@ -216,6 +227,13 @@ class Map extends Component {
                 onDragStart: () => {
                     if (this.props.menu.includes("EDIT")) {
                         this.setState({ isDragging: true });
+                    }
+                },
+                onHover: e => {
+                    if (e.object && e.object.properties) {
+                        this.setState({
+                            gridCellInfo: e.object.properties
+                        });
                     }
                 },
                 onDragEnd: () => {
@@ -328,6 +346,21 @@ class Map extends Component {
         this.setState({ randomType: randomType });
     };
 
+    _statsUI = () => {
+        const menu = this.props.menu;
+        if (menu.includes("ABM")) {
+            return <MapStats stats={this._calculateSunPosition()} />;
+        } else if (menu.includes("GRID") && this.state.gridCellInfo) {
+            // {"height":10,"interactive":false,"interactive_id":null,"land_use":"M1"}
+            const stats =
+                "Height: " +
+                this.state.gridCellInfo.height +
+                " Land Use: " +
+                this.state.gridCellInfo.land_use;
+            return <MapStats stats={stats} />;
+        }
+    };
+
     /**
      * Description.
      * draw target area around mouse
@@ -374,11 +407,7 @@ class Map extends Component {
                 }
             >
                 <div>{this._renderSelectionTarget()}</div>
-                <div>
-                    {this.props.menu.includes("ABM") ? (
-                        <MapStats time={this._calculateSunPosition()} />
-                    ) : null}
-                </div>
+                <div>{this.state.showStats ? this._statsUI() : null}</div>
 
                 <DeckGL
                     // sets the cursor on paint
