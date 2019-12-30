@@ -27,7 +27,6 @@ export const _proccessGridData = data => {
 export const _proccessAccessData = data => {
     const accessData = data.access;
     // get colors from settings
-    const colors = Object.values(settings.map.types).map(d => d.color);
     let coordinates = accessData.features.map(d => d.geometry.coordinates);
     let values = accessData.features.map(d => d.properties);
     let heatmap = [];
@@ -37,5 +36,5 @@ export const _proccessAccessData = data => {
             values: values[i]
         });
     }
-    return { colors: colors, heatmap: heatmap };
+    return heatmap;
 };

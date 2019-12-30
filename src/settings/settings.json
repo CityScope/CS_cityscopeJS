@@ -42,6 +42,16 @@
                 "startSimHour": 25200,
                 "endSimHour": 50400,
                 "animationSpeed": 10
+            },
+            "heatmap": {
+                "colors": [
+                    [213, 62, 79],
+                    [252, 141, 89],
+                    [254, 224, 139],
+                    [230, 245, 152],
+                    [153, 213, 148],
+                    [50, 136, 189]
+                ]
             }
         },
         "initialViewState": {

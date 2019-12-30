@@ -126,10 +126,7 @@ class Map extends Component {
                 meta_grid: gridData
             });
             const accessData = _proccessAccessData(data);
-            this.setState({
-                accessColors: accessData.colors
-            });
-            this.setState({ access: accessData.heatmap });
+            this.setState({ access: accessData });
 
             this._rndType();
         }
@@ -305,7 +302,7 @@ class Map extends Component {
             new HeatmapLayer({
                 id: "ACCESS",
                 visible: this.props.menu.includes("ACCESS") ? true : false,
-                colorRange: this.state.accessColors,
+                colorRange: settings.map.layers.heatmap.colors,
                 radiusPixels: 200,
                 opacity: 0.25,
                 data: this.state.access,
