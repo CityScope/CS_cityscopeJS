@@ -199,135 +199,152 @@ class Map extends Component {
 
     _renderLayers() {
         const cityioData = this.props.cityioData;
+        let layers = [];
 
-        let layers = [
-            new GeoJsonLayer({
-                id: "GRID",
-                data: this.state.meta_grid,
-                visible: this.props.menu.includes("GRID") ? true : false,
-                pickable: true,
-                extruded: true,
-                lineWidthScale: 1,
-                lineWidthMinPixels: 2,
-                getElevation: d =>
-                    d.properties.land_use !== "None" ? d.properties.height : 0,
-                getFillColor: d =>
-                    d.properties.type !== undefined
-                        ? d.properties.color
-                        : d.properties.color
-                        ? d.properties.color
-                        : d.properties.land_use !== "None"
-                        ? settings.map.types.white.color
-                        : settings.map.types.water.color,
+        if (this.props.menu.includes("GRID")) {
+            layers.push(
+                new GeoJsonLayer({
+                    id: "GRID",
+                    data: this.state.meta_grid,
+                    visible: this.props.menu.includes("GRID") ? true : false,
+                    pickable: true,
+                    extruded: true,
+                    lineWidthScale: 1,
+                    lineWidthMinPixels: 2,
+                    getElevation: d =>
+                        d.properties.land_use !== "None"
+                            ? d.properties.height
+                            : 0,
+                    getFillColor: d =>
+                        d.properties.type !== undefined
+                            ? d.properties.color
+                            : d.properties.color
+                            ? d.properties.color
+                            : d.properties.land_use !== "None"
+                            ? settings.map.types.white.color
+                            : settings.map.types.water.color,
 
-                onDrag: event => {
-                    if (this.props.menu.includes("EDIT"))
-                        this._handleSelection(event);
-                },
-                onDragStart: () => {
-                    if (this.props.menu.includes("EDIT")) {
-                        this.setState({ isDragging: true });
+                    onDrag: event => {
+                        if (this.props.menu.includes("EDIT"))
+                            this._handleSelection(event);
+                    },
+                    onDragStart: () => {
+                        if (this.props.menu.includes("EDIT")) {
+                            this.setState({ isDragging: true });
+                        }
+                    },
+                    onHover: e => {
+                        if (e.object && e.object.properties) {
+                            this.setState({
+                                gridCellInfo: e.object.properties
+                            });
+                        }
+                    },
+                    onDragEnd: () => {
+                        this.setState({ isDragging: false });
+                    },
+
+                    updateTriggers: {
+                        getFillColor: this.state.selectedCellsState,
+                        getElevation: this.state.selectedCellsState
+                    },
+                    transitions: {
+                        getFillColor: 500,
+
+                        getElevation: 500
                     }
-                },
-                onHover: e => {
-                    if (e.object && e.object.properties) {
-                        this.setState({
-                            gridCellInfo: e.object.properties
-                        });
-                    }
-                },
-                onDragEnd: () => {
-                    this.setState({ isDragging: false });
-                },
+                })
+            );
+        }
 
-                updateTriggers: {
-                    getFillColor: this.state.selectedCellsState,
-                    getElevation: this.state.selectedCellsState
-                },
-                transitions: {
-                    getFillColor: 500,
+        if (this.props.menu.includes("ABM")) {
+            layers.push(
+                new TripsLayer({
+                    id: "ABM",
+                    visible: this.props.menu.includes("ABM") ? true : false,
+                    data: cityioData.ABM,
+                    // getPath: d => d.path,
+                    getPath: d => {
+                        for (let i in d.path) {
+                            d.path[i][2] = 20;
+                        }
+                        return d.path;
+                    },
 
-                    getElevation: 500
-                }
-            }),
+                    getTimestamps: d => d.timestamps,
+                    getColor: d => {
+                        //switch between modes or types of users
+                        switch (d.mode[1]) {
+                            case 0:
+                                return [255, 0, 0];
+                            case 1:
+                                return [0, 0, 255];
+                            case 2:
+                                return [0, 255, 0];
+                            default:
+                                return [0, 0, 0];
+                        }
+                    },
+                    getWidth: 2,
+                    opacity: 0.8,
+                    rounded: true,
+                    trailLength: 500,
+                    currentTime: this.state.time
+                })
+            );
+        }
 
-            new TripsLayer({
-                id: "ABM",
-                visible: this.props.menu.includes("ABM") ? true : false,
-                data: cityioData.ABM,
-                // getPath: d => d.path,
-                getPath: d => {
-                    for (let i in d.path) {
-                        d.path[i][2] = 20;
-                    }
-                    return d.path;
-                },
+        if (this.props.menu.includes("PATHS")) {
+            layers.push(
+                new PathLayer({
+                    id: "PATHS",
+                    visible: this.props.menu.includes("PATHS") ? true : false,
+                    _shadow: false,
+                    data: cityioData.ABM,
+                    getPath: d => {
+                        const noisePath =
+                            Math.random() < 0.5
+                                ? Math.random() * 0.00005
+                                : Math.random() * -0.00005;
+                        for (let i in d.path) {
+                            d.path[i][0] = d.path[i][0] + noisePath;
+                            d.path[i][1] = d.path[i][1] + noisePath;
+                            d.path[i][2] = 200;
+                        }
+                        return d.path;
+                    },
+                    getColor: d => {
+                        switch (d.mode[1]) {
+                            case 0:
+                                return [255, 0, 0];
+                            case 1:
+                                return [0, 0, 255];
+                            case 2:
+                                return [0, 255, 0];
+                            default:
+                                return [0, 0, 0];
+                        }
+                    },
+                    opacity: 0.2,
+                    getWidth: 1
+                })
+            );
+        }
 
-                getTimestamps: d => d.timestamps,
-                getColor: d => {
-                    //switch between modes or types of users
-                    switch (d.mode[1]) {
-                        case 0:
-                            return [255, 0, 0];
-                        case 1:
-                            return [0, 0, 255];
-                        case 2:
-                            return [0, 255, 0];
-                        default:
-                            return [0, 0, 0];
-                    }
-                },
-                getWidth: 2,
-                opacity: 0.8,
-                rounded: true,
-                trailLength: 500,
-                currentTime: this.state.time
-            }),
-
-            new PathLayer({
-                id: "PATHS",
-                visible: this.props.menu.includes("PATHS") ? true : false,
-                _shadow: false,
-                data: cityioData.ABM,
-                getPath: d => {
-                    const noisePath =
-                        Math.random() < 0.5
-                            ? Math.random() * 0.00005
-                            : Math.random() * -0.00005;
-                    for (let i in d.path) {
-                        d.path[i][0] = d.path[i][0] + noisePath;
-                        d.path[i][1] = d.path[i][1] + noisePath;
-                        d.path[i][2] = 200;
-                    }
-                    return d.path;
-                },
-                getColor: d => {
-                    switch (d.mode[1]) {
-                        case 0:
-                            return [255, 0, 0];
-                        case 1:
-                            return [0, 0, 255];
-                        case 2:
-                            return [0, 255, 0];
-                        default:
-                            return [0, 0, 0];
-                    }
-                },
-                opacity: 0.2,
-                getWidth: 1
-            }),
-
-            new HeatmapLayer({
-                id: "ACCESS",
-                visible: this.props.menu.includes("ACCESS") ? true : false,
-                colorRange: settings.map.layers.heatmap.colors,
-                radiusPixels: 200,
-                opacity: 0.25,
-                data: this.state.access,
-                getPosition: d => d.coordinates,
-                getWeight: d => d.values.housing
-            })
-        ];
+        if (this.props.menu.includes("ACCESS")) {
+            layers.push(
+                new HeatmapLayer({
+                    id: "ACCESS",
+                    visible: this.props.menu.includes("ACCESS") ? true : false,
+                    colorRange: settings.map.layers.heatmap.colors,
+                    radiusPixels: 200,
+                    opacity: 0.25,
+                    data: this.state.access,
+                    getPosition: d => d.coordinates,
+                    getWeight: d => d.values.housing
+                })
+            );
+        }
         return layers;
     }
 
