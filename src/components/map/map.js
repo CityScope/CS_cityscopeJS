@@ -1,5 +1,8 @@
 /* global window */
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { listenToMapEvents } from "../../redux/reducer";
+
 import { _proccessAccessData, _proccessGridData } from "./mapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
@@ -115,7 +118,12 @@ class Map extends Component {
                 date.getSeconds()
             );
         }
-        // return date.getHours().toString() + ":" + date.getMinutes().toString();
+
+        const timeOfDay =
+            date.getHours().toString() + ":" + date.getMinutes().toString();
+
+        // if (date.getMinutes() % 20 === 0)
+        // this.props.listenToMapEvents({ time: timeOfDay });
     }
 
     componentWillUnmount() {
@@ -144,6 +152,7 @@ class Map extends Component {
         }
 
         if (prevState.cityioData !== this.props.cityioData) {
+            console.log(this.props);
             console.log("...new map data");
 
             const data = this.props.cityioData;
@@ -263,8 +272,8 @@ class Map extends Component {
 
                     onHover: e => {
                         if (e.object && e.object.properties) {
-                            this.setState({
-                                gridCellInfo: e.object.properties
+                            this.props.listenToMapEvents({
+                                cellInfo: e.object.properties
                             });
                         }
                     },
@@ -470,4 +479,8 @@ class Map extends Component {
     }
 }
 
-export default Map;
+const mapDispatchToProps = {
+    listenToMapEvents: listenToMapEvents
+};
+
+export default connect(null, mapDispatchToProps)(Map);
