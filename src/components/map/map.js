@@ -1,7 +1,6 @@
 /* global window */
 import React, { Component } from "react";
 import { _proccessAccessData, _proccessGridData } from "./mapUtils";
-import MapStats from "./MapStats/MapStats";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
@@ -14,7 +13,6 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showStats: false,
             menu: null,
             cityioData: null,
             draggingWhileEditing: false,
@@ -31,8 +29,6 @@ class Map extends Component {
     };
 
     _handleKeyDown = e => {
-        console.log(e.nativeEvent);
-
         this.setState({ keyDownState: e.nativeEvent.key });
         // compute rnd color for now
         if (e.nativeEvent.key === " ") {
@@ -76,22 +72,30 @@ class Map extends Component {
 
     _animate() {
         // stop animation on state
-        // if (this.animationFrame) {
-        //     window.cancelAnimationFrame(this.animationFrame);
-        // }
-        const {
-            startSimHour,
-            animationSpeed,
-            endSimHour
-        } = settings.map.layers.ABM;
-        let t = this.state.time + animationSpeed;
-        if (this.state.time > endSimHour || this.state.time < startSimHour) {
-            t = startSimHour;
+        if (!this.props.menu.includes("ABM")) {
+            // && this.animationFrame
+            window.cancelAnimationFrame(this.animationFrame);
+            return;
+        } else {
+            const {
+                startSimHour,
+                animationSpeed,
+                endSimHour
+            } = settings.map.layers.ABM;
+            let t = this.state.time + animationSpeed;
+            if (
+                this.state.time > endSimHour ||
+                this.state.time < startSimHour
+            ) {
+                t = startSimHour;
+            }
+            this.setState({ time: t });
+            this.animationFrame = window.requestAnimationFrame(
+                this._animate.bind(this)
+            );
+
+            this._calculateSunPosition();
         }
-        this.setState({ time: t });
-        this.animationFrame = window.requestAnimationFrame(
-            this._animate.bind(this)
-        );
     }
 
     /**
@@ -111,7 +115,7 @@ class Map extends Component {
                 date.getSeconds()
             );
         }
-        return date.getHours().toString() + ":" + date.getMinutes().toString();
+        // return date.getHours().toString() + ":" + date.getMinutes().toString();
     }
 
     componentWillUnmount() {
@@ -121,10 +125,12 @@ class Map extends Component {
     }
 
     componentDidMount() {
+        // fix deck view rotate
         this._rightClickViewRotate();
+        // setup sun effects
         this._setupEffects();
+        // zoom map on CS table location
         this._setViewStateToTableHeader();
-        this._animate();
     }
 
     /**
@@ -133,11 +139,8 @@ class Map extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.menu !== prevState.menu) {
             this.setState({ menu: this.props.menu });
-            //
-            const menu = this.props.menu;
-            menu.includes("ABM") || menu.includes("GRID")
-                ? this.setState({ showStats: true })
-                : this.setState({ showStats: false });
+            // start ainmation/sim
+            this._animate();
         }
 
         if (prevState.cityioData !== this.props.cityioData) {
@@ -384,21 +387,6 @@ class Map extends Component {
         this.setState({ randomType: randomType });
     };
 
-    _statsUI = () => {
-        const menu = this.props.menu;
-        if (menu.includes("ABM")) {
-            return <MapStats stats={this._calculateSunPosition()} />;
-        } else if (menu.includes("GRID") && this.state.gridCellInfo) {
-            // {"height":10,"interactive":false,"interactive_id":null,"land_use":"M1"}
-            const stats =
-                "Height: " +
-                this.state.gridCellInfo.height +
-                " Land Use: " +
-                this.state.gridCellInfo.land_use;
-            return <MapStats stats={stats} />;
-        }
-    };
-
     /**
      * Description.
      * draw target area around mouse
@@ -447,7 +435,6 @@ class Map extends Component {
                 }
             >
                 <div>{this._renderSelectionTarget()}</div>
-                <div>{this.state.showStats ? this._statsUI() : null}</div>
 
                 <DeckGL
                     // sets the cursor on paint
