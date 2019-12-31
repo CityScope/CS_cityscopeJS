@@ -17,7 +17,7 @@ class Map extends Component {
             showStats: false,
             menu: null,
             cityioData: null,
-            isDragging: false,
+            draggingWhileEditing: false,
             selectedCellsState: null,
             time: 0,
             viewState: settings.map.initialViewState
@@ -25,6 +25,20 @@ class Map extends Component {
         this.animationFrame = null;
         this._onViewStateChange = this._onViewStateChange.bind(this);
     }
+
+    _handleKeyUp = () => {
+        this.setState({ keyDownState: null });
+    };
+
+    _handleKeyDown = e => {
+        console.log(e.nativeEvent);
+
+        this.setState({ keyDownState: e.nativeEvent.key });
+        // compute rnd color for now
+        if (e.nativeEvent.key === " ") {
+            this._rndType();
+        }
+    };
 
     _onViewStateChange({ viewState }) {
         this.setState({ viewState });
@@ -225,14 +239,25 @@ class Map extends Component {
                             : settings.map.types.water.color,
 
                     onDrag: event => {
-                        if (this.props.menu.includes("EDIT"))
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        )
                             this._handleSelection(event);
                     },
                     onDragStart: () => {
-                        if (this.props.menu.includes("EDIT")) {
-                            this.setState({ isDragging: true });
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        ) {
+                            this.setState({ draggingWhileEditing: true });
                         }
                     },
+
+                    onDragEnd: () => {
+                        this.setState({ draggingWhileEditing: false });
+                    },
+
                     onHover: e => {
                         if (e.object && e.object.properties) {
                             this.setState({
@@ -240,10 +265,6 @@ class Map extends Component {
                             });
                         }
                     },
-                    onDragEnd: () => {
-                        this.setState({ isDragging: false });
-                    },
-
                     updateTriggers: {
                         getFillColor: this.state.selectedCellsState,
                         getElevation: this.state.selectedCellsState
@@ -417,6 +438,8 @@ class Map extends Component {
     render() {
         return (
             <div
+                onKeyDown={this._handleKeyDown}
+                onKeyUp={this._handleKeyUp}
                 onMouseMove={e =>
                     this.setState({
                         mousePos: e.nativeEvent
@@ -440,8 +463,8 @@ class Map extends Component {
                     layers={this._renderLayers()}
                     effects={this._effects}
                     controller={{
-                        dragPan: !this.state.isDragging,
-                        dragRotate: !this.state.isDragging
+                        dragPan: !this.state.draggingWhileEditing,
+                        dragRotate: !this.state.draggingWhileEditing
                     }}
                 >
                     <StaticMap
