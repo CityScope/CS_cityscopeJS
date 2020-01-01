@@ -152,7 +152,6 @@ class Map extends Component {
         }
 
         if (prevState.cityioData !== this.props.cityioData) {
-            console.log(this.props);
             console.log("...new map data");
 
             const data = this.props.cityioData;

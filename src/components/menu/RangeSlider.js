@@ -5,19 +5,31 @@ import Slider from "@material-ui/core/Slider";
 import settings from "../../settings/settings.json";
 import { connect } from "react-redux";
 
+const sixAm = 6 * 3600;
 const { startSimHour, animationSpeed, endSimHour } = settings.map.layers.ABM;
-const sliderStart = new Date(startSimHour * 1000).getHours();
-const sliderEnd = new Date(endSimHour * 1000).getHours();
+const sliderStart = new Date((sixAm + startSimHour) * 1000).getHours();
+const sliderEnd = new Date((sixAm + endSimHour) * 1000).getHours();
+
+const marks = [
+    {
+        value: 0,
+        label: "12AM"
+    },
+    {
+        value: 12,
+        label: "12PM"
+    }
+];
 
 const useStyles = makeStyles({
     root: {
-        width: 200
+        width: "100%"
     }
 });
 
 function RangeSlider(props) {
     const classes = useStyles();
-    const [value, setValue] = React.useState([sliderStart, 5, sliderEnd]);
+    const [value, setValue] = React.useState([sliderStart, 12, sliderEnd]);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -28,8 +40,9 @@ function RangeSlider(props) {
                 Simulation Range
             </Typography>
             <Slider
-                min={sliderStart}
-                max={sliderEnd}
+                min={0}
+                max={23}
+                marks={marks}
                 value={value}
                 onChange={handleChange}
                 valueLabelDisplay="auto"
@@ -40,8 +53,6 @@ function RangeSlider(props) {
 }
 
 const mapStateToProps = state => {
-    console.log(state);
-
     return {
         mapEvents: state.MAP
     };
