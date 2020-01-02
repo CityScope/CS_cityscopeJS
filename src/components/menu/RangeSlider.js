@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
 import settings from "../../settings/settings.json";
 import { connect } from "react-redux";
+import { listenToSlidersEvents } from "../../redux/actions";
 
 const sixAm = 6 * 3600;
 const { startSimHour, animationSpeed, endSimHour } = settings.map.layers.ABM;
@@ -16,8 +17,16 @@ const marks = [
         label: "12AM"
     },
     {
+        value: 6,
+        label: "6AM"
+    },
+    {
         value: 12,
         label: "12PM"
+    },
+    {
+        value: 18,
+        label: "6PM"
     }
 ];
 
@@ -29,9 +38,34 @@ const useStyles = makeStyles({
 
 function RangeSlider(props) {
     const classes = useStyles();
-    const [value, setValue] = React.useState([sliderStart, 12, sliderEnd]);
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+    const [timeValue, setTimeValue] = React.useState([
+        sliderStart,
+        12,
+        sliderEnd
+    ]);
+
+    const [speedValue, setSpeedValue] = React.useState([50]);
+
+    const handleSetTimeValue = (e, newValue) => {
+        setTimeValue(newValue);
+        props.listenToSlidersEvents({
+            ...props,
+            SLIDERS: {
+                ...props,
+                time: newValue
+            }
+        });
+    };
+
+    const handleSetSpeedValue = (e, newValue) => {
+        setSpeedValue(newValue);
+        props.listenToSlidersEvents({
+            ...props,
+            SLIDERS: {
+                ...props,
+                speed: newValue
+            }
+        });
     };
 
     return (
@@ -43,8 +77,19 @@ function RangeSlider(props) {
                 min={0}
                 max={23}
                 marks={marks}
-                value={value}
-                onChange={handleChange}
+                value={timeValue}
+                onChange={handleSetTimeValue}
+                valueLabelDisplay="auto"
+                aria-labelledby="range-slider"
+            />
+            <Typography id="range-slider" gutterBottom>
+                Simulation Speed
+            </Typography>
+            <Slider
+                min={0}
+                max={100}
+                value={speedValue}
+                onChange={handleSetSpeedValue}
                 valueLabelDisplay="auto"
                 aria-labelledby="range-slider"
             />
@@ -53,9 +98,15 @@ function RangeSlider(props) {
 }
 
 const mapStateToProps = state => {
+    console.log(state);
+
     return {
-        mapEvents: state.MAP
+        ABMlayerEvents: state.MAP
     };
 };
 
-export default connect(mapStateToProps, null)(RangeSlider);
+const mapDispatchToProps = {
+    listenToSlidersEvents: listenToSlidersEvents
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RangeSlider);

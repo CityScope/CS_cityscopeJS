@@ -1,7 +1,7 @@
 /* global window */
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { listenToMapEvents } from "../../redux/reducer";
+import { listenToMapEvents } from "../../redux/actions";
 
 import { _proccessAccessData, _proccessGridData } from "./mapUtils";
 import { StaticMap } from "react-map-gl";

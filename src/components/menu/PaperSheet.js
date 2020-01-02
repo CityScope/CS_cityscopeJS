@@ -7,9 +7,9 @@ const useStyles = makeStyles(theme => ({
     root: {
         padding: theme.spacing(1, 5),
         position: "fixed",
-        bottom: "2vw",
-        left: "2vw",
-        width: "90vw"
+        bottom: "3vw",
+        left: "3vw",
+        width: "20vw"
     }
 }));
 

@@ -9,8 +9,9 @@ import Drawer from "@material-ui/core/Drawer";
 import Fab from "@material-ui/core/Fab";
 import MenuIcon from "@material-ui/icons/Menu";
 import { connect } from "react-redux";
-import { listenToMenuUI } from "../../redux/reducer";
+import { listenToMenuUI } from "../../redux/actions";
 import settings from "../../settings/settings.json";
+import PaperSheet from "./PaperSheet";
 
 function Menu(props) {
     const listOfToggles = Object.keys(settings.menu.toggles);
@@ -77,8 +78,11 @@ function Menu(props) {
             newChecked.splice(currentIndex, 1);
         }
         setChecked(newChecked);
+
+        setState({ ...state, checked: newChecked });
         props.listenToMenuUI(newChecked);
     };
+
     let togglesCompsArray = [];
     for (let i = 0; i < listOfToggles.length; i++) {
         const thisToggle = (
@@ -97,6 +101,13 @@ function Menu(props) {
         );
         togglesCompsArray.push(thisToggle);
     }
+
+    const renderABMslider = () => {
+        if (state.checked && state.checked.includes("ABM")) {
+            return <PaperSheet />;
+        } else return null;
+    };
+
     return (
         <div>
             <div className={classes.root}>
@@ -119,6 +130,7 @@ function Menu(props) {
                     <MenuIcon />
                 </Fab>
             </div>
+            {renderABMslider()}
         </div>
     );
 }

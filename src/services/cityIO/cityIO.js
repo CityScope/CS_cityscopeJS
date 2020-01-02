@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getCityioData } from "../../redux/reducer";
+import { getCityioData } from "../../redux/actions";
 import settings from "../../settings/settings.json";
 import CityioFail from "./cityioFail";
 
