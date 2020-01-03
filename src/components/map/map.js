@@ -119,8 +119,8 @@ class Map extends Component {
             );
         }
 
-        const timeOfDay =
-            date.getHours().toString() + ":" + date.getMinutes().toString();
+        // const timeOfDay =
+        // date.getHours().toString() + ":" + date.getMinutes().toString();
 
         // if (date.getMinutes() % 20 === 0)
         // this.props.listenToMapEvents({ time: timeOfDay });
@@ -166,7 +166,37 @@ class Map extends Component {
             // FOR NOW FAKE TYPE
             this._rndType();
         }
+
+        this._prepareEditsForCityIO(prevProps);
     }
+
+    /**
+     * checks if edits are done (toggled off)
+     * than returns a redux state
+     * with cityIO payload and flag
+     */
+    _prepareEditsForCityIO = prevProps => {
+        if (
+            prevProps.menu.includes("EDIT") &&
+            !this.props.menu.includes("EDIT")
+        ) {
+            let arr = [];
+
+            const geo = this.state.meta_grid.features;
+            console.log("finished editing...");
+
+            for (let i = 0; i < geo.length; i++) {
+                geo[i].properties.height = Math.random() * 100;
+                arr[i] = {
+                    [i]: geo[i].properties
+                };
+            }
+
+            for (let i = 0; i < geo.length; i++) {
+                geo[i].properties.height = arr[i].height;
+            }
+        }
+    };
 
     /**
      * Description. fix deck issue
@@ -204,6 +234,8 @@ class Map extends Component {
     _handleSelection = e => {
         let rndType = this.state.randomType;
         const multiSelectedObj = this._mulipleObjPicked(e);
+        console.log(multiSelectedObj);
+
         multiSelectedObj.forEach(selected => {
             const thisCellProps = selected.object.properties;
             if (

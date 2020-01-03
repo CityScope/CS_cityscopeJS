@@ -48,6 +48,7 @@ function RangeSlider(props) {
 
     const handleSetTimeValue = (e, newValue) => {
         setTimeValue(newValue);
+        // ! not working
         props.listenToSlidersEvents({
             ...props,
             SLIDERS: {
@@ -59,6 +60,7 @@ function RangeSlider(props) {
 
     const handleSetSpeedValue = (e, newValue) => {
         setSpeedValue(newValue);
+        // ! not working
         props.listenToSlidersEvents({
             ...props,
             SLIDERS: {
@@ -98,8 +100,6 @@ function RangeSlider(props) {
 }
 
 const mapStateToProps = state => {
-    console.log(state);
-
     return {
         ABMlayerEvents: state.MAP
     };
