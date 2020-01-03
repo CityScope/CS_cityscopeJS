@@ -171,34 +171,6 @@ class Map extends Component {
     }
 
     /**
-     * checks if edits are done (toggled off)
-     * than returns a redux state
-     * with cityIO payload and flag
-     */
-    _prepareEditsForCityIO = prevProps => {
-        if (
-            prevProps.menu.includes("EDIT") &&
-            !this.props.menu.includes("EDIT")
-        ) {
-            let arr = [];
-
-            const geo = this.state.meta_grid.features;
-            console.log("finished editing...");
-
-            for (let i = 0; i < geo.length; i++) {
-                geo[i].properties.height = Math.random() * 100;
-                arr[i] = {
-                    [i]: geo[i].properties
-                };
-            }
-
-            for (let i = 0; i < geo.length; i++) {
-                geo[i].properties.height = arr[i].height;
-            }
-        }
-    };
-
-    /**
      * Description. fix deck issue
      * with rotate right botton
      */
@@ -234,7 +206,6 @@ class Map extends Component {
     _handleSelection = e => {
         let rndType = this.state.randomType;
         const multiSelectedObj = this._mulipleObjPicked(e);
-        console.log(multiSelectedObj);
 
         multiSelectedObj.forEach(selected => {
             const thisCellProps = selected.object.properties;
@@ -252,6 +223,30 @@ class Map extends Component {
         this.setState({
             selectedCellsState: multiSelectedObj
         });
+    };
+
+    /**
+     * checks if edits are done (toggled off)
+     * than returns a redux state
+     * with cityIO payload and flag
+     */
+    _prepareEditsForCityIO = prevProps => {
+        if (
+            prevProps.menu.includes("EDIT") &&
+            !this.props.menu.includes("EDIT")
+        ) {
+            let arr = [];
+            let grid = this.state.meta_grid;
+            for (let i = 0; i < grid.features.length; i++) {
+                arr[i] = {
+                    [i]: grid.features[i].properties
+                };
+            }
+
+            // forces an update via an obj copy
+            const newGrid = { ...this.state.meta_grid };
+            this.setState({ meta_grid: newGrid });
+        }
     };
 
     _renderLayers() {
