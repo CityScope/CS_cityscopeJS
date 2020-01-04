@@ -232,6 +232,8 @@ class Map extends Component {
      */
     _prepareEditsForCityIO = prevProps => {
         if (
+            // finised edit
+            // should bulid it into UI
             prevProps.menu.includes("EDIT") &&
             !this.props.menu.includes("EDIT")
         ) {
@@ -242,6 +244,8 @@ class Map extends Component {
                     [i]: grid.features[i].properties
                 };
             }
+
+            console.log(this.state.meta_grid, grid);
 
             // forces an update via an obj copy
             const newGrid = { ...this.state.meta_grid };
@@ -439,6 +443,10 @@ class Map extends Component {
                 ")";
             const mousePos = this.state.mousePos;
             const divSize = 30;
+
+            let mouseX = mousePos.clientX ? mousePos.clientX - divSize / 2 : 0;
+            let mouseY = mousePos.clientY ? mousePos.clientY - divSize / 2 : 0;
+
             return (
                 <div
                     style={{
@@ -450,8 +458,8 @@ class Map extends Component {
                         pointerEvents: "none",
                         width: divSize,
                         height: divSize,
-                        left: mousePos.clientX - divSize / 2,
-                        top: mousePos.clientY - divSize / 2
+                        left: mouseX,
+                        top: mouseY
                     }}
                 ></div>
             );
