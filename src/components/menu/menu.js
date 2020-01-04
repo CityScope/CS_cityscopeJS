@@ -45,6 +45,7 @@ function Menu(props) {
 
     const classes = useStyles();
     const [toggleStateArray, setChecked] = React.useState([]);
+
     const [state, setState] = React.useState({
         left: false
     });
@@ -71,14 +72,12 @@ function Menu(props) {
     const handleToggle = value => () => {
         const currentIndex = toggleStateArray.indexOf(value);
         const newChecked = [...toggleStateArray];
-
         if (currentIndex === -1) {
             newChecked.push(value);
         } else {
             newChecked.splice(currentIndex, 1);
         }
         setChecked(newChecked);
-
         setState({ ...state, checked: newChecked });
         props.listenToMenuUI(newChecked);
     };
@@ -91,10 +90,16 @@ function Menu(props) {
                 <ListItemSecondaryAction>
                     <Switch
                         edge="end"
-                        onChange={handleToggle(listOfToggles[i])}
+                        /**
+                         * gets props with initial menu state
+                         * and turn on the layer on init
+                         */
                         checked={
-                            toggleStateArray.indexOf(listOfToggles[i]) !== -1
+                            props.menuState.includes(listOfToggles[i])
+                                ? true
+                                : false
                         }
+                        onChange={handleToggle(listOfToggles[i])}
                     />
                 </ListItemSecondaryAction>
             </ListItem>
@@ -135,8 +140,14 @@ function Menu(props) {
     );
 }
 
+const mapStateToProps = state => {
+    return {
+        menuState: state.MENU
+    };
+};
+
 const mapDispatchToProps = {
     listenToMenuUI: listenToMenuUI
 };
 
-export default connect(null, mapDispatchToProps)(Menu);
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);
