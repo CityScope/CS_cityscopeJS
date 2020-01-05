@@ -48,25 +48,20 @@ export const _proccessAccessData = data => {
 /**
  * checks if edits are done (toggled off)
  * than returns a redux state
- * with cityIO payload and flag
+ * with grid edits payload
  */
-export const _prepareEditsForCityIO = meta_grid => {
-    let arr = [];
+export const _prepareEditsForCityIO = (meta_grid, tableName) => {
+    let metaGridProps = [];
     for (let i = 0; i < meta_grid.features.length; i++) {
-        arr[i] = meta_grid.features[i].properties;
+        metaGridProps[i] = meta_grid.features[i].properties;
     }
-    _postCityIOgridEdits(arr);
-};
 
-/**
- * post grid edit to cityIO
- *
- */
-export const _postCityIOgridEdits = data => {
     axios
         .post(
-            "https://cityio.media.mit.edu/api/table/update/grasbrook/interactive_grid_data",
-            data
+            "https://cityio.media.mit.edu/api/table/update/" +
+                tableName +
+                "/interactive_grid_data",
+            metaGridProps
         )
         .then(response => {
             console.log(response);

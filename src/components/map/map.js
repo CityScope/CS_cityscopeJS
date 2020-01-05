@@ -178,7 +178,10 @@ class Map extends Component {
             prevProps.menu.includes("EDIT") &&
             !this.props.menu.includes("EDIT")
         ) {
-            _prepareEditsForCityIO(this.state.meta_grid);
+            _prepareEditsForCityIO(
+                this.state.meta_grid,
+                this.props.cityioData.tableName
+            );
         }
     }
 
