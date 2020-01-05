@@ -28,6 +28,12 @@ class Map extends Component {
         };
         this.animationFrame = null;
         this._onViewStateChange = this._onViewStateChange.bind(this);
+        this.dirLightSettings = {
+            timestamp: Date.UTC(2019, 7, 1, 12),
+            color: [255, 255, 255],
+            intensity: 1.0,
+            _shadow: true
+        };
     }
 
     _handleKeyUp = () => {
@@ -65,22 +71,22 @@ class Map extends Component {
             color: [255, 255, 255],
             intensity: 1
         });
-        const dirLight = new _SunLight({
-            timestamp: Date.UTC(2019, 7, 1, 12),
-            color: [255, 255, 255],
-            intensity: 1.0,
-            _shadow: true
-        });
+        const dirLight = new _SunLight(this.dirLightSettings);
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });
-        lightingEffect.shadowColor = [0, 0, 0, 0.3];
+        lightingEffect.shadowColor = [0, 0, 0, 0.7];
         this._effects = [lightingEffect];
     }
 
     _animate() {
+        /**
+         * remove the binded animation when comp updates
+         */
+        window.cancelAnimationFrame(this.animationFrame);
+
         // stop animation on state
         if (!this.props.menu.includes("ABM")) {
             // && this.animationFrame
-            window.cancelAnimationFrame(this.animationFrame);
+            this._effects[0].directionalLights[0].timestamp = this.dirLightSettings.timestamp;
             return;
         } else {
             const {
@@ -100,18 +106,7 @@ class Map extends Component {
                 this._animate.bind(this)
             );
 
-            this._calculateSunPosition();
-        }
-    }
-
-    /**
-     * Description. calculates the sun position
-     * to fit the `_animate` time
-     */
-    _calculateSunPosition() {
-        const { startSimHour } = settings.map.layers.ABM;
-        var date = new Date((startSimHour + this.state.time) * 1000);
-        if (this._effects) {
+            var date = new Date((startSimHour + this.state.time) * 1000);
             this._effects[0].directionalLights[0].timestamp = Date.UTC(
                 date.getFullYear(),
                 date.getMonth(),
@@ -121,12 +116,6 @@ class Map extends Component {
                 date.getSeconds()
             );
         }
-
-        // const timeOfDay =
-        // date.getHours().toString() + ":" + date.getMinutes().toString();
-
-        // if (date.getMinutes() % 20 === 0)
-        // this.props.listenToMapEvents({ time: timeOfDay });
     }
 
     componentWillUnmount() {

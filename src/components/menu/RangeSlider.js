@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { listenToSlidersEvents } from "../../redux/actions";
 
 const sixAm = 6 * 3600;
-const { startSimHour, animationSpeed, endSimHour } = settings.map.layers.ABM;
+const { startSimHour, endSimHour } = settings.map.layers.ABM;
 const sliderStart = new Date((sixAm + startSimHour) * 1000).getHours();
 const sliderEnd = new Date((sixAm + endSimHour) * 1000).getHours();
 
