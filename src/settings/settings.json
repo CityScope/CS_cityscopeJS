@@ -28,7 +28,8 @@
             "meta_grid",
             "ABM",
             "grid",
-            "access"
+            "access",
+            "interactive_grid_data"
         ]
     },
     "map": {

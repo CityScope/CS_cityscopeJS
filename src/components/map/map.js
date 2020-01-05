@@ -2,8 +2,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { listenToMapEvents } from "../../redux/actions";
-
-import { _proccessAccessData, _proccessGridData } from "./mapUtils";
+import {
+    _proccessAccessData,
+    _proccessGridData,
+    _prepareEditsForCityIO
+} from "./mapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
@@ -167,7 +170,16 @@ class Map extends Component {
             this._rndType();
         }
 
-        this._prepareEditsForCityIO(prevProps);
+        /**
+         * finised edit
+         * should have dedicated UI
+         */
+        if (
+            prevProps.menu.includes("EDIT") &&
+            !this.props.menu.includes("EDIT")
+        ) {
+            _prepareEditsForCityIO(this.state.meta_grid);
+        }
     }
 
     /**
@@ -223,34 +235,6 @@ class Map extends Component {
         this.setState({
             selectedCellsState: multiSelectedObj
         });
-    };
-
-    /**
-     * checks if edits are done (toggled off)
-     * than returns a redux state
-     * with cityIO payload and flag
-     */
-    _prepareEditsForCityIO = prevProps => {
-        if (
-            // finised edit
-            // should bulid it into UI
-            prevProps.menu.includes("EDIT") &&
-            !this.props.menu.includes("EDIT")
-        ) {
-            let arr = [];
-            let grid = this.state.meta_grid;
-            for (let i = 0; i < grid.features.length; i++) {
-                arr[i] = {
-                    [i]: grid.features[i].properties
-                };
-            }
-
-            console.log(this.state.meta_grid, grid);
-
-            // forces an update via an obj copy
-            const newGrid = { ...this.state.meta_grid };
-            this.setState({ meta_grid: newGrid });
-        }
     };
 
     _renderLayers() {
