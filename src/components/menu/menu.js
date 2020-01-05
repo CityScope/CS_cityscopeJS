@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { listenToMenuUI } from "../../redux/actions";
 import settings from "../../settings/settings.json";
 import PaperSheet from "./PaperSheet";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 function Menu(props) {
     const listOfToggles = Object.keys(settings.menu.toggles);
@@ -79,6 +80,7 @@ function Menu(props) {
         }
         setChecked(newChecked);
         setState({ ...state, checked: newChecked });
+
         props.listenToMenuUI(newChecked);
     };
 
@@ -86,20 +88,22 @@ function Menu(props) {
     for (let i = 0; i < listOfToggles.length; i++) {
         const thisToggle = (
             <ListItem key={listOfToggles[i]}>
+                <CircularProgress size={20} thickness={5} />
+
                 <ListItemText primary={listOfToggles[i]} />
                 <ListItemSecondaryAction>
                     <Switch
-                        edge="end"
                         /**
                          * gets props with initial menu state
                          * and turn on the layer on init
                          */
+                        edge="end"
+                        onChange={handleToggle(listOfToggles[i])}
                         checked={
                             props.menuState.includes(listOfToggles[i])
                                 ? true
                                 : false
                         }
-                        onChange={handleToggle(listOfToggles[i])}
                     />
                 </ListItemSecondaryAction>
             </ListItem>

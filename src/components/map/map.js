@@ -52,6 +52,11 @@ class Map extends Component {
         this.setState({ viewState });
     }
 
+    /**
+     * resets the camera viewport
+     * to cityIO header data
+     * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
+     */
     _setViewStateToTableHeader() {
         const header = this.props.cityioData.header;
         this.setState({
