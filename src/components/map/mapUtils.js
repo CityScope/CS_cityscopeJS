@@ -14,7 +14,7 @@ export const _proccessGridData = cityioData => {
         geojson.features[i].properties = cityioData.interactive_grid_data[i];
     }
     // handles interactive mapping of the grid
-    // this should only happen once, to remove on future builds
+    // this should only happen once, to be removed on future builds
     const interactiveMapping = cityioData.interactive_grid_mapping;
     for (let i in interactiveMapping) {
         geojson.features[interactiveMapping[i]].properties.type = grid[i][0];
@@ -24,6 +24,32 @@ export const _proccessGridData = cityioData => {
             types[grid[i][0]].height;
     }
     return geojson;
+};
+
+/**
+ * Data format:
+ * [
+ *   {text: 'type', coordinates: [-122.466233, 37.684638]},
+ *   ...
+ * ]
+ *
+ * Grid data format:
+ * features[i].geometry.coordinates[0][0]
+ */
+export const _proccessGridTextData = data => {
+    const meta_grid = data.meta_grid;
+    let textData = [];
+    for (let i = 0; i < meta_grid.features.length; i++) {
+        textData[i] = {
+            text: meta_grid.features[i].properties.height.toString(),
+            coordinates: [
+                meta_grid.features[i].geometry.coordinates[0][0][0],
+                meta_grid.features[i].geometry.coordinates[0][0][1],
+                meta_grid.features[i].properties.height + 10
+            ]
+        };
+    }
+    return textData;
 };
 
 /**

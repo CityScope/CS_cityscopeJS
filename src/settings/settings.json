@@ -68,7 +68,7 @@
             "2": { "height": 20, "color": [254, 224, 139] },
             "3": { "height": 30, "color": [230, 245, 152] },
             "4": { "height": 40, "color": [153, 213, 148] },
-            "5": { "height": 50, "color": [50, 136, 189] },
+            "5": { "height": 80, "color": [50, 136, 189] },
             "white": { "height": 10, "color": [255, 255, 255, 200] },
             "water": { "height": 0, "color": [40, 70, 100, 200] }
         }
@@ -76,6 +76,7 @@
     "menu": {
         "toggles": {
             "GRID": true,
+            "TEXT": false,
             "EDIT": false,
             "PATHS": false,
             "ABM": false,

@@ -5,13 +5,14 @@ import { listenToMapEvents } from "../../redux/actions";
 import {
     _proccessAccessData,
     _proccessGridData,
-    _prepareEditsForCityIO
+    _prepareEditsForCityIO,
+    _proccessGridTextData
 } from "./mapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
+import { HeatmapLayer, PathLayer, GeoJsonLayer, TextLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../settings/settings.json";
 
@@ -151,14 +152,20 @@ class Map extends Component {
         if (prevState.cityioData !== this.props.cityioData) {
             console.log("...new map data");
 
+            // get cityio data from props
             const data = this.props.cityioData;
+
             this.setState({ cityioData: data });
             const gridData = _proccessGridData(data);
-            this.setState({
-                meta_grid: gridData
-            });
+            const gridTextData = _proccessGridTextData(data);
+
             const accessData = _proccessAccessData(data);
-            this.setState({ access: accessData });
+
+            this.setState({
+                meta_grid: gridData,
+                gridTextData: gridTextData,
+                access: accessData
+            });
 
             // FOR NOW FAKE TYPE
             this._rndType();
@@ -238,6 +245,18 @@ class Map extends Component {
         const cityioData = this.props.cityioData;
         let layers = [];
 
+        if (this.props.menu.includes("TEXT")) {
+            layers.push(
+                new TextLayer({
+                    id: "gridText-layer",
+                    data: this.state.gridTextData,
+                    getText: d => d.text,
+                    getPosition: d => d.coordinates,
+                    getColor: [255, 255, 255],
+                    getSize: 16
+                })
+            );
+        }
         if (this.props.menu.includes("GRID")) {
             layers.push(
                 new GeoJsonLayer({
