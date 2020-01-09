@@ -10,8 +10,11 @@ export const _proccessGridData = cityioData => {
     const grid = cityioData.grid;
     const geojson = cityioData.meta_grid;
     // update meta_grid features from cityio
-    for (let i = 0; i < geojson.features.length; i++) {
-        geojson.features[i].properties = cityioData.interactive_grid_data[i];
+    if (cityioData.interactive_grid_data) {
+        for (let i = 0; i < geojson.features.length; i++) {
+            geojson.features[i].properties =
+                cityioData.interactive_grid_data[i];
+        }
     }
     // handles interactive mapping of the grid
     // this should only happen once, to be removed on future builds

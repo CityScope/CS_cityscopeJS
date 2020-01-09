@@ -372,7 +372,7 @@ class Map extends Component {
                         for (let i in d.path) {
                             d.path[i][0] = d.path[i][0] + noisePath;
                             d.path[i][1] = d.path[i][1] + noisePath;
-                            d.path[i][2] = 200;
+                            d.path[i][2] = 10;
                         }
                         return d.path;
                     },
