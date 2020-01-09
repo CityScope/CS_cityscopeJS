@@ -45,7 +45,13 @@ function Menu(props) {
     }));
 
     const classes = useStyles();
-    const [toggleStateArray, setChecked] = React.useState([]);
+    const [toggleStateArray, setChecked] = React.useState(
+        Object.keys(settings.menu.toggles)
+            .filter(function(k) {
+                return settings.menu.toggles[k];
+            })
+            .map(String)
+    );
 
     const [state, setState] = React.useState({
         left: false
