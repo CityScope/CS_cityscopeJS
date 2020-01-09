@@ -1,5 +1,37 @@
 import settings from "../../settings/settings.json";
 import axios from "axios";
+var tzlookup = require("tz-lookup");
+
+/**
+ * returns time for table location
+ * for the light emlement
+ * @param {*} header
+ */
+
+export const setDirLightSettings = header => {
+    // get the hour element of this location
+    let hourAtLatLong = new Date().toLocaleString("en-US", {
+        timeZone: tzlookup(header.spatial.latitude, header.spatial.longitude),
+        hour: "2-digit",
+        hour12: false
+    });
+
+    // get the time in greenwich
+    var greenwichDate = new Date();
+    var greenwichHours = greenwichDate.getUTCHours();
+    // calc the offset
+    let timeZoneOffset = hourAtLatLong - greenwichHours;
+
+    // return the light setup
+    let lightSettings = {
+        timestamp: Date.UTC(2019, 7, 1, 10 - timeZoneOffset),
+        color: [255, 255, 255],
+        intensity: 1.0,
+        _shadow: true
+    };
+
+    return lightSettings;
+};
 
 /**
  * Description. gets `props` with geojson

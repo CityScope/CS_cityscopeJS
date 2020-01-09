@@ -18,7 +18,8 @@
         "react-spinners": "^0.6.1",
         "react-vis": "^1.11.7",
         "redux": "^4.0.5",
-        "typescript": "^3.7.4"
+        "typescript": "^3.7.4",
+        "tz-lookup": "^6.1.25"
     },
     "scripts": {
         "start": "react-scripts start",

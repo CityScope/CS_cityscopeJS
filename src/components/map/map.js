@@ -6,7 +6,8 @@ import {
     _proccessAccessData,
     _proccessGridData,
     _prepareEditsForCityIO,
-    _proccessGridTextData
+    _proccessGridTextData,
+    setDirLightSettings
 } from "./mapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
@@ -29,12 +30,10 @@ class Map extends Component {
         };
         this.animationFrame = null;
         this._onViewStateChange = this._onViewStateChange.bind(this);
-        this.dirLightSettings = {
-            timestamp: Date.UTC(2019, 7, 1, 12),
-            color: [255, 255, 255],
-            intensity: 1.0,
-            _shadow: true
-        };
+
+        this.dirLightSettings = setDirLightSettings(
+            this.props.cityioData.header
+        );
     }
 
     _handleKeyUp = () => {
