@@ -63,14 +63,46 @@
             "bearing": 0
         },
         "types": {
-            "0": { "height": 1, "color": [213, 62, 79] },
-            "1": { "height": 10, "color": [252, 141, 89] },
-            "2": { "height": 20, "color": [254, 224, 139] },
-            "3": { "height": 30, "color": [230, 245, 152] },
-            "4": { "height": 40, "color": [153, 213, 148] },
-            "5": { "height": 80, "color": [50, 136, 189] },
-            "white": { "height": 10, "color": [255, 255, 255, 200] },
-            "water": { "height": 0, "color": [40, 70, 100, 200] }
+            "0": {
+                "height": 1,
+                "color": [255, 255, 255, 200],
+                "name": "Empty"
+            },
+            "1": {
+                "height": 0,
+                "color": [40, 70, 100, 200],
+                "name": "Roads"
+            },
+            "2": {
+                "height": 10,
+                "color": [153, 213, 148],
+                "name": "Green"
+            },
+            "3": {
+                "height": 10,
+                "color": [252, 141, 89],
+                "name": "Residential Low"
+            },
+            "4": {
+                "height": 20,
+                "color": [254, 224, 139],
+                "name": "Residential Mid"
+            },
+            "5": {
+                "height": 30,
+                "color": [230, 245, 152],
+                "name": "Residential Tall"
+            },
+            "6": {
+                "height": 40,
+                "color": [213, 62, 79],
+                "name": "Office Mixuse"
+            },
+            "7": {
+                "height": 80,
+                "color": [50, 136, 189],
+                "name": "Office Tower"
+            }
         }
     },
     "menu": {

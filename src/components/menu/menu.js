@@ -94,7 +94,7 @@ function Menu(props) {
     for (let i = 0; i < listOfToggles.length; i++) {
         const thisToggle = (
             <ListItem key={listOfToggles[i]}>
-                <CircularProgress size={20} thickness={5} />
+                {/* <CircularProgress size={20} thickness={5} /> */}
 
                 <ListItemText primary={listOfToggles[i]} />
                 <ListItemSecondaryAction>

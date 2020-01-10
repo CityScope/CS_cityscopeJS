@@ -276,8 +276,8 @@ class Map extends Component {
                             : d.properties.color
                             ? d.properties.color
                             : d.properties.land_use !== "None"
-                            ? settings.map.types.white.color
-                            : settings.map.types.water.color,
+                            ? settings.map.types[0].color
+                            : settings.map.types[1].color,
 
                     onDrag: event => {
                         if (
@@ -451,6 +451,7 @@ class Map extends Component {
                     style={{
                         border: "2px solid",
                         borderColor: color,
+                        color: color,
                         borderRadius: "15%",
                         position: "fixed",
                         zIndex: 1,
@@ -460,7 +461,17 @@ class Map extends Component {
                         left: mouseX,
                         top: mouseY
                     }}
-                ></div>
+                >
+                    <div
+                        style={{
+                            position: "relative",
+                            left: divSize + 10,
+                            fontSize: "1vw"
+                        }}
+                    >
+                        {this.state.randomType.name}
+                    </div>
+                </div>
             );
         }
     };
