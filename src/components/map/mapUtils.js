@@ -20,17 +20,8 @@ export const setDirLightSettings = header => {
     var greenwichDate = new Date();
     var greenwichHours = greenwichDate.getUTCHours();
     // calc the offset
-    let timeZoneOffset = hourAtLatLong - greenwichHours;
-
-    // return the light setup
-    let lightSettings = {
-        timestamp: Date.UTC(2019, 7, 1, 10 - timeZoneOffset),
-        color: [255, 255, 255],
-        intensity: 1.0,
-        _shadow: true
-    };
-
-    return lightSettings;
+    let timeZoneOffset = greenwichHours + 24 - parseInt(hourAtLatLong);
+    return timeZoneOffset;
 };
 
 /**

@@ -31,9 +31,14 @@ class Map extends Component {
         this.animationFrame = null;
         this._onViewStateChange = this._onViewStateChange.bind(this);
 
-        this.dirLightSettings = setDirLightSettings(
-            this.props.cityioData.header
-        );
+        this.timeZoneOffset = setDirLightSettings(this.props.cityioData.header);
+
+        this.dirLightSettings = {
+            timestamp: Date.UTC(2019, 7, 1, 10 + this.timeZoneOffset),
+            color: [255, 255, 255],
+            intensity: 1.0,
+            _shadow: true
+        };
     }
 
     _handleKeyUp = () => {
@@ -99,6 +104,7 @@ class Map extends Component {
                 animationSpeed,
                 endSimHour
             } = settings.map.layers.ABM;
+
             let t = this.state.time + animationSpeed;
             if (
                 this.state.time > endSimHour ||
@@ -111,7 +117,12 @@ class Map extends Component {
                 this._animate.bind(this)
             );
 
-            var date = new Date((startSimHour + this.state.time) * 1000);
+            let offset = this.timeZoneOffset * 3600;
+            console.log(this.timeZoneOffset);
+
+            var date = new Date(
+                (startSimHour + offset + this.state.time) * 1000
+            );
             this._effects[0].directionalLights[0].timestamp = Date.UTC(
                 date.getFullYear(),
                 date.getMonth(),
