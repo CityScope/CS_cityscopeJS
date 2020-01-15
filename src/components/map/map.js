@@ -288,7 +288,13 @@ class Map extends Component {
                             : d.properties.land_use !== "None"
                             ? settings.map.types[0].color
                             : settings.map.types[1].color,
-
+                    onClick: event => {
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        )
+                            this._handleSelection(event);
+                    },
                     onDrag: event => {
                         if (
                             this.props.menu.includes("EDIT") &&
@@ -440,7 +446,7 @@ class Map extends Component {
      * draw target area around mouse
      */
     _renderSelectionTarget = () => {
-        if (this.props.menu.includes("EDIT")) {
+        if (this.props.menu.includes("EDIT") && this.state.mousePos) {
             const rt = this.state.randomType;
             const color =
                 "rgb(" +
@@ -453,8 +459,8 @@ class Map extends Component {
             const mousePos = this.state.mousePos;
             const divSize = 30;
 
-            let mouseX = mousePos.clientX ? mousePos.clientX - divSize / 2 : 0;
-            let mouseY = mousePos.clientY ? mousePos.clientY - divSize / 2 : 0;
+            let mouseX = mousePos.clientX - divSize / 2;
+            let mouseY = mousePos.clientY - divSize / 2;
 
             return (
                 <div

@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
+import { createMuiTheme } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -12,26 +13,27 @@ import { connect } from "react-redux";
 import { listenToMenuUI } from "../../redux/actions";
 import settings from "../../settings/settings.json";
 import PaperSheet from "./PaperSheet";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { ThemeProvider } from "@material-ui/styles";
+
+// import CircularProgress from "@material-ui/core/CircularProgress";
 
 function Menu(props) {
     const listOfToggles = Object.keys(settings.menu.toggles);
     const useStyles = makeStyles(theme => ({
         root: {
             width: "100%",
-            maxWidth: "15em",
+            maxWidth: "15vw",
             position: "absolute",
             "& > *": {
-                margin: theme.spacing(1)
+                margin: theme.spacing(2)
             }
         },
         paper: {
             background: "black",
             color: "white"
         },
-
         list: {
-            width: "15em"
+            width: "15vw"
         },
         fullList: {
             width: "auto"
@@ -45,6 +47,11 @@ function Menu(props) {
     }));
 
     const classes = useStyles();
+    const theme = createMuiTheme({
+        palette: {
+            type: "dark"
+        }
+    });
     const [toggleStateArray, setChecked] = React.useState(
         Object.keys(settings.menu.toggles)
             .filter(function(k) {
@@ -124,29 +131,31 @@ function Menu(props) {
     };
 
     return (
-        <div>
-            <div className={classes.root}>
-                <Drawer
-                    anchor="left"
-                    open={state.left}
-                    onClose={toggleDrawer("left", false)}
-                >
-                    {sideList("left")}
-                    <List className={classes.root}>
-                        <h2>cityscopeJS</h2>
-                        {togglesCompsArray}
-                    </List>
-                </Drawer>
-                <Fab
-                    aria-label="add"
-                    className={classes.menuButton}
-                    onClick={toggleDrawer("left", true)}
-                >
-                    <MenuIcon />
-                </Fab>
+        <ThemeProvider theme={theme}>
+            <div>
+                <div className={classes.root}>
+                    <Drawer
+                        anchor="left"
+                        open={state.left}
+                        onClose={toggleDrawer("left", false)}
+                    >
+                        {sideList("left")}
+                        <List className={classes.root}>
+                            <h2>cityscopeJS</h2>
+                            {togglesCompsArray}
+                        </List>
+                    </Drawer>
+                    <Fab
+                        aria-label="add"
+                        className={classes.menuButton}
+                        onClick={toggleDrawer("left", true)}
+                    >
+                        <MenuIcon />
+                    </Fab>
+                </div>
+                {renderABMslider()}
             </div>
-            {renderABMslider()}
-        </div>
+        </ThemeProvider>
     );
 }
 
