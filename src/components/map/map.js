@@ -118,7 +118,6 @@ class Map extends Component {
             );
 
             let offset = this.timeZoneOffset * 3600;
-            console.log(this.timeZoneOffset);
 
             var date = new Date(
                 (startSimHour + offset + this.state.time) * 1000
