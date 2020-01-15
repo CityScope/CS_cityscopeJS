@@ -41,18 +41,6 @@ class Map extends Component {
         };
     }
 
-    _handleKeyUp = () => {
-        this.setState({ keyDownState: null });
-    };
-
-    _handleKeyDown = e => {
-        this.setState({ keyDownState: e.nativeEvent.key });
-        // compute rnd color for now
-        if (e.nativeEvent.key === " ") {
-            this._rndType();
-        }
-    };
-
     _onViewStateChange({ viewState }) {
         this.setState({ viewState });
     }
@@ -250,6 +238,85 @@ class Map extends Component {
         });
     };
 
+    /**
+     * Description.
+     * draw target area around mouse
+     */
+    _renderSelectionTarget = () => {
+        if (this.props.menu.includes("EDIT") && this.state.mousePos) {
+            const rc = this.state.randomType.color;
+            const color = "rgb(" + rc[0] + "," + rc[1] + "," + rc[2] + ")";
+            const mousePos = this.state.mousePos;
+            const divSize = 30;
+
+            let mouseX = mousePos.clientX - divSize / 2;
+            let mouseY = mousePos.clientY - divSize / 2;
+
+            return (
+                <div
+                    style={{
+                        border: "2px solid",
+                        backgroundColor: this.state.mouseDown
+                            ? "rgba(" +
+                              rc[0] +
+                              "," +
+                              rc[1] +
+                              "," +
+                              rc[2] +
+                              ",0.6)"
+                            : "rgba(0,0,0,0)",
+                        borderColor: color,
+                        color: color,
+                        borderRadius: "15%",
+                        position: "fixed",
+                        zIndex: 1,
+                        pointerEvents: "none",
+                        width: divSize,
+                        height: divSize,
+                        left: mouseX,
+                        top: mouseY
+                    }}
+                >
+                    <div
+                        style={{
+                            position: "relative",
+                            left: divSize + 10,
+                            fontSize: "1vw"
+                        }}
+                    >
+                        {this.state.randomType.name}
+                    </div>
+                </div>
+            );
+        }
+    };
+
+    /**
+     * Description.
+     * Temp def. for color selection
+     */
+    _rndType = () => {
+        var keys = Object.keys(settings.map.types);
+        let randomType =
+            settings.map.types[keys[(keys.length * Math.random()) << 0]];
+        this.setState({ randomType: randomType });
+    };
+
+    _handleKeyUp = () => {
+        this.setState({ keyDownState: null });
+    };
+
+    _handleKeyDown = e => {
+        this.setState({ keyDownState: e.nativeEvent.key });
+        // compute rnd color for now
+        if (e.nativeEvent.key === " ") {
+            this._rndType();
+        }
+    };
+
+    /**
+     * renders deck gl layers
+     */
     _renderLayers() {
         const cityioData = this.props.cityioData;
         let layers = [];
@@ -426,72 +493,6 @@ class Map extends Component {
         return layers;
     }
 
-    _onWebGLInitialized = gl => {
-        this.setState({ gl });
-    };
-
-    /**
-     * Description.
-     * Temp def. for color selection
-     */
-    _rndType = () => {
-        var keys = Object.keys(settings.map.types);
-        let randomType =
-            settings.map.types[keys[(keys.length * Math.random()) << 0]];
-        this.setState({ randomType: randomType });
-    };
-
-    /**
-     * Description.
-     * draw target area around mouse
-     */
-    _renderSelectionTarget = () => {
-        if (this.props.menu.includes("EDIT") && this.state.mousePos) {
-            const rt = this.state.randomType;
-            const color =
-                "rgb(" +
-                rt.color[0] +
-                "," +
-                rt.color[1] +
-                "," +
-                rt.color[2] +
-                ")";
-            const mousePos = this.state.mousePos;
-            const divSize = 30;
-
-            let mouseX = mousePos.clientX - divSize / 2;
-            let mouseY = mousePos.clientY - divSize / 2;
-
-            return (
-                <div
-                    style={{
-                        border: "2px solid",
-                        borderColor: color,
-                        color: color,
-                        borderRadius: "15%",
-                        position: "fixed",
-                        zIndex: 1,
-                        pointerEvents: "none",
-                        width: divSize,
-                        height: divSize,
-                        left: mouseX,
-                        top: mouseY
-                    }}
-                >
-                    <div
-                        style={{
-                            position: "relative",
-                            left: divSize + 10,
-                            fontSize: "1vw"
-                        }}
-                    >
-                        {this.state.randomType.name}
-                    </div>
-                </div>
-            );
-        }
-    };
-
     render() {
         return (
             <div
@@ -500,6 +501,16 @@ class Map extends Component {
                 onMouseMove={e =>
                     this.setState({
                         mousePos: e.nativeEvent
+                    })
+                }
+                onMouseUp={() =>
+                    this.setState({
+                        mouseDown: false
+                    })
+                }
+                onMouseDown={() =>
+                    this.setState({
+                        mouseDown: true
                     })
                 }
             >

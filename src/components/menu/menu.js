@@ -22,10 +22,10 @@ function Menu(props) {
     const useStyles = makeStyles(theme => ({
         root: {
             width: "100%",
-            maxWidth: "15vw",
+            maxWidth: "15em",
             position: "absolute",
             "& > *": {
-                margin: theme.spacing(2)
+                margin: theme.spacing(1)
             }
         },
         paper: {
@@ -33,7 +33,7 @@ function Menu(props) {
             color: "white"
         },
         list: {
-            width: "15vw"
+            width: "15em"
         },
         fullList: {
             width: "auto"
