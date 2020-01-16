@@ -60,7 +60,7 @@ class Map extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.menu !== prevState.menu) {
             this.setState({ menu: this.props.menu });
-            // start ainmation/sim
+            // start ainmation/sim/roate
             this._animate();
         }
         if (prevState.cityioData !== this.props.cityioData) {
@@ -164,22 +164,31 @@ class Map extends Component {
             );
 
             this.setState({ time: t });
-        } else if (this.props.menu.includes("ROTATE")) {
-            let bearing = this.state.bearing ? this.state.bearing : 0;
-            bearing < 360 ? (bearing += 1) : (bearing = 0);
-            this.setState({ bearing: bearing });
-            console.log(bearing);
+        }
+        if (this.props.menu.includes("ROTATE")) {
+            let bearing = this.state.viewState.bearing
+                ? this.state.viewState.bearing
+                : 0;
+            bearing < 360 ? (bearing += 0.05) : (bearing = 0);
+
+            this.setState({
+                viewState: {
+                    ...this.state.viewState,
+                    bearing: bearing
+                }
+            });
         }
 
+        this.animationFrame = window.requestAnimationFrame(
+            this._animate.bind(this)
+        );
+
         // stop animation on state
-        else if (!this.props.menu.includes("ABM")) {
+        if (!this.props.menu.includes("ABM")) {
             // && this.animationFrame
             this._effects[0].directionalLights[0].timestamp = this.dirLightSettings.timestamp;
             return;
         }
-        this.animationFrame = window.requestAnimationFrame(
-            this._animate.bind(this)
-        );
     }
 
     /**
