@@ -30,15 +30,69 @@ class Map extends Component {
         };
         this.animationFrame = null;
         this._onViewStateChange = this._onViewStateChange.bind(this);
-
         this.timeZoneOffset = setDirLightSettings(this.props.cityioData.header);
-
         this.dirLightSettings = {
             timestamp: Date.UTC(2019, 7, 1, 10 + this.timeZoneOffset),
             color: [255, 255, 255],
             intensity: 1.0,
             _shadow: true
         };
+    }
+
+    componentWillUnmount() {
+        if (this.animationFrame) {
+            window.cancelAnimationFrame(this.animationFrame);
+        }
+    }
+
+    componentDidMount() {
+        // fix deck view rotate
+        this._rightClickViewRotate();
+        // setup sun effects
+        this._setupEffects();
+        // zoom map on CS table location
+        this._setViewStateToTableHeader();
+    }
+
+    /**
+     * handels events as they derived from redux props
+     */
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.menu !== prevState.menu) {
+            this.setState({ menu: this.props.menu });
+            // start ainmation/sim
+            this._animate();
+        }
+        if (prevState.cityioData !== this.props.cityioData) {
+            console.log("...new map data");
+            // get cityio data from props
+            const data = this.props.cityioData;
+            this.setState({ cityioData: data });
+            const gridData = _proccessGridData(data);
+            const gridTextData = _proccessGridTextData(data);
+            const accessData = _proccessAccessData(data);
+            this.setState({
+                meta_grid: gridData,
+                gridTextData: gridTextData,
+                access: accessData
+            });
+            // FOR NOW FAKE TYPE
+            this._rndType();
+        }
+
+        /**
+         * finised edit
+         * should have dedicated UI
+         */
+        if (
+            prevProps.menu.includes("EDIT") &&
+            !this.props.menu.includes("EDIT")
+        ) {
+            _prepareEditsForCityIO(
+                this.state.meta_grid,
+                this.props.cityioData.tableName
+            );
+        }
     }
 
     _onViewStateChange({ viewState }) {
@@ -81,12 +135,7 @@ class Map extends Component {
          */
         window.cancelAnimationFrame(this.animationFrame);
 
-        // stop animation on state
-        if (!this.props.menu.includes("ABM")) {
-            // && this.animationFrame
-            this._effects[0].directionalLights[0].timestamp = this.dirLightSettings.timestamp;
-            return;
-        } else {
+        if (this.props.menu.includes("ABM")) {
             const {
                 startSimHour,
                 animationSpeed,
@@ -100,13 +149,8 @@ class Map extends Component {
             ) {
                 t = startSimHour;
             }
-            this.setState({ time: t });
-            this.animationFrame = window.requestAnimationFrame(
-                this._animate.bind(this)
-            );
 
             let offset = this.timeZoneOffset * 3600;
-
             var date = new Date(
                 (startSimHour + offset + this.state.time) * 1000
             );
@@ -118,69 +162,24 @@ class Map extends Component {
                 date.getMinutes(),
                 date.getSeconds()
             );
-        }
-    }
 
-    componentWillUnmount() {
-        if (this.animationFrame) {
-            window.cancelAnimationFrame(this.animationFrame);
-        }
-    }
-
-    componentDidMount() {
-        // fix deck view rotate
-        this._rightClickViewRotate();
-        // setup sun effects
-        this._setupEffects();
-        // zoom map on CS table location
-        this._setViewStateToTableHeader();
-    }
-
-    /**
-     * handels events as they derived from redux props
-     */
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.menu !== prevState.menu) {
-            this.setState({ menu: this.props.menu });
-            // start ainmation/sim
-            this._animate();
+            this.setState({ time: t });
+        } else if (this.props.menu.includes("ROTATE")) {
+            let bearing = this.state.bearing ? this.state.bearing : 0;
+            bearing < 360 ? (bearing += 1) : (bearing = 0);
+            this.setState({ bearing: bearing });
+            console.log(bearing);
         }
 
-        if (prevState.cityioData !== this.props.cityioData) {
-            console.log("...new map data");
-
-            // get cityio data from props
-            const data = this.props.cityioData;
-
-            this.setState({ cityioData: data });
-            const gridData = _proccessGridData(data);
-            const gridTextData = _proccessGridTextData(data);
-
-            const accessData = _proccessAccessData(data);
-
-            this.setState({
-                meta_grid: gridData,
-                gridTextData: gridTextData,
-                access: accessData
-            });
-
-            // FOR NOW FAKE TYPE
-            this._rndType();
+        // stop animation on state
+        else if (!this.props.menu.includes("ABM")) {
+            // && this.animationFrame
+            this._effects[0].directionalLights[0].timestamp = this.dirLightSettings.timestamp;
+            return;
         }
-
-        /**
-         * finised edit
-         * should have dedicated UI
-         */
-        if (
-            prevProps.menu.includes("EDIT") &&
-            !this.props.menu.includes("EDIT")
-        ) {
-            _prepareEditsForCityIO(
-                this.state.meta_grid,
-                this.props.cityioData.tableName
-            );
-        }
+        this.animationFrame = window.requestAnimationFrame(
+            this._animate.bind(this)
+        );
     }
 
     /**
@@ -514,6 +513,7 @@ class Map extends Component {
                     })
                 }
             >
+                {/* renders the slection box div */}
                 <div>{this._renderSelectionTarget()}</div>
 
                 <DeckGL

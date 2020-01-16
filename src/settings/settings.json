@@ -113,7 +113,8 @@
             "PATHS": false,
             "ABM": false,
             "ACCESS": false,
-            "RADAR": false
+            "RADAR": false,
+            "ROTATE": false
         }
     }
 }

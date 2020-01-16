@@ -6,6 +6,7 @@ import MenuContainer from "./components/menu/menuContainer";
 import MapContainer from "./components/map/mapContainer";
 import VisContainer from "./components/vis/visContainer";
 import React, { Component } from "react";
+
 const store = configureStore();
 
 class App extends Component {
