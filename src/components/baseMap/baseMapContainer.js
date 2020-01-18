@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import MAP from "./map";
+import MAP from "./baseMap";
 import { connect } from "react-redux";
 import { Layer } from "../prjMap/layer";
 

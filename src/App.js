@@ -3,7 +3,7 @@ import "./index.css";
 import configureStore from "./redux/store";
 import CityIO from "./services/cityIO/cityIO";
 import MenuContainer from "./components/menu/menuContainer";
-import MapContainer from "./components/map/mapContainer";
+import MapContainer from "./components/baseMap/baseMapContainer";
 import VisContainer from "./components/vis/visContainer";
 import React, { Component } from "react";
 

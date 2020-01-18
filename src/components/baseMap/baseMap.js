@@ -8,7 +8,7 @@ import {
     _prepareEditsForCityIO,
     _proccessGridTextData,
     setDirLightSettings
-} from "./mapUtils";
+} from "./baseMapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
