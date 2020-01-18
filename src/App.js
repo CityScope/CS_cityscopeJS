@@ -13,8 +13,8 @@ class App extends Component {
     render() {
         return (
             <Provider store={store}>
-                <CityIO />
                 <MapContainer />
+                <CityIO />
                 <VisContainer />
                 <MenuContainer />
             </Provider>

@@ -40,7 +40,7 @@ function Menu(props) {
         },
 
         menuButton: {
-            position: "absolute",
+            position: "fixed",
             top: theme.spacing(2),
             left: theme.spacing(2)
         }

@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import MAP from "./map";
 import { connect } from "react-redux";
+import { Layer } from "../prjMap/layer";
 
 class MapContainer extends Component {
+    _checkKeystone = () => {
+        return this.props.menu.includes("KS") ? true : false;
+    };
+
     render() {
         if (
             this.props &&
@@ -10,10 +15,15 @@ class MapContainer extends Component {
             this.props.cityioData.header
         ) {
             return (
-                <MAP
-                    cityioData={this.props.cityioData}
-                    menu={this.props.menu}
-                />
+                <Layer
+                    style={{ height: "100vh", width: "100vw" }}
+                    isEditMode={this._checkKeystone()}
+                >
+                    <MAP
+                        cityioData={this.props.cityioData}
+                        menu={this.props.menu}
+                    />
+                </Layer>
             );
         } else {
             return null;

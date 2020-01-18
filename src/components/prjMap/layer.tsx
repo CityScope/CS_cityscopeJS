@@ -110,12 +110,10 @@ export class Layer extends React.Component<Props, State> {
         containerTranslate: [this.props.x || 0, this.props.y || 0]
     };
 
-    componentWillMount() {
+    componentDidMount() {
         window.addEventListener("mousemove", this.onAnchorMouseMove);
         window.addEventListener("mousemove", this.onMouseMove);
-    }
 
-    componentDidMount() {
         if (this.container) {
             const { width, height } = this.container.getBoundingClientRect();
 

@@ -114,7 +114,8 @@
             "ABM": false,
             "ACCESS": false,
             "RADAR": false,
-            "ROTATE": false
+            "ROTATE": false,
+            "KS": false
         }
     }
 }
