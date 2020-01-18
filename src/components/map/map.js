@@ -16,6 +16,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer, TextLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../settings/settings.json";
+import { Layer } from "../prjMap/layer";
 
 class Map extends Component {
     constructor(props) {
@@ -554,6 +555,15 @@ class Map extends Component {
                         preventStyleDiffing={true}
                     />
                 </DeckGL>
+
+                <Layer x={100} y={40}>
+                    <div>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Esse a soluta eveniet impedit, fugit quisquam similique,
+                        consequatur porro qui debitis in consequuntur. Explicabo
+                        eum quo, fuga eos ipsa nesciunt rerum.
+                    </div>
+                </Layer>
             </div>
         );
     }
