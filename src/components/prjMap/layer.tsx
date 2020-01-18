@@ -140,7 +140,7 @@ export class Layer extends React.Component<Props, State> {
         window.removeEventListener("mousemove", this.onMouseMove);
     }
 
-    onAnchorMouseDown = (evt, position) => {
+    onAnchorMouseDown = (evt: any, position: any) => {
         evt.stopPropagation();
         this.anchorTranslateDelta = [
             evt.pageX - this.state.translateDelta[position][0],
@@ -150,7 +150,7 @@ export class Layer extends React.Component<Props, State> {
         this.anchorMoving = position;
     };
 
-    onAnchorMouseMove = evt => {
+    onAnchorMouseMove = (evt: any) => {
         if (
             !this.anchorTranslateDelta ||
             !this.state.sourcePoints ||
@@ -183,7 +183,7 @@ export class Layer extends React.Component<Props, State> {
         });
     };
 
-    onAnchorMouseUp = position => {
+    onAnchorMouseUp = (position: any) => {
         this.anchorTranslateDelta = undefined;
         this.anchorMoving = undefined;
     };
@@ -192,7 +192,7 @@ export class Layer extends React.Component<Props, State> {
         this.layerTranslateDelta = undefined;
     };
 
-    onMouseMove = evt => {
+    onMouseMove = (evt: any) => {
         if (!this.layerTranslateDelta || !this.props.isEditMode) {
             return;
         }
@@ -207,7 +207,7 @@ export class Layer extends React.Component<Props, State> {
         });
     };
 
-    onMouseDown = evt => {
+    onMouseDown = (evt: any) => {
         const { containerTranslate } = this.state;
         this.layerTranslateDelta = [
             evt.pageX - containerTranslate[0],

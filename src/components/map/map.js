@@ -16,6 +16,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer, TextLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../settings/settings.json";
+
 import { Layer } from "../prjMap/layer";
 
 class Map extends Component {
@@ -525,44 +526,46 @@ class Map extends Component {
             >
                 {/* renders the slection box div */}
                 <div>{this._renderSelectionTarget()}</div>
-
-                <DeckGL
-                    // sets the cursor on paint
-                    getCursor={() =>
-                        this.props.menu.includes("EDIT") ? "none" : "all-scroll"
-                    }
-                    ref={ref => {
-                        // save a reference to the Deck instance
-                        this.deckGL = ref && ref.deck;
+                <Layer
+                    style={{
+                        height: "100vw",
+                        width: "100vw"
                     }}
-                    viewState={this.state.viewState}
-                    onViewStateChange={this._onViewStateChange}
-                    layers={this._renderLayers()}
-                    effects={this._effects}
-                    controller={{
-                        dragPan: !this.state.draggingWhileEditing,
-                        dragRotate: !this.state.draggingWhileEditing
-                    }}
+                    x={100}
+                    y={40}
+                    isEditMode={true}
                 >
-                    <StaticMap
-                        asyncRender={true}
-                        dragRotate={true}
-                        reuseMaps={true}
-                        mapboxApiAccessToken={
-                            process.env.REACT_APP_MAPBOX_TOKEN
+                    <DeckGL
+                        // sets the cursor on paint
+                        getCursor={() =>
+                            this.props.menu.includes("EDIT")
+                                ? "none"
+                                : "all-scroll"
                         }
-                        mapStyle={settings.map.mapStyle.blue}
-                        preventStyleDiffing={true}
-                    />
-                </DeckGL>
-
-                <Layer x={100} y={40}>
-                    <div>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Esse a soluta eveniet impedit, fugit quisquam similique,
-                        consequatur porro qui debitis in consequuntur. Explicabo
-                        eum quo, fuga eos ipsa nesciunt rerum.
-                    </div>
+                        ref={ref => {
+                            // save a reference to the Deck instance
+                            this.deckGL = ref && ref.deck;
+                        }}
+                        viewState={this.state.viewState}
+                        onViewStateChange={this._onViewStateChange}
+                        layers={this._renderLayers()}
+                        effects={this._effects}
+                        controller={{
+                            dragPan: !this.state.draggingWhileEditing,
+                            dragRotate: !this.state.draggingWhileEditing
+                        }}
+                    >
+                        <StaticMap
+                            asyncRender={true}
+                            dragRotate={true}
+                            reuseMaps={true}
+                            mapboxApiAccessToken={
+                                process.env.REACT_APP_MAPBOX_TOKEN
+                            }
+                            mapStyle={settings.map.mapStyle.blue}
+                            preventStyleDiffing={true}
+                        />
+                    </DeckGL>
                 </Layer>
             </div>
         );
