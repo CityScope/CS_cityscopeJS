@@ -88,6 +88,14 @@ const defaultMatrix: Matrix3d = [
     1 // second and third for x and y position of element
 ];
 
+const _setDeltaVal = () => {
+    let deltaInitVals: any = {};
+    anchors.forEach(e => {
+        deltaInitVals[e] = [0, 0];
+    });
+    return deltaInitVals;
+};
+
 export class Layer extends React.Component<Props, State> {
     container: HTMLElement | null;
 
@@ -101,16 +109,15 @@ export class Layer extends React.Component<Props, State> {
 
     state: State = {
         matrix: defaultMatrix,
-        translateDelta: anchors.reduce(
-            (acc, key) => ((acc[key] = [0, 0]), acc),
-            {}
-        ),
+        translateDelta: _setDeltaVal(),
+
         sourcePoints: undefined,
         transformOrigin: [0, 0],
         containerTranslate: [this.props.x || 0, this.props.y || 0]
     };
 
     componentDidMount() {
+        console.log("starting projMap...");
         window.addEventListener("mousemove", this.onAnchorMouseMove);
         window.addEventListener("mousemove", this.onMouseMove);
 
@@ -126,14 +133,27 @@ export class Layer extends React.Component<Props, State> {
 
             this.targetPoints = [...sourcePoints] as RectPoints;
             this.setState({ sourcePoints });
-        } else {
-            throw new Error(
-                "Couldn't get a reference of the container element"
-            );
+        }
+    }
+    componentDidUpdate(prevProps: any, prevState: State) {
+        // if entered keystone mode
+        if (!prevProps.isEditMode && this.props.isEditMode) {
+            // if found prev. keystone data
+            if (localStorage.getItem("projMap")) {
+                console.log("loading prev. projMap...");
+                let s: any = localStorage.getItem("projMap");
+                this.setState(JSON.parse(s));
+            }
+            // if left keystone mode
+        } else if (prevProps.isEditMode && !this.props.isEditMode) {
+            console.log("saving edited projMap...");
+            // save whatever keystone was in state
+            localStorage.setItem("projMap", JSON.stringify(prevState));
         }
     }
 
     componentWillUnmount() {
+        console.log(this.state.translateDelta);
         window.removeEventListener("mousemove", this.onAnchorMouseMove);
         window.removeEventListener("mousemove", this.onMouseMove);
     }

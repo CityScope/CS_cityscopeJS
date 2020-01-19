@@ -17,5 +17,6 @@
         "strictPropertyInitialization": false,
         "suppressImplicitAnyIndexErrors": true
     },
+
     "include": ["src"]
 }
