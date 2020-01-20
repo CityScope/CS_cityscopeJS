@@ -6,6 +6,8 @@ import {
     vectorToTransform
 } from "./util";
 
+import DeleteLocalStorage from "./deleteLocalStorage";
+
 // Component interfaces
 export interface Props {
     style?: React.CSSProperties;
@@ -98,19 +100,14 @@ const _setDeltaVal = () => {
 
 export class Layer extends React.Component<Props, State> {
     container: HTMLElement | null;
-
     layerTranslateDelta: Vector | undefined;
     anchorTranslateDelta: Vector | undefined;
-
     isAnchorDragging = false;
-
     targetPoints: RectPoints;
     anchorMoving: Anchor | undefined;
-
     state: State = {
         matrix: defaultMatrix,
         translateDelta: _setDeltaVal(),
-
         sourcePoints: undefined,
         transformOrigin: [0, 0],
         containerTranslate: [this.props.x || 0, this.props.y || 0]
@@ -120,10 +117,8 @@ export class Layer extends React.Component<Props, State> {
         console.log("starting projMap...");
         window.addEventListener("mousemove", this.onAnchorMouseMove);
         window.addEventListener("mousemove", this.onMouseMove);
-
         if (this.container) {
             const { width, height } = this.container.getBoundingClientRect();
-
             const sourcePoints = [
                 [0, 0],
                 [width, 0],
@@ -141,8 +136,8 @@ export class Layer extends React.Component<Props, State> {
             // if found prev. keystone data
             if (localStorage.getItem("projMap")) {
                 console.log("loading prev. projMap...");
-                let s: any = localStorage.getItem("projMap");
-                this.setState(JSON.parse(s));
+                let ls: any = localStorage.getItem("projMap");
+                this.setState(JSON.parse(ls));
             }
             // if left keystone mode
         } else if (prevProps.isEditMode && !this.props.isEditMode) {
@@ -176,7 +171,6 @@ export class Layer extends React.Component<Props, State> {
         ) {
             return;
         }
-
         evt.preventDefault();
         evt.stopPropagation();
         const vectorIndexToModify = anchors.indexOf(this.anchorMoving);
@@ -233,6 +227,13 @@ export class Layer extends React.Component<Props, State> {
         ];
     };
 
+    _clearLocalStraoge = () => {
+        if (localStorage.getItem("projMap")) {
+            localStorage.removeItem("projMap");
+        }
+        window.location.reload();
+    };
+
     render() {
         const {
             style,
@@ -249,47 +250,55 @@ export class Layer extends React.Component<Props, State> {
         } = this.state;
 
         return (
-            <div
-                onMouseDown={this.onMouseDown}
-                onMouseUp={this.onMouseUp}
-                style={{
-                    cursor: isEditMode ? "all-scroll" : "inherit",
-                    position: "relative",
-                    display: "inline-block",
-                    transform: vectorToTransform(containerTranslate)
-                }}
-            >
-                <div
-                    ref={ref => {
-                        this.container = ref;
-                    }}
-                    style={{
-                        ...styles.container,
-                        ...style,
-                        pointerEvents: isEditMode ? "none" : "all",
-                        transform: matrixToTransform(matrix),
-                        transformOrigin: `${transformOrigin[0]}px ${transformOrigin[1]}px 0px`
-                    }}
-                    className={className}
-                >
-                    {this.props.children}
-                </div>
+            <React.Fragment>
                 {isEditMode && (
-                    <div>
-                        {anchors.map((anchor, index) => (
-                            <AnchorComponent
-                                style={anchorStyle}
-                                className={anchorClassName}
-                                key={anchor}
-                                translation={translateDelta[anchor]}
-                                position={anchor}
-                                onMouseDown={this.onAnchorMouseDown}
-                                onMouseUp={this.onAnchorMouseUp}
-                            />
-                        ))}
+                    <div onClick={() => this._clearLocalStraoge()}>
+                        <DeleteLocalStorage />
                     </div>
                 )}
-            </div>
+
+                <div
+                    onMouseDown={this.onMouseDown}
+                    onMouseUp={this.onMouseUp}
+                    style={{
+                        cursor: isEditMode ? "all-scroll" : "inherit",
+                        position: "relative",
+                        display: "inline-block",
+                        transform: vectorToTransform(containerTranslate)
+                    }}
+                >
+                    <div
+                        ref={ref => {
+                            this.container = ref;
+                        }}
+                        style={{
+                            ...styles.container,
+                            ...style,
+                            pointerEvents: isEditMode ? "none" : "all",
+                            transform: matrixToTransform(matrix),
+                            transformOrigin: `${transformOrigin[0]}px ${transformOrigin[1]}px 0px`
+                        }}
+                        className={className}
+                    >
+                        {this.props.children}
+                    </div>
+                    {isEditMode && (
+                        <div>
+                            {anchors.map((anchor, index) => (
+                                <AnchorComponent
+                                    style={anchorStyle}
+                                    className={anchorClassName}
+                                    key={anchor}
+                                    translation={translateDelta[anchor]}
+                                    position={anchor}
+                                    onMouseDown={this.onAnchorMouseDown}
+                                    onMouseUp={this.onAnchorMouseUp}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </React.Fragment>
         );
     }
 }
