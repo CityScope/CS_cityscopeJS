@@ -65,13 +65,13 @@
         "types": {
             "0": {
                 "height": 1,
-                "color": [255, 255, 255, 200],
-                "name": "Empty"
+                "color": [255, 255, 255],
+                "name": "Road"
             },
             "1": {
                 "height": 0,
-                "color": [40, 70, 100, 200],
-                "name": "Roads"
+                "color": [0, 0, 0, 0],
+                "name": "None"
             },
             "2": {
                 "height": 10,
