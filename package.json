@@ -1,7 +1,8 @@
 {
     "name": "cityscopejs",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "private": true,
+    "homepage": "https://cityscope.media.mit.edu/CS_cityscopeJS",
     "dependencies": {
         "@material-ui/core": "^4.8.3",
         "@material-ui/icons": "^4.5.1",
@@ -9,6 +10,7 @@
         "axios": "^0.19.1",
         "bootstrap": "^4.4.1",
         "deck.gl": "^7.3.14",
+        "gh-pages": "^2.2.0",
         "jquery": "^3.4.1",
         "maptastic": "^3.0.0",
         "numeric": "^1.2.6",
@@ -27,7 +29,8 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "gh": "gh-pages -d build"
     },
     "eslintConfig": {
         "extends": "react-app"
