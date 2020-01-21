@@ -65,7 +65,8 @@ export const _proccessGridData = cityioData => {
             console.log("... got null type...");
         }
     }
-    return wholeGrid;
+    const newGrid = JSON.parse(JSON.stringify(wholeGrid));
+    return newGrid;
 };
 
 /**

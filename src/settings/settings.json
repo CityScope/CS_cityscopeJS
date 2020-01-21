@@ -42,7 +42,7 @@
             "ABM": {
                 "startSimHour": 25200,
                 "endSimHour": 50400,
-                "animationSpeed": 10
+                "animationSpeed": 20
             },
             "heatmap": {
                 "colors": [
