@@ -15,15 +15,12 @@ class CityioFail extends Component {
                     <a href="https://github.com/CityScope/CS_cityscopeJS">
                         open-source
                     </a>{" "}
-                    urban modeling and simulation tool. Start by adding
-                    CityScope table name to the URL
-                    <small>(in the form of: '...URL/?yourTableName') </small>,
-                    for example:
-                    <br />
+                    urban modeling and simulation platform. Start by adding
+                    CityScope table name to the URL [for example{" "}
                     <a href="https://cityscope.media.mit.edu/CS_cityscopeJS/?grasbrook">
-                        CityScopeJS Hamburg
+                        CityScopeJS Grasbrook
                     </a>
-                    , or click <a href="https://cityio.media.mit.edu"> here</a>{" "}
+                    ] or click <a href="https://cityio.media.mit.edu"> here</a>{" "}
                     for a list of active CityScope tables. <br />
                     <br />
                 </div>

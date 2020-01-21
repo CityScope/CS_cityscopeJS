@@ -1,34 +1,16 @@
-.shadow {
-    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
-}
-
 .background {
     margin: 0;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     color: #fff;
-    background: linear-gradient(-45deg, #e100ff, #0099ff);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
 }
-
-@keyframes gradientBG {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+h1 {
+    font-size: 5vw;
 }
-
 .info {
-    border-radius: 1.5em;
     text-align: left;
     overflow: auto;
-    font-size: 2em;
+    font-size: 3vw;
     padding: 1em;
     font-weight: lighter;
     color: rgb(255, 255, 255);
@@ -44,7 +26,7 @@
 a:visited {
     color: white;
     text-decoration: none;
-    font-weight: 400;
+    font-weight: 500;
 }
 .info a:hover {
     background-color: rgba(255, 255, 255, 0.2);
