@@ -51,16 +51,18 @@ export const _proccessGridData = cityioData => {
             wholeGrid.features[interactiveMapping[i]].properties;
         // set up the cell type
         interactiveCellProps.type = gridCellType;
-        // get value of cell from settings via its index
-        let cellValueByIndex = Object.values(types)[TUIgridData[i][0]];
+
         // check if not undefined type (no scanning)
+
         if (TUIgridData[i][0] !== -1) {
+            // get value of cell from settings via its index
+            let cellValueByIndex = Object.values(types)[TUIgridData[i][0]];
             // cast the cell color
             interactiveCellProps.color = cellValueByIndex.color;
             // cast the cell height
             interactiveCellProps.height = cellValueByIndex.height;
         } else {
-            console.log("...null type");
+            console.log("... got null type...");
         }
     }
     return wholeGrid;

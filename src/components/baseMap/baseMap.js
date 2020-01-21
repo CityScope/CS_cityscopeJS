@@ -16,6 +16,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer, TextLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../settings/settings.json";
+import { consoleStyle } from "../../services/consoleStyle";
 class Map extends Component {
     constructor(props) {
         super(props);
@@ -63,7 +64,7 @@ class Map extends Component {
             this._animate();
         }
         if (prevState.cityioData !== this.props.cityioData) {
-            console.log("...new map data");
+            console.log("%c new cityioData data to render ", consoleStyle);
             // get cityio data from props
             const cityioData = this.props.cityioData;
             this.setState({ cityioData: cityioData });
@@ -122,7 +123,7 @@ class Map extends Component {
         });
         const dirLight = new _SunLight(this.dirLightSettings);
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });
-        lightingEffect.shadowColor = [0, 0, 0, 0.3];
+        lightingEffect.shadowColor = [0, 0, 0, 0.5];
         this._effects = [lightingEffect];
     }
 

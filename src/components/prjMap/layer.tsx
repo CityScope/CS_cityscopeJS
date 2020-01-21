@@ -148,7 +148,6 @@ export class Layer extends React.Component<Props, State> {
     }
 
     componentWillUnmount() {
-        console.log(this.state.translateDelta);
         window.removeEventListener("mousemove", this.onAnchorMouseMove);
         window.removeEventListener("mousemove", this.onMouseMove);
     }
