@@ -36,6 +36,10 @@ class CityIO extends Component {
                 () => this.getCityIOHash(this.cityioURL + "/meta"),
                 settings.cityIO.interval
             );
+            console.log(
+                "starting cityIO interval every..",
+                settings.cityIO.interval
+            );
         } else {
             // no URL provided
             this.setState({ userEnteredCityioEndpoint: false });

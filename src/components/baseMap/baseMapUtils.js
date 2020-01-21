@@ -30,14 +30,14 @@ export const setDirLightSettings = header => {
  */
 export const _proccessGridData = cityioData => {
     let types = settings.map.types;
-    const gridData = cityioData.grid;
+    const TUIgridData = cityioData.grid;
 
-    const geojson = cityioData.meta_grid;
+    const wholeGrid = cityioData.meta_grid;
+    const interactiveGridData = cityioData.interactive_grid_data;
     // update meta_grid features from cityio
-    if (cityioData.interactive_grid_data) {
-        for (let i = 0; i < geojson.features.length; i++) {
-            geojson.features[i].properties =
-                cityioData.interactive_grid_data[i];
+    if (interactiveGridData) {
+        for (let i = 0; i < wholeGrid.features.length; i++) {
+            wholeGrid.features[i].properties = interactiveGridData[i];
         }
     }
 
@@ -46,24 +46,24 @@ export const _proccessGridData = cityioData => {
     for (let i in interactiveMapping) {
         // type is the first value in the cell array
         // the rotation is the 2nd
-        let gridCellType = gridData[i][0];
+        let gridCellType = TUIgridData[i][0];
         let interactiveCellProps =
-            geojson.features[interactiveMapping[i]].properties;
+            wholeGrid.features[interactiveMapping[i]].properties;
         // set up the cell type
         interactiveCellProps.type = gridCellType;
         // get value of cell from settings via its index
-        let cellValueByIndex = Object.values(types)[gridData[i][0]];
+        let cellValueByIndex = Object.values(types)[TUIgridData[i][0]];
         // check if not undefined type (no scanning)
-        if (gridData[i][0] !== -1) {
+        if (TUIgridData[i][0] !== -1) {
             // cast the cell color
             interactiveCellProps.color = cellValueByIndex.color;
             // cast the cell height
             interactiveCellProps.height = cellValueByIndex.height;
         } else {
-            console.log("null type");
+            console.log("...null type");
         }
     }
-    return geojson;
+    return wholeGrid;
 };
 
 /**

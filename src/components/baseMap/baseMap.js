@@ -79,7 +79,7 @@ class Map extends Component {
 
         /**
          * finised edit
-         * should have dedicated UI
+         * ! should have dedicated UI
          */
         if (
             prevProps.menu.includes("EDIT") &&
@@ -122,7 +122,7 @@ class Map extends Component {
         });
         const dirLight = new _SunLight(this.dirLightSettings);
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });
-        lightingEffect.shadowColor = [0, 0, 0, 0.7];
+        lightingEffect.shadowColor = [0, 0, 0, 0.3];
         this._effects = [lightingEffect];
     }
 
@@ -387,13 +387,13 @@ class Map extends Component {
                         this.setState({ draggingWhileEditing: false });
                     },
 
-                    onHover: e => {
-                        if (e.object && e.object.properties) {
-                            this.props.listenToMapEvents({
-                                cellInfo: e.object.properties
-                            });
-                        }
-                    },
+                    // onHover: e => {
+                    //     if (e.object && e.object.properties) {
+                    //         this.props.listenToMapEvents({
+                    //             cellInfo: e.object.properties
+                    //         });
+                    //     }
+                    // },
                     updateTriggers: {
                         getFillColor: this.state.selectedCellsState,
                         getElevation: this.state.selectedCellsState
