@@ -30,7 +30,8 @@ export const setDirLightSettings = header => {
  */
 export const _proccessGridData = cityioData => {
     let types = settings.map.types;
-    const grid = cityioData.grid;
+    const gridData = cityioData.grid;
+
     const geojson = cityioData.meta_grid;
     // update meta_grid features from cityio
     if (cityioData.interactive_grid_data) {
@@ -39,15 +40,28 @@ export const _proccessGridData = cityioData => {
                 cityioData.interactive_grid_data[i];
         }
     }
-    // handles interactive mapping of the grid
-    // this should only happen once, to be removed on future builds
+
+    // handles TUI grid data on update
     const interactiveMapping = cityioData.interactive_grid_mapping;
     for (let i in interactiveMapping) {
-        geojson.features[interactiveMapping[i]].properties.type = grid[i][0];
-        geojson.features[interactiveMapping[i]].properties.color =
-            types[grid[i][0]].color;
-        geojson.features[interactiveMapping[i]].properties.height =
-            types[grid[i][0]].height;
+        // type is the first value in the cell array
+        // the rotation is the 2nd
+        let gridCellType = gridData[i][0];
+        let interactiveCellProps =
+            geojson.features[interactiveMapping[i]].properties;
+        // set up the cell type
+        interactiveCellProps.type = gridCellType;
+        // get value of cell from settings via its index
+        let cellValueByIndex = Object.values(types)[gridData[i][0]];
+        // check if not undefined type (no scanning)
+        if (gridData[i][0] !== -1) {
+            // cast the cell color
+            interactiveCellProps.color = cellValueByIndex.color;
+            // cast the cell height
+            interactiveCellProps.height = cellValueByIndex.height;
+        } else {
+            console.log("null type");
+        }
     }
     return geojson;
 };

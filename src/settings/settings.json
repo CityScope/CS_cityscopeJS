@@ -64,14 +64,14 @@
         },
         "types": {
             "0": {
-                "height": 1,
-                "color": [255, 255, 255],
-                "name": "Road"
-            },
-            "1": {
                 "height": 0,
                 "color": [0, 0, 0, 0],
                 "name": "None"
+            },
+            "1": {
+                "height": 1,
+                "color": [255, 255, 255],
+                "name": "Road"
             },
             "2": {
                 "height": 10,

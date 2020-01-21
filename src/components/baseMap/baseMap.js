@@ -65,15 +65,13 @@ class Map extends Component {
         if (prevState.cityioData !== this.props.cityioData) {
             console.log("...new map data");
             // get cityio data from props
-            const data = this.props.cityioData;
-            this.setState({ cityioData: data });
-            const gridData = _proccessGridData(data);
-            const gridTextData = _proccessGridTextData(data);
-            const accessData = _proccessAccessData(data);
+            const cityioData = this.props.cityioData;
+            this.setState({ cityioData: cityioData });
+
             this.setState({
-                meta_grid: gridData,
-                gridTextData: gridTextData,
-                access: accessData
+                meta_grid: _proccessGridData(cityioData),
+                gridTextData: _proccessGridTextData(cityioData),
+                access: _proccessAccessData(cityioData)
             });
             // FOR NOW FAKE TYPE
             this._rndType();
@@ -360,8 +358,8 @@ class Map extends Component {
                             : d.properties.color
                             ? d.properties.color
                             : d.properties.land_use !== "None"
-                            ? settings.map.types[0].color
-                            : settings.map.types[1].color,
+                            ? settings.map.types[1].color
+                            : settings.map.types[0].color,
                     onClick: event => {
                         if (
                             this.props.menu.includes("EDIT") &&
