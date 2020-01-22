@@ -541,6 +541,8 @@ class Map extends Component {
                     layers={this._renderLayers()}
                     effects={this._effects}
                     controller={{
+                        touchZoom: true,
+                        touchRotate: true,
                         dragPan: !this.state.draggingWhileEditing,
                         dragRotate: !this.state.draggingWhileEditing
                     }}
