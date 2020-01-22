@@ -77,15 +77,11 @@ class Map extends Component {
             if (this.props.cityioData.access) {
                 this.setState({ access: _proccessAccessData(cityioData) });
             }
-
             // FOR NOW FAKE TYPE
             this._rndType();
         }
 
-        /**
-         * finised edit
-         * ! should have dedicated UI
-         */
+        //    toggle edit mode
         if (
             prevProps.menu.includes("EDIT") &&
             !this.props.menu.includes("EDIT")
@@ -94,6 +90,14 @@ class Map extends Component {
                 this.state.meta_grid,
                 this.props.cityioData.tableName
             );
+        }
+
+        //    toggle reset view mode
+        if (
+            !prevProps.menu.includes("RESET_VIEW") &&
+            this.props.menu.includes("RESET_VIEW")
+        ) {
+            this._setViewStateToTableHeader();
         }
     }
 

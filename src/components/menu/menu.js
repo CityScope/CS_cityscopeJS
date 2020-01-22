@@ -11,12 +11,13 @@ import Fab from "@material-ui/core/Fab";
 import MenuIcon from "@material-ui/icons/Menu";
 import EditIcon from "@material-ui/icons/Edit";
 import CancelIcon from "@material-ui/icons/Cancel";
-
 import { connect } from "react-redux";
 import { listenToMenuUI } from "../../redux/actions";
 import settings from "../../settings/settings.json";
 import PaperSheet from "./PaperSheet";
 import { ThemeProvider } from "@material-ui/styles";
+import NearMeIcon from "@material-ui/icons/NearMe";
+import NavigationIcon from "@material-ui/icons/Navigation";
 
 // import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -49,7 +50,12 @@ function Menu(props) {
         },
         editButton: {
             position: "fixed",
-            top: theme.spacing(10),
+            top: theme.spacing(12),
+            left: theme.spacing(2)
+        },
+        resetViewButton: {
+            position: "fixed",
+            top: theme.spacing(22),
             left: theme.spacing(2)
         }
     }));
@@ -153,6 +159,7 @@ function Menu(props) {
                     </List>
                 </Drawer>
             </div>
+
             <Fab
                 className={classes.menuButton}
                 onClick={toggleDrawer("left", true)}
@@ -166,6 +173,18 @@ function Menu(props) {
                     <EditIcon />
                 )}
             </Fab>
+
+            <Fab
+                className={classes.resetViewButton}
+                onClick={handleToggle("RESET_VIEW")}
+            >
+                {toggleStateArray.includes("RESET_VIEW") ? (
+                    <NavigationIcon />
+                ) : (
+                    <NearMeIcon />
+                )}
+            </Fab>
+
             {renderABMslider()}
         </ThemeProvider>
     );
