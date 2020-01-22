@@ -67,13 +67,17 @@ class Map extends Component {
             console.log("%c new cityioData data to render ", consoleStyle);
             // get cityio data from props
             const cityioData = this.props.cityioData;
-            this.setState({ cityioData: cityioData });
-
             this.setState({
+                cityioData: cityioData,
                 meta_grid: _proccessGridData(cityioData),
-                gridTextData: _proccessGridTextData(cityioData),
-                access: _proccessAccessData(cityioData)
+                gridTextData: _proccessGridTextData(cityioData)
             });
+
+            // ! workaround for preloading access layer data
+            if (this.props.cityioData.access) {
+                this.setState({ access: _proccessAccessData(cityioData) });
+            }
+
             // FOR NOW FAKE TYPE
             this._rndType();
         }
