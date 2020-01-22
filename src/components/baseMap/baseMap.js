@@ -98,6 +98,16 @@ class Map extends Component {
             this.props.menu.includes("RESET_VIEW")
         ) {
             this._setViewStateToTableHeader();
+        } else if (
+            prevProps.menu.includes("RESET_VIEW") &&
+            !this.props.menu.includes("RESET_VIEW")
+        ) {
+            this.setState({
+                viewState: {
+                    ...this.state.viewState,
+                    pitch: 45
+                }
+            });
         }
     }
 
