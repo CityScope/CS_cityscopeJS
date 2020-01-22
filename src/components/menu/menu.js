@@ -9,6 +9,8 @@ import Switch from "@material-ui/core/Switch";
 import Drawer from "@material-ui/core/Drawer";
 import Fab from "@material-ui/core/Fab";
 import MenuIcon from "@material-ui/icons/Menu";
+import EditIcon from "@material-ui/icons/Edit";
+
 import { connect } from "react-redux";
 import { listenToMenuUI } from "../../redux/actions";
 import settings from "../../settings/settings.json";
@@ -42,6 +44,11 @@ function Menu(props) {
         menuButton: {
             position: "fixed",
             top: theme.spacing(2),
+            left: theme.spacing(2)
+        },
+        editButton: {
+            position: "fixed",
+            top: theme.spacing(10),
             left: theme.spacing(2)
         }
     }));
@@ -132,29 +139,30 @@ function Menu(props) {
 
     return (
         <ThemeProvider theme={theme}>
-            <div>
-                <div className={classes.root}>
-                    <Drawer
-                        anchor="left"
-                        open={state.left}
-                        onClose={toggleDrawer("left", false)}
-                    >
-                        {sideList("left")}
-                        <List className={classes.root}>
-                            <h2>cityscopeJS</h2>
-                            {togglesCompsArray}
-                        </List>
-                    </Drawer>
-                    <Fab
-                        aria-label="add"
-                        className={classes.menuButton}
-                        onClick={toggleDrawer("left", true)}
-                    >
-                        <MenuIcon />
-                    </Fab>
-                </div>
-                {renderABMslider()}
+            <div className={classes.root}>
+                <Drawer
+                    anchor="left"
+                    open={state.left}
+                    onClose={toggleDrawer("left", false)}
+                >
+                    {sideList("left")}
+                    <List className={classes.root}>
+                        <h2>cityscopeJS</h2>
+                        {togglesCompsArray}
+                    </List>
+                </Drawer>
             </div>
+            <Fab
+                className={classes.menuButton}
+                onClick={toggleDrawer("left", true)}
+            >
+                <MenuIcon />
+            </Fab>
+
+            <Fab className={classes.editButton} onClick={handleToggle("EDIT")}>
+                <EditIcon />
+            </Fab>
+            {renderABMslider()}
         </ThemeProvider>
     );
 }

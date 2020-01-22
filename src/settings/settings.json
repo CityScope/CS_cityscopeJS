@@ -109,7 +109,6 @@
         "toggles": {
             "GRID": true,
             "TEXT": false,
-            "EDIT": false,
             "PATHS": false,
             "ABM": false,
             "ACCESS": false,
