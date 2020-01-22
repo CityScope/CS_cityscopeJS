@@ -32,7 +32,7 @@ class Map extends Component {
         this._onViewStateChange = this._onViewStateChange.bind(this);
         this.timeZoneOffset = setDirLightSettings(this.props.cityioData.header);
         this.dirLightSettings = {
-            timestamp: Date.UTC(2019, 7, 1, 10 + this.timeZoneOffset),
+            timestamp: Date.UTC(2019, 7, 1, 11 + this.timeZoneOffset),
             color: [255, 255, 255],
             intensity: 1.0,
             _shadow: true
@@ -119,7 +119,7 @@ class Map extends Component {
     _setupEffects() {
         const ambientLight = new AmbientLight({
             color: [255, 255, 255],
-            intensity: 1
+            intensity: 0.85
         });
         const dirLight = new _SunLight(this.dirLightSettings);
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });

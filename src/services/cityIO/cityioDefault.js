@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./cityioFail.css";
+import "./cityioDefault.css";
 
 class CityioFail extends Component {
     render() {
@@ -16,11 +16,15 @@ class CityioFail extends Component {
                         open-source
                     </a>{" "}
                     urban modeling and simulation platform. Start by adding
-                    CityScope table name to the URL [for example{" "}
-                    <a href="https://cityscope.media.mit.edu/CS_cityscopeJS/?grasbrook">
-                        CityScopeJS Grasbrook
-                    </a>
-                    ] or click <a href="https://cityio.media.mit.edu"> here</a>{" "}
+                    CityScope table name to the URL{" "}
+                    <small>
+                        [for example{" "}
+                        <a href="https://cityscope.media.mit.edu/CS_cityscopeJS/?grasbrook">
+                            CityScopeJS Grasbrook
+                        </a>
+                        ]
+                    </small>{" "}
+                    or click <a href="https://cityio.media.mit.edu"> here</a>{" "}
                     for a list of active CityScope tables. <br />
                     <br />
                 </div>

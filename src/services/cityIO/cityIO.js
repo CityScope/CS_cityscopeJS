@@ -3,7 +3,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { getCityioData } from "../../redux/actions";
 import settings from "../../settings/settings.json";
-import CityioFail from "./cityioFail";
+import CityioFail from "./cityioDefault";
 
 class CityIO extends Component {
     constructor(props) {
