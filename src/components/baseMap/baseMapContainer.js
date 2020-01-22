@@ -16,7 +16,11 @@ class MapContainer extends Component {
         ) {
             return (
                 <Layer
-                    style={{ height: "100vh", width: "100vw" }}
+                    className="mapLayer"
+                    style={{
+                        height: "99.5vh",
+                        width: "100vw"
+                    }}
                     isEditMode={this._checkKeystone()}
                 >
                     <MAP
