@@ -10,6 +10,7 @@ import Drawer from "@material-ui/core/Drawer";
 import Fab from "@material-ui/core/Fab";
 import MenuIcon from "@material-ui/icons/Menu";
 import EditIcon from "@material-ui/icons/Edit";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 import { connect } from "react-redux";
 import { listenToMenuUI } from "../../redux/actions";
@@ -158,9 +159,12 @@ function Menu(props) {
             >
                 <MenuIcon />
             </Fab>
-
             <Fab className={classes.editButton} onClick={handleToggle("EDIT")}>
-                <EditIcon />
+                {toggleStateArray.includes("EDIT") ? (
+                    <CancelIcon />
+                ) : (
+                    <EditIcon />
+                )}
             </Fab>
             {renderABMslider()}
         </ThemeProvider>
