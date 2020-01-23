@@ -70,6 +70,59 @@ export const _proccessGridData = cityioData => {
 };
 
 /**
+ * proccess grid data to geojson
+ * of lineStrings
+ * @param {cityIOdata} data
+ */
+
+export const _proccesLinestringGrid = cityioData => {
+    const metaGrid = cityioData.meta_grid.features;
+
+    const lineString = {
+        type: "FeatureCollection",
+        features: [
+            // {
+            //     type: "Feature",
+            //     properties: {},
+            //     geometry: {
+            //         type: "LineString",
+            //         coordinates: [
+            //             [lat, long],
+            //            [lat, long]
+            //         ]
+            //     }
+            // }...
+        ]
+    };
+
+    // update meta_grid features from cityio
+    if (metaGrid) {
+        for (let i = 0; i < metaGrid.length; i++) {
+            const coordinates = metaGrid[i].geometry.coordinates[0];
+            for (let n = 0; n < coordinates.length - 1; n++) {
+                const line = {
+                    type: "Feature",
+                    properties: { name: null },
+                    geometry: {
+                        type: "LineString",
+                        coordinates: []
+                    }
+                };
+                line.properties.name = i;
+                line.properties.type = Math.floor(Math.random() * 20);
+                line.geometry.coordinates.push(
+                    coordinates[n],
+                    coordinates[n + 1]
+                );
+
+                lineString.features.push(line);
+            }
+        }
+    }
+    return lineString;
+};
+
+/**
  * Data format:
  * [
  *   {text: 'type', coordinates: [-122.466233, 37.684638]},

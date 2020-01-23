@@ -108,6 +108,7 @@
     "menu": {
         "toggles": {
             "GRID": true,
+            "NETWORK": true,
             "TEXT": false,
             "PATHS": false,
             "ABM": false,

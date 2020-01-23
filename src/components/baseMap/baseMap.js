@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { listenToMapEvents } from "../../redux/actions";
 import {
+    _proccesLinestringGrid,
     _proccessAccessData,
     _proccessGridData,
     _prepareEditsForCityIO,
@@ -63,6 +64,7 @@ class Map extends Component {
             // start ainmation/sim/roate
             this._animate();
         }
+
         if (prevState.cityioData !== this.props.cityioData) {
             console.log("%c new cityioData data to render ", consoleStyle);
             // get cityio data from props
@@ -70,13 +72,15 @@ class Map extends Component {
             this.setState({
                 cityioData: cityioData,
                 meta_grid: _proccessGridData(cityioData),
-                gridTextData: _proccessGridTextData(cityioData)
+                gridTextData: _proccessGridTextData(cityioData),
+                linestringGrid: _proccesLinestringGrid(cityioData)
             });
 
             // ! workaround for preloading access layer data
             if (this.props.cityioData.access) {
                 this.setState({ access: _proccessAccessData(cityioData) });
             }
+
             // FOR NOW FAKE TYPE
             this._rndType();
         }
@@ -357,6 +361,25 @@ class Map extends Component {
                 })
             );
         }
+
+        if (
+            this.props.menu.includes("NETWORK") &&
+            this.state.linestringGrid &&
+            this.state.linestringGrid.features
+        ) {
+            layers.push(
+                new GeoJsonLayer({
+                    id: "NETWORK",
+                    data: this.state.linestringGrid.features,
+                    visible: this.props.menu.includes("NETWORK") ? true : false,
+                    pickable: true,
+                    lineWidthScale: 1,
+                    lineWidthMinPixels: 2,
+                    getLineColor: [255, 255, 255, 50]
+                })
+            );
+        }
+
         if (this.props.menu.includes("GRID")) {
             layers.push(
                 new GeoJsonLayer({
