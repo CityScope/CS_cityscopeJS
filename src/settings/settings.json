@@ -21,7 +21,7 @@
 
     "cityIO": {
         "baseURL": "https://cityio.media.mit.edu/api/table/",
-        "interval": 1000,
+        "interval": 100000,
         "cityIOmodules": [
             "header",
             "interactive_grid_mapping",

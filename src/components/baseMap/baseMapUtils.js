@@ -102,19 +102,17 @@ export const _proccesLinestringGrid = cityioData => {
             for (let n = 0; n < coordinates.length - 1; n++) {
                 const line = {
                     type: "Feature",
-                    properties: { name: null },
+                    properties: {
+                        land_use: "network",
+                        netWidth: 0,
+                        color: [255, 255, 255, 200]
+                    },
                     geometry: {
                         type: "LineString",
                         coordinates: []
                     }
                 };
                 line.properties.id = -1 + (n + 1) * (i + 1);
-                line.properties.color = [
-                    Math.floor(Math.random() * 255),
-                    Math.floor(Math.random() * 255),
-                    Math.floor(Math.random() * 255),
-                    200
-                ];
                 line.geometry.coordinates.push(
                     coordinates[n],
                     coordinates[n + 1]

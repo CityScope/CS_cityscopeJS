@@ -26,6 +26,7 @@ class Map extends Component {
             cityioData: null,
             draggingWhileEditing: false,
             selectedCellsState: null,
+            selectedNetState: null,
             time: 0,
             viewState: settings.map.initialViewState
         };
@@ -244,10 +245,9 @@ class Map extends Component {
      *  not of CityScope TUI & that are interactable
      * so to not overlap TUI activity
      */
-    _handleSelection = e => {
-        let rndType = this.state.randomType;
+    _handleCellsSelection = e => {
+        const randomType = this.state.randomType;
         const multiSelectedObj = this._mulipleObjPicked(e);
-
         multiSelectedObj.forEach(selected => {
             const thisCellProps = selected.object.properties;
             if (
@@ -256,13 +256,35 @@ class Map extends Component {
             ) {
                 thisCellProps.old_height = thisCellProps.height;
                 thisCellProps.old_color = thisCellProps.color;
-                thisCellProps.color = rndType.color;
-                thisCellProps.height = rndType.height;
+                thisCellProps.color = randomType.color;
+                thisCellProps.height = randomType.height;
+            }
+
+            this.setState({
+                selectedCellsState: multiSelectedObj
+            });
+        });
+    };
+
+    /**
+     * Description. allow only to pick net edges
+     */
+    _handleNetSelection = e => {
+        const randomType = this.state.randomType;
+        console.log(randomType);
+        const multiSelectedObj = this._mulipleObjPicked(e);
+        multiSelectedObj.forEach(selected => {
+            const thisEdgeProps = selected.object.properties;
+            // network edges selected
+            if (thisEdgeProps.land_use === "network") {
+                thisEdgeProps.old_color = thisEdgeProps.color;
+                thisEdgeProps.color = randomType.color;
+
+                // thisEdgeProps.netWidth =;
             }
         });
-
         this.setState({
-            selectedCellsState: multiSelectedObj
+            selectedNetState: multiSelectedObj
         });
     };
 
@@ -368,14 +390,48 @@ class Map extends Component {
             this.state.linestringGrid.features
         ) {
             layers.push(
-                new GeoJsonLayer({
+                new PathLayer({
                     id: "NETWORK",
                     data: this.state.linestringGrid.features,
-                    visible: this.props.menu.includes("NETWORK") ? true : false,
                     pickable: true,
-                    lineWidthScale: 2,
-                    lineWidthMinPixels: 1,
-                    getLineColor: d => d.properties.color
+                    widthScale: 1,
+                    widthMinPixels: 1,
+                    getPath: d => d.geometry.coordinates,
+                    getColor: d => d.properties.color,
+                    getWidth: d => d.properties.netWidth,
+                    updateTriggers: {
+                        getColor: this.state.selectedNetState,
+                        getWidth: this.state.selectedNetState
+                    },
+                    transitions: {
+                        getColor: 500,
+                        getWidth: 500
+                    },
+                    onClick: event => {
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        )
+                            this._handleNetSelection(event);
+                    },
+                    onDrag: event => {
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        )
+                            this._handleNetSelection(event);
+                    },
+                    onDragStart: () => {
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        ) {
+                            this.setState({ draggingWhileEditing: true });
+                        }
+                    },
+                    onDragEnd: () => {
+                        this.setState({ draggingWhileEditing: false });
+                    }
                 })
             );
         }
@@ -407,14 +463,14 @@ class Map extends Component {
                             this.props.menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift"
                         )
-                            this._handleSelection(event);
+                            this._handleCellsSelection(event);
                     },
                     onDrag: event => {
                         if (
                             this.props.menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift"
                         )
-                            this._handleSelection(event);
+                            this._handleCellsSelection(event);
                     },
                     onDragStart: () => {
                         if (
@@ -424,25 +480,15 @@ class Map extends Component {
                             this.setState({ draggingWhileEditing: true });
                         }
                     },
-
                     onDragEnd: () => {
                         this.setState({ draggingWhileEditing: false });
                     },
-
-                    // onHover: e => {
-                    //     if (e.object && e.object.properties) {
-                    //         this.props.listenToMapEvents({
-                    //             cellInfo: e.object.properties
-                    //         });
-                    //     }
-                    // },
                     updateTriggers: {
                         getFillColor: this.state.selectedCellsState,
                         getElevation: this.state.selectedCellsState
                     },
                     transitions: {
                         getFillColor: 500,
-
                         getElevation: 500
                     }
                 })
