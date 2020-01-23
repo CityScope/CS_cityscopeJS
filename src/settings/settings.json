@@ -21,7 +21,7 @@
 
     "cityIO": {
         "baseURL": "https://cityio.media.mit.edu/api/table/",
-        "interval": 100000,
+        "interval": 500,
         "cityIOmodules": [
             "header",
             "interactive_grid_mapping",
@@ -61,6 +61,34 @@
             "zoom": 17,
             "pitch": 0,
             "bearing": 0
+        },
+
+        "netTypes": {
+            "0": {
+                "width": 10,
+                "color": [255, 255, 255, 10],
+                "name": "None"
+            },
+            "1": {
+                "width": 5,
+                "color": [100, 100, 100, 100],
+                "name": "two lanes"
+            },
+            "2": {
+                "width": 10,
+                "color": [50, 50, 50, 100],
+                "name": "four lanes"
+            },
+            "3": {
+                "width": 4,
+                "color": [0, 250, 0, 100],
+                "name": "bikelanes"
+            },
+            "4": {
+                "width": 2,
+                "color": [200, 200, 0, 100],
+                "name": "walkway"
+            }
         },
         "types": {
             "0": {

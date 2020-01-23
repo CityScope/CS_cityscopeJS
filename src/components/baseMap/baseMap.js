@@ -270,17 +270,15 @@ class Map extends Component {
      * Description. allow only to pick net edges
      */
     _handleNetSelection = e => {
-        const randomType = this.state.randomType;
-        console.log(randomType);
+        const rndNetType = this.state.randomNetType;
         const multiSelectedObj = this._mulipleObjPicked(e);
         multiSelectedObj.forEach(selected => {
             const thisEdgeProps = selected.object.properties;
             // network edges selected
             if (thisEdgeProps.land_use === "network") {
                 thisEdgeProps.old_color = thisEdgeProps.color;
-                thisEdgeProps.color = randomType.color;
-
-                // thisEdgeProps.netWidth =;
+                thisEdgeProps.color = rndNetType.color;
+                thisEdgeProps.netWidth = rndNetType.width;
             }
         });
         this.setState({
@@ -294,7 +292,12 @@ class Map extends Component {
      */
     _renderSelectionTarget = () => {
         if (this.props.menu.includes("EDIT") && this.state.mousePos) {
-            const rc = this.state.randomType.color;
+            const targetMetaData =
+                !this.props.menu.includes("GRID") &&
+                this.props.menu.includes("NETWORK")
+                    ? this.state.randomNetType
+                    : this.state.randomType;
+            const rc = targetMetaData.color;
             const color = "rgb(" + rc[0] + "," + rc[1] + "," + rc[2] + ")";
             const mousePos = this.state.mousePos;
             const divSize = 30;
@@ -334,7 +337,7 @@ class Map extends Component {
                             fontSize: "1vw"
                         }}
                     >
-                        {this.state.randomType.name}
+                        {targetMetaData.name}
                     </div>
                 </div>
             );
@@ -350,6 +353,13 @@ class Map extends Component {
         let randomType =
             settings.map.types[keys[(keys.length * Math.random()) << 0]];
         this.setState({ randomType: randomType });
+        // net type !TEMP
+        var netKeys = Object.keys(settings.map.netTypes);
+        let randomNetType =
+            settings.map.netTypes[
+                netKeys[(netKeys.length * Math.random()) << 0]
+            ];
+        this.setState({ randomNetType: randomNetType });
     };
 
     _handleKeyUp = () => {
