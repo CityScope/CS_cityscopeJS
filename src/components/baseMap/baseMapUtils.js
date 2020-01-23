@@ -104,8 +104,8 @@ export const _proccesLinestringGrid = cityioData => {
                     type: "Feature",
                     properties: {
                         land_use: "network",
-                        netWidth: 10,
-                        color: [0, 0, 0, 200]
+                        netWidth: 2,
+                        color: [0, 0, 0, 100]
                     },
                     geometry: {
                         type: "LineString",

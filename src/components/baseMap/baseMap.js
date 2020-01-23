@@ -28,6 +28,7 @@ class Map extends Component {
             selectedCellsState: null,
             selectedNetState: null,
             time: 0,
+            pickingRadius: 10,
             viewState: settings.map.initialViewState
         };
         this.animationFrame = null;
@@ -228,7 +229,7 @@ class Map extends Component {
      * @argument{object} e  picking event
      */
     _mulipleObjPicked = e => {
-        const dim = 10;
+        const dim = this.state.pickingRadius;
         const x = e.x - dim / 2;
         const y = e.y - dim / 2;
         let mulipleObj = this.deckGL.pickObjects({
@@ -271,9 +272,9 @@ class Map extends Component {
      */
     _handleNetSelection = e => {
         const rndNetType = this.state.randomNetType;
-        const multiSelectedObj = this._mulipleObjPicked(e);
-        multiSelectedObj.forEach(selected => {
-            const thisEdgeProps = selected.object.properties;
+        const multiEdgeSelected = this._mulipleObjPicked(e);
+        multiEdgeSelected.forEach(edge => {
+            const thisEdgeProps = edge.object.properties;
             // network edges selected
             if (thisEdgeProps.land_use === "network") {
                 thisEdgeProps.old_color = thisEdgeProps.color;
@@ -282,7 +283,7 @@ class Map extends Component {
             }
         });
         this.setState({
-            selectedNetState: multiSelectedObj
+            selectedNetState: multiEdgeSelected
         });
     };
 
@@ -300,7 +301,7 @@ class Map extends Component {
             const rc = targetMetaData.color;
             const color = "rgb(" + rc[0] + "," + rc[1] + "," + rc[2] + ")";
             const mousePos = this.state.mousePos;
-            const divSize = 30;
+            const divSize = this.state.pickingRadius;
 
             let mouseX = mousePos.clientX - divSize / 2;
             let mouseY = mousePos.clientY - divSize / 2;
@@ -367,10 +368,15 @@ class Map extends Component {
     };
 
     _handleKeyDown = e => {
+        // avoid common clicks
         this.setState({ keyDownState: e.nativeEvent.key });
         // compute rnd color for now
         if (e.nativeEvent.key === " ") {
             this._rndType();
+        } else if (e.nativeEvent.key === "=") {
+            this.setState({ pickingRadius: this.state.pickingRadius + 1 });
+        } else if (e.nativeEvent.key === "-") {
+            this.setState({ pickingRadius: this.state.pickingRadius - 1 });
         }
     };
 
@@ -637,7 +643,8 @@ class Map extends Component {
                         touchZoom: true,
                         touchRotate: true,
                         dragPan: !this.state.draggingWhileEditing,
-                        dragRotate: !this.state.draggingWhileEditing
+                        dragRotate: !this.state.draggingWhileEditing,
+                        keyboard: false
                     }}
                 >
                     <StaticMap
