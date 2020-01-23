@@ -373,9 +373,9 @@ class Map extends Component {
                     data: this.state.linestringGrid.features,
                     visible: this.props.menu.includes("NETWORK") ? true : false,
                     pickable: true,
-                    lineWidthScale: 1,
-                    lineWidthMinPixels: 2,
-                    getLineColor: [255, 255, 255, 50]
+                    lineWidthScale: 2,
+                    lineWidthMinPixels: 1,
+                    getLineColor: d => d.properties.color
                 })
             );
         }

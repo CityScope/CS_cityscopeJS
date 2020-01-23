@@ -108,8 +108,13 @@ export const _proccesLinestringGrid = cityioData => {
                         coordinates: []
                     }
                 };
-                line.properties.name = i;
-                line.properties.type = Math.floor(Math.random() * 20);
+                line.properties.id = -1 + (n + 1) * (i + 1);
+                line.properties.color = [
+                    Math.floor(Math.random() * 255),
+                    Math.floor(Math.random() * 255),
+                    Math.floor(Math.random() * 255),
+                    200
+                ];
                 line.geometry.coordinates.push(
                     coordinates[n],
                     coordinates[n + 1]
