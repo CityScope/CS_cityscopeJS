@@ -29,7 +29,8 @@
             "ABM",
             "grid",
             "access",
-            "interactive_grid_data"
+            "interactive_grid_data",
+            "interactive_network_data"
         ]
     },
     "map": {

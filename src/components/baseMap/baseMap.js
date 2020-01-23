@@ -3,10 +3,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { listenToMapEvents } from "../../redux/actions";
 import {
-    _proccesLinestringGrid,
+    _proccesnetworkGeojson,
     _proccessAccessData,
     _proccessGridData,
-    _prepareEditsForCityIO,
+    _postMapEditsToCityIO,
     _proccessGridTextData,
     setDirLightSettings
 } from "./baseMapUtils";
@@ -28,7 +28,7 @@ class Map extends Component {
             selectedCellsState: null,
             selectedNetState: null,
             time: 0,
-            pickingRadius: 10,
+            pickingRadius: 40,
             viewState: settings.map.initialViewState
         };
         this.animationFrame = null;
@@ -75,7 +75,7 @@ class Map extends Component {
                 cityioData: cityioData,
                 meta_grid: _proccessGridData(cityioData),
                 gridTextData: _proccessGridTextData(cityioData),
-                linestringGrid: _proccesLinestringGrid(cityioData)
+                networkGeojson: _proccesnetworkGeojson(cityioData)
             });
 
             // ! workaround for preloading access layer data
@@ -92,9 +92,18 @@ class Map extends Component {
             prevProps.menu.includes("EDIT") &&
             !this.props.menu.includes("EDIT")
         ) {
-            _prepareEditsForCityIO(
+            _postMapEditsToCityIO(
                 this.state.meta_grid,
-                this.props.cityioData.tableName
+
+                this.props.cityioData.tableName,
+                "/interactive_grid_data"
+            );
+
+            _postMapEditsToCityIO(
+                this.state.networkGeojson,
+
+                this.props.cityioData.tableName,
+                "/interactive_network_data"
             );
         }
 
@@ -402,13 +411,13 @@ class Map extends Component {
 
         if (
             this.props.menu.includes("NETWORK") &&
-            this.state.linestringGrid &&
-            this.state.linestringGrid.features
+            this.state.networkGeojson &&
+            this.state.networkGeojson.features
         ) {
             layers.push(
                 new PathLayer({
                     id: "NETWORK",
-                    data: this.state.linestringGrid.features,
+                    data: this.state.networkGeojson.features,
                     pickable: true,
                     widthScale: 1,
                     widthMinPixels: 1,

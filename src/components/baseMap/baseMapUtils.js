@@ -73,26 +73,27 @@ export const _proccessGridData = cityioData => {
  * proccess grid data to geojson
  * of lineStrings
  * @param {cityIOdata} data
+ * 
+ * features: [
+            {
+                type: "Feature",
+                properties: {},
+                geometry: {
+                    type: "LineString",
+                    coordinates: [
+                        [lat, long],
+                       [lat, long]
+                    ]
+                }
+            }...
+        ]
  */
 
-export const _proccesLinestringGrid = cityioData => {
+export const _proccesnetworkGeojson = cityioData => {
     const metaGrid = cityioData.meta_grid.features;
-
-    const lineString = {
+    const networkGeojson = {
         type: "FeatureCollection",
-        features: [
-            // {
-            //     type: "Feature",
-            //     properties: {},
-            //     geometry: {
-            //         type: "LineString",
-            //         coordinates: [
-            //             [lat, long],
-            //            [lat, long]
-            //         ]
-            //     }
-            // }...
-        ]
+        features: []
     };
 
     // update meta_grid features from cityio
@@ -100,29 +101,37 @@ export const _proccesLinestringGrid = cityioData => {
         for (let i = 0; i < metaGrid.length; i++) {
             const coordinates = metaGrid[i].geometry.coordinates[0];
             for (let n = 0; n < coordinates.length - 1; n++) {
-                const line = {
-                    type: "Feature",
-                    properties: {
+                let id = -1 + (n + 1) * (i + 1);
+                let props;
+                if (cityioData.interactive_network_data) {
+                    props = cityioData.interactive_network_data[id];
+                } else {
+                    props = {
                         land_use: "network",
                         netWidth: 2,
-                        color: [0, 0, 0, 100]
-                    },
+                        color: [0, 0, 0, 100],
+                        id: id
+                    };
+                }
+                const line = {
+                    type: "Feature",
+                    properties: props,
                     geometry: {
                         type: "LineString",
                         coordinates: []
                     }
                 };
-                line.properties.id = -1 + (n + 1) * (i + 1);
+
                 line.geometry.coordinates.push(
                     coordinates[n],
                     coordinates[n + 1]
                 );
 
-                lineString.features.push(line);
+                networkGeojson.features.push(line);
             }
         }
     }
-    return lineString;
+    return networkGeojson;
 };
 
 /**
@@ -175,18 +184,18 @@ export const _proccessAccessData = data => {
  * than returns a redux state
  * with grid edits payload
  */
-export const _prepareEditsForCityIO = (meta_grid, tableName) => {
-    let metaGridProps = [];
-    for (let i = 0; i < meta_grid.features.length; i++) {
-        metaGridProps[i] = meta_grid.features[i].properties;
+export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
+    let dataProps = [];
+    for (let i = 0; i < data.features.length; i++) {
+        dataProps[i] = data.features[i].properties;
     }
 
     axios
         .post(
             "https://cityio.media.mit.edu/api/table/update/" +
                 tableName +
-                "/interactive_grid_data",
-            metaGridProps
+                endPoint,
+            dataProps
         )
         .then(response => {
             console.log(response);
