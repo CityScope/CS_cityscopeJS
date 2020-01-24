@@ -74,19 +74,20 @@ export const _proccessGridData = cityioData => {
  * of lineStrings
  * @param {cityIOdata} data
  * 
- * features: [
-            {
-                type: "Feature",
-                properties: {},
-                geometry: {
-                    type: "LineString",
-                    coordinates: [
-                        [lat, long],
-                       [lat, long]
-                    ]
-                }
-            }...
-        ]
+ 
+features  :[
+    {
+        type: "Feature",
+        properties: {},
+        geometry: {
+            type: "Point",
+            coordinates: [125.6, 10.1]
+        },
+        properties: {
+            name: "Dinagat Islands"
+        }
+    }...
+]
  */
 
 export const _proccesnetworkGeojson = cityioData => {
@@ -95,40 +96,31 @@ export const _proccesnetworkGeojson = cityioData => {
         type: "FeatureCollection",
         features: []
     };
-
     // update meta_grid features from cityio
     if (metaGrid) {
         for (let i = 0; i < metaGrid.length; i++) {
-            const coordinates = metaGrid[i].geometry.coordinates[0];
-            for (let n = 0; n < coordinates.length - 1; n++) {
-                let id = -1 + (n + 1) * (i + 1);
-                let props;
-                if (cityioData.interactive_network_data) {
-                    props = cityioData.interactive_network_data[id];
-                } else {
-                    props = {
-                        land_use: "network",
-                        netWidth: 2,
-                        color: [0, 0, 0, 100],
-                        id: id
-                    };
-                }
-                const line = {
-                    type: "Feature",
-                    properties: props,
-                    geometry: {
-                        type: "LineString",
-                        coordinates: []
-                    }
+            const pnttLatLong = metaGrid[i].geometry.coordinates[0][0];
+            let id = i;
+            let props;
+            if (cityioData.interactive_network_data) {
+                props = cityioData.interactive_network_data[id];
+            } else {
+                props = {
+                    land_use: "network",
+                    netWidth: 5,
+                    color: [255, 255, 255, 1],
+                    id: id
                 };
-
-                line.geometry.coordinates.push(
-                    coordinates[n],
-                    coordinates[n + 1]
-                );
-
-                networkGeojson.features.push(line);
             }
+            const pnt = {
+                type: "Feature",
+                properties: props,
+                geometry: {
+                    type: "Point",
+                    coordinates: pnttLatLong
+                }
+            };
+            networkGeojson.features.push(pnt);
         }
     }
     return networkGeojson;

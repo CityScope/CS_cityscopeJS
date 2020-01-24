@@ -14,7 +14,13 @@ import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { HeatmapLayer, PathLayer, GeoJsonLayer, TextLayer } from "deck.gl";
+import {
+    HeatmapLayer,
+    PathLayer,
+    GeoJsonLayer,
+    TextLayer,
+    ScatterplotLayer
+} from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../settings/settings.json";
 import { consoleStyle } from "../../services/consoleStyle";
@@ -382,10 +388,13 @@ class Map extends Component {
         // compute rnd color for now
         if (e.nativeEvent.key === " ") {
             this._rndType();
-        } else if (e.nativeEvent.key === "=") {
-            this.setState({ pickingRadius: this.state.pickingRadius + 1 });
-        } else if (e.nativeEvent.key === "-") {
-            this.setState({ pickingRadius: this.state.pickingRadius - 1 });
+        } else if (
+            e.nativeEvent.key === "=" &&
+            this.state.pickingRadius < 100
+        ) {
+            this.setState({ pickingRadius: this.state.pickingRadius + 5 });
+        } else if (e.nativeEvent.key === "-" && this.state.pickingRadius > 0) {
+            this.setState({ pickingRadius: this.state.pickingRadius - 5 });
         }
     };
 
@@ -415,22 +424,28 @@ class Map extends Component {
             this.state.networkGeojson.features
         ) {
             layers.push(
-                new PathLayer({
+                new ScatterplotLayer({
                     id: "NETWORK",
                     data: this.state.networkGeojson.features,
                     pickable: true,
-                    widthScale: 1,
-                    widthMinPixels: 1,
-                    getPath: d => d.geometry.coordinates,
-                    getColor: d => d.properties.color,
-                    getWidth: d => d.properties.netWidth,
+                    opacity: 0.8,
+                    stroked: true,
+                    filled: true,
+                    radiusScale: 1,
+                    radiusMinPixels: 1,
+                    radiusMaxPixels: 20,
+                    getPosition: d => d.geometry.coordinates,
+                    // getColor: d => d.properties.color,
+                    getFillColor: [0, 0, 0, 0],
+                    getLineColor: d => d.properties.color,
+                    getRadius: d => d.properties.netWidth,
                     updateTriggers: {
-                        getColor: this.state.selectedNetState,
-                        getWidth: this.state.selectedNetState
+                        getLineColor: this.state.selectedNetState,
+                        getRadius: this.state.selectedNetState
                     },
                     transitions: {
-                        getColor: 500,
-                        getWidth: 500
+                        getLineColor: 500,
+                        getRadius: 500
                     },
                     onClick: event => {
                         if (

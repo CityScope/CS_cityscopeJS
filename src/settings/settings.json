@@ -67,27 +67,27 @@
         "netTypes": {
             "0": {
                 "width": 10,
-                "color": [255, 255, 255, 10],
+                "color": [255, 255, 255, 50],
                 "name": "None"
             },
             "1": {
                 "width": 5,
-                "color": [100, 100, 100, 100],
+                "color": [100, 100, 100, 150],
                 "name": "two lanes"
             },
             "2": {
                 "width": 10,
-                "color": [50, 50, 50, 100],
+                "color": [50, 50, 50, 150],
                 "name": "four lanes"
             },
             "3": {
                 "width": 4,
-                "color": [0, 250, 0, 100],
+                "color": [0, 250, 0, 150],
                 "name": "bikelanes"
             },
             "4": {
                 "width": 2,
-                "color": [200, 200, 0, 100],
+                "color": [200, 200, 0, 150],
                 "name": "walkway"
             }
         },
