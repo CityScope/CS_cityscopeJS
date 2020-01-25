@@ -282,6 +282,28 @@ class Map extends Component {
         });
     };
 
+    _handleCellsHover = e => {
+        const randomType = this.state.randomType;
+
+        if (e.object && e.object.properties) {
+            const thisCellProps = e.object.properties;
+            if (
+                thisCellProps.land_use !== "None" &&
+                !thisCellProps.interactive
+            ) {
+                thisCellProps.old_color = thisCellProps.color;
+                thisCellProps.color = randomType.color;
+                this.setState({
+                    selectedCellsState: e.object
+                });
+                thisCellProps.color = thisCellProps.old_color;
+                this.setState({
+                    selectedCellsState: e.object
+                });
+            }
+        }
+    };
+
     /**
      * Description. allow only to pick net edges
      */
@@ -504,6 +526,13 @@ class Map extends Component {
                             this.state.keyDownState !== "Shift"
                         )
                             this._handleCellsSelection(event);
+                    },
+                    onHover: event => {
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        )
+                            this._handleCellsHover(event);
                     },
                     onDrag: event => {
                         if (
