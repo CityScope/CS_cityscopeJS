@@ -1,31 +1,28 @@
-# CityScopeJS
+# CityScopeJS Architecture
 
-#### CityScope platform for the web
+## CityScope platform for the web
 
 CityScopeJS is a modular, open-ended architecture for MIT CityScope project.
-
-## Architecture
 
 ![CityScopeJS Architecture](figures/CityScopeJS_arch.png)
 
 CityScopeJS includes several modules for building, testing and deploying an end-to-end CityScope platform. Each module is developed as a standalone part of the system with minimal dependency on others. Data flow between modules is achieved using [cityIO](https://cityio.media.mit.edu), which operates between the different modules.
-
 ![TUI](figures/CityScopeJS.jpg)
 
-# CityScopeJS Frontend
+## CityScopeJS Frontend
 
 This repo contains the web frontend interface for CityScope platform.
 
-## Development
+### Development
 
 In the project directory, you can run: `npm start` Runs the app in the development mode.<br /> Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-## Usage
+### Usage
 
 -   Start by adding CityScope table name to the URL (in the form of: `...URL/?__yourTableName__`)
 -   Look for other active tables in cityIO
 
-# CityScopeJS Auxiliary Tools
+## CityScopeJS Auxiliary Tools
 
 CityScopeJS is being constantly developed through its frontend, backend and modules. These tools extend CityScopeJS:
 

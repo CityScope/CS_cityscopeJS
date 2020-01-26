@@ -28,7 +28,12 @@ const MapRoute = () => {
 };
 
 const DocsRoute = () => {
-    return <Docs doc="schema" />;
+    return (
+        <React.Fragment>
+            <Docs doc="arch" />
+            <Docs doc="schema" />
+        </React.Fragment>
+    );
 };
 
 class App extends Component {
