@@ -3,7 +3,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { getCityioData } from "../../redux/actions";
 import settings from "../../settings/settings.json";
-import CityioFail from "./cityioDefault";
+import CityioDefault from "./cityioDefault";
 
 class CityIO extends Component {
     constructor(props) {
@@ -168,7 +168,7 @@ class CityIO extends Component {
 
     render() {
         if (this.state.userEnteredCityioEndpoint === false) {
-            return <CityioFail />;
+            return <CityioDefault />;
         } else {
             this.sharePropsWithRedux();
             return null;

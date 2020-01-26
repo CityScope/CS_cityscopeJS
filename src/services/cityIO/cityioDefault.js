@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./cityioDefault.css";
 
-class CityioFail extends Component {
+class CityioDefault extends Component {
     render() {
         return (
             <div className="background">
@@ -33,4 +33,4 @@ class CityioFail extends Component {
     }
 }
 
-export default CityioFail;
+export default CityioDefault;
