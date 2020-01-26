@@ -1,0 +1,20 @@
+h1 {
+    font-size: 5vw;
+}
+body {
+    text-align: left;
+    font-size: 2vw;
+    padding: 10vw;
+    font-weight: lighter;
+    color: rgb(255, 255, 255);
+}
+
+a:link,
+a:visited {
+    color: white;
+    text-decoration: underline;
+    font-weight: 500;
+}
+a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}

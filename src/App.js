@@ -2,7 +2,7 @@ import { Provider } from "react-redux";
 import "./index.css";
 import configureStore from "./redux/store";
 import CityIO from "./services/cityIO";
-import Fallback from "./components/fallback/fallback";
+import Docs from "./docs/docs";
 import MenuContainer from "./components/menu/menuContainer";
 import MapContainer from "./components/baseMap/baseMapContainer";
 import VisContainer from "./components/vis/visContainer";
@@ -24,11 +24,11 @@ const MapRoute = () => {
             </React.Fragment>
         );
     }
-    return <Fallback />;
+    return <Docs />;
 };
 
-const Docs = () => {
-    return null;
+const DocsRoute = () => {
+    return <Docs />;
 };
 
 class App extends Component {
@@ -38,7 +38,7 @@ class App extends Component {
                 <Router>
                     <Switch>
                         <Route path="/docs">
-                            <Docs />;
+                            <DocsRoute />;
                         </Route>
                         <Route path="/">
                             <MapRoute />
