@@ -1,16 +1,14 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getCityioData } from "../../redux/actions";
-import settings from "../../settings/settings.json";
-import CityioDefault from "./cityioDefault";
+import { getCityioData } from "../redux/actions";
+import settings from "../settings/settings.json";
 
 class CityIO extends Component {
     constructor(props) {
         super(props);
         this.state = {
             oldHashs: {},
-            userEnteredCityioEndpoint: false,
             cityIOmodulesData: {}
         };
         this.cityioURL = null;
@@ -24,26 +22,18 @@ class CityIO extends Component {
     }
 
     handleURL = () => {
-        this.tableName = window.location.search.substring(1);
-        if (this.tableName !== "") {
-            this.setState({ userEnteredCityioEndpoint: true });
-            this.cityioURL =
-                settings.cityIO.baseURL + this.tableName.toString();
-            // get the hashes first
-            this.getCityIOHash(this.cityioURL + "/meta");
-            // and every interval
-            this.timer = setInterval(
-                () => this.getCityIOHash(this.cityioURL + "/meta"),
-                settings.cityIO.interval
-            );
-            console.log(
-                "starting cityIO interval every..",
-                settings.cityIO.interval
-            );
-        } else {
-            // no URL provided
-            this.setState({ userEnteredCityioEndpoint: false });
-        }
+        this.cityioURL = settings.cityIO.baseURL + this.props.tableName;
+        // get the hashes first
+        this.getCityIOHash(this.cityioURL + "/meta");
+        // and every interval
+        this.timer = setInterval(
+            () => this.getCityIOHash(this.cityioURL + "/meta"),
+            settings.cityIO.interval
+        );
+        console.log(
+            "starting cityIO interval every..",
+            settings.cityIO.interval
+        );
     };
 
     /**
@@ -167,12 +157,8 @@ class CityIO extends Component {
     };
 
     render() {
-        if (this.state.userEnteredCityioEndpoint === false) {
-            return <CityioDefault />;
-        } else {
-            this.sharePropsWithRedux();
-            return null;
-        }
+        this.sharePropsWithRedux();
+        return null;
     }
 }
 

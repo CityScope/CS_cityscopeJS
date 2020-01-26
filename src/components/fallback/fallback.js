@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import "./cityioDefault.css";
+import "./fallback.css";
 
-class CityioDefault extends Component {
+class Fallback extends Component {
     render() {
         return (
             <div className="background">
@@ -33,4 +33,4 @@ class CityioDefault extends Component {
     }
 }
 
-export default CityioDefault;
+export default Fallback;
