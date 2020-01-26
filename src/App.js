@@ -16,36 +16,34 @@ const MapRoute = () => {
     const tableName = window.location.search.substring(1);
     if (tableName !== "") {
         return (
-            <React.Fragment>
+            <Provider store={store}>
                 <MapContainer />
                 <CityIO tableName={tableName} />
                 <VisContainer />
                 <MenuContainer />
-            </React.Fragment>
+            </Provider>
         );
     }
-    return <Docs />;
+    return <Docs doc="home" />;
 };
 
 const DocsRoute = () => {
-    return <Docs />;
+    return <Docs doc="schema" />;
 };
 
 class App extends Component {
     render() {
         return (
-            <Provider store={store}>
-                <Router>
-                    <Switch>
-                        <Route path="/docs">
-                            <DocsRoute />;
-                        </Route>
-                        <Route path="/">
-                            <MapRoute />
-                        </Route>
-                    </Switch>
-                </Router>
-            </Provider>
+            <Router>
+                <Switch>
+                    <Route path="/docs">
+                        <DocsRoute />;
+                    </Route>
+                    <Route path="/">
+                        <MapRoute />
+                    </Route>
+                </Switch>
+            </Router>
         );
     }
 }

@@ -1,20 +1,21 @@
 h1 {
     font-size: 5vw;
 }
-body {
+.docs {
     text-align: left;
-    font-size: 2vw;
-    padding: 10vw;
+    font-size: 1.5vw;
+    padding-left: 25vw;
+    padding-right: 25vw;
     font-weight: lighter;
     color: rgb(255, 255, 255);
 }
 
-a:link,
+.docs a:link,
 a:visited {
     color: white;
     text-decoration: underline;
     font-weight: 500;
 }
-a:hover {
+.docs a:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }

@@ -2,31 +2,25 @@ import React, { Component } from "react";
 import "./docs.css";
 const ReactMarkdown = require("react-markdown");
 
-const arch = require("./md/arch.md");
+// const arch = require("./md/arch.md");
+// const home = require("./md/home.md");
+// const schema = require("./md/schema.md");
 
 class Docs extends Component {
-    state = { text: "Loading..." };
+    state = { text: "loading..." };
 
     componentDidMount() {
-        fetch(arch)
+        const doc = require("./md/" + this.props.doc + ".md");
+        fetch(doc)
             .then(response => response.text())
-            .then(text => {
-                this.setState({ text });
-            });
+            .then(text => this.setState({ text: text }));
     }
 
     render() {
-        const { text } = this.state;
-
         return (
-            <React.Fragment>
-                <ReactMarkdown
-                    source={text}
-                    transformImageUri={input =>
-                        /^https?:/.test(input) ? input : `../src/md/${input}`
-                    }
-                />
-            </React.Fragment>
+            <div className="docs">
+                <ReactMarkdown source={this.state.text} />
+            </div>
         );
     }
 }
