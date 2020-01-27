@@ -1,4 +1,5 @@
 {
+    "docsURL": "https://raw.githubusercontent.com/CityScope/CS_cityscopeJS/master/docs/",
     "radar": {
         "domain": [
             { "name": "amazing city", "domain": [0, 1] },

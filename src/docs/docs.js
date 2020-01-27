@@ -1,17 +1,18 @@
 import React, { Component } from "react";
+import settings from "../settings/settings.json";
+
 import "./docs.css";
 import axios from "axios";
 const ReactMarkdown = require("react-markdown");
+
+const docsURL = settings.docsURL;
 
 class Docs extends Component {
     state = { text: "loading..." };
 
     componentDidMount() {
-        const doc =
-            "https://raw.githubusercontent.com/CityScope/CS_cityscopeJS/master/src/docs/md/" +
-            this.props.doc +
-            ".md";
-
+        const doc = docsURL + this.props.doc + ".md";
+        // get the doc
         axios
             .get(doc, {
                 mode: "no-cors"
@@ -24,7 +25,14 @@ class Docs extends Component {
     render() {
         return (
             <div className="docs">
-                <ReactMarkdown source={this.state.text} />
+                <ReactMarkdown
+                    source={this.state.text}
+                    transformImageUri={uri =>
+                        uri.startsWith("http")
+                            ? uri
+                            : `${settings.docsURL}${uri}`
+                    }
+                />
             </div>
         );
     }
