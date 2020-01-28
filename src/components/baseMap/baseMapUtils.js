@@ -191,7 +191,7 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
             dataProps
         )
         .then(response => {
-            console.log(response);
+            console.log(response.data);
         })
         .catch(error => {
             console.log(error);

@@ -118,10 +118,12 @@ class Map extends Component {
             this.props.menu.includes("RESET_VIEW")
         ) {
             this._setViewStateToTableHeader();
+            this._handleCellsHeight(true);
         } else if (
             prevProps.menu.includes("RESET_VIEW") &&
             !this.props.menu.includes("RESET_VIEW")
         ) {
+            this._handleCellsHeight(false);
             this.setState({
                 viewState: {
                     ...this.state.viewState,
@@ -237,6 +239,32 @@ class Map extends Component {
             .addEventListener("contextmenu", evt => evt.preventDefault());
     }
 
+    _handleCellsHeight(flat) {
+        let grid = this.state.meta_grid.features;
+
+        grid.forEach(cell => {
+            const thisCellProps = cell.properties;
+            if (flat) {
+                thisCellProps.old_height = thisCellProps.height;
+                thisCellProps.height = 0.1;
+            } else {
+                thisCellProps.height = thisCellProps.old_height;
+            }
+        });
+
+        // ! this should be done cleaner
+        // make new object to hold the state
+        // change value
+        let arr = [];
+        grid.forEach(e => {
+            arr.push(e.properties.height);
+        });
+
+        this.setState({
+            selectedCellsState: arr
+        });
+    }
+
     /**
      * Description. uses deck api to
      * collect objects in a region
@@ -274,10 +302,9 @@ class Map extends Component {
                 thisCellProps.color = randomType.color;
                 thisCellProps.height = randomType.height;
             }
-
-            this.setState({
-                selectedCellsState: multiSelectedObj
-            });
+        });
+        this.setState({
+            selectedCellsState: multiSelectedObj
         });
     };
 
@@ -505,10 +532,7 @@ class Map extends Component {
                     extruded: true,
                     lineWidthScale: 1,
                     lineWidthMinPixels: 2,
-                    getElevation: d =>
-                        d.properties.land_use !== "None"
-                            ? d.properties.height
-                            : 0,
+                    getElevation: d => d.properties.height,
                     getFillColor: d =>
                         d.properties.type !== undefined
                             ? d.properties.color
