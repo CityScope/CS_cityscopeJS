@@ -15,6 +15,8 @@ const store = configureStore();
 const MapRoute = () => {
     const tableName = window.location.search.substring(1);
     if (tableName !== "") {
+        console.log(tableName);
+
         return (
             <Provider store={store}>
                 <MapContainer />

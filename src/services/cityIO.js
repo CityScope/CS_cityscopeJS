@@ -109,7 +109,7 @@ class CityIO extends Component {
     sharePropsWithRedux = () => {
         if (this.state.readyToShareWithRedux) {
             const data = this.state.cityIOmodulesData;
-            data.tableName = this.tableName;
+            data.tableName = this.props.tableName;
             console.log("done updating from cityIO..");
             // finally, send data to redux
             this.props.getCityioData(data);

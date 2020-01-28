@@ -98,9 +98,10 @@ class Map extends Component {
             prevProps.menu.includes("EDIT") &&
             !this.props.menu.includes("EDIT")
         ) {
+            console.log(this.props.cityioData);
+
             _postMapEditsToCityIO(
                 this.state.meta_grid,
-
                 this.props.cityioData.tableName,
                 "/interactive_grid_data"
             );
