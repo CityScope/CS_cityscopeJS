@@ -12,6 +12,8 @@ class Docs extends Component {
 
     componentDidMount() {
         const doc = docsURL + this.props.doc + ".md";
+        console.log(doc);
+
         // get the doc
         axios
             .get(doc, {
