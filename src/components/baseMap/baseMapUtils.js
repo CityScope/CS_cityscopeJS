@@ -197,3 +197,24 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
             console.log(error);
         });
 };
+
+// _handleCellsHeight(flat) {
+//     let grid = this.state.meta_grid.features;
+
+//     grid.forEach(cell => {
+//         const thisCellProps = cell.properties;
+//         if (flat) {
+//             thisCellProps.old_height = thisCellProps.height;
+//             thisCellProps.flat = true;
+//             thisCellProps.height = 0.1;
+//         } else {
+//             thisCellProps.flat = false;
+//             thisCellProps.height = thisCellProps.old_height;
+//         }
+//     });
+//     // make react think of a new obj: hack
+//     grid = JSON.parse(JSON.stringify(grid));
+//     this.setState({
+//         selectedCellsState: grid
+//     });
+// }

@@ -106,7 +106,6 @@ class Map extends Component {
 
             _postMapEditsToCityIO(
                 this.state.networkGeojson,
-
                 this.props.cityioData.tableName,
                 "/interactive_network_data"
             );
@@ -118,12 +117,10 @@ class Map extends Component {
             this.props.menu.includes("RESET_VIEW")
         ) {
             this._setViewStateToTableHeader();
-            this._handleCellsHeight(true);
         } else if (
             prevProps.menu.includes("RESET_VIEW") &&
             !this.props.menu.includes("RESET_VIEW")
         ) {
-            this._handleCellsHeight(false);
             this.setState({
                 viewState: {
                     ...this.state.viewState,
@@ -237,32 +234,6 @@ class Map extends Component {
         document
             .getElementById("deckgl-wrapper")
             .addEventListener("contextmenu", evt => evt.preventDefault());
-    }
-
-    _handleCellsHeight(flat) {
-        let grid = this.state.meta_grid.features;
-
-        grid.forEach(cell => {
-            const thisCellProps = cell.properties;
-            if (flat) {
-                thisCellProps.old_height = thisCellProps.height;
-                thisCellProps.height = 0.1;
-            } else {
-                thisCellProps.height = thisCellProps.old_height;
-            }
-        });
-
-        // ! this should be done cleaner
-        // make new object to hold the state
-        // change value
-        let arr = [];
-        grid.forEach(e => {
-            arr.push(e.properties.height);
-        });
-
-        this.setState({
-            selectedCellsState: arr
-        });
     }
 
     /**
@@ -679,6 +650,7 @@ class Map extends Component {
     render() {
         return (
             <div
+                className="baseMap"
                 onKeyDown={this._handleKeyDown}
                 onKeyUp={this._handleKeyUp}
                 onMouseMove={e =>
