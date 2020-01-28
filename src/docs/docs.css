@@ -1,21 +1,23 @@
 h1 {
-    font-size: 5vw;
+    font-size: 3vw;
 }
 .docs {
     text-align: left;
     font-size: 1.5vw;
     padding-left: 25vw;
     padding-right: 25vw;
-    font-weight: 200;
+    font-weight: 300;
 }
 
 .docs a:link,
 a:visited {
-    text-decoration: none;
-    font-weight: 300;
+    color: black;
+    text-decoration: underline;
 }
 .docs a:hover {
-    background-color: rgba(87, 87, 87, 0.2);
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0.2vw 0.2vw 1vw rgba(0, 0, 0, 0.473);
+    border-radius: 0.5vw;
 }
 
 img {
