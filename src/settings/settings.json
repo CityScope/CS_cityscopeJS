@@ -68,7 +68,7 @@
         "netTypes": {
             "0": {
                 "width": 10,
-                "color": [255, 255, 255, 50],
+                "color": [255, 255, 255, 1],
                 "name": "None"
             },
             "1": {
@@ -82,7 +82,7 @@
                 "name": "four lanes"
             },
             "3": {
-                "width": 4,
+                "width": 2,
                 "color": [0, 250, 0, 150],
                 "name": "bikelanes"
             },
@@ -101,7 +101,7 @@
             "1": {
                 "height": 1,
                 "color": [255, 255, 255],
-                "name": "Road"
+                "name": "Plaza"
             },
             "2": {
                 "height": 10,

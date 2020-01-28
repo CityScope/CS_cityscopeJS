@@ -98,8 +98,6 @@ class Map extends Component {
             prevProps.menu.includes("EDIT") &&
             !this.props.menu.includes("EDIT")
         ) {
-            console.log(this.props.cityioData);
-
             _postMapEditsToCityIO(
                 this.state.meta_grid,
                 this.props.cityioData.tableName,
@@ -452,22 +450,20 @@ class Map extends Component {
                     data: this.state.networkGeojson.features,
                     pickable: true,
                     opacity: 0.8,
-                    stroked: true,
+                    stroked: false,
                     filled: true,
                     radiusScale: 1,
                     radiusMinPixels: 1,
                     radiusMaxPixels: 20,
                     getPosition: d => d.geometry.coordinates,
-                    // getColor: d => d.properties.color,
-                    getFillColor: [0, 0, 0, 0],
-                    getLineColor: d => d.properties.color,
+                    getFillColor: d => d.properties.color,
                     getRadius: d => d.properties.netWidth,
                     updateTriggers: {
-                        getLineColor: this.state.selectedNetState,
+                        getFillColor: this.state.selectedNetState,
                         getRadius: this.state.selectedNetState
                     },
                     transitions: {
-                        getLineColor: 500,
+                        getFillColor: 500,
                         getRadius: 500
                     },
                     onClick: event => {

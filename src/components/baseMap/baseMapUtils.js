@@ -105,11 +105,12 @@ export const _proccesnetworkGeojson = cityioData => {
             if (cityioData.interactive_network_data) {
                 props = cityioData.interactive_network_data[id];
             } else {
+                const noneType = settings.map.netTypes[0];
                 props = {
                     land_use: "network",
-                    netWidth: 5,
-                    color: [255, 255, 255, 1],
-                    id: id
+                    netWidth: noneType.width,
+                    color: noneType.color,
+                    id: "0"
                 };
             }
             const pnt = {
