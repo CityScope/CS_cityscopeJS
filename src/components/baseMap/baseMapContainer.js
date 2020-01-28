@@ -15,19 +15,29 @@ class MapContainer extends Component {
             this.props.cityioData.header
         ) {
             return (
-                <Layer
-                    className="mapLayer"
+                <div
                     style={{
-                        height: "99.5vh",
-                        width: "100vw"
+                        background: "black",
+                        height: "100vh",
+                        width: "100vw",
+                        maxWidth: "100%",
+                        overflow: "hidden"
                     }}
-                    isEditMode={this._checkKeystone()}
                 >
-                    <MAP
-                        cityioData={this.props.cityioData}
-                        menu={this.props.menu}
-                    />
-                </Layer>
+                    <Layer
+                        className="mapLayer"
+                        style={{
+                            height: "100vh",
+                            width: "100vw"
+                        }}
+                        isEditMode={this._checkKeystone()}
+                    >
+                        <MAP
+                            cityioData={this.props.cityioData}
+                            menu={this.props.menu}
+                        />
+                    </Layer>
+                </div>
             );
         } else {
             return null;
