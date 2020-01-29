@@ -640,7 +640,9 @@ class Map extends Component {
                     opacity: 0.25,
                     data: this.state.access,
                     getPosition: d => d.coordinates,
-                    getWeight: d => d.values.housing
+                    getWeight: d => {
+                        return d.values[Object.keys(d.values)[0]];
+                    }
                 })
             );
         }
