@@ -55,7 +55,11 @@ Ideally, this field should be read once on init, due to its size and static stat
 
 **optional fields**
 
-`interactive_mapping`: maps the grid cells that are interactable via the HCI/TUI CityScope interface or web/mobile UI. This allow mixing of different interactions without overwriting. Format `{"__feature_number__":{"TUI":"__TUI_CELL_NUMBER__"},"__feature_number__":{"WEB":"__WEB_INTERACTION_CELL_NUMBER__"}}`
+`interactive_mapping`: maps the grid cells that are interactable via the HCI/TUI CityScope interface or web/mobile UI. This allow mixing of different interactions without overwriting. Format
+
+```
+{"__feature_number__":{"TUI":"__TUI_CELL_NUMBER__"},"__feature_number__":{"WEB":"__WEB_INTERACTION_CELL_NUMBER__"}}
+```
 
 ---
 

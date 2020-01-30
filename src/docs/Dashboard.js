@@ -31,6 +31,7 @@ const styles = theme => ({
         ...theme.mixins.toolbar
     },
     appBar: {
+        background: "#000",
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,

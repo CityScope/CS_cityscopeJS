@@ -1,26 +1,14 @@
 .result-pane > div {
-    top: 57px;
     right: 0;
     left: 0;
     bottom: 0;
     overflow: auto;
-    padding: 10px;
-    padding-left: 20px;
+    padding: 2vh;
+    padding-left: 2vw;
+    padding-right: 15vw;
     color: #444;
-
-    font-size: 16px;
-    line-height: 1.5em;
-}
-
-h1 {
-    font-size: 3vw;
-}
-.docs {
-    text-align: left;
-    font-size: 1.5vw;
-    padding-left: 25vw;
-    padding-right: 25vw;
-    font-weight: 300;
+    font-size: 1.2vw;
+    line-height: 1.5vw;
 }
 
 a:link,
@@ -37,31 +25,15 @@ a:hover {
 img {
     max-width: 100%;
     max-height: 100%;
-}
-
-.markdown-controls {
-    position: relative;
-    z-index: 5;
-    text-align: right;
-    color: #fff;
-    float: right;
-}
-
-.markdown-controls form {
-    background-color: rgba(0, 0, 0, 0.5);
-    margin-right: 20px;
-}
-
-.markdown-controls legend {
-    border-bottom: 0;
-    color: #fff;
-    font-size: 1.25em;
-    margin: 0;
-    padding: 10px 0 0 0;
+    border-radius: 1vw;
+    box-shadow: 0vw 0vw 1vw 0.1vw #c4c4c4;
+    margin: 1vw;
 }
 
 pre {
-    border: 1px solid #ccc;
+    border-radius: 1vw;
+    padding: 2vw;
+    box-shadow: 0vw 0vw 1vw 0.1vw #c4c4c4;
 }
 
 blockquote {
@@ -69,19 +41,4 @@ blockquote {
     margin: 0;
     padding-left: 3em;
     border-left: 0.5em #eee solid;
-}
-
-tr {
-    border-top: 1px solid #000000;
-    background: rgb(255, 255, 255);
-}
-
-th,
-td {
-    padding: 6px 13px;
-    border: 1px solid #dfe2e5;
-}
-
-table tr:nth-child(2n) {
-    background: #f6f8fa;
 }
