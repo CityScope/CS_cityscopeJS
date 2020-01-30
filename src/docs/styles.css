@@ -1,0 +1,44 @@
+.result-pane > div {
+    right: 0;
+    left: 0;
+    bottom: 0;
+    overflow: auto;
+    padding: 2vh;
+    padding-left: 2vw;
+    padding-right: 15vw;
+    color: #444;
+    font-size: 1.2vw;
+    line-height: 1.5vw;
+}
+
+a:link,
+a:visited {
+    color: black;
+    text-decoration: underline;
+}
+a:hover {
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0.2vw 0.2vw 1vw rgba(0, 0, 0, 0.473);
+    border-radius: 0.5vw;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 1vw;
+    box-shadow: 0vw 0vw 1vw 0.1vw #c4c4c4;
+    margin: 1vw;
+}
+
+pre {
+    border-radius: 1vw;
+    padding: 2vw;
+    box-shadow: 0vw 0vw 1vw 0.1vw #c4c4c4;
+}
+
+blockquote {
+    color: rgb(0, 0, 0);
+    margin: 0;
+    padding-left: 3em;
+    border-left: 0.5em #eee solid;
+}
