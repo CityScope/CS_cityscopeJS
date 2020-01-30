@@ -38,7 +38,7 @@ function TechnologyListItems() {
     };
     return (
         <div>
-            <ListSubheader inset>Docs</ListSubheader>
+            <ListSubheader inset>General</ListSubheader>
 
             <ListItem
                 button
@@ -55,6 +55,20 @@ function TechnologyListItems() {
             <ListItem
                 button
                 onClick={() => {
+                    changeContentUrl("ecosystem.md");
+                }}
+            >
+                <ListItemIcon>
+                    <LayersIcon />
+                </ListItemIcon>
+                <ListItemText primary="CityScope Ecosystem" />
+            </ListItem>
+
+            <ListSubheader inset>Usage & Dev</ListSubheader>
+
+            <ListItem
+                button
+                onClick={() => {
                     changeContentUrl("schema.md");
                 }}
             >
@@ -62,6 +76,18 @@ function TechnologyListItems() {
                     <LayersIcon />
                 </ListItemIcon>
                 <ListItemText primary="Data Standards" />
+            </ListItem>
+
+            <ListItem
+                button
+                onClick={() => {
+                    changeContentUrl("dev.md");
+                }}
+            >
+                <ListItemIcon>
+                    <LayersIcon />
+                </ListItemIcon>
+                <ListItemText primary="Development" />
             </ListItem>
 
             <ListSubheader inset>Links</ListSubheader>
