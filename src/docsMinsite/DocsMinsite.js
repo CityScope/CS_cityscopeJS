@@ -3,7 +3,7 @@ import "./styles.css";
 import Dashboard from "./Dashboard";
 import Provider from "./provider";
 
-function Docs() {
+function DocsMinsite() {
     return (
         <Provider>
             <Dashboard />
@@ -11,4 +11,4 @@ function Docs() {
     );
 }
 
-export default Docs;
+export default DocsMinsite;
