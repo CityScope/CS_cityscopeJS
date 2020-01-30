@@ -1,43 +1,14 @@
-import React, { Component } from "react";
-import settings from "../settings/settings.json";
+import React from "react";
+import "./styles.css";
+import Dashboard from "./Dashboard";
+import Provider from "./provider";
 
-import "./docs.css";
-import axios from "axios";
-const ReactMarkdown = require("react-markdown");
-
-const docsURL = settings.docsURL;
-
-class Docs extends Component {
-    state = { text: "loading..." };
-
-    componentDidMount() {
-        const doc = docsURL + this.props.doc + ".md";
-        console.log(doc);
-
-        // get the doc
-        axios
-            .get(doc, {
-                mode: "no-cors"
-            })
-            .then(response => {
-                this.setState({ text: response.data });
-            });
-    }
-
-    render() {
-        return (
-            <div className="docs">
-                <ReactMarkdown
-                    source={this.state.text}
-                    transformImageUri={uri =>
-                        uri.startsWith("http")
-                            ? uri
-                            : `${settings.docsURL}${uri}`
-                    }
-                />
-            </div>
-        );
-    }
+function Docs() {
+    return (
+        <Provider>
+            <Dashboard />
+        </Provider>
+    );
 }
 
 export default Docs;
