@@ -5,8 +5,7 @@
     overflow: auto;
     padding: 2vh;
     padding-left: 2vw;
-    padding-right: 15vw;
-    color: #444;
+    padding-right: 20vw;
     font-size: 1.2vw;
     line-height: 1.5vw;
 }
@@ -34,6 +33,7 @@ pre {
     border-radius: 1vw;
     padding: 2vw;
     box-shadow: 0vw 0vw 1vw 0.1vw #c4c4c4;
+    overflow-x: scroll;
 }
 
 blockquote {
