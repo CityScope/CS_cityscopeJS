@@ -2,7 +2,7 @@ import { Provider } from "react-redux";
 import "./index.css";
 import configureStore from "./redux/store";
 import CityIO from "./services/cityIO";
-import DocsMinsite from "./docsMinsite/DocsMinsite";
+import DocsMinsite from "./components/docsMinsite/DocsMinsite";
 import MenuContainer from "./components/menu/menuContainer";
 import MapContainer from "./components/baseMap/baseMapContainer";
 import VisContainer from "./components/vis/visContainer";

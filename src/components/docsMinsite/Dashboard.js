@@ -113,6 +113,7 @@ class Dashboard extends React.Component {
         return (
             <div className={classes.root}>
                 <CssBaseline />
+
                 <AppBar
                     position="absolute"
                     className={classNames(
