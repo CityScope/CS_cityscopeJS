@@ -417,10 +417,19 @@ class Map extends Component {
         }
     };
 
+    _remapValues = value => {
+        let remap =
+            value > 14 && value < 20 ? 5 : value < 14 && value > 12 ? 20 : 40;
+
+        return remap;
+    };
+
     /**
      * renders deck gl layers
      */
     _renderLayers() {
+        const zoomLevel = this.state.viewState.zoom;
+
         const cityioData = this.props.cityioData;
         let layers = [];
 
@@ -556,19 +565,37 @@ class Map extends Component {
             );
         }
 
+        if (this.props.menu.includes("ACCESS")) {
+            layers.push(
+                new HeatmapLayer({
+                    id: "ACCESS",
+                    visible: this.props.menu.includes("ACCESS") ? true : false,
+                    colorRange: settings.map.layers.heatmap.colors,
+                    radiusPixels: 200,
+                    opacity: 0.25,
+                    data: this.state.access,
+                    getPosition: d => d.coordinates,
+                    getWeight: d => {
+                        return d.values[Object.keys(d.values)[0]];
+                    }
+                })
+            );
+        }
+
         if (this.props.menu.includes("ABM")) {
             layers.push(
                 new TripsLayer({
                     id: "ABM",
                     visible: this.props.menu.includes("ABM") ? true : false,
                     data: cityioData.ABM,
-                    // getPath: d => d.path,
-                    getPath: d => {
-                        for (let i in d.path) {
-                            d.path[i][2] = 20;
-                        }
-                        return d.path;
-                    },
+                    getPath: d => d.path,
+                    // ! get Z for each segment
+                    // getPath: d => {
+                    //     for (let i in d.path) {
+                    //         d.path[i][2] = Math.random() * 20;
+                    //     }
+                    //     return d.path;
+                    // },
 
                     getTimestamps: d => d.timestamps,
                     getColor: d => {
@@ -584,7 +611,8 @@ class Map extends Component {
                                 return [0, 0, 0];
                         }
                     },
-                    getWidth: 2,
+                    getWidth: 1,
+                    widthScale: this._remapValues(zoomLevel),
                     opacity: 0.8,
                     rounded: true,
                     trailLength: 500,
@@ -630,22 +658,6 @@ class Map extends Component {
             );
         }
 
-        if (this.props.menu.includes("ACCESS")) {
-            layers.push(
-                new HeatmapLayer({
-                    id: "ACCESS",
-                    visible: this.props.menu.includes("ACCESS") ? true : false,
-                    colorRange: settings.map.layers.heatmap.colors,
-                    radiusPixels: 200,
-                    opacity: 0.25,
-                    data: this.state.access,
-                    getPosition: d => d.coordinates,
-                    getWeight: d => {
-                        return d.values[Object.keys(d.values)[0]];
-                    }
-                })
-            );
-        }
         return layers;
     }
 
