@@ -4,21 +4,19 @@
     bottom: 0;
     overflow: auto;
     padding: 2vh;
-    padding-left: 2vw;
-    padding-right: 20vw;
-    font-size: 1.2vw;
-    line-height: 1.5vw;
+    padding-left: 15%;
+    padding-right: 15%;
+    font-size: 1.5em;
 }
 
 a:link,
 a:visited {
-    color: black;
-    text-decoration: underline;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    box-shadow: 0vw 0.2vw 1vw rgba(0, 0, 0, 0.3);
 }
 a:hover {
-    background-color: rgba(255, 255, 255, 1);
-    box-shadow: 0.2vw 0.2vw 1vw rgba(0, 0, 0, 0.473);
-    border-radius: 0.5vw;
+    box-shadow: 0.2vw 0.2vw 1vw rgba(0, 0, 0, 0.7);
 }
 
 img {

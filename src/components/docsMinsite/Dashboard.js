@@ -27,7 +27,7 @@ const styles = theme => ({
         display: "flex",
         alignItems: "center",
         justifyContent: "flex-end",
-        padding: "0 8px",
+        padding: "0 5%",
         ...theme.mixins.toolbar
     },
     appBar: {
@@ -54,7 +54,9 @@ const styles = theme => ({
         display: "none"
     },
     title: {
-        flexGrow: 1
+        flexGrow: 1,
+        fontSize: 20,
+        fontWeight: "lighter"
     },
     drawerPaper: {
         position: "relative",
@@ -137,7 +139,7 @@ class Dashboard extends React.Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography
-                            component="h1"
+                            component="h6"
                             variant="h6"
                             color="inherit"
                             noWrap
