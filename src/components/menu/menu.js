@@ -22,7 +22,9 @@ import NavigationIcon from "@material-ui/icons/Navigation";
 // import CircularProgress from "@material-ui/core/CircularProgress";
 
 function Menu(props) {
-    const listOfToggles = Object.keys(settings.menu.toggles);
+    const togglesMeta = settings.menu.toggles;
+    const listOfToggles = Object.keys(togglesMeta);
+
     const useStyles = makeStyles(theme => ({
         root: {
             width: "100%",
@@ -73,7 +75,7 @@ function Menu(props) {
     const [toggleStateArray, setChecked] = React.useState(
         Object.keys(settings.menu.toggles)
             .filter(function(k) {
-                return settings.menu.toggles[k];
+                return settings.menu.toggles[k].showOnInit;
             })
             .map(String)
     );
@@ -119,9 +121,9 @@ function Menu(props) {
     for (let i = 0; i < listOfToggles.length; i++) {
         const thisToggle = (
             <ListItem key={listOfToggles[i]}>
-                {/* <CircularProgress size={20} thickness={5} /> */}
-
-                <ListItemText primary={listOfToggles[i]} />
+                <ListItemText
+                    primary={togglesMeta[listOfToggles[i]].displayName}
+                />
                 <ListItemSecondaryAction>
                     <Switch
                         /**

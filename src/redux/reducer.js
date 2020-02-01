@@ -13,10 +13,11 @@ import {
 const listOfToggles = Object.keys(settings.menu.toggles);
 let menuInitState = [];
 for (let i = 0; i < listOfToggles.length; i++) {
-    if (Object.values(settings.menu.toggles)[i]) {
+    if (Object.values(settings.menu.toggles)[i].showOnInit) {
         menuInitState.push(listOfToggles[i]);
     }
 }
+
 const initialState = {
     MENU: menuInitState,
     CITYIO: {},

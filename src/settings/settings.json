@@ -137,15 +137,21 @@
     },
     "menu": {
         "toggles": {
-            "GRID": true,
-            "NETWORK": true,
-            "TEXT": false,
-            "PATHS": false,
-            "ABM": false,
-            "ACCESS": false,
-            "RADAR": false,
-            "ROTATE": false,
-            "KS": false
+            "GRID": { "displayName": "Interactive Grid", "showOnInit": true },
+            "NETWORK": { "displayName": "Street Network", "showOnInit": true },
+            "TEXT": { "displayName": "Cell Information", "showOnInit": false },
+            "PATHS": {
+                "displayName": "Aggregated Sim Paths",
+                "showOnInit": false
+            },
+            "ABM": { "displayName": "Traffic Simulation", "showOnInit": false },
+            "ACCESS": {
+                "displayName": "Accessibility Analysis",
+                "showOnInit": false
+            },
+            "RADAR": { "displayName": "Urban Matrices", "showOnInit": false },
+            "ROTATE": { "displayName": "Rotate Camera", "showOnInit": false },
+            "KS": { "displayName": "Projection Mapping", "showOnInit": false }
         }
     }
 }
