@@ -13,6 +13,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { MainListItems, TechnologyListItems } from "./menu";
 import Content from "./Content";
+import GitHubIcon from "@material-ui/icons/GitHub";
+import CloudQueueIcon from "@material-ui/icons/CloudQueue";
 
 const drawerWidth = 300;
 
@@ -147,6 +149,30 @@ class Dashboard extends React.Component {
                         >
                             CityScopeJS | MIT CityScope Project
                         </Typography>
+
+                        <IconButton
+                            color="inherit"
+                            onClick={props =>
+                                window.open(
+                                    "https://github.com/CityScope/CS_cityscopeJS",
+                                    "_blank"
+                                )
+                            }
+                        >
+                            <GitHubIcon />
+                        </IconButton>
+
+                        <IconButton
+                            color="inherit"
+                            onClick={props =>
+                                window.open(
+                                    "https://cityio.media.mit.edu",
+                                    "_blank"
+                                )
+                            }
+                        >
+                            <CloudQueueIcon />
+                        </IconButton>
                     </Toolbar>
                 </AppBar>
                 <Drawer

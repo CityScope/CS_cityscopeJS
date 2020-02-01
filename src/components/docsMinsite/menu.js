@@ -6,8 +6,6 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import LayersIcon from "@material-ui/icons/Layers";
 import { AppContext } from "./provider";
 import HomeIcon from "@material-ui/icons/Home";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import CloudQueueIcon from "@material-ui/icons/CloudQueue";
 
 function MainListItems() {
     const { setContentUrl } = useContext(AppContext);
@@ -88,35 +86,6 @@ function TechnologyListItems() {
                     <LayersIcon />
                 </ListItemIcon>
                 <ListItemText primary="Development" />
-            </ListItem>
-
-            <ListSubheader inset>Links</ListSubheader>
-
-            <ListItem
-                button
-                onClick={() =>
-                    window.open(
-                        "https://github.com/CityScope/CS_cityscopeJS",
-                        "_blank"
-                    )
-                }
-            >
-                <ListItemIcon>
-                    <GitHubIcon />
-                </ListItemIcon>
-                <ListItemText primary="CityScopeJS GitHub" />
-            </ListItem>
-
-            <ListItem
-                button
-                onClick={() =>
-                    window.open("https://cityio.media.mit.edu", "_blank")
-                }
-            >
-                <ListItemIcon>
-                    <CloudQueueIcon />
-                </ListItemIcon>
-                <ListItemText primary="cityIO" />
             </ListItem>
         </div>
     );
