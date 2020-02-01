@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function PaperSheet() {
+export default function ABMslider() {
     const classes = useStyles();
 
     return (

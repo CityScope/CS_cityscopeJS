@@ -14,7 +14,7 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import { connect } from "react-redux";
 import { listenToMenuUI } from "../../redux/actions";
 import settings from "../../settings/settings.json";
-import PaperSheet from "./PaperSheet";
+import ABMslider from "./ABMslider";
 import { ThemeProvider } from "@material-ui/styles";
 import NearMeIcon from "@material-ui/icons/NearMe";
 import NavigationIcon from "@material-ui/icons/Navigation";
@@ -26,18 +26,22 @@ function Menu(props) {
     const useStyles = makeStyles(theme => ({
         root: {
             width: "100%",
-            maxWidth: "15em",
+            maxWidth: "30vw",
             position: "absolute",
             "& > *": {
                 margin: theme.spacing(1)
             }
         },
+        backDrop: {
+            backgroundColor: "transparent"
+        },
         paper: {
             background: "black",
             color: "white"
         },
+
         list: {
-            width: "15em"
+            width: "30vw"
         },
         fullList: {
             width: "auto"
@@ -140,7 +144,7 @@ function Menu(props) {
 
     const renderABMslider = () => {
         if (state.checked && state.checked.includes("ABM")) {
-            return <PaperSheet />;
+            return <ABMslider />;
         } else return null;
     };
 
@@ -148,6 +152,11 @@ function Menu(props) {
         <ThemeProvider theme={theme}>
             <div className={classes.root}>
                 <Drawer
+                    BackdropProps={{
+                        classes: {
+                            root: classes.backDrop
+                        }
+                    }}
                     anchor="left"
                     open={state.left}
                     onClose={toggleDrawer("left", false)}
