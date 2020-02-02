@@ -39,7 +39,6 @@ class Map extends Component {
             viewState: settings.map.initialViewState
         };
         this.animationFrame = null;
-        this._onViewStateChange = this._onViewStateChange.bind(this);
         this.timeZoneOffset = setDirLightSettings(this.props.cityioData.header);
         this.dirLightSettings = {
             timestamp: Date.UTC(2019, 7, 1, 11 + this.timeZoneOffset),
@@ -128,9 +127,13 @@ class Map extends Component {
         }
     }
 
-    _onViewStateChange({ viewState }) {
+    _onViewStateChange = ({ viewState }) => {
+        viewState.orthographic = this.props.menu.includes("RESET_VIEW")
+            ? true
+            : false;
+
         this.setState({ viewState });
-    }
+    };
 
     /**
      * resets the camera viewport
@@ -144,9 +147,10 @@ class Map extends Component {
                 ...this.state.viewState,
                 longitude: header.spatial.longitude,
                 latitude: header.spatial.latitude,
-                zoom: 14,
+                zoom: 15,
                 pitch: 0,
-                bearing: 180 - header.spatial.rotation
+                bearing: 360 - header.spatial.rotation,
+                orthographic: true
             }
         });
     }
