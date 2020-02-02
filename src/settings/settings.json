@@ -144,7 +144,7 @@
                 "height": 80,
                 "color": [50, 136, 189, 180],
                 "name": "Office Tower",
-                "class": "buildings"
+                "class": "buildingsClass"
             }
         }
     },
