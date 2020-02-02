@@ -26,8 +26,8 @@ const initialState = {
     SLIDERS: {},
     SELECTED_TYPE: {
         height: 0,
-        color: [0, 0, 0, 0],
-        name: "Clear Buildings"
+        color: [255, 0, 0, 200],
+        name: "Select Land-Use!"
     }
 };
 
