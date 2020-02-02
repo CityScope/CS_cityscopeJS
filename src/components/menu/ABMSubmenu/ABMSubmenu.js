@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function ABMslider() {
+export default function ABMSubmenu() {
     const classes = useStyles();
 
     return (

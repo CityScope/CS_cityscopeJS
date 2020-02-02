@@ -68,90 +68,124 @@
         "netTypes": {
             "0": {
                 "width": 10,
-                "color": [255, 255, 255, 1],
-                "name": "None"
+                "color": [0, 0, 0, 1],
+                "name": "Clear network",
+                "class": "networkClass"
             },
             "1": {
                 "width": 5,
                 "color": [100, 100, 100, 150],
-                "name": "two lanes"
+                "name": "two lanes",
+                "class": "networkClass"
             },
             "2": {
                 "width": 10,
                 "color": [50, 50, 50, 150],
-                "name": "four lanes"
+                "name": "four lanes",
+                "class": "networkClass"
             },
             "3": {
                 "width": 2,
-                "color": [0, 250, 0, 150],
-                "name": "bikelanes"
+                "color": [0, 200, 20, 150],
+                "name": "bike lanes",
+                "class": "networkClass"
             },
             "4": {
                 "width": 2,
                 "color": [200, 200, 0, 150],
-                "name": "walkway"
+                "name": "walkway",
+                "class": "networkClass"
             }
         },
         "types": {
             "0": {
                 "height": 0,
                 "color": [0, 0, 0, 0],
-                "name": "None"
+                "name": "Clear Buildings",
+                "class": "buildingsClass"
             },
             "1": {
                 "height": 1,
                 "color": [255, 255, 255, 180],
-                "name": "Plaza"
+                "name": "Plaza",
+                "class": "buildingsClass"
             },
             "2": {
                 "height": 10,
                 "color": [153, 213, 148, 180],
-                "name": "Green"
+                "name": "Green",
+                "class": "buildingsClass"
             },
             "3": {
                 "height": 10,
                 "color": [252, 141, 89, 180],
-                "name": "Residential Low"
+                "name": "Residential Low",
+                "class": "buildingsClass"
             },
             "4": {
                 "height": 20,
                 "color": [254, 224, 139, 180],
-                "name": "Residential Mid"
+                "name": "Residential Mid",
+                "class": "buildingsClass"
             },
             "5": {
                 "height": 30,
                 "color": [230, 245, 152, 180],
-                "name": "Residential Tall"
+                "name": "Residential Tall",
+                "class": "buildingsClass"
             },
             "6": {
                 "height": 40,
                 "color": [213, 62, 79, 180],
-                "name": "Office Mixuse"
+                "name": "Office Mix Use",
+                "class": "buildingsClass"
             },
             "7": {
                 "height": 80,
                 "color": [50, 136, 189, 180],
-                "name": "Office Tower"
+                "name": "Office Tower",
+                "class": "buildings"
             }
         }
     },
     "menu": {
         "toggles": {
-            "GRID": { "displayName": "Interactive Grid", "showOnInit": true },
-            "NETWORK": { "displayName": "Street Network", "showOnInit": true },
-            "TEXT": { "displayName": "Cell Information", "showOnInit": false },
+            "GRID": {
+                "displayName": "Interactive Grid",
+                "showOnInit": true
+            },
+            "NETWORK": {
+                "displayName": "Street Network",
+                "showOnInit": true
+            },
+            "TEXT": {
+                "displayName": "Cell Information",
+                "showOnInit": false
+            },
             "PATHS": {
                 "displayName": "Aggregated Sim Paths",
                 "showOnInit": false
             },
-            "ABM": { "displayName": "Traffic Simulation", "showOnInit": false },
+            "ABM": {
+                "displayName": "Traffic Simulation",
+                "showOnInit": false
+            },
             "ACCESS": {
                 "displayName": "Accessibility Analysis",
                 "showOnInit": false
             },
-            "RADAR": { "displayName": "Urban Matrices", "showOnInit": false },
-            "ROTATE": { "displayName": "Rotate Camera", "showOnInit": false },
-            "KS": { "displayName": "Projection Mapping", "showOnInit": false }
+            "RADAR": {
+                "displayName": "Urban Matrices",
+                "showOnInit": false
+            },
+            "ROTATE": {
+                "displayName": "Rotate Camera",
+                "showOnInit": false
+            },
+            "KS": {
+                "displayName": "Projection Mapping",
+                "showOnInit": false
+            }
         }
     }
 }

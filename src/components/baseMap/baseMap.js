@@ -30,6 +30,7 @@ class Map extends Component {
         this.state = {
             menu: null,
             cityioData: null,
+            selectedType: null,
             draggingWhileEditing: false,
             selectedCellsState: null,
             selectedNetState: null,
@@ -88,9 +89,6 @@ class Map extends Component {
             if (this.props.cityioData.access) {
                 this.setState({ access: _proccessAccessData(cityioData) });
             }
-
-            // FOR NOW FAKE TYPE
-            this._rndType();
         }
 
         //    toggle edit mode
@@ -236,6 +234,28 @@ class Map extends Component {
             .addEventListener("contextmenu", evt => evt.preventDefault());
     }
 
+    _handleCellsHover = e => {
+        const selectedType = this.props.selectedType;
+
+        if (e.object && e.object.properties) {
+            const thisCellProps = e.object.properties;
+            if (
+                thisCellProps.land_use !== "None" &&
+                !thisCellProps.interactive
+            ) {
+                thisCellProps.old_color = thisCellProps.color;
+                thisCellProps.color = selectedType.color;
+                this.setState({
+                    selectedCellsState: e.object
+                });
+                thisCellProps.color = thisCellProps.old_color;
+                this.setState({
+                    selectedCellsState: e.object
+                });
+            }
+        }
+    };
+
     /**
      * Description. uses deck api to
      * collect objects in a region
@@ -259,19 +279,20 @@ class Map extends Component {
      *  not of CityScope TUI & that are interactable
      * so to not overlap TUI activity
      */
-    _handleCellsSelection = e => {
-        const randomType = this.state.randomType;
+    _handleGridcellEditing = e => {
+        const selectedType = this.props.selectedType;
         const multiSelectedObj = this._mulipleObjPicked(e);
         multiSelectedObj.forEach(selected => {
             const thisCellProps = selected.object.properties;
             if (
+                this.props.selectedType.class === "buildingsClass" &&
                 thisCellProps.land_use !== "None" &&
                 !thisCellProps.interactive
             ) {
                 thisCellProps.old_height = thisCellProps.height;
                 thisCellProps.old_color = thisCellProps.color;
-                thisCellProps.color = randomType.color;
-                thisCellProps.height = randomType.height;
+                thisCellProps.color = selectedType.color;
+                thisCellProps.height = selectedType.height;
             }
         });
         this.setState({
@@ -279,41 +300,22 @@ class Map extends Component {
         });
     };
 
-    _handleCellsHover = e => {
-        const randomType = this.state.randomType;
-
-        if (e.object && e.object.properties) {
-            const thisCellProps = e.object.properties;
-            if (
-                thisCellProps.land_use !== "None" &&
-                !thisCellProps.interactive
-            ) {
-                thisCellProps.old_color = thisCellProps.color;
-                thisCellProps.color = randomType.color;
-                this.setState({
-                    selectedCellsState: e.object
-                });
-                thisCellProps.color = thisCellProps.old_color;
-                this.setState({
-                    selectedCellsState: e.object
-                });
-            }
-        }
-    };
-
     /**
      * Description. allow only to pick net edges
      */
-    _handleNetSelection = e => {
-        const rndNetType = this.state.randomNetType;
+    _handleNetworkEditing = e => {
+        const selectedType = this.props.selectedType;
         const multiEdgeSelected = this._mulipleObjPicked(e);
         multiEdgeSelected.forEach(edge => {
             const thisEdgeProps = edge.object.properties;
             // network edges selected
-            if (thisEdgeProps.land_use === "network") {
+            if (
+                this.props.selectedType.class === "networkClass" &&
+                thisEdgeProps.land_use === "network"
+            ) {
                 thisEdgeProps.old_color = thisEdgeProps.color;
-                thisEdgeProps.color = rndNetType.color;
-                thisEdgeProps.netWidth = rndNetType.width;
+                thisEdgeProps.color = selectedType.color;
+                thisEdgeProps.netWidth = selectedType.width;
             }
         });
         this.setState({
@@ -327,11 +329,8 @@ class Map extends Component {
      */
     _renderSelectionTarget = () => {
         if (this.props.menu.includes("EDIT") && this.state.mousePos) {
-            const targetMetaData =
-                !this.props.menu.includes("GRID") &&
-                this.props.menu.includes("NETWORK")
-                    ? this.state.randomNetType
-                    : this.state.randomType;
+            const targetMetaData = this.props.selectedType;
+
             const rc = targetMetaData.color;
             const color = "rgb(" + rc[0] + "," + rc[1] + "," + rc[2] + ")";
             const mousePos = this.state.mousePos;
@@ -379,24 +378,6 @@ class Map extends Component {
         }
     };
 
-    /**
-     * Description.
-     * Temp def. for color selection
-     */
-    _rndType = () => {
-        var keys = Object.keys(settings.map.types);
-        let randomType =
-            settings.map.types[keys[(keys.length * Math.random()) << 0]];
-        this.setState({ randomType: randomType });
-        // net type !TEMP
-        var netKeys = Object.keys(settings.map.netTypes);
-        let randomNetType =
-            settings.map.netTypes[
-                netKeys[(netKeys.length * Math.random()) << 0]
-            ];
-        this.setState({ randomNetType: randomNetType });
-    };
-
     _handleKeyUp = () => {
         this.setState({ keyDownState: null });
     };
@@ -404,23 +385,19 @@ class Map extends Component {
     _handleKeyDown = e => {
         // avoid common clicks
         this.setState({ keyDownState: e.nativeEvent.key });
-        // compute rnd color for now
-        if (e.nativeEvent.key === " ") {
-            this._rndType();
-        } else if (
-            e.nativeEvent.key === "=" &&
-            this.state.pickingRadius < 100
-        ) {
+        if (e.nativeEvent.key === "=" && this.state.pickingRadius < 100) {
             this.setState({ pickingRadius: this.state.pickingRadius + 5 });
         } else if (e.nativeEvent.key === "-" && this.state.pickingRadius > 0) {
             this.setState({ pickingRadius: this.state.pickingRadius - 5 });
         }
     };
 
+    /**
+     * remap line width
+     */
     _remapValues = value => {
         let remap =
             value > 14 && value < 20 ? 5 : value < 14 && value > 12 ? 20 : 40;
-
         return remap;
     };
 
@@ -478,14 +455,14 @@ class Map extends Component {
                             this.props.menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift"
                         )
-                            this._handleNetSelection(event);
+                            this._handleNetworkEditing(event);
                     },
                     onDrag: event => {
                         if (
                             this.props.menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift"
                         )
-                            this._handleNetSelection(event);
+                            this._handleNetworkEditing(event);
                     },
                     onDragStart: () => {
                         if (
@@ -526,7 +503,7 @@ class Map extends Component {
                             this.props.menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift"
                         )
-                            this._handleCellsSelection(event);
+                            this._handleGridcellEditing(event);
                     },
                     onHover: event => {
                         if (
@@ -540,7 +517,7 @@ class Map extends Component {
                             this.props.menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift"
                         )
-                            this._handleCellsSelection(event);
+                            this._handleGridcellEditing(event);
                     },
                     onDragStart: () => {
                         if (

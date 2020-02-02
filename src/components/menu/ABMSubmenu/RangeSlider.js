@@ -2,9 +2,9 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
-import settings from "../../settings/settings.json";
+import settings from "../../../settings/settings.json";
 import { connect } from "react-redux";
-import { listenToSlidersEvents } from "../../redux/actions";
+import { listenToSlidersEvents } from "../../../redux/actions";
 
 const sixAm = 6 * 3600;
 const { startSimHour, endSimHour } = settings.map.layers.ABM;
