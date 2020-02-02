@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import { createMuiTheme } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -14,8 +13,8 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import { connect } from "react-redux";
 import { listenToMenuUI } from "../../redux/actions";
 import settings from "../../settings/settings.json";
-import ABMslider from "./ABMslider";
-import { ThemeProvider } from "@material-ui/styles";
+import ABMSubmenu from "./ABMSubmenu/ABMSubmenu";
+import TypeEditor from "./TypeEditor/TypeEditor";
 import NearMeIcon from "@material-ui/icons/NearMe";
 import NavigationIcon from "@material-ui/icons/Navigation";
 
@@ -24,7 +23,6 @@ import NavigationIcon from "@material-ui/icons/Navigation";
 function Menu(props) {
     const togglesMeta = settings.menu.toggles;
     const listOfToggles = Object.keys(togglesMeta);
-
     const useStyles = makeStyles(theme => ({
         root: {
             width: "100%",
@@ -67,11 +65,6 @@ function Menu(props) {
     }));
 
     const classes = useStyles();
-    const theme = createMuiTheme({
-        palette: {
-            type: "dark"
-        }
-    });
     const [toggleStateArray, setChecked] = React.useState(
         Object.keys(settings.menu.toggles)
             .filter(function(k) {
@@ -117,6 +110,10 @@ function Menu(props) {
         props.listenToMenuUI(newChecked);
     };
 
+    /**
+     * gets props with initial menu state
+     * and turn on the layer on init
+     */
     let togglesCompsArray = [];
     for (let i = 0; i < listOfToggles.length; i++) {
         const thisToggle = (
@@ -126,10 +123,6 @@ function Menu(props) {
                 />
                 <ListItemSecondaryAction>
                     <Switch
-                        /**
-                         * gets props with initial menu state
-                         * and turn on the layer on init
-                         */
                         edge="end"
                         onChange={handleToggle(listOfToggles[i])}
                         checked={
@@ -144,14 +137,28 @@ function Menu(props) {
         togglesCompsArray.push(thisToggle);
     }
 
-    const renderABMslider = () => {
-        if (state.checked && state.checked.includes("ABM")) {
-            return <ABMslider />;
-        } else return null;
+    const renderSubMenu = () => {
+        if (state.checked) {
+            let subMenuArr = [];
+            state.checked.forEach(layer => {
+                switch (layer) {
+                    case "ABM":
+                        subMenuArr.push(<ABMSubmenu key={layer} />);
+                        break;
+                    case "EDIT":
+                        subMenuArr.push(<TypeEditor key={layer} />);
+                        break;
+
+                    default:
+                        break;
+                }
+            });
+            return subMenuArr;
+        }
     };
 
     return (
-        <ThemeProvider theme={theme}>
+        <React.Fragment>
             <div className={classes.root}>
                 <Drawer
                     BackdropProps={{
@@ -170,7 +177,6 @@ function Menu(props) {
                     </List>
                 </Drawer>
             </div>
-
             <Fab
                 className={classes.menuButton}
                 onClick={toggleDrawer("left", true)}
@@ -184,7 +190,6 @@ function Menu(props) {
                     <EditIcon />
                 )}
             </Fab>
-
             <Fab
                 className={classes.resetViewButton}
                 onClick={handleToggle("RESET_VIEW")}
@@ -195,9 +200,9 @@ function Menu(props) {
                     <NearMeIcon />
                 )}
             </Fab>
-
-            {renderABMslider()}
-        </ThemeProvider>
+            {/** renders sub menus based on toggle state */}
+            {renderSubMenu()}
+        </React.Fragment>
     );
 }
 

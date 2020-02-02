@@ -4,11 +4,12 @@ import {
     GET_CITYIO_DATA,
     MENU_INTERACTION,
     LISTEN_TO_MAP_EVENTS,
-    LISTEN_TO_ABM_SLIDERS
+    LISTEN_TO_ABM_SLIDERS,
+    LISTEN_TO_TYPE_EDITOR
 } from "./actions";
 
 /**
- * INIT STATE
+ * ! INIT STATE -- to be removed from reducer
  */
 const listOfToggles = Object.keys(settings.menu.toggles);
 let menuInitState = [];
@@ -22,7 +23,12 @@ const initialState = {
     MENU: menuInitState,
     CITYIO: {},
     MAP: {},
-    SLIDERS: {}
+    SLIDERS: {},
+    SELECTED_TYPE: {
+        height: 0,
+        color: [0, 0, 0, 0],
+        name: "Clear Buildings"
+    }
 };
 
 /**
@@ -38,6 +44,8 @@ export default function reducer(state = initialState, action) {
             return { ...state, MAP: action.data };
         case LISTEN_TO_ABM_SLIDERS:
             return { ...state, SLIDERS: action.data };
+        case LISTEN_TO_TYPE_EDITOR:
+            return { ...state, SELECTED_TYPE: action.data };
         default:
             return state;
     }

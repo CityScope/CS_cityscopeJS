@@ -35,6 +35,7 @@ class MapContainer extends Component {
                         <MAP
                             cityioData={this.props.cityioData}
                             menu={this.props.menu}
+                            selectedType={this.props.selectedType}
                         />
                     </Layer>
                 </div>
@@ -48,7 +49,8 @@ class MapContainer extends Component {
 const mapStateToProps = state => {
     return {
         cityioData: state.CITYIO,
-        menu: state.MENU
+        menu: state.MENU,
+        selectedType: state.SELECTED_TYPE
     };
 };
 

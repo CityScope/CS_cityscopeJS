@@ -12,13 +12,20 @@ class CityIO extends Component {
             cityIOmodulesData: {}
         };
         this.cityioURL = null;
+        this._isMounted = false;
     }
 
     /**
      * start fetching API hashes to check for new data
      */
     componentDidMount() {
+        this._isMounted = true;
+
         this.handleURL();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     handleURL = () => {
@@ -43,7 +50,9 @@ class CityIO extends Component {
         fetch(URL)
             .then(response => response.json())
             .then(result => {
-                this.handleCityIOHashes(result);
+                if (this._isMounted) {
+                    this.handleCityIOHashes(result);
+                }
             })
             .catch(e => {
                 console.log(e);
