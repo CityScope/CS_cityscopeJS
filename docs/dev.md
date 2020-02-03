@@ -1,8 +1,6 @@
-## CityScopeJS Frontend
+# Development
 
-This repo contains the web frontend interface for CityScope platform.
-
-### Development
+CityScopeJS is being constantly developed through its frontend, backend and modules. This repo is subject to breaking changes.
 
 In the project directory, you can run: `npm start` Runs the app in the development mode.<br /> Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 

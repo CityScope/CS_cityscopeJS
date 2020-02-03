@@ -11,12 +11,14 @@ import React, { Component } from "react";
 const store = configureStore();
 
 const MapRoute = () => {
-    const tableName = window.location.search.substring(1);
-    if (tableName !== "") {
+    let url = window.location.toString();
+    let pre = "cityscope=";
+    let cityscopePrjName = url.substring(url.indexOf(pre) + pre.length);
+    if (url.indexOf(pre) !== -1 && cityscopePrjName.length > 0) {
         return (
             <Provider store={store}>
                 <MapContainer />
-                <CityIO tableName={tableName} />
+                <CityIO tableName={cityscopePrjName} />
                 <VisContainer />
                 <MenuContainer />
             </Provider>
