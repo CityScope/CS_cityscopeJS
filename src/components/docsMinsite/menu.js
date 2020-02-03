@@ -67,6 +67,18 @@ function TechnologyListItems() {
             <ListItem
                 button
                 onClick={() => {
+                    changeContentUrl("quickStart.md");
+                }}
+            >
+                <ListItemIcon>
+                    <LayersIcon />
+                </ListItemIcon>
+                <ListItemText primary="Quick start" />
+            </ListItem>
+
+            <ListItem
+                button
+                onClick={() => {
                     changeContentUrl("schema.md");
                 }}
             >
