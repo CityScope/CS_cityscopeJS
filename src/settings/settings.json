@@ -31,7 +31,8 @@
             "grid",
             "access",
             "interactive_grid_data",
-            "interactive_network_data"
+            "interactive_network_data",
+            "meta_grid_header"
         ]
     },
     "map": {

@@ -1,5 +1,7 @@
 import settings from "../../settings/settings.json";
 import axios from "axios";
+import { Grid, Astar } from "fast-astar";
+
 var tzlookup = require("tz-lookup");
 
 /**
@@ -24,6 +26,60 @@ export const setDirLightSettings = header => {
     return timeZoneOffset;
 };
 
+export const _createAstarGrid = cityIOdata => {
+    const metaGrid = cityIOdata.meta_grid.features;
+    const gridRows = cityIOdata.meta_grid_header.nrows;
+    const gridCols = cityIOdata.meta_grid_header.ncols;
+    // zero an array
+    var astarArr = [];
+    let r = [];
+    let counter = 0;
+    for (var col = 0; col < gridCols; col++) {
+        astarArr[col] = new Array(gridRows);
+        for (let cell = 0; cell < astarArr[col].length; cell++) {
+            const pntLatLong = metaGrid[counter].geometry.coordinates[0][0];
+
+            astarArr[col][cell] = {
+                id: [col, cell],
+                pnt: pntLatLong,
+                obstacle:
+                    metaGrid[counter].properties.land_use === "None" ? 1 : 0
+            };
+
+            if (metaGrid[counter].properties.land_use === "None") {
+                r.push([col, cell]);
+            }
+            counter += 1;
+        }
+    }
+    // console.log(astarArr);
+
+    // Create a grid
+    let grid = new Grid({
+        col: gridCols,
+        row: gridRows
+    });
+
+    // Add obstacles to the grid
+    r.forEach(item => {
+        grid.set(item, "value", 1);
+    });
+
+    // // Pass the grid as a parameter to the Astar object
+    let astar = new Astar(grid),
+        path = astar.search(
+            [25, 20], // start
+            [21, 32], // end
+            {
+                // option
+                rightAngle: false, // default:false,Allow diagonal
+                optimalResult: true // default:true,In a few cases, the speed is slightly slower
+            }
+        );
+
+    console.log("Result", path);
+};
+
 /**
  * Description. gets `props` with geojson
  * and procces the interactive area
@@ -38,6 +94,7 @@ export const _proccessGridData = cityioData => {
     if (interactiveGridData) {
         for (let i = 0; i < wholeGrid.features.length; i++) {
             wholeGrid.features[i].properties = interactiveGridData[i];
+            wholeGrid.features[i].properties.id = i;
         }
     }
 
@@ -51,7 +108,6 @@ export const _proccessGridData = cityioData => {
             wholeGrid.features[interactiveMapping[i]].properties;
         // set up the cell type
         interactiveCellProps.type = gridCellType;
-
         // check if not undefined type (no scanning)
 
         if (TUIgridData[i][0] !== -1) {
@@ -99,11 +155,11 @@ export const _proccesnetworkGeojson = cityioData => {
     // update meta_grid features from cityio
     if (metaGrid) {
         for (let i = 0; i < metaGrid.length; i++) {
-            const pnttLatLong = metaGrid[i].geometry.coordinates[0][0];
-            let id = i;
+            const pntLatLong = metaGrid[i].geometry.coordinates[0][0];
+
             let props;
             if (cityioData.interactive_network_data) {
-                props = cityioData.interactive_network_data[id];
+                props = cityioData.interactive_network_data[i];
             } else {
                 const noneType = settings.map.netTypes[0];
                 props = {
@@ -118,7 +174,7 @@ export const _proccesnetworkGeojson = cityioData => {
                 properties: props,
                 geometry: {
                     type: "Point",
-                    coordinates: pnttLatLong
+                    coordinates: pntLatLong
                 }
             };
             networkGeojson.features.push(pnt);
@@ -142,7 +198,7 @@ export const _proccessGridTextData = data => {
     let textData = [];
     for (let i = 0; i < meta_grid.features.length; i++) {
         textData[i] = {
-            text: meta_grid.features[i].properties.height.toString(),
+            text: meta_grid.features[i].properties.id.toString(),
             coordinates: [
                 meta_grid.features[i].geometry.coordinates[0][0][0],
                 meta_grid.features[i].geometry.coordinates[0][0][1],

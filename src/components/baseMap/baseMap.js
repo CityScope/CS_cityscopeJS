@@ -3,12 +3,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { listenToMapEvents } from "../../redux/actions";
 import {
-    _proccesnetworkGeojson,
+    _proccesnetworkGeojson as _proccesNetworkGeojson,
     _proccessAccessData,
     _proccessGridData,
     _postMapEditsToCityIO,
     _proccessGridTextData,
-    setDirLightSettings
+    setDirLightSettings,
+    _createAstarGrid
 } from "./baseMapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
@@ -55,6 +56,8 @@ class Map extends Component {
     }
 
     componentDidMount() {
+        const cityIOdata = this.props.cityioData;
+        _createAstarGrid(cityIOdata);
         // fix deck view rotate
         this._rightClickViewRotate();
         // setup sun effects
@@ -81,7 +84,7 @@ class Map extends Component {
                 cityioData: cityioData,
                 meta_grid: _proccessGridData(cityioData),
                 gridTextData: _proccessGridTextData(cityioData),
-                networkGeojson: _proccesnetworkGeojson(cityioData)
+                networkGeojson: _proccesNetworkGeojson(cityioData)
             });
 
             // ! workaround for preloading access layer data
