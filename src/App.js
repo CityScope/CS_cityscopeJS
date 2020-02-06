@@ -16,8 +16,6 @@ const MapRoute = () => {
     let cityscopePrjName = url.substring(url.indexOf(pre) + pre.length);
 
     if (url.indexOf(pre) !== -1 && cityscopePrjName.length > 0) {
-        console.log(url, pre, cityscopePrjName);
-
         return (
             <Provider store={store}>
                 <MapContainer />

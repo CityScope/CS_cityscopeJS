@@ -3,13 +3,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { listenToMapEvents } from "../../redux/actions";
 import {
-    _proccesnetworkGeojson as _proccesNetworkGeojson,
+    _proccesNetworkGeojson,
     _proccessAccessData,
     _proccessGridData,
     _postMapEditsToCityIO,
     _proccessGridTextData,
-    setDirLightSettings,
-    _createAstarGrid
+    setDirLightSettings
 } from "./baseMapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
@@ -37,7 +36,10 @@ class Map extends Component {
             selectedNetState: null,
             time: 0,
             pickingRadius: 40,
-            viewState: settings.map.initialViewState
+            viewState: settings.map.initialViewState,
+            networkFirstPoint: null,
+            networkEdge: [],
+            networkLayer: []
         };
         this.animationFrame = null;
         this.timeZoneOffset = setDirLightSettings(this.props.cityioData.header);
@@ -57,13 +59,15 @@ class Map extends Component {
 
     componentDidMount() {
         const cityIOdata = this.props.cityioData;
-        _createAstarGrid(cityIOdata);
         // fix deck view rotate
         this._rightClickViewRotate();
         // setup sun effects
         this._setupEffects();
         // zoom map on CS table location
         this._setViewStateToTableHeader();
+        this.setState({
+            networkGeojson: _proccesNetworkGeojson(cityIOdata)
+        });
     }
 
     /**
@@ -83,8 +87,7 @@ class Map extends Component {
             this.setState({
                 cityioData: cityioData,
                 meta_grid: _proccessGridData(cityioData),
-                gridTextData: _proccessGridTextData(cityioData),
-                networkGeojson: _proccesNetworkGeojson(cityioData)
+                gridTextData: _proccessGridTextData(cityioData)
             });
 
             // ! workaround for preloading access layer data
@@ -93,13 +96,18 @@ class Map extends Component {
             }
         }
 
-        //    toggle edit mode
+        //  toggle edit mode and send to cityio
         if (
             prevProps.menu.includes("EDIT") &&
             !this.props.menu.includes("EDIT")
         ) {
+            // take props from grid and send
+            let dataProps = [];
+            for (let i = 0; i < this.state.meta_grid.features.length; i++) {
+                dataProps[i] = this.state.meta_grid.features[i].properties;
+            }
             _postMapEditsToCityIO(
-                this.state.meta_grid,
+                dataProps,
                 this.props.cityioData.tableName,
                 "/interactive_grid_data"
             );
@@ -111,7 +119,7 @@ class Map extends Component {
             );
         }
 
-        //    toggle reset view mode
+        // toggle reset view mode
         if (
             !prevProps.menu.includes("RESET_VIEW") &&
             this.props.menu.includes("RESET_VIEW")
@@ -307,28 +315,105 @@ class Map extends Component {
         });
     };
 
-    /**
-     * Description. allow only to pick net edges
-     */
-    _handleNetworkEditing = e => {
-        const selectedType = this.props.selectedType;
-        const multiEdgeSelected = this._mulipleObjPicked(e);
-        multiEdgeSelected.forEach(edge => {
-            const thisEdgeProps = edge.object.properties;
-            // network edges selected
-            if (
-                this.props.selectedType.class === "networkClass" &&
-                thisEdgeProps.land_use === "network"
-            ) {
-                thisEdgeProps.old_color = thisEdgeProps.color;
-                thisEdgeProps.color = selectedType.color;
-                thisEdgeProps.netWidth = selectedType.width;
-            }
-        });
-        this.setState({
-            selectedNetState: multiEdgeSelected
-        });
+    _handleNetworkHover = pnt => {
+        // check if really a pnt
+        if (pnt && pnt.object && pnt.object.properties) {
+            // paint the pnt
+            const selectedType = this.props.selectedType;
+            const pntProps = pnt.object.properties;
+            pntProps.old_color = pntProps.color;
+            pntProps.color = selectedType.color;
+            pntProps.old_netWidth = pntProps.netWidth;
+            pntProps.netWidth = pntProps.netWidth * 2;
+            this.setState({
+                hoveredPnt: pnt.object
+            });
+
+            // then back to org color
+            pntProps.color = pntProps.old_color;
+            pntProps.netWidth = pntProps.old_netWidth;
+
+            this.setState({
+                hoveredPnt: pnt.object
+            });
+        }
     };
+
+    _handleNetworkDragEdit = pnt => {
+        /**
+         *
+         * if we have the first pnt
+         * get the second point
+         * if on any of it's 4 immidate sides
+         * draw line
+         *
+         */
+
+        const pickData = this.deckGL.pickObject({
+            x: pnt.x,
+            y: pnt.y
+        });
+
+        if (pickData) {
+            const SP = pickData.object.properties.gridPosition;
+            const FP = this.state.networkFirstPoint.object.properties
+                .gridPosition;
+            //  check if next  4 matrix directions
+            if (
+                (FP[0] - 1 === SP[0] && FP[1] === SP[1]) ||
+                (FP[0] + 1 === SP[0] && FP[1] === SP[1]) ||
+                (FP[0] === SP[0] - 1 && FP[1] === SP[1]) ||
+                (FP[0] === SP[0] + 1 && FP[1] === SP[1]) ||
+                (FP[1] - 1 === SP[1] && FP[0] === SP[0]) ||
+                (FP[1] + 1 === SP[1] && FP[0] === SP[0]) ||
+                (FP[1] === SP[1] - 1 && FP[0] === SP[0]) ||
+                (FP[1] === SP[1] + 1 && FP[0] === SP[0])
+            ) {
+                let tmpArr = this.state.networkLayer;
+                let networkEdge = {
+                    path: [
+                        pickData.object.geometry.coordinates,
+                        this.state.networkFirstPoint.object.geometry.coordinates
+                    ],
+                    hash: [
+                        pickData.object.geometry.coordinates.toString(),
+                        this.state.networkFirstPoint.object.geometry.coordinates.toString()
+                    ]
+                };
+                networkEdge.selectedType = this.props.selectedType;
+                tmpArr.push(networkEdge);
+                tmpArr = JSON.parse(JSON.stringify(tmpArr));
+                this.setState({ networkLayer: tmpArr });
+            }
+
+            this.setState({ networkFirstPoint: pickData });
+        }
+    };
+
+    /**
+     * if edge hash[0]+ hash[1]
+     * or
+     * edge hash [1]+ hash[0]
+     * is duplicate
+     * remove from array
+     * save a new copy to state
+     */
+    _handleNetworkDragEnd = () => {
+        const network = this.state.networkLayer;
+        let hashArr = [];
+        network.forEach(edge => {
+            const fwd = edge.hash[0] + edge.hash[1];
+            const back = edge.hash[1] + edge.hash[0];
+            hashArr.push([fwd, back]);
+        });
+
+        // console.log(hashArr);
+
+        console.log(this._findDuplicates(hashArr));
+    };
+
+    _findDuplicates = arr =>
+        arr.filter((item, index) => arr.indexOf(item) !== index);
 
     /**
      * Description.
@@ -413,8 +498,8 @@ class Map extends Component {
      */
     _renderLayers() {
         const zoomLevel = this.state.viewState.zoom;
-
         const cityioData = this.props.cityioData;
+
         let layers = [];
 
         if (this.props.menu.includes("TEXT")) {
@@ -440,48 +525,70 @@ class Map extends Component {
                     id: "NETWORK",
                     data: this.state.networkGeojson.features,
                     pickable: true,
-                    opacity: 0.8,
-                    stroked: false,
+                    opacity: 1,
+                    stroked: true,
                     filled: true,
                     radiusScale: 1,
                     radiusMinPixels: 1,
-                    radiusMaxPixels: 20,
+                    radiusMaxPixels: 100,
                     getPosition: d => d.geometry.coordinates,
                     getFillColor: d => d.properties.color,
                     getRadius: d => d.properties.netWidth,
-                    updateTriggers: {
-                        getFillColor: this.state.selectedNetState,
-                        getRadius: this.state.selectedNetState
-                    },
-                    transitions: {
-                        getFillColor: 500,
-                        getRadius: 500
-                    },
-                    onClick: event => {
-                        if (
-                            this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        )
-                            this._handleNetworkEditing(event);
-                    },
-                    onDrag: event => {
-                        if (
-                            this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        )
-                            this._handleNetworkEditing(event);
-                    },
-                    onDragStart: () => {
+
+                    onHover: e => {
                         if (
                             this.props.menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift"
                         ) {
-                            this.setState({ draggingWhileEditing: true });
+                            this._handleNetworkHover(e);
+                        }
+                    },
+                    onDrag: e => {
+                        // ! picking won't be called on drag
+                        // https://github.com/uber/deck.gl/blob/master/docs/developer-guide/custom-layers/picking.md#default-handling-of-pointer-events
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        ) {
+                            this._handleNetworkDragEdit(e);
+                        }
+                    },
+                    onDragStart: e => {
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        ) {
+                            this.setState({
+                                networkFirstPoint: e,
+                                draggingWhileEditing: true
+                            });
                         }
                     },
                     onDragEnd: () => {
                         this.setState({ draggingWhileEditing: false });
+                        this._handleNetworkDragEnd();
+                    },
+
+                    updateTriggers: {
+                        getFillColor: this.state.hoveredPnt,
+                        getRadius: this.state.hoveredPnt
+                    },
+                    transitions: {
+                        getFillColor: 100,
+                        getRadius: 300
                     }
+                })
+            );
+
+            layers.push(
+                new PathLayer({
+                    id: "ASTAR_PATHS",
+                    data: this.state.networkLayer,
+                    widthScale: 1,
+                    widthMinPixels: 5,
+                    getPath: d => d.path,
+                    getColor: d => d.selectedType.color,
+                    getWidth: d => d.selectedType.width
                 })
             );
         }

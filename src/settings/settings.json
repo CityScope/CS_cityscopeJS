@@ -21,6 +21,7 @@
     },
 
     "cityIO": {
+        "mockURL": "http://localhost:3001",
         "baseURL": "https://cityio.media.mit.edu/api/table/",
         "interval": 500,
         "cityIOmodules": [
@@ -69,31 +70,31 @@
         "netTypes": {
             "0": {
                 "width": 10,
-                "color": [0, 0, 0, 1],
+                "color": [0, 0, 0, 200],
                 "name": "Clear network",
                 "class": "networkClass"
             },
             "1": {
                 "width": 5,
-                "color": [100, 100, 100, 150],
+                "color": [100, 100, 100, 200],
                 "name": "two lanes",
                 "class": "networkClass"
             },
             "2": {
                 "width": 10,
-                "color": [50, 50, 50, 150],
+                "color": [50, 50, 50, 200],
                 "name": "four lanes",
                 "class": "networkClass"
             },
             "3": {
                 "width": 2,
-                "color": [0, 200, 20, 150],
+                "color": [0, 200, 20, 200],
                 "name": "bike lanes",
                 "class": "networkClass"
             },
             "4": {
                 "width": 2,
-                "color": [200, 200, 0, 150],
+                "color": [200, 200, 0, 200],
                 "name": "walkway",
                 "class": "networkClass"
             }
@@ -153,7 +154,7 @@
         "toggles": {
             "GRID": {
                 "displayName": "Interactive Grid",
-                "showOnInit": true
+                "showOnInit": false
             },
             "NETWORK": {
                 "displayName": "Street Network",
