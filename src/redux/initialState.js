@@ -20,7 +20,8 @@ const initialState = {
         height: 0,
         color: [255, 0, 0, 200],
         name: "Select Land-Use!"
-    }
+    },
+    READY: false
 };
 
 export default initialState;
