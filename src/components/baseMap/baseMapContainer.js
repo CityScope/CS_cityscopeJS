@@ -9,11 +9,7 @@ class MapContainer extends Component {
     };
 
     render() {
-        if (
-            this.props &&
-            this.props.cityioData &&
-            this.props.cityioData.header
-        ) {
+        if (this.props.ready) {
             return (
                 <div
                     style={{
@@ -50,7 +46,8 @@ const mapStateToProps = state => {
     return {
         cityioData: state.CITYIO,
         menu: state.MENU,
-        selectedType: state.SELECTED_TYPE
+        selectedType: state.SELECTED_TYPE,
+        ready: state.READY
     };
 };
 

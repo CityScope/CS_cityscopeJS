@@ -4,7 +4,7 @@ import Menu from "./menu";
 
 class MenuContainer extends Component {
     render() {
-        if (this.props.cityioData && this.props.cityioData.grid) {
+        if (this.props.ready) {
             return <Menu />;
         } else {
             return null;
@@ -14,7 +14,7 @@ class MenuContainer extends Component {
 
 const mapStateToProps = state => {
     return {
-        cityioData: state.CITYIO
+        ready: state.READY
     };
 };
 
