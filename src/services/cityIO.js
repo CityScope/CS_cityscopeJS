@@ -1,7 +1,7 @@
 import { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getCityioData } from "../redux/actions";
+import { getCityioData, setReadyState } from "../redux/actions";
 import settings from "../settings/settings.json";
 
 class CityIO extends Component {
@@ -122,6 +122,8 @@ class CityIO extends Component {
             console.log("done updating from cityIO..");
             // finally, send data to redux
             this.props.getCityioData(data);
+            // initializes rendering of Menu and Map containers
+            this.props.setReadyState(true);
         }
     };
 
@@ -172,7 +174,8 @@ class CityIO extends Component {
 }
 
 const mapDispatchToProps = {
-    getCityioData: getCityioData
+    getCityioData: getCityioData,
+    setReadyState: setReadyState
 };
 
 export default connect(null, mapDispatchToProps)(CityIO);
