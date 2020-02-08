@@ -1,5 +1,3 @@
-import settings from "../settings/settings.json";
-
 import {
     GET_CITYIO_DATA,
     MENU_INTERACTION,
@@ -7,29 +5,7 @@ import {
     LISTEN_TO_ABM_SLIDERS,
     LISTEN_TO_TYPE_EDITOR
 } from "./actions";
-
-/**
- * ! INIT STATE -- to be removed from reducer
- */
-const listOfToggles = Object.keys(settings.menu.toggles);
-let menuInitState = [];
-for (let i = 0; i < listOfToggles.length; i++) {
-    if (Object.values(settings.menu.toggles)[i].showOnInit) {
-        menuInitState.push(listOfToggles[i]);
-    }
-}
-
-const initialState = {
-    MENU: menuInitState,
-    CITYIO: {},
-    MAP: {},
-    SLIDERS: {},
-    SELECTED_TYPE: {
-        height: 0,
-        color: [255, 0, 0, 200],
-        name: "Select Land-Use!"
-    }
-};
+import initialState from "./initialState";
 
 /**
  * REDUCER
