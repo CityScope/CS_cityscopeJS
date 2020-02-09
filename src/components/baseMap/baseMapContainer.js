@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import MAP from "./baseMap";
 import { connect } from "react-redux";
 import { Layer } from "../prjMap/layer";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 class MapContainer extends Component {
     _checkKeystone = () => {
@@ -20,6 +21,7 @@ class MapContainer extends Component {
                         overflow: "hidden"
                     }}
                 >
+                    <LoadingSpinner />
                     <Layer
                         className="mapLayer"
                         style={{

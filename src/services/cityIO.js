@@ -1,7 +1,11 @@
 import { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getCityioData, setReadyState } from "../redux/actions";
+import {
+    getCityioData,
+    setReadyState,
+    setLoadingState
+} from "../redux/actions";
 import settings from "../settings/settings.json";
 
 class CityIO extends Component {
@@ -72,6 +76,7 @@ class CityIO extends Component {
 
             // reset the state of this flag
             this.setState({ readyToShareWithRedux: false });
+            this.props.setLoadingState(true);
 
             // new data in table, get all modules
             // that are listed in settings
@@ -124,6 +129,7 @@ class CityIO extends Component {
             this.props.getCityioData(data);
             // initializes rendering of Menu and Map containers
             this.props.setReadyState(true);
+            this.props.setLoadingState(false);
         }
     };
 
@@ -175,7 +181,8 @@ class CityIO extends Component {
 
 const mapDispatchToProps = {
     getCityioData: getCityioData,
-    setReadyState: setReadyState
+    setReadyState: setReadyState,
+    setLoadingState: setLoadingState
 };
 
 export default connect(null, mapDispatchToProps)(CityIO);

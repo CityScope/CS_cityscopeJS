@@ -4,7 +4,8 @@ import {
     LISTEN_TO_MAP_EVENTS,
     LISTEN_TO_ABM_SLIDERS,
     LISTEN_TO_TYPE_EDITOR,
-    SET_READY_STATE
+    SET_READY_STATE,
+    SET_LOADING_STATE
 } from "./actions";
 import initialState from "./initialState";
 
@@ -25,6 +26,8 @@ export default function reducer(state = initialState, action) {
             return { ...state, SELECTED_TYPE: action.data };
         case SET_READY_STATE:
             return { ...state, READY: action.data };
+        case SET_LOADING_STATE:
+            return { ...state, LOADING: action.data };
         default:
             return state;
     }
