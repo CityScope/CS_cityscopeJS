@@ -1,5 +1,6 @@
 import settings from "../../settings/settings.json";
 import axios from "axios";
+import { errorStyle } from "../../services/consoleStyle";
 var tzlookup = require("tz-lookup");
 
 /**
@@ -190,18 +191,32 @@ export const _proccessAccessData = data => {
  * with grid edits payload
  */
 export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
-    axios
-        .post(
+    let postURL;
+    // check if cityIO or local server
+    if (tableName === "mockAPI") {
+        postURL = settings.cityIO.mockURL + endPoint;
+    } else {
+        postURL =
             "https://cityio.media.mit.edu/api/table/update/" +
-                tableName +
-                endPoint,
-            data
-        )
+            tableName +
+            endPoint;
+    }
+
+    console.log("POSTing to", postURL);
+
+    axios
+        .post(postURL, data, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
         .then(response => {
-            console.log(response.data);
+            console.log(response);
         })
         .catch(error => {
-            console.log(error);
+            console.log("%c" + error, errorStyle);
+
+            console.log("ERROR:", error);
         });
 };
 

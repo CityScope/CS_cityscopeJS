@@ -23,7 +23,7 @@ import {
 } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../settings/settings.json";
-import { consoleStyle } from "../../services/consoleStyle";
+import { newDataStyle } from "../../services/consoleStyle";
 class Map extends Component {
     constructor(props) {
         super(props);
@@ -81,7 +81,7 @@ class Map extends Component {
         }
 
         if (prevState.cityioData !== this.props.cityioData) {
-            console.log("%c new cityioData data to render ", consoleStyle);
+            console.log("%c new cityioData to render ", newDataStyle);
             // get cityio data from props
             const cityioData = this.props.cityioData;
             this.setState({
