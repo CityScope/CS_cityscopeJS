@@ -38,6 +38,7 @@ export const _proccessGridData = cityioData => {
     if (interactiveGridData) {
         for (let i = 0; i < wholeGrid.features.length; i++) {
             wholeGrid.features[i].properties = interactiveGridData[i];
+            wholeGrid.features[i].properties.id = i;
         }
     }
 
@@ -51,7 +52,6 @@ export const _proccessGridData = cityioData => {
             wholeGrid.features[interactiveMapping[i]].properties;
         // set up the cell type
         interactiveCellProps.type = gridCellType;
-
         // check if not undefined type (no scanning)
 
         if (TUIgridData[i][0] !== -1) {
@@ -90,38 +90,42 @@ features  :[
 ]
  */
 
-export const _proccesnetworkGeojson = cityioData => {
+export const _proccesNetworkGeojson = cityioData => {
     const metaGrid = cityioData.meta_grid.features;
+    // pnt object
     const networkGeojson = {
         type: "FeatureCollection",
         features: []
     };
-    // update meta_grid features from cityio
-    if (metaGrid) {
-        for (let i = 0; i < metaGrid.length; i++) {
-            const pnttLatLong = metaGrid[i].geometry.coordinates[0][0];
-            let id = i;
+
+    const gridRows = cityioData.meta_grid_header.nrows;
+    const gridCols = cityioData.meta_grid_header.ncols;
+
+    let counter = 0;
+
+    // create array for obstecles
+    // and array for coordinates
+    for (let cell = 0; cell < gridRows; cell++) {
+        for (var col = 0; col < gridCols; col++) {
             let props;
-            if (cityioData.interactive_network_data) {
-                props = cityioData.interactive_network_data[id];
-            } else {
-                const noneType = settings.map.netTypes[0];
-                props = {
-                    land_use: "network",
-                    netWidth: noneType.width,
-                    color: noneType.color,
-                    id: "0"
-                };
-            }
+            const pntLatLong = metaGrid[counter].geometry.coordinates[0][0];
+            const typeProp = settings.map.netTypes[1];
+            props = {
+                land_use: "network",
+                netWidth: typeProp.width,
+                color: typeProp.color,
+                gridPosition: [col, cell]
+            };
             const pnt = {
                 type: "Feature",
                 properties: props,
                 geometry: {
                     type: "Point",
-                    coordinates: pnttLatLong
+                    coordinates: pntLatLong
                 }
             };
             networkGeojson.features.push(pnt);
+            counter += 1;
         }
     }
     return networkGeojson;
@@ -137,18 +141,26 @@ export const _proccesnetworkGeojson = cityioData => {
  * Grid data format:
  * features[i].geometry.coordinates[0][0]
  */
-export const _proccessGridTextData = data => {
-    const meta_grid = data.meta_grid;
+export const _proccessGridTextData = cityioData => {
+    const meta_grid = cityioData.meta_grid;
     let textData = [];
-    for (let i = 0; i < meta_grid.features.length; i++) {
-        textData[i] = {
-            text: meta_grid.features[i].properties.height.toString(),
-            coordinates: [
-                meta_grid.features[i].geometry.coordinates[0][0][0],
-                meta_grid.features[i].geometry.coordinates[0][0][1],
-                meta_grid.features[i].properties.height + 10
-            ]
-        };
+
+    const gridRows = cityioData.meta_grid_header.nrows;
+    const gridCols = cityioData.meta_grid_header.ncols;
+
+    let counter = 0;
+    for (let cell = 0; cell < gridRows; cell++) {
+        for (var col = 0; col < gridCols; col++) {
+            textData[counter] = {
+                text: [col, cell].toString(),
+                coordinates: [
+                    meta_grid.features[counter].geometry.coordinates[0][0][0],
+                    meta_grid.features[counter].geometry.coordinates[0][0][1],
+                    meta_grid.features[counter].properties.height + 10
+                ]
+            };
+            counter += 1;
+        }
     }
     return textData;
 };
@@ -178,17 +190,12 @@ export const _proccessAccessData = data => {
  * with grid edits payload
  */
 export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
-    let dataProps = [];
-    for (let i = 0; i < data.features.length; i++) {
-        dataProps[i] = data.features[i].properties;
-    }
-
     axios
         .post(
             "https://cityio.media.mit.edu/api/table/update/" +
                 tableName +
                 endPoint,
-            dataProps
+            data
         )
         .then(response => {
             console.log(response.data);

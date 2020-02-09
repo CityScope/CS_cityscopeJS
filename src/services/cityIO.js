@@ -33,7 +33,12 @@ class CityIO extends Component {
     }
 
     handleURL = () => {
-        this.cityioURL = settings.cityIO.baseURL + this.props.tableName;
+        if (this.props.tableName === "mockAPI") {
+            this.cityioURL = settings.cityIO.mockURL;
+        } else {
+            this.cityioURL = settings.cityIO.baseURL + this.props.tableName;
+        }
+
         // get the hashes first
         this.getCityIOHash(this.cityioURL + "/meta");
         // and every interval
