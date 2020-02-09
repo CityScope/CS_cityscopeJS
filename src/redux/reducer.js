@@ -3,7 +3,8 @@ import {
     MENU_INTERACTION,
     LISTEN_TO_MAP_EVENTS,
     LISTEN_TO_ABM_SLIDERS,
-    LISTEN_TO_TYPE_EDITOR
+    LISTEN_TO_TYPE_EDITOR,
+    SET_READY_STATE
 } from "./actions";
 import initialState from "./initialState";
 
@@ -22,6 +23,8 @@ export default function reducer(state = initialState, action) {
             return { ...state, SLIDERS: action.data };
         case LISTEN_TO_TYPE_EDITOR:
             return { ...state, SELECTED_TYPE: action.data };
+        case SET_READY_STATE:
+            return { ...state, READY: action.data };
         default:
             return state;
     }
