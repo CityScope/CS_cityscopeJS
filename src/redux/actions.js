@@ -26,3 +26,13 @@ export const LISTEN_TO_TYPE_EDITOR = "LISTEN_TO_TYPE_EDITOR";
 export function listenToTypeEditor(data) {
     return { type: LISTEN_TO_TYPE_EDITOR, data };
 }
+
+export const SET_READY_STATE = "SET_READY_STATE";
+export function setReadyState(data) {
+    return { type: SET_READY_STATE, data };
+}
+
+export const SET_LOADING_STATE = "SET_LOADING_STATE";
+export function setLoadingState(data) {
+    return { type: SET_LOADING_STATE, data };
+}

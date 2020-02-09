@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import MAP from "./baseMap";
 import { connect } from "react-redux";
 import { Layer } from "../prjMap/layer";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 class MapContainer extends Component {
     _checkKeystone = () => {
@@ -9,11 +10,7 @@ class MapContainer extends Component {
     };
 
     render() {
-        if (
-            this.props &&
-            this.props.cityioData &&
-            this.props.cityioData.header
-        ) {
+        if (this.props.ready) {
             return (
                 <div
                     style={{
@@ -24,6 +21,7 @@ class MapContainer extends Component {
                         overflow: "hidden"
                     }}
                 >
+                    <LoadingSpinner />
                     <Layer
                         className="mapLayer"
                         style={{
@@ -50,7 +48,8 @@ const mapStateToProps = state => {
     return {
         cityioData: state.CITYIO,
         menu: state.MENU,
-        selectedType: state.SELECTED_TYPE
+        selectedType: state.SELECTED_TYPE,
+        ready: state.READY
     };
 };
 
