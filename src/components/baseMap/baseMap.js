@@ -444,8 +444,8 @@ class Map extends Component {
                     radiusMinPixels: 1,
                     radiusMaxPixels: 20,
                     getPosition: d => d.geometry.coordinates,
-                    getFillColor: d => d.properties.color,
-                    getRadius: d => d.properties.netWidth,
+                    getFillColor: d => d.color,
+                    getRadius: d => d.netWidth,
                     updateTriggers: {
                         getFillColor: this.state.selectedNetState,
                         getRadius: this.state.selectedNetState
