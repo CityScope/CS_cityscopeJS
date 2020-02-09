@@ -190,13 +190,23 @@ export const _proccessAccessData = data => {
  * with grid edits payload
  */
 export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
-    axios
-        .post(
+    let postURL;
+    // check if cityIO or local server
+    if (tableName === "mockAPI") {
+        postURL = settings.cityIO.mockURL + endPoint;
+    } else {
+        postURL =
             "https://cityio.media.mit.edu/api/table/update/" +
-                tableName +
-                endPoint,
-            data
-        )
+            tableName +
+            endPoint;
+    }
+
+    axios
+        .post(postURL, data, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
         .then(response => {
             console.log(response.data);
         })
