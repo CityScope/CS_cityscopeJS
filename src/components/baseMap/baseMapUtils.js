@@ -1,5 +1,6 @@
 import settings from "../../settings/settings.json";
 import axios from "axios";
+import { errorStyle } from "../../services/consoleStyle";
 var tzlookup = require("tz-lookup");
 
 /**
@@ -201,6 +202,8 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
             endPoint;
     }
 
+    console.log("POSTing to", postURL);
+
     axios
         .post(postURL, data, {
             headers: {
@@ -208,10 +211,12 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
             }
         })
         .then(response => {
-            console.log(response.data);
+            console.log(response);
         })
         .catch(error => {
-            console.log(error);
+            console.log("%c" + error, errorStyle);
+
+            console.log("ERROR:", error);
         });
 };
 
