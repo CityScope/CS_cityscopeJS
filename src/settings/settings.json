@@ -154,11 +154,11 @@
         "toggles": {
             "GRID": {
                 "displayName": "Interactive Grid",
-                "showOnInit": true
+                "showOnInit": false
             },
             "NETWORK": {
                 "displayName": "Street Network",
-                "showOnInit": false
+                "showOnInit": true
             },
             "TEXT": {
                 "displayName": "Cell Information",

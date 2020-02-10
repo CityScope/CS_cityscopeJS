@@ -153,7 +153,15 @@ export const _proccessGridTextData = cityioData => {
     for (let cell = 0; cell < gridRows; cell++) {
         for (var col = 0; col < gridCols; col++) {
             textData[counter] = {
-                text: [col, cell].toString(),
+                text: [
+                    col,
+                    cell,
+                    " | ",
+                    meta_grid.features[counter].geometry.coordinates[0][0][0],
+                    meta_grid.features[counter].geometry.coordinates[0][0][1]
+                ].toString(),
+
+                // [col, cell].toString(),
                 coordinates: [
                     meta_grid.features[counter].geometry.coordinates[0][0][0],
                     meta_grid.features[counter].geometry.coordinates[0][0][1],
@@ -240,3 +248,113 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
 //         selectedCellsState: grid
 //     });
 // }
+
+export const _proccessBresenhamGrid = cityioData => {
+    let bresenhamGrid = {};
+    const metaGrid = cityioData.meta_grid.features;
+    const gridRows = cityioData.meta_grid_header.nrows;
+    const gridCols = cityioData.meta_grid_header.ncols;
+
+    let counter = 0;
+    for (let row = 0; row < gridRows; row++) {
+        for (var col = 0; col < gridCols; col++) {
+            const pntLatLong = metaGrid[counter].geometry.coordinates[0][0];
+            let posString = [col, row].toString();
+            bresenhamGrid[posString] = pntLatLong;
+            counter += 1;
+        }
+    }
+    return bresenhamGrid;
+};
+
+/**
+ * https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+ */
+export const _bresenhamLine = (x1, y1, x2, y2, bresenhamGrid) => {
+    // search for latLong for this pixel
+    const _pushTobresenhamLine = (x, y) => {
+        let posString = [x, y].toString();
+        pathArr.push(bresenhamGrid[posString]);
+    };
+
+    let pathArr = [];
+    // Iterators, counters required by algorithm
+    let x, y, deltaX, deltaY, absDeltaX, absDeltaY, px, py, xe, ye, counter;
+    // Calculate line deltas
+    deltaX = x2 - x1;
+    deltaY = y2 - y1;
+    // Create a positive copy of deltas (makes iterating easier)
+    absDeltaX = Math.abs(deltaX);
+    absDeltaY = Math.abs(deltaY);
+    // Calculate error intervals for both axis
+    px = 2 * absDeltaY - absDeltaX;
+    py = 2 * absDeltaX - absDeltaY;
+
+    // The line is X-axis dominant
+    if (absDeltaY <= absDeltaX) {
+        // Line is drawn left to right
+        if (deltaX >= 0) {
+            x = x1;
+            y = y1;
+            xe = x2;
+        } else {
+            // Line is drawn right to left (swap ends)
+            x = x2;
+            y = y2;
+            xe = x1;
+        }
+        // Draw first pixel
+        _pushTobresenhamLine(x, y);
+        // Rasterize the line
+        for (counter = 0; x < xe; counter++) {
+            x = x + 1;
+            // Deal with octants...
+            if (px < 0) {
+                px = px + 2 * absDeltaY;
+            } else {
+                if ((deltaX < 0 && deltaY < 0) || (deltaX > 0 && deltaY > 0)) {
+                    y = y + 1;
+                } else {
+                    y = y - 1;
+                }
+                px = px + 2 * (absDeltaY - absDeltaX);
+            }
+            // Draw pixel from line span at currently rasterized position
+            _pushTobresenhamLine(x, y);
+        }
+    }
+    // The line is Y-axis dominant
+    else {
+        // Line is drawn bottom to top
+        if (deltaY >= 0) {
+            x = x1;
+            y = y1;
+            ye = y2;
+        } else {
+            // Line is drawn top to bottom
+            x = x2;
+            y = y2;
+            ye = y1;
+        }
+        _pushTobresenhamLine(x, y); // Draw first pixel
+        // Rasterize the line
+        for (counter = 0; y < ye; counter++) {
+            y = y + 1;
+            // Deal with octants...
+            if (py <= 0) {
+                py = py + 2 * absDeltaX;
+            } else {
+                if ((deltaX < 0 && deltaY < 0) || (deltaX > 0 && deltaY > 0)) {
+                    x = x + 1;
+                } else {
+                    x = x - 1;
+                }
+                py = py + 2 * (absDeltaX - absDeltaY);
+            }
+            // Draw pixel from line span at currently rasterized position
+            _pushTobresenhamLine(x, y);
+        }
+    }
+
+    return pathArr;
+};
