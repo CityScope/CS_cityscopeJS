@@ -3,12 +3,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { listenToMapEvents } from "../../redux/actions";
 import {
-    _proccesNetworkGeojson,
+    _proccesNetworkPnts,
     _proccessAccessData,
     _proccessGridData,
     _postMapEditsToCityIO,
     _proccessGridTextData,
-    setDirLightSettings
+    _proccessBresenhamGrid,
+    setDirLightSettings,
+    _bresenhamLine
 } from "./baseMapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
@@ -66,7 +68,10 @@ class Map extends Component {
         // zoom map on CS table location
         this._setViewStateToTableHeader();
         this.setState({
-            networkGeojson: _proccesNetworkGeojson(cityIOdata)
+            networkPnts: _proccesNetworkPnts(cityIOdata),
+            gridTextData: _proccessGridTextData(cityIOdata),
+            bresenhamGrid: _proccessBresenhamGrid(cityIOdata),
+            networkLayer: cityIOdata.interactive_network_data
         });
     }
 
@@ -86,8 +91,7 @@ class Map extends Component {
             const cityioData = this.props.cityioData;
             this.setState({
                 cityioData: cityioData,
-                meta_grid: _proccessGridData(cityioData),
-                gridTextData: _proccessGridTextData(cityioData)
+                meta_grid: _proccessGridData(cityioData)
             });
 
             // ! workaround for preloading access layer data
@@ -113,7 +117,7 @@ class Map extends Component {
             );
 
             _postMapEditsToCityIO(
-                this.state.networkGeojson,
+                this.state.networkLayer,
                 this.props.cityioData.tableName,
                 "/interactive_network_data"
             );
@@ -339,81 +343,49 @@ class Map extends Component {
         }
     };
 
-    _handleNetworkDragEdit = pnt => {
-        /**
-         *
-         * if we have the first pnt
-         * get the second point
-         * if on any of it's 4 immidate sides
-         * draw line
-         *
-         */
+    /**
+     *
+     * if we have the first pnt
+     * get the second point
+     * if on any of it's 4 immidate sides
+     * draw line
+     *
+     */
+    _handleNetworkEdit = pnt => {
+        if (!this.state.networkFirstPoint) {
+            // make this the first point
+            this.setState({ networkFirstPoint: pnt });
+        } else {
+            const pickData = this.deckGL.pickObject({
+                x: pnt.x,
+                y: pnt.y
+            });
 
-        const pickData = this.deckGL.pickObject({
-            x: pnt.x,
-            y: pnt.y
-        });
+            if (pickData) {
+                const FP = this.state.networkFirstPoint.object.properties
+                    .gridPosition;
+                const SP = pickData.object.properties.gridPosition;
 
-        if (pickData) {
-            const SP = pickData.object.properties.gridPosition;
-            const FP = this.state.networkFirstPoint.object.properties
-                .gridPosition;
-            //  check if next  4 matrix directions
-            if (
-                (FP[0] - 1 === SP[0] && FP[1] === SP[1]) ||
-                (FP[0] + 1 === SP[0] && FP[1] === SP[1]) ||
-                (FP[0] === SP[0] - 1 && FP[1] === SP[1]) ||
-                (FP[0] === SP[0] + 1 && FP[1] === SP[1]) ||
-                (FP[1] - 1 === SP[1] && FP[0] === SP[0]) ||
-                (FP[1] + 1 === SP[1] && FP[0] === SP[0]) ||
-                (FP[1] === SP[1] - 1 && FP[0] === SP[0]) ||
-                (FP[1] === SP[1] + 1 && FP[0] === SP[0])
-            ) {
-                let tmpArr = this.state.networkLayer;
-                let networkEdge = {
-                    path: [
-                        pickData.object.geometry.coordinates,
-                        this.state.networkFirstPoint.object.geometry.coordinates
-                    ],
-                    hash: [
-                        pickData.object.geometry.coordinates.toString(),
-                        this.state.networkFirstPoint.object.geometry.coordinates.toString()
-                    ]
+                let lineObj = _bresenhamLine(
+                    FP[0],
+                    FP[1],
+                    SP[0],
+                    SP[1],
+                    this.state.bresenhamGrid
+                );
+                let bresenhamLine = {
+                    path: lineObj,
+                    selectedType: this.props.selectedType
                 };
-                networkEdge.selectedType = this.props.selectedType;
-                tmpArr.push(networkEdge);
+                let tmpArr = this.state.networkLayer;
+                tmpArr.push(bresenhamLine);
                 tmpArr = JSON.parse(JSON.stringify(tmpArr));
                 this.setState({ networkLayer: tmpArr });
+                // null the first pnt for new selection
+                this.setState({ networkFirstPoint: null });
             }
-
-            this.setState({ networkFirstPoint: pickData });
         }
     };
-
-    /**
-     * if edge hash[0]+ hash[1]
-     * or
-     * edge hash [1]+ hash[0]
-     * is duplicate
-     * remove from array
-     * save a new copy to state
-     */
-    _handleNetworkDragEnd = () => {
-        const network = this.state.networkLayer;
-        let hashArr = [];
-        network.forEach(edge => {
-            const fwd = edge.hash[0] + edge.hash[1];
-            const back = edge.hash[1] + edge.hash[0];
-            hashArr.push([fwd, back]);
-        });
-
-        // console.log(hashArr);
-
-        console.log(this._findDuplicates(hashArr));
-    };
-
-    _findDuplicates = arr =>
-        arr.filter((item, index) => arr.indexOf(item) !== index);
 
     /**
      * Description.
@@ -510,20 +482,20 @@ class Map extends Component {
                     getText: d => d.text,
                     getPosition: d => d.coordinates,
                     getColor: [255, 255, 255],
-                    getSize: 16
+                    getSize: 10
                 })
             );
         }
 
         if (
             this.props.menu.includes("NETWORK") &&
-            this.state.networkGeojson &&
-            this.state.networkGeojson.features
+            this.state.networkPnts &&
+            this.state.networkPnts.features
         ) {
             layers.push(
                 new ScatterplotLayer({
                     id: "NETWORK",
-                    data: this.state.networkGeojson.features,
+                    data: this.state.networkPnts.features,
                     pickable: true,
                     opacity: 1,
                     stroked: true,
@@ -543,30 +515,13 @@ class Map extends Component {
                             this._handleNetworkHover(e);
                         }
                     },
-                    onDrag: e => {
-                        // ! picking won't be called on drag
-                        // https://github.com/uber/deck.gl/blob/master/docs/developer-guide/custom-layers/picking.md#default-handling-of-pointer-events
+                    onClick: e => {
                         if (
                             this.props.menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift"
                         ) {
-                            this._handleNetworkDragEdit(e);
+                            this._handleNetworkEdit(e);
                         }
-                    },
-                    onDragStart: e => {
-                        if (
-                            this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        ) {
-                            this.setState({
-                                networkFirstPoint: e,
-                                draggingWhileEditing: true
-                            });
-                        }
-                    },
-                    onDragEnd: () => {
-                        this.setState({ draggingWhileEditing: false });
-                        this._handleNetworkDragEnd();
                     },
 
                     updateTriggers: {
@@ -582,7 +537,7 @@ class Map extends Component {
 
             layers.push(
                 new PathLayer({
-                    id: "ASTAR_PATHS",
+                    id: "NETWORK_PATHS",
                     data: this.state.networkLayer,
                     widthScale: 1,
                     widthMinPixels: 5,

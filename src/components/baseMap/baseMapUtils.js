@@ -91,7 +91,7 @@ features  :[
 ]
  */
 
-export const _proccesNetworkGeojson = cityioData => {
+export const _proccesNetworkPnts = cityioData => {
     const metaGrid = cityioData.meta_grid.features;
     // pnt object
     const networkGeojson = {
@@ -153,7 +153,15 @@ export const _proccessGridTextData = cityioData => {
     for (let cell = 0; cell < gridRows; cell++) {
         for (var col = 0; col < gridCols; col++) {
             textData[counter] = {
-                text: [col, cell].toString(),
+                text: [
+                    col,
+                    cell
+                    // " | ",
+                    // meta_grid.features[counter].geometry.coordinates[0][0][0],
+                    // meta_grid.features[counter].geometry.coordinates[0][0][1]
+                ].toString(),
+
+                // [col, cell].toString(),
                 coordinates: [
                     meta_grid.features[counter].geometry.coordinates[0][0][0],
                     meta_grid.features[counter].geometry.coordinates[0][0][1],
@@ -220,23 +228,127 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
         });
 };
 
-// _handleCellsHeight(flat) {
-//     let grid = this.state.meta_grid.features;
+export const _proccessBresenhamGrid = cityioData => {
+    let bresenhamGrid = {};
+    const metaGrid = cityioData.meta_grid.features;
+    const gridRows = cityioData.meta_grid_header.nrows;
+    const gridCols = cityioData.meta_grid_header.ncols;
 
-//     grid.forEach(cell => {
-//         const thisCellProps = cell.properties;
-//         if (flat) {
-//             thisCellProps.old_height = thisCellProps.height;
-//             thisCellProps.flat = true;
-//             thisCellProps.height = 0.1;
-//         } else {
-//             thisCellProps.flat = false;
-//             thisCellProps.height = thisCellProps.old_height;
-//         }
-//     });
-//     // make react think of a new obj: hack
-//     grid = JSON.parse(JSON.stringify(grid));
-//     this.setState({
-//         selectedCellsState: grid
-//     });
-// }
+    let counter = 0;
+    for (let row = 0; row < gridRows; row++) {
+        for (var col = 0; col < gridCols; col++) {
+            const pntLatLong = metaGrid[counter].geometry.coordinates[0][0];
+            let posString = [col, row].toString();
+            bresenhamGrid[posString] = pntLatLong;
+            counter += 1;
+        }
+    }
+    return bresenhamGrid;
+};
+
+/**
+ * https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+ */
+export const _bresenhamLine = (x0, y0, x1, y1, bresenhamGrid) => {
+    // search for latLong for this pixel
+    const _pushTobresenhamLine = (x, y) => {
+        let posString = [x, y].toString();
+        pathArr.push(bresenhamGrid[posString]);
+    };
+    let pathArr = [];
+    // Iterators, counters required by algorithm
+    let xWalker,
+        yWalker,
+        deltaX,
+        deltaY,
+        absDeltaX,
+        absDeltaY,
+        errX,
+        errY,
+        xDestination,
+        yDestination,
+        step;
+    // Calculate line deltas
+    deltaX = x1 - x0;
+    deltaY = y1 - y0;
+    // Create a positive copy of deltas (makes iterating easier)
+    absDeltaX = Math.abs(deltaX);
+    absDeltaY = Math.abs(deltaY);
+    // Calculate error intervals for both axis
+    errX = 2 * absDeltaY - absDeltaX;
+    errY = 2 * absDeltaX - absDeltaY;
+    // The line is X-axis dominant
+    if (absDeltaY <= absDeltaX) {
+        // Line is drawn left to right
+        if (deltaX >= 0) {
+            xWalker = x0;
+            yWalker = y0;
+            xDestination = x1;
+        }
+        // Line is drawn right to left (swap ends)
+        else {
+            xWalker = x1;
+            yWalker = y1;
+            xDestination = x0;
+        }
+        // Push first pixel
+        _pushTobresenhamLine(xWalker, yWalker);
+        // Rasterize the line
+        for (step = 0; xWalker < xDestination; step++) {
+            // move one step on x
+            xWalker = xWalker + 1;
+            // errX is smaller than 0
+            if (errX < 0) {
+                errX = errX + 2 * absDeltaY;
+                _pushTobresenhamLine(xWalker, yWalker);
+            }
+            // errX is larger than 0
+            else {
+                if ((deltaX < 0 && deltaY < 0) || (deltaX > 0 && deltaY > 0)) {
+                    yWalker = yWalker + 1;
+                } else {
+                    yWalker = yWalker - 1;
+                }
+                errX = errX + 2 * (absDeltaY - absDeltaX);
+                // push pnt that stays on x for the y+1 step
+                // so that the a 90deg step is created
+                _pushTobresenhamLine(xWalker - 1, yWalker);
+            }
+            _pushTobresenhamLine(xWalker, yWalker);
+        }
+    }
+    // The line is Y-axis dominant
+    else if (absDeltaY > absDeltaX) {
+        // Line is drawn bottom to top
+        if (deltaY >= 0) {
+            xWalker = x0;
+            yWalker = y0;
+            yDestination = y1;
+        } else {
+            // Line is drawn top to bottom
+            xWalker = x1;
+            yWalker = y1;
+            yDestination = y0;
+        }
+        _pushTobresenhamLine(xWalker, yWalker); // Draw first pixel
+        // Rasterize the line
+        for (step = 0; yWalker < yDestination; step++) {
+            // move y
+            yWalker = yWalker + 1;
+            if (errY <= 0) {
+                errY = errY + 2 * absDeltaX;
+                _pushTobresenhamLine(xWalker, yWalker);
+            } else {
+                if ((deltaX < 0 && deltaY < 0) || (deltaX > 0 && deltaY > 0)) {
+                    xWalker = xWalker + 1;
+                } else {
+                    xWalker = xWalker - 1;
+                }
+                errY = errY + 2 * (absDeltaX - absDeltaY);
+                _pushTobresenhamLine(xWalker, yWalker - 1);
+            }
+            _pushTobresenhamLine(xWalker, yWalker);
+        }
+    }
+    return pathArr;
+};

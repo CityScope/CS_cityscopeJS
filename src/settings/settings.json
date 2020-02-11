@@ -154,22 +154,22 @@
         "toggles": {
             "GRID": {
                 "displayName": "Interactive Grid",
-                "showOnInit": true
+                "showOnInit": false
             },
             "NETWORK": {
-                "displayName": "Street Network",
-                "showOnInit": false
+                "displayName": "Mobility Network",
+                "showOnInit": true
             },
             "TEXT": {
                 "displayName": "Cell Information",
                 "showOnInit": false
             },
             "PATHS": {
-                "displayName": "Aggregated Sim Paths",
+                "displayName": "Aggregated Mobility",
                 "showOnInit": false
             },
             "ABM": {
-                "displayName": "Traffic Simulation",
+                "displayName": "Mobility Simulation",
                 "showOnInit": false
             },
             "ACCESS": {
