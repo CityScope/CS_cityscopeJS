@@ -212,12 +212,16 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
 
     console.log("POSTing to", postURL);
 
-    axios
-        .post(postURL, data, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
+    const options = {
+        method: "post",
+        url: postURL,
+        data: data,
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+
+    axios(options)
         .then(response => {
             console.log(response);
         })

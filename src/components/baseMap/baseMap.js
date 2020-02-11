@@ -93,7 +93,7 @@ class Map extends Component {
             const cityioData = this.props.cityioData;
             this.setState({
                 cityioData: cityioData,
-                meta_grid: _proccessGridData(cityioData)
+                GEOGRID: _proccessGridData(cityioData)
             });
 
             // ! workaround for preloading access layer data
@@ -109,8 +109,8 @@ class Map extends Component {
         ) {
             // take props from grid and send
             let dataProps = [];
-            for (let i = 0; i < this.state.meta_grid.features.length; i++) {
-                dataProps[i] = this.state.meta_grid.features[i].properties;
+            for (let i = 0; i < this.state.GEOGRID.features.length; i++) {
+                dataProps[i] = this.state.GEOGRID.features[i].properties;
             }
             _postMapEditsToCityIO(
                 dataProps,
@@ -555,7 +555,7 @@ class Map extends Component {
             layers.push(
                 new GeoJsonLayer({
                     id: "GRID",
-                    data: this.state.meta_grid,
+                    data: this.state.GEOGRID,
                     visible: this.props.menu.includes("GRID") ? true : false,
                     pickable: true,
                     extruded: true,
