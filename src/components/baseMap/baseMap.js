@@ -44,7 +44,9 @@ class Map extends Component {
             networkLayer: []
         };
         this.animationFrame = null;
-        this.timeZoneOffset = setDirLightSettings(this.props.cityioData.header);
+        this.timeZoneOffset = setDirLightSettings(
+            this.props.cityioData.GEOGRID.properties.header
+        );
         this.dirLightSettings = {
             timestamp: Date.UTC(2019, 7, 1, 11 + this.timeZoneOffset),
             color: [255, 255, 255],
@@ -71,7 +73,7 @@ class Map extends Component {
             networkPnts: _proccesNetworkPnts(cityIOdata),
             gridTextData: _proccessGridTextData(cityIOdata),
             bresenhamGrid: _proccessBresenhamGrid(cityIOdata),
-            networkLayer: cityIOdata.interactive_network_data
+            networkLayer: cityIOdata.GEONETWORK
         });
     }
 
@@ -113,13 +115,13 @@ class Map extends Component {
             _postMapEditsToCityIO(
                 dataProps,
                 this.props.cityioData.tableName,
-                "/interactive_grid_data"
+                "/GEOGRIDDATA"
             );
 
             _postMapEditsToCityIO(
                 this.state.networkLayer,
                 this.props.cityioData.tableName,
-                "/interactive_network_data"
+                "/GEONETWORK"
             );
         }
 
@@ -156,15 +158,16 @@ class Map extends Component {
      * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
      */
     _setViewStateToTableHeader() {
-        const header = this.props.cityioData.header;
+        const header = this.props.cityioData.GEOGRID.properties.header;
+
         this.setState({
             viewState: {
                 ...this.state.viewState,
-                longitude: header.spatial.longitude,
-                latitude: header.spatial.latitude,
+                longitude: header.longitude,
+                latitude: header.latitude,
                 zoom: 15,
                 pitch: 0,
-                bearing: 360 - header.spatial.rotation,
+                bearing: 360 - header.rotation,
                 orthographic: true
             }
         });

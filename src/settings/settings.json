@@ -26,14 +26,12 @@
         "interval": 500,
         "cityIOmodules": [
             "header",
-            "interactive_grid_mapping",
-            "meta_grid",
+            "GEOGRID",
             "ABM",
             "grid",
             "access",
-            "interactive_grid_data",
-            "interactive_network_data",
-            "meta_grid_header"
+            "GEONETWORK",
+            "GEOGRIDDATA"
         ]
     },
     "map": {
