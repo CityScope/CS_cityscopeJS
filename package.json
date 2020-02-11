@@ -34,7 +34,8 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "gh": "react-scripts build && gh-pages -d build"
+        "gh": "react-scripts build && gh-pages -d build",
+        "dev": "cd docs && cd mockAPI && json-server --watch mockAPI.json --port 3001 & npm start"
     },
     "eslintConfig": {
         "extends": "react-app"

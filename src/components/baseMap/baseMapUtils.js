@@ -91,7 +91,7 @@ features  :[
 ]
  */
 
-export const _proccesNetworkGeojson = cityioData => {
+export const _proccesNetworkPnts = cityioData => {
     const metaGrid = cityioData.meta_grid.features;
     // pnt object
     const networkGeojson = {
@@ -155,10 +155,10 @@ export const _proccessGridTextData = cityioData => {
             textData[counter] = {
                 text: [
                     col,
-                    cell,
-                    " | ",
-                    meta_grid.features[counter].geometry.coordinates[0][0][0],
-                    meta_grid.features[counter].geometry.coordinates[0][0][1]
+                    cell
+                    // " | ",
+                    // meta_grid.features[counter].geometry.coordinates[0][0][0],
+                    // meta_grid.features[counter].geometry.coordinates[0][0][1]
                 ].toString(),
 
                 // [col, cell].toString(),
@@ -228,27 +228,6 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
         });
 };
 
-// _handleCellsHeight(flat) {
-//     let grid = this.state.meta_grid.features;
-
-//     grid.forEach(cell => {
-//         const thisCellProps = cell.properties;
-//         if (flat) {
-//             thisCellProps.old_height = thisCellProps.height;
-//             thisCellProps.flat = true;
-//             thisCellProps.height = 0.1;
-//         } else {
-//             thisCellProps.flat = false;
-//             thisCellProps.height = thisCellProps.old_height;
-//         }
-//     });
-//     // make react think of a new obj: hack
-//     grid = JSON.parse(JSON.stringify(grid));
-//     this.setState({
-//         selectedCellsState: grid
-//     });
-// }
-
 export const _proccessBresenhamGrid = cityioData => {
     let bresenhamGrid = {};
     const metaGrid = cityioData.meta_grid.features;
@@ -270,91 +249,106 @@ export const _proccessBresenhamGrid = cityioData => {
 /**
  * https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
  */
-export const _bresenhamLine = (x1, y1, x2, y2, bresenhamGrid) => {
+export const _bresenhamLine = (x0, y0, x1, y1, bresenhamGrid) => {
     // search for latLong for this pixel
     const _pushTobresenhamLine = (x, y) => {
         let posString = [x, y].toString();
         pathArr.push(bresenhamGrid[posString]);
     };
-
     let pathArr = [];
     // Iterators, counters required by algorithm
-    let x, y, deltaX, deltaY, absDeltaX, absDeltaY, px, py, xe, ye, counter;
+    let xWalker,
+        yWalker,
+        deltaX,
+        deltaY,
+        absDeltaX,
+        absDeltaY,
+        errX,
+        errY,
+        xDestination,
+        yDestination,
+        step;
     // Calculate line deltas
-    deltaX = x2 - x1;
-    deltaY = y2 - y1;
+    deltaX = x1 - x0;
+    deltaY = y1 - y0;
     // Create a positive copy of deltas (makes iterating easier)
     absDeltaX = Math.abs(deltaX);
     absDeltaY = Math.abs(deltaY);
     // Calculate error intervals for both axis
-    px = 2 * absDeltaY - absDeltaX;
-    py = 2 * absDeltaX - absDeltaY;
-
+    errX = 2 * absDeltaY - absDeltaX;
+    errY = 2 * absDeltaX - absDeltaY;
     // The line is X-axis dominant
     if (absDeltaY <= absDeltaX) {
         // Line is drawn left to right
         if (deltaX >= 0) {
-            x = x1;
-            y = y1;
-            xe = x2;
-        } else {
-            // Line is drawn right to left (swap ends)
-            x = x2;
-            y = y2;
-            xe = x1;
+            xWalker = x0;
+            yWalker = y0;
+            xDestination = x1;
         }
-        // Draw first pixel
-        _pushTobresenhamLine(x, y);
+        // Line is drawn right to left (swap ends)
+        else {
+            xWalker = x1;
+            yWalker = y1;
+            xDestination = x0;
+        }
+        // Push first pixel
+        _pushTobresenhamLine(xWalker, yWalker);
         // Rasterize the line
-        for (counter = 0; x < xe; counter++) {
-            x = x + 1;
-            // Deal with octants...
-            if (px < 0) {
-                px = px + 2 * absDeltaY;
-            } else {
-                if ((deltaX < 0 && deltaY < 0) || (deltaX > 0 && deltaY > 0)) {
-                    y = y + 1;
-                } else {
-                    y = y - 1;
-                }
-                px = px + 2 * (absDeltaY - absDeltaX);
+        for (step = 0; xWalker < xDestination; step++) {
+            // move one step on x
+            xWalker = xWalker + 1;
+            // errX is smaller than 0
+            if (errX < 0) {
+                errX = errX + 2 * absDeltaY;
+                _pushTobresenhamLine(xWalker, yWalker);
             }
-            // Draw pixel from line span at currently rasterized position
-            _pushTobresenhamLine(x, y);
+            // errX is larger than 0
+            else {
+                if ((deltaX < 0 && deltaY < 0) || (deltaX > 0 && deltaY > 0)) {
+                    yWalker = yWalker + 1;
+                } else {
+                    yWalker = yWalker - 1;
+                }
+                errX = errX + 2 * (absDeltaY - absDeltaX);
+                // push pnt that stays on x for the y+1 step
+                // so that the a 90deg step is created
+                _pushTobresenhamLine(xWalker - 1, yWalker);
+            }
+            _pushTobresenhamLine(xWalker, yWalker);
         }
     }
     // The line is Y-axis dominant
-    else {
+    else if (absDeltaY > absDeltaX) {
         // Line is drawn bottom to top
         if (deltaY >= 0) {
-            x = x1;
-            y = y1;
-            ye = y2;
+            xWalker = x0;
+            yWalker = y0;
+            yDestination = y1;
         } else {
             // Line is drawn top to bottom
-            x = x2;
-            y = y2;
-            ye = y1;
+            xWalker = x1;
+            yWalker = y1;
+            yDestination = y0;
         }
-        _pushTobresenhamLine(x, y); // Draw first pixel
+        _pushTobresenhamLine(xWalker, yWalker); // Draw first pixel
         // Rasterize the line
-        for (counter = 0; y < ye; counter++) {
-            y = y + 1;
-            // Deal with octants...
-            if (py <= 0) {
-                py = py + 2 * absDeltaX;
+        for (step = 0; yWalker < yDestination; step++) {
+            // move y
+            yWalker = yWalker + 1;
+            if (errY <= 0) {
+                errY = errY + 2 * absDeltaX;
+                _pushTobresenhamLine(xWalker, yWalker);
             } else {
                 if ((deltaX < 0 && deltaY < 0) || (deltaX > 0 && deltaY > 0)) {
-                    x = x + 1;
+                    xWalker = xWalker + 1;
                 } else {
-                    x = x - 1;
+                    xWalker = xWalker - 1;
                 }
-                py = py + 2 * (absDeltaX - absDeltaY);
+                errY = errY + 2 * (absDeltaX - absDeltaY);
+                _pushTobresenhamLine(xWalker, yWalker - 1);
             }
-            // Draw pixel from line span at currently rasterized position
-            _pushTobresenhamLine(x, y);
+            _pushTobresenhamLine(xWalker, yWalker);
         }
     }
-
     return pathArr;
 };

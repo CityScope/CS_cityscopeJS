@@ -157,7 +157,7 @@
                 "showOnInit": false
             },
             "NETWORK": {
-                "displayName": "Street Network",
+                "displayName": "Mobility Network",
                 "showOnInit": true
             },
             "TEXT": {
@@ -165,11 +165,11 @@
                 "showOnInit": false
             },
             "PATHS": {
-                "displayName": "Aggregated Sim Paths",
+                "displayName": "Aggregated Mobility",
                 "showOnInit": false
             },
             "ABM": {
-                "displayName": "Traffic Simulation",
+                "displayName": "Mobility Simulation",
                 "showOnInit": false
             },
             "ACCESS": {
