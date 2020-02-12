@@ -107,16 +107,16 @@ class Map extends Component {
             prevProps.menu.includes("EDIT") &&
             !this.props.menu.includes("EDIT")
         ) {
-            // take props from grid and send
-            let dataProps = [];
-            for (let i = 0; i < this.state.GEOGRID.features.length; i++) {
-                dataProps[i] = this.state.GEOGRID.features[i].properties;
-            }
-            _postMapEditsToCityIO(
-                dataProps,
-                this.props.cityioData.tableName,
-                "/GEOGRIDDATA"
-            );
+            // // take props from grid and send
+            // let dataProps = [];
+            // for (let i = 0; i < this.state.GEOGRID.features.length; i++) {
+            //     dataProps[i] = this.state.GEOGRID.features[i].properties;
+            // }
+            // _postMapEditsToCityIO(
+            //     dataProps,
+            //     this.props.cityioData.tableName,
+            //     "/GEOGRIDDATA"
+            // );
 
             _postMapEditsToCityIO(
                 this.state.networkLayer,

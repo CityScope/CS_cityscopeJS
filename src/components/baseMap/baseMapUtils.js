@@ -199,25 +199,24 @@ export const _proccessAccessData = data => {
 export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
     let postURL;
     // check if cityIO or local server
-    if (tableName === "mockAPI") {
-        postURL = settings.cityIO.mockURL + endPoint;
-    } else {
-        postURL =
-            "https://cityio.media.mit.edu/api/table/update/" +
-            tableName +
-            endPoint;
-    }
-
-    console.log("POSTing to", postURL);
+    postURL =
+        tableName === "mockAPI"
+            ? settings.cityIO.mockURL + endPoint
+            : "https://cityio.media.mit.edu/api/table/update/" +
+              tableName +
+              endPoint;
 
     const options = {
-        method: "post",
+        method: "put",
         url: postURL,
         data: data,
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Accept: "application/json"
         }
     };
+
+    console.log(data, postURL);
 
     axios(options)
         .then(response => {
