@@ -32,29 +32,27 @@ export const setDirLightSettings = header => {
 export const _proccessGridData = cityioData => {
     let types = settings.map.types;
     const TUIgridData = cityioData.grid;
-
-    const wholeGrid = cityioData.GEOGRID;
+    const geoGrid = cityioData.GEOGRID;
     const interactiveGridData = cityioData.interactive_grid_data;
     // update GEOGRID features from cityio
     if (interactiveGridData) {
-        for (let i = 0; i < wholeGrid.features.length; i++) {
-            wholeGrid.features[i].properties = interactiveGridData[i];
-            wholeGrid.features[i].properties.id = i;
+        for (let i = 0; i < geoGrid.features.length; i++) {
+            geoGrid.features[i].properties = interactiveGridData[i];
+            geoGrid.features[i].properties.id = i;
         }
     }
 
     // handles TUI grid data on update
-    const interactiveMapping = cityioData.interactive_grid_mapping;
-    for (let i in interactiveMapping) {
+    const geoGridMapping = cityioData.GEOGRID.properties.GEOGRIDMAPPING;
+    for (let i in geoGridMapping) {
         // type is the first value in the cell array
         // the rotation is the 2nd
         let gridCellType = TUIgridData[i][0];
         let interactiveCellProps =
-            wholeGrid.features[interactiveMapping[i]].properties;
+            geoGrid.features[geoGridMapping[i]].properties;
         // set up the cell type
         interactiveCellProps.type = gridCellType;
         // check if not undefined type (no scanning)
-
         if (TUIgridData[i][0] !== -1) {
             // get value of cell from settings via its index
             let cellValueByIndex = Object.values(types)[TUIgridData[i][0]];
@@ -66,7 +64,7 @@ export const _proccessGridData = cityioData => {
             console.log("... got null type...");
         }
     }
-    const newGrid = JSON.parse(JSON.stringify(wholeGrid));
+    const newGrid = JSON.parse(JSON.stringify(geoGrid));
     return newGrid;
 };
 
