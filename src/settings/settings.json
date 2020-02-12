@@ -154,11 +154,11 @@
         "toggles": {
             "GRID": {
                 "displayName": "Interactive Grid",
-                "showOnInit": false
+                "showOnInit": true
             },
             "NETWORK": {
                 "displayName": "Mobility Network",
-                "showOnInit": true
+                "showOnInit": false
             },
             "TEXT": {
                 "displayName": "Cell Information",
