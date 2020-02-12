@@ -207,7 +207,7 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
               endPoint;
 
     const options = {
-        method: "put",
+        method: "post",
         url: postURL,
         data: data,
         headers: {
