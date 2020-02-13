@@ -346,6 +346,21 @@ class Map extends Component {
         }
     };
 
+    _handleNetworkPaths = path => {
+        const selectedType = this.props.selectedType;
+        if (path.object && selectedType.name === "Clear network") {
+            path = path.object;
+            this.state.networkLayer.forEach((item, index, object) => {
+                if (item.id === path.id) {
+                    object.splice(index, 1);
+                    this.setState({
+                        networkLayer: object
+                    });
+                }
+            });
+        }
+    };
+
     /**
      *
      * if we have the first pnt
@@ -355,6 +370,8 @@ class Map extends Component {
      *
      */
     _handleNetworkEdit = pnt => {
+        const selectedType = this.props.selectedType;
+
         if (!this.state.networkFirstPoint) {
             // make this the first point
             this.setState({ networkFirstPoint: pnt });
@@ -364,7 +381,11 @@ class Map extends Component {
                 y: pnt.y
             });
 
-            if (pickData) {
+            if (
+                pickData &&
+                selectedType.class === "networkClass" &&
+                selectedType.name !== "Clear network"
+            ) {
                 const FP = this.state.networkFirstPoint.object.properties
                     .gridPosition;
                 const SP = pickData.object.properties.gridPosition;
@@ -376,16 +397,18 @@ class Map extends Component {
                     SP[1],
                     this.state.bresenhamGrid
                 );
-                let bresenhamLine = {
-                    path: lineObj,
-                    selectedType: this.props.selectedType
-                };
 
                 let tmpArr;
 
                 tmpArr = Array.isArray(this.state.networkLayer)
                     ? this.state.networkLayer
                     : [];
+
+                let bresenhamLine = {
+                    path: lineObj,
+                    id: tmpArr.length,
+                    selectedType: this.props.selectedType
+                };
 
                 tmpArr.push(bresenhamLine);
                 tmpArr = JSON.parse(JSON.stringify(tmpArr));
@@ -546,13 +569,22 @@ class Map extends Component {
 
             layers.push(
                 new PathLayer({
+                    pickable: true,
                     id: "NETWORK_PATHS",
                     data: this.state.networkLayer,
                     widthScale: 1,
                     widthMinPixels: 5,
                     getPath: d => d.path,
                     getColor: d => d.selectedType.color,
-                    getWidth: d => d.selectedType.width
+                    getWidth: d => d.selectedType.width,
+                    onClick: e => {
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        ) {
+                            this._handleNetworkPaths(e);
+                        }
+                    }
                 })
             );
         }
