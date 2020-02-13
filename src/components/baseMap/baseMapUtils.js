@@ -33,7 +33,7 @@ export const _proccessGridData = cityioData => {
     let types = settings.map.types;
     const TUIgridData = cityioData.grid;
     const geoGrid = cityioData.GEOGRID;
-    const interactiveGridData = cityioData.interactive_grid_data;
+    const interactiveGridData = cityioData.GEOGRIDDATA;
     // update GEOGRID features from cityio
     if (interactiveGridData) {
         for (let i = 0; i < geoGrid.features.length; i++) {
@@ -215,9 +215,6 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
             Accept: "application/json"
         }
     };
-
-    console.log(data, postURL);
-
     axios(options)
         .then(response => {
             console.log(response);
