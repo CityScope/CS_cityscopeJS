@@ -44,7 +44,9 @@ class Map extends Component {
             networkLayer: []
         };
         this.animationFrame = null;
-        this.timeZoneOffset = setDirLightSettings(this.props.cityioData.header);
+        this.timeZoneOffset = setDirLightSettings(
+            this.props.cityioData.GEOGRID.properties.header
+        );
         this.dirLightSettings = {
             timestamp: Date.UTC(2019, 7, 1, 11 + this.timeZoneOffset),
             color: [255, 255, 255],
@@ -71,7 +73,7 @@ class Map extends Component {
             networkPnts: _proccesNetworkPnts(cityIOdata),
             gridTextData: _proccessGridTextData(cityIOdata),
             bresenhamGrid: _proccessBresenhamGrid(cityIOdata),
-            networkLayer: cityIOdata.interactive_network_data
+            networkLayer: cityIOdata.GEONETWORK
         });
     }
 
@@ -91,7 +93,7 @@ class Map extends Component {
             const cityioData = this.props.cityioData;
             this.setState({
                 cityioData: cityioData,
-                meta_grid: _proccessGridData(cityioData)
+                GEOGRID: _proccessGridData(cityioData)
             });
 
             // ! workaround for preloading access layer data
@@ -107,19 +109,19 @@ class Map extends Component {
         ) {
             // take props from grid and send
             let dataProps = [];
-            for (let i = 0; i < this.state.meta_grid.features.length; i++) {
-                dataProps[i] = this.state.meta_grid.features[i].properties;
+            for (let i = 0; i < this.state.GEOGRID.features.length; i++) {
+                dataProps[i] = this.state.GEOGRID.features[i].properties;
             }
             _postMapEditsToCityIO(
                 dataProps,
                 this.props.cityioData.tableName,
-                "/interactive_grid_data"
+                "/GEOGRIDDATA"
             );
 
             _postMapEditsToCityIO(
                 this.state.networkLayer,
                 this.props.cityioData.tableName,
-                "/interactive_network_data"
+                "/GEONETWORK"
             );
         }
 
@@ -156,15 +158,16 @@ class Map extends Component {
      * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
      */
     _setViewStateToTableHeader() {
-        const header = this.props.cityioData.header;
+        const header = this.props.cityioData.GEOGRID.properties.header;
+
         this.setState({
             viewState: {
                 ...this.state.viewState,
-                longitude: header.spatial.longitude,
-                latitude: header.spatial.latitude,
+                longitude: header.longitude,
+                latitude: header.latitude,
                 zoom: 15,
                 pitch: 0,
-                bearing: 360 - header.spatial.rotation,
+                bearing: 360 - header.rotation,
                 orthographic: true
             }
         });
@@ -377,7 +380,13 @@ class Map extends Component {
                     path: lineObj,
                     selectedType: this.props.selectedType
                 };
-                let tmpArr = this.state.networkLayer;
+
+                let tmpArr;
+
+                tmpArr = Array.isArray(this.state.networkLayer)
+                    ? this.state.networkLayer
+                    : [];
+
                 tmpArr.push(bresenhamLine);
                 tmpArr = JSON.parse(JSON.stringify(tmpArr));
                 this.setState({ networkLayer: tmpArr });
@@ -552,7 +561,7 @@ class Map extends Component {
             layers.push(
                 new GeoJsonLayer({
                     id: "GRID",
-                    data: this.state.meta_grid,
+                    data: this.state.GEOGRID,
                     visible: this.props.menu.includes("GRID") ? true : false,
                     pickable: true,
                     extruded: true,

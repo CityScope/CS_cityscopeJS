@@ -12,7 +12,7 @@ var tzlookup = require("tz-lookup");
 export const setDirLightSettings = header => {
     // get the hour element of this location
     let hourAtLatLong = new Date().toLocaleString("en-US", {
-        timeZone: tzlookup(header.spatial.latitude, header.spatial.longitude),
+        timeZone: tzlookup(header.latitude, header.longitude),
         hour: "2-digit",
         hour12: false
     });
@@ -32,29 +32,27 @@ export const setDirLightSettings = header => {
 export const _proccessGridData = cityioData => {
     let types = settings.map.types;
     const TUIgridData = cityioData.grid;
-
-    const wholeGrid = cityioData.meta_grid;
-    const interactiveGridData = cityioData.interactive_grid_data;
-    // update meta_grid features from cityio
+    const geoGrid = cityioData.GEOGRID;
+    const interactiveGridData = cityioData.GEOGRIDDATA;
+    // update GEOGRID features from cityio
     if (interactiveGridData) {
-        for (let i = 0; i < wholeGrid.features.length; i++) {
-            wholeGrid.features[i].properties = interactiveGridData[i];
-            wholeGrid.features[i].properties.id = i;
+        for (let i = 0; i < geoGrid.features.length; i++) {
+            geoGrid.features[i].properties = interactiveGridData[i];
+            geoGrid.features[i].properties.id = i;
         }
     }
 
     // handles TUI grid data on update
-    const interactiveMapping = cityioData.interactive_grid_mapping;
-    for (let i in interactiveMapping) {
+    const geoGridMapping = cityioData.GEOGRID.properties.GEOGRIDMAPPING;
+    for (let i in geoGridMapping) {
         // type is the first value in the cell array
         // the rotation is the 2nd
         let gridCellType = TUIgridData[i][0];
         let interactiveCellProps =
-            wholeGrid.features[interactiveMapping[i]].properties;
+            geoGrid.features[geoGridMapping[i]].properties;
         // set up the cell type
         interactiveCellProps.type = gridCellType;
         // check if not undefined type (no scanning)
-
         if (TUIgridData[i][0] !== -1) {
             // get value of cell from settings via its index
             let cellValueByIndex = Object.values(types)[TUIgridData[i][0]];
@@ -66,7 +64,7 @@ export const _proccessGridData = cityioData => {
             console.log("... got null type...");
         }
     }
-    const newGrid = JSON.parse(JSON.stringify(wholeGrid));
+    const newGrid = JSON.parse(JSON.stringify(geoGrid));
     return newGrid;
 };
 
@@ -92,15 +90,15 @@ features  :[
  */
 
 export const _proccesNetworkPnts = cityioData => {
-    const metaGrid = cityioData.meta_grid.features;
+    const metaGrid = cityioData.GEOGRID.features;
     // pnt object
     const networkGeojson = {
         type: "FeatureCollection",
         features: []
     };
 
-    const gridRows = cityioData.meta_grid_header.nrows;
-    const gridCols = cityioData.meta_grid_header.ncols;
+    const gridRows = cityioData.GEOGRID.properties.header.nrows;
+    const gridCols = cityioData.GEOGRID.properties.header.ncols;
 
     let counter = 0;
 
@@ -143,11 +141,11 @@ export const _proccesNetworkPnts = cityioData => {
  * features[i].geometry.coordinates[0][0]
  */
 export const _proccessGridTextData = cityioData => {
-    const meta_grid = cityioData.meta_grid;
+    const GEOGRID = cityioData.GEOGRID;
     let textData = [];
 
-    const gridRows = cityioData.meta_grid_header.nrows;
-    const gridCols = cityioData.meta_grid_header.ncols;
+    const gridRows = cityioData.GEOGRID.properties.header.nrows;
+    const gridCols = cityioData.GEOGRID.properties.header.ncols;
 
     let counter = 0;
     for (let cell = 0; cell < gridRows; cell++) {
@@ -157,15 +155,15 @@ export const _proccessGridTextData = cityioData => {
                     col,
                     cell
                     // " | ",
-                    // meta_grid.features[counter].geometry.coordinates[0][0][0],
-                    // meta_grid.features[counter].geometry.coordinates[0][0][1]
+                    // GEOGRID.features[counter].geometry.coordinates[0][0][0],
+                    // GEOGRID.features[counter].geometry.coordinates[0][0][1]
                 ].toString(),
 
                 // [col, cell].toString(),
                 coordinates: [
-                    meta_grid.features[counter].geometry.coordinates[0][0][0],
-                    meta_grid.features[counter].geometry.coordinates[0][0][1],
-                    meta_grid.features[counter].properties.height + 10
+                    GEOGRID.features[counter].geometry.coordinates[0][0][0],
+                    GEOGRID.features[counter].geometry.coordinates[0][0][1],
+                    GEOGRID.features[counter].properties.height + 10
                 ]
             };
             counter += 1;
@@ -201,23 +199,23 @@ export const _proccessAccessData = data => {
 export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
     let postURL;
     // check if cityIO or local server
-    if (tableName === "mockAPI") {
-        postURL = settings.cityIO.mockURL + endPoint;
-    } else {
-        postURL =
-            "https://cityio.media.mit.edu/api/table/update/" +
-            tableName +
-            endPoint;
-    }
+    postURL =
+        tableName === "mockAPI"
+            ? settings.cityIO.mockURL + endPoint
+            : "https://cityio.media.mit.edu/api/table/update/" +
+              tableName +
+              endPoint;
 
-    console.log("POSTing to", postURL);
-
-    axios
-        .post(postURL, data, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
+    const options = {
+        method: "post",
+        url: postURL,
+        data: data,
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+        }
+    };
+    axios(options)
         .then(response => {
             console.log(response);
         })
@@ -230,9 +228,9 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
 
 export const _proccessBresenhamGrid = cityioData => {
     let bresenhamGrid = {};
-    const metaGrid = cityioData.meta_grid.features;
-    const gridRows = cityioData.meta_grid_header.nrows;
-    const gridCols = cityioData.meta_grid_header.ncols;
+    const metaGrid = cityioData.GEOGRID.features;
+    const gridRows = cityioData.GEOGRID.properties.header.nrows;
+    const gridCols = cityioData.GEOGRID.properties.header.ncols;
 
     let counter = 0;
     for (let row = 0; row < gridRows; row++) {
