@@ -138,7 +138,7 @@
             },
             "NETWORK": {
                 "displayName": "Mobility Network",
-                "showOnInit": false
+                "showOnInit": true
             },
             "TEXT": {
                 "displayName": "Cell Information",
@@ -158,7 +158,7 @@
             },
             "RADAR": {
                 "displayName": "Urban Matrices",
-                "showOnInit": true
+                "showOnInit": false
             },
             "ROTATE": {
                 "displayName": "Rotate Camera",
