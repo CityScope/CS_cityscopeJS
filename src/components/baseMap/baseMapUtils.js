@@ -34,11 +34,16 @@ export const _proccessGridData = cityioData => {
     const TUIgridData = cityioData.grid;
     const geoGrid = cityioData.GEOGRID;
     const GEOGRIDDATA = cityioData.GEOGRIDDATA;
-    // update GEOGRID features from cityio
-    if (GEOGRIDDATA) {
+    // update GEOGRID features from GEOGRIDDATA on cityio
+    if (GEOGRIDDATA && GEOGRIDDATA.length > 0) {
         for (let i = 0; i < geoGrid.features.length; i++) {
             geoGrid.features[i].properties = GEOGRIDDATA[i];
             geoGrid.features[i].properties.id = i;
+            // set no color for when no land use exist
+            geoGrid.features[i].properties.color =
+                geoGrid.features[i].properties.land_use === "None"
+                    ? [0, 0, 0, 0]
+                    : geoGrid.features[i].properties.color;
         }
     }
 

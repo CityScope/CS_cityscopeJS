@@ -613,19 +613,16 @@ class Map extends Component {
                     id: "GRID",
                     data: this.state.GEOGRID,
                     visible: this.props.menu.includes("GRID") ? true : false,
-                    pickable: true,
+                    pickable:
+                        // allow selection only when buildings are edited
+                        this.props.selectedType.class === "buildingsClass"
+                            ? true
+                            : false,
                     extruded: true,
                     lineWidthScale: 1,
                     lineWidthMinPixels: 2,
                     getElevation: d => d.properties.height,
-                    getFillColor: d =>
-                        d.properties.type !== undefined
-                            ? d.properties.color
-                            : d.properties.color
-                            ? d.properties.color
-                            : d.properties.land_use !== "None"
-                            ? settings.map.types[1].color
-                            : settings.map.types[0].color,
+                    getFillColor: d => d.properties.color,
                     onClick: event => {
                         if (
                             this.props.menu.includes("EDIT") &&
