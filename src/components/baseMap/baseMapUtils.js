@@ -33,11 +33,11 @@ export const _proccessGridData = cityioData => {
     let types = settings.map.types;
     const TUIgridData = cityioData.grid;
     const geoGrid = cityioData.GEOGRID;
-    const interactiveGridData = cityioData.GEOGRIDDATA;
+    const GEOGRIDDATA = cityioData.GEOGRIDDATA;
     // update GEOGRID features from cityio
-    if (interactiveGridData) {
+    if (GEOGRIDDATA) {
         for (let i = 0; i < geoGrid.features.length; i++) {
-            geoGrid.features[i].properties = interactiveGridData[i];
+            geoGrid.features[i].properties = GEOGRIDDATA[i];
             geoGrid.features[i].properties.id = i;
         }
     }

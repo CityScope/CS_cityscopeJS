@@ -323,15 +323,21 @@ class Map extends Component {
     };
 
     _handleNetworkHover = pnt => {
+        // paint the pnt
+        const selectedType = this.props.selectedType;
         // check if really a pnt
-        if (pnt && pnt.object && pnt.object.properties) {
-            // paint the pnt
-            const selectedType = this.props.selectedType;
+        if (
+            pnt &&
+            pnt.object &&
+            pnt.object.properties &&
+            selectedType.name !== "Clear network"
+        ) {
             const pntProps = pnt.object.properties;
             pntProps.old_color = pntProps.color;
             pntProps.color = selectedType.color;
             pntProps.old_netWidth = pntProps.netWidth;
             pntProps.netWidth = pntProps.netWidth * 2;
+            // dirty solution for animating selection
             this.setState({
                 hoveredPnt: pnt.object
             });
@@ -346,15 +352,16 @@ class Map extends Component {
         }
     };
 
-    _handleNetworkPaths = path => {
+    _handleNetworkRemove = path => {
         const selectedType = this.props.selectedType;
         if (path.object && selectedType.name === "Clear network") {
             path = path.object;
             this.state.networkLayer.forEach((item, index, object) => {
                 if (item.id === path.id) {
                     object.splice(index, 1);
+                    let tmpObj = JSON.parse(JSON.stringify(object));
                     this.setState({
-                        networkLayer: object
+                        networkLayer: tmpObj
                     });
                 }
             });
@@ -369,52 +376,55 @@ class Map extends Component {
      * draw line
      *
      */
-    _handleNetworkEdit = pnt => {
+    _handleNetworkCreate = pnt => {
+        // check if on network path  delete mode
         const selectedType = this.props.selectedType;
+        if (selectedType.name !== "Clear network") {
+            // if this is the first point
+            if (!this.state.networkFirstPoint) {
+                // make this the first point
+                this.setState({ networkFirstPoint: pnt });
+            } else {
+                const pickData = this.deckGL.pickObject({
+                    x: pnt.x,
+                    y: pnt.y
+                });
 
-        if (!this.state.networkFirstPoint) {
-            // make this the first point
-            this.setState({ networkFirstPoint: pnt });
-        } else {
-            const pickData = this.deckGL.pickObject({
-                x: pnt.x,
-                y: pnt.y
-            });
+                if (
+                    pickData &&
+                    selectedType.class === "networkClass" &&
+                    selectedType.name !== "Clear network"
+                ) {
+                    const FP = this.state.networkFirstPoint.object.properties
+                        .gridPosition;
+                    const SP = pickData.object.properties.gridPosition;
 
-            if (
-                pickData &&
-                selectedType.class === "networkClass" &&
-                selectedType.name !== "Clear network"
-            ) {
-                const FP = this.state.networkFirstPoint.object.properties
-                    .gridPosition;
-                const SP = pickData.object.properties.gridPosition;
+                    let lineObj = _bresenhamLine(
+                        FP[0],
+                        FP[1],
+                        SP[0],
+                        SP[1],
+                        this.state.bresenhamGrid
+                    );
 
-                let lineObj = _bresenhamLine(
-                    FP[0],
-                    FP[1],
-                    SP[0],
-                    SP[1],
-                    this.state.bresenhamGrid
-                );
+                    let tmpArr;
 
-                let tmpArr;
+                    tmpArr = Array.isArray(this.state.networkLayer)
+                        ? this.state.networkLayer
+                        : [];
 
-                tmpArr = Array.isArray(this.state.networkLayer)
-                    ? this.state.networkLayer
-                    : [];
+                    let bresenhamLine = {
+                        path: lineObj,
+                        id: tmpArr.length,
+                        selectedType: this.props.selectedType
+                    };
 
-                let bresenhamLine = {
-                    path: lineObj,
-                    id: tmpArr.length,
-                    selectedType: this.props.selectedType
-                };
-
-                tmpArr.push(bresenhamLine);
-                tmpArr = JSON.parse(JSON.stringify(tmpArr));
-                this.setState({ networkLayer: tmpArr });
-                // null the first pnt for new selection
-                this.setState({ networkFirstPoint: null });
+                    tmpArr.push(bresenhamLine);
+                    tmpArr = JSON.parse(JSON.stringify(tmpArr));
+                    this.setState({ networkLayer: tmpArr });
+                    // null the first pnt for new selection
+                    this.setState({ networkFirstPoint: null });
+                }
             }
         }
     };
@@ -524,48 +534,50 @@ class Map extends Component {
             this.state.networkPnts &&
             this.state.networkPnts.features
         ) {
-            layers.push(
-                new ScatterplotLayer({
-                    id: "NETWORK",
-                    data: this.state.networkPnts.features,
-                    pickable: true,
-                    opacity: 1,
-                    stroked: true,
-                    filled: true,
-                    radiusScale: 1,
-                    radiusMinPixels: 1,
-                    radiusMaxPixels: 100,
-                    getPosition: d => d.geometry.coordinates,
-                    getFillColor: d => d.properties.color,
-                    getRadius: d => d.properties.netWidth,
+            if (this.props.menu.includes("EDIT")) {
+                layers.push(
+                    new ScatterplotLayer({
+                        id: "NETWORK",
+                        data: this.state.networkPnts.features,
+                        pickable: true,
+                        opacity: 1,
+                        stroked: true,
+                        filled: true,
+                        radiusScale: 1,
+                        radiusMinPixels: 1,
+                        radiusMaxPixels: 100,
+                        getPosition: d => d.geometry.coordinates,
+                        getFillColor: d => d.properties.color,
+                        getRadius: d => d.properties.netWidth,
 
-                    onHover: e => {
-                        if (
-                            this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        ) {
-                            this._handleNetworkHover(e);
-                        }
-                    },
-                    onClick: e => {
-                        if (
-                            this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        ) {
-                            this._handleNetworkEdit(e);
-                        }
-                    },
+                        onHover: e => {
+                            if (
+                                this.props.menu.includes("EDIT") &&
+                                this.state.keyDownState !== "Shift"
+                            ) {
+                                this._handleNetworkHover(e);
+                            }
+                        },
+                        onClick: e => {
+                            if (
+                                this.props.menu.includes("EDIT") &&
+                                this.state.keyDownState !== "Shift"
+                            ) {
+                                this._handleNetworkCreate(e);
+                            }
+                        },
 
-                    updateTriggers: {
-                        getFillColor: this.state.hoveredPnt,
-                        getRadius: this.state.hoveredPnt
-                    },
-                    transitions: {
-                        getFillColor: 100,
-                        getRadius: 300
-                    }
-                })
-            );
+                        updateTriggers: {
+                            getFillColor: this.state.hoveredPnt,
+                            getRadius: this.state.hoveredPnt
+                        },
+                        transitions: {
+                            getFillColor: 100,
+                            getRadius: 300
+                        }
+                    })
+                );
+            }
 
             layers.push(
                 new PathLayer({
@@ -582,8 +594,14 @@ class Map extends Component {
                             this.props.menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift"
                         ) {
-                            this._handleNetworkPaths(e);
+                            this._handleNetworkRemove(e);
                         }
+                    },
+                    updateTriggers: {
+                        getPath: this.state.networkLayer
+                    },
+                    transitions: {
+                        getPath: 500
                     }
                 })
             );
