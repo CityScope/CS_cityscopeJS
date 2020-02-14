@@ -1,24 +1,5 @@
 {
     "docsURL": "https://raw.githubusercontent.com/CityScope/CS_cityscopeJS/master/docs/",
-    "radar": {
-        "domain": [
-            { "name": "amazing city", "domain": [0, 1] },
-            { "name": "validated innovation", "domain": [0, 1] },
-            { "name": "predicted happiness", "domain": [0, 1] },
-            { "name": "wow mix-use", "domain": [0, 1] },
-            { "name": "ok buildings", "domain": [0, 1] },
-            { "name": "fun crime rates", "domain": [0, 1] },
-            { "name": "success urbanism", "domain": [0, 1] },
-            { "name": "happy AI", "domain": [0, 1] },
-            { "name": "free parking", "domain": [0, 1] },
-            { "name": "deep chainy", "domain": [0, 1] },
-            { "name": "failed urbanism", "domain": [0, 1] },
-            { "name": "Data for free", "domain": [0, 1] },
-            { "name": "vapor energy", "domain": [0, 1] },
-            { "name": "deep chainy", "domain": [0, 1] }
-        ],
-        "colorRange": ["#fc03ec", "#79C7E3"]
-    },
 
     "cityIO": {
         "mockURL": "http://localhost:3001",
@@ -31,7 +12,8 @@
             "grid",
             "access",
             "GEONETWORK",
-            "GEOGRIDDATA"
+            "GEOGRIDDATA",
+            "indicators"
         ]
     },
     "map": {
@@ -176,7 +158,7 @@
             },
             "RADAR": {
                 "displayName": "Urban Matrices",
-                "showOnInit": false
+                "showOnInit": true
             },
             "ROTATE": {
                 "displayName": "Rotate Camera",

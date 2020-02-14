@@ -1,98 +1,122 @@
 import React, { Component } from "react";
 import { CircularGridLines, RadarChart } from "react-vis";
-import settings from "../../../settings/settings.json";
 import "../../../../node_modules/react-vis/dist/style.css";
 import "./Radar.css";
 
+/**
+ * 
+ * 
+ *  "domain": [
+            { "name": "amazing city", "domain": [0, 1] },
+            { "name": "validated innovation", "domain": [0, 1] },
+            { "name": "predicted happiness", "domain": [0, 1] },
+            { "name": "wow mix-use", "domain": [0, 1] },
+            { "name": "ok buildings", "domain": [0, 1] },
+            { "name": "fun crime rates", "domain": [0, 1] },
+            { "name": "success urbanism", "domain": [0, 1] },
+            { "name": "happy AI", "domain": [0, 1] },
+            { "name": "free parking", "domain": [0, 1] },
+            { "name": "deep chainy", "domain": [0, 1] },
+            { "name": "failed urbanism", "domain": [0, 1] },
+            { "name": "Data for free", "domain": [0, 1] },
+            { "name": "vapor energy", "domain": [0, 1] },
+            { "name": "deep chainy", "domain": [0, 1] }
+        ],
+ */
 class Radar extends Component {
     constructor(props) {
         super(props);
-        this.domain = settings.radar.domain;
-        this.colorRange = settings.radar.colorRange;
         this.state = {
-            cityioData: {},
+            domains: [],
             radarData: []
         };
-
         this.radarSize = 700;
+
+        this.colorRange = ["#fc03ec", "#79C7E3"];
     }
 
     generateData() {
-        let data = {};
-        let dataStatic = {};
-        for (let i in this.domain) {
-            // b/s data for now
-            data[this.domain[i].name] = this.props.cityioData.grid[i][0] / 10;
-            // compared with other b/s data
-            dataStatic[this.domain[i].name] = i / this.domain.length;
+        const indicators = this.props.cityioData.indicators;
+        let radarData = {};
+        let domains = [];
+        for (let i = 0; i < indicators.length; i++) {
+            radarData[indicators[i].name] = indicators[i].value;
+            indicators[i].domain = [0, 1];
+            domains.push(indicators[i]);
         }
-        this.setState({ radarData: [data, dataStatic] });
+        this.setState({ radarData: [radarData], domains: domains });
     }
 
     componentDidMount() {
-        console.log(">> init radar");
-
+        console.log("....init radar");
+        this.setState({ indicators: this.props.indicators });
         this.generateData();
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.cityioData !== this.props.cityioData) {
-            this.setState({ cityioData: this.props.cityioData });
+    componentDidUpdate(prevProps) {
+        if (
+            prevProps.cityioData.indicators !== this.props.cityioData.indicators
+        ) {
+            this.setState({ indicators: this.props.indicators });
             console.log("new radar data..");
             this.generateData();
         }
     }
 
     render() {
-        return (
-            <RadarChart
-                className="Radar blur"
-                animation
-                data={this.state.radarData}
-                domains={this.domain}
-                colorRange={this.colorRange}
-                style={{
-                    polygons: {
-                        fillOpacity: 0.2,
-                        strokeWidth: 2
-                    },
-                    axes: {
-                        text: {
-                            opacity: 0,
-                            fontWeight: 700,
-                            fill: "white"
-                        },
-                        strokeWidth: 0
-                    },
-                    labels: {
-                        textAnchor: "middle",
-                        fontSize: 12,
-                        fontWeight: "600",
-                        fill: "white"
-                    }
-                }}
-                margin={{
-                    left: this.radarSize / 6,
-                    top: this.radarSize / 6,
-                    bottom: this.radarSize / 6,
-                    right: this.radarSize / 6
-                }}
-                width={this.radarSize}
-                height={this.radarSize}
-            >
-                <CircularGridLines
+        if (this.props.cityioData.indicators) {
+            return (
+                <RadarChart
+                    className="Radar blur"
+                    animation
+                    data={this.state.radarData}
+                    domains={this.state.domains}
+                    colorRange={this.colorRange}
                     style={{
-                        fill: "white",
-                        fillOpacity: 0.1,
-                        backgroundColor: "#fff",
-                        opacity: 0.5,
-                        stroke: "white",
-                        width: 0.1
+                        polygons: {
+                            fillOpacity: 0.2,
+                            strokeWidth: 2
+                        },
+                        axes: {
+                            text: {
+                                opacity: 0,
+                                fontWeight: 700,
+                                fill: "white"
+                            },
+                            strokeWidth: 0
+                        },
+                        labels: {
+                            textAnchor: "middle",
+                            fontSize: 11,
+                            fontWeight: "600",
+                            fill: "white"
+                        }
                     }}
-                    tickValues={[...new Array(11)].map((v, i) => i / 10 - 1)}
-                />
-            </RadarChart>
-        );
+                    margin={{
+                        left: this.radarSize / 6,
+                        top: this.radarSize / 6,
+                        bottom: this.radarSize / 6,
+                        right: this.radarSize / 6
+                    }}
+                    width={this.radarSize}
+                    height={this.radarSize}
+                >
+                    <CircularGridLines
+                        style={{
+                            fill: "white",
+                            fillOpacity: 0.1,
+                            backgroundColor: "#fff",
+                            opacity: 0.5,
+                            stroke: "white",
+                            width: 0.1
+                        }}
+                        tickValues={[...new Array(11)].map(
+                            (v, i) => i / 10 - 1
+                        )}
+                    />
+                </RadarChart>
+            );
+        } else return null;
     }
 }
 

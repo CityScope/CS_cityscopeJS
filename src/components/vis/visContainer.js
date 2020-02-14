@@ -4,12 +4,7 @@ import Radar from "./Radar/Radar";
 
 class VisContainer extends Component {
     render() {
-        if (
-            this.props.menu &&
-            this.props.menu.includes("RADAR") &&
-            this.props.cityioData &&
-            this.props.cityioData.grid
-        ) {
+        if (this.props.menu.includes("RADAR") && this.props.ready) {
             return <Radar cityioData={this.props.cityioData} />;
         } else {
             return null;
@@ -20,7 +15,8 @@ class VisContainer extends Component {
 const mapStateToProps = state => {
     return {
         cityioData: state.CITYIO,
-        menu: state.MENU
+        menu: state.MENU,
+        ready: state.READY
     };
 };
 
