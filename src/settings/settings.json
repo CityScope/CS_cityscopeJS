@@ -134,39 +134,48 @@
         "toggles": {
             "GRID": {
                 "displayName": "Interactive Grid",
-                "showOnInit": true
+                "showOnInit": true,
+                "requireModule": "GEOGRID"
             },
             "NETWORK": {
                 "displayName": "Mobility Network",
-                "showOnInit": true
+                "showOnInit": true,
+                "requireModule": "GEOGRID"
             },
             "TEXT": {
                 "displayName": "Cell Information",
-                "showOnInit": false
-            },
-            "PATHS": {
-                "displayName": "Aggregated Mobility",
-                "showOnInit": false
+                "showOnInit": false,
+                "requireModule": "GEOGRID"
             },
             "ABM": {
                 "displayName": "Mobility Simulation",
-                "showOnInit": false
+                "showOnInit": false,
+                "requireModule": "ABM"
+            },
+            "PATHS": {
+                "displayName": "Aggregated Mobility",
+                "showOnInit": false,
+                "requireModule": "ABM"
             },
             "ACCESS": {
                 "displayName": "Accessibility Analysis",
-                "showOnInit": false
+                "showOnInit": false,
+                "requireModule": "access"
             },
             "RADAR": {
                 "displayName": "Urban Matrices",
-                "showOnInit": false
+                "showOnInit": false,
+                "requireModule": "indicators"
             },
             "ROTATE": {
                 "displayName": "Rotate Camera",
-                "showOnInit": false
+                "showOnInit": false,
+                "requireModule": false
             },
             "KS": {
                 "displayName": "Projection Mapping",
-                "showOnInit": false
+                "showOnInit": false,
+                "requireModule": false
             }
         }
     }
