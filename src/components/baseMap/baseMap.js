@@ -306,11 +306,7 @@ class Map extends Component {
         const multiSelectedObj = this._mulipleObjPicked(e);
         multiSelectedObj.forEach(selected => {
             const thisCellProps = selected.object.properties;
-            if (
-                this.props.selectedType.class === "buildingsClass" &&
-                thisCellProps.land_use !== "None" &&
-                !thisCellProps.interactive
-            ) {
+            if (this.props.selectedType.class === "buildingsClass") {
                 thisCellProps.old_height = thisCellProps.height;
                 thisCellProps.old_color = thisCellProps.color;
                 thisCellProps.color = selectedType.color;
@@ -541,7 +537,6 @@ class Map extends Component {
                         data: this.state.networkPnts.features,
                         pickable: true,
                         opacity: 1,
-                        stroked: true,
                         filled: true,
                         radiusScale: 1,
                         radiusMinPixels: 1,

@@ -32,18 +32,22 @@ export const setDirLightSettings = header => {
 export const _proccessGridData = cityioData => {
     let types = settings.map.types;
     const TUIgridData = cityioData.grid;
-    const geoGrid = cityioData.GEOGRID;
+    const GEOGRID = cityioData.GEOGRID;
     const GEOGRIDDATA = cityioData.GEOGRIDDATA;
     // update GEOGRID features from GEOGRIDDATA on cityio
     if (GEOGRIDDATA && GEOGRIDDATA.length > 0) {
-        for (let i = 0; i < geoGrid.features.length; i++) {
-            geoGrid.features[i].properties = GEOGRIDDATA[i];
-            geoGrid.features[i].properties.id = i;
+        for (let i = 0; i < GEOGRID.features.length; i++) {
+            GEOGRID.features[i].properties = GEOGRIDDATA[i];
+            GEOGRID.features[i].properties.id = i;
+        }
+    } else {
+        for (let i = 0; i < GEOGRID.features.length; i++) {
+            GEOGRID.features[i].properties.id = i;
             // set no color for when no land use exist
-            geoGrid.features[i].properties.color =
-                geoGrid.features[i].properties.land_use === "None"
-                    ? [0, 0, 0, 0]
-                    : geoGrid.features[i].properties.color;
+            GEOGRID.features[i].properties.color = [255, 255, 255, 200];
+            GEOGRID.features[i].properties.height = 1;
+
+            GEOGRID.features[i].properties.interactive = true;
         }
     }
 
@@ -54,7 +58,7 @@ export const _proccessGridData = cityioData => {
         // the rotation is the 2nd
         let gridCellType = TUIgridData[i][0];
         let interactiveCellProps =
-            geoGrid.features[geoGridMapping[i]].properties;
+            GEOGRID.features[geoGridMapping[i]].properties;
         // set up the cell type
         interactiveCellProps.type = gridCellType;
         // check if not undefined type (no scanning)
@@ -69,7 +73,7 @@ export const _proccessGridData = cityioData => {
             console.log("... got null type...");
         }
     }
-    const newGrid = JSON.parse(JSON.stringify(geoGrid));
+    const newGrid = JSON.parse(JSON.stringify(GEOGRID));
     return newGrid;
 };
 
@@ -113,11 +117,10 @@ export const _proccesNetworkPnts = cityioData => {
         for (var col = 0; col < gridCols; col++) {
             let props;
             const pntLatLong = metaGrid[counter].geometry.coordinates[0][0];
-            const typeProp = settings.map.netTypes[1];
             props = {
                 land_use: "network",
-                netWidth: typeProp.width,
-                color: typeProp.color,
+                netWidth: 5,
+                color: [255, 255, 255, 150],
                 gridPosition: [col, cell]
             };
             const pnt = {
