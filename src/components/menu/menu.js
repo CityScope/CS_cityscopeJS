@@ -115,26 +115,35 @@ function Menu(props) {
      * and turn on the layer on init
      */
     let togglesCompsArray = [];
+    // array of loaded API modules
+    const loadedModlues = Object.keys(props.cityIOdata);
+    // create each toggle
     for (let i = 0; i < listOfToggles.length; i++) {
-        const thisToggle = (
-            <ListItem key={listOfToggles[i]}>
-                <ListItemText
-                    primary={togglesMeta[listOfToggles[i]].displayName}
-                />
-                <ListItemSecondaryAction>
-                    <Switch
-                        edge="end"
-                        onChange={handleToggle(listOfToggles[i])}
-                        checked={
-                            props.menuState.includes(listOfToggles[i])
-                                ? true
-                                : false
-                        }
+        // check if the mdoule of this toggle
+        // was loaded on the API
+        let requireModule = togglesMeta[listOfToggles[i]].requireModule;
+
+        if (loadedModlues.includes(requireModule) || requireModule === false) {
+            const thisToggle = (
+                <ListItem key={listOfToggles[i]}>
+                    <ListItemText
+                        primary={togglesMeta[listOfToggles[i]].displayName}
                     />
-                </ListItemSecondaryAction>
-            </ListItem>
-        );
-        togglesCompsArray.push(thisToggle);
+                    <ListItemSecondaryAction>
+                        <Switch
+                            edge="end"
+                            onChange={handleToggle(listOfToggles[i])}
+                            checked={
+                                props.menuState.includes(listOfToggles[i])
+                                    ? true
+                                    : false
+                            }
+                        />
+                    </ListItemSecondaryAction>
+                </ListItem>
+            );
+            togglesCompsArray.push(thisToggle);
+        }
     }
 
     const renderSubMenu = () => {
@@ -208,7 +217,8 @@ function Menu(props) {
 
 const mapStateToProps = state => {
     return {
-        menuState: state.MENU
+        menuState: state.MENU,
+        cityIOdata: state.CITYIO
     };
 };
 
