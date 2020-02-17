@@ -44,9 +44,9 @@ export const _proccessGridData = cityioData => {
         for (let i = 0; i < GEOGRID.features.length; i++) {
             GEOGRID.features[i].properties.id = i;
             // set no color for when no land use exist
-            GEOGRID.features[i].properties.color = [255, 255, 255, 200];
-            GEOGRID.features[i].properties.height = 1;
-
+            GEOGRID.features[i].properties.color = [255, 255, 255, 180];
+            GEOGRID.features[i].properties.height = 0.1;
+            GEOGRID.features[i].properties.name = "empty";
             GEOGRID.features[i].properties.interactive = true;
         }
     }

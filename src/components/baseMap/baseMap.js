@@ -256,28 +256,6 @@ class Map extends Component {
             .addEventListener("contextmenu", evt => evt.preventDefault());
     }
 
-    _handleCellsHover = e => {
-        const selectedType = this.props.selectedType;
-
-        if (e.object && e.object.properties) {
-            const thisCellProps = e.object.properties;
-            if (
-                thisCellProps.land_use !== "None" &&
-                !thisCellProps.interactive
-            ) {
-                thisCellProps.old_color = thisCellProps.color;
-                thisCellProps.color = selectedType.color;
-                this.setState({
-                    selectedCellsState: e.object
-                });
-                thisCellProps.color = thisCellProps.old_color;
-                this.setState({
-                    selectedCellsState: e.object
-                });
-            }
-        }
-    };
-
     /**
      * Description. uses deck api to
      * collect objects in a region
@@ -311,6 +289,7 @@ class Map extends Component {
                 thisCellProps.old_color = thisCellProps.color;
                 thisCellProps.color = selectedType.color;
                 thisCellProps.height = selectedType.height;
+                thisCellProps.name = selectedType.name;
             }
         });
         this.setState({
@@ -430,53 +409,81 @@ class Map extends Component {
      * draw target area around mouse
      */
     _renderSelectionTarget = () => {
-        if (this.props.menu.includes("EDIT") && this.state.mousePos) {
-            const targetMetaData = this.props.selectedType;
-
-            const rc = targetMetaData.color;
-            const color = "rgb(" + rc[0] + "," + rc[1] + "," + rc[2] + ")";
+        if (this.state.mousePos) {
             const mousePos = this.state.mousePos;
-            const divSize = this.state.pickingRadius;
 
-            let mouseX = mousePos.clientX - divSize / 2;
-            let mouseY = mousePos.clientY - divSize / 2;
-
-            return (
-                <div
-                    style={{
-                        border: "2px solid",
-                        backgroundColor: this.state.mouseDown
-                            ? "rgba(" +
-                              rc[0] +
-                              "," +
-                              rc[1] +
-                              "," +
-                              rc[2] +
-                              ",0.6)"
-                            : "rgba(0,0,0,0)",
-                        borderColor: color,
-                        color: color,
-                        borderRadius: "15%",
-                        position: "fixed",
-                        zIndex: 1,
-                        pointerEvents: "none",
-                        width: divSize,
-                        height: divSize,
-                        left: mouseX,
-                        top: mouseY
-                    }}
-                >
+            if (this.props.menu.includes("EDIT")) {
+                const targetMetaData = this.props.selectedType;
+                const rc = targetMetaData.color;
+                const color = "rgb(" + rc[0] + "," + rc[1] + "," + rc[2] + ")";
+                const colorTrans =
+                    "rgba(" + rc[0] + "," + rc[1] + "," + rc[2] + ",0.6)";
+                const divSize = this.state.pickingRadius;
+                let mouseX = mousePos.clientX - divSize / 2;
+                let mouseY = mousePos.clientY - divSize / 2;
+                return (
                     <div
                         style={{
-                            position: "relative",
-                            left: divSize + 10,
-                            fontSize: "1vw"
+                            border: "2px solid",
+                            backgroundColor: this.state.mouseDown
+                                ? colorTrans
+                                : "rgba(0,0,0,0)",
+                            borderColor: color,
+                            color: color,
+                            borderRadius: "15%",
+                            position: "fixed",
+                            zIndex: 1,
+                            pointerEvents: "none",
+                            width: divSize,
+                            height: divSize,
+                            left: mouseX,
+                            top: mouseY
                         }}
                     >
-                        {targetMetaData.name}
+                        <div
+                            style={{
+                                position: "relative",
+                                left: divSize + 10,
+                                fontSize: "1vw"
+                            }}
+                        >
+                            {targetMetaData.name}
+                        </div>
                     </div>
-                </div>
-            );
+                );
+            } else {
+                return (
+                    this.state.hoveredObj && (
+                        <div
+                            style={{
+                                borderRadius: "15%",
+                                position: "fixed",
+                                pointerEvents: "none",
+                                backgroundColor: "rgba(0,0,0,0.5)",
+                                padding: "1vw",
+                                color: "rgba(255,255,255,0.9)",
+                                zIndex: 1,
+                                left: mousePos.clientX + 50,
+                                top: mousePos.clientY - 50,
+                                fontSize: "1vw"
+                            }}
+                        >
+                            <p>
+                                Type:
+                                {this.state.hoveredObj.object.properties.name}
+                            </p>
+                            <p>
+                                Height:
+                                {this.state.hoveredObj.object.properties.height}
+                            </p>
+                            <p>
+                                ID:
+                                {this.state.hoveredObj.object.properties.id}
+                            </p>
+                        </div>
+                    )
+                );
+            }
         }
     };
 
@@ -609,10 +616,9 @@ class Map extends Component {
                     data: this.state.GEOGRID,
                     visible: this.props.menu.includes("GRID") ? true : false,
                     pickable:
-                        // allow selection only when buildings are edited
-                        this.props.selectedType.class === "buildingsClass"
-                            ? true
-                            : false,
+                        this.props.selectedType.class === "networkClass"
+                            ? false
+                            : true,
                     extruded: true,
                     lineWidthScale: 1,
                     lineWidthMinPixels: 2,
@@ -621,17 +627,17 @@ class Map extends Component {
                     onClick: event => {
                         if (
                             this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
+                            this.state.keyDownState !== "Shift" &&
+                            this.props.selectedType.class === "buildingsClass"
                         )
                             this._handleGridcellEditing(event);
                     },
-                    onHover: event => {
-                        if (
-                            this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        )
-                            this._handleCellsHover(event);
+                    onHover: e => {
+                        if (e.object) {
+                            this.setState({ hoveredObj: e });
+                        }
                     },
+
                     onDrag: event => {
                         if (
                             this.props.menu.includes("EDIT") &&
@@ -686,14 +692,6 @@ class Map extends Component {
                     visible: this.props.menu.includes("ABM") ? true : false,
                     data: cityioData.ABM,
                     getPath: d => d.path,
-                    // ! get Z for each segment
-                    // getPath: d => {
-                    //     for (let i in d.path) {
-                    //         d.path[i][2] = Math.random() * 20;
-                    //     }
-                    //     return d.path;
-                    // },
-
                     getTimestamps: d => d.timestamps,
                     getColor: d => {
                         //switch between modes or types of users
