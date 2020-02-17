@@ -284,7 +284,10 @@ class Map extends Component {
         const multiSelectedObj = this._mulipleObjPicked(e);
         multiSelectedObj.forEach(selected => {
             const thisCellProps = selected.object.properties;
-            if (this.props.selectedType.class === "buildingsClass") {
+            if (
+                this.props.selectedType.class === "buildingsClass" &&
+                thisCellProps.land_use !== "None"
+            ) {
                 thisCellProps.old_height = thisCellProps.height;
                 thisCellProps.old_color = thisCellProps.color;
                 thisCellProps.color = selectedType.color;
