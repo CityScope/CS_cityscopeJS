@@ -6,12 +6,11 @@ export const StyledListItem = styled(ListItem)`
     margin-left: 0.2em;
     margin-right: 0.2em;
     border-radius: 50%;
-    height: 80px;
-    width: 80px;
+    height: 60px;
+    width: 60px;
     align-items: center;
     justify-content: center;
     background-color: ${props => props.color};
-    border: 1px solid black;
     &:hover {
         background-color: ${props => props.color};
     }
@@ -39,5 +38,9 @@ export const useStyles = makeStyles(theme => ({
         flexDirection: "row",
         marginLeft: "12px",
         marginRight: "12px"
+    },
+    typeName: {
+        color: "white",
+        fontSize: "11px"
     }
 }));

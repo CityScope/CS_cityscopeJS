@@ -41,7 +41,11 @@ function TypeEditor(props) {
                         handleListItemClick(event, typesFamily[type])
                     }
                 >
-                    <Typography variant="subtitle2" align="center">
+                    <Typography
+                        variant="subtitle2"
+                        className={classes.typeName}
+                        align="center"
+                    >
                         {typesFamily[type].name}
                     </Typography>
                 </StyledListItem>

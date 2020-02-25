@@ -88,7 +88,7 @@
             },
             "1": {
                 "height": 1,
-                "color": [255, 255, 255, 180],
+                "color": [236, 195, 11, 180],
                 "name": "Plaza",
                 "class": "buildingsClass"
             },
