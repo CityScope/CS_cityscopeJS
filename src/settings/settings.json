@@ -50,7 +50,7 @@
         "netTypes": {
             "0": {
                 "width": 10,
-                "color": [0, 0, 0, 200],
+                "color": [128, 128, 128, 180],
                 "name": "Clear network",
                 "class": "networkClass"
             },
@@ -82,7 +82,7 @@
         "types": {
             "0": {
                 "height": 0,
-                "color": [0, 0, 0, 0],
+                "color": [128, 128, 128, 180],
                 "name": "Clear Buildings",
                 "class": "buildingsClass"
             },
@@ -95,35 +95,17 @@
             "2": {
                 "height": 10,
                 "color": [153, 213, 148, 180],
-                "name": "Green",
+                "name": "Park",
                 "class": "buildingsClass"
             },
             "3": {
-                "height": 10,
+                "height": [0, 10],
                 "color": [252, 141, 89, 180],
-                "name": "Residential Low",
+                "name": "Residential",
                 "class": "buildingsClass"
             },
             "4": {
-                "height": 20,
-                "color": [254, 224, 139, 180],
-                "name": "Residential Mid",
-                "class": "buildingsClass"
-            },
-            "5": {
-                "height": 30,
-                "color": [230, 245, 152, 180],
-                "name": "Residential Tall",
-                "class": "buildingsClass"
-            },
-            "6": {
-                "height": 40,
-                "color": [213, 62, 79, 180],
-                "name": "Office Mix Use",
-                "class": "buildingsClass"
-            },
-            "7": {
-                "height": 80,
+                "height": [0, 80],
                 "color": [50, 136, 189, 180],
                 "name": "Office Tower",
                 "class": "buildingsClass"
