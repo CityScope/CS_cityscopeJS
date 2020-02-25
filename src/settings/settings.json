@@ -109,6 +109,12 @@
                 "color": [50, 136, 189, 180],
                 "name": "Office Tower",
                 "class": "buildingsClass"
+            },
+            "5": {
+                "height": 0,
+                "color": [0, 0, 0, 0],
+                "name": "Dummy",
+                "class": "buildingsClass"
             }
         }
     },
