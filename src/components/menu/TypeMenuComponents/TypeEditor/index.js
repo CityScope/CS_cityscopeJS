@@ -1,35 +1,19 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import settings from "../../../settings/settings.json";
+import settings from "../../../../settings/settings.json";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
+import { StyledListItem } from "./styles";
+import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
 import HomeWorkIcon from "@material-ui/icons/HomeWork";
 import CommuteIcon from "@material-ui/icons/Commute";
 import { connect } from "react-redux";
+import { useStyles } from "./styles";
 
-import { listenToTypeEditor } from "../../../redux/actions";
+import { listenToTypeEditor } from "../../../../redux/actions";
 
 const buildingTypes = settings.map.types;
 const networkTypes = settings.map.netTypes;
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        padding: theme.spacing(2, 5),
-        position: "fixed",
-        bottom: "3vw",
-        right: "3vw",
-        maxWidth: "35%",
-        maxHeight: "50%",
-        overflow: "auto"
-    },
-
-    shadow: {
-        boxShadow: "inset 0 0 2px #000000"
-    }
-}));
 
 function TypeEditor(props) {
     const classes = useStyles();
@@ -47,25 +31,20 @@ function TypeEditor(props) {
             let rgbCol = "rgb(" + col[0] + "," + col[1] + "," + col[2] + ")";
 
             iconsArr.push(
-                <ListItem
-                    style={{
-                        margin: ".2em",
-                        borderRadius: "0.5em",
-                        border: "2px solid " + rgbCol
-                    }}
-                    className={classes.shadow}
-                    variant="outlined"
+                <StyledListItem
+                    color={rgbCol}
                     key={type}
                     button
+                    variant="raised"
                     selected={selectedIndex === typesFamily[type].name}
                     onClick={event =>
                         handleListItemClick(event, typesFamily[type])
                     }
                 >
-                    <Typography variant="caption">
+                    <Typography variant="subtitle2" align="center">
                         {typesFamily[type].name}
                     </Typography>
-                </ListItem>
+                </StyledListItem>
             );
         });
         return iconsArr;
@@ -77,13 +56,17 @@ function TypeEditor(props) {
                 <HomeWorkIcon />
                 Buildings
             </Typography>
-            <List>{createTypesIcons(buildingTypes, <HomeWorkIcon />)}</List>
+            <List className={classes.list}>
+                {createTypesIcons(buildingTypes)}
+            </List>
             <Divider />
             <Typography variant="h6" gutterBottom>
                 <CommuteIcon />
                 Mobility
             </Typography>
-            <List>{createTypesIcons(networkTypes, <CommuteIcon />)}</List>
+            <List className={classes.list}>
+                {createTypesIcons(networkTypes)}
+            </List>
         </Paper>
     );
 }
