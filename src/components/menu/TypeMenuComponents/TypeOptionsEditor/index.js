@@ -15,7 +15,7 @@ function TypeOptionsEditor(props) {
         { value: 0, label: "0" },
         { value: 100, label: "100" }
     ];
-    const mixedUse = height.constructor === Array;
+    const mixedUse = height ? height.constructor === Array : false;
     const sliderText = mixedUse
         ? "Street Level Floors - Total Floors"
         : "Height";
