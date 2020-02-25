@@ -280,7 +280,8 @@ class Map extends Component {
      * so to not overlap TUI activity
      */
     _handleGridcellEditing = e => {
-        const selectedType = this.props.selectedType;
+        const { selectedType } = this.props;
+        const { height, color, name } = selectedType;
         const multiSelectedObj = this._mulipleObjPicked(e);
         multiSelectedObj.forEach(selected => {
             const thisCellProps = selected.object.properties;
@@ -290,9 +291,9 @@ class Map extends Component {
             ) {
                 thisCellProps.old_height = thisCellProps.height;
                 thisCellProps.old_color = thisCellProps.color;
-                thisCellProps.color = selectedType.color;
-                thisCellProps.height = selectedType.height;
-                thisCellProps.name = selectedType.name;
+                thisCellProps.color = color;
+                thisCellProps.height = height;
+                thisCellProps.name = name;
             }
         });
         this.setState({
@@ -302,7 +303,7 @@ class Map extends Component {
 
     _handleNetworkHover = pnt => {
         // paint the pnt
-        const selectedType = this.props.selectedType;
+        const { selectedType } = this.props;
         // check if really a pnt
         if (
             pnt &&
@@ -475,10 +476,33 @@ class Map extends Component {
                                 Type:
                                 {this.state.hoveredObj.object.properties.name}
                             </p>
-                            <p>
-                                Height:
-                                {this.state.hoveredObj.object.properties.height}
-                            </p>
+                            {this.state.hoveredObj.object.properties.height
+                                .constructor === Array ? (
+                                <>
+                                    <p>
+                                        Street Level Floors:
+                                        {
+                                            this.state.hoveredObj.object
+                                                .properties.height[0]
+                                        }
+                                    </p>
+                                    <p>
+                                        Total Floors:
+                                        {
+                                            this.state.hoveredObj.object
+                                                .properties.height[1]
+                                        }
+                                    </p>
+                                </>
+                            ) : (
+                                <p>
+                                    Total Floors:
+                                    {
+                                        this.state.hoveredObj.object.properties
+                                            .height
+                                    }
+                                </p>
+                            )}
                             <p>
                                 ID:
                                 {this.state.hoveredObj.object.properties.id}
@@ -616,6 +640,7 @@ class Map extends Component {
             layers.push(
                 new GeoJsonLayer({
                     id: "GRID",
+                    // loads geogrid into visualization
                     data: this.state.GEOGRID,
                     visible: this.props.menu.includes("GRID") ? true : false,
                     pickable:
@@ -625,7 +650,10 @@ class Map extends Component {
                     extruded: true,
                     lineWidthScale: 1,
                     lineWidthMinPixels: 2,
-                    getElevation: d => d.properties.height,
+                    getElevation: d =>
+                        d.properties.height.constructor === Array
+                            ? d.properties.height[1]
+                            : d.properties.height,
                     getFillColor: d => d.properties.color,
                     onClick: event => {
                         if (
