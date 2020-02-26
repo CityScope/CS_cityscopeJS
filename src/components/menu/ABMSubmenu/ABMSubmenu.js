@@ -6,10 +6,10 @@ import RangeSlider from "./RangeSlider";
 const useStyles = makeStyles(theme => ({
     root: {
         padding: theme.spacing(1, 5),
-        position: "fixed",
-        bottom: "3vw",
-        left: "3vw",
-        width: "20vw"
+        position: "absolute",
+        bottom: "25%",
+        left: "6.3vw",
+        width: "220px"
     }
 }));
 

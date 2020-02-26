@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 import { listenToMenuUI } from "../../redux/actions";
 import settings from "../../settings/settings.json";
 import ABMSubmenu from "./ABMSubmenu/ABMSubmenu";
-import TypeEditor from "./TypeEditor/TypeEditor";
+import TypeMenuContainer from "./TypeMenuComponents/TypeMenuContainer";
 import NearMeIcon from "@material-ui/icons/NearMe";
 import NavigationIcon from "@material-ui/icons/Navigation";
 
@@ -146,28 +146,8 @@ function Menu(props) {
         }
     }
 
-    const renderSubMenu = () => {
-        if (state.checked) {
-            let subMenuArr = [];
-            state.checked.forEach(layer => {
-                switch (layer) {
-                    case "ABM":
-                        subMenuArr.push(<ABMSubmenu key={layer} />);
-                        break;
-                    case "EDIT":
-                        subMenuArr.push(<TypeEditor key={layer} />);
-                        break;
-
-                    default:
-                        break;
-                }
-            });
-            return subMenuArr;
-        }
-    };
-
     return (
-        <React.Fragment>
+        <>
             <div className={classes.root}>
                 <Drawer
                     BackdropProps={{
@@ -209,9 +189,17 @@ function Menu(props) {
                     <NearMeIcon />
                 )}
             </Fab>
-            {/** renders sub menus based on toggle state */}
-            {renderSubMenu()}
-        </React.Fragment>
+            {state.checked && (
+                <>
+                    {state.checked.includes("ABM") && (
+                        <ABMSubmenu key={"ABM"} />
+                    )}
+                    {state.checked.includes("EDIT") && (
+                        <TypeMenuContainer key={"EDIT"} />
+                    )}
+                </>
+            )}
+        </>
     );
 }
 
