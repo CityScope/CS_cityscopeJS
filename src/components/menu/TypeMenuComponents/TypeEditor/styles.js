@@ -41,6 +41,6 @@ export const useStyles = makeStyles(theme => ({
     },
     typeName: {
         color: "white",
-        fontSize: "11px"
+        fontSize: "10px"
     }
 }));

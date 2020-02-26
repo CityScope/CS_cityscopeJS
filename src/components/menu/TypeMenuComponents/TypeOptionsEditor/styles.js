@@ -9,7 +9,7 @@ export const useStyles = makeStyles({
         transform: "translate(-50%, 0)",
         flexDirection: "row",
         minWidth: "80%",
-        minHeight: "15%",
+        minHeight: "10%",
         paddingBottom: "10px",
         paddingTop: "10px",
         paddingRight: "50px",

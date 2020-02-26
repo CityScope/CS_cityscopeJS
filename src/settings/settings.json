@@ -51,7 +51,7 @@
             "0": {
                 "width": 10,
                 "color": [128, 128, 128, 180],
-                "name": "Clear network",
+                "name": "Delete Path",
                 "class": "networkClass"
             },
             "1": {
@@ -83,7 +83,7 @@
             "0": {
                 "height": 0,
                 "color": [128, 128, 128, 180],
-                "name": "Clear Buildings",
+                "name": "Reset",
                 "class": "buildingsClass"
             },
             "1": {
