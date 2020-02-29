@@ -4,15 +4,16 @@ export const useStyles = makeStyles({
     root: {
         display: "flex",
         position: "absolute",
+        paddingBottom: "10px",
+        paddingTop: "10px",
+        paddingLeft: "30px",
+        paddingRight: "30px",
         left: "50%",
         bottom: "25%",
         transform: "translate(-50%, 0)",
         flexDirection: "row",
-        minWidth: "80%",
-        minHeight: "10%",
-        paddingBottom: "10px",
-        paddingTop: "10px",
-        paddingRight: "50px",
+        alignItems: "center",
+        width: "50vw",
         overflow: "auto"
     },
     name: {

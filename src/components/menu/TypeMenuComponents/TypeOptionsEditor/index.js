@@ -13,13 +13,10 @@ function TypeOptionsEditor(props) {
     const classes = useStyles();
     const marks = [
         { value: 0, label: "0" },
-        { value: 100, label: "100" }
+        { value: 50, label: "50" }
     ];
     const mixedUse = height ? height.constructor === Array : false;
-    const sliderText = mixedUse
-        ? "Street Level Floors - Total Floors"
-        : "Height";
-    console.log("name", name);
+    const sliderText = mixedUse ? "Street Level / Total Floors" : "Height";
     if (name !== "Residential" && name !== "Office Tower") return null;
     return (
         <Paper className={classes.root}>
@@ -49,7 +46,7 @@ function TypeOptionsEditor(props) {
                     aria-labelledby="Floors"
                     getAriaLabel={index => index.toString()}
                     min={0}
-                    max={100}
+                    max={50}
                     marks={marks}
                 ></Slider>
             </Box>

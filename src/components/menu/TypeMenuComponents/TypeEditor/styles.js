@@ -13,7 +13,15 @@ export const StyledListItem = styled(ListItem)`
     background-color: ${props => props.color};
     &:hover {
         background-color: ${props => props.color};
+
+        -webkit-box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.75);
+        box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.75);
     }
+
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
 `;
 
 export const useStyles = makeStyles(theme => ({
@@ -29,7 +37,7 @@ export const useStyles = makeStyles(theme => ({
         transform: "translate(-50%, 0)",
         flexDirection: "row",
         alignItems: "center",
-        width: "80vw",
+        maxWidth: "50vw",
         height: "15vh",
         overflow: "auto"
     },

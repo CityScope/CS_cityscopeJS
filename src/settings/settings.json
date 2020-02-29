@@ -50,7 +50,7 @@
         "netTypes": {
             "0": {
                 "width": 10,
-                "color": [128, 128, 128, 180],
+                "color": [0, 0, 0],
                 "name": "Delete Path",
                 "class": "networkClass"
             },
@@ -82,7 +82,7 @@
         "types": {
             "0": {
                 "height": 0,
-                "color": [128, 128, 128, 180],
+                "color": [0, 0, 0],
                 "name": "Reset",
                 "class": "buildingsClass"
             },
