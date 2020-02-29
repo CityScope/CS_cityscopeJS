@@ -1,5 +1,7 @@
 /* global window */
 import React, { Component } from "react";
+import { CellMeta, SelectionTarget } from "./baseMapComponents";
+
 import { connect } from "react-redux";
 import { listenToMapEvents } from "../../redux/actions";
 import {
@@ -413,104 +415,26 @@ class Map extends Component {
      * draw target area around mouse
      */
     _renderSelectionTarget = () => {
-        if (this.state.mousePos) {
-            const mousePos = this.state.mousePos;
-
-            if (this.props.menu.includes("EDIT")) {
-                const targetMetaData = this.props.selectedType;
-                const rc = targetMetaData.color;
-                const color = "rgb(" + rc[0] + "," + rc[1] + "," + rc[2] + ")";
-                const colorTrans =
-                    "rgba(" + rc[0] + "," + rc[1] + "," + rc[2] + ",0.6)";
-                const divSize = this.state.pickingRadius;
-                let mouseX = mousePos.clientX - divSize / 2;
-                let mouseY = mousePos.clientY - divSize / 2;
-                return (
-                    <div
-                        style={{
-                            border: "2px solid",
-                            backgroundColor: this.state.mouseDown
-                                ? colorTrans
-                                : "rgba(0,0,0,0)",
-                            borderColor: color,
-                            color: color,
-                            borderRadius: "15%",
-                            position: "fixed",
-                            zIndex: 1,
-                            pointerEvents: "none",
-                            width: divSize,
-                            height: divSize,
-                            left: mouseX,
-                            top: mouseY
-                        }}
-                    >
-                        <div
-                            style={{
-                                position: "relative",
-                                left: divSize + 10,
-                                fontSize: "1vw"
-                            }}
-                        >
-                            {targetMetaData.name}
-                        </div>
-                    </div>
-                );
-            } else {
-                return (
-                    this.state.hoveredObj && (
-                        <div
-                            style={{
-                                borderRadius: "15%",
-                                position: "fixed",
-                                pointerEvents: "none",
-                                backgroundColor: "rgba(0,0,0,0.5)",
-                                padding: "1vw",
-                                color: "rgba(255,255,255,0.9)",
-                                zIndex: 1,
-                                left: mousePos.clientX + 50,
-                                top: mousePos.clientY - 50,
-                                fontSize: "1vw"
-                            }}
-                        >
-                            <p>
-                                Type:
-                                {this.state.hoveredObj.object.properties.name}
-                            </p>
-                            {this.state.hoveredObj.object.properties.height
-                                .constructor === Array ? (
-                                <>
-                                    <p>
-                                        Street Level Floors:
-                                        {
-                                            this.state.hoveredObj.object
-                                                .properties.height[0]
-                                        }
-                                    </p>
-                                    <p>
-                                        Total Floors:
-                                        {
-                                            this.state.hoveredObj.object
-                                                .properties.height[1]
-                                        }
-                                    </p>
-                                </>
-                            ) : (
-                                <p>
-                                    Total Floors:
-                                    {
-                                        this.state.hoveredObj.object.properties
-                                            .height
-                                    }
-                                </p>
-                            )}
-                            <p>
-                                ID:
-                                {this.state.hoveredObj.object.properties.id}
-                            </p>
-                        </div>
-                    )
-                );
-            }
+        if (this.props.menu.includes("EDIT")) {
+            return (
+                this.props.selectedType && (
+                    <SelectionTarget
+                        mousePos={this.state.mousePos}
+                        selectedType={this.props.selectedType}
+                        divSize={this.state.pickingRadius}
+                        mouseDown={this.state.mouseDown}
+                    />
+                )
+            );
+        } else {
+            return (
+                this.state.hoveredObj && (
+                    <CellMeta
+                        mousePos={this.state.mousePos}
+                        hoveredObj={this.state.hoveredObj}
+                    />
+                )
+            );
         }
     };
 
