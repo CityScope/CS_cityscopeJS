@@ -335,7 +335,7 @@ class Map extends Component {
 
     _handleNetworkRemove = path => {
         const selectedType = this.props.selectedType;
-        if (path.object && selectedType.name === "Clear network") {
+        if (path.object && selectedType.name === "Delete Path") {
             path = path.object;
             this.state.networkLayer.forEach((item, index, object) => {
                 if (item.id === path.id) {
@@ -360,7 +360,8 @@ class Map extends Component {
     _handleNetworkCreate = pnt => {
         // check if on network path  delete mode
         const selectedType = this.props.selectedType;
-        if (selectedType.name !== "Clear network") {
+        // if we're not removing paths
+        if (selectedType.name !== "Delete Path") {
             // if this is the first point
             if (!this.state.networkFirstPoint) {
                 // make this the first point
