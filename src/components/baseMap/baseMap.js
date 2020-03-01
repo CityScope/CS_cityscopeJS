@@ -484,6 +484,70 @@ class Map extends Component {
             );
         }
 
+        if (this.props.menu.includes("GRID")) {
+            layers.push(
+                new GeoJsonLayer({
+                    id: "GRID",
+                    // loads geogrid into visualization
+                    data: this.state.GEOGRID,
+                    visible: this.props.menu.includes("GRID") ? true : false,
+                    pickable:
+                        this.props.selectedType.class === "networkClass"
+                            ? false
+                            : true,
+                    extruded: true,
+                    lineWidthScale: 1,
+                    lineWidthMinPixels: 2,
+                    getElevation: d =>
+                        d.properties.height &&
+                        d.properties.height.constructor === Array
+                            ? d.properties.height[1]
+                            : d.properties.height,
+                    getFillColor: d => d.properties.color,
+                    onClick: event => {
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift" &&
+                            this.props.selectedType.class === "buildingsClass"
+                        )
+                            this._handleGridcellEditing(event);
+                    },
+                    onHover: e => {
+                        if (e.object) {
+                            this.setState({ hoveredObj: e });
+                        }
+                    },
+
+                    onDrag: event => {
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        )
+                            this._handleGridcellEditing(event);
+                    },
+                    onDragStart: () => {
+                        if (
+                            this.props.menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        ) {
+                            this.setState({ draggingWhileEditing: true });
+                        }
+                    },
+                    onDragEnd: () => {
+                        this.setState({ draggingWhileEditing: false });
+                    },
+                    updateTriggers: {
+                        getFillColor: this.state.selectedCellsState,
+                        getElevation: this.state.selectedCellsState
+                    },
+                    transitions: {
+                        getFillColor: 500,
+                        getElevation: 500
+                    }
+                })
+            );
+        }
+
         if (
             this.props.menu.includes("NETWORK") &&
             this.state.networkPnts &&
@@ -556,70 +620,6 @@ class Map extends Component {
                     },
                     transitions: {
                         getPath: 500
-                    }
-                })
-            );
-        }
-
-        if (this.props.menu.includes("GRID")) {
-            layers.push(
-                new GeoJsonLayer({
-                    id: "GRID",
-                    // loads geogrid into visualization
-                    data: this.state.GEOGRID,
-                    visible: this.props.menu.includes("GRID") ? true : false,
-                    pickable:
-                        this.props.selectedType.class === "networkClass"
-                            ? false
-                            : true,
-                    extruded: true,
-                    lineWidthScale: 1,
-                    lineWidthMinPixels: 2,
-                    getElevation: d =>
-                        d.properties.height &&
-                        d.properties.height.constructor === Array
-                            ? d.properties.height[1]
-                            : d.properties.height,
-                    getFillColor: d => d.properties.color,
-                    onClick: event => {
-                        if (
-                            this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift" &&
-                            this.props.selectedType.class === "buildingsClass"
-                        )
-                            this._handleGridcellEditing(event);
-                    },
-                    onHover: e => {
-                        if (e.object) {
-                            this.setState({ hoveredObj: e });
-                        }
-                    },
-
-                    onDrag: event => {
-                        if (
-                            this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        )
-                            this._handleGridcellEditing(event);
-                    },
-                    onDragStart: () => {
-                        if (
-                            this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        ) {
-                            this.setState({ draggingWhileEditing: true });
-                        }
-                    },
-                    onDragEnd: () => {
-                        this.setState({ draggingWhileEditing: false });
-                    },
-                    updateTriggers: {
-                        getFillColor: this.state.selectedCellsState,
-                        getElevation: this.state.selectedCellsState
-                    },
-                    transitions: {
-                        getFillColor: 500,
-                        getElevation: 500
                     }
                 })
             );
@@ -709,7 +709,6 @@ class Map extends Component {
                 })
             );
         }
-
         return layers;
     }
 
