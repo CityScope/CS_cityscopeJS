@@ -82,38 +82,44 @@
         "types": {
             "0": {
                 "height": 0,
-                "color": [0, 0, 0],
+                "color": [0, 0, 0, 0],
                 "name": "Reset",
                 "class": "buildingsClass"
             },
             "1": {
-                "height": 1,
-                "color": [236, 195, 11, 180],
+                "height": 0,
+                "color": [100, 150, 240, 180],
                 "name": "Plaza",
                 "class": "buildingsClass"
             },
             "2": {
-                "height": 10,
-                "color": [153, 213, 148, 180],
+                "height": 0,
+                "color": [0, 150, 220, 180],
                 "name": "Park",
                 "class": "buildingsClass"
             },
             "3": {
                 "height": [0, 10],
-                "color": [252, 141, 89, 180],
+                "color": [252, 151, 208, 180],
                 "name": "Residential",
                 "class": "buildingsClass"
             },
             "4": {
                 "height": [0, 80],
-                "color": [50, 136, 189, 180],
+                "color": [247, 93, 208, 180],
                 "name": "Office Tower",
                 "class": "buildingsClass"
             },
             "5": {
-                "height": 0,
-                "color": [0, 0, 0, 0],
-                "name": "Dummy",
+                "height": [0, 50],
+                "color": [228, 13, 213, 180],
+                "name": "Mix-use",
+                "class": "buildingsClass"
+            },
+            "6": {
+                "height": [0, 20],
+                "color": [133, 0, 135, 180],
+                "name": "Service",
                 "class": "buildingsClass"
             }
         }

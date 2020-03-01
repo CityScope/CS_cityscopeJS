@@ -30,7 +30,7 @@ export const setDirLightSettings = header => {
  * and procces the interactive area
  */
 export const _proccessGridData = cityioData => {
-    let types = settings.map.types;
+    let typesSettings = settings.map.types;
     const TUIgridData = cityioData.grid;
     const GEOGRID = cityioData.GEOGRID;
     const GEOGRIDDATA = cityioData.GEOGRIDDATA;
@@ -64,7 +64,9 @@ export const _proccessGridData = cityioData => {
         // check if not undefined type (no scanning)
         if (TUIgridData[i][0] !== -1) {
             // get value of cell from settings via its index
-            let cellValueByIndex = Object.values(types)[TUIgridData[i][0]];
+            let cellValueByIndex = Object.values(typesSettings)[
+                TUIgridData[i][0]
+            ];
             // cast the cell color
             interactiveCellProps.color = cellValueByIndex.color;
             // cast the cell height
