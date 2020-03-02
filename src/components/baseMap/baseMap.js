@@ -736,7 +736,8 @@ class Map extends Component {
                 }
             >
                 {/* renders the slection box div */}
-                <div>{this._renderSelectionTarget()}</div>
+
+                <React.Fragment>{this._renderSelectionTarget()}</React.Fragment>
 
                 <DeckGL
                     // sets the cursor on paint

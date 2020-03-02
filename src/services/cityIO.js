@@ -112,26 +112,10 @@ class CityIO extends Component {
         }
     };
 
-    checkDoneCityIO = moduleName => {
-        this.setNestedState("cityIOmodulesStatus", moduleName, true);
-
-        // check if all modules are done
-        for (const status in this.state.cityIOmodulesStatus) {
-            if (this.state.cityIOmodulesStatus[status] !== true) {
-                // we still need to update some module, stop
-                return;
-            }
-        }
-        //  if so, share the data with the app
-        const data = this.state.cityIOmodulesData;
-        data.tableName = this.props.tableName;
-        // finally, send data to redux
-        this.props.getCityioData(data);
-        // initializes rendering of Menu and Map containers
-        this.props.setReadyState(true);
-        this.props.setLoadingState(false);
-        console.log("done updating from cityIO..");
-    };
+    /**
+     *
+     * Helper function to set nested state
+     */
 
     setNestedState = (parent, child, data) => {
         var holder = { ...this.state[parent] };
@@ -139,6 +123,9 @@ class CityIO extends Component {
         this.setState({ [parent]: holder });
     };
 
+    /**
+     * get each module data
+     */
     getCityIOmoduleData = (moduleName, URL) => {
         axios
             .get(URL)
@@ -171,6 +158,27 @@ class CityIO extends Component {
                 }
                 console.log("request config:", error.config);
             });
+    };
+
+    checkDoneCityIO = moduleName => {
+        this.setNestedState("cityIOmodulesStatus", moduleName, true);
+
+        // check if all modules are done
+        for (const status in this.state.cityIOmodulesStatus) {
+            if (this.state.cityIOmodulesStatus[status] !== true) {
+                // we still need to update some module, stop
+                return;
+            }
+        }
+        //  if so, share the data with the app
+        const data = this.state.cityIOmodulesData;
+        data.tableName = this.props.tableName;
+        // finally, send data to redux
+        this.props.getCityioData(data);
+        // initializes rendering of Menu and Map containers
+        this.props.setReadyState(true);
+        this.props.setLoadingState(false);
+        console.log("done updating from cityIO..");
     };
 
     render() {

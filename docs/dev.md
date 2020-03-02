@@ -24,3 +24,10 @@ then, use this URL to run the app in the mocked server env:
 `http://localhost:3000/cityscope=mockAPI`
 
 Note that the mocked API only holds minimal data for running the dev env, but not the full API.
+
+### Hard-Reset cityIO `GEOGRIDDATA` field
+
+**Note!** This feature involves permanent data loss.
+
+If your dev created odd data for the grid, you can quickly reset it via:
+`$ curl https://cityio.media.mit.edar/__TABLE_NAME__/GEOGRIDDATA`

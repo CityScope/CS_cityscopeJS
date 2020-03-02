@@ -21,7 +21,6 @@ class MapContainer extends Component {
                         overflow: "hidden"
                     }}
                 >
-                    <LoadingSpinner />
                     <Layer
                         className="mapLayer"
                         style={{
@@ -36,6 +35,8 @@ class MapContainer extends Component {
                             selectedType={this.props.selectedType}
                         />
                     </Layer>
+
+                    <LoadingSpinner />
                 </div>
             );
         } else {

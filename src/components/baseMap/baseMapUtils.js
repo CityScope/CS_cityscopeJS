@@ -226,15 +226,11 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
             Accept: "application/json"
         }
     };
-    axios(options)
-        .then(response => {
-            console.log(response);
-        })
-        .catch(error => {
-            console.log("%c" + error, errorStyle);
+    axios(options).catch(error => {
+        console.log("%c" + error, errorStyle);
 
-            console.log("ERROR:", error);
-        });
+        console.log("ERROR:", error);
+    });
 };
 
 export const _proccessBresenhamGrid = cityioData => {
