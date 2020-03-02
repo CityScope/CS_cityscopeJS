@@ -289,6 +289,7 @@ class Map extends Component {
             const thisCellProps = selected.object.properties;
             if (
                 this.props.selectedType.class === "buildingsClass" &&
+                thisCellProps &&
                 thisCellProps.land_use !== "None"
             ) {
                 thisCellProps.old_height = thisCellProps.height;

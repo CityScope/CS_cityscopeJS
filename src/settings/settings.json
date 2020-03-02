@@ -100,13 +100,13 @@
             },
             "3": {
                 "height": [0, 10],
-                "color": [252, 151, 208, 180],
+                "color": [133, 94, 247, 180],
                 "name": "Residential",
                 "class": "buildingsClass"
             },
             "4": {
                 "height": [0, 80],
-                "color": [247, 93, 208, 180],
+                "color": [247, 94, 133, 180],
                 "name": "Office Tower",
                 "class": "buildingsClass"
             },
