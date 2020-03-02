@@ -44,7 +44,7 @@ export const _proccessGridData = cityioData => {
         for (let i = 0; i < GEOGRID.features.length; i++) {
             GEOGRID.features[i].properties.id = i;
             // set no color for when no land use exist
-            GEOGRID.features[i].properties.color = [255, 255, 255, 180];
+            GEOGRID.features[i].properties.color = [0, 0, 0, 0];
             GEOGRID.features[i].properties.height = 0.1;
             GEOGRID.features[i].properties.name = "empty";
             GEOGRID.features[i].properties.interactive = true;
@@ -52,20 +52,20 @@ export const _proccessGridData = cityioData => {
     }
 
     // handles TUI grid data on update
-    const geoGridMapping = cityioData.GEOGRID.properties.GEOGRIDMAPPING;
-    for (let i in geoGridMapping) {
+    const geoGridMapping = cityioData.GEOGRID.properties.geogrid_to_tui_mapping;
+    let counter = 0;
+    for (let thisCellMapping in geoGridMapping) {
         // type is the first value in the cell array
         // the rotation is the 2nd
-        let gridCellType = TUIgridData[i][0];
-        let interactiveCellProps =
-            GEOGRID.features[geoGridMapping[i]].properties;
+        let gridCellType = TUIgridData[counter][0];
+        let interactiveCellProps = GEOGRID.features[thisCellMapping].properties;
         // set up the cell type
         interactiveCellProps.type = gridCellType;
         // check if not undefined type (no scanning)
-        if (TUIgridData[i][0] !== -1) {
+        if (TUIgridData[counter][0] !== -1) {
             // get value of cell from settings via its index
             let cellValueByIndex = Object.values(typesSettings)[
-                TUIgridData[i][0]
+                TUIgridData[counter][0]
             ];
             // cast the cell color
             interactiveCellProps.color = cellValueByIndex.color;
@@ -74,6 +74,7 @@ export const _proccessGridData = cityioData => {
         } else {
             console.log("... got null type...");
         }
+        counter = counter + 1;
     }
     const newGrid = JSON.parse(JSON.stringify(GEOGRID));
     return newGrid;

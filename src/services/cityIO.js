@@ -66,6 +66,8 @@ class CityIO extends Component {
             .catch(e => {
                 console.log(e);
             });
+
+        // this.sharePropsWithRedux();
     };
 
     /**
@@ -80,7 +82,6 @@ class CityIO extends Component {
             this.setState({ cityIOmodulesStatus: {} });
 
             // reset the state of this flag
-            this.setState({ readyToShareWithRedux: false });
             this.props.setLoadingState(true);
 
             // new data in table, get all modules
@@ -121,21 +122,15 @@ class CityIO extends Component {
                 return;
             }
         }
-        //  if so, change the state of 'readyToShareWithRedux'
-        this.setState({ readyToShareWithRedux: true });
-    };
-
-    sharePropsWithRedux = () => {
-        if (this.state.readyToShareWithRedux) {
-            const data = this.state.cityIOmodulesData;
-            data.tableName = this.props.tableName;
-            console.log("done updating from cityIO..");
-            // finally, send data to redux
-            this.props.getCityioData(data);
-            // initializes rendering of Menu and Map containers
-            this.props.setReadyState(true);
-            this.props.setLoadingState(false);
-        }
+        //  if so, share the data with the app
+        const data = this.state.cityIOmodulesData;
+        data.tableName = this.props.tableName;
+        // finally, send data to redux
+        this.props.getCityioData(data);
+        // initializes rendering of Menu and Map containers
+        this.props.setReadyState(true);
+        this.props.setLoadingState(false);
+        console.log("done updating from cityIO..");
     };
 
     setNestedState = (parent, child, data) => {
@@ -179,7 +174,6 @@ class CityIO extends Component {
     };
 
     render() {
-        this.sharePropsWithRedux();
         return null;
     }
 }
