@@ -478,7 +478,7 @@ class Map extends Component {
      */
     _remapValues = value => {
         let remap =
-            value > 14 && value < 20 ? 5 : value < 14 && value > 12 ? 20 : 40;
+            value > 15 && value < 20 ? 1.5 : value < 15 && value > 12 ? 10 : 30;
         return remap;
     };
 
