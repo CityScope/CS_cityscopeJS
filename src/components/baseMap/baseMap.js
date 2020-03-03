@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { CellMeta, SelectionTarget } from "./baseMapComponents";
 
 import { connect } from "react-redux";
-import { listenToMapEvents } from "../../redux/actions";
 import {
     _proccesNetworkPnts,
     _proccessAccessData,
@@ -28,17 +27,18 @@ import {
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../settings/settings.json";
 import { newDataStyle } from "../../services/consoleStyle";
+import { listenToSlidersEvents } from "../../redux/actions";
+
 class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            menu: null,
+            menu: [],
             cityioData: null,
             selectedType: null,
             draggingWhileEditing: false,
             selectedCellsState: null,
             selectedNetState: null,
-            time: 0,
             pickingRadius: 40,
             viewState: settings.map.initialViewState,
             networkFirstPoint: null,
@@ -102,6 +102,20 @@ class Map extends Component {
             if (this.props.cityioData.access) {
                 this.setState({ access: _proccessAccessData(cityioData) });
             }
+        }
+
+        if (
+            !prevProps.menu.includes("SHADOWS") &&
+            this.props.menu.includes("SHADOWS")
+        ) {
+            this._effects[0].shadowColor = [0, 0, 0, 0.5];
+        }
+
+        if (
+            prevProps.menu.includes("SHADOWS") &&
+            !this.props.menu.includes("SHADOWS")
+        ) {
+            this._effects[0].shadowColor = [0, 0, 0, 0];
         }
 
         //  toggle edit mode and send to cityio
@@ -190,27 +204,25 @@ class Map extends Component {
         /**
          * remove the binded animation when comp updates
          */
+        const time = this.props.sliders.time[1];
+
         window.cancelAnimationFrame(this.animationFrame);
 
         if (this.props.menu.includes("ABM")) {
-            const {
-                startSimHour,
-                animationSpeed,
-                endSimHour
-            } = settings.map.layers.ABM;
+            const speed = this.props.sliders.speed;
 
-            let t = this.state.time + animationSpeed;
-            if (
-                this.state.time > endSimHour ||
-                this.state.time < startSimHour
-            ) {
-                t = startSimHour;
+            const startHour = this.props.sliders.time[0];
+            const endHour = this.props.sliders.time[2];
+
+            let t = parseInt(time) + parseInt(speed);
+            if (time < startHour || time > endHour) {
+                t = startHour;
             }
 
-            let offset = this.timeZoneOffset * 3600;
-            var date = new Date(
-                (startSimHour + offset + this.state.time) * 1000
-            );
+            var currentDateMidnight = new Date();
+            currentDateMidnight.setHours(0, 0, 0, 0);
+
+            var date = new Date(currentDateMidnight.getTime() + t * 1000);
             this._effects[0].directionalLights[0].timestamp = Date.UTC(
                 date.getFullYear(),
                 date.getMonth(),
@@ -220,7 +232,14 @@ class Map extends Component {
                 date.getSeconds()
             );
 
-            this.setState({ time: t });
+            this.props.listenToSlidersEvents({
+                ...this.props.sliders,
+                time: [
+                    this.props.sliders.time[0],
+                    t,
+                    this.props.sliders.time[2]
+                ]
+            });
         }
         if (this.props.menu.includes("ROTATE")) {
             let bearing = this.state.viewState.bearing
@@ -243,7 +262,7 @@ class Map extends Component {
         // stop animation on state
         if (!this.props.menu.includes("ABM")) {
             // && this.animationFrame
-            this._effects[0].directionalLights[0].timestamp = this.dirLightSettings.timestamp;
+            // this._effects[0].directionalLights[0].timestamp = this.dirLightSettings.timestamp;
             return;
         }
     }
@@ -669,7 +688,7 @@ class Map extends Component {
                     opacity: 0.8,
                     rounded: true,
                     trailLength: 500,
-                    currentTime: this.state.time
+                    currentTime: this.props.sliders.time[1]
                 })
             );
         }
@@ -776,8 +795,15 @@ class Map extends Component {
     }
 }
 
-const mapDispatchToProps = {
-    listenToMapEvents: listenToMapEvents
+const mapStateToProps = state => {
+    return {
+        sliders: state.SLIDERS,
+        menu: state.MENU
+    };
 };
 
-export default connect(null, mapDispatchToProps)(Map);
+const mapDispatchToProps = {
+    listenToSlidersEvents: listenToSlidersEvents
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map);
