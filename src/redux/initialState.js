@@ -15,7 +15,14 @@ const initialState = {
     MENU: menuInitState,
     CITYIO: {},
     MAP: {},
-    SLIDERS: {},
+    SLIDERS: {
+        time: [
+            settings.map.layers.ABM.startSimHour,
+            settings.map.layers.ABM.startSimHour,
+            settings.map.layers.ABM.endSimHour
+        ],
+        speed: settings.map.layers.ABM.animationSpeed
+    },
     SELECTED_TYPE: {
         height: 0,
         color: [255, 0, 0, 200],

@@ -146,6 +146,11 @@
                 "showOnInit": false,
                 "requireModule": "ABM"
             },
+            "SHADOWS": {
+                "displayName": "Shadows",
+                "showOnInit": true,
+                "requireModule": "GEOGRID"
+            },
             "PATHS": {
                 "displayName": "Aggregated Mobility",
                 "showOnInit": false,
