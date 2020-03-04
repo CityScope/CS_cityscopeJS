@@ -9,6 +9,10 @@ import React from "react";
 export const SelectionTarget = props => {
     const selectedType = props.selectedType;
     const mousePos = props.mousePos;
+    if (!mousePos || !mousePos.clientX) {
+        mousePos.clientX = 0;
+        mousePos.clientY = 0;
+    }
     const divSize = props.divSize;
     const rc = selectedType.color;
     const color = "rgb(" + rc[0] + "," + rc[1] + "," + rc[2] + ")";
@@ -52,6 +56,10 @@ export const SelectionTarget = props => {
 
 export const CellMeta = props => {
     const mousePos = props.mousePos;
+    if (!mousePos || !mousePos.clientX) {
+        mousePos.clientX = 0;
+        mousePos.clientY = 0;
+    }
 
     return (
         <div
