@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import {
@@ -7,6 +7,7 @@ import {
     setLoadingState
 } from "../redux/actions";
 import settings from "../settings/settings.json";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 
 class CityIO extends Component {
     constructor(props) {
@@ -182,7 +183,7 @@ class CityIO extends Component {
     };
 
     render() {
-        return null;
+        return <LoadingSpinner />;
     }
 }
 

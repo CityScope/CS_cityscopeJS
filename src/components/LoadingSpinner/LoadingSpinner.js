@@ -7,7 +7,7 @@ import PulseLoader from "react-spinners/PulseLoader";
 const override = css`
     display: block;
     margin: 0 auto;
-    border-color: red;
+    border-color: none;
 `;
 
 class LoadingSpinner extends Component {
@@ -16,8 +16,8 @@ class LoadingSpinner extends Component {
             <div
                 style={{
                     position: "absolute",
-                    bottom: 40,
-                    right: 40,
+                    bottom: 50,
+                    right: 50,
                     zIndex: 1
                 }}
             >
