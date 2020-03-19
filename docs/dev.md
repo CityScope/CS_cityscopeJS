@@ -30,4 +30,4 @@ Note that the mocked API only holds minimal data for running the dev env, but no
 **Note!** This feature involves permanent data loss.
 
 If your dev created odd data for the grid, you can quickly reset it via:
-`$ curl https://cityio.media.mit.edar/__TABLE_NAME__/GEOGRIDDATA`
+`$ curl https://cityio.media.mit.edu/api/table/clear/__TABLE_NAME__/GEOGRIDDATA`
