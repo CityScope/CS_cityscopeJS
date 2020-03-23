@@ -68,8 +68,6 @@ Ideally, this field should be read once on init, due to its size and static stat
 }
 ```
 
----
-
 ### `geonet:geojson`
 
 This file holds a single point for each grid cell. Each point is then evaluated as part of a network graph that is adjoined to the overall city network graph via a mobility service. This file will be self created in the app if no prior data exist on cityIO. Minimal data is a valid GeoJson `FeatureCollection` of at least 4 `Points` feature. Ideally, this field should be read once on init, due to its size and static state. User should not iterate over it.

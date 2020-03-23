@@ -20,7 +20,9 @@ const drawerWidth = 300;
 
 const styles = theme => ({
     root: {
-        display: "flex"
+        display: "flex",
+        background: "#1D1F21",
+        color: "#FFF"
     },
     toolbar: {
         paddingRight: 24
@@ -33,14 +35,16 @@ const styles = theme => ({
         ...theme.mixins.toolbar
     },
     appBar: {
-        background: "#000",
+        background: "#1D1F21",
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
-        })
+        }),
+        color: "#FFF"
     },
     appBarShift: {
+        background: "#1D1F21",
         marginLeft: drawerWidth,
         width: `calc(100% - ${drawerWidth}px)`,
         transition: theme.transitions.create(["width", "margin"], {
@@ -52,15 +56,19 @@ const styles = theme => ({
         marginLeft: 12,
         marginRight: 36
     },
+
     menuButtonHidden: {
         display: "none"
     },
+
     title: {
         flexGrow: 1,
         fontSize: 20,
         fontWeight: "lighter"
     },
     drawerPaper: {
+        color: "#FFF",
+        background: "#1D1F21",
         position: "relative",
         whiteSpace: "nowrap",
         width: drawerWidth,
