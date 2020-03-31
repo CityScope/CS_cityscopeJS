@@ -26,7 +26,14 @@ const marks = [
 
 const useStyles = makeStyles({
     root: {
-        width: "100%"
+        width: "80%",
+        marginLeft: 28
+    },
+    subtitle1: {
+        marginTop: 12
+    },
+    subtitle2: {
+        marginTop: 12
     }
 });
 
@@ -49,7 +56,12 @@ function RangeSlider(props) {
 
     return (
         <div className={classes.root}>
-            <Typography id="range-slider" gutterBottom>
+            <Typography
+                className={classes.subtitle1}
+                variant="subtitle2"
+                id="range-slider"
+                gutterBottom
+            >
                 Simulation Range
             </Typography>
             <Slider
@@ -61,7 +73,12 @@ function RangeSlider(props) {
                 valueLabelDisplay="off"
                 aria-labelledby="range-slider"
             />
-            <Typography id="continuous-slider" gutterBottom>
+            <Typography
+                className={classes.subtitle2}
+                variant="subtitle2"
+                id="continuous-slider"
+                gutterBottom
+            >
                 Simulation Speed
             </Typography>
             <Slider

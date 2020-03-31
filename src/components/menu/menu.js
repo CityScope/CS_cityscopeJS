@@ -130,9 +130,6 @@ function Menu(props) {
             </Fab>
             {state.checked && (
                 <>
-                    {state.checked.includes("ABM") && (
-                        <ABMSubmenu key={"ABM"} />
-                    )}
                     {state.checked.includes("EDIT") && (
                         <TypeMenuContainer key={"EDIT"} />
                     )}

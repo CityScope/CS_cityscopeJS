@@ -6,6 +6,9 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import Switch from "@material-ui/core/Switch";
 import settings from "../../../settings/settings.json";
+import Collapse from "@material-ui/core/Collapse";
+import Paper from "@material-ui/core/Paper";
+import RangeSlider from "../ABMSubmenu/RangeSlider";
 
 import { connect } from "react-redux";
 import { listenToMenuUI } from "../../../redux/actions";
@@ -29,24 +32,38 @@ function TogglesMenu(props) {
         // was loaded on the API
         let requireModule = togglesMeta[listOfToggles[i]].requireModule;
 
+        const checked = props.menuState.includes(listOfToggles[i])
+            ? true
+            : false;
+
         if (loadedModlues.includes(requireModule) || requireModule === false) {
             const thisToggle = (
-                <ListItem key={listOfToggles[i]}>
-                    <ListItemText
-                        primary={togglesMeta[listOfToggles[i]].displayName}
-                    />
-                    <ListItemSecondaryAction>
-                        <Switch
-                            edge="end"
-                            onChange={handleToggle(listOfToggles[i])}
-                            checked={
-                                props.menuState.includes(listOfToggles[i])
-                                    ? true
-                                    : false
-                            }
+                <div>
+                    <ListItem key={listOfToggles[i]}>
+                        <ListItemText
+                            primary={togglesMeta[listOfToggles[i]].displayName}
                         />
-                    </ListItemSecondaryAction>
-                </ListItem>
+                        <ListItemSecondaryAction>
+                            <Switch
+                                edge="end"
+                                onChange={handleToggle(listOfToggles[i])}
+                                checked={checked}
+                            />
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                    {listOfToggles[i] === "ABM" && (
+                        <Collapse in={checked}>
+                            <RangeSlider />
+                        </Collapse>
+                    )}
+                    {listOfToggles[i] === "ACCESS" && (
+                        <Collapse in={checked}>
+                            <Paper style={{ marginLeft: 24, marginRight: 24 }}>
+                                TODO
+                            </Paper>
+                        </Collapse>
+                    )}
+                </div>
             );
             togglesCompsArray.push(thisToggle);
         }
