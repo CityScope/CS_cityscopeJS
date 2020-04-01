@@ -309,7 +309,7 @@ class Map extends Component {
             if (
                 this.props.selectedType.class === "buildingsClass" &&
                 thisCellProps &&
-                thisCellProps.interactive == true
+                thisCellProps.interactive === true
             ) {
                 thisCellProps.old_height = thisCellProps.height;
                 thisCellProps.old_color = thisCellProps.color;
