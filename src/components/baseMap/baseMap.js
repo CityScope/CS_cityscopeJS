@@ -487,8 +487,7 @@ class Map extends Component {
      */
     _renderLayers() {
         const zoomLevel = this.state.viewState.zoom;
-        const cityioData = this.props.cityioData;
-
+        const { cityioData } = this.props;
         let layers = [];
 
         if (this.props.menu.includes("TEXT")) {
@@ -649,14 +648,15 @@ class Map extends Component {
             layers.push(
                 new HeatmapLayer({
                     id: "ACCESS",
-                    visible: this.props.menu.includes("ACCESS") ? true : false,
+                    visible: this.props.menu.includes("ACCESS"),
                     colorRange: settings.map.layers.heatmap.colors,
                     radiusPixels: 200,
                     opacity: 0.25,
                     data: this.state.access,
                     getPosition: d => d.coordinates,
-                    getWeight: d => {
-                        return d.values[Object.keys(d.values)[0]];
+                    getWeight: d => d.values[this.props.accessToggle],
+                    updateTriggers: {
+                        getWeight: [this.props.accessToggle]
                     }
                 })
             );
@@ -798,7 +798,8 @@ class Map extends Component {
 const mapStateToProps = state => {
     return {
         sliders: state.SLIDERS,
-        menu: state.MENU
+        menu: state.MENU,
+        accessToggle: state.ACCESS_TOGGLE
     };
 };
 
