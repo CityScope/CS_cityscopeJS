@@ -7,11 +7,10 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Switch from "@material-ui/core/Switch";
 import settings from "../../../settings/settings.json";
 import Collapse from "@material-ui/core/Collapse";
-import Paper from "@material-ui/core/Paper";
 import RangeSlider from "../ABMSubmenu/RangeSlider";
+import AccessSubmenu from "../AccessSubmenu";
 
 import { connect } from "react-redux";
-import { listenToMenuUI } from "../../../redux/actions";
 
 function TogglesMenu(props) {
     const { open, toggleDrawer, classes, handleToggle } = props;
@@ -25,7 +24,7 @@ function TogglesMenu(props) {
      */
     let togglesCompsArray = [];
     // array of loaded API modules
-    const loadedModlues = Object.keys(props.cityIOdata);
+    const loadedModules = Object.keys(props.cityIOdata);
     // create each toggle
     for (let i = 0; i < listOfToggles.length; i++) {
         // check if the mdoule of this toggle
@@ -36,10 +35,10 @@ function TogglesMenu(props) {
             ? true
             : false;
 
-        if (loadedModlues.includes(requireModule) || requireModule === false) {
+        if (loadedModules.includes(requireModule) || requireModule === false) {
             const thisToggle = (
-                <div>
-                    <ListItem key={listOfToggles[i]}>
+                <div key={listOfToggles[i]}>
+                    <ListItem>
                         <ListItemText
                             primary={togglesMeta[listOfToggles[i]].displayName}
                         />
@@ -52,15 +51,19 @@ function TogglesMenu(props) {
                         </ListItemSecondaryAction>
                     </ListItem>
                     {listOfToggles[i] === "ABM" && (
-                        <Collapse in={checked}>
+                        <Collapse in={checked} style={{ width: "100%" }}>
                             <RangeSlider />
                         </Collapse>
                     )}
                     {listOfToggles[i] === "ACCESS" && (
-                        <Collapse in={checked}>
-                            <Paper style={{ marginLeft: 24, marginRight: 24 }}>
-                                TODO
-                            </Paper>
+                        <Collapse
+                            in={checked}
+                            style={{
+                                width: "80%",
+                                marginLeft: 24
+                            }}
+                        >
+                            <AccessSubmenu />
                         </Collapse>
                     )}
                 </div>
@@ -68,15 +71,6 @@ function TogglesMenu(props) {
             togglesCompsArray.push(thisToggle);
         }
     }
-
-    const sideList = side => (
-        <div
-            className={classes.list}
-            role="presentation"
-            onClick={toggleDrawer(side, false)}
-            onKeyDown={toggleDrawer(side, false)}
-        ></div>
-    );
 
     return (
         <Drawer
@@ -87,9 +81,14 @@ function TogglesMenu(props) {
             }}
             anchor="left"
             open={open}
-            onClose={toggleDrawer("left", false)}
+            onClose={toggleDrawer}
         >
-            {sideList("left")}
+            <div
+                className={classes.list}
+                role="presentation"
+                onClick={toggleDrawer}
+                onKeyDown={toggleDrawer}
+            ></div>
             <List className={classes.root}>
                 <h2>cityscopeJS</h2>
                 {togglesCompsArray}
@@ -105,8 +104,4 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = {
-    listenToMenuUI: listenToMenuUI
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TogglesMenu);
+export default connect(mapStateToProps, null)(TogglesMenu);
