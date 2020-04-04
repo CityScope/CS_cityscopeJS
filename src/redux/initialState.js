@@ -23,6 +23,7 @@ const initialState = {
         ],
         speed: settings.map.layers.ABM.animationSpeed
     },
+    ACCESS_TOGGLE: 0,
     SELECTED_TYPE: {
         height: 0,
         color: [255, 0, 0, 200],
