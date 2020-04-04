@@ -6,8 +6,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { connect } from "react-redux";
 import { listenToMenuUI } from "../../redux/actions";
-import settings from "../../settings/settings.json";
-import ABMSubmenu from "./ABMSubmenu/ABMSubmenu";
 import TypeMenuContainer from "./TypeMenuComponents/TypeMenuContainer";
 import NearMeIcon from "@material-ui/icons/NearMe";
 import NavigationIcon from "@material-ui/icons/Navigation";
@@ -58,41 +56,27 @@ function Menu(props) {
     }));
 
     const classes = useStyles();
-    const [toggleStateArray, setChecked] = React.useState(
-        Object.keys(settings.menu.toggles)
-            .filter(function(k) {
-                return settings.menu.toggles[k].showOnInit;
-            })
-            .map(String)
-    );
 
     const [state, setState] = React.useState({
-        left: false
+        drawerOpen: false
     });
 
-    const toggleDrawer = (side, open) => event => {
-        if (
-            event.type === "keydown" &&
-            (event.key === "Tab" || event.key === "Shift")
-        ) {
-            return;
-        }
-
-        setState({ ...state, [side]: open });
+    const toggleDrawer = () => {
+        setState({ ...state, drawerOpen: !state.drawerOpen });
     };
 
-    const handleToggle = value => () => {
-        const currentIndex = toggleStateArray.indexOf(value);
-        const newChecked = [...toggleStateArray];
-        if (currentIndex === -1) {
-            newChecked.push(value);
-        } else {
-            newChecked.splice(currentIndex, 1);
-        }
-        setChecked(newChecked);
-        setState({ ...state, checked: newChecked });
+    const { menuState, listenToMenuUI } = props;
 
-        props.listenToMenuUI(newChecked);
+    const handleToggle = value => () => {
+        const i = menuState.indexOf(value);
+        const updatedMenuState = [...menuState];
+        if (i === -1) {
+            updatedMenuState.push(value);
+        } else {
+            updatedMenuState.splice(i, 1);
+        }
+
+        listenToMenuUI(updatedMenuState);
     };
 
     return (
@@ -100,37 +84,30 @@ function Menu(props) {
             <div className={classes.root}>
                 <TogglesMenu
                     classes={classes}
-                    open={state.left}
+                    open={state.drawerOpen}
                     toggleDrawer={toggleDrawer}
                     handleToggle={handleToggle}
                 />
             </div>
-            <Fab
-                className={classes.menuButton}
-                onClick={toggleDrawer("left", true)}
-            >
+            <Fab className={classes.menuButton} onClick={toggleDrawer}>
                 <MenuIcon />
             </Fab>
             <Fab className={classes.editButton} onClick={handleToggle("EDIT")}>
-                {toggleStateArray.includes("EDIT") ? (
-                    <CancelIcon />
-                ) : (
-                    <EditIcon />
-                )}
+                {menuState.includes("EDIT") ? <CancelIcon /> : <EditIcon />}
             </Fab>
             <Fab
                 className={classes.resetViewButton}
                 onClick={handleToggle("RESET_VIEW")}
             >
-                {toggleStateArray.includes("RESET_VIEW") ? (
+                {menuState.includes("RESET_VIEW") ? (
                     <NavigationIcon />
                 ) : (
                     <NearMeIcon />
                 )}
             </Fab>
-            {state.checked && (
+            {menuState && (
                 <>
-                    {state.checked.includes("EDIT") && (
+                    {menuState.includes("EDIT") && (
                         <TypeMenuContainer key={"EDIT"} />
                     )}
                 </>
@@ -141,8 +118,7 @@ function Menu(props) {
 
 const mapStateToProps = state => {
     return {
-        menuState: state.MENU,
-        cityIOdata: state.CITYIO
+        menuState: state.MENU
     };
 };
 
