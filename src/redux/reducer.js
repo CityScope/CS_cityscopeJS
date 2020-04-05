@@ -5,7 +5,8 @@ import {
     LISTEN_TO_ABM_SLIDERS,
     LISTEN_TO_TYPE_EDITOR,
     SET_READY_STATE,
-    SET_LOADING_STATE
+    SET_LOADING_STATE,
+    LISTEN_TO_ACCESS_TOGGLE
 } from "./actions";
 import initialState from "./initialState";
 
@@ -22,6 +23,8 @@ export default function reducer(state = initialState, action) {
             return { ...state, MAP: action.data };
         case LISTEN_TO_ABM_SLIDERS:
             return { ...state, SLIDERS: action.data };
+        case LISTEN_TO_ACCESS_TOGGLE:
+            return { ...state, ACCESS_TOGGLE: action.data };
         case LISTEN_TO_TYPE_EDITOR:
             return { ...state, SELECTED_TYPE: action.data };
         case SET_READY_STATE:
