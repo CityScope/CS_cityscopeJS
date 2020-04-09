@@ -1,19 +1,25 @@
 import React from "react";
+import { useStyles, ColoredSwitch } from "./styles";
+import { useSelector } from "react-redux";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import Typography from "@material-ui/core/Typography";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
-import Switch from "@material-ui/core/Switch";
 import settings from "../../../settings/settings.json";
 import Collapse from "@material-ui/core/Collapse";
-import RangeSlider from "../ABMSubmenu/RangeSlider";
-import AccessSubmenu from "../AccessSubmenu";
-
-import { connect } from "react-redux";
+import RangeSlider from "./ABMSubmenu/RangeSlider/RangeSlider";
+import AccessSubmenu from "./AccessSubmenu";
 
 function TogglesMenu(props) {
-    const { open, toggleDrawer, classes, handleToggle } = props;
+    const classes = useStyles();
+    const { open, toggleDrawer, handleToggle } = props;
+
+    const { menuState, cityioData } = useSelector(state => ({
+        menuState: state.MENU,
+        cityioData: state.CITYIO
+    }));
 
     const togglesMeta = settings.menu.toggles;
     const listOfToggles = Object.keys(togglesMeta);
@@ -24,16 +30,14 @@ function TogglesMenu(props) {
      */
     let togglesCompsArray = [];
     // array of loaded API modules
-    const loadedModules = Object.keys(props.cityIOdata);
+    const loadedModules = Object.keys(cityioData);
     // create each toggle
     for (let i = 0; i < listOfToggles.length; i++) {
         // check if the mdoule of this toggle
         // was loaded on the API
         let requireModule = togglesMeta[listOfToggles[i]].requireModule;
 
-        const checked = props.menuState.includes(listOfToggles[i])
-            ? true
-            : false;
+        const checked = menuState.includes(listOfToggles[i]) ? true : false;
 
         if (loadedModules.includes(requireModule) || requireModule === false) {
             const thisToggle = (
@@ -43,7 +47,7 @@ function TogglesMenu(props) {
                             primary={togglesMeta[listOfToggles[i]].displayName}
                         />
                         <ListItemSecondaryAction>
-                            <Switch
+                            <ColoredSwitch
                                 edge="end"
                                 onChange={handleToggle(listOfToggles[i])}
                                 checked={checked}
@@ -74,34 +78,25 @@ function TogglesMenu(props) {
 
     return (
         <Drawer
+            className={classes.root}
             BackdropProps={{
-                classes: {
-                    root: classes.backDrop
-                }
+                invisible: true
+            }}
+            classes={{
+                paper: classes.paper
             }}
             anchor="left"
             open={open}
             onClose={toggleDrawer}
         >
-            <div
-                className={classes.list}
-                role="presentation"
-                onClick={toggleDrawer}
-                onKeyDown={toggleDrawer}
-            ></div>
-            <List className={classes.root}>
-                <h2>cityscopeJS</h2>
+            <List className={classes.list}>
+                <Typography variant="h5" className={classes.text} gutterBottom>
+                    CityScopeJS
+                </Typography>
                 {togglesCompsArray}
             </List>
         </Drawer>
     );
 }
 
-const mapStateToProps = state => {
-    return {
-        menuState: state.MENU,
-        cityIOdata: state.CITYIO
-    };
-};
-
-export default connect(mapStateToProps, null)(TogglesMenu);
+export default TogglesMenu;
