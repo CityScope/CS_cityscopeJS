@@ -1,27 +1,27 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Switch from "@material-ui/core/Switch";
-import { connect } from "react-redux";
 import { listenToAccessToggle } from "../../../redux/actions";
 
-const ACCESS_PROPERTIES = [
-    "housing",
-    "parks",
-    "nightlife",
-    "employment",
-    "groceries",
-    "restaurants",
-    "education"
-];
+function AccessSubmenu() {
+    const { accessToggle, cityioData } = useSelector(state => ({
+        accessToggle: state.ACCESS_TOGGLE,
+        cityioData: state.CITYIO
+    }));
 
-function AccessSubmenu(props) {
-    const { accessToggle, listenToAccessToggle } = props;
+    const ACCESS_PROPERTIES =
+        cityioData && cityioData.access && cityioData.access.properties
+            ? cityioData.access.properties
+            : [];
 
-    const propList = () => (
-        <>
+    const dispatch = useDispatch();
+
+    return (
+        <List>
             {ACCESS_PROPERTIES.map((p, i) => (
                 <ListItem key={p}>
                     <ListItemText
@@ -33,28 +33,14 @@ function AccessSubmenu(props) {
                             edge="end"
                             checked={accessToggle === i}
                             onChange={() => {
-                                listenToAccessToggle(i);
+                                dispatch(listenToAccessToggle(i));
                             }}
                         />
                     </ListItemSecondaryAction>
                 </ListItem>
             ))}
-        </>
+        </List>
     );
-
-    return <List>{propList()}</List>;
 }
 
-const mapStateToProps = state => {
-    return {
-        menuState: state.MENU,
-        cityIOdata: state.CITYIO,
-        accessToggle: state.ACCESS_TOGGLE
-    };
-};
-
-const mapDispatchToProps = {
-    listenToAccessToggle: listenToAccessToggle
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AccessSubmenu);
+export default AccessSubmenu;
