@@ -67,7 +67,7 @@ function TogglesMenu(props) {
                                 marginLeft: 24
                             }}
                         >
-                            <AccessSubmenu />
+                            <AccessSubmenu cityioData={cityioData} />
                         </Collapse>
                     )}
                 </div>

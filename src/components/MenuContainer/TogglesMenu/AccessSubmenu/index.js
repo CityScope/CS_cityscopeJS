@@ -7,11 +7,10 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import { ColoredSwitch } from "../styles";
 import { listenToAccessToggle } from "../../../../redux/actions";
 
-function AccessSubmenu() {
-    const { accessToggle, cityioData } = useSelector(state => ({
-        accessToggle: state.ACCESS_TOGGLE,
-        cityioData: state.CITYIO
-    }));
+function AccessSubmenu(props) {
+    const accessToggle = useSelector(state => state.ACCESS_TOGGLE);
+
+    const { cityioData } = props;
 
     const ACCESS_PROPERTIES =
         cityioData && cityioData.access && cityioData.access.properties
