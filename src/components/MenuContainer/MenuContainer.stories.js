@@ -1,11 +1,11 @@
 import React from "react";
 import { WithProvider } from "../../stories/withProvider.stories";
-import Menu from "./menu";
+import MenuContainer from ".";
 
-export default { title: "Menu", component: Menu };
+export default { title: "MenuContainer", component: MenuContainer };
 
 export const defaultView = () => (
     <WithProvider>
-        <Menu></Menu>
+        <MenuContainer></MenuContainer>
     </WithProvider>
 );

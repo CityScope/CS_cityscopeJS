@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import settings from "../../../../settings/settings.json";
 import List from "@material-ui/core/List";
 import { StyledListItem } from "./styles";
@@ -7,21 +8,21 @@ import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
 import HomeWorkIcon from "@material-ui/icons/HomeWork";
 import CommuteIcon from "@material-ui/icons/Commute";
-import { connect } from "react-redux";
 import { useStyles } from "./styles";
-
-import { listenToTypeEditor } from "../../../../redux/actions";
+import { listenToEditMenu } from "../../../../redux/actions";
 
 const buildingTypes = settings.map.types;
 const networkTypes = settings.map.netTypes;
 
-function TypeEditor(props) {
+function EditMenuMain() {
     const classes = useStyles();
     const [selectedIndex, setSelectedIndex] = React.useState(1);
 
+    const dispatch = useDispatch();
+
     const handleListItemClick = (event, typeProps) => {
         setSelectedIndex(typeProps.name);
-        props.listenToTypeEditor(typeProps);
+        dispatch(listenToEditMenu(typeProps));
     };
 
     const createTypesIcons = typesFamily => {
@@ -75,8 +76,4 @@ function TypeEditor(props) {
     );
 }
 
-const mapDispatchToProps = {
-    listenToTypeEditor: listenToTypeEditor
-};
-
-export default connect(null, mapDispatchToProps)(TypeEditor);
+export default EditMenuMain;

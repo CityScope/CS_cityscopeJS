@@ -1,14 +1,14 @@
 import React from "react";
 import { WithProvider } from "../../../../stories/withProvider.stories";
-import TypeMenuContainer from "./index";
+import EditMenuMain from "./index";
 
 export default {
-    title: "TypeMenuContainer",
-    component: TypeMenuContainer
+    title: "EditMenuMain",
+    component: EditMenuMain
 };
 
 export const DefaultView = () => (
     <WithProvider>
-        <TypeMenuContainer></TypeMenuContainer>
+        <EditMenuMain></EditMenuMain>
     </WithProvider>
 );
