@@ -64,7 +64,8 @@ class Map extends Component {
     }
 
     componentDidMount() {
-        const cityIOdata = this.props.cityioData;
+        const { cityioData } = this.props;
+        console.log(cityioData);
         // fix deck view rotate
         this._rightClickViewRotate();
         // setup sun effects
@@ -72,10 +73,10 @@ class Map extends Component {
         // zoom map on CS table location
         this._setViewStateToTableHeader();
         this.setState({
-            networkPnts: _proccesNetworkPnts(cityIOdata),
-            gridTextData: _proccessGridTextData(cityIOdata),
-            bresenhamGrid: _proccessBresenhamGrid(cityIOdata),
-            networkLayer: cityIOdata.GEONETWORK
+            networkPnts: _proccesNetworkPnts(cityioData),
+            gridTextData: _proccessGridTextData(cityioData),
+            bresenhamGrid: _proccessBresenhamGrid(cityioData),
+            networkLayer: cityioData.GEONETWORK
         });
     }
 
@@ -88,18 +89,18 @@ class Map extends Component {
             // start ainmation/sim/roate
             this._animate();
         }
-
-        if (prevState.cityioData !== this.props.cityioData) {
+        const { cityioData } = this.props;
+        if (prevState.cityioData !== cityioData) {
             console.log("%c new cityioData to render ", newDataStyle);
             // get cityio data from props
-            const cityioData = this.props.cityioData;
+
             this.setState({
                 cityioData: cityioData,
                 GEOGRID: _proccessGridData(cityioData)
             });
 
             // ! workaround for preloading access layer data
-            if (this.props.cityioData.access) {
+            if (cityioData.access) {
                 this.setState({ access: _proccessAccessData(cityioData) });
             }
         }
@@ -130,13 +131,13 @@ class Map extends Component {
             }
             _postMapEditsToCityIO(
                 dataProps,
-                this.props.cityioData.tableName,
+                cityioData.tableName,
                 "/GEOGRIDDATA"
             );
 
             _postMapEditsToCityIO(
                 this.state.networkLayer,
-                this.props.cityioData.tableName,
+                cityioData.tableName,
                 "/GEONETWORK"
             );
         }
@@ -797,6 +798,7 @@ class Map extends Component {
 
 const mapStateToProps = state => {
     return {
+        cityioData: state.CITYIO,
         sliders: state.SLIDERS,
         menu: state.MENU,
         accessToggle: state.ACCESS_TOGGLE
