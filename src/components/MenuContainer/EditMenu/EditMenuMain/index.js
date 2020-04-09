@@ -31,13 +31,18 @@ function EditMenuMain() {
             let col = typesFamily[type].color;
             let rgbCol = "rgb(" + col[0] + "," + col[1] + "," + col[2] + ")";
 
+            const selected = selectedIndex === typesFamily[type].name;
+
             iconsArr.push(
                 <StyledListItem
-                    color={rgbCol}
+                    style={{
+                        backgroundColor: rgbCol,
+                        opacity: selected ? 0.4 : 1
+                    }}
                     key={type}
                     button
                     variant="raised"
-                    selected={selectedIndex === typesFamily[type].name}
+                    selected={selected}
                     onClick={event =>
                         handleListItemClick(event, typesFamily[type])
                     }

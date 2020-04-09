@@ -49,7 +49,7 @@ export const useStyles = makeStyles({
         marginRight: "12px"
     },
     typeName: {
-        color: "white",
+        color: "#FFF",
         fontSize: "10px"
     }
 });
