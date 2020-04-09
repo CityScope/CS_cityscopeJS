@@ -14,7 +14,8 @@ export const useStyles = makeStyles({
         flexDirection: "row",
         alignItems: "center",
         width: "50vw",
-        overflow: "auto"
+        overflow: "auto",
+        zIndex: 1
     },
     name: {
         display: "flex",

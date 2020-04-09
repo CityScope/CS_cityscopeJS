@@ -4,14 +4,13 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import Switch from "@material-ui/core/Switch";
-import { listenToAccessToggle } from "../../../redux/actions";
+import { ColoredSwitch } from "../styles";
+import { listenToAccessToggle } from "../../../../redux/actions";
 
-function AccessSubmenu() {
-    const { accessToggle, cityioData } = useSelector(state => ({
-        accessToggle: state.ACCESS_TOGGLE,
-        cityioData: state.CITYIO
-    }));
+function AccessSubmenu(props) {
+    const accessToggle = useSelector(state => state.ACCESS_TOGGLE);
+
+    const { cityioData } = props;
 
     const ACCESS_PROPERTIES =
         cityioData && cityioData.access && cityioData.access.properties
@@ -29,7 +28,7 @@ function AccessSubmenu() {
                         style={{ textTransform: "capitalize" }}
                     />
                     <ListItemSecondaryAction>
-                        <Switch
+                        <ColoredSwitch
                             edge="end"
                             checked={accessToggle === i}
                             onChange={() => {

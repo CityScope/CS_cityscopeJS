@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import MAP from "./baseMap";
 import { connect } from "react-redux";
 import { Layer } from "../prjMap/layer";
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 class MapContainer extends Component {
     _checkKeystone = () => {
@@ -10,47 +9,38 @@ class MapContainer extends Component {
     };
 
     render() {
-        if (this.props.ready) {
-            return (
-                <div
+        return (
+            <div
+                style={{
+                    background: "black",
+                    height: "100vh",
+                    width: "100vw",
+                    maxWidth: "100%",
+                    overflow: "hidden"
+                }}
+            >
+                <Layer
+                    className="mapLayer"
                     style={{
-                        background: "black",
                         height: "100vh",
-                        width: "100vw",
-                        maxWidth: "100%",
-                        overflow: "hidden"
+                        width: "100vw"
                     }}
+                    isEditMode={this._checkKeystone()}
                 >
-                    <Layer
-                        className="mapLayer"
-                        style={{
-                            height: "100vh",
-                            width: "100vw"
-                        }}
-                        isEditMode={this._checkKeystone()}
-                    >
-                        <MAP
-                            cityioData={this.props.cityioData}
-                            menu={this.props.menu}
-                            selectedType={this.props.selectedType}
-                        />
-                    </Layer>
-
-                    <LoadingSpinner />
-                </div>
-            );
-        } else {
-            return null;
-        }
+                    <MAP
+                        menu={this.props.menu}
+                        selectedType={this.props.selectedType}
+                    />
+                </Layer>
+            </div>
+        );
     }
 }
 
 const mapStateToProps = state => {
     return {
-        cityioData: state.CITYIO,
         menu: state.MENU,
-        selectedType: state.SELECTED_TYPE,
-        ready: state.READY
+        selectedType: state.SELECTED_TYPE
     };
 };
 

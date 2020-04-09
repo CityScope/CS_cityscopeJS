@@ -1,15 +1,18 @@
 import React from "react";
 import { useStyles } from "./styles";
-import { connect } from "react-redux";
-import { listenToTypeEditor } from "../../../../redux/actions";
+import { useSelector, useDispatch } from "react-redux";
+import { listenToEditMenu } from "../../../../redux/actions";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
 import Box from "@material-ui/core/Box";
 
-function TypeOptionsEditor(props) {
-    const { selectedType } = props;
+function EditMenuOptions() {
+    const selectedType = useSelector(state => state.SELECTED_TYPE);
     const { name, height } = selectedType;
+
+    const dispatch = useDispatch();
+
     const classes = useStyles();
     const marks = [
         { value: 0, label: "0" },
@@ -38,10 +41,12 @@ function TypeOptionsEditor(props) {
                     value={height}
                     valueLabelDisplay="auto"
                     onChange={(event, value) =>
-                        props.listenToTypeEditor({
-                            ...selectedType,
-                            height: value
-                        })
+                        dispatch(
+                            listenToEditMenu({
+                                ...selectedType,
+                                height: value
+                            })
+                        )
                     }
                     aria-labelledby="Floors"
                     getAriaLabel={index => index.toString()}
@@ -54,14 +59,4 @@ function TypeOptionsEditor(props) {
     );
 }
 
-const mapDispatchToProps = {
-    listenToTypeEditor: listenToTypeEditor
-};
-
-const mapStateToProps = state => {
-    return {
-        selectedType: state.SELECTED_TYPE
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TypeOptionsEditor);
+export default EditMenuOptions;

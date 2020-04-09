@@ -1,11 +1,8 @@
 import Provider from "./Provider";
 import "./index.css";
 import configureStore from "./redux/store";
-import CityIO from "./services/cityIO";
+import Screen from "./components/Screen";
 import DocsMinsite from "./components/docsMinsite/DocsMinsite";
-import MenuContainer from "./components/menu/menuContainer";
-import MapContainer from "./components/baseMap/baseMapContainer";
-import VisContainer from "./components/vis/visContainer";
 import { StylesProvider } from "@material-ui/core/styles";
 import React, { Component } from "react";
 
@@ -20,10 +17,7 @@ const MapRoute = () => {
         return (
             <Provider store={store}>
                 <StylesProvider injectFirst>
-                    <MapContainer />
-                    <CityIO tableName={cityscopePrjName} />
-                    <VisContainer />
-                    <MenuContainer />
+                    <Screen tableName={cityscopePrjName} />
                 </StylesProvider>
             </Provider>
         );

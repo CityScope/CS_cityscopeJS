@@ -24,7 +24,7 @@ export const StyledListItem = styled(ListItem)`
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
 `;
 
-export const useStyles = makeStyles(theme => ({
+export const useStyles = makeStyles({
     root: {
         display: "flex",
         position: "absolute",
@@ -39,7 +39,8 @@ export const useStyles = makeStyles(theme => ({
         alignItems: "center",
         maxWidth: "50vw",
         height: "15vh",
-        overflow: "auto"
+        overflow: "auto",
+        zIndex: 1
     },
     list: {
         display: "flex",
@@ -48,7 +49,7 @@ export const useStyles = makeStyles(theme => ({
         marginRight: "12px"
     },
     typeName: {
-        color: "white",
+        color: "#FFF",
         fontSize: "10px"
     }
-}));
+});

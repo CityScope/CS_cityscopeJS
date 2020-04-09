@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import {
@@ -7,7 +7,6 @@ import {
     setLoadingState
 } from "../redux/actions";
 import settings from "../settings/settings.json";
-import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 
 class CityIO extends Component {
     constructor(props) {
@@ -17,7 +16,6 @@ class CityIO extends Component {
             cityIOmodulesData: {}
         };
         this.cityioURL = null;
-        this._isMounted = false;
     }
 
     /**
@@ -43,10 +41,11 @@ class CityIO extends Component {
         // get the hashes first
         this.getCityIOHash(this.cityioURL + "/meta");
         // and every interval
-        this.timer = setInterval(
-            () => this.getCityIOHash(this.cityioURL + "/meta"),
-            settings.cityIO.interval
-        );
+        this.timer = setInterval(() => {
+            if (this._isMounted) {
+                this.getCityIOHash(this.cityioURL + "/meta");
+            }
+        }, settings.cityIO.interval);
         console.log(
             "starting cityIO interval every..",
             settings.cityIO.interval
@@ -57,12 +56,10 @@ class CityIO extends Component {
      * returns only the hasees from API
      */
     getCityIOHash = URL => {
-        fetch(URL)
-            .then(response => response.json())
-            .then(result => {
-                if (this._isMounted) {
-                    this.handleCityIOHashes(result);
-                }
+        axios
+            .get(URL)
+            .then(response => {
+                this.handleCityIOHashes(response.data);
             })
             .catch(e => {
                 console.log(e);
@@ -183,7 +180,7 @@ class CityIO extends Component {
     };
 
     render() {
-        return <LoadingSpinner />;
+        return null;
     }
 }
 
