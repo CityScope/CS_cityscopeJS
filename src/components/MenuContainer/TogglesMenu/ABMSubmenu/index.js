@@ -1,58 +1,57 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { useStyles } from "./styles";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
-import { connect } from "react-redux";
-import { listenToSlidersEvents } from "../../../../../redux/actions";
+import { useSelector, useDispatch } from "react-redux";
+import { listenToSlidersEvents } from "../../../../redux/actions";
 
-const marks = [
-    {
-        value: 0,
-        label: "12AM"
-    },
-    {
-        value: 21600,
-        label: "6AM"
-    },
-    {
-        value: 43200,
-        label: "12PM"
-    },
-    {
-        value: 64800,
-        label: "6PM"
-    }
-];
-
-const useStyles = makeStyles({
-    root: {
-        width: "80%",
-        marginLeft: 28
-    },
-    subtitle1: {
-        marginTop: 12
-    },
-    subtitle2: {
-        marginTop: 12
-    }
-});
-
-function RangeSlider(props) {
+function ABMSubmenu() {
     const classes = useStyles();
 
+    const sliders = useSelector(state => state.SLIDERS);
+
+    const dispatch = useDispatch();
+
     const handleSetTimeValue = (e, newValue) => {
-        props.listenToSlidersEvents({
-            ...props.sliders,
-            time: newValue
-        });
+        dispatch(
+            listenToSlidersEvents({
+                ...sliders,
+                time: newValue
+            })
+        );
     };
 
     const handleSetSpeedValue = (e, newValue) => {
-        props.listenToSlidersEvents({
-            ...props.sliders,
-            speed: newValue
-        });
+        dispatch(
+            listenToSlidersEvents({
+                ...sliders,
+                speed: newValue
+            })
+        );
     };
+
+    const marks = [
+        {
+            value: 0,
+            label: "12AM"
+        },
+        {
+            value: 21600,
+            label: "6AM"
+        },
+        {
+            value: 43200,
+            label: "12PM"
+        },
+        {
+            value: 64800,
+            label: "6PM"
+        },
+        {
+            value: 86400,
+            label: "12AM"
+        }
+    ];
 
     return (
         <div className={classes.root}>
@@ -65,10 +64,13 @@ function RangeSlider(props) {
                 Simulation Range
             </Typography>
             <Slider
+                classes={{
+                    markLabel: classes.markLabel
+                }}
                 min={0}
                 max={86400}
                 marks={marks}
-                value={props.sliders.time}
+                value={sliders.time}
                 onChange={handleSetTimeValue}
                 valueLabelDisplay="off"
                 aria-labelledby="range-slider"
@@ -84,7 +86,7 @@ function RangeSlider(props) {
             <Slider
                 min={0}
                 max={100}
-                value={props.sliders.speed}
+                value={sliders.speed}
                 onChange={handleSetSpeedValue}
                 valueLabelDisplay="auto"
                 aria-labelledby="continuous-slider"
@@ -93,14 +95,4 @@ function RangeSlider(props) {
     );
 }
 
-const mapStateToProps = state => {
-    return {
-        sliders: state.SLIDERS
-    };
-};
-
-const mapDispatchToProps = {
-    listenToSlidersEvents: listenToSlidersEvents
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(RangeSlider);
+export default ABMSubmenu;

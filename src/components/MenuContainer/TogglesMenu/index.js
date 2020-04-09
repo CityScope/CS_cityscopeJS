@@ -9,7 +9,7 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import settings from "../../../settings/settings.json";
 import Collapse from "@material-ui/core/Collapse";
-import RangeSlider from "./ABMSubmenu/RangeSlider/RangeSlider";
+import ABMSubmenu from "./ABMSubmenu";
 import AccessSubmenu from "./AccessSubmenu";
 
 function TogglesMenu(props) {
@@ -56,7 +56,7 @@ function TogglesMenu(props) {
                     </ListItem>
                     {listOfToggles[i] === "ABM" && (
                         <Collapse in={checked} style={{ width: "100%" }}>
-                            <RangeSlider />
+                            <ABMSubmenu />
                         </Collapse>
                     )}
                     {listOfToggles[i] === "ACCESS" && (
