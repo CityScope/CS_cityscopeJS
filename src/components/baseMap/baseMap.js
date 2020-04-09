@@ -1,7 +1,6 @@
 /* global window */
 import React, { Component } from "react";
 import { CellMeta, SelectionTarget } from "./baseMapComponents";
-
 import { connect } from "react-redux";
 import {
     _proccesNetworkPnts,
