@@ -163,7 +163,7 @@
             },
             "RADAR": {
                 "displayName": "Urban Matrices",
-                "showOnInit": false,
+                "showOnInit": true,
                 "requireModule": "indicators"
             },
             "ROTATE": {

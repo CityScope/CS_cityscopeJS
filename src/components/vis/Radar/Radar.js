@@ -1,15 +1,5 @@
 import React, { Component } from "react";
-import {
-    CircularGridLines,
-    RadarChart,
-    XYPlot,
-    XAxis,
-    YAxis,
-    VerticalGridLines,
-    HorizontalGridLines,
-    VerticalBarSeries,
-    VerticalBarSeriesCanvas,
-} from "react-vis";
+import { CircularGridLines, RadarChart } from "react-vis";
 import "../../../../node_modules/react-vis/dist/style.css";
 
 import "./Radar.css";
@@ -40,8 +30,6 @@ class Radar extends Component {
         this.state = {
             domains: [],
             radarData: [],
-
-            useCanvas: false,
         };
         this.radarSize = 700;
 
@@ -61,7 +49,7 @@ class Radar extends Component {
     }
 
     componentDidMount() {
-        console.log("....init radar");
+        console.log("...init radar");
         this.setState({ indicators: this.props.indicators });
         this.generateData();
     }
@@ -77,84 +65,57 @@ class Radar extends Component {
     }
 
     render() {
-        const BarSeries = this.state.useCanvas
-            ? VerticalBarSeriesCanvas
-            : VerticalBarSeries;
-
         if (this.props.cityioData.indicators) {
             return (
-                <div>
-                    <XYPlot width={300} height={300} stackBy="y">
-                        <VerticalGridLines />
-                        <HorizontalGridLines />
-                        <XAxis />
-                        <YAxis />
-                        <BarSeries
-                            data={[
-                                { x: 2, y: 10 },
-                                { x: 4, y: 5 },
-                                { x: 5, y: 15 },
-                            ]}
-                        />
-                        <BarSeries
-                            data={[
-                                { x: 2, y: 12 },
-                                { x: 4, y: 2 },
-                                { x: 5, y: 11 },
-                            ]}
-                        />
-                    </XYPlot>
-
-                    <RadarChart
-                        className="Radar blur"
-                        animation
-                        data={this.state.radarData}
-                        domains={this.state.domains}
-                        colorRange={this.colorRange}
+                <RadarChart
+                    className="Radar blur"
+                    animation
+                    data={this.state.radarData}
+                    domains={this.state.domains}
+                    colorRange={this.colorRange}
+                    style={{
+                        polygons: {
+                            fillOpacity: 0.2,
+                            strokeWidth: 2,
+                        },
+                        axes: {
+                            text: {
+                                opacity: 0,
+                                fontWeight: 700,
+                                fill: "white",
+                            },
+                            strokeWidth: 0,
+                        },
+                        labels: {
+                            textAnchor: "middle",
+                            fontSize: 11,
+                            fontWeight: "600",
+                            fill: "white",
+                        },
+                    }}
+                    margin={{
+                        left: this.radarSize / 6,
+                        top: this.radarSize / 6,
+                        bottom: this.radarSize / 6,
+                        right: this.radarSize / 6,
+                    }}
+                    width={this.radarSize}
+                    height={this.radarSize}
+                >
+                    <CircularGridLines
                         style={{
-                            polygons: {
-                                fillOpacity: 0.2,
-                                strokeWidth: 2,
-                            },
-                            axes: {
-                                text: {
-                                    opacity: 0,
-                                    fontWeight: 700,
-                                    fill: "white",
-                                },
-                                strokeWidth: 0,
-                            },
-                            labels: {
-                                textAnchor: "middle",
-                                fontSize: 11,
-                                fontWeight: "600",
-                                fill: "white",
-                            },
+                            fill: "white",
+                            fillOpacity: 0.1,
+                            backgroundColor: "#fff",
+                            opacity: 0.5,
+                            stroke: "white",
+                            width: 0.1,
                         }}
-                        margin={{
-                            left: this.radarSize / 6,
-                            top: this.radarSize / 6,
-                            bottom: this.radarSize / 6,
-                            right: this.radarSize / 6,
-                        }}
-                        width={this.radarSize}
-                        height={this.radarSize}
-                    >
-                        <CircularGridLines
-                            style={{
-                                fill: "white",
-                                fillOpacity: 0.1,
-                                backgroundColor: "#fff",
-                                opacity: 0.5,
-                                stroke: "white",
-                                width: 0.1,
-                            }}
-                            tickValues={[...new Array(11)].map(
-                                (v, i) => i / 10 - 1
-                            )}
-                        />
-                    </RadarChart>
-                </div>
+                        tickValues={[...new Array(11)].map(
+                            (v, i) => i / 10 - 1
+                        )}
+                    />
+                </RadarChart>
             );
         } else return null;
     }
