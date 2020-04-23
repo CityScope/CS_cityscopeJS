@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import {
-    XYPlot,
+    FlexibleWidthXYPlot,
     XAxis,
+    ChartLabel,
     YAxis,
-    VerticalGridLines,
     VerticalBarSeries,
 } from "react-vis";
 import "../../../../node_modules/react-vis/dist/style.css";
@@ -11,40 +11,73 @@ import "../../../../node_modules/react-vis/dist/style.css";
 class Radar extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            barChartData: null,
+        };
+        this.colorRange = ["#fc03ec", "#79C7E3"];
     }
 
     componentDidMount() {
         console.log("....init BarChart");
+        this.generateData();
+    }
+
+    /**
+   
+    [
+    { x: 2, y: 10 },
+    { x: 4, y: 5 },
+    { x: 12, y: 15 },
+    ]
+     */
+
+    generateData() {
+        const indicators = this.props.cityioData.indicators;
+
+        let dataArr = [];
+        for (let i = 0; i < indicators.length; i++) {
+            dataArr.push({
+                x: indicators[i].name,
+                y: indicators[i].value,
+            });
+        }
+        this.setState({ barChartData: dataArr });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (
+            prevProps.cityioData.indicators !== this.props.cityioData.indicators
+        ) {
+            this.generateData();
+        }
     }
 
     render() {
-        if (this.props.cityioData.indicators) {
+        if (this.state.barChartData) {
+            console.log(this.state.barChartData);
+
             return (
-                <XYPlot
-                    width={500}
+                <FlexibleWidthXYPlot
+                    color={this.colorRange[1]}
+                    opacity={0.5}
+                    xType="ordinal"
+                    width={300}
                     height={500}
                     stackBy="y"
-                    className="BarChart blur"
+                    yDomain={[0, 1]}
                 >
-                    <VerticalGridLines />
-                    <XAxis />
-                    <YAxis />
-                    <VerticalBarSeries
-                        data={[
-                            { x: 2, y: 10 },
-                            { x: 4, y: 5 },
-                            { x: 5, y: 15 },
-                        ]}
+                    <XAxis
+                        style={{
+                            text: {
+                                fill: "#fff",
+                                fontSize: "0.6em",
+                            },
+                        }}
+                        tickLabelAngle={90}
                     />
-                    <VerticalBarSeries
-                        data={[
-                            { x: 2, y: 12 },
-                            { x: 4, y: 2 },
-                            { x: 5, y: 11 },
-                        ]}
-                    />
-                </XYPlot>
+                    <YAxis style={{ text: { fill: "#fff" } }} />
+                    <VerticalBarSeries data={this.state.barChartData} />
+                </FlexibleWidthXYPlot>
             );
         } else return null;
     }
