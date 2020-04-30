@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { CircularGridLines, RadarChart } from "react-vis";
 import "../../../../node_modules/react-vis/dist/style.css";
+
 import "./Radar.css";
 
 /**
@@ -28,7 +29,7 @@ class Radar extends Component {
         super(props);
         this.state = {
             domains: [],
-            radarData: []
+            radarData: [],
         };
         this.radarSize = 700;
 
@@ -40,15 +41,17 @@ class Radar extends Component {
         let radarData = {};
         let domains = [];
         for (let i = 0; i < indicators.length; i++) {
-            radarData[indicators[i].name] = indicators[i].value;
-            indicators[i].domain = [0, 1];
-            domains.push(indicators[i]);
+            if (indicators[i].viz_type === "radar") {
+                radarData[indicators[i].name] = indicators[i].value;
+                indicators[i].domain = [0, 1];
+                domains.push(indicators[i]);
+            }
         }
         this.setState({ radarData: [radarData], domains: domains });
     }
 
     componentDidMount() {
-        console.log("....init radar");
+        console.log("...init radar");
         this.setState({ indicators: this.props.indicators });
         this.generateData();
     }
@@ -75,28 +78,28 @@ class Radar extends Component {
                     style={{
                         polygons: {
                             fillOpacity: 0.2,
-                            strokeWidth: 2
+                            strokeWidth: 2,
                         },
                         axes: {
                             text: {
                                 opacity: 0,
                                 fontWeight: 700,
-                                fill: "white"
+                                fill: "white",
                             },
-                            strokeWidth: 0
+                            strokeWidth: 0,
                         },
                         labels: {
                             textAnchor: "middle",
                             fontSize: 11,
                             fontWeight: "600",
-                            fill: "white"
-                        }
+                            fill: "white",
+                        },
                     }}
                     margin={{
                         left: this.radarSize / 6,
                         top: this.radarSize / 6,
                         bottom: this.radarSize / 6,
-                        right: this.radarSize / 6
+                        right: this.radarSize / 6,
                     }}
                     width={this.radarSize}
                     height={this.radarSize}
@@ -108,7 +111,7 @@ class Radar extends Component {
                             backgroundColor: "#fff",
                             opacity: 0.5,
                             stroke: "white",
-                            width: 0.1
+                            width: 0.1,
                         }}
                         tickValues={[...new Array(11)].map(
                             (v, i) => i / 10 - 1

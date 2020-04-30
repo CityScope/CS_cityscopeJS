@@ -18,30 +18,30 @@ import CloudQueueIcon from "@material-ui/icons/CloudQueue";
 
 const drawerWidth = 300;
 
-const styles = theme => ({
+const styles = (theme) => ({
     root: {
         display: "flex",
         background: "#1D1F21",
-        color: "#FFF"
+        color: "#FFF",
     },
     toolbar: {
-        paddingRight: 24
+        paddingRight: 24,
     },
     toolbarIcon: {
         display: "flex",
         alignItems: "center",
         justifyContent: "flex-end",
         padding: "0 5%",
-        ...theme.mixins.toolbar
+        ...theme.mixins.toolbar,
     },
     appBar: {
         background: "#1D1F21",
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen
+            duration: theme.transitions.duration.leavingScreen,
         }),
-        color: "#FFF"
+        color: "#FFF",
     },
     appBarShift: {
         background: "#1D1F21",
@@ -49,22 +49,22 @@ const styles = theme => ({
         width: `calc(100% - ${drawerWidth}px)`,
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
+            duration: theme.transitions.duration.enteringScreen,
+        }),
     },
     menuButton: {
         marginLeft: 12,
-        marginRight: 36
+        marginRight: 36,
     },
 
     menuButtonHidden: {
-        display: "none"
+        display: "none",
     },
 
     title: {
         flexGrow: 1,
         fontSize: 20,
-        fontWeight: "lighter"
+        fontWeight: "lighter",
     },
     drawerPaper: {
         color: "#FFF",
@@ -74,41 +74,41 @@ const styles = theme => ({
         width: drawerWidth,
         transition: theme.transitions.create("width", {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
+            duration: theme.transitions.duration.enteringScreen,
+        }),
     },
     drawerPaperClose: {
         overflowX: "hidden",
         transition: theme.transitions.create("width", {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen
+            duration: theme.transitions.duration.leavingScreen,
         }),
         width: theme.spacing() * 7,
         [theme.breakpoints.up("sm")]: {
-            width: theme.spacing() * 9
-        }
+            width: theme.spacing() * 9,
+        },
     },
     appBarSpacer: theme.mixins.toolbar,
     content: {
         flexGrow: 1,
         padding: theme.spacing() * 3,
         height: "100vh",
-        overflow: "auto"
+        overflow: "auto",
     },
     chartContainer: {
-        marginLeft: -22
+        marginLeft: -22,
     },
     tableContainer: {
-        height: 320
+        height: 320,
     },
     h5: {
-        marginBottom: theme.spacing() * 2
-    }
+        marginBottom: theme.spacing() * 2,
+    },
 });
 
 class Dashboard extends React.Component {
     state = {
-        open: true
+        open: true,
     };
 
     handleDrawerOpen = () => {
@@ -160,7 +160,7 @@ class Dashboard extends React.Component {
 
                         <IconButton
                             color="inherit"
-                            onClick={props =>
+                            onClick={(props) =>
                                 window.open(
                                     "https://github.com/CityScope/CS_cityscopeJS",
                                     "_blank"
@@ -172,7 +172,7 @@ class Dashboard extends React.Component {
 
                         <IconButton
                             color="inherit"
-                            onClick={props =>
+                            onClick={(props) =>
                                 window.open(
                                     "https://cityio.media.mit.edu",
                                     "_blank"
@@ -189,7 +189,7 @@ class Dashboard extends React.Component {
                         paper: classNames(
                             classes.drawerPaper,
                             !this.state.open && classes.drawerPaperClose
-                        )
+                        ),
                     }}
                     open={this.state.open}
                 >

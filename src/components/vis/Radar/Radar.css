@@ -4,15 +4,3 @@
 .rv-xy-plot__axis__tick__line {
     stroke-width: 0.5;
 }
-
-.Radar {
-    position: fixed;
-    right: 1em;
-    top: 1em;
-}
-
-.blur {
-    border-radius: 2em;
-    -webkit-backdrop-filter: blur(1em);
-    backdrop-filter: blur(1em);
-}
