@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import CityIO from "../../services/cityIO";
 import MenuContainer from "../MenuContainer";
-import MapContainer from "../baseMap/baseMapContainer";
+import BaseMapContainer from "../BaseMapContainer";
 import VisContainer from "../vis/visContainer";
 import LoadingSpinner from "../LoadingSpinner";
 
@@ -16,7 +16,7 @@ function Screen(props) {
             {ready && (
                 <>
                     <MenuContainer />
-                    <MapContainer />
+                    <BaseMapContainer />
                     <VisContainer />
                 </>
             )}

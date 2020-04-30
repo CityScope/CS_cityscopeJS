@@ -24,5 +24,6 @@ export const useStyles = makeStyles({
     templatesButton: {
         marginTop: 8,
         marginBottom: 8
-    }
+    },
+    disabled: {}
 });

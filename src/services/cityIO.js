@@ -32,17 +32,19 @@ class CityIO extends Component {
     }
 
     handleURL = () => {
-        if (this.props.tableName === "mockAPI") {
+        if (!!this.props.scenario) {
+            this.cityioURL = settings.cityIO.mockURL + "/scenarios";
+            return;
+        } else if (this.props.tableName === "mockAPI") {
             this.cityioURL = settings.cityIO.mockURL;
         } else {
             this.cityioURL = settings.cityIO.baseURL + this.props.tableName;
         }
-
         // get the hashes first
         this.getCityIOHash(this.cityioURL + "/meta");
         // and every interval
         this.timer = setInterval(() => {
-            if (this._isMounted) {
+            if (this._isMounted && !this.props.scenario) {
                 this.getCityIOHash(this.cityioURL + "/meta");
             }
         }, settings.cityIO.interval);
@@ -184,10 +186,16 @@ class CityIO extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        scenario: state.SCENARIO
+    };
+};
+
 const mapDispatchToProps = {
     getCityioData: getCityioData,
     setReadyState: setReadyState,
     setLoadingState: setLoadingState
 };
 
-export default connect(null, mapDispatchToProps)(CityIO);
+export default connect(mapStateToProps, mapDispatchToProps)(CityIO);

@@ -13,6 +13,8 @@ export default function FABMenu(props) {
     const classes = useStyles();
 
     const menuState = useSelector(state => state.MENU);
+    const scenario = useSelector(state => state.SCENARIO);
+
     const { handleToggle, toggleDrawer } = props;
 
     return (
@@ -26,7 +28,9 @@ export default function FABMenu(props) {
             </Fab>
             <Fab
                 className={classes.editButton}
-                onClick={handleToggle("EDIT")}
+                classes={{ root: classes.fab, disabled: classes.disabled }}
+                disabled={!!scenario}
+                onClick={() => handleToggle("EDIT")}
                 style={{ backgroundColor: "#1D1F21" }}
             >
                 {menuState.includes("EDIT") ? (
@@ -37,7 +41,7 @@ export default function FABMenu(props) {
             </Fab>
             <Fab
                 className={classes.resetViewButton}
-                onClick={handleToggle("RESET_VIEW")}
+                onClick={() => handleToggle("RESET_VIEW")}
                 style={{ backgroundColor: "#1D1F21" }}
             >
                 {menuState.includes("RESET_VIEW") ? (
@@ -48,7 +52,7 @@ export default function FABMenu(props) {
             </Fab>
             <Fab
                 className={classes.templatesButton}
-                onClick={handleToggle("TEMPLATES")}
+                onClick={() => handleToggle("SCENARIOS")}
                 style={{ backgroundColor: "#1D1F21" }}
             >
                 <InsertDriveFileIcon style={{ color: "FFF" }} />

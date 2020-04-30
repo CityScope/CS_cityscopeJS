@@ -30,7 +30,8 @@ const initialState = {
         name: "Select Land-Use!"
     },
     READY: false,
-    LOADING: false
+    LOADING: false,
+    SCENARIO: null
 };
 
 export default initialState;

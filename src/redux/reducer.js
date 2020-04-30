@@ -6,7 +6,8 @@ import {
     LISTEN_TO_EDIT_MENU,
     SET_READY_STATE,
     SET_LOADING_STATE,
-    LISTEN_TO_ACCESS_TOGGLE
+    LISTEN_TO_ACCESS_TOGGLE,
+    SET_SCENARIO
 } from "./actions";
 import initialState from "./initialState";
 
@@ -31,6 +32,8 @@ export default function reducer(state = initialState, action) {
             return { ...state, READY: action.data };
         case SET_LOADING_STATE:
             return { ...state, LOADING: action.data };
+        case SET_SCENARIO:
+            return { ...state, SCENARIO: action.data };
         default:
             return state;
     }

@@ -49,7 +49,7 @@ function TogglesMenu(props) {
                         <ListItemSecondaryAction>
                             <ColoredSwitch
                                 edge="end"
-                                onChange={handleToggle(listOfToggles[i])}
+                                onChange={() => handleToggle(listOfToggles[i])}
                                 checked={checked}
                             />
                         </ListItemSecondaryAction>

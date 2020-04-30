@@ -41,3 +41,8 @@ export const SET_LOADING_STATE = "SET_LOADING_STATE";
 export function setLoadingState(data) {
     return { type: SET_LOADING_STATE, data };
 }
+
+export const SET_SCENARIO = "SET_SCENARIO";
+export function setScenario(data) {
+    return { type: SET_SCENARIO, data };
+}
