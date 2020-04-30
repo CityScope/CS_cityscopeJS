@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import {
     FlexibleWidthXYPlot,
     XAxis,
-    ChartLabel,
     YAxis,
     VerticalBarSeries,
 } from "react-vis";
@@ -36,10 +35,12 @@ class Radar extends Component {
 
         let dataArr = [];
         for (let i = 0; i < indicators.length; i++) {
-            dataArr.push({
-                x: indicators[i].name,
-                y: indicators[i].value,
-            });
+            if (indicators[i].viz_type === "bar") {
+                dataArr.push({
+                    x: indicators[i].name,
+                    y: indicators[i].value,
+                });
+            }
         }
         this.setState({ barChartData: dataArr });
     }
@@ -54,12 +55,10 @@ class Radar extends Component {
 
     render() {
         if (this.state.barChartData) {
-            console.log(this.state.barChartData);
-
             return (
                 <FlexibleWidthXYPlot
                     color={this.colorRange[1]}
-                    opacity={0.5}
+                    opacity={0.25}
                     xType="ordinal"
                     width={300}
                     height={500}

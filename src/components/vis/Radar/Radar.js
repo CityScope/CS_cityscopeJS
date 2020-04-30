@@ -41,9 +41,11 @@ class Radar extends Component {
         let radarData = {};
         let domains = [];
         for (let i = 0; i < indicators.length; i++) {
-            radarData[indicators[i].name] = indicators[i].value;
-            indicators[i].domain = [0, 1];
-            domains.push(indicators[i]);
+            if (indicators[i].viz_type === "radar") {
+                radarData[indicators[i].name] = indicators[i].value;
+                indicators[i].domain = [0, 1];
+                domains.push(indicators[i]);
+            }
         }
         this.setState({ radarData: [radarData], domains: domains });
     }

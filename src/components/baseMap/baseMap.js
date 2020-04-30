@@ -10,7 +10,7 @@ import {
     _proccessGridTextData,
     _proccessBresenhamGrid,
     setDirLightSettings,
-    _bresenhamLine
+    _bresenhamLine,
 } from "./baseMapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
@@ -21,7 +21,7 @@ import {
     PathLayer,
     GeoJsonLayer,
     TextLayer,
-    ScatterplotLayer
+    ScatterplotLayer,
 } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../settings/settings.json";
@@ -42,7 +42,7 @@ class Map extends Component {
             viewState: settings.map.initialViewState,
             networkFirstPoint: null,
             networkEdge: [],
-            networkLayer: []
+            networkLayer: [],
         };
         this.animationFrame = null;
         this.timeZoneOffset = setDirLightSettings(
@@ -52,7 +52,7 @@ class Map extends Component {
             timestamp: Date.UTC(2019, 7, 1, 11 + this.timeZoneOffset),
             color: [255, 255, 255],
             intensity: 1.0,
-            _shadow: true
+            _shadow: true,
         };
     }
 
@@ -64,7 +64,6 @@ class Map extends Component {
 
     componentDidMount() {
         const { cityioData } = this.props;
-        console.log(cityioData);
         // fix deck view rotate
         this._rightClickViewRotate();
         // setup sun effects
@@ -75,7 +74,7 @@ class Map extends Component {
             networkPnts: _proccesNetworkPnts(cityioData),
             gridTextData: _proccessGridTextData(cityioData),
             bresenhamGrid: _proccessBresenhamGrid(cityioData),
-            networkLayer: cityioData.GEONETWORK
+            networkLayer: cityioData.GEONETWORK,
         });
     }
 
@@ -95,7 +94,7 @@ class Map extends Component {
 
             this.setState({
                 cityioData: cityioData,
-                GEOGRID: _proccessGridData(cityioData)
+                GEOGRID: _proccessGridData(cityioData),
             });
 
             // ! workaround for preloading access layer data
@@ -154,8 +153,8 @@ class Map extends Component {
             this.setState({
                 viewState: {
                     ...this.state.viewState,
-                    pitch: 45
-                }
+                    pitch: 45,
+                },
             });
         }
     }
@@ -184,15 +183,15 @@ class Map extends Component {
                 zoom: 15,
                 pitch: 0,
                 bearing: 360 - header.rotation,
-                orthographic: true
-            }
+                orthographic: true,
+            },
         });
     }
 
     _setupEffects() {
         const ambientLight = new AmbientLight({
             color: [255, 255, 255],
-            intensity: 0.85
+            intensity: 0.85,
         });
         const dirLight = new _SunLight(this.dirLightSettings);
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });
@@ -237,8 +236,8 @@ class Map extends Component {
                 time: [
                     this.props.sliders.time[0],
                     t,
-                    this.props.sliders.time[2]
-                ]
+                    this.props.sliders.time[2],
+                ],
             });
         }
         if (this.props.menu.includes("ROTATE")) {
@@ -250,8 +249,8 @@ class Map extends Component {
             this.setState({
                 viewState: {
                     ...this.state.viewState,
-                    bearing: bearing
-                }
+                    bearing: bearing,
+                },
             });
         }
 
@@ -274,7 +273,7 @@ class Map extends Component {
     _rightClickViewRotate() {
         document
             .getElementById("deckgl-wrapper")
-            .addEventListener("contextmenu", evt => evt.preventDefault());
+            .addEventListener("contextmenu", (evt) => evt.preventDefault());
     }
 
     /**
@@ -282,7 +281,7 @@ class Map extends Component {
      * collect objects in a region
      * @argument{object} e  picking event
      */
-    _mulipleObjPicked = e => {
+    _mulipleObjPicked = (e) => {
         const dim = this.state.pickingRadius;
         const x = e.x - dim / 2;
         const y = e.y - dim / 2;
@@ -290,7 +289,7 @@ class Map extends Component {
             x: x,
             y: y,
             width: dim,
-            height: dim
+            height: dim,
         });
         return mulipleObj;
     };
@@ -300,11 +299,11 @@ class Map extends Component {
      *  not of CityScope TUI & that are interactable
      * so to not overlap TUI activity
      */
-    _handleGridcellEditing = e => {
+    _handleGridcellEditing = (e) => {
         const { selectedType } = this.props;
         const { height, color, name } = selectedType;
         const multiSelectedObj = this._mulipleObjPicked(e);
-        multiSelectedObj.forEach(selected => {
+        multiSelectedObj.forEach((selected) => {
             const thisCellProps = selected.object.properties;
             if (
                 this.props.selectedType.class === "buildingsClass" &&
@@ -319,11 +318,11 @@ class Map extends Component {
             }
         });
         this.setState({
-            selectedCellsState: multiSelectedObj
+            selectedCellsState: multiSelectedObj,
         });
     };
 
-    _handleNetworkHover = pnt => {
+    _handleNetworkHover = (pnt) => {
         // paint the pnt
         const { selectedType } = this.props;
         // check if really a pnt
@@ -340,7 +339,7 @@ class Map extends Component {
             pntProps.netWidth = pntProps.netWidth * 2;
             // dirty solution for animating selection
             this.setState({
-                hoveredPnt: pnt.object
+                hoveredPnt: pnt.object,
             });
 
             // then back to org color
@@ -348,12 +347,12 @@ class Map extends Component {
             pntProps.netWidth = pntProps.old_netWidth;
 
             this.setState({
-                hoveredPnt: pnt.object
+                hoveredPnt: pnt.object,
             });
         }
     };
 
-    _handleNetworkRemove = path => {
+    _handleNetworkRemove = (path) => {
         const selectedType = this.props.selectedType;
         if (path.object && selectedType.name === "Delete Path") {
             path = path.object;
@@ -362,7 +361,7 @@ class Map extends Component {
                     object.splice(index, 1);
                     let tmpObj = JSON.parse(JSON.stringify(object));
                     this.setState({
-                        networkLayer: tmpObj
+                        networkLayer: tmpObj,
                     });
                 }
             });
@@ -377,7 +376,7 @@ class Map extends Component {
      * draw line
      *
      */
-    _handleNetworkCreate = pnt => {
+    _handleNetworkCreate = (pnt) => {
         // check if on network path  delete mode
         const selectedType = this.props.selectedType;
         // if we're not removing paths
@@ -389,7 +388,7 @@ class Map extends Component {
             } else {
                 const pickData = this.deckGL.pickObject({
                     x: pnt.x,
-                    y: pnt.y
+                    y: pnt.y,
                 });
 
                 if (
@@ -418,7 +417,7 @@ class Map extends Component {
                     let bresenhamLine = {
                         path: lineObj,
                         id: tmpArr.length,
-                        selectedType: this.props.selectedType
+                        selectedType: this.props.selectedType,
                     };
 
                     tmpArr.push(bresenhamLine);
@@ -463,7 +462,7 @@ class Map extends Component {
         this.setState({ keyDownState: null });
     };
 
-    _handleKeyDown = e => {
+    _handleKeyDown = (e) => {
         // avoid common clicks
         this.setState({ keyDownState: e.nativeEvent.key });
         if (e.nativeEvent.key === "=" && this.state.pickingRadius < 100) {
@@ -476,7 +475,7 @@ class Map extends Component {
     /**
      * remap line width
      */
-    _remapValues = value => {
+    _remapValues = (value) => {
         let remap =
             value > 15 && value < 20 ? 1.5 : value < 15 && value > 12 ? 10 : 30;
         return remap;
@@ -495,10 +494,10 @@ class Map extends Component {
                 new TextLayer({
                     id: "gridText-layer",
                     data: this.state.gridTextData,
-                    getText: d => d.text,
-                    getPosition: d => d.coordinates,
+                    getText: (d) => d.text,
+                    getPosition: (d) => d.coordinates,
                     getColor: [255, 255, 255],
-                    getSize: 10
+                    getSize: 10,
                 })
             );
         }
@@ -517,13 +516,13 @@ class Map extends Component {
                     extruded: true,
                     lineWidthScale: 1,
                     lineWidthMinPixels: 2,
-                    getElevation: d =>
+                    getElevation: (d) =>
                         d.properties.height &&
                         d.properties.height.constructor === Array
                             ? d.properties.height[1]
                             : d.properties.height,
-                    getFillColor: d => d.properties.color,
-                    onClick: event => {
+                    getFillColor: (d) => d.properties.color,
+                    onClick: (event) => {
                         if (
                             this.props.menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift" &&
@@ -531,13 +530,13 @@ class Map extends Component {
                         )
                             this._handleGridcellEditing(event);
                     },
-                    onHover: e => {
+                    onHover: (e) => {
                         if (e.object) {
                             this.setState({ hoveredObj: e });
                         }
                     },
 
-                    onDrag: event => {
+                    onDrag: (event) => {
                         if (
                             this.props.menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift"
@@ -557,12 +556,12 @@ class Map extends Component {
                     },
                     updateTriggers: {
                         getFillColor: this.state.selectedCellsState,
-                        getElevation: this.state.selectedCellsState
+                        getElevation: this.state.selectedCellsState,
                     },
                     transitions: {
                         getFillColor: 500,
-                        getElevation: 500
-                    }
+                        getElevation: 500,
+                    },
                 })
             );
         }
@@ -583,11 +582,11 @@ class Map extends Component {
                         radiusScale: 1,
                         radiusMinPixels: 1,
                         radiusMaxPixels: 100,
-                        getPosition: d => d.geometry.coordinates,
-                        getFillColor: d => d.properties.color,
-                        getRadius: d => d.properties.netWidth,
+                        getPosition: (d) => d.geometry.coordinates,
+                        getFillColor: (d) => d.properties.color,
+                        getRadius: (d) => d.properties.netWidth,
 
-                        onHover: e => {
+                        onHover: (e) => {
                             if (
                                 this.props.menu.includes("EDIT") &&
                                 this.state.keyDownState !== "Shift"
@@ -595,7 +594,7 @@ class Map extends Component {
                                 this._handleNetworkHover(e);
                             }
                         },
-                        onClick: e => {
+                        onClick: (e) => {
                             if (
                                 this.props.menu.includes("EDIT") &&
                                 this.state.keyDownState !== "Shift"
@@ -606,12 +605,12 @@ class Map extends Component {
 
                         updateTriggers: {
                             getFillColor: this.state.hoveredPnt,
-                            getRadius: this.state.hoveredPnt
+                            getRadius: this.state.hoveredPnt,
                         },
                         transitions: {
                             getFillColor: 100,
-                            getRadius: 300
-                        }
+                            getRadius: 300,
+                        },
                     })
                 );
             }
@@ -623,10 +622,10 @@ class Map extends Component {
                     data: this.state.networkLayer,
                     widthScale: 1,
                     widthMinPixels: 5,
-                    getPath: d => d.path,
-                    getColor: d => d.selectedType.color,
-                    getWidth: d => d.selectedType.width,
-                    onClick: e => {
+                    getPath: (d) => d.path,
+                    getColor: (d) => d.selectedType.color,
+                    getWidth: (d) => d.selectedType.width,
+                    onClick: (e) => {
                         if (
                             this.props.menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift"
@@ -635,11 +634,11 @@ class Map extends Component {
                         }
                     },
                     updateTriggers: {
-                        getPath: this.state.networkLayer
+                        getPath: this.state.networkLayer,
                     },
                     transitions: {
-                        getPath: 500
-                    }
+                        getPath: 500,
+                    },
                 })
             );
         }
@@ -653,11 +652,11 @@ class Map extends Component {
                     radiusPixels: 200,
                     opacity: 0.25,
                     data: this.state.access,
-                    getPosition: d => d.coordinates,
-                    getWeight: d => d.values[this.props.accessToggle],
+                    getPosition: (d) => d.coordinates,
+                    getWeight: (d) => d.values[this.props.accessToggle],
                     updateTriggers: {
-                        getWeight: [this.props.accessToggle]
-                    }
+                        getWeight: [this.props.accessToggle],
+                    },
                 })
             );
         }
@@ -668,9 +667,9 @@ class Map extends Component {
                     id: "ABM",
                     visible: this.props.menu.includes("ABM") ? true : false,
                     data: cityioData.ABM,
-                    getPath: d => d.path,
-                    getTimestamps: d => d.timestamps,
-                    getColor: d => {
+                    getPath: (d) => d.path,
+                    getTimestamps: (d) => d.timestamps,
+                    getColor: (d) => {
                         //switch between modes or types of users
                         switch (d.mode[1]) {
                             case 0:
@@ -688,7 +687,7 @@ class Map extends Component {
                     opacity: 0.8,
                     rounded: true,
                     trailLength: 500,
-                    currentTime: this.props.sliders.time[1]
+                    currentTime: this.props.sliders.time[1],
                 })
             );
         }
@@ -700,7 +699,7 @@ class Map extends Component {
                     visible: this.props.menu.includes("PATHS") ? true : false,
                     _shadow: false,
                     data: cityioData.ABM,
-                    getPath: d => {
+                    getPath: (d) => {
                         const noisePath =
                             Math.random() < 0.5
                                 ? Math.random() * 0.00005
@@ -712,7 +711,7 @@ class Map extends Component {
                         }
                         return d.path;
                     },
-                    getColor: d => {
+                    getColor: (d) => {
                         switch (d.mode[1]) {
                             case 0:
                                 return [255, 0, 0];
@@ -725,7 +724,7 @@ class Map extends Component {
                         }
                     },
                     opacity: 0.2,
-                    getWidth: 1
+                    getWidth: 1,
                 })
             );
         }
@@ -738,19 +737,19 @@ class Map extends Component {
                 className="baseMap"
                 onKeyDown={this._handleKeyDown}
                 onKeyUp={this._handleKeyUp}
-                onMouseMove={e =>
+                onMouseMove={(e) =>
                     this.setState({
-                        mousePos: e.nativeEvent
+                        mousePos: e.nativeEvent,
                     })
                 }
                 onMouseUp={() =>
                     this.setState({
-                        mouseDown: false
+                        mouseDown: false,
                     })
                 }
                 onMouseDown={() =>
                     this.setState({
-                        mouseDown: true
+                        mouseDown: true,
                     })
                 }
             >
@@ -763,7 +762,7 @@ class Map extends Component {
                     getCursor={() =>
                         this.props.menu.includes("EDIT") ? "none" : "all-scroll"
                     }
-                    ref={ref => {
+                    ref={(ref) => {
                         // save a reference to the Deck instance
                         this.deckGL = ref && ref.deck;
                     }}
@@ -776,7 +775,7 @@ class Map extends Component {
                         touchRotate: true,
                         dragPan: !this.state.draggingWhileEditing,
                         dragRotate: !this.state.draggingWhileEditing,
-                        keyboard: false
+                        keyboard: false,
                     }}
                 >
                     <StaticMap
@@ -795,17 +794,17 @@ class Map extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         cityioData: state.CITYIO,
         sliders: state.SLIDERS,
         menu: state.MENU,
-        accessToggle: state.ACCESS_TOGGLE
+        accessToggle: state.ACCESS_TOGGLE,
     };
 };
 
 const mapDispatchToProps = {
-    listenToSlidersEvents: listenToSlidersEvents
+    listenToSlidersEvents: listenToSlidersEvents,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);
