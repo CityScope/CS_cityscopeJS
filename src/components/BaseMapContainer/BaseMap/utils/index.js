@@ -1,6 +1,6 @@
-import settings from "../../settings/settings.json";
+import settings from "../../../../settings/settings.json";
 import axios from "axios";
-import { errorStyle } from "../../services/consoleStyle";
+import { errorStyle } from "../../../../services/consoleStyle";
 var tzlookup = require("tz-lookup");
 
 /**
