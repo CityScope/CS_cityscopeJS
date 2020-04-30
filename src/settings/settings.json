@@ -162,7 +162,7 @@
                 "requireModule": "access"
             },
             "RADAR": {
-                "displayName": "Urban Matrices",
+                "displayName": "Urban Indicators",
                 "showOnInit": true,
                 "requireModule": "indicators"
             },

@@ -60,8 +60,8 @@ class Radar extends Component {
                     color={this.colorRange[1]}
                     opacity={0.25}
                     xType="ordinal"
-                    width={300}
-                    height={500}
+                    width={400}
+                    height={400}
                     stackBy="y"
                     yDomain={[0, 1]}
                 >
@@ -69,7 +69,6 @@ class Radar extends Component {
                         style={{
                             text: {
                                 fill: "#fff",
-                                fontSize: "0.6em",
                             },
                         }}
                         tickLabelAngle={90}
