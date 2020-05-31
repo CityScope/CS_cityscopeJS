@@ -43,6 +43,8 @@ function EditMenuMain(props) {
     const dispatch = useDispatch();
 
     const handleListItemClick = (event, name, typeProps) => {
+        // ! injects the type name into the attributes themselves
+        typeProps.name = name;
         setSelectedIndex(name);
         dispatch(listenToEditMenu(typeProps));
     };

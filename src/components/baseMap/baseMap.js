@@ -512,11 +512,7 @@ class Map extends Component {
                     extruded: true,
                     lineWidthScale: 1,
                     lineWidthMinPixels: 2,
-                    getElevation: (d) =>
-                        d.properties.height &&
-                        d.properties.height.constructor === Array
-                            ? d.properties.height[1]
-                            : d.properties.height,
+                    getElevation: (d) => d.properties.height,
                     getFillColor: (d) => d.properties.color,
                     onClick: (event) => {
                         if (
