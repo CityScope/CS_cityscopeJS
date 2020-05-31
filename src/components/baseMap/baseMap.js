@@ -305,11 +305,7 @@ class Map extends Component {
         const multiSelectedObj = this._mulipleObjPicked(e);
         multiSelectedObj.forEach((selected) => {
             const thisCellProps = selected.object.properties;
-            if (
-                this.props.selectedType.class === "buildingsClass" &&
-                thisCellProps &&
-                thisCellProps.interactive === true
-            ) {
+            if (thisCellProps && thisCellProps.interactive === true) {
                 thisCellProps.old_height = thisCellProps.height;
                 thisCellProps.old_color = thisCellProps.color;
                 thisCellProps.color = color;
@@ -525,8 +521,7 @@ class Map extends Component {
                     onClick: (event) => {
                         if (
                             this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift" &&
-                            this.props.selectedType.class === "buildingsClass"
+                            this.state.keyDownState !== "Shift"
                         )
                             this._handleGridcellEditing(event);
                     },

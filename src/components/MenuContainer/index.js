@@ -6,18 +6,18 @@ import TogglesMenu from "./TogglesMenu";
 import FABMenu from "./FABMenu";
 
 function MenuContainer() {
-    const menuState = useSelector(state => state.MENU);
+    const menuState = useSelector((state) => state.MENU);
     const dispatch = useDispatch();
 
     const [state, setState] = React.useState({
-        drawerOpen: false
+        drawerOpen: false,
     });
 
     const toggleDrawer = () => {
         setState({ ...state, drawerOpen: !state.drawerOpen });
     };
 
-    const handleToggle = value => () => {
+    const handleToggle = (value) => () => {
         const i = menuState.indexOf(value);
         const updatedMenuState = [...menuState];
         if (i === -1) {
