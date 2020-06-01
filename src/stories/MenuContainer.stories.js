@@ -1,6 +1,6 @@
 import React from "react";
-import { WithProvider } from "../../stories/withProvider.stories";
-import MenuContainer from ".";
+import { WithProvider } from "./withProvider.stories";
+import MenuContainer from "../components/MenuContainer";
 
 export default { title: "MenuContainer", component: MenuContainer };
 
