@@ -5,6 +5,7 @@ import Screen from "./components/Screen";
 import { StylesProvider } from "@material-ui/core/styles";
 import React, { Component } from "react";
 
+// redux store configuration
 const store = configureStore();
 
 const MapRoute = () => {

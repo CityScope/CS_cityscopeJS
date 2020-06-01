@@ -3,7 +3,7 @@ import { AnchorComponent } from "./anchor";
 import {
     matrixToTransform,
     transformPointsToMatrix,
-    vectorToTransform
+    vectorToTransform,
 } from "./util";
 
 import DeleteLocalStorage from "./deleteLocalStorage";
@@ -33,8 +33,8 @@ export interface State {
 
 const styles = {
     container: {
-        position: "relative" as "relative"
-    }
+        position: "relative" as "relative",
+    },
 };
 
 // Sorted
@@ -43,7 +43,7 @@ const anchors: Anchor[] = [
     "top-left",
     "top-right",
     "bottom-right",
-    "bottom-left"
+    "bottom-left",
 ];
 
 // 4x4 matrix
@@ -87,12 +87,12 @@ const defaultMatrix: Matrix3d = [
     0,
     0,
     0,
-    1 // second and third for x and y position of element
+    1, // second and third for x and y position of element
 ];
 
 const _setDeltaVal = () => {
     let deltaInitVals: any = {};
-    anchors.forEach(e => {
+    anchors.forEach((e) => {
         deltaInitVals[e] = [0, 0];
     });
     return deltaInitVals;
@@ -110,11 +110,10 @@ export class Layer extends React.Component<Props, State> {
         translateDelta: _setDeltaVal(),
         sourcePoints: undefined,
         transformOrigin: [0, 0],
-        containerTranslate: [this.props.x || 0, this.props.y || 0]
+        containerTranslate: [this.props.x || 0, this.props.y || 0],
     };
 
     componentDidMount() {
-        console.log("starting projMap...");
         window.addEventListener("mousemove", this.onAnchorMouseMove);
         window.addEventListener("mousemove", this.onMouseMove);
         if (this.container) {
@@ -123,7 +122,7 @@ export class Layer extends React.Component<Props, State> {
                 [0, 0],
                 [width, 0],
                 [width, height],
-                [0, height]
+                [0, height],
             ] as RectPoints;
 
             this.targetPoints = [...sourcePoints] as RectPoints;
@@ -156,7 +155,7 @@ export class Layer extends React.Component<Props, State> {
         evt.stopPropagation();
         this.anchorTranslateDelta = [
             evt.pageX - this.state.translateDelta[position][0],
-            evt.pageY - this.state.translateDelta[position][1]
+            evt.pageY - this.state.translateDelta[position][1],
         ];
 
         this.anchorMoving = position;
@@ -179,7 +178,7 @@ export class Layer extends React.Component<Props, State> {
 
         this.targetPoints[vectorIndexToModify] = [
             this.state.sourcePoints[vectorIndexToModify][0] + deltaX,
-            this.state.sourcePoints[vectorIndexToModify][1] + deltaY
+            this.state.sourcePoints[vectorIndexToModify][1] + deltaY,
         ];
 
         this.setState({
@@ -189,8 +188,8 @@ export class Layer extends React.Component<Props, State> {
             ),
             translateDelta: {
                 ...this.state.translateDelta,
-                [this.anchorMoving]: [deltaX, deltaY]
-            }
+                [this.anchorMoving]: [deltaX, deltaY],
+            },
         });
     };
 
@@ -210,11 +209,11 @@ export class Layer extends React.Component<Props, State> {
 
         const newVector: Vector = [
             evt.pageX - this.layerTranslateDelta[0],
-            evt.pageY - this.layerTranslateDelta[1]
+            evt.pageY - this.layerTranslateDelta[1],
         ];
 
         this.setState({
-            containerTranslate: newVector
+            containerTranslate: newVector,
         });
     };
 
@@ -222,7 +221,7 @@ export class Layer extends React.Component<Props, State> {
         const { containerTranslate } = this.state;
         this.layerTranslateDelta = [
             evt.pageX - containerTranslate[0],
-            evt.pageY - containerTranslate[1]
+            evt.pageY - containerTranslate[1],
         ];
     };
 
@@ -239,13 +238,13 @@ export class Layer extends React.Component<Props, State> {
             isEditMode,
             className,
             anchorStyle,
-            anchorClassName
+            anchorClassName,
         } = this.props;
         const {
             translateDelta,
             matrix,
             containerTranslate,
-            transformOrigin
+            transformOrigin,
         } = this.state;
 
         return (
@@ -263,11 +262,11 @@ export class Layer extends React.Component<Props, State> {
                         cursor: isEditMode ? "all-scroll" : "inherit",
                         position: "relative",
                         display: "inline-block",
-                        transform: vectorToTransform(containerTranslate)
+                        transform: vectorToTransform(containerTranslate),
                     }}
                 >
                     <div
-                        ref={ref => {
+                        ref={(ref) => {
                             this.container = ref;
                         }}
                         style={{
@@ -275,7 +274,7 @@ export class Layer extends React.Component<Props, State> {
                             ...style,
                             pointerEvents: isEditMode ? "none" : "all",
                             transform: matrixToTransform(matrix),
-                            transformOrigin: `${transformOrigin[0]}px ${transformOrigin[1]}px 0px`
+                            transformOrigin: `${transformOrigin[0]}px ${transformOrigin[1]}px 0px`,
                         }}
                         className={className}
                     >

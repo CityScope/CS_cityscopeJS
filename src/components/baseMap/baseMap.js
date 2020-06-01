@@ -87,9 +87,9 @@ class Map extends Component {
             // start ainmation/sim/roate
             this._animate();
         }
+
         const { cityioData } = this.props;
         if (prevState.cityioData !== cityioData) {
-            console.log("%c new cityioData to render ", newDataStyle);
             // get cityio data from props
 
             this.setState({
