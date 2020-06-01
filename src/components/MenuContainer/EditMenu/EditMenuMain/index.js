@@ -6,53 +6,78 @@ import { StyledListItem } from "./styles";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
-import HomeWorkIcon from "@material-ui/icons/HomeWork";
-import CommuteIcon from "@material-ui/icons/Commute";
 import { useStyles } from "./styles";
 import { listenToEditMenu } from "../../../../redux/actions";
+import { connect } from "react-redux";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
-const buildingTypes = settings.map.types;
 const networkTypes = settings.map.netTypes;
 
-function EditMenuMain() {
+function EditMenuMain(props) {
     const classes = useStyles();
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
+
+    const theme = createMuiTheme({
+        palette: {
+            textPrimary: { main: "white" },
+        },
+        typography: {
+            body1: {
+                // fontFamily: '"Roboto", "sans-serif"',
+                fontSize: "1em",
+            },
+            h5: {
+                fontSize: "2em",
+                fontWeight: "300",
+            },
+            h6: {
+                fontSize: "0.5em",
+                fontWeight: "700",
+                textShadow: "2px 2px 2px #000",
+            },
+        },
+    });
+
+    const [selectedIndex, setSelectedIndex] = React.useState("");
 
     const dispatch = useDispatch();
 
-    const handleListItemClick = (event, typeProps) => {
-        setSelectedIndex(typeProps.name);
+    const handleListItemClick = (event, name, typeProps) => {
+        // ! injects the type name into the attributes themselves
+        typeProps.name = name;
+        setSelectedIndex(name);
         dispatch(listenToEditMenu(typeProps));
     };
 
-    const createTypesIcons = typesFamily => {
+    // create the types themselves
+    const createTypesIcons = (LanduseTypesList) => {
         let iconsArr = [];
-        Object.keys(typesFamily).forEach(type => {
-            let col = typesFamily[type].color;
+        Object.keys(LanduseTypesList).forEach((type) => {
+            let col = LanduseTypesList[type].color;
             let rgbCol = "rgb(" + col[0] + "," + col[1] + "," + col[2] + ")";
 
-            const selected = selectedIndex === typesFamily[type].name;
+            const selected = selectedIndex === type;
 
             iconsArr.push(
                 <StyledListItem
                     style={{
                         backgroundColor: rgbCol,
-                        opacity: selected ? 0.4 : 1
+                        opacity: selected ? 0.4 : 1,
                     }}
                     key={type}
                     button
                     variant="raised"
                     selected={selected}
-                    onClick={event =>
-                        handleListItemClick(event, typesFamily[type])
+                    onClick={(event) =>
+                        handleListItemClick(event, type, LanduseTypesList[type])
                     }
                 >
                     <Typography
-                        variant="subtitle2"
                         className={classes.typeName}
+                        variant="h6"
                         align="center"
                     >
-                        {typesFamily[type].name}
+                        {type}
                     </Typography>
                 </StyledListItem>
             );
@@ -61,24 +86,35 @@ function EditMenuMain() {
     };
 
     return (
-        <Paper className={classes.root}>
-            <Typography variant="h6" gutterBottom>
-                <HomeWorkIcon />
-                Buildings
-            </Typography>
-            <List className={classes.list}>
-                {createTypesIcons(buildingTypes)}
-            </List>
-            <Divider />
-            <Typography variant="h6" gutterBottom>
-                <CommuteIcon />
-                Mobility
-            </Typography>
-            <List className={classes.list}>
-                {createTypesIcons(networkTypes)}
-            </List>
-        </Paper>
+        <MuiThemeProvider theme={theme}>
+            <CssBaseline />
+            <Paper className={classes.root}>
+                <Typography variant="h5" gutterBottom>
+                    Land-Use
+                </Typography>
+                <List className={classes.list}>
+                    {createTypesIcons(
+                        props.cityioData.GEOGRID.properties.types
+                    )}
+                </List>
+                <Divider />
+                <Typography variant="h5" gutterBottom>
+                    Mobility
+                </Typography>
+                <List className={classes.list}>
+                    {createTypesIcons(networkTypes)}
+                </List>
+            </Paper>
+        </MuiThemeProvider>
     );
 }
 
-export default EditMenuMain;
+// export default EditMenuMain;
+
+const mapStateToProps = (state) => {
+    return {
+        cityioData: state.CITYIO,
+    };
+};
+
+export default connect(mapStateToProps, null)(EditMenuMain);

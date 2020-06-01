@@ -8,7 +8,7 @@ import Slider from "@material-ui/core/Slider";
 import Box from "@material-ui/core/Box";
 
 function EditMenuOptions() {
-    const selectedType = useSelector(state => state.SELECTED_TYPE);
+    const selectedType = useSelector((state) => state.SELECTED_TYPE);
     const { name, height } = selectedType;
 
     const dispatch = useDispatch();
@@ -16,11 +16,9 @@ function EditMenuOptions() {
     const classes = useStyles();
     const marks = [
         { value: 0, label: "0" },
-        { value: 50, label: "50" }
+        { value: 50, label: "50" },
     ];
-    const mixedUse = height ? height.constructor === Array : false;
-    const sliderText = mixedUse ? "Street Level / Total Floors" : "Height";
-    if (name !== "Residential" && name !== "Office Tower") return null;
+
     return (
         <Paper className={classes.root}>
             <Typography variant="h6" className={classes.name}>
@@ -32,11 +30,11 @@ function EditMenuOptions() {
                     className={classes.item}
                     variant="subtitle1"
                 >
-                    {sliderText}
+                    Height
                 </Typography>
                 <Slider
                     classes={{
-                        root: classes.slider
+                        root: classes.slider,
                     }}
                     value={height}
                     valueLabelDisplay="auto"
@@ -44,12 +42,12 @@ function EditMenuOptions() {
                         dispatch(
                             listenToEditMenu({
                                 ...selectedType,
-                                height: value
+                                height: value,
                             })
                         )
                     }
                     aria-labelledby="Floors"
-                    getAriaLabel={index => index.toString()}
+                    getAriaLabel={(index) => index.toString()}
                     min={0}
                     max={50}
                     marks={marks}
