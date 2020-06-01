@@ -25,7 +25,6 @@ import {
 } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../settings/settings.json";
-import { newDataStyle } from "../../services/consoleStyle";
 import { listenToSlidersEvents } from "../../redux/actions";
 
 class Map extends Component {
@@ -76,6 +75,9 @@ class Map extends Component {
             bresenhamGrid: _proccessBresenhamGrid(cityioData),
             networkLayer: cityioData.GEONETWORK,
         });
+
+        // start ainmation/sim/roate
+        this._animate();
     }
 
     /**
@@ -84,12 +86,10 @@ class Map extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.menu !== prevState.menu) {
             this.setState({ menu: this.props.menu });
-            // start ainmation/sim/roate
-            this._animate();
         }
+
         const { cityioData } = this.props;
         if (prevState.cityioData !== cityioData) {
-            console.log("%c new cityioData to render ", newDataStyle);
             // get cityio data from props
 
             this.setState({
@@ -101,6 +101,32 @@ class Map extends Component {
             if (cityioData.access) {
                 this.setState({ access: _proccessAccessData(cityioData) });
             }
+        }
+
+        // toggle ABM animation
+        if (
+            !prevProps.menu.includes("ABM") &&
+            this.props.menu.includes("ABM")
+        ) {
+            this.setState({ animateABM: true });
+        } else if (
+            prevProps.menu.includes("ABM") &&
+            !this.props.menu.includes("ABM")
+        ) {
+            this.setState({ animateABM: false });
+        }
+
+        // toggle rotate animation
+        if (
+            !prevProps.menu.includes("ROTATE") &&
+            this.props.menu.includes("ROTATE")
+        ) {
+            this.setState({ animateCamera: true });
+        } else if (
+            prevProps.menu.includes("ROTATE") &&
+            !this.props.menu.includes("ROTATE")
+        ) {
+            this.setState({ animateCamera: false });
         }
 
         if (
@@ -200,27 +226,30 @@ class Map extends Component {
     }
 
     _animate() {
-        /**
-         * remove the binded animation when comp updates
-         */
-        const time = this.props.sliders.time[1];
+        if (this.state.animateCamera) {
+            let bearing = this.state.viewState.bearing
+                ? this.state.viewState.bearing
+                : 0;
+            bearing < 360 ? (bearing += 0.05) : (bearing = 0);
+            this.setState({
+                viewState: {
+                    ...this.state.viewState,
+                    bearing: bearing,
+                },
+            });
+        }
 
-        window.cancelAnimationFrame(this.animationFrame);
-
-        if (this.props.menu.includes("ABM")) {
+        if (this.state.animateABM) {
+            const time = this.props.sliders.time[1];
             const speed = this.props.sliders.speed;
-
             const startHour = this.props.sliders.time[0];
             const endHour = this.props.sliders.time[2];
-
             let t = parseInt(time) + parseInt(speed);
             if (time < startHour || time > endHour) {
                 t = startHour;
             }
-
             var currentDateMidnight = new Date();
             currentDateMidnight.setHours(0, 0, 0, 0);
-
             var date = new Date(currentDateMidnight.getTime() + t * 1000);
             this._effects[0].directionalLights[0].timestamp = Date.UTC(
                 date.getFullYear(),
@@ -240,30 +269,11 @@ class Map extends Component {
                 ],
             });
         }
-        if (this.props.menu.includes("ROTATE")) {
-            let bearing = this.state.viewState.bearing
-                ? this.state.viewState.bearing
-                : 0;
-            bearing < 360 ? (bearing += 0.05) : (bearing = 0);
 
-            this.setState({
-                viewState: {
-                    ...this.state.viewState,
-                    bearing: bearing,
-                },
-            });
-        }
-
+        // ! start the req animation frame
         this.animationFrame = window.requestAnimationFrame(
             this._animate.bind(this)
         );
-
-        // stop animation on state
-        if (!this.props.menu.includes("ABM")) {
-            // && this.animationFrame
-            // this._effects[0].directionalLights[0].timestamp = this.dirLightSettings.timestamp;
-            return;
-        }
     }
 
     /**

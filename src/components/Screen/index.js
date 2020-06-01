@@ -7,12 +7,15 @@ import VisContainer from "../vis/visContainer";
 import LoadingSpinner from "../LoadingSpinner";
 
 function Screen(props) {
-    const ready = useSelector(state => state.READY);
+    // wait for 'ready' flag when app is ready to start
+    const ready = useSelector((state) => state.READY);
+    // get the table name for cityIO comp
     const { tableName } = props;
 
     return (
         <>
             <CityIO tableName={tableName} />
+            {/* if ready, render the app*/}
             {ready && (
                 <>
                     <MenuContainer />

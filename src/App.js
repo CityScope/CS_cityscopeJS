@@ -5,16 +5,15 @@ import Screen from "./components/Screen";
 import { StylesProvider } from "@material-ui/core/styles";
 import React, { Component } from "react";
 
+// redux store configuration
 const store = configureStore();
 
 const MapRoute = () => {
-    let url = window.location.toString();
-    let pre = "cityscope=";
-    let cityscopePrjName = url.substring(url.indexOf(pre) + pre.length);
-
+    let urlArray = window.location.href.split("/");
+    let projectName = urlArray[urlArray.length - 1];
     let table = null;
-    if (url.indexOf(pre) !== -1 && cityscopePrjName.length > 0) {
-        table = cityscopePrjName;
+    if (projectName) {
+        table = projectName;
     } else {
         table = "grasbrook";
     }

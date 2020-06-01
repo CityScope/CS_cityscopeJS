@@ -4,16 +4,17 @@ import { connect } from "react-redux";
 import {
     getCityioData,
     setReadyState,
-    setLoadingState
+    setLoadingState,
 } from "../redux/actions";
 import settings from "../settings/settings.json";
+import { loadingStyle, errorStyle } from "../services/consoleStyle";
 
 class CityIO extends Component {
     constructor(props) {
         super(props);
         this.state = {
             oldHashs: {},
-            cityIOmodulesData: {}
+            cityIOmodulesData: {},
         };
         this.cityioURL = null;
     }
@@ -23,7 +24,6 @@ class CityIO extends Component {
      */
     componentDidMount() {
         this._isMounted = true;
-
         this.handleURL();
     }
 
@@ -47,25 +47,25 @@ class CityIO extends Component {
             }
         }, settings.cityIO.interval);
         console.log(
-            "starting cityIO interval every..",
-            settings.cityIO.interval
+            "%c starting cityIO GET interval every " +
+                settings.cityIO.interval +
+                "ms ",
+            loadingStyle
         );
     };
 
     /**
      * returns only the hasees from API
      */
-    getCityIOHash = URL => {
+    getCityIOHash = (URL) => {
         axios
             .get(URL)
-            .then(response => {
+            .then((response) => {
                 this.handleCityIOHashes(response.data);
             })
-            .catch(e => {
+            .catch((e) => {
                 console.log(e);
             });
-
-        // this.sharePropsWithRedux();
     };
 
     /**
@@ -73,7 +73,7 @@ class CityIO extends Component {
      * if new hashes exist,
      * fetch !! WHOLE API (for now)
      */
-    handleCityIOHashes = result => {
+    handleCityIOHashes = (result) => {
         // if master hash ID has changed (cityIO table state)
         if (result.id !== this.state.oldHashs.id) {
             // reset the cityIOmodulesStatus
@@ -84,7 +84,7 @@ class CityIO extends Component {
 
             // new data in table, get all modules
             // that are listed in settings
-            settings.cityIO.cityIOmodules.forEach(module => {
+            settings.cityIO.cityIOmodules.forEach((module) => {
                 // only update modules that have new data
                 if (result.hashes[module] !== this.state.oldHashs[module]) {
                     // set this module as not ready
@@ -127,7 +127,7 @@ class CityIO extends Component {
     getCityIOmoduleData = (moduleName, URL) => {
         axios
             .get(URL)
-            .then(response => {
+            .then((response) => {
                 // put response to state obj
                 this.setNestedState(
                     "cityIOmodulesData",
@@ -138,7 +138,7 @@ class CityIO extends Component {
                 this.checkDoneCityIO(moduleName);
             })
 
-            .catch(error => {
+            .catch((error) => {
                 if (error.response) {
                     console.log(
                         "error.response:",
@@ -158,7 +158,7 @@ class CityIO extends Component {
             });
     };
 
-    checkDoneCityIO = moduleName => {
+    checkDoneCityIO = (moduleName) => {
         this.setNestedState("cityIOmodulesStatus", moduleName, true);
 
         // check if all modules are done
@@ -173,10 +173,11 @@ class CityIO extends Component {
         data.tableName = this.props.tableName;
         // finally, send data to redux
         this.props.getCityioData(data);
+        console.log("%c done updating from cityIO", errorStyle);
+
         // initializes rendering of Menu and Map containers
         this.props.setReadyState(true);
         this.props.setLoadingState(false);
-        console.log("done updating from cityIO..");
     };
 
     render() {
@@ -187,7 +188,7 @@ class CityIO extends Component {
 const mapDispatchToProps = {
     getCityioData: getCityioData,
     setReadyState: setReadyState,
-    setLoadingState: setLoadingState
+    setLoadingState: setLoadingState,
 };
 
 export default connect(null, mapDispatchToProps)(CityIO);
