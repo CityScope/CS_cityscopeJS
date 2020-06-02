@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { listenToMenuUI } from "../../redux/actions";
-import EditMenu from "./EditMenu";
+import EditMenu from "./EditMenu/EditMenu";
 import TogglesMenu from "./TogglesMenu";
 import FABMenu from "./FABMenu";
 

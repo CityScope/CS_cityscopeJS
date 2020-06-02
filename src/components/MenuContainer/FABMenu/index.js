@@ -12,7 +12,7 @@ import NavigationIcon from "@material-ui/icons/Navigation";
 export default function FABMenu(props) {
     const classes = useStyles();
 
-    const menuState = useSelector(state => state.MENU);
+    const menuState = useSelector((state) => state.MENU);
     const { handleToggle, toggleDrawer } = props;
 
     return (
