@@ -719,15 +719,21 @@ class Map extends Component {
                         return d.path;
                     },
                     getColor: (d) => {
-                        switch (d.mode[1]) {
+                        switch (d.mode[0]) {
                             case 0:
-                                return [255, 0, 0];
+                                return [228,26,28];
                             case 1:
-                                return [0, 0, 255];
+                                return [55,126,184];
                             case 2:
-                                return [0, 255, 0];
+                                return [77,175,74];
+                            case 3:
+                                return [255,255,51];
+                            case 4:
+                                return [152,78,163];
+                            case 5:
+                                return [255,127,0];
                             default:
-                                return [0, 0, 0];
+                                return [255, 255, 255];
                         }
                     },
                     opacity: 0.2,
