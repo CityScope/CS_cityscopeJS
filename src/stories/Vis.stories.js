@@ -1,11 +1,10 @@
 import React from "react";
 import { WithProvider } from "./withProvider.stories";
-import EditMenu from "../components/MenuContainer/EditMenu/EditMenu";
-
-export default { title: "EditMenu", component: EditMenu };
+import VisContainer from "../components/vis/visContainer";
+export default { title: "VisContainer", component: VisContainer };
 
 export const defaultView = () => (
     <WithProvider>
-        <EditMenu></EditMenu>
+        <VisContainer />
     </WithProvider>
 );

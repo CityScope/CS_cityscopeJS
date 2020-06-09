@@ -11,7 +11,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 
 function EditMenu(props) {
