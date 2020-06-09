@@ -483,7 +483,7 @@ class Map extends Component {
      */
     _remapValues = (value) => {
         let remap =
-            value > 15 && value < 20 ? 1.5 : value < 15 && value > 12 ? 10 : 30;
+            value > 15 && value < 25 ? 3 : value < 15 && value > 10 ? 12 : 30;
         return remap;
     };
 
@@ -672,15 +672,21 @@ class Map extends Component {
                     getTimestamps: (d) => d.timestamps,
                     getColor: (d) => {
                         //switch between modes or types of users
-                        switch (d.mode[1]) {
+                        switch (d.mode[0]) {
                             case 0:
-                                return [255, 0, 0];
+                                return [228, 26, 28];
                             case 1:
-                                return [0, 0, 255];
+                                return [55, 126, 184];
                             case 2:
-                                return [0, 255, 0];
+                                return [77, 175, 74];
+                            case 3:
+                                return [255, 255, 51];
+                            case 4:
+                                return [152, 78, 163];
+                            case 5:
+                                return [255, 127, 0];
                             default:
-                                return [0, 0, 0];
+                                return [255, 255, 255];
                         }
                     },
                     getWidth: 1,
@@ -708,24 +714,30 @@ class Map extends Component {
                         for (let i in d.path) {
                             d.path[i][0] = d.path[i][0] + noisePath;
                             d.path[i][1] = d.path[i][1] + noisePath;
-                            d.path[i][2] = 10;
+                            d.path[i][2] = d.mode[0] * 2;
                         }
                         return d.path;
                     },
                     getColor: (d) => {
-                        switch (d.mode[1]) {
+                        switch (d.mode[0]) {
                             case 0:
-                                return [255, 0, 0];
+                                return [228, 26, 28];
                             case 1:
-                                return [0, 0, 255];
+                                return [55, 126, 184];
                             case 2:
-                                return [0, 255, 0];
+                                return [77, 175, 74];
+                            case 3:
+                                return [255, 255, 51];
+                            case 4:
+                                return [152, 78, 163];
+                            case 5:
+                                return [255, 127, 0];
                             default:
-                                return [0, 0, 0];
+                                return [255, 255, 255];
                         }
                     },
                     opacity: 0.2,
-                    getWidth: 1,
+                    getWidth: 1.5,
                 })
             );
         }
