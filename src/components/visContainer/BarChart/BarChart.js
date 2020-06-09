@@ -60,8 +60,8 @@ class Radar extends Component {
                     color={this.colorRange[1]}
                     opacity={0.25}
                     xType="ordinal"
-                    width={400}
-                    height={400}
+                    width={350}
+                    height={250}
                     stackBy="y"
                     yDomain={[0, 1]}
                 >

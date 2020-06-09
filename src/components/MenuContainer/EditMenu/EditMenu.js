@@ -1,6 +1,6 @@
 import React from "react";
 import Drawer from "@material-ui/core/Drawer";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 import { useSelector, useDispatch } from "react-redux";
 import List from "@material-ui/core/List";
@@ -14,10 +14,12 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 
 function EditMenu(props) {
-    const useStyles = makeStyles({
+    const useStyles = makeStyles((theme) => ({
         drawer: {
             background: "#1D1F21",
             width: 300,
+
+            zIndex: theme.zIndex.drawer + 1,
         },
         listItemPrimaryText: {
             color: "#FFF",
@@ -29,8 +31,9 @@ function EditMenu(props) {
         list: {
             color: "#999",
         },
-    });
+    }));
 
+    const theme = useTheme();
     const classes = useStyles();
     const [selectedIndex, setSelectedIndex] = React.useState(null);
     const dispatch = useDispatch();

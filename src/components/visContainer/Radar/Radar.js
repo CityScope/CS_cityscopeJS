@@ -31,7 +31,7 @@ class Radar extends Component {
             domains: [],
             radarData: [],
         };
-        this.radarSize = 700;
+        this.radarSize = 350;
 
         this.colorRange = ["#fc03ec", "#79C7E3"];
     }
@@ -90,7 +90,7 @@ class Radar extends Component {
                         },
                         labels: {
                             textAnchor: "middle",
-                            fontSize: 11,
+                            fontSize: 8,
                             fontWeight: "600",
                             fill: "white",
                         },

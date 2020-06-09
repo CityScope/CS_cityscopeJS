@@ -7,8 +7,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function AreaCalc() {
+export default function AreaCalc(props) {
     const classes = useStyles();
+    console.log(props);
 
     return (
         <div className={classes.root}>
