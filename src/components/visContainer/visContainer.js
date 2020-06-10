@@ -55,9 +55,6 @@ function VisContainer(props) {
                                 <h2>Urban Indicators</h2>
                             </ListItemText>
                         </ListItem>
-                        <ListItem>
-                            <AreaCalc cityioData={props.cityioData} />
-                        </ListItem>
                         <Divider />
                         <ListItem>
                             <Radar cityioData={props.cityioData} />
@@ -66,6 +63,11 @@ function VisContainer(props) {
 
                         <ListItem>
                             <BarChart cityioData={props.cityioData} />
+                        </ListItem>
+
+                        <Divider />
+                        <ListItem>
+                            <AreaCalc cityioData={props.cityioData} />
                         </ListItem>
                     </List>
                 </Drawer>

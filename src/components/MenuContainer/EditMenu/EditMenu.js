@@ -33,7 +33,6 @@ function EditMenu(props) {
         },
     }));
 
-    const theme = useTheme();
     const classes = useStyles();
     const [selectedIndex, setSelectedIndex] = React.useState(null);
     const dispatch = useDispatch();
