@@ -16,9 +16,9 @@ function TogglesMenu(props) {
     const classes = useStyles();
     const { open, toggleDrawer, handleToggle } = props;
 
-    const { menuState, cityioData } = useSelector(state => ({
+    const { menuState, cityioData } = useSelector((state) => ({
         menuState: state.MENU,
-        cityioData: state.CITYIO
+        cityioData: state.CITYIO,
     }));
 
     const togglesMeta = settings.menu.toggles;
@@ -64,7 +64,7 @@ function TogglesMenu(props) {
                             in={checked}
                             style={{
                                 width: "80%",
-                                marginLeft: 24
+                                marginLeft: 24,
                             }}
                         >
                             <AccessSubmenu cityioData={cityioData} />
@@ -80,10 +80,10 @@ function TogglesMenu(props) {
         <Drawer
             className={classes.root}
             BackdropProps={{
-                invisible: true
+                invisible: true,
             }}
             classes={{
-                paper: classes.paper
+                paper: classes.paper,
             }}
             anchor="left"
             open={open}

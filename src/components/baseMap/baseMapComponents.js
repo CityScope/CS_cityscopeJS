@@ -6,7 +6,7 @@ import React from "react";
  * @param {*} props
  */
 
-export const SelectionTarget = props => {
+export const SelectionTarget = (props) => {
     const selectedType = props.selectedType;
     if (!props.mousePos) return null;
     const mousePos = props.mousePos;
@@ -31,14 +31,14 @@ export const SelectionTarget = props => {
                 width: divSize,
                 height: divSize,
                 left: mouseX,
-                top: mouseY
+                top: mouseY,
             }}
         >
             <div
                 style={{
                     position: "relative",
                     left: divSize + 10,
-                    fontSize: "0.5em"
+                    fontSize: "0.5em",
                 }}
             >
                 {selectedType.name}
@@ -52,7 +52,7 @@ export const SelectionTarget = props => {
  * Cell meta comp
  */
 
-export const CellMeta = props => {
+export const CellMeta = (props) => {
     if (!props.mousePos) return null;
     const mousePos = props.mousePos;
 
@@ -68,31 +68,18 @@ export const CellMeta = props => {
                 zIndex: 1,
                 left: mousePos.clientX,
                 top: mousePos.clientY,
-                fontSize: "0.5em",
-                fontWeight: 500
+                fontSize: "0.65em",
+                fontWeight: 500,
             }}
         >
             <p>
                 Type:
                 {props.hoveredObj.object.properties.name}
             </p>
-            {props.hoveredObj.object.properties.height.constructor === Array ? (
-                <>
-                    <p>
-                        Street Level Floors:
-                        {props.hoveredObj.object.properties.height[0]}
-                    </p>
-                    <p>
-                        Total Floors:
-                        {props.hoveredObj.object.properties.height[1]}
-                    </p>
-                </>
-            ) : (
-                <p>
-                    Total Floors:
-                    {props.hoveredObj.object.properties.height}
-                </p>
-            )}
+            <p>
+                Floors:
+                {props.hoveredObj.object.properties.height}
+            </p>
             <p>
                 ID:
                 {props.hoveredObj.object.properties.id}
