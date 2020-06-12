@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/css/main.876aadab.chunk.css",
-    "main.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/main.07139289.chunk.js",
-    "main.js.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/main.07139289.chunk.js.map",
+    "main.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/main.930c5d32.chunk.js",
+    "main.js.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/main.930c5d32.chunk.js.map",
     "runtime-main.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/runtime-main.be45fd82.js",
     "runtime-main.js.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/runtime-main.be45fd82.js.map",
     "static/css/2.c6e343d6.chunk.css": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/css/2.c6e343d6.chunk.css",
     "static/js/2.e918f761.chunk.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/2.e918f761.chunk.js",
     "static/js/2.e918f761.chunk.js.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/2.e918f761.chunk.js.map",
     "index.html": "https://cityscope.media.mit.edu/CS_cityscopeJS/index.html",
-    "precache-manifest.34c514c7106b5473031701e66c39608b.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/precache-manifest.34c514c7106b5473031701e66c39608b.js",
+    "precache-manifest.7083d63f874ceaf3bee717ce23b982f3.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/precache-manifest.7083d63f874ceaf3bee717ce23b982f3.js",
     "service-worker.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/service-worker.js",
     "static/css/2.c6e343d6.chunk.css.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/css/2.c6e343d6.chunk.css.map",
     "static/css/main.876aadab.chunk.css.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/css/main.876aadab.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.c6e343d6.chunk.css",
     "static/js/2.e918f761.chunk.js",
     "static/css/main.876aadab.chunk.css",
-    "static/js/main.07139289.chunk.js"
+    "static/js/main.930c5d32.chunk.js"
   ]
 }
