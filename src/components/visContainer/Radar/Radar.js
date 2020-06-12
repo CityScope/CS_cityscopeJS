@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { CircularGridLines, RadarChart } from "react-vis";
 import "../../../../node_modules/react-vis/dist/style.css";
 import "./Radar.css";
-import DownloadRawData from "../DownloadRawData/DownloadRawData";
 
 /**
  * 
@@ -119,10 +118,6 @@ class Radar extends Component {
                             )}
                         />
                     </RadarChart>
-                    <DownloadRawData
-                        data={this.state.radarData}
-                        title={"radar data"}
-                    />
                 </div>
             );
         } else return null;

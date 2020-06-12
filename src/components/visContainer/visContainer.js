@@ -62,10 +62,6 @@ function VisContainer(props) {
                         <ListItem>
                             <Radar cityioData={props.cityioData} />
                         </ListItem>
-                        <Divider
-                            variant="middle"
-                            classes={{ root: classes.dividerColor }}
-                        />
 
                         <ListItem>
                             <BarChart cityioData={props.cityioData} />

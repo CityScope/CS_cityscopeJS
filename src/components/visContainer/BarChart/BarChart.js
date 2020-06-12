@@ -81,7 +81,7 @@ class Radar extends Component {
                     </FlexibleWidthXYPlot>
                     <DownloadRawData
                         data={this.props.cityioData.indicators}
-                        title={"bars data"}
+                        title={"radar & bars data"}
                     />
                 </div>
             );
