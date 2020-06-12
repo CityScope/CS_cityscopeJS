@@ -6,6 +6,7 @@ import {
     VerticalBarSeries,
 } from "react-vis";
 import "../../../../node_modules/react-vis/dist/style.css";
+import DownloadRawData from "../DownloadRawData/DownloadRawData";
 
 class Radar extends Component {
     constructor(props) {
@@ -56,26 +57,32 @@ class Radar extends Component {
     render() {
         if (this.state.barChartData) {
             return (
-                <FlexibleWidthXYPlot
-                    color={this.colorRange[1]}
-                    opacity={0.25}
-                    xType="ordinal"
-                    width={350}
-                    height={250}
-                    stackBy="y"
-                    yDomain={[0, 1]}
-                >
-                    <XAxis
-                        style={{
-                            text: {
-                                fill: "#fff",
-                            },
-                        }}
-                        tickLabelAngle={90}
+                <div>
+                    <FlexibleWidthXYPlot
+                        color={this.colorRange[1]}
+                        opacity={0.25}
+                        xType="ordinal"
+                        width={350}
+                        height={250}
+                        stackBy="y"
+                        yDomain={[0, 1]}
+                    >
+                        <XAxis
+                            style={{
+                                text: {
+                                    fill: "#fff",
+                                },
+                            }}
+                            tickLabelAngle={90}
+                        />
+                        <YAxis style={{ text: { fill: "#fff" } }} />
+                        <VerticalBarSeries data={this.state.barChartData} />
+                    </FlexibleWidthXYPlot>
+                    <DownloadRawData
+                        data={this.state.barChartData}
+                        title={"bars data"}
                     />
-                    <YAxis style={{ text: { fill: "#fff" } }} />
-                    <VerticalBarSeries data={this.state.barChartData} />
-                </FlexibleWidthXYPlot>
+                </div>
             );
         } else return null;
     }

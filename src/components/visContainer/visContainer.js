@@ -22,7 +22,7 @@ function VisContainer(props) {
             width: 400,
         },
         list: {
-            color: "#FFF",
+            color: "#fFF",
         },
         text: {
             marginLeft: 16,
@@ -31,6 +31,10 @@ function VisContainer(props) {
             fontSize: 20,
             marginBottom: 12,
             fontWeight: "lighter",
+        },
+
+        dividerColor: {
+            backgroundColor: "#484848",
         },
     });
 
@@ -55,17 +59,22 @@ function VisContainer(props) {
                                 <h2>Urban Indicators</h2>
                             </ListItemText>
                         </ListItem>
-                        <Divider />
                         <ListItem>
                             <Radar cityioData={props.cityioData} />
                         </ListItem>
-                        <Divider />
+                        <Divider
+                            variant="middle"
+                            classes={{ root: classes.dividerColor }}
+                        />
 
                         <ListItem>
                             <BarChart cityioData={props.cityioData} />
                         </ListItem>
 
-                        <Divider />
+                        <Divider
+                            variant="middle"
+                            classes={{ root: classes.dividerColor }}
+                        />
                         <ListItem>
                             <AreaCalc cityioData={props.cityioData} />
                         </ListItem>

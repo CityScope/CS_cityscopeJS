@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { CircularGridLines, RadarChart } from "react-vis";
 import "../../../../node_modules/react-vis/dist/style.css";
-
 import "./Radar.css";
+import DownloadRawData from "../DownloadRawData/DownloadRawData";
 
 /**
  * 
@@ -69,55 +69,61 @@ class Radar extends Component {
     render() {
         if (this.props.cityioData.indicators) {
             return (
-                <RadarChart
-                    className="Radar blur"
-                    animation
-                    data={this.state.radarData}
-                    domains={this.state.domains}
-                    colorRange={this.colorRange}
-                    style={{
-                        polygons: {
-                            fillOpacity: 0.2,
-                            strokeWidth: 2,
-                        },
-                        axes: {
-                            text: {
-                                opacity: 0,
-                                fontWeight: 700,
+                <div>
+                    <RadarChart
+                        className="Radar blur"
+                        animation
+                        data={this.state.radarData}
+                        domains={this.state.domains}
+                        colorRange={this.colorRange}
+                        style={{
+                            polygons: {
+                                fillOpacity: 0.2,
+                                strokeWidth: 2,
+                            },
+                            axes: {
+                                text: {
+                                    opacity: 0,
+                                    fontWeight: 700,
+                                    fill: "white",
+                                },
+                                strokeWidth: 0,
+                            },
+                            labels: {
+                                textAnchor: "middle",
+                                fontSize: 8,
+                                fontWeight: "600",
                                 fill: "white",
                             },
-                            strokeWidth: 0,
-                        },
-                        labels: {
-                            textAnchor: "middle",
-                            fontSize: 8,
-                            fontWeight: "600",
-                            fill: "white",
-                        },
-                    }}
-                    margin={{
-                        left: this.radarSize / 6,
-                        top: this.radarSize / 6,
-                        bottom: this.radarSize / 6,
-                        right: this.radarSize / 6,
-                    }}
-                    width={this.radarSize}
-                    height={this.radarSize}
-                >
-                    <CircularGridLines
-                        style={{
-                            fill: "white",
-                            fillOpacity: 0.1,
-                            backgroundColor: "#fff",
-                            opacity: 0.5,
-                            stroke: "white",
-                            width: 0.1,
                         }}
-                        tickValues={[...new Array(11)].map(
-                            (v, i) => i / 10 - 1
-                        )}
+                        margin={{
+                            left: this.radarSize / 6,
+                            top: this.radarSize / 6,
+                            bottom: this.radarSize / 6,
+                            right: this.radarSize / 6,
+                        }}
+                        width={this.radarSize}
+                        height={this.radarSize}
+                    >
+                        <CircularGridLines
+                            style={{
+                                fill: "white",
+                                fillOpacity: 0.1,
+                                backgroundColor: "#fff",
+                                opacity: 0.5,
+                                stroke: "white",
+                                width: 0.1,
+                            }}
+                            tickValues={[...new Array(11)].map(
+                                (v, i) => i / 10 - 1
+                            )}
+                        />
+                    </RadarChart>
+                    <DownloadRawData
+                        data={this.state.radarData}
+                        title={"radar data"}
                     />
-                </RadarChart>
+                </div>
             );
         } else return null;
     }

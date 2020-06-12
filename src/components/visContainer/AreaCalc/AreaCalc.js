@@ -3,6 +3,7 @@ import { rgbToHex } from "../../../services/utils";
 import { Treemap } from "react-vis";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import DownloadRawData from "../DownloadRawData/DownloadRawData";
 
 export default function AreaCalc(props) {
     const [hoveredNode, setHoveredNode] = useState(false);
@@ -84,6 +85,8 @@ export default function AreaCalc(props) {
                     }}
                 />
             </ListItem>
+
+            <DownloadRawData data={data} title={"area data"} />
         </List>
     );
 }
