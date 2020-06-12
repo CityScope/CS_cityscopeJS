@@ -77,7 +77,7 @@ export default function AreaCalc(props) {
                         animation: true,
                         className: "nested-tree-example",
                         data: data,
-                        height: 200,
+                        height: 400,
                         width: 400,
                         getSize: (d) => d.area,
                         getLabel: (d) => d.name + " cells: " + d.count,
