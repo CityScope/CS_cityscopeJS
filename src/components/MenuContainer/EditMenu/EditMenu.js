@@ -1,6 +1,6 @@
 import React from "react";
 import Drawer from "@material-ui/core/Drawer";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 import { useSelector, useDispatch } from "react-redux";
 import List from "@material-ui/core/List";
@@ -12,8 +12,37 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
+import Box from "@material-ui/core/Box";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
 
 function EditMenu(props) {
+    const muiTheme = createMuiTheme({
+        overrides: {
+            MuiSlider: {
+                thumb: {
+                    color: "#FFF5",
+                },
+                track: {
+                    color: "white",
+                },
+                rail: {
+                    color: "white",
+                },
+
+                markActive: {
+                    color: "white",
+                },
+                markLabelActive: {
+                    color: "white",
+                },
+                markLabel: {
+                    color: "white",
+                },
+            },
+        },
+    });
+
     const useStyles = makeStyles((theme) => ({
         drawer: {
             background: "#1D1F21",
@@ -31,6 +60,10 @@ function EditMenu(props) {
         list: {
             color: "#999",
         },
+
+        dividerColor: {
+            backgroundColor: "#484848",
+        },
     }));
 
     const classes = useStyles();
@@ -39,8 +72,8 @@ function EditMenu(props) {
     const selectedType = useSelector((state) => state.SELECTED_TYPE);
     const { height } = selectedType;
     const marks = [
-        { value: 0, label: "0" },
-        { value: 50, label: "50" },
+        { value: 0, label: "0 floors" },
+        { value: 50, label: "50 floors" },
     ];
 
     const handleListItemClick = (event, name, typeProps) => {
@@ -63,11 +96,12 @@ function EditMenu(props) {
             });
 
             iconsArr.push(
-                <React.Fragment key={Math.random()}>
+                <ThemeProvider theme={muiTheme}>
                     <Divider
                         key={Math.random()}
                         variant="inset"
                         component="li"
+                        classes={{ root: classes.dividerColor }}
                     />
 
                     <ListItem
@@ -105,13 +139,14 @@ function EditMenu(props) {
                         />
                     </ListItem>
 
-                    <Collapse in={selected}>
-                        <ListItem key={Math.random()}>
+                    <Collapse in={selected} key={Math.random()}>
+                        <Box m={2} width={0.8}>
                             <Slider
+                                key={Math.random()}
                                 value={height}
                                 valueLabelDisplay="auto"
                                 className={classes.list}
-                                onChange={(event, value) =>
+                                onChangeCommitted={(event, value) =>
                                     dispatch(
                                         listenToEditMenu({
                                             ...selectedType,
@@ -119,15 +154,14 @@ function EditMenu(props) {
                                         })
                                     )
                                 }
-                                aria-labelledby="Floors"
                                 getAriaLabel={(index) => index.toString()}
                                 min={0}
                                 max={50}
                                 marks={marks}
                             ></Slider>
-                        </ListItem>
+                        </Box>
                     </Collapse>
-                </React.Fragment>
+                </ThemeProvider>
             );
         });
         return iconsArr;
