@@ -43,6 +43,7 @@ class Radar extends Component {
                 });
             }
         }
+
         this.setState({ barChartData: dataArr });
     }
 
@@ -79,7 +80,7 @@ class Radar extends Component {
                         <VerticalBarSeries data={this.state.barChartData} />
                     </FlexibleWidthXYPlot>
                     <DownloadRawData
-                        data={this.state.barChartData}
+                        data={this.props.cityioData.indicators}
                         title={"bars data"}
                     />
                 </div>
