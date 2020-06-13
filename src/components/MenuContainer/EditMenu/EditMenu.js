@@ -96,7 +96,7 @@ function EditMenu(props) {
             });
 
             iconsArr.push(
-                <ThemeProvider theme={muiTheme}>
+                <ThemeProvider key={Math.random()} theme={muiTheme}>
                     <Divider
                         key={Math.random()}
                         variant="inset"
@@ -119,13 +119,14 @@ function EditMenu(props) {
                         }
                         className={classes.list}
                     >
-                        <ListItemAvatar>
+                        <ListItemAvatar key={Math.random()}>
                             <Avatar style={{ backgroundColor: rgbCol }}>
                                 {type.charAt(0)}
                             </Avatar>
                         </ListItemAvatar>
 
                         <ListItemText
+                            key={Math.random()}
                             classes={{
                                 primary: classes.listItemPrimaryText,
                                 secondary: classes.listItemSecondaryText,
@@ -140,7 +141,7 @@ function EditMenu(props) {
                     </ListItem>
 
                     <Collapse in={selected} key={Math.random()}>
-                        <Box m={2} width={0.8}>
+                        <Box m={2} width={0.8} key={Math.random()}>
                             <Slider
                                 key={Math.random()}
                                 value={height}

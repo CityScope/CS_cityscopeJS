@@ -4,9 +4,12 @@ import { Treemap } from "react-vis";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import DownloadRawData from "../DownloadRawData/DownloadRawData";
+import { RadialChart, Hint } from "react-vis";
 
 export default function AreaCalc(props) {
     const [hoveredNode, setHoveredNode] = useState(false);
+
+    const [hoveredRadial, setHoveredRadial] = useState(false);
 
     const calcArea = () => {
         let gridProps = props.cityioData.GEOGRID.properties;
@@ -54,21 +57,23 @@ export default function AreaCalc(props) {
     };
 
     const data = calcArea();
+    const radialRadius = 300;
 
     return (
         <List>
             <ListItem>
-                {hoveredNode ? (
+                {hoveredRadial.name ? (
                     <React.Fragment>
                         <p>
-                            {hoveredNode.data.name}: {hoveredNode.data.area} sqm
+                            {hoveredRadial.name}: {hoveredRadial.area}
+                            sqm
                         </p>
                     </React.Fragment>
                 ) : (
                     <p>Hover on chart...</p>
                 )}
             </ListItem>
-            <ListItem>
+            {/* <ListItem>
                 <Treemap
                     {...{
                         onLeafMouseOver: (evt) => setHoveredNode(evt),
@@ -78,14 +83,55 @@ export default function AreaCalc(props) {
                         animation: true,
                         className: "nested-tree-example",
                         data: data,
-                        height: 400,
-                        width: 400,
+                        height: 500,
+                        width: 350,
                         getSize: (d) => d.area,
-                        getLabel: (d) => d.name + " cells: " + d.count,
+                        getLabel: (d) =>
+                            d.name +
+                            "\n" +
+                            " area: " +
+                            d.area +
+                            "\n" +
+                            " cells: " +
+                            d.count +
+                            "\n",
                     }}
                 />
-            </ListItem>
+            </ListItem> */}
 
+            <ListItem>
+                <RadialChart
+                    colorType="literal"
+                    animation={true}
+                    className={"donut-chart-example"}
+                    innerRadius={radialRadius / 2 - radialRadius / 5}
+                    radius={radialRadius / 2}
+                    getLabel={(d) => d.name}
+                    labelsRadiusMultiplier={1}
+                    labelsStyle={{ fontSize: 10, fill: "#000" }}
+                    showLabels
+                    getAngle={(d) => d.area}
+                    data={data.children}
+                    onValueMouseOver={(evt) => setHoveredRadial(evt)}
+                    onSeriesMouseOut={() => setHoveredRadial(false)}
+                    width={radialRadius}
+                    height={radialRadius}
+                    padAngle={0.01}
+                >
+                    {hoveredRadial !== false && (
+                        <Hint value={hoveredRadial}>
+                            <div
+                                style={{
+                                    background: "rgba(0,0,0,0.8)",
+                                    fontSize: 14,
+                                }}
+                            >
+                                Area: {hoveredRadial.area} sqm
+                            </div>
+                        </Hint>
+                    )}
+                </RadialChart>
+            </ListItem>
             <DownloadRawData data={data} title={"area data"} />
         </List>
     );

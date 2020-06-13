@@ -12,7 +12,6 @@
         "gh-pages": "^2.2.0",
         "numeric": "^1.2.6",
         "react": "^16.13.0",
-        "react-csv": "^2.0.3",
         "react-dom": "^16.13.0",
         "react-map-gl": "^5.2.5",
         "react-markdown": "^4.3.1",
