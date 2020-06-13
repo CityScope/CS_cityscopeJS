@@ -2,19 +2,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
-import { CSVLink } from "react-csv";
-
-/*
-const csvData = [
-    ["firstname", "lastname", "email"],
-    ["Ahmed", "Tomi", "ah@smthing.co.com"],
-    ["Raed", "Labes", "rl@smthing.co.com"],
-    ["Yezzi", "Min l3b", "ymin@cocococo.com"],
-];
-*/
-
-// global var to trigger the d/l
-let csvLinkRefernce;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,14 +11,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-// simulate click event
-const downloadCSV = () => {
-    csvLinkRefernce.link.click();
-};
-
-const handleData = (props) => {
+const downloadTxtFile = (props) => {
     let data = JSON.stringify(props);
-    return data;
+    const element = document.createElement("a");
+    const file = new Blob([data], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = "data.json";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
 };
 
 export default function DownloadRawData(props) {
@@ -39,15 +26,9 @@ export default function DownloadRawData(props) {
 
     return (
         <div className={classes.root}>
-            {/* ref the CSV comp */}
-            <CSVLink
-                ref={(r) => (csvLinkRefernce = r)}
-                data={handleData(props)}
-            ></CSVLink>
-
             <Button
                 onClick={() => {
-                    downloadCSV();
+                    downloadTxtFile(props);
                 }}
                 size="small"
                 variant="outlined"
