@@ -4,7 +4,7 @@
 
 CityScopeJS is a unified front-end for the [MIT CityScope](https://cityscope.media.mit.edu/) project, an [open-source](https://github.com/CityScope/CS_cityscopeJS) urban modeling and simulation platform. CityScopeJS allows users to test different design alternatives and observe their impact through multiple layers of urban analytics. CityScopeJS combines different urban analytics modules, such as traffic simulation, ABM, noise, storm-water, access.
 
-![TUI](docs/figures/CityScopeJS.jpg)
+![TUI](docs/CityScopeJS.jpg)
 
 ###### Schematic view of CityScope TUI
 
@@ -18,7 +18,7 @@ To explore the app for a known CityScope project, add a CityScope project name t
 
 CityScopeJS is a modular, open-ended architecture for MIT CityScope project.
 
-![CityScopeJS Architecture](docs/figures/CityScopeJS_arch.png)
+![CityScopeJS Architecture](docs/CityScopeJS_arch.png)
 
 CityScopeJS includes several modules for building, testing and deploying an end-to-end CityScope platform. Each module is developed as a standalone part of the system with minimal dependency on others. Data flow between modules is achieved using [cityIO](https://cityio.media.mit.edu), which operates between the different modules.
 

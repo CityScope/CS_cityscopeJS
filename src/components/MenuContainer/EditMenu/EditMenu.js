@@ -47,9 +47,18 @@ function EditMenu(props) {
         drawer: {
             background: "#1D1F21",
             width: 300,
-
             zIndex: theme.zIndex.drawer + 1,
         },
+
+        marginAutoContainer: {
+            width: "100%",
+            display: "flex",
+        },
+        marginAutoItem: {
+            margin: "auto",
+            width: "80%",
+        },
+
         listItemPrimaryText: {
             color: "#FFF",
         },
@@ -140,28 +149,30 @@ function EditMenu(props) {
                         />
                     </ListItem>
 
-                    <Collapse in={selected} key={Math.random()}>
-                        <Box m={2} width={0.8} key={Math.random()}>
-                            <Slider
-                                key={Math.random()}
-                                value={height}
-                                valueLabelDisplay="auto"
-                                className={classes.list}
-                                onChangeCommitted={(event, value) =>
-                                    dispatch(
-                                        listenToEditMenu({
-                                            ...selectedType,
-                                            height: value,
-                                        })
-                                    )
-                                }
-                                getAriaLabel={(index) => index.toString()}
-                                min={0}
-                                max={50}
-                                marks={marks}
-                            ></Slider>
-                        </Box>
-                    </Collapse>
+                    <div className={classes.marginAutoContainer}>
+                        <div className={classes.marginAutoItem}>
+                            <Collapse in={selected} key={Math.random()}>
+                                <Slider
+                                    key={Math.random()}
+                                    value={height}
+                                    valueLabelDisplay="auto"
+                                    className={classes.slider}
+                                    onChangeCommitted={(event, value) =>
+                                        dispatch(
+                                            listenToEditMenu({
+                                                ...selectedType,
+                                                height: value,
+                                            })
+                                        )
+                                    }
+                                    getAriaLabel={(index) => index.toString()}
+                                    min={0}
+                                    max={50}
+                                    marks={marks}
+                                ></Slider>
+                            </Collapse>
+                        </div>
+                    </div>
                 </ThemeProvider>
             );
         });

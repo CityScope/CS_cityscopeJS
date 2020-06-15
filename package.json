@@ -7,14 +7,12 @@
         "@material-ui/core": "^4.10.1",
         "@material-ui/icons": "^4.9.1",
         "axios": "^0.19.2",
-        "classnames": "^2.2.6",
         "deck.gl": "^7.3.15",
         "gh-pages": "^2.2.0",
         "numeric": "^1.2.6",
         "react": "^16.13.0",
         "react-dom": "^16.13.0",
         "react-map-gl": "^5.2.5",
-        "react-markdown": "^4.3.1",
         "react-redux": "^7.2.0",
         "react-scripts": "^3.4.0",
         "react-spinners": "^0.6.1",
@@ -29,10 +27,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "gh": "react-scripts build && gh-pages -d build",
-        "dev": "cd docs && cd mockAPI && json-server --watch mockAPI.json --port 3001 & npm start",
-        "storybook": "start-storybook -p 9009 -s public",
-        "build-storybook": "build-storybook -s public"
+        "gh": "react-scripts build && gh-pages -d build"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -48,12 +43,5 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    },
-    "devDependencies": {
-        "@storybook/addon-actions": "^5.3.19",
-        "@storybook/addon-links": "^5.3.19",
-        "@storybook/addons": "^5.3.19",
-        "@storybook/preset-create-react-app": "^3.0.0",
-        "@storybook/react": "^5.3.19"
     }
 }
