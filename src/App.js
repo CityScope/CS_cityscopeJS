@@ -1,4 +1,4 @@
-import Provider from "./Provider";
+import Provider from "./redux/Provider";
 import "./index.css";
 import configureStore from "./redux/store";
 import Screen from "./components/Screen";

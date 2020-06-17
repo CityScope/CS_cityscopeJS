@@ -54,10 +54,11 @@ function EditMenu(props) {
             let col = LanduseTypesList[type].color;
             let rgbCol = "rgb(" + col[0] + "," + col[1] + "," + col[2] + ")";
             const selected = selectedIndex === type;
-            let use;
-            LanduseTypesList[type].LBCS.forEach((lbcs) => {
-                use = Object.keys(lbcs.use)[0];
-            });
+
+            let typeHasHeightProps = false;
+            if (LanduseTypesList[type].height) {
+                typeHasHeightProps = true;
+            }
 
             iconsArr.push(
                 <React.Fragment key={Math.random()}>
@@ -96,38 +97,37 @@ function EditMenu(props) {
                                 secondary: classes.listItemSecondaryText,
                             }}
                             primary={type}
-                            secondary={
-                                <React.Fragment>
-                                    {"LBCS: " + use}
-                                </React.Fragment>
-                            }
                         />
                     </ListItem>
 
-                    <div className={classes.marginAutoContainer}>
-                        <div className={classes.marginAutoItem}>
-                            <Collapse in={selected} key={Math.random()}>
-                                <Slider
-                                    key={Math.random()}
-                                    value={height}
-                                    valueLabelDisplay="auto"
-                                    className={classes.slider}
-                                    onChangeCommitted={(event, value) =>
-                                        dispatch(
-                                            listenToEditMenu({
-                                                ...selectedType,
-                                                height: value,
-                                            })
-                                        )
-                                    }
-                                    getAriaLabel={(index) => index.toString()}
-                                    min={0}
-                                    max={50}
-                                    marks={marks}
-                                ></Slider>
-                            </Collapse>
+                    {typeHasHeightProps && (
+                        <div className={classes.marginAutoContainer}>
+                            <div className={classes.marginAutoItem}>
+                                <Collapse in={selected} key={Math.random()}>
+                                    <Slider
+                                        key={Math.random()}
+                                        value={height}
+                                        valueLabelDisplay="auto"
+                                        className={classes.slider}
+                                        onChangeCommitted={(event, value) =>
+                                            dispatch(
+                                                listenToEditMenu({
+                                                    ...selectedType,
+                                                    height: value,
+                                                })
+                                            )
+                                        }
+                                        getAriaLabel={(index) =>
+                                            index.toString()
+                                        }
+                                        min={0}
+                                        max={50}
+                                        marks={marks}
+                                    ></Slider>
+                                </Collapse>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </React.Fragment>
             );
         });
