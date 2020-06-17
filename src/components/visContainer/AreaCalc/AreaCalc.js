@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { rgbToHex } from "../../../services/utils";
-import { Treemap } from "react-vis";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import DownloadRawData from "../DownloadRawData/DownloadRawData";
 import { RadialChart, Hint } from "react-vis";
 
 export default function AreaCalc(props) {
-    const [hoveredNode, setHoveredNode] = useState(false);
-
     const [hoveredRadial, setHoveredRadial] = useState(false);
 
     const calcArea = () => {
@@ -73,31 +70,6 @@ export default function AreaCalc(props) {
                     <p>Hover on chart...</p>
                 )}
             </ListItem>
-            {/* <ListItem>
-                <Treemap
-                    {...{
-                        onLeafMouseOver: (evt) => setHoveredNode(evt),
-                        onLeafMouseOut: () => setHoveredNode(false),
-
-                        colorType: "literal",
-                        animation: true,
-                        className: "nested-tree-example",
-                        data: data,
-                        height: 500,
-                        width: 350,
-                        getSize: (d) => d.area,
-                        getLabel: (d) =>
-                            d.name +
-                            "\n" +
-                            " area: " +
-                            d.area +
-                            "\n" +
-                            " cells: " +
-                            d.count +
-                            "\n",
-                    }}
-                />
-            </ListItem> */}
 
             <ListItem>
                 <RadialChart

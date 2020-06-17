@@ -12,7 +12,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
-import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 
 function EditMenu(props) {
@@ -62,7 +61,7 @@ function EditMenu(props) {
             });
 
             iconsArr.push(
-                <ThemeProvider key={Math.random()}>
+                <React.Fragment key={Math.random()}>
                     <Divider
                         key={Math.random()}
                         variant="inset"
@@ -130,7 +129,7 @@ function EditMenu(props) {
                             </Collapse>
                         </div>
                     </div>
-                </ThemeProvider>
+                </React.Fragment>
             );
         });
         return iconsArr;

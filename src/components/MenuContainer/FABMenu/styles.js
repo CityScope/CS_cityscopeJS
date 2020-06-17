@@ -7,22 +7,18 @@ export const useStyles = makeStyles({
         position: "fixed",
         paddingLeft: 16,
         paddingTop: 8,
-        zIndex: 1
+        zIndex: 1,
     },
     menuButton: {
         marginTop: 8,
-        marginBottom: 8
+        marginBottom: 8,
     },
     editButton: {
         marginTop: 8,
-        marginBottom: 8
+        marginBottom: 8,
     },
     resetViewButton: {
         marginTop: 8,
-        marginBottom: 8
+        marginBottom: 8,
     },
-    templatesButton: {
-        marginTop: 8,
-        marginBottom: 8
-    }
 });
