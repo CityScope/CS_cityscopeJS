@@ -13,7 +13,6 @@ export default function AreaCalc(props) {
 
     const useStyles = makeStyles((theme) => ({
         list: {
-            width: "100%",
             width: props.drawerWidth - 50,
         },
     }));
