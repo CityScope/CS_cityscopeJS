@@ -12,21 +12,19 @@ const MapRoute = () => {
     let pre = "cityscope=";
     let cityscopePrjName = url.substring(url.indexOf(pre) + pre.length);
 
-    let table = null;
     if (url.indexOf(pre) !== -1 && cityscopePrjName.length > 0) {
-        table = cityscopePrjName;
-    } else {
-        table = "grasbrook";
-    }
-    console.log("loading CityScope project: " + table);
+        console.log("loading CityScope project: " + cityscopePrjName);
 
-    return (
-        <Provider store={store}>
-            <StylesProvider injectFirst>
-                <Screen tableName={table} />
-            </StylesProvider>
-        </Provider>
-    );
+        return (
+            <Provider store={store}>
+                <StylesProvider injectFirst>
+                    <Screen tableName={cityscopePrjName} />
+                </StylesProvider>
+            </Provider>
+        );
+    } else {
+        return <h1>CityScopeJS</h1>;
+    }
 };
 
 class App extends Component {

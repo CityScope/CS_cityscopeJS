@@ -12,40 +12,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
-import Box from "@material-ui/core/Box";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 
 function EditMenu(props) {
-    const muiTheme = createMuiTheme({
-        overrides: {
-            MuiSlider: {
-                thumb: {
-                    color: "#FFF5",
-                },
-                track: {
-                    color: "white",
-                },
-                rail: {
-                    color: "white",
-                },
-
-                markActive: {
-                    color: "white",
-                },
-                markLabelActive: {
-                    color: "white",
-                },
-                markLabel: {
-                    color: "white",
-                },
-            },
-        },
-    });
-
     const useStyles = makeStyles((theme) => ({
         drawer: {
-            background: "#1D1F21",
             width: 300,
             zIndex: theme.zIndex.drawer + 1,
         },
@@ -57,21 +29,6 @@ function EditMenu(props) {
         marginAutoItem: {
             margin: "auto",
             width: "80%",
-        },
-
-        listItemPrimaryText: {
-            color: "#FFF",
-        },
-        listItemSecondaryText: {
-            color: "#999",
-            fontSize: "0.7em",
-        },
-        list: {
-            color: "#999",
-        },
-
-        dividerColor: {
-            backgroundColor: "#484848",
         },
     }));
 
@@ -105,7 +62,7 @@ function EditMenu(props) {
             });
 
             iconsArr.push(
-                <ThemeProvider key={Math.random()} theme={muiTheme}>
+                <ThemeProvider key={Math.random()}>
                     <Divider
                         key={Math.random()}
                         variant="inset"
