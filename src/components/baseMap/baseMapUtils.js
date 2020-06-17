@@ -144,48 +144,6 @@ export const _proccesNetworkPnts = (cityioData) => {
 };
 
 /**
- * Data format:
- * [
- *   {text: 'type', coordinates: [-122.466233, 37.684638]},
- *   ...
- * ]
- *
- * Grid data format:
- * features[i].geometry.coordinates[0][0]
- */
-export const _proccessGridTextData = (cityioData) => {
-    const GEOGRID = cityioData.GEOGRID;
-    let textData = [];
-
-    const gridRows = cityioData.GEOGRID.properties.header.nrows;
-    const gridCols = cityioData.GEOGRID.properties.header.ncols;
-
-    let counter = 0;
-    for (let cell = 0; cell < gridRows; cell++) {
-        for (var col = 0; col < gridCols; col++) {
-            textData[counter] = {
-                text: [
-                    col,
-                    cell,
-                    // " | ",
-                    // GEOGRID.features[counter].geometry.coordinates[0][0][0],
-                    // GEOGRID.features[counter].geometry.coordinates[0][0][1]
-                ].toString(),
-
-                // [col, cell].toString(),
-                coordinates: [
-                    GEOGRID.features[counter].geometry.coordinates[0][0][0],
-                    GEOGRID.features[counter].geometry.coordinates[0][0][1],
-                    GEOGRID.features[counter].properties.height + 10,
-                ],
-            };
-            counter += 1;
-        }
-    }
-    return textData;
-};
-
-/**
  * Description. gets `props` with geojson
  * and procces the access layer data
  */

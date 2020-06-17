@@ -133,11 +133,6 @@
             },
             "NETWORK": {
                 "displayName": "Mobility Network",
-                "showOnInit": true,
-                "requireModule": "GEOGRID"
-            },
-            "TEXT": {
-                "displayName": "Cell Information",
                 "showOnInit": false,
                 "requireModule": "GEOGRID"
             },

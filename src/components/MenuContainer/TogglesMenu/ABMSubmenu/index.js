@@ -8,7 +8,7 @@ import { listenToSlidersEvents } from "../../../../redux/actions";
 function ABMSubmenu() {
     const classes = useStyles();
 
-    const sliders = useSelector(state => state.SLIDERS);
+    const sliders = useSelector((state) => state.SLIDERS);
 
     const dispatch = useDispatch();
 
@@ -16,7 +16,7 @@ function ABMSubmenu() {
         dispatch(
             listenToSlidersEvents({
                 ...sliders,
-                time: newValue
+                time: newValue,
             })
         );
     };
@@ -25,7 +25,7 @@ function ABMSubmenu() {
         dispatch(
             listenToSlidersEvents({
                 ...sliders,
-                speed: newValue
+                speed: newValue,
             })
         );
     };
@@ -33,24 +33,24 @@ function ABMSubmenu() {
     const marks = [
         {
             value: 0,
-            label: "12AM"
+            label: "12AM",
         },
         {
             value: 21600,
-            label: "6AM"
+            label: "6AM",
         },
         {
             value: 43200,
-            label: "12PM"
+            label: "12PM",
         },
         {
             value: 64800,
-            label: "6PM"
+            label: "6PM",
         },
         {
             value: 86400,
-            label: "12AM"
-        }
+            label: "12AM",
+        },
     ];
 
     return (
@@ -64,9 +64,6 @@ function ABMSubmenu() {
                 Simulation Range
             </Typography>
             <Slider
-                classes={{
-                    markLabel: classes.markLabel
-                }}
                 min={0}
                 max={86400}
                 marks={marks}
