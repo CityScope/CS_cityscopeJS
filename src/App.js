@@ -4,7 +4,6 @@ import configureStore from "./redux/store";
 import Screen from "./components/Screen";
 import { StylesProvider } from "@material-ui/core/styles";
 import React, { Component } from "react";
-import { newDataStyle } from "./services/consoleStyle";
 
 const store = configureStore();
 
@@ -19,7 +18,7 @@ const MapRoute = () => {
     } else {
         table = "grasbrook";
     }
-    console.log("%c loading CityScope project: " + table, newDataStyle);
+    console.log("loading CityScope project: " + table);
 
     return (
         <Provider store={store}>

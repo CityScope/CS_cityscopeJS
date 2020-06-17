@@ -7,7 +7,6 @@ import {
     setLoadingState,
 } from "../redux/actions";
 import settings from "../settings/settings.json";
-import { loadingStyle, errorStyle } from "../services/consoleStyle";
 
 class CityIO extends Component {
     constructor(props) {
@@ -47,10 +46,9 @@ class CityIO extends Component {
             }
         }, settings.cityIO.interval);
         console.log(
-            "%c starting cityIO GET interval every " +
+            "starting cityIO GET interval every " +
                 settings.cityIO.interval +
-                "ms ",
-            loadingStyle
+                "ms "
         );
     };
 
@@ -173,7 +171,7 @@ class CityIO extends Component {
         data.tableName = this.props.tableName;
         // finally, send data to redux
         this.props.getCityioData(data);
-        console.log("%c done updating from cityIO", errorStyle);
+        console.log("done updating from cityIO");
 
         // initializes rendering of Menu and Map containers
         this.props.setReadyState(true);

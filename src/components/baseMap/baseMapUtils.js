@@ -1,6 +1,5 @@
 import settings from "../../settings/settings.json";
 import axios from "axios";
-import { errorStyle } from "../../services/consoleStyle";
 var tzlookup = require("tz-lookup");
 
 /**
@@ -230,7 +229,7 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
         },
     };
     axios(options).catch((error) => {
-        console.log("%c" + error, errorStyle);
+        console.log(error);
 
         console.log("ERROR:", error);
     });
