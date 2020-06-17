@@ -110,9 +110,16 @@ function TogglesMenu(props) {
             onClose={toggleDrawer}
         >
             <List className={classes.list}>
-                <Typography variant="h6" gutterBottom>
-                    MIT CityScope
-                </Typography>
+                <ListItem>
+                    <Typography variant="h6" gutterBottom>
+                        MIT CityScope
+                    </Typography>
+                </ListItem>
+                <ListItem>
+                    <Typography variant="caption" gutterBottom>
+                        Toggle layers visability
+                    </Typography>
+                </ListItem>
                 {togglesCompsArray}
             </List>
         </Drawer>

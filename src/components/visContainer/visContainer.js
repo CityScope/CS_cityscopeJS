@@ -4,39 +4,27 @@ import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import { connect } from "react-redux";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
+import Typography from "@material-ui/core/Typography";
 import Radar from "./Radar/Radar";
 import BarChart from "./BarChart/BarChart";
 import AreaCalc from "./AreaCalc/AreaCalc";
 
-function VisContainer(props) {
-    const useStyles = makeStyles({
-        root: {
-            display: "flex",
-            paddingLeft: 16,
-            paddingRight: 16,
-        },
-        paper: {
-            background: "#1D1F21",
-            width: 400,
-        },
-        list: {
-            color: "#fFF",
-        },
-        text: {
-            marginLeft: 16,
-            marginTop: 12,
-            flexGrow: 1,
-            fontSize: 20,
-            marginBottom: 12,
-            fontWeight: "lighter",
-        },
+import Paper from "@material-ui/core/Paper";
 
-        dividerColor: {
-            backgroundColor: "#484848",
+function VisContainer(props) {
+    const drawerWidth = 450;
+
+    const useStyles = makeStyles((theme) => ({
+        paper: {
+            display: "flex",
+            "& > *": {
+                margin: theme.spacing(1),
+            },
         },
-    });
+        drawerPaper: {
+            width: drawerWidth,
+        },
+    }));
 
     const classes = useStyles();
     const showRadar = props.menu && props.menu.includes("RADAR");
@@ -45,35 +33,51 @@ function VisContainer(props) {
         <React.Fragment>
             {showRadar && (
                 <Drawer
-                    className={classes.root}
                     variant="persistent"
                     anchor="right"
                     open={true}
                     classes={{
-                        paper: classes.paper,
+                        paper: classes.drawerPaper,
                     }}
                 >
                     <List className={classes.list}>
                         <ListItem>
-                            <ListItemText className={classes.text}>
-                                <h2>Urban Indicators</h2>
-                            </ListItemText>
-                        </ListItem>
-                        <ListItem>
-                            <Radar cityioData={props.cityioData} />
+                            <Typography variant="h6" gutterBottom>
+                                Urban Indicators
+                            </Typography>
                         </ListItem>
 
-                        <ListItem>
-                            <BarChart cityioData={props.cityioData} />
-                        </ListItem>
+                        <div className={classes.paper}>
+                            <Paper elevation={3}>
+                                <ListItem>
+                                    <Radar
+                                        cityioData={props.cityioData}
+                                        drawerWidth={drawerWidth}
+                                    />
+                                </ListItem>
+                            </Paper>
+                        </div>
 
-                        <Divider
-                            variant="middle"
-                            classes={{ root: classes.dividerColor }}
-                        />
-                        <ListItem>
-                            <AreaCalc cityioData={props.cityioData} />
-                        </ListItem>
+                        <div className={classes.paper}>
+                            <Paper elevation={3}>
+                                <ListItem>
+                                    <BarChart
+                                        cityioData={props.cityioData}
+                                        drawerWidth={drawerWidth}
+                                    />
+                                </ListItem>
+                            </Paper>
+                        </div>
+                        <div className={classes.paper}>
+                            <Paper elevation={3}>
+                                <ListItem>
+                                    <AreaCalc
+                                        cityioData={props.cityioData}
+                                        drawerWidth={drawerWidth}
+                                    />
+                                </ListItem>
+                            </Paper>
+                        </div>
                     </List>
                 </Drawer>
             )}

@@ -1,12 +1,24 @@
 import React, { useState } from "react";
 import { rgbToHex } from "../../../services/utils";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import DownloadRawData from "../DownloadRawData/DownloadRawData";
 import { RadialChart, Hint } from "react-vis";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 
 export default function AreaCalc(props) {
+    const radialRadius = props.drawerWidth - 100;
     const [hoveredRadial, setHoveredRadial] = useState(false);
+
+    const useStyles = makeStyles((theme) => ({
+        list: {
+            width: "100%",
+            width: props.drawerWidth - 50,
+        },
+    }));
+
+    const classes = useStyles();
 
     const calcArea = () => {
         let gridProps = props.cityioData.GEOGRID.properties;
@@ -16,7 +28,7 @@ export default function AreaCalc(props) {
         geoGridData.forEach((gridCellData) => {
             let typeName = gridCellData.name;
             if (
-                // if this type is not null
+                //    if this type is not null
                 gridCellData.name !== "None"
             ) {
                 if (calcAreaObj.hasOwnProperty(typeName)) {
@@ -54,20 +66,16 @@ export default function AreaCalc(props) {
     };
 
     const data = calcArea();
-    const radialRadius = 300;
 
     return (
-        <List>
+        <List className={classes.list}>
             <ListItem>
                 {hoveredRadial.name ? (
-                    <React.Fragment>
-                        <p>
-                            {hoveredRadial.name}: {hoveredRadial.area}
-                            sqm
-                        </p>
-                    </React.Fragment>
+                    <Typography gutterBottom>
+                        {hoveredRadial.name}: {hoveredRadial.area} sqm
+                    </Typography>
                 ) : (
-                    <p>Hover on chart...</p>
+                    <Typography gutterBottom>Hover on chart...</Typography>
                 )}
             </ListItem>
 
@@ -80,7 +88,7 @@ export default function AreaCalc(props) {
                     radius={radialRadius / 2}
                     getLabel={(d) => d.name}
                     labelsRadiusMultiplier={1}
-                    labelsStyle={{ fontSize: 10, fill: "#000" }}
+                    labelsStyle={{ fontSize: 12, fill: "#000" }}
                     showLabels
                     getAngle={(d) => d.area}
                     data={data.children}
@@ -104,7 +112,10 @@ export default function AreaCalc(props) {
                     )}
                 </RadialChart>
             </ListItem>
-            <DownloadRawData data={data} title={"area data"} />
+
+            <ListItem>
+                <DownloadRawData data={data} title={"area data"} />
+            </ListItem>
         </List>
     );
 }

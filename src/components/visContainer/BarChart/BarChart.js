@@ -61,22 +61,22 @@ class Radar extends Component {
                 <div>
                     <FlexibleWidthXYPlot
                         color={this.colorRange[1]}
-                        opacity={0.25}
+                        opacity={0.5}
                         xType="ordinal"
-                        width={350}
-                        height={250}
+                        width={this.props.drawerWidth - 50}
+                        height={this.props.drawerWidth - 50}
                         stackBy="y"
                         yDomain={[0, 1]}
                     >
                         <XAxis
                             style={{
                                 text: {
-                                    fill: "#fff",
+                                    fill: "#000",
                                 },
                             }}
                             tickLabelAngle={90}
                         />
-                        <YAxis style={{ text: { fill: "#fff" } }} />
+                        <YAxis style={{ text: { fill: "#000" } }} />
                         <VerticalBarSeries data={this.state.barChartData} />
                     </FlexibleWidthXYPlot>
                     <DownloadRawData
