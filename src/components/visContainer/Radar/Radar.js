@@ -91,7 +91,6 @@ class Radar extends Component {
                             labels: {
                                 textAnchor: "middle",
                                 fontSize: 10,
-                                fontWeight: "600",
                                 fill: "white",
                             },
                         }}
