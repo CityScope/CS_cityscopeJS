@@ -113,7 +113,7 @@ export default function AreaCalc(props) {
             </ListItem>
 
             <ListItem>
-                <DownloadRawData data={data} title={"area data"} />
+                <DownloadRawData data={data.children} title={"area data"} />
             </ListItem>
         </List>
     );
