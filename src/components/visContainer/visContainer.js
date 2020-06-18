@@ -48,7 +48,7 @@ function VisContainer(props) {
                         </ListItem>
 
                         <div className={classes.paper}>
-                            <Paper elevation={3}>
+                            <Paper elevation={10}>
                                 <ListItem>
                                     <Radar
                                         cityioData={props.cityioData}
@@ -59,7 +59,7 @@ function VisContainer(props) {
                         </div>
 
                         <div className={classes.paper}>
-                            <Paper elevation={3}>
+                            <Paper elevation={10}>
                                 <ListItem>
                                     <BarChart
                                         cityioData={props.cityioData}
@@ -69,7 +69,7 @@ function VisContainer(props) {
                             </Paper>
                         </div>
                         <div className={classes.paper}>
-                            <Paper elevation={3}>
+                            <Paper elevation={10}>
                                 <ListItem>
                                     <AreaCalc
                                         cityioData={props.cityioData}

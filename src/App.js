@@ -6,10 +6,13 @@ import { ThemeProvider } from "@material-ui/styles";
 import React, { Component } from "react";
 import { createMuiTheme } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 const theme = createMuiTheme({
+    // ! https://material-ui.com/customization/palette/
     palette: {
         type: "dark",
+        background: { default: "#000", paper: "#263238" },
     },
 });
 
@@ -24,18 +27,16 @@ const MapRoute = () => {
         console.log("loading CityScope project: " + cityscopePrjName);
 
         return (
-            <Provider store={store}>
-                <ThemeProvider theme={theme}>
-                    <Screen tableName={cityscopePrjName} />
-                </ThemeProvider>
-            </Provider>
-        );
-    } else {
-        return (
             <ThemeProvider theme={theme}>
-                <Typography gutterBottom>CityScopeJS</Typography>
+                <CssBaseline />
+
+                <Provider store={store}>
+                    <Screen tableName={cityscopePrjName} />
+                </Provider>
             </ThemeProvider>
         );
+    } else {
+        return <Typography gutterBottom>CityScopeJS</Typography>;
     }
 };
 

@@ -98,6 +98,7 @@ function TogglesMenu(props) {
 
     return (
         <Drawer
+            elevation={3}
             className={classes.drawer}
             classes={{
                 paper: classes.drawerPaper,

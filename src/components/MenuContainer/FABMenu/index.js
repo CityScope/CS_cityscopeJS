@@ -32,38 +32,29 @@ export default function FABMenu(props) {
         <List className={classes.root}>
             <ListItem>
                 <Tooltip title="Open Layer + Settings Menu">
-                    <Fab
-                        onClick={toggleDrawer}
-                        style={{ backgroundColor: "#616161" }}
-                    >
-                        <MenuIcon style={{ color: "FFF" }} />
+                    <Fab color="secondary" onClick={toggleDrawer}>
+                        <MenuIcon />
                     </Fab>
                 </Tooltip>
             </ListItem>
             <ListItem>
                 <Tooltip title="Toggle Edit Grid Mode, send to cityIO">
-                    <Fab
-                        onClick={handleToggle("EDIT")}
-                        style={{ backgroundColor: "#616161" }}
-                    >
+                    <Fab color="secondary" onClick={handleToggle("EDIT")}>
                         {menuState.includes("EDIT") ? (
                             <CancelIcon style={{ color: "e91e63" }} />
                         ) : (
-                            <EditIcon style={{ color: "FFF" }} />
+                            <EditIcon />
                         )}
                     </Fab>
                 </Tooltip>
             </ListItem>
             <ListItem>
                 <Tooltip title="Reset View/Toggle Ortho">
-                    <Fab
-                        onClick={handleToggle("RESET_VIEW")}
-                        style={{ backgroundColor: "#616161" }}
-                    >
+                    <Fab color="secondary" onClick={handleToggle("RESET_VIEW")}>
                         {menuState.includes("RESET_VIEW") ? (
-                            <NavigationIcon style={{ color: "FFF" }} />
+                            <NavigationIcon />
                         ) : (
-                            <NearMeIcon style={{ color: "FFF" }} />
+                            <NearMeIcon />
                         )}
                     </Fab>
                 </Tooltip>
