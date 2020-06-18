@@ -167,7 +167,7 @@
                 "showOnInit": true,
                 "requireModule": "GEOGRID"
             },
-            "KS": {
+            "KEYSTONE": {
                 "displayName": "Projection Mapping",
                 "showOnInit": false,
                 "requireModule": false

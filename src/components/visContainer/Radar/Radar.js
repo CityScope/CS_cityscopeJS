@@ -90,9 +90,8 @@ class Radar extends Component {
                             },
                             labels: {
                                 textAnchor: "middle",
-                                fontSize: 8,
-                                fontWeight: "600",
-                                fill: "black",
+                                fontSize: 10,
+                                fill: "white",
                             },
                         }}
                         margin={{
@@ -106,11 +105,11 @@ class Radar extends Component {
                     >
                         <CircularGridLines
                             style={{
-                                fill: "black",
+                                fill: "white",
                                 fillOpacity: 0.1,
-                                backgroundColor: "#000",
+                                backgroundColor: "#FFF",
                                 opacity: 0.5,
-                                stroke: "black",
+                                stroke: "white",
                                 width: 0.1,
                             }}
                             tickValues={[...new Array(11)].map(

@@ -7,12 +7,14 @@ import {
 } from "react-vis";
 import "../../../../node_modules/react-vis/dist/style.css";
 import DownloadRawData from "../DownloadRawData/DownloadRawData";
+import Typography from "@material-ui/core/Typography";
 
 class Radar extends Component {
     constructor(props) {
         super(props);
         this.state = {
             barChartData: null,
+            hoverdNode: null,
         };
         this.colorRange = ["#fc03ec", "#79C7E3"];
     }
@@ -56,36 +58,53 @@ class Radar extends Component {
     }
 
     render() {
-        if (this.state.barChartData) {
-            return (
-                <div>
-                    <FlexibleWidthXYPlot
-                        color={this.colorRange[1]}
-                        opacity={0.5}
-                        xType="ordinal"
-                        width={this.props.drawerWidth - 50}
-                        height={this.props.drawerWidth - 50}
-                        stackBy="y"
-                        yDomain={[0, 1]}
-                    >
-                        <XAxis
-                            style={{
-                                text: {
-                                    fill: "#000",
-                                },
-                            }}
-                            tickLabelAngle={90}
+        const { hoveredNode } = this.state;
+
+        return (
+            <>
+                {this.state.barChartData && (
+                    <div>
+                        {hoveredNode && (
+                            <Typography gutterBottom>
+                                {hoveredNode.x} : {hoveredNode.y}
+                            </Typography>
+                        )}
+
+                        <FlexibleWidthXYPlot
+                            color={this.colorRange[1]}
+                            opacity={0.2}
+                            xType="ordinal"
+                            width={this.props.drawerWidth - 50}
+                            height={this.props.drawerWidth - 50}
+                            stackBy="y"
+                            yDomain={[0, 1]}
+                        >
+                            <XAxis
+                                style={{
+                                    text: {
+                                        fill: "#FFF",
+                                    },
+                                }}
+                                tickLabelAngle={90}
+                            />
+                            <YAxis style={{ text: { fill: "#FFF" } }} />
+                            <VerticalBarSeries
+                                animation={true}
+                                onValueMouseOver={(d) => {
+                                    this.setState({ hoveredNode: d });
+                                }}
+                                data={this.state.barChartData}
+                            />
+                        </FlexibleWidthXYPlot>
+
+                        <DownloadRawData
+                            data={this.props.cityioData.indicators}
+                            title={"radar & bars data"}
                         />
-                        <YAxis style={{ text: { fill: "#000" } }} />
-                        <VerticalBarSeries data={this.state.barChartData} />
-                    </FlexibleWidthXYPlot>
-                    <DownloadRawData
-                        data={this.props.cityioData.indicators}
-                        title={"radar & bars data"}
-                    />
-                </div>
-            );
-        } else return null;
+                    </div>
+                )}
+            </>
+        );
     }
 }
 

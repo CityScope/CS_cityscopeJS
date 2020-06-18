@@ -117,7 +117,7 @@ function TogglesMenu(props) {
                 </ListItem>
                 <ListItem>
                     <Typography variant="caption" gutterBottom>
-                        Toggle layers visability
+                        Toggle layers visibility
                     </Typography>
                 </ListItem>
                 {togglesCompsArray}

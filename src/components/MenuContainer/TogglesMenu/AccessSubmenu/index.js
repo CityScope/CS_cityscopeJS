@@ -23,7 +23,6 @@ function AccessSubmenu(props) {
     const dispatch = useDispatch();
     const c = settings.map.layers.heatmap.colors;
     const l = c.length - 1;
-    const m = Math.floor(c.length - 1);
     return (
         <List>
             <ListItem>

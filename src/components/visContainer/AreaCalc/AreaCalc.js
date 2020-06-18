@@ -86,8 +86,14 @@ export default function AreaCalc(props) {
                     innerRadius={radialRadius / 2 - radialRadius / 5}
                     radius={radialRadius / 2}
                     getLabel={(d) => d.name}
-                    labelsRadiusMultiplier={1}
-                    labelsStyle={{ fontSize: 12, fill: "#000" }}
+                    labelsRadiusMultiplier={0.95}
+                    labelsStyle={{
+                        textAnchor: "middle",
+
+                        fontSize: 11,
+                        fill: "#FFF",
+                        textShadow: "2px 2px 2px #000",
+                    }}
                     showLabels
                     getAngle={(d) => d.area}
                     data={data.children}
@@ -105,7 +111,9 @@ export default function AreaCalc(props) {
                                     fontSize: 14,
                                 }}
                             >
-                                Area: {hoveredRadial.area} sqm
+                                <Typography variant={"caption"} gutterBottom>
+                                    Area: {hoveredRadial.area} sqm
+                                </Typography>
                             </div>
                         </Hint>
                     )}
