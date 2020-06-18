@@ -2,8 +2,16 @@ import Provider from "./redux/Provider";
 import "./index.css";
 import configureStore from "./redux/store";
 import Screen from "./components/Screen";
-import { StylesProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
 import React, { Component } from "react";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { createMuiTheme } from "@material-ui/core";
+
+const theme = createMuiTheme({
+    palette: {
+        type: "dark",
+    },
+});
 
 const store = configureStore();
 
@@ -17,9 +25,11 @@ const MapRoute = () => {
 
         return (
             <Provider store={store}>
-                <StylesProvider injectFirst>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+
                     <Screen tableName={cityscopePrjName} />
-                </StylesProvider>
+                </ThemeProvider>
             </Provider>
         );
     } else {
