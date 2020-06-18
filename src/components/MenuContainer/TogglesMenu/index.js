@@ -1,5 +1,4 @@
 import React from "react";
-import { useStyles, ColoredSwitch } from "./styles";
 import { useSelector } from "react-redux";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -11,8 +10,24 @@ import settings from "../../../settings/settings.json";
 import Collapse from "@material-ui/core/Collapse";
 import ABMSubmenu from "./ABMSubmenu";
 import AccessSubmenu from "./AccessSubmenu";
+import Switch from "@material-ui/core/Switch";
+import { makeStyles } from "@material-ui/core/styles";
 
 function TogglesMenu(props) {
+    let drawerWidth = 350;
+    const useStyles = makeStyles((theme) => ({
+        drawer: {
+            display: "flex",
+            paddingLeft: 16,
+            paddingRight: 16,
+            width: drawerWidth,
+            padding: theme.spacing(0, 1),
+        },
+        drawerPaper: {
+            width: drawerWidth,
+        },
+    }));
+
     const classes = useStyles();
     const { open, toggleDrawer, handleToggle } = props;
 
@@ -47,18 +62,23 @@ function TogglesMenu(props) {
                             primary={togglesMeta[listOfToggles[i]].displayName}
                         />
                         <ListItemSecondaryAction>
-                            <ColoredSwitch
+                            <Switch
                                 edge="end"
                                 onChange={handleToggle(listOfToggles[i])}
                                 checked={checked}
                             />
                         </ListItemSecondaryAction>
                     </ListItem>
-                    {listOfToggles[i] === "ABM" && (
-                        <Collapse in={checked} style={{ width: "100%" }}>
-                            <ABMSubmenu />
-                        </Collapse>
-                    )}
+
+                    {
+                        // ! Handle submenus of ABM/ACCESS
+
+                        listOfToggles[i] === "ABM" && (
+                            <Collapse in={checked} style={{ width: "100%" }}>
+                                <ABMSubmenu />
+                            </Collapse>
+                        )
+                    }
                     {listOfToggles[i] === "ACCESS" && (
                         <Collapse
                             in={checked}
@@ -78,21 +98,28 @@ function TogglesMenu(props) {
 
     return (
         <Drawer
-            className={classes.root}
+            className={classes.drawer}
+            classes={{
+                paper: classes.drawerPaper,
+            }}
             BackdropProps={{
                 invisible: true,
-            }}
-            classes={{
-                paper: classes.paper,
             }}
             anchor="left"
             open={open}
             onClose={toggleDrawer}
         >
             <List className={classes.list}>
-                <Typography variant="h5" className={classes.text} gutterBottom>
-                    CityScopeJS
-                </Typography>
+                <ListItem>
+                    <Typography variant="h6" gutterBottom>
+                        MIT CityScope
+                    </Typography>
+                </ListItem>
+                <ListItem>
+                    <Typography variant="caption" gutterBottom>
+                        Toggle layers visability
+                    </Typography>
+                </ListItem>
                 {togglesCompsArray}
             </List>
         </Drawer>

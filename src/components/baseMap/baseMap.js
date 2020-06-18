@@ -7,7 +7,6 @@ import {
     _proccessAccessData,
     _proccessGridData,
     _postMapEditsToCityIO,
-    _proccessGridTextData,
     _proccessBresenhamGrid,
     setDirLightSettings,
     _bresenhamLine,
@@ -20,7 +19,6 @@ import {
     HeatmapLayer,
     PathLayer,
     GeoJsonLayer,
-    TextLayer,
     ScatterplotLayer,
 } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
@@ -71,7 +69,6 @@ class Map extends Component {
         this._setViewStateToTableHeader();
         this.setState({
             networkPnts: _proccesNetworkPnts(cityioData),
-            gridTextData: _proccessGridTextData(cityioData),
             bresenhamGrid: _proccessBresenhamGrid(cityioData),
             networkLayer: cityioData.GEONETWORK,
         });
@@ -494,19 +491,6 @@ class Map extends Component {
         const zoomLevel = this.state.viewState.zoom;
         const { cityioData } = this.props;
         let layers = [];
-
-        if (this.props.menu.includes("TEXT")) {
-            layers.push(
-                new TextLayer({
-                    id: "gridText-layer",
-                    data: this.state.gridTextData,
-                    getText: (d) => d.text,
-                    getPosition: (d) => d.coordinates,
-                    getColor: [255, 255, 255],
-                    getSize: 10,
-                })
-            );
-        }
 
         if (this.props.menu.includes("GRID")) {
             layers.push(

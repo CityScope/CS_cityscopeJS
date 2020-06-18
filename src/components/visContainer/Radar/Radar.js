@@ -30,7 +30,7 @@ class Radar extends Component {
             domains: [],
             radarData: [],
         };
-        this.radarSize = 350;
+        this.radarSize = this.props.drawerWidth - 50;
 
         this.colorRange = ["#fc03ec", "#79C7E3"];
     }
@@ -92,7 +92,7 @@ class Radar extends Component {
                                 textAnchor: "middle",
                                 fontSize: 8,
                                 fontWeight: "600",
-                                fill: "white",
+                                fill: "black",
                             },
                         }}
                         margin={{
@@ -106,11 +106,11 @@ class Radar extends Component {
                     >
                         <CircularGridLines
                             style={{
-                                fill: "white",
+                                fill: "black",
                                 fillOpacity: 0.1,
-                                backgroundColor: "#fff",
+                                backgroundColor: "#000",
                                 opacity: 0.5,
-                                stroke: "white",
+                                stroke: "black",
                                 width: 0.1,
                             }}
                             tickValues={[...new Array(11)].map(

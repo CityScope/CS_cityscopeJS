@@ -133,11 +133,6 @@
             },
             "NETWORK": {
                 "displayName": "Mobility Network",
-                "showOnInit": true,
-                "requireModule": "GEOGRID"
-            },
-            "TEXT": {
-                "displayName": "Cell Information",
                 "showOnInit": false,
                 "requireModule": "GEOGRID"
             },
@@ -146,13 +141,8 @@
                 "showOnInit": false,
                 "requireModule": "ABM"
             },
-            "SHADOWS": {
-                "displayName": "Shadows",
-                "showOnInit": true,
-                "requireModule": "GEOGRID"
-            },
             "PATHS": {
-                "displayName": "Aggregated Mobility",
+                "displayName": "Aggregated Trips",
                 "showOnInit": false,
                 "requireModule": "ABM"
             },
@@ -170,6 +160,12 @@
                 "displayName": "Rotate Camera",
                 "showOnInit": false,
                 "requireModule": false
+            },
+
+            "SHADOWS": {
+                "displayName": "Toggle Shadows",
+                "showOnInit": true,
+                "requireModule": "GEOGRID"
             },
             "KS": {
                 "displayName": "Projection Mapping",

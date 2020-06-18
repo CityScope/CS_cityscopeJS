@@ -5,9 +5,9 @@ import Fab from "@material-ui/core/Fab";
 import MenuIcon from "@material-ui/icons/Menu";
 import EditIcon from "@material-ui/icons/Edit";
 import CancelIcon from "@material-ui/icons/Cancel";
-import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import NearMeIcon from "@material-ui/icons/NearMe";
 import NavigationIcon from "@material-ui/icons/Navigation";
+import Tooltip from "@material-ui/core/Tooltip";
 
 export default function FABMenu(props) {
     const classes = useStyles();
@@ -17,42 +17,31 @@ export default function FABMenu(props) {
 
     return (
         <div className={classes.root}>
-            <Fab
-                className={classes.menuButton}
-                onClick={toggleDrawer}
-                style={{ backgroundColor: "#1D1F21" }}
-            >
-                <MenuIcon style={{ color: "FFF" }} />
-            </Fab>
-            <Fab
-                className={classes.editButton}
-                onClick={handleToggle("EDIT")}
-                style={{ backgroundColor: "#1D1F21" }}
-            >
-                {menuState.includes("EDIT") ? (
-                    <CancelIcon style={{ color: "FFF" }} />
-                ) : (
-                    <EditIcon style={{ color: "FFF" }} />
-                )}
-            </Fab>
-            <Fab
-                className={classes.resetViewButton}
-                onClick={handleToggle("RESET_VIEW")}
-                style={{ backgroundColor: "#1D1F21" }}
-            >
-                {menuState.includes("RESET_VIEW") ? (
-                    <NavigationIcon style={{ color: "FFF" }} />
-                ) : (
-                    <NearMeIcon style={{ color: "FFF" }} />
-                )}
-            </Fab>
-            <Fab
-                className={classes.templatesButton}
-                onClick={handleToggle("TEMPLATES")}
-                style={{ backgroundColor: "#1D1F21" }}
-            >
-                <InsertDriveFileIcon style={{ color: "FFF" }} />
-            </Fab>
+            <Tooltip title="Open Layer + Settings Menu">
+                <Fab className={classes.menuButton} onClick={toggleDrawer}>
+                    <MenuIcon />
+                </Fab>
+            </Tooltip>
+            <Tooltip title="Toggle Edit Grid Mode">
+                <Fab
+                    className={classes.editButton}
+                    onClick={handleToggle("EDIT")}
+                >
+                    {menuState.includes("EDIT") ? <CancelIcon /> : <EditIcon />}
+                </Fab>
+            </Tooltip>
+            <Tooltip title="Reset View/Toggle Ortho">
+                <Fab
+                    className={classes.resetViewButton}
+                    onClick={handleToggle("RESET_VIEW")}
+                >
+                    {menuState.includes("RESET_VIEW") ? (
+                        <NavigationIcon />
+                    ) : (
+                        <NearMeIcon />
+                    )}
+                </Fab>
+            </Tooltip>
         </div>
     );
 }
