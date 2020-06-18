@@ -776,7 +776,7 @@ class Map extends Component {
                     }}
                 >
                     <StaticMap
-                        asyncRender={true}
+                        asyncRender={false}
                         dragRotate={true}
                         reuseMaps={true}
                         mapboxApiAccessToken={

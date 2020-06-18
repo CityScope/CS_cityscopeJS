@@ -4,8 +4,8 @@ import configureStore from "./redux/store";
 import Screen from "./components/Screen";
 import { ThemeProvider } from "@material-ui/styles";
 import React, { Component } from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import { createMuiTheme } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 
 const theme = createMuiTheme({
     palette: {
@@ -26,14 +26,16 @@ const MapRoute = () => {
         return (
             <Provider store={store}>
                 <ThemeProvider theme={theme}>
-                    <CssBaseline />
-
                     <Screen tableName={cityscopePrjName} />
                 </ThemeProvider>
             </Provider>
         );
     } else {
-        return <h1>CityScopeJS</h1>;
+        return (
+            <ThemeProvider theme={theme}>
+                <Typography gutterBottom>CityScopeJS</Typography>
+            </ThemeProvider>
+        );
     }
 };
 

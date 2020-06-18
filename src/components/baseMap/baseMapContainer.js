@@ -5,25 +5,22 @@ import { Layer } from "../prjMap/layer";
 
 class MapContainer extends Component {
     _checkKeystone = () => {
-        return this.props.menu.includes("KS") ? true : false;
+        return this.props.menu.includes("KEYSTONE") ? true : false;
     };
 
     render() {
         return (
             <div
                 style={{
-                    background: "black",
                     height: "100vh",
                     width: "100vw",
-                    maxWidth: "100%",
-                    overflow: "hidden"
+                    overflow: "hidden",
                 }}
             >
                 <Layer
-                    className="mapLayer"
                     style={{
                         height: "100vh",
-                        width: "100vw"
+                        width: "100vw",
                     }}
                     isEditMode={this._checkKeystone()}
                 >
@@ -37,10 +34,10 @@ class MapContainer extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         menu: state.MENU,
-        selectedType: state.SELECTED_TYPE
+        selectedType: state.SELECTED_TYPE,
     };
 };
 
