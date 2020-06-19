@@ -12,7 +12,7 @@ const theme = createMuiTheme({
     // ! https://material-ui.com/customization/palette/
     palette: {
         type: "dark",
-        background: { default: "#000", paper: "#263238" },
+        background: { default: "#000", paper: "#29323c" },
     },
 });
 
