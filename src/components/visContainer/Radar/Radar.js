@@ -3,26 +3,6 @@ import { CircularGridLines, RadarChart } from "react-vis";
 import "../../../../node_modules/react-vis/dist/style.css";
 import "./Radar.css";
 
-/**
- * 
- * 
- *  "domain": [
-            { "name": "amazing city", "domain": [0, 1] },
-            { "name": "validated innovation", "domain": [0, 1] },
-            { "name": "predicted happiness", "domain": [0, 1] },
-            { "name": "wow mix-use", "domain": [0, 1] },
-            { "name": "ok buildings", "domain": [0, 1] },
-            { "name": "fun crime rates", "domain": [0, 1] },
-            { "name": "success urbanism", "domain": [0, 1] },
-            { "name": "happy AI", "domain": [0, 1] },
-            { "name": "free parking", "domain": [0, 1] },
-            { "name": "deep chainy", "domain": [0, 1] },
-            { "name": "failed urbanism", "domain": [0, 1] },
-            { "name": "Data for free", "domain": [0, 1] },
-            { "name": "vapor energy", "domain": [0, 1] },
-            { "name": "deep chainy", "domain": [0, 1] }
-        ],
- */
 class Radar extends Component {
     constructor(props) {
         super(props);
@@ -38,19 +18,20 @@ class Radar extends Component {
     generateData() {
         const indicators = this.props.cityioData.indicators;
         let radarData = {};
+        let refData = {};
         let domains = [];
         for (let i = 0; i < indicators.length; i++) {
             if (indicators[i].viz_type === "radar") {
-                radarData[indicators[i].name] = indicators[i].value;
+                radarData[indicators[i].name] = [indicators[i].value];
+                refData[indicators[i].name] = [indicators[i].ref_value];
                 indicators[i].domain = [0, 1];
                 domains.push(indicators[i]);
             }
         }
-        this.setState({ radarData: [radarData], domains: domains });
+        this.setState({ radarData: [radarData, refData], domains: domains });
     }
 
     componentDidMount() {
-        console.log("...init radar");
         this.setState({ indicators: this.props.indicators });
         this.generateData();
     }

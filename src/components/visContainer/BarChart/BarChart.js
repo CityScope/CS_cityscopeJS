@@ -20,7 +20,6 @@ class Radar extends Component {
     }
 
     componentDidMount() {
-        console.log("....init BarChart");
         this.generateData();
     }
 
@@ -37,16 +36,22 @@ class Radar extends Component {
         const indicators = this.props.cityioData.indicators;
 
         let dataArr = [];
+        let refDataArr = [];
         for (let i = 0; i < indicators.length; i++) {
             if (indicators[i].viz_type === "bar") {
                 dataArr.push({
                     x: indicators[i].name,
                     y: indicators[i].value,
                 });
+
+                refDataArr.push({
+                    x: indicators[i].name,
+                    y: indicators[i].ref_value,
+                });
             }
         }
 
-        this.setState({ barChartData: dataArr });
+        this.setState({ barChartData: dataArr, refChartData: refDataArr });
     }
 
     componentDidUpdate(prevProps) {
@@ -71,7 +76,6 @@ class Radar extends Component {
                         )}
 
                         <FlexibleWidthXYPlot
-                            color={this.colorRange[1]}
                             opacity={0.2}
                             xType="ordinal"
                             width={this.props.drawerWidth - 50}
@@ -94,6 +98,13 @@ class Radar extends Component {
                                     this.setState({ hoveredNode: d });
                                 }}
                                 data={this.state.barChartData}
+                            />
+                            <VerticalBarSeries
+                                animation={true}
+                                onValueMouseOver={(d) => {
+                                    this.setState({ hoveredNode: d });
+                                }}
+                                data={this.state.refChartData}
                             />
                         </FlexibleWidthXYPlot>
 
