@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { CircularGridLines, RadarChart } from "react-vis";
 import "../../../../node_modules/react-vis/dist/style.css";
 import "./Radar.css";
+import { DiscreteColorLegend } from "react-vis";
 
 class Radar extends Component {
     constructor(props) {
@@ -98,6 +99,11 @@ class Radar extends Component {
                             )}
                         />
                     </RadarChart>
+
+                    <DiscreteColorLegend
+                        items={["Design", "Reference"]}
+                        colors={this.colorRange}
+                    />
                 </div>
             );
         } else return null;

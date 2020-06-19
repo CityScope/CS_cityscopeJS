@@ -4,3 +4,6 @@
 .rv-xy-plot__axis__tick__line {
     stroke-width: 0.5;
 }
+.rv-discrete-color-legend-item {
+    color: azure;
+}
