@@ -96,7 +96,6 @@ class Map extends Component {
         ) {
             this.setState({ animateCamera: false });
         }
-
         if (
             !prevProps.menu.includes("SHADOWS") &&
             this.props.menu.includes("SHADOWS")
@@ -110,7 +109,6 @@ class Map extends Component {
         ) {
             this._effects[0].shadowColor = [0, 0, 0, 0];
         }
-
         //  toggle edit mode and send to cityio
         if (
             prevProps.menu.includes("EDIT") &&
@@ -181,14 +179,12 @@ class Map extends Component {
             color: [255, 255, 255],
             intensity: 0.85,
         });
-
         let dirLightSettings = {
             timestamp: Date.UTC(2000, 7, 1, 11),
             color: [255, 255, 255],
             intensity: 1.0,
             _shadow: true,
         };
-
         const dirLight = new _SunLight(dirLightSettings);
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });
         lightingEffect.shadowColor = [0, 0, 0, 0.5];
@@ -229,7 +225,6 @@ class Map extends Component {
                 date.getMinutes(),
                 date.getSeconds()
             );
-
             this.props.listenToSlidersEvents({
                 ...this.props.sliders,
                 time: [
@@ -239,7 +234,6 @@ class Map extends Component {
                 ],
             });
         }
-
         // ! start the req animation frame
         this.animationFrame = window.requestAnimationFrame(
             this._animate.bind(this)

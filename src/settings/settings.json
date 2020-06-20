@@ -11,7 +11,6 @@
             "ABM",
             "grid",
             "access",
-            "GEONETWORK",
             "GEOGRIDDATA",
             "indicators"
         ]
@@ -40,88 +39,9 @@
             }
         },
         "initialViewState": {
-            "longitude": -71.0894527,
-            "latitude": 42.3603609,
             "zoom": 17,
             "pitch": 0,
             "bearing": 0
-        },
-
-        "netTypes": {
-            "0": {
-                "width": 10,
-                "color": [0, 0, 0],
-                "name": "Delete Path",
-                "class": "networkClass"
-            },
-            "1": {
-                "width": 5,
-                "color": [100, 100, 100, 200],
-                "name": "two lanes",
-                "class": "networkClass"
-            },
-            "2": {
-                "width": 10,
-                "color": [50, 50, 50, 200],
-                "name": "four lanes",
-                "class": "networkClass"
-            },
-            "3": {
-                "width": 2,
-                "color": [0, 200, 20, 200],
-                "name": "bike lanes",
-                "class": "networkClass"
-            },
-            "4": {
-                "width": 2,
-                "color": [200, 200, 0, 200],
-                "name": "walkway",
-                "class": "networkClass"
-            }
-        },
-        "types": {
-            "0": {
-                "height": 0,
-                "color": [0, 0, 0, 0],
-                "name": "Reset",
-                "class": "buildingsClass"
-            },
-            "1": {
-                "height": 0,
-                "color": [100, 150, 240, 180],
-                "name": "Plaza",
-                "class": "buildingsClass"
-            },
-            "2": {
-                "height": 0,
-                "color": [0, 150, 220, 180],
-                "name": "Park",
-                "class": "buildingsClass"
-            },
-            "3": {
-                "height": [0, 10],
-                "color": [133, 94, 247, 180],
-                "name": "Residential",
-                "class": "buildingsClass"
-            },
-            "4": {
-                "height": [0, 50],
-                "color": [247, 94, 133, 180],
-                "name": "Office Tower",
-                "class": "buildingsClass"
-            },
-            "5": {
-                "height": [0, 50],
-                "color": [228, 13, 213, 180],
-                "name": "Mix-use",
-                "class": "buildingsClass"
-            },
-            "6": {
-                "height": [0, 20],
-                "color": [133, 0, 135, 180],
-                "name": "Service",
-                "class": "buildingsClass"
-            }
         }
     },
     "menu": {
@@ -131,11 +51,7 @@
                 "showOnInit": true,
                 "requireModule": "GEOGRID"
             },
-            "NETWORK": {
-                "displayName": "Mobility Network",
-                "showOnInit": false,
-                "requireModule": "GEOGRID"
-            },
+
             "ABM": {
                 "displayName": "Mobility Simulation",
                 "showOnInit": false,

@@ -6,29 +6,25 @@ import axios from "axios";
  * and procces the interactive area
  */
 export const _proccessGridData = (cityioData) => {
-    let typesSettings = settings.map.types;
-    const TUIgridData = cityioData.grid;
+    // get the static grid
     const GEOGRID = cityioData.GEOGRID;
-    const GEOGRIDDATA = cityioData.GEOGRIDDATA;
-    // update GEOGRID features from GEOGRIDDATA on cityio
-    if (GEOGRIDDATA && GEOGRIDDATA.length > 0) {
+    // if GEOGRRIDDATA exist
+    if (cityioData.GEOGRIDDATA && cityioData.GEOGRIDDATA.length > 0) {
+        // get the grid data
+        const GEOGRIDDATA = cityioData.GEOGRIDDATA;
+        // update GEOGRID features from GEOGRIDDATA on cityio
         for (let i = 0; i < GEOGRID.features.length; i++) {
             GEOGRID.features[i].properties = GEOGRIDDATA[i];
+            // inject id
             GEOGRID.features[i].properties.id = i;
-        }
-        // for first init of gird
-        // when GEOPGRIDDATA was not yet created
-    } else {
-        // clreate empty grid
-        for (let i = 0; i < GEOGRID.features.length; i++) {
-            GEOGRID.features[i].properties.id = i;
-            // set no color for when no land use exist
-            GEOGRID.features[i].properties.color = [0, 0, 0, 0];
-            GEOGRID.features[i].properties.height = 0.1;
-            GEOGRID.features[i].properties.name = "empty";
-            GEOGRID.features[i].properties.interactive = true;
         }
     }
+    const newGrid = JSON.parse(JSON.stringify(GEOGRID));
+    return newGrid;
+};
+
+/*
+const _handleTUIgridUpdate = (cityioData) => {
 
     // handles TUI grid data on update
     const geoGridMapping = cityioData.GEOGRID.properties.geogrid_to_tui_mapping;
@@ -55,9 +51,8 @@ export const _proccessGridData = (cityioData) => {
         }
         counter = counter + 1;
     }
-    const newGrid = JSON.parse(JSON.stringify(GEOGRID));
-    return newGrid;
 };
+   */
 
 /**
  * Description. gets `props` with geojson
