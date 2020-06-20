@@ -68,9 +68,9 @@ class Map extends Component {
         // zoom map on CS table location
         this._setViewStateToTableHeader();
         this.setState({
-            networkPnts: _proccesNetworkPnts(cityioData),
-            bresenhamGrid: _proccessBresenhamGrid(cityioData),
-            networkLayer: cityioData.GEONETWORK,
+            // networkPnts: _proccesNetworkPnts(cityioData),
+            // bresenhamGrid: _proccessBresenhamGrid(cityioData),
+            // networkLayer: cityioData.GEONETWORK,
         });
 
         // start ainmation/sim/roate
@@ -551,82 +551,82 @@ class Map extends Component {
             );
         }
 
-        if (
-            this.props.menu.includes("NETWORK") &&
-            this.state.networkPnts &&
-            this.state.networkPnts.features
-        ) {
-            if (this.props.menu.includes("EDIT")) {
-                layers.push(
-                    new ScatterplotLayer({
-                        id: "NETWORK",
-                        data: this.state.networkPnts.features,
-                        pickable: true,
-                        opacity: 1,
-                        filled: true,
-                        radiusScale: 1,
-                        radiusMinPixels: 1,
-                        radiusMaxPixels: 100,
-                        getPosition: (d) => d.geometry.coordinates,
-                        getFillColor: (d) => d.properties.color,
-                        getRadius: (d) => d.properties.netWidth,
+        // if (
+        //     this.props.menu.includes("NETWORK") &&
+        //     this.state.networkPnts &&
+        //     this.state.networkPnts.features
+        // ) {
+        //     if (this.props.menu.includes("EDIT")) {
+        //         layers.push(
+        //             new ScatterplotLayer({
+        //                 id: "NETWORK",
+        //                 data: this.state.networkPnts.features,
+        //                 pickable: true,
+        //                 opacity: 1,
+        //                 filled: true,
+        //                 radiusScale: 1,
+        //                 radiusMinPixels: 1,
+        //                 radiusMaxPixels: 100,
+        //                 getPosition: (d) => d.geometry.coordinates,
+        //                 getFillColor: (d) => d.properties.color,
+        //                 getRadius: (d) => d.properties.netWidth,
 
-                        onHover: (e) => {
-                            if (
-                                this.props.menu.includes("EDIT") &&
-                                this.state.keyDownState !== "Shift"
-                            ) {
-                                this._handleNetworkHover(e);
-                            }
-                        },
-                        onClick: (e) => {
-                            if (
-                                this.props.menu.includes("EDIT") &&
-                                this.state.keyDownState !== "Shift"
-                            ) {
-                                this._handleNetworkCreate(e);
-                            }
-                        },
+        //                 onHover: (e) => {
+        //                     if (
+        //                         this.props.menu.includes("EDIT") &&
+        //                         this.state.keyDownState !== "Shift"
+        //                     ) {
+        //                         this._handleNetworkHover(e);
+        //                     }
+        //                 },
+        //                 onClick: (e) => {
+        //                     if (
+        //                         this.props.menu.includes("EDIT") &&
+        //                         this.state.keyDownState !== "Shift"
+        //                     ) {
+        //                         this._handleNetworkCreate(e);
+        //                     }
+        //                 },
 
-                        updateTriggers: {
-                            getFillColor: this.state.hoveredPnt,
-                            getRadius: this.state.hoveredPnt,
-                        },
-                        transitions: {
-                            getFillColor: 100,
-                            getRadius: 300,
-                        },
-                    })
-                );
-            }
+        //                 updateTriggers: {
+        //                     getFillColor: this.state.hoveredPnt,
+        //                     getRadius: this.state.hoveredPnt,
+        //                 },
+        //                 transitions: {
+        //                     getFillColor: 100,
+        //                     getRadius: 300,
+        //                 },
+        //             })
+        //         );
+        //     }
 
-            layers.push(
-                new PathLayer({
-                    pickable: true,
-                    id: "NETWORK_PATHS",
-                    data: this.state.networkLayer,
-                    widthScale: 1,
-                    widthMinPixels: 5,
-                    getPath: (d) => d.path,
-                    getColor: (d) => d.selectedType.color,
-                    getWidth: (d) => d.selectedType.width,
-                    onClick: (e) => {
-                        if (
-                            this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        ) {
-                            this._handleNetworkRemove(e);
-                        }
-                    },
-                    updateTriggers: {
-                        getPath: this.state.networkLayer,
-                    },
-                    transitions: {
-                        getPath: 500,
-                    },
-                })
-            );
-        }
+        //     layers.push(
+        //         new PathLayer({
+        //             pickable: true,
+        //             id: "NETWORK_PATHS",
+        //             data: this.state.networkLayer,
+        //             widthScale: 1,
+        //             widthMinPixels: 5,
+        //             getPath: (d) => d.path,
+        //             getColor: (d) => d.selectedType.color,
+        //             getWidth: (d) => d.selectedType.width,
+        //             onClick: (e) => {
+        //                 if (
+        //                     this.props.menu.includes("EDIT") &&
+        //                     this.state.keyDownState !== "Shift"
+        //                 ) {
+        //                     this._handleNetworkRemove(e);
+        //                 }
+        //             },
+        //             updateTriggers: {
+        //                 getPath: this.state.networkLayer,
+        //             },
+        //             transitions: {
+        //                 getPath: 500,
+        //             },
+        //         })
+        //     );
+        // }
 
         if (this.props.menu.includes("ACCESS")) {
             layers.push(

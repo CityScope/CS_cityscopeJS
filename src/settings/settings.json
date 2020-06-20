@@ -153,7 +153,7 @@
             },
             "RADAR": {
                 "displayName": "Urban Indicators",
-                "showOnInit": true,
+                "showOnInit": false,
                 "requireModule": "indicators"
             },
             "ROTATE": {
