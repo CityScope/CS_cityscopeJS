@@ -1,4 +1,4 @@
-import { Matrix3d, RectPoints, Vector } from "./layer";
+import { Matrix3d, RectPoints, Vector } from "./ProjectionMapping";
 const { solve } = require("numeric");
 
 export const round = (num: number, precision: number) => {
@@ -51,8 +51,8 @@ export const transformPointsToMatrix = (
         h[2],
         h[5],
         0,
-        1
-    ].map(num => round(num, 10)) as Matrix3d;
+        1,
+    ].map((num) => round(num, 10)) as Matrix3d;
 };
 
 export const matrixToTransform = (matrix: Matrix3d) =>

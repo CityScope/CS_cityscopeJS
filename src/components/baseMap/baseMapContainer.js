@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import MAP from "./baseMap";
 import { connect } from "react-redux";
-import { Layer } from "../prjMap/layer";
+import { ProjectionMapping } from "../ProjectionMapping/ProjectionMapping";
 
 class MapContainer extends Component {
     _checkKeystone = () => {
@@ -17,7 +17,7 @@ class MapContainer extends Component {
                     overflow: "hidden",
                 }}
             >
-                <Layer
+                <ProjectionMapping
                     style={{
                         height: "100vh",
                         width: "100vw",
@@ -28,7 +28,7 @@ class MapContainer extends Component {
                         menu={this.props.menu}
                         selectedType={this.props.selectedType}
                     />
-                </Layer>
+                </ProjectionMapping>
             </div>
         );
     }

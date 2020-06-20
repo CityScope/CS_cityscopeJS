@@ -98,7 +98,7 @@ const _setDeltaVal = () => {
     return deltaInitVals;
 };
 
-export class Layer extends React.Component<Props, State> {
+export class ProjectionMapping extends React.Component<Props, State> {
     container: HTMLElement | null;
     layerTranslateDelta: Vector | undefined;
     anchorTranslateDelta: Vector | undefined;

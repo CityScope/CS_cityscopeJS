@@ -1,5 +1,17 @@
-import settings from "../../settings/settings.json";
 import axios from "axios";
+
+/**
+ *
+ * conver rgb to hex
+ */
+function valToHex(c) {
+    var hex = c.toString(16);
+    return hex.length === 1 ? "0" + hex : hex;
+}
+
+export function rgbToHex(r, g, b) {
+    return "#" + valToHex(r) + valToHex(g) + valToHex(b);
+}
 
 /**
  * Description. gets `props` with geojson
@@ -22,37 +34,6 @@ export const _proccessGridData = (cityioData) => {
     const newGrid = JSON.parse(JSON.stringify(GEOGRID));
     return newGrid;
 };
-
-/*
-const _handleTUIgridUpdate = (cityioData) => {
-
-    // handles TUI grid data on update
-    const geoGridMapping = cityioData.GEOGRID.properties.geogrid_to_tui_mapping;
-    let counter = 0;
-    for (let thisCellMapping in geoGridMapping) {
-        // type is the first value in the cell array
-        // the rotation is the 2nd
-        let gridCellType = TUIgridData[counter][0];
-        let interactiveCellProps = GEOGRID.features[thisCellMapping].properties;
-        // set up the cell type
-        interactiveCellProps.type = gridCellType;
-        // check if not undefined type (no scanning)
-        if (TUIgridData[counter][0] !== -1) {
-            // get value of cell from settings via its index
-            let cellValueByIndex = Object.values(typesSettings)[
-                TUIgridData[counter][0]
-            ];
-            // cast the cell color
-            interactiveCellProps.color = cellValueByIndex.color;
-            // cast the cell height
-            interactiveCellProps.height = cellValueByIndex.height;
-        } else {
-            console.log("... got null type...");
-        }
-        counter = counter + 1;
-    }
-};
-   */
 
 /**
  * Description. gets `props` with geojson
@@ -79,14 +60,8 @@ export const _proccessAccessData = (data) => {
  * with grid edits payload
  */
 export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
-    let postURL;
-    // check if cityIO or local server
-    postURL =
-        tableName === "mockAPI"
-            ? settings.cityIO.mockURL + endPoint
-            : "https://cityio.media.mit.edu/api/table/update/" +
-              tableName +
-              endPoint;
+    let postURL =
+        "https://cityio.media.mit.edu/api/table/update/" + tableName + endPoint;
 
     const options = {
         method: "post",
