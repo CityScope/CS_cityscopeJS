@@ -11,7 +11,7 @@ render(Router);
 
 if (module.hot) {
     module.hot.accept(Router, () => {
-        const hotModule = require(Router).default;
+        const hotModule = require("./components/Router/Router").default;
         render(hotModule);
     });
 }
