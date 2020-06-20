@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import CityIO from "../../CityIO/cityIO";
 import MenuContainer from "../../MenuContainer/MenuContainer";
 import MapContainer from "../../baseMap/baseMapContainer";
-import VisContainer from "../../visContainer/visContainer";
+import VisContainer from "../../VisContainer/VisContainer";
 import LoadingSpinner from "../../LoadingSpinner";
 
 export default function App(props) {
