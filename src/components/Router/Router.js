@@ -1,12 +1,12 @@
-import Provider from "./redux/Provider";
-import "./index.css";
-import configureStore from "./redux/store";
-import Screen from "./components/Screen";
+import Provider from "../../redux/Provider";
+import "./Router.css";
+import configureStore from "../../redux/store";
+import App from "./App/App";
 import { ThemeProvider } from "@material-ui/styles";
 import React, { Component } from "react";
 import { createMuiTheme } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import SplashScreen from "./SplashScreen/SplashScreen";
 
 const theme = createMuiTheme({
     // ! https://material-ui.com/customization/palette/
@@ -16,34 +16,34 @@ const theme = createMuiTheme({
     },
 });
 
-const store = configureStore();
-
-const MapRoute = () => {
+const AppRouter = () => {
     let url = window.location.toString();
     let pre = "cityscope=";
     let cityscopePrjName = url.substring(url.indexOf(pre) + pre.length);
 
     if (url.indexOf(pre) !== -1 && cityscopePrjName.length > 0) {
         console.log("loading CityScope project: " + cityscopePrjName);
-
         return (
             <ThemeProvider theme={theme}>
                 <CssBaseline />
 
-                <Provider store={store}>
-                    <Screen tableName={cityscopePrjName} />
+                <Provider store={configureStore()}>
+                    <App tableName={cityscopePrjName} />
                 </Provider>
             </ThemeProvider>
         );
     } else {
-        return <Typography gutterBottom>CityScopeJS</Typography>;
+        return (
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <SplashScreen />
+            </ThemeProvider>
+        );
     }
 };
 
-class App extends Component {
+export default class Router extends Component {
     render() {
-        return <MapRoute />;
+        return <AppRouter />;
     }
 }
-
-export default App;
