@@ -1,6 +1,7 @@
 /* global window */
 import React, { Component } from "react";
-import { CellMeta, SelectionTarget } from "./baseMapComponents";
+import { CellMeta } from "./CellMeta/CellMeta";
+import { SelectionTarget } from "./SelectionTarget/SelectionTarget";
 import { connect } from "react-redux";
 import { listenToSlidersEvents } from "../../redux/actions";
 import {
@@ -465,11 +466,13 @@ class Map extends Component {
             );
         }
 
-        if (this.props.menu.includes("PATHS")) {
+        if (this.props.menu.includes("AGGREGATED_TRIPS")) {
             layers.push(
                 new PathLayer({
-                    id: "PATHS",
-                    visible: this.props.menu.includes("PATHS") ? true : false,
+                    id: "AGGREGATED_TRIPS",
+                    visible: this.props.menu.includes("AGGREGATED_TRIPS")
+                        ? true
+                        : false,
                     _shadow: false,
                     data: cityioData.ABM,
                     getPath: (d) => {

@@ -57,7 +57,7 @@
                 "showOnInit": false,
                 "requireModule": "ABM"
             },
-            "PATHS": {
+            "AGGREGATED_TRIPS": {
                 "displayName": "Aggregated Trips",
                 "showOnInit": false,
                 "requireModule": "ABM"
