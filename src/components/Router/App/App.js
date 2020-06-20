@@ -6,7 +6,7 @@ import MapContainer from "../../baseMap/baseMapContainer";
 import VisContainer from "../../visContainer/visContainer";
 import LoadingSpinner from "../../LoadingSpinner";
 
-export default Screen = (props) => {
+export default function App(props) {
     // wait for 'ready' flag when app is ready to start
     const ready = useSelector((state) => state.READY);
     // get the table name for cityIO comp
@@ -26,4 +26,4 @@ export default Screen = (props) => {
             <LoadingSpinner />
         </>
     );
-};
+}

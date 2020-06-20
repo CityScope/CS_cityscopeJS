@@ -26,7 +26,6 @@ const AppRouter = () => {
         return (
             <ThemeProvider theme={theme}>
                 <CssBaseline />
-
                 <Provider store={configureStore()}>
                     <App tableName={cityscopePrjName} />
                 </Provider>
