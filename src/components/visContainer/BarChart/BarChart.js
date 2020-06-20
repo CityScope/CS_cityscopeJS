@@ -24,7 +24,7 @@ class Radar extends Component {
     }
 
     /**
-   
+   data format 
     [
     { x: 2, y: 10 },
     { x: 4, y: 5 },
@@ -36,7 +36,7 @@ class Radar extends Component {
         const indicators = this.props.cityioData.indicators;
 
         let dataArr = [];
-        let refDataArr = [];
+        // let refDataArr = [];
         for (let i = 0; i < indicators.length; i++) {
             if (indicators[i].viz_type === "bar") {
                 dataArr.push({
@@ -44,14 +44,17 @@ class Radar extends Component {
                     y: indicators[i].value,
                 });
 
-                refDataArr.push({
-                    x: indicators[i].name,
-                    y: indicators[i].ref_value,
-                });
+                // refDataArr.push({
+                //     x: indicators[i].name,
+                //     y: indicators[i].ref_value,
+                // });
             }
         }
 
-        this.setState({ barChartData: dataArr, refChartData: refDataArr });
+        this.setState({
+            barChartData: dataArr,
+            // refChartData: refDataArr
+        });
     }
 
     componentDidUpdate(prevProps) {
