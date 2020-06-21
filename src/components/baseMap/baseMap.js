@@ -8,6 +8,8 @@ import {
     _proccessAccessData,
     _proccessGridData,
     _postMapEditsToCityIO,
+    testHex,
+    hexToRgb,
 } from "./baseMapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
@@ -181,7 +183,7 @@ class Map extends Component {
             intensity: 0.85,
         });
         let dirLightSettings = {
-            timestamp: Date.UTC(2000, 7, 1, 11),
+            timestamp: 1554927200000,
             color: [255, 255, 255],
             intensity: 1.0,
             _shadow: true,
@@ -281,9 +283,7 @@ class Map extends Component {
         multiSelectedObj.forEach((selected) => {
             const thisCellProps = selected.object.properties;
             if (thisCellProps && thisCellProps.interactive === true) {
-                thisCellProps.old_height = thisCellProps.height;
-                thisCellProps.old_color = thisCellProps.color;
-                thisCellProps.color = color;
+                thisCellProps.color = testHex(color) ? hexToRgb(color) : color;
                 thisCellProps.height = height;
                 thisCellProps.name = name;
             }
@@ -326,13 +326,7 @@ class Map extends Component {
     };
 
     _handleKeyDown = (e) => {
-        // avoid common clicks
         this.setState({ keyDownState: e.nativeEvent.key });
-        if (e.nativeEvent.key === "=" && this.state.pickingRadius < 100) {
-            this.setState({ pickingRadius: this.state.pickingRadius + 5 });
-        } else if (e.nativeEvent.key === "-" && this.state.pickingRadius > 0) {
-            this.setState({ pickingRadius: this.state.pickingRadius - 5 });
-        }
     };
 
     /**
@@ -349,53 +343,56 @@ class Map extends Component {
      */
     _renderLayers() {
         const zoomLevel = this.state.viewState.zoom;
-        const { cityioData } = this.props;
+        const { cityioData, selectedType, menu } = this.props;
         let layers = [];
 
-        if (this.props.menu.includes("GRID")) {
+        if (menu.includes("GRID")) {
             layers.push(
                 new GeoJsonLayer({
                     id: "GRID",
-                    // loads geogrid into visualization
                     data: this.state.GEOGRID,
-                    visible: this.props.menu.includes("GRID") ? true : false,
-                    pickable:
-                        this.props.selectedType.class === "networkClass"
-                            ? false
-                            : true,
+                    visible: menu.includes("GRID") ? true : false,
+                    pickable: true,
                     extruded: true,
+                    wireframe: true,
                     lineWidthScale: 1,
                     lineWidthMinPixels: 2,
                     getElevation: (d) => d.properties.height,
                     getFillColor: (d) => d.properties.color,
                     onClick: (event) => {
                         if (
-                            this.props.menu.includes("EDIT") &&
+                            selectedType &&
+                            menu.includes("EDIT") &&
                             this.state.keyDownState !== "Shift"
                         )
                             this._handleGridcellEditing(event);
                     },
+
+                    onDrag: (event) => {
+                        if (
+                            selectedType &&
+                            menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        )
+                            this._handleGridcellEditing(event);
+                    },
+
+                    onDragStart: () => {
+                        if (
+                            selectedType &&
+                            menu.includes("EDIT") &&
+                            this.state.keyDownState !== "Shift"
+                        ) {
+                            this.setState({ draggingWhileEditing: true });
+                        }
+                    },
+
                     onHover: (e) => {
                         if (e.object) {
                             this.setState({ hoveredObj: e });
                         }
                     },
 
-                    onDrag: (event) => {
-                        if (
-                            this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        )
-                            this._handleGridcellEditing(event);
-                    },
-                    onDragStart: () => {
-                        if (
-                            this.props.menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
-                        ) {
-                            this.setState({ draggingWhileEditing: true });
-                        }
-                    },
                     onDragEnd: () => {
                         this.setState({ draggingWhileEditing: false });
                     },
@@ -411,11 +408,11 @@ class Map extends Component {
             );
         }
 
-        if (this.props.menu.includes("ACCESS")) {
+        if (menu.includes("ACCESS")) {
             layers.push(
                 new HeatmapLayer({
                     id: "ACCESS",
-                    visible: this.props.menu.includes("ACCESS"),
+                    visible: menu.includes("ACCESS"),
                     colorRange: settings.map.layers.heatmap.colors,
                     radiusPixels: 200,
                     opacity: 0.25,
@@ -429,11 +426,11 @@ class Map extends Component {
             );
         }
 
-        if (this.props.menu.includes("ABM")) {
+        if (menu.includes("ABM")) {
             layers.push(
                 new TripsLayer({
                     id: "ABM",
-                    visible: this.props.menu.includes("ABM") ? true : false,
+                    visible: menu.includes("ABM") ? true : false,
                     data: cityioData.ABM,
                     getPath: (d) => d.path,
                     getTimestamps: (d) => d.timestamps,
@@ -466,13 +463,11 @@ class Map extends Component {
             );
         }
 
-        if (this.props.menu.includes("AGGREGATED_TRIPS")) {
+        if (menu.includes("AGGREGATED_TRIPS")) {
             layers.push(
                 new PathLayer({
                     id: "AGGREGATED_TRIPS",
-                    visible: this.props.menu.includes("AGGREGATED_TRIPS")
-                        ? true
-                        : false,
+                    visible: menu.includes("AGGREGATED_TRIPS") ? true : false,
                     _shadow: false,
                     data: cityioData.ABM,
                     getPath: (d) => {
@@ -580,6 +575,7 @@ const mapStateToProps = (state) => {
         sliders: state.SLIDERS,
         menu: state.MENU,
         accessToggle: state.ACCESS_TOGGLE,
+        selectedType: state.SELECTED_TYPE,
     };
 };
 

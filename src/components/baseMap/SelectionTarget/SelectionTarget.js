@@ -1,4 +1,5 @@
 import React from "react";
+import { testHex, hexToRgb } from "../../baseMap/baseMapUtils";
 
 /**
  * cell selection
@@ -12,11 +13,21 @@ export const SelectionTarget = (props) => {
     const mousePos = props.mousePos;
 
     const divSize = props.divSize;
-    const rc = selectedType.color;
-    const color = "rgb(" + rc[0] + "," + rc[1] + "," + rc[2] + ")";
-    const colorTrans = "rgba(" + rc[0] + "," + rc[1] + "," + rc[2] + ",0.6)";
+    let col = selectedType.color;
+
+    if (testHex(col)) {
+        col = hexToRgb(col);
+    }
+
+    const color = "rgb(" + col[0] + "," + col[1] + "," + col[2] + ")";
+    const colorTrans = "rgba(" + col[0] + "," + col[1] + "," + col[2] + ",0.6)";
     let mouseX = mousePos.clientX - divSize / 2;
     let mouseY = mousePos.clientY - divSize / 2;
+
+    let msg =
+        props.selectedType.interactive !== "false"
+            ? selectedType.name
+            : "(x) not-interactive";
     return (
         <div
             style={{
@@ -41,7 +52,7 @@ export const SelectionTarget = (props) => {
                     fontSize: "0.5em",
                 }}
             >
-                {selectedType.name}
+                {msg}:
             </div>
         </div>
     );
