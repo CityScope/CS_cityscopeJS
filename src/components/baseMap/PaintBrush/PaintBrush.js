@@ -1,5 +1,6 @@
 import React from "react";
-import { testHex, hexToRgb } from "../../baseMap/baseMapUtils";
+import { testHex, hexToRgb } from "../baseMapUtils";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 /**
  * cell selection
@@ -7,27 +8,22 @@ import { testHex, hexToRgb } from "../../baseMap/baseMapUtils";
  * @param {*} props
  */
 
-export const SelectionTarget = (props) => {
+export const PaintBrush = (props) => {
     const selectedType = props.selectedType;
     if (!props.mousePos) return null;
+    const isInteractiveCell = props.hoveredCells.object.properties.interactive;
     const mousePos = props.mousePos;
-
     const divSize = props.divSize;
     let col = selectedType.color;
-
     if (testHex(col)) {
         col = hexToRgb(col);
     }
-
     const color = "rgb(" + col[0] + "," + col[1] + "," + col[2] + ")";
     const colorTrans = "rgba(" + col[0] + "," + col[1] + "," + col[2] + ",0.6)";
     let mouseX = mousePos.clientX - divSize / 2;
     let mouseY = mousePos.clientY - divSize / 2;
 
-    let msg =
-        props.selectedType.interactive !== "false"
-            ? selectedType.name
-            : "(x) not-interactive";
+    let msg = isInteractiveCell ? selectedType.name : "Not-interactive";
     return (
         <div
             style={{
@@ -49,9 +45,10 @@ export const SelectionTarget = (props) => {
                 style={{
                     position: "relative",
                     left: divSize + 10,
-                    fontSize: "0.5em",
+                    fontSize: "0.8em",
                 }}
             >
+                {!isInteractiveCell && <ErrorOutlineIcon />}
                 {msg}:
             </div>
         </div>

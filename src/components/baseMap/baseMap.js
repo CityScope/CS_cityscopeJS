@@ -1,7 +1,7 @@
 /* global window */
 import React, { Component } from "react";
 import { CellMeta } from "./CellMeta/CellMeta";
-import { SelectionTarget } from "./SelectionTarget/SelectionTarget";
+import { PaintBrush } from "./PaintBrush/PaintBrush";
 import { connect } from "react-redux";
 import { listenToSlidersEvents } from "../../redux/actions";
 import {
@@ -297,15 +297,16 @@ class Map extends Component {
      * Description.
      * draw target area around mouse
      */
-    _renderSelectionTarget = () => {
+    _renderPaintBrush = () => {
         if (this.props.menu.includes("EDIT")) {
             return (
                 this.props.selectedType && (
-                    <SelectionTarget
+                    <PaintBrush
                         mousePos={this.state.mousePos}
                         selectedType={this.props.selectedType}
                         divSize={this.state.pickingRadius}
                         mouseDown={this.state.mouseDown}
+                        hoveredCells={this.state.hoveredObj}
                     />
                 )
             );
@@ -359,6 +360,7 @@ class Map extends Component {
                     lineWidthMinPixels: 2,
                     getElevation: (d) => d.properties.height,
                     getFillColor: (d) => d.properties.color,
+
                     onClick: (event) => {
                         if (
                             selectedType &&
@@ -530,13 +532,9 @@ class Map extends Component {
                     })
                 }
             >
-                <React.Fragment>{this._renderSelectionTarget()}</React.Fragment>
+                <React.Fragment>{this._renderPaintBrush()}</React.Fragment>
 
                 <DeckGL
-                    // sets the cursor on paint
-                    getCursor={() =>
-                        this.props.menu.includes("EDIT") ? "none" : "all-scroll"
-                    }
                     ref={(ref) => {
                         // save a reference to the Deck instance
                         this.deckGL = ref && ref.deck;

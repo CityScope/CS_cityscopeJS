@@ -35,7 +35,6 @@ function EditMenu(props) {
     const [selectedIndex, setSelectedIndex] = React.useState(null);
     const dispatch = useDispatch();
     let selectedType = useSelector((state) => state.SELECTED_TYPE);
-
     const height = selectedType ? selectedType.height : null;
 
     const marks = [
