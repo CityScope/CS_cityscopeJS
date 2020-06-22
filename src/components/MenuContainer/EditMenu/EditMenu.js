@@ -12,6 +12,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
+import { testHex, hexToRgb } from "../../baseMap/baseMapUtils";
 
 function EditMenu(props) {
     const useStyles = makeStyles((theme) => ({
@@ -33,8 +34,9 @@ function EditMenu(props) {
     const classes = useStyles();
     const [selectedIndex, setSelectedIndex] = React.useState(null);
     const dispatch = useDispatch();
-    const selectedType = useSelector((state) => state.SELECTED_TYPE);
-    const { height } = selectedType;
+    let selectedType = useSelector((state) => state.SELECTED_TYPE);
+    const height = selectedType ? selectedType.height : null;
+
     const marks = [
         { value: 0, label: "0 floors" },
         { value: 50, label: "50 floors" },
@@ -52,9 +54,11 @@ function EditMenu(props) {
         let iconsArr = [];
         Object.keys(LanduseTypesList).forEach((type) => {
             let col = LanduseTypesList[type].color;
+            if (testHex(col)) {
+                col = hexToRgb(col);
+            }
             let rgbCol = "rgb(" + col[0] + "," + col[1] + "," + col[2] + ")";
             const selected = selectedIndex === type;
-
             let typeHasHeightProps = false;
             if (LanduseTypesList[type].height) {
                 typeHasHeightProps = true;

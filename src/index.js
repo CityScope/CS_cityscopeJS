@@ -1,17 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import Router from "./components/Router/Router";
 
 const root = document.getElementById("root");
 const render = () => {
-    return ReactDOM.render(<App />, root);
+    return ReactDOM.render(<Router />, root);
 };
 
-render(App);
+render(Router);
 
 if (module.hot) {
-    module.hot.accept("./App", () => {
-        const NextApp = require("./App").default;
-        render(NextApp);
+    module.hot.accept(Router, () => {
+        const hotModule = require("./components/Router/Router").default;
+        render(hotModule);
     });
 }

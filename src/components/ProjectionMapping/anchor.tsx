@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Anchor, Vector } from "./layer";
+import { Anchor, Vector } from "./ProjectionMapping";
 import { vectorToTransform } from "./util";
 
 const anchorSize = 30;
@@ -12,24 +12,24 @@ const styles = {
         borderRadius: "50%",
         position: "absolute" as "absolute",
         border: "4px solid white",
-        cursor: "move"
+        cursor: "move",
     },
     "top-left": {
         left: -halfAnchor,
-        top: -halfAnchor
+        top: -halfAnchor,
     },
     "bottom-left": {
         left: -halfAnchor,
-        bottom: -halfAnchor
+        bottom: -halfAnchor,
     },
     "top-right": {
         top: -halfAnchor,
-        right: -halfAnchor
+        right: -halfAnchor,
     },
     "bottom-right": {
         bottom: -halfAnchor,
-        right: -halfAnchor
-    }
+        right: -halfAnchor,
+    },
 };
 
 export interface Props {
@@ -50,18 +50,18 @@ export const AnchorComponent: React.StatelessComponent<Props> = ({
     onMouseDown,
     onMouseUp,
     className = "",
-    style = {}
+    style = {},
 }) => (
     <div
         onMouseEnter={() => onMouseEnter && onMouseEnter(position)}
-        onMouseDown={evt => onMouseDown(evt, position)}
+        onMouseDown={(evt) => onMouseDown(evt, position)}
         onMouseUp={() => onMouseUp(position)}
         className={className}
         style={{
             ...styles.container,
             ...styles[position],
             ...style,
-            transform: vectorToTransform(translation)
+            transform: vectorToTransform(translation),
         }}
     />
 );

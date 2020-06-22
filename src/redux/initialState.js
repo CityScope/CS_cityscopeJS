@@ -19,18 +19,14 @@ const initialState = {
         time: [
             settings.map.layers.ABM.startSimHour,
             settings.map.layers.ABM.startSimHour,
-            settings.map.layers.ABM.endSimHour
+            settings.map.layers.ABM.endSimHour,
         ],
-        speed: settings.map.layers.ABM.animationSpeed
+        speed: settings.map.layers.ABM.animationSpeed,
     },
     ACCESS_TOGGLE: 0,
-    SELECTED_TYPE: {
-        height: 0,
-        color: [255, 0, 0, 200],
-        name: "Select Land-Use!"
-    },
+    SELECTED_TYPE: null,
     READY: false,
-    LOADING: false
+    LOADING: false,
 };
 
 export default initialState;

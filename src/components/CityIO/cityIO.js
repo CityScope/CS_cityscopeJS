@@ -5,8 +5,8 @@ import {
     getCityioData,
     setReadyState,
     setLoadingState,
-} from "../redux/actions";
-import settings from "../settings/settings.json";
+} from "../../redux/actions";
+import settings from "../../settings/settings.json";
 
 class CityIO extends Component {
     constructor(props) {
