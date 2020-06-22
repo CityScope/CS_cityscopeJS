@@ -2,12 +2,12 @@ import React from "react";
 import { useSelector } from "react-redux";
 import CityIO from "../../CityIO/cityIO";
 import MenuContainer from "../../MenuContainer/MenuContainer";
-import MapContainer from "../../baseMap/baseMapContainer";
+import MapContainer from "../../BaseMap/BaseMapContainer";
 import VisContainer from "../../VisContainer/VisContainer";
 import LoadingSpinner from "../../LoadingSpinner";
 
 export default function App(props) {
-    // wait for 'ready' flag when app is ready to start
+    // wait for 'ready' flag from cityIO when app is ready to start
     const ready = useSelector((state) => state.READY);
     // get the table name for cityIO comp
     const { tableName } = props;

@@ -12,7 +12,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
-import { testHex, hexToRgb } from "../../baseMap/baseMapUtils";
+import { testHex, hexToRgb } from "../../BaseMap/BaseMapUtils";
 
 function EditMenu(props) {
     const useStyles = makeStyles((theme) => ({
