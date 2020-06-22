@@ -1,12 +1,12 @@
 import Provider from "../../redux/Provider";
 import "./Router.css";
 import configureStore from "../../redux/store";
-import App from "./App/App";
+import CityScopeJS from "../CityScopeJS/CityScopeJS";
 import { ThemeProvider } from "@material-ui/styles";
 import React, { Component } from "react";
 import { createMuiTheme } from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import SplashScreen from "./SplashScreen/SplashScreen";
+import SplashScreen from "../SplashScreen/SplashScreen";
 
 const theme = createMuiTheme({
     // ! https://material-ui.com/customization/palette/
@@ -27,7 +27,7 @@ const AppRouter = () => {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <Provider store={configureStore()}>
-                    <App tableName={cityscopePrjName} />
+                    <CityScopeJS tableName={cityscopePrjName} />
                 </Provider>
             </ThemeProvider>
         );
