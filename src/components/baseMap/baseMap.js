@@ -1,4 +1,3 @@
-/* global window */
 import React, { Component } from "react";
 import { CellMeta } from "./CellMeta/CellMeta";
 import { PaintBrush } from "./PaintBrush/PaintBrush";
