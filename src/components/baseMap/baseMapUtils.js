@@ -42,12 +42,16 @@ export const _proccessGridData = (cityioData) => {
     // get the static grid
     const GEOGRID = cityioData.GEOGRID;
     // if GEOGRRIDDATA exist
-    if (cityioData.GEOGRIDDATA && cityioData.GEOGRIDDATA.length > 0) {
+    if (
+        cityioData.GEOGRIDDATA &&
+        cityioData.GEOGRIDDATA.length === cityioData.GEOGRID.features.length
+    ) {
         // get the grid data
         const GEOGRIDDATA = cityioData.GEOGRIDDATA;
         // update GEOGRID features from GEOGRIDDATA on cityio
         for (let i = 0; i < GEOGRID.features.length; i++) {
             GEOGRID.features[i].properties = GEOGRIDDATA[i];
+
             // inject id
             GEOGRID.features[i].properties.id = i;
         }

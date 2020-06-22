@@ -12,7 +12,21 @@ const useStyles = makeStyles((theme) => ({
         margin: "auto",
         padding: theme.spacing(2),
         width: "100%",
-        maxWidth: "80%",
+        maxWidth: "50%",
+    },
+
+    inputRoot: {
+        fontSize: 40,
+    },
+    labelRoot: {
+        fontSize: 30,
+        color: "white",
+        "&$labelFocused": {
+            color: "white",
+        },
+    },
+    labelFocused: {
+        fontSize: 15,
     },
 }));
 
@@ -20,24 +34,31 @@ export default function SplashScreen() {
     const classes = useStyles();
 
     return (
-        <div className={classes.root}>
-            <Typography variant="h1" gutterBottom>
-                CityScopeJS
-            </Typography>
-            <Link href="https://github.com/CityScope/CS_cityscopeJS"></Link>
+        <>
+            <div className={classes.root}>
+                <Typography variant="h2" gutterBottom>
+                    CityScopeJS
+                </Typography>
 
-            <Typography variant="h3" gutterBottom>
-                CityScopeJS is a unified front-end for MIT CityScope project, an
-                open-source urban modeling and simulation platform. CityScopeJS
-                allows users to examine different urban-design alternatives, and
-                observe their impact through multiple layers of urban analytics
-                modules, such as economy, traffic and ABM simulation, urban
-                access, storm-water, noise and more.
-            </Typography>
+                <div>
+                    <Link href="https://github.com/CityScope/CS_cityscopeJS">
+                        {""}
+                        <Button color="default">
+                            <GitHubIcon />
+                        </Button>
+                    </Link>
+                </div>
 
-            <Button color="default">
-                <GitHubIcon />
-            </Button>
-        </div>
+                <Typography variant="h5" gutterBottom>
+                    CityScopeJS is a unified front-end for MIT CityScope
+                    project, an open-source urban modeling and simulation
+                    platform. CityScopeJS allows users to examine different
+                    urban-design alternatives, and observe their impact through
+                    multiple layers of urban analytics modules, such as economy,
+                    traffic and ABM simulation, urban access, storm-water, noise
+                    and more.
+                </Typography>
+            </div>
+        </>
     );
 }
