@@ -41,7 +41,7 @@ export const testHex = (hexString) => {
 export const _proccessGridData = (cityioData) => {
     // get the static grid
     const GEOGRID = cityioData.GEOGRID;
-    // if GEOGRRIDDATA exist
+    // if GEOGRRIDDATA exist and is the same length as our grid
     if (
         cityioData.GEOGRIDDATA &&
         cityioData.GEOGRIDDATA.length === cityioData.GEOGRID.features.length

@@ -282,7 +282,7 @@ class Map extends Component {
         const multiSelectedObj = this._mulipleObjPicked(e);
         multiSelectedObj.forEach((selected) => {
             const thisCellProps = selected.object.properties;
-            if (thisCellProps && thisCellProps.interactive === true) {
+            if (thisCellProps && thisCellProps.interactive) {
                 thisCellProps.color = testHex(color) ? hexToRgb(color) : color;
                 thisCellProps.height = height;
                 thisCellProps.name = name;

@@ -9,8 +9,9 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
  */
 
 export const PaintBrush = (props) => {
+    if (!props.mousePos || !props.hoveredCells) return null;
     const selectedType = props.selectedType;
-    if (!props.mousePos) return null;
+
     const isInteractiveCell = props.hoveredCells.object.properties.interactive;
     const mousePos = props.mousePos;
     const divSize = props.divSize;
