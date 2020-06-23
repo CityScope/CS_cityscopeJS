@@ -15,13 +15,13 @@ const randomProperty = (obj) => {
 };
 
 export const gridCreator = (gridProps) => {
-    let top_left_lon = gridProps.longitude;
-    let top_left_lat = gridProps.latitude;
-    let rotation = gridProps.rotation;
+    let top_left_lon = parseFloat(gridProps.longitude);
+    let top_left_lat = parseFloat(gridProps.latitude);
+    let rotation = parseFloat(gridProps.rotation);
     let userPrj = gridProps.projection;
-    let cell_size = gridProps.cellSize;
-    let nrows = gridProps.nrows;
-    let ncols = gridProps.ncols;
+    let cell_size = parseFloat(gridProps.cellSize);
+    let nrows = parseFloat(gridProps.nrows);
+    let ncols = parseFloat(gridProps.ncols);
 
     const webMercator = proj4.defs("EPSG:4326");
     let EARTH_RADIUS_M = 6.371e6;

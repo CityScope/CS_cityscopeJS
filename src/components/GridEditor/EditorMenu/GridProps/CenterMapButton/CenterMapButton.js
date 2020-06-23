@@ -23,7 +23,7 @@ export default function CenterMapButton(props) {
             startIcon={<CenterFocusStrongIcon />}
             style={{ fontSize: "12px" }}
         >
-            Center Map ({props.mapCenter[0]}, {props.mapCenter[1]})
+            Center Map
         </Button>
     );
 }

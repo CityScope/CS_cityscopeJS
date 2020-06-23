@@ -34,6 +34,27 @@ export default function CommitGrid(props) {
     let geoGridObj = settings.GEOGRID;
     // inject table props to grid
     geoGridObj.properties.header = props.gridProps;
+    geoGridObj.properties.header.longitude = parseFloat(
+        geoGridObj.properties.header.longitude
+    );
+    console.log(geoGridObj.properties.header.longitude);
+
+    geoGridObj.properties.header.latitude = parseFloat(
+        geoGridObj.properties.header.latitude
+    );
+    geoGridObj.properties.header.rotation = parseFloat(
+        geoGridObj.properties.header.rotation
+    );
+    geoGridObj.properties.header.nrows = parseFloat(
+        geoGridObj.properties.header.nrows
+    );
+    geoGridObj.properties.header.ncols = parseFloat(
+        geoGridObj.properties.header.ncols
+    );
+    geoGridObj.properties.header.cellSize = parseFloat(
+        geoGridObj.properties.header.cellSize
+    );
+
     const [reqResonse, setReqResonse] = React.useState(null);
 
     const reduxState = useSelector((state) => state);
