@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 import axios from "axios";
 import settings from "../../../GridEditorSettings.json";
 import Typography from "@material-ui/core/Typography";
@@ -80,6 +81,28 @@ export default function CommitGrid(props) {
     const reduxState = useSelector((state) => state);
     const hasGrid = reduxState.GRID_CREATED;
 
+    const downloadObjectAsJson = () => {
+        let struct = settings.GEOGRID;
+        let typesList = reduxState.TYPES_LIST;
+        let geoJsonFeatures = reduxState.GRID_CREATED.features;
+        let gridProps = props.gridProps;
+        let geoGridObj = prepareData(
+            struct,
+            typesList,
+            geoJsonFeatures,
+            gridProps
+        );
+        var dataStr =
+            "data:text/json;charset=utf-8," +
+            encodeURIComponent(JSON.stringify(geoGridObj));
+        var downloadAnchorNode = document.createElement("a");
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "grid.json");
+        document.body.appendChild(downloadAnchorNode); // required for firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    };
+
     const postGridToCityIO = () => {
         let struct = settings.GEOGRID;
         let typesList = reduxState.TYPES_LIST;
@@ -147,6 +170,19 @@ export default function CommitGrid(props) {
                     >
                         Commit Grid to cityIO
                     </Button>
+
+                    <Button
+                        onClick={() => {
+                            // ! download as json
+                            downloadObjectAsJson();
+                        }}
+                        variant="outlined"
+                        color="default"
+                        startIcon={<CloudDownloadIcon />}
+                    >
+                        Download JSON
+                    </Button>
+
                     <div style={{ width: "100%" }}> {reqResonse}</div>
                 </>
             )}
