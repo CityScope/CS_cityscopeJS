@@ -6,7 +6,11 @@ import {
     LISTEN_TO_EDIT_MENU,
     SET_READY_STATE,
     SET_LOADING_STATE,
-    LISTEN_TO_ACCESS_TOGGLE
+    LISTEN_TO_ACCESS_TOGGLE,
+    LISTEN_TO_ROW_EDIT,
+    LISTEN_TO_TYPES_LIST,
+    LISTEN_TO_GRID_CREATOR,
+    LISTEN_TO_BASE_MAP_CENTER,
 } from "./actions";
 import initialState from "./initialState";
 
@@ -31,6 +35,20 @@ export default function reducer(state = initialState, action) {
             return { ...state, READY: action.data };
         case SET_LOADING_STATE:
             return { ...state, LOADING: action.data };
+
+        //! Editor
+        case LISTEN_TO_ROW_EDIT:
+            return { ...state, ROW_EDIT: action.data };
+
+        case LISTEN_TO_TYPES_LIST:
+            return { ...state, TYPES_LIST: action.data };
+
+        case LISTEN_TO_GRID_CREATOR:
+            return { ...state, GRID_CREATED: action.data };
+
+        case LISTEN_TO_BASE_MAP_CENTER:
+            return { ...state, BASE_MAP_CENTER: action.data };
+
         default:
             return state;
     }

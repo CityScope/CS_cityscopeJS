@@ -22,7 +22,6 @@ export function listenToAccessToggle(data) {
 }
 
 export const MENU_INTERACTION = "MENU_INTERACTION";
-
 export function listenToMenuUI(data) {
     return { type: MENU_INTERACTION, data };
 }
@@ -40,4 +39,28 @@ export function setReadyState(data) {
 export const SET_LOADING_STATE = "SET_LOADING_STATE";
 export function setLoadingState(data) {
     return { type: SET_LOADING_STATE, data };
+}
+
+/**
+ * Editor Actions
+ */
+
+export const LISTEN_TO_GRID_CREATOR = "LISTEN_TO_GRID_CREATOR";
+export function listenToGridCreator(data) {
+    return { type: LISTEN_TO_GRID_CREATOR, data };
+}
+
+export const LISTEN_TO_ROW_EDIT = "LISTEN_TO_ROW_EDIT";
+export function listenToRowEdits(data) {
+    return { type: LISTEN_TO_ROW_EDIT, data };
+}
+
+export const LISTEN_TO_TYPES_LIST = "LISTEN_TO_TYPES_LIST";
+export function listeonToTypesList(data) {
+    return { type: LISTEN_TO_TYPES_LIST, data };
+}
+
+export const LISTEN_TO_BASE_MAP_CENTER = "LISTEN_TO_BASE_MAP_CENTER";
+export function listenToBaseMapCenter(data) {
+    return { type: LISTEN_TO_BASE_MAP_CENTER, data };
 }

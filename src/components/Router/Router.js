@@ -7,6 +7,7 @@ import React, { Component } from "react";
 import { createMuiTheme } from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import SplashScreen from "../SplashScreen/SplashScreen";
+import GridEditor from "../GridEditor/GridEditor";
 
 const theme = createMuiTheme({
     // ! https://material-ui.com/customization/palette/
@@ -33,10 +34,13 @@ const AppRouter = () => {
         );
     } else {
         return (
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <SplashScreen />
-            </ThemeProvider>
+            <Provider store={configureStore()}>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <SplashScreen />
+                    <GridEditor />
+                </ThemeProvider>
+            </Provider>
         );
     }
 };
