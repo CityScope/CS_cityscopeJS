@@ -7,69 +7,94 @@ import Typography from "@material-ui/core/Typography";
 import { useSelector } from "react-redux";
 import Link from "@material-ui/core/Link";
 
+const reqResonseUI = (response, tableName) => {
+    let cityscopeJSendpoint =
+        "https://cityscope.media.mit.edu/CS_cityscopeJS/?cityscope=" +
+        tableName;
+    // create the feedback text
+    let resText = (
+        <Typography variant="caption">
+            CityIO is {response.data.status}. Grid deployed to{" "}
+            <Link href={cityscopeJSendpoint}>{cityscopeJSendpoint}</Link>
+        </Typography>
+    );
+
+    return resText;
+};
+
 /**
  *
  * @param {typesList} typesList List of types form table editor
  *
  */
-const prepareTypesList = (typesList) => {
+const prepareData = (struct, typesList, geoJsonFeatures, gridProps) => {
+    let geoGridObject = struct;
+
+    // take types list and prepare to csJS format
     let newTypesList = {};
+
     typesList.forEach((oldType) => {
         newTypesList[oldType.name] = oldType;
 
-        // fixes JSON => string in material-table
-        newTypesList[oldType.name].LBCS = JSON.parse(
-            JSON.stringify(oldType.LBCS)
-        );
-        newTypesList[oldType.name].NAICS = JSON.parse(
-            JSON.stringify(oldType.NAICS)
-        );
+        // // fixes JSON => string in material-table
+        // newTypesList[oldType.name].LBCS = JSON.parse(
+        //     JSON.stringify(oldType.LBCS)
+        // );
+        // newTypesList[oldType.name].NAICS = JSON.parse(
+        //     JSON.stringify(oldType.NAICS)
+        // );
     });
 
-    return newTypesList;
+    geoGridObject.properties.types = newTypesList;
+
+    // inject table props to grid
+    geoGridObject.properties.header = gridProps;
+    geoGridObject.properties.header.longitude = parseFloat(
+        geoGridObject.properties.header.longitude
+    );
+    geoGridObject.properties.header.latitude = parseFloat(
+        geoGridObject.properties.header.latitude
+    );
+    geoGridObject.properties.header.rotation = parseFloat(
+        geoGridObject.properties.header.rotation
+    );
+    geoGridObject.properties.header.nrows = parseFloat(
+        geoGridObject.properties.header.nrows
+    );
+    geoGridObject.properties.header.ncols = parseFloat(
+        geoGridObject.properties.header.ncols
+    );
+    geoGridObject.properties.header.cellSize = parseFloat(
+        geoGridObject.properties.header.cellSize
+    );
+
+    // lastly get the grid features
+    geoGridObject.features = geoJsonFeatures;
+
+    return geoGridObject;
 };
 
 export default function CommitGrid(props) {
-    // take grid struct from settings
-    let geoGridObj = settings.GEOGRID;
-    // inject table props to grid
-    geoGridObj.properties.header = props.gridProps;
-    geoGridObj.properties.header.longitude = parseFloat(
-        geoGridObj.properties.header.longitude
-    );
-    console.log(geoGridObj.properties.header.longitude);
-
-    geoGridObj.properties.header.latitude = parseFloat(
-        geoGridObj.properties.header.latitude
-    );
-    geoGridObj.properties.header.rotation = parseFloat(
-        geoGridObj.properties.header.rotation
-    );
-    geoGridObj.properties.header.nrows = parseFloat(
-        geoGridObj.properties.header.nrows
-    );
-    geoGridObj.properties.header.ncols = parseFloat(
-        geoGridObj.properties.header.ncols
-    );
-    geoGridObj.properties.header.cellSize = parseFloat(
-        geoGridObj.properties.header.cellSize
-    );
-
     const [reqResonse, setReqResonse] = React.useState(null);
 
     const reduxState = useSelector((state) => state);
     const hasGrid = reduxState.GRID_CREATED;
 
-    // if grid was created, and is on redux
-    if (hasGrid) {
-        geoGridObj.features = reduxState.GRID_CREATED.features;
-        // prepare type to csJS format
-        geoGridObj.properties.types = prepareTypesList(reduxState.TYPES_LIST);
-    }
+    const postGridToCityIO = () => {
+        let struct = settings.GEOGRID;
+        let typesList = reduxState.TYPES_LIST;
+        let geoJsonFeatures = reduxState.GRID_CREATED.features;
+        let gridProps = props.gridProps;
+        // take grid struct from settings
+        let geoGridObj = prepareData(
+            struct,
+            typesList,
+            geoJsonFeatures,
+            gridProps
+        );
 
-    const postToCityIO = () => {
         let tableName = geoGridObj.properties.header.tableName.toLowerCase();
-        let reqList = {
+        let requestsList = {
             geoGridURL:
                 "https://cityio.media.mit.edu/api/table/update/" +
                 tableName +
@@ -83,7 +108,7 @@ export default function CommitGrid(props) {
 
         const options = {
             method: "post",
-            url: reqList.geoGridURL,
+            url: requestsList.geoGridURL,
             data: geoGridObj,
             headers: {
                 "Content-Type": "application/json",
@@ -93,12 +118,12 @@ export default function CommitGrid(props) {
 
         axios(options)
             .then(function (response) {
-                reqResonseTag(response, tableName);
+                setReqResonse(reqResonseUI(response, tableName));
             })
             // then reset GEOGRIDDATA of that new grid
 
             .then(function () {
-                options.url = reqList.geoGridDataURL;
+                options.url = requestsList.geoGridDataURL;
                 options.data = {};
                 axios(options);
                 console.log("removed GEOGRIDDATA");
@@ -108,27 +133,13 @@ export default function CommitGrid(props) {
             });
     };
 
-    const reqResonseTag = (response, tableName) => {
-        let cityscopeJSendpoint =
-            "https://cityscope.media.mit.edu/CS_cityscopeJS/?cityscope=" +
-            tableName;
-        // create the feedback text
-        let resText = (
-            <Typography variant="caption">
-                CityIO is {response.data.status}. Grid deployed to{" "}
-                <Link href={cityscopeJSendpoint}>{cityscopeJSendpoint}</Link>
-            </Typography>
-        );
-
-        setReqResonse(resText);
-    };
     return (
         <>
             {hasGrid && (
                 <>
                     <Button
                         onClick={() => {
-                            postToCityIO();
+                            postGridToCityIO();
                         }}
                         variant="outlined"
                         color="default"
