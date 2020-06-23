@@ -27,6 +27,18 @@ const initialState = {
     SELECTED_TYPE: null,
     READY: false,
     LOADING: false,
+
+    /**
+     * ! EDITOR INIT STATE
+     */
+
+    ROW_EDIT: null,
+    BASE_MAP_CENTER: {
+        latCenter: null,
+        lonCenter: null,
+    },
+    TYPES_LIST: null,
+    GRID_CREATED: null,
 };
 
 export default initialState;
