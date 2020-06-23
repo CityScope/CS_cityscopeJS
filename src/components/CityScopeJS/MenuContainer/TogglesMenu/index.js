@@ -9,6 +9,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import settings from "../../../../settings/settings.json";
 import Collapse from "@material-ui/core/Collapse";
 import ABMSubmenu from "./ABMSubmenu";
+import ShadowSubmenu from "./ShadowSubmenu";
 import AccessSubmenu from "./AccessSubmenu";
 import Switch from "@material-ui/core/Switch";
 import { makeStyles } from "@material-ui/core/styles";
@@ -69,6 +70,16 @@ function TogglesMenu(props) {
                             />
                         </ListItemSecondaryAction>
                     </ListItem>
+
+                    {
+                        // ! Handle submenus of ABM/ACCESS
+
+                        listOfToggles[i] === "SHADOWS" && (
+                            <Collapse in={checked} style={{ width: "100%" }}>
+                                <ShadowSubmenu />
+                            </Collapse>
+                        )
+                    }
 
                     {
                         // ! Handle submenus of ABM/ACCESS

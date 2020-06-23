@@ -43,7 +43,7 @@ class Map extends Component {
         // fix deck view rotate
         this._rightClickViewRotate();
         // setup sun effects
-        this._setupEffects();
+        this._setupSunEffects();
         // zoom map on CS table location
         this._setViewStateToTableHeader();
         // start ainmation/sim/roate
@@ -54,6 +54,8 @@ class Map extends Component {
      * handels events as they derived from redux props
      */
     componentDidUpdate(prevProps, prevState) {
+        this._updateSunDirecation(this.props.sliders.time[1]);
+
         if (prevProps.menu !== prevState.menu) {
             this.setState({ menu: this.props.menu });
         }
@@ -176,7 +178,7 @@ class Map extends Component {
         });
     }
 
-    _setupEffects() {
+    _setupSunEffects() {
         const ambientLight = new AmbientLight({
             color: [255, 255, 255],
             intensity: 0.85,
@@ -192,6 +194,20 @@ class Map extends Component {
         lightingEffect.shadowColor = [0, 0, 0, 0.5];
         this._effects = [lightingEffect];
     }
+
+    _updateSunDirecation = (time) => {
+        var currentDateMidnight = new Date();
+        currentDateMidnight.setHours(0, 0, 0, 0);
+        var date = new Date(currentDateMidnight.getTime() + time * 1000);
+        this._effects[0].directionalLights[0].timestamp = Date.UTC(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDay(),
+            date.getHours(),
+            date.getMinutes(),
+            date.getSeconds()
+        );
+    };
 
     _animate() {
         if (this.state.animateCamera) {
@@ -216,17 +232,7 @@ class Map extends Component {
             if (time < startHour || time > endHour) {
                 t = startHour;
             }
-            var currentDateMidnight = new Date();
-            currentDateMidnight.setHours(0, 0, 0, 0);
-            var date = new Date(currentDateMidnight.getTime() + t * 1000);
-            this._effects[0].directionalLights[0].timestamp = Date.UTC(
-                date.getFullYear(),
-                date.getMonth(),
-                date.getDay(),
-                date.getHours(),
-                date.getMinutes(),
-                date.getSeconds()
-            );
+
             this.props.listenToSlidersEvents({
                 ...this.props.sliders,
                 time: [
@@ -235,6 +241,9 @@ class Map extends Component {
                     this.props.sliders.time[2],
                 ],
             });
+
+            // upddate sun position
+            this._updateSunDirecation(t);
         }
         // ! start the req animation frame
         this.animationFrame = window.requestAnimationFrame(
