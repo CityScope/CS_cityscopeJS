@@ -37,7 +37,7 @@ const AppRouter = () => {
             <Provider store={configureStore()}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
-                    <SplashScreen />
+                    {/* <SplashScreen /> */}
                     <GridEditor />
                 </ThemeProvider>
             </Provider>

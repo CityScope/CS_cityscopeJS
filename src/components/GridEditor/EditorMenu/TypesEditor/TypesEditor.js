@@ -65,7 +65,7 @@ export default function TypesEditor() {
                                 backgroundColor:
                                     selectedRow === rowData.tableData.id
                                         ? rowColor
-                                        : "#FFF",
+                                        : null,
                             }),
                         }}
                         onRowClick={(evt, row) => {
