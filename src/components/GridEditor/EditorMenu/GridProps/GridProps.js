@@ -54,7 +54,7 @@ export default function GridProps() {
                         variant="outlined"
                         className={classes.textField}
                         id="tableName"
-                        label="Table Name"
+                        label="CityScope Project Name"
                         defaultValue={formValues.tableName}
                     />
                 </div>

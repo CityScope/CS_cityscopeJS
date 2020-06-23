@@ -9,8 +9,10 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import SplashScreen from "../SplashScreen/SplashScreen";
 import GridEditor from "../GridEditor/GridEditor";
 
+/**
+ *  ! https://material-ui.com/customization/palette/
+ */
 const theme = createMuiTheme({
-    // ! https://material-ui.com/customization/palette/
     palette: {
         type: "dark",
         background: { default: "#000", paper: "#29323c" },
@@ -21,32 +23,32 @@ const AppRouter = () => {
     let url = window.location.toString();
     let pre = "cityscope=";
     let cityscopePrjName = url.substring(url.indexOf(pre) + pre.length);
+    let app = null;
 
+    console.log(window.location.search);
+
+    // check URL for proper CS project link
     if (url.indexOf(pre) !== -1 && cityscopePrjName.length > 0) {
-        console.log("loading CityScope project: " + cityscopePrjName);
-        return (
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <Provider store={configureStore()}>
-                    <CityScopeJS tableName={cityscopePrjName} />
-                </Provider>
-            </ThemeProvider>
-        );
+        console.log("Loading CityScope project: " + cityscopePrjName);
+        app = <CityScopeJS tableName={cityscopePrjName} />;
+    } else if (window.location.search === "?editor") {
+        app = <GridEditor />;
     } else {
-        return (
-            <Provider store={configureStore()}>
-                <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    {/* <SplashScreen /> */}
-                    <GridEditor />
-                </ThemeProvider>
-            </Provider>
-        );
+        app = <SplashScreen />;
     }
+
+    return app;
 };
 
 export default class Router extends Component {
     render() {
-        return <AppRouter />;
+        return (
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Provider store={configureStore()}>
+                    <AppRouter />
+                </Provider>
+            </ThemeProvider>
+        );
     }
 }
