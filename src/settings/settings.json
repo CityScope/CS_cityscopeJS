@@ -8,42 +8,14 @@
         "cityIOmodules": [
             "header",
             "GEOGRID",
-            "ABM",
+            "ABM2",
             "grid",
             "access",
             "GEOGRIDDATA",
             "indicators"
         ]
     },
-    "map": {
-        "mapStyle": {
-            "sat": "mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd?fresh=true",
-            "dark": "mapbox://styles/relnox/cjl58dpkq2jjp2rmzyrdvfsds?fresh=true",
-            "blue": "mapbox://styles/relnox/ck0h5xn701bpr1dqs3he2lecq?fresh=true"
-        },
-        "layers": {
-            "ABM": {
-                "startSimHour": 25200,
-                "endSimHour": 50400,
-                "animationSpeed": 20
-            },
-            "heatmap": {
-                "colors": [
-                    [213, 62, 79],
-                    [252, 141, 89],
-                    [254, 224, 139],
-                    [230, 245, 152],
-                    [153, 213, 148],
-                    [50, 136, 189]
-                ]
-            }
-        },
-        "initialViewState": {
-            "zoom": 17,
-            "pitch": 0,
-            "bearing": 0
-        }
-    },
+
     "menu": {
         "toggles": {
             "GRID": {
@@ -55,12 +27,12 @@
             "ABM": {
                 "displayName": "Mobility Simulation",
                 "showOnInit": false,
-                "requireModule": "ABM"
+                "requireModule": "ABM2"
             },
             "AGGREGATED_TRIPS": {
                 "displayName": "Aggregated Trips",
                 "showOnInit": false,
-                "requireModule": "ABM"
+                "requireModule": "ABM2"
             },
             "ACCESS": {
                 "displayName": "Accessibility Analysis",
@@ -88,6 +60,36 @@
                 "showOnInit": false,
                 "requireModule": false
             }
+        }
+    },
+
+    "map": {
+        "mapStyle": {
+            "sat": "mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd?fresh=true",
+            "dark": "mapbox://styles/relnox/cjl58dpkq2jjp2rmzyrdvfsds?fresh=true",
+            "blue": "mapbox://styles/relnox/ck0h5xn701bpr1dqs3he2lecq?fresh=true"
+        },
+        "layers": {
+            "ABM": {
+                "startSimHour": 25200,
+                "endSimHour": 50400,
+                "animationSpeed": 20
+            },
+            "heatmap": {
+                "colors": [
+                    [213, 62, 79],
+                    [252, 141, 89],
+                    [254, 224, 139],
+                    [230, 245, 152],
+                    [153, 213, 148],
+                    [50, 136, 189]
+                ]
+            }
+        },
+        "initialViewState": {
+            "zoom": 17,
+            "pitch": 0,
+            "bearing": 0
         }
     }
 }
