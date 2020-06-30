@@ -13,7 +13,8 @@ import { _postMapEditsToCityIO } from "../../../../BaseMap/BaseMapUtils";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { getScenarioIndices } from "../../../../CityIO/utils";
 
-function ScenarioItems() {
+function ScenarioItems(props) {
+    const { toggleDrawer } = props;
     const cityioData = useSelector((state) => state.CITYIO);
     const scenarioNames = useSelector((state) => state.SCENARIO_NAMES);
     const dispatch = useDispatch();
@@ -83,6 +84,7 @@ function ScenarioItems() {
                     onClick={() => {
                         dispatch(setLoadingState(true));
                         getScenario(cityioData.tableName, scenario.id);
+                        toggleDrawer();
                     }}
                 >
                     <Typography variant="h6">{scenario.name}</Typography>

@@ -85,8 +85,7 @@ class CityIO extends Component {
             // get scenario indices
             getScenarioIndices(
                 this.props.tableName,
-                this.props.setScenarioNames,
-                this.props.setLoadingState
+                this.props.setScenarioNames
             );
 
             // new data in table, get all modules
@@ -110,9 +109,9 @@ class CityIO extends Component {
                 } else {
                     // update module name with ok
                     this.setNestedState("cityIOmodulesStatus", module, true);
-                    this.props.setLoadingState(false);
                 }
             });
+            this.checkDoneCityIO();
             // finally, put to state the hashes master id
             this.setNestedState("oldHashs", "id", result.id);
         }
@@ -143,7 +142,8 @@ class CityIO extends Component {
                     response.data
                 );
                 console.log("...updating module:", moduleName);
-                this.checkDoneCityIO(moduleName);
+                this.setNestedState("cityIOmodulesStatus", moduleName, true);
+                this.checkDoneCityIO();
             })
 
             .catch((error) => {
@@ -166,9 +166,7 @@ class CityIO extends Component {
             });
     };
 
-    checkDoneCityIO = (moduleName) => {
-        this.setNestedState("cityIOmodulesStatus", moduleName, true);
-
+    checkDoneCityIO = () => {
         // check if all modules are done
         for (const status in this.state.cityIOmodulesStatus) {
             if (this.state.cityIOmodulesStatus[status] !== true) {

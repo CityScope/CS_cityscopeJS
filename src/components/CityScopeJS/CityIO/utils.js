@@ -36,7 +36,7 @@ export const getScenarioIndices = (
                             id: r.data.id,
                         }))
                     );
-                    setLoadingState(false);
+                    setLoadingState && setLoadingState(false);
                 })
                 .catch((err) =>
                     console.log("error getting scenario names", err)

@@ -1,5 +1,6 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoadingState } from "../../../../../../redux/actions";
 import settings from "../../../../../../settings/settings.json";
 import axios from "axios";
 import Button from "@material-ui/core/Button";
@@ -13,7 +14,9 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 export default function SaveAsScenario(props) {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState("");
-    const { tableName } = props;
+    const dispatch = useDispatch();
+
+    const { tableName, toggleDrawer } = props;
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -84,6 +87,8 @@ export default function SaveAsScenario(props) {
         axios(options)
             .then((res) => {
                 console.log("Successfully saved grid data and network");
+                dispatch(setLoadingState(false));
+                toggleDrawer();
                 handleClose();
             })
             .catch((error) => {
@@ -128,6 +133,7 @@ export default function SaveAsScenario(props) {
                     </Button>
                     <Button
                         onClick={() => {
+                            dispatch(setLoadingState(true));
                             getScenarioIndex();
                         }}
                         color="primary"

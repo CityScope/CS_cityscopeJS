@@ -28,8 +28,11 @@ export default function SaveMenu(props) {
                 <Typography variant="h5" className={classes.text} gutterBottom>
                     Scenarios
                 </Typography>
-                <SaveAsScenario tableName={tableName} />
-                <ScenarioItems />
+                <SaveAsScenario
+                    tableName={tableName}
+                    toggleDrawer={toggleDrawer}
+                />
+                <ScenarioItems toggleDrawer={toggleDrawer} />
             </List>
         </Drawer>
     );
