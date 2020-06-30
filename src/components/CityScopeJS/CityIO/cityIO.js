@@ -5,8 +5,10 @@ import {
     getCityioData,
     setReadyState,
     setLoadingState,
+    setScenarioNames,
 } from "../../../redux/actions";
 import settings from "../../../settings/settings.json";
+import { getScenarioIndices } from "./utils";
 
 class CityIO extends Component {
     constructor(props) {
@@ -80,6 +82,13 @@ class CityIO extends Component {
             // reset the state of this flag
             this.props.setLoadingState(true);
 
+            // get scenario indices
+            getScenarioIndices(
+                this.props.tableName,
+                this.props.setScenarioNames,
+                this.props.setLoadingState
+            );
+
             // new data in table, get all modules
             // that are listed in settings
             settings.cityIO.cityIOmodules.forEach((module) => {
@@ -101,6 +110,7 @@ class CityIO extends Component {
                 } else {
                     // update module name with ok
                     this.setNestedState("cityIOmodulesStatus", module, true);
+                    this.props.setLoadingState(false);
                 }
             });
             // finally, put to state the hashes master id
@@ -187,6 +197,7 @@ const mapDispatchToProps = {
     getCityioData: getCityioData,
     setReadyState: setReadyState,
     setLoadingState: setLoadingState,
+    setScenarioNames: setScenarioNames,
 };
 
 export default connect(null, mapDispatchToProps)(CityIO);
