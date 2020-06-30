@@ -3,30 +3,25 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
+import GridOnIcon from "@material-ui/icons/GridOn";
+import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: "flex",
-        flexWrap: "wrap",
-        margin: "auto",
-        padding: theme.spacing(2),
-        width: "100%",
+        "& > *": {
+            margin: theme.spacing(1),
+        },
+        padding: theme.spacing(5),
+
         maxWidth: "50%",
     },
 
-    inputRoot: {
-        fontSize: 40,
-    },
-    labelRoot: {
-        fontSize: 30,
-        color: "white",
-        "&$labelFocused": {
-            color: "white",
+    paper: {
+        "& > *": {
+            margin: theme.spacing(1),
+            width: theme.spacing(20),
+            height: theme.spacing(30),
         },
-    },
-    labelFocused: {
-        fontSize: 15,
     },
 }));
 
@@ -36,19 +31,9 @@ export default function SplashScreen() {
     return (
         <>
             <div className={classes.root}>
-                <Typography variant="h2" gutterBottom>
+                <Typography variant="h1" gutterBottom>
                     CityScopeJS
                 </Typography>
-
-                <div>
-                    <Link href="https://github.com/CityScope/CS_cityscopeJS">
-                        {""}
-                        <Button color="default">
-                            <GitHubIcon />
-                        </Button>
-                    </Link>
-                </div>
-
                 <Typography variant="h5" gutterBottom>
                     CityScopeJS is a unified front-end for MIT CityScope
                     project, an open-source urban modeling and simulation
@@ -58,6 +43,42 @@ export default function SplashScreen() {
                     traffic and ABM simulation, urban access, storm-water, noise
                     and more.
                 </Typography>
+                <Box p={5} />
+
+                <div className={classes.paper}>
+                    <Button
+                        variant="outlined"
+                        color="default"
+                        href="https://cityscope.media.mit.edu/CS_cityscopeJS/?editor"
+                    >
+                        <Box justifyContent="center">
+                            <div>
+                                <GridOnIcon />
+                            </div>
+
+                            <Typography variant="caption" gutterBottom>
+                                Click here to design and deploy a new CityScope
+                                project using Grid Editor
+                            </Typography>
+                        </Box>
+                    </Button>
+
+                    <Button
+                        variant="outlined"
+                        href="https://cityscope.media.mit.edu/CS_cityscopeJS/?editor"
+                        color="default"
+                    >
+                        <Box justifyContent="center">
+                            <div>
+                                <GitHubIcon />
+                            </div>
+                            <Typography variant="caption" gutterBottom>
+                                This open-source project is developed by the
+                                CityScope Network. Join us!
+                            </Typography>
+                        </Box>
+                    </Button>
+                </div>
             </div>
         </>
     );

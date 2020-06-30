@@ -24,9 +24,6 @@ const AppRouter = () => {
     let pre = "cityscope=";
     let cityscopePrjName = url.substring(url.indexOf(pre) + pre.length);
     let app = null;
-
-    console.log(window.location.search);
-
     // check URL for proper CS project link
     if (url.indexOf(pre) !== -1 && cityscopePrjName.length > 0) {
         console.log("Loading CityScope project: " + cityscopePrjName);
