@@ -14,6 +14,7 @@ for (let i = 0; i < listOfToggles.length; i++) {
 const initialState = {
     MENU: menuInitState,
     CITYIO: {},
+    SCENARIO_NAMES: [],
     MAP: {},
     SLIDERS: {
         time: [
