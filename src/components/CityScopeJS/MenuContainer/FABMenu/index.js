@@ -6,6 +6,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import CancelIcon from "@material-ui/icons/Cancel";
 import NearMeIcon from "@material-ui/icons/NearMe";
 import NavigationIcon from "@material-ui/icons/Navigation";
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+
 import Tooltip from "@material-ui/core/Tooltip";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -26,7 +28,7 @@ export default function FABMenu(props) {
     const classes = useStyles();
 
     const menuState = useSelector((state) => state.MENU);
-    const { handleToggle, toggleDrawer } = props;
+    const { handleToggle, toggleDrawer, toggleSaveDrawer } = props;
 
     return (
         <List className={classes.root}>
@@ -57,6 +59,19 @@ export default function FABMenu(props) {
                             <NearMeIcon />
                         )}
                     </Fab>
+                </Tooltip>
+            </ListItem>
+            <ListItem>
+                <Tooltip title="Save/Load Scenario">
+                    <div>
+                        <Fab
+                            disabled={menuState.includes("EDIT")}
+                            color="secondary"
+                            onClick={toggleSaveDrawer}
+                        >
+                            <InsertDriveFileIcon style={{ color: "FFF" }} />
+                        </Fab>
+                    </div>
                 </Tooltip>
             </ListItem>
         </List>
