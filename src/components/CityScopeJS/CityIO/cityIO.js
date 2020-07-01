@@ -5,8 +5,10 @@ import {
     getCityioData,
     setReadyState,
     setLoadingState,
+    setScenarioNames,
 } from "../../../redux/actions";
 import settings from "../../../settings/settings.json";
+import { getScenarioIndices } from "./utils";
 
 class CityIO extends Component {
     constructor(props) {
@@ -80,6 +82,12 @@ class CityIO extends Component {
             // reset the state of this flag
             this.props.setLoadingState(true);
 
+            // get scenario indices
+            getScenarioIndices(
+                this.props.tableName,
+                this.props.setScenarioNames
+            );
+
             // new data in table, get all modules
             // that are listed in settings
             settings.cityIO.cityIOmodules.forEach((module) => {
@@ -103,6 +111,7 @@ class CityIO extends Component {
                     this.setNestedState("cityIOmodulesStatus", module, true);
                 }
             });
+            this.checkDoneCityIO();
             // finally, put to state the hashes master id
             this.setNestedState("oldHashs", "id", result.id);
         }
@@ -133,7 +142,8 @@ class CityIO extends Component {
                     response.data
                 );
                 console.log("...updating module:", moduleName);
-                this.checkDoneCityIO(moduleName);
+                this.setNestedState("cityIOmodulesStatus", moduleName, true);
+                this.checkDoneCityIO();
             })
 
             .catch((error) => {
@@ -156,9 +166,7 @@ class CityIO extends Component {
             });
     };
 
-    checkDoneCityIO = (moduleName) => {
-        this.setNestedState("cityIOmodulesStatus", moduleName, true);
-
+    checkDoneCityIO = () => {
         // check if all modules are done
         for (const status in this.state.cityIOmodulesStatus) {
             if (this.state.cityIOmodulesStatus[status] !== true) {
@@ -187,6 +195,7 @@ const mapDispatchToProps = {
     getCityioData: getCityioData,
     setReadyState: setReadyState,
     setLoadingState: setLoadingState,
+    setScenarioNames: setScenarioNames,
 };
 
 export default connect(null, mapDispatchToProps)(CityIO);

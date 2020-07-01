@@ -4,17 +4,24 @@ import { listenToMenuUI } from "../../../redux/actions";
 import EditMenu from "./EditMenu/EditMenu";
 import TogglesMenu from "./TogglesMenu";
 import FABMenu from "./FABMenu";
+import SaveMenu from "./SaveMenu";
 
-function MenuContainer() {
+function MenuContainer(props) {
+    const { tableName } = props;
     const menuState = useSelector((state) => state.MENU);
     const dispatch = useDispatch();
 
     const [state, setState] = React.useState({
         drawerOpen: false,
+        saveDrawerOpen: false,
     });
 
     const toggleDrawer = () => {
         setState({ ...state, drawerOpen: !state.drawerOpen });
+    };
+
+    const toggleSaveDrawer = () => {
+        setState({ ...state, saveDrawerOpen: !state.saveDrawerOpen });
     };
 
     const handleToggle = (value) => () => {
@@ -38,8 +45,18 @@ function MenuContainer() {
                 toggleDrawer={toggleDrawer}
                 handleToggle={handleToggle}
             />
-            <FABMenu toggleDrawer={toggleDrawer} handleToggle={handleToggle} />
+            <FABMenu
+                toggleDrawer={toggleDrawer}
+                handleToggle={handleToggle}
+                toggleSaveDrawer={toggleSaveDrawer}
+            />
             {showEditMenu && <EditMenu key={"EDIT"} />}
+            <SaveMenu
+                tableName={tableName}
+                handleToggle={handleToggle}
+                toggleDrawer={toggleSaveDrawer}
+                open={state.saveDrawerOpen}
+            />
         </div>
     );
 }

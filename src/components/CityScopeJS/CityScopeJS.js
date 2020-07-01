@@ -18,7 +18,7 @@ export default function App(props) {
             {/* if ready, render the app*/}
             {ready && (
                 <>
-                    <MenuContainer />
+                    <MenuContainer tableName={tableName} />
                     <MapContainer />
                     <VisContainer />
                 </>

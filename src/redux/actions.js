@@ -41,6 +41,11 @@ export function setLoadingState(data) {
     return { type: SET_LOADING_STATE, data };
 }
 
+export const SET_SCENARIO_NAMES = "SET_SCENARIO_NAMES";
+export function setScenarioNames(data) {
+    return { type: SET_SCENARIO_NAMES, data };
+}
+
 /**
  * Editor Actions
  */

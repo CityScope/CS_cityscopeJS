@@ -6,6 +6,7 @@ import {
     LISTEN_TO_EDIT_MENU,
     SET_READY_STATE,
     SET_LOADING_STATE,
+    SET_SCENARIO_NAMES,
     LISTEN_TO_ACCESS_TOGGLE,
     LISTEN_TO_ROW_EDIT,
     LISTEN_TO_TYPES_LIST,
@@ -35,6 +36,8 @@ export default function reducer(state = initialState, action) {
             return { ...state, READY: action.data };
         case SET_LOADING_STATE:
             return { ...state, LOADING: action.data };
+        case SET_SCENARIO_NAMES:
+            return { ...state, SCENARIO_NAMES: action.data };
 
         //! Editor
         case LISTEN_TO_ROW_EDIT:
