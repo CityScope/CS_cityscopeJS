@@ -17,6 +17,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../../settings/settings.json";
+import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
 
 class Map extends Component {
     constructor(props) {
@@ -353,7 +354,60 @@ class Map extends Component {
     _renderLayers() {
         const zoomLevel = this.state.viewState.zoom;
         const { cityioData, selectedType, menu } = this.props;
+        const tripsAttr = cityioData.ABM2.attr;
         let layers = [];
+
+        if (menu.includes("ABM")) {
+            layers.push(
+                new TripsLayer({
+                    id: "ABM",
+                    visible: menu.includes("ABM") ? true : false,
+                    data: cityioData.ABM2.trips,
+                    getPath: (d) => d.path,
+                    getTimestamps: (d) => d.timestamps,
+                    getColor: (d) => {
+                        let col = _hexToRgb(tripsAttr.mode[d.mode].color);
+                        return col;
+                    },
+
+                    getWidth: 1,
+                    widthScale: this._remapValues(zoomLevel),
+                    opacity: 0.8,
+                    rounded: true,
+                    trailLength: 500,
+                    currentTime: this.props.sliders.time[1],
+                })
+            );
+        }
+
+        if (menu.includes("AGGREGATED_TRIPS")) {
+            layers.push(
+                new PathLayer({
+                    id: "AGGREGATED_TRIPS",
+                    visible: menu.includes("AGGREGATED_TRIPS") ? true : false,
+                    _shadow: false,
+                    data: cityioData.ABM2.trips,
+                    getPath: (d) => {
+                        const noisePath =
+                            Math.random() < 0.5
+                                ? Math.random() * 0.00005
+                                : Math.random() * -0.00005;
+                        for (let i in d.path) {
+                            d.path[i][0] = d.path[i][0] + noisePath;
+                            d.path[i][1] = d.path[i][1] + noisePath;
+                            d.path[i][2] = d.mode[0] * 2;
+                        }
+                        return d.path;
+                    },
+                    getColor: (d) => {
+                        let col = _hexToRgb(tripsAttr.mode[d.mode].color);
+                        return col;
+                    },
+                    opacity: 0.2,
+                    getWidth: 1.5,
+                })
+            );
+        }
 
         if (menu.includes("GRID")) {
             layers.push(
@@ -436,85 +490,6 @@ class Map extends Component {
             );
         }
 
-        if (menu.includes("ABM")) {
-            layers.push(
-                new TripsLayer({
-                    id: "ABM",
-                    visible: menu.includes("ABM") ? true : false,
-                    data: cityioData.ABM,
-                    getPath: (d) => d.path,
-                    getTimestamps: (d) => d.timestamps,
-                    getColor: (d) => {
-                        //switch between modes or types of users
-                        switch (d.mode[0]) {
-                            case 0:
-                                return [228, 26, 28];
-                            case 1:
-                                return [55, 126, 184];
-                            case 2:
-                                return [77, 175, 74];
-                            case 3:
-                                return [255, 255, 51];
-                            case 4:
-                                return [152, 78, 163];
-                            case 5:
-                                return [255, 127, 0];
-                            default:
-                                return [255, 255, 255];
-                        }
-                    },
-                    getWidth: 1,
-                    widthScale: this._remapValues(zoomLevel),
-                    opacity: 0.8,
-                    rounded: true,
-                    trailLength: 500,
-                    currentTime: this.props.sliders.time[1],
-                })
-            );
-        }
-
-        if (menu.includes("AGGREGATED_TRIPS")) {
-            layers.push(
-                new PathLayer({
-                    id: "AGGREGATED_TRIPS",
-                    visible: menu.includes("AGGREGATED_TRIPS") ? true : false,
-                    _shadow: false,
-                    data: cityioData.ABM,
-                    getPath: (d) => {
-                        const noisePath =
-                            Math.random() < 0.5
-                                ? Math.random() * 0.00005
-                                : Math.random() * -0.00005;
-                        for (let i in d.path) {
-                            d.path[i][0] = d.path[i][0] + noisePath;
-                            d.path[i][1] = d.path[i][1] + noisePath;
-                            d.path[i][2] = d.mode[0] * 2;
-                        }
-                        return d.path;
-                    },
-                    getColor: (d) => {
-                        switch (d.mode[0]) {
-                            case 0:
-                                return [228, 26, 28];
-                            case 1:
-                                return [55, 126, 184];
-                            case 2:
-                                return [77, 175, 74];
-                            case 3:
-                                return [255, 255, 51];
-                            case 4:
-                                return [152, 78, 163];
-                            case 5:
-                                return [255, 127, 0];
-                            default:
-                                return [255, 255, 255];
-                        }
-                    },
-                    opacity: 0.2,
-                    getWidth: 1.5,
-                })
-            );
-        }
         return layers;
     }
 
