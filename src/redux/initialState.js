@@ -19,7 +19,7 @@ const initialState = {
     SLIDERS: {
         time: [
             settings.map.layers.ABM.startSimHour,
-            settings.map.layers.ABM.startSimHour,
+            settings.map.layers.ABM.currentSimHour,
             settings.map.layers.ABM.endSimHour,
         ],
         speed: settings.map.layers.ABM.animationSpeed,

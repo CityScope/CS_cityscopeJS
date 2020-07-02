@@ -354,7 +354,7 @@ class Map extends Component {
     _renderLayers() {
         const zoomLevel = this.state.viewState.zoom;
         const { cityioData, selectedType, menu } = this.props;
-        const tripsAttr = cityioData.ABM2.attr;
+
         let layers = [];
 
         if (menu.includes("ABM")) {
@@ -366,7 +366,9 @@ class Map extends Component {
                     getPath: (d) => d.path,
                     getTimestamps: (d) => d.timestamps,
                     getColor: (d) => {
-                        let col = _hexToRgb(tripsAttr.mode[d.mode].color);
+                        let col = _hexToRgb(
+                            cityioData.ABM2.attr.mode[d.mode].color
+                        );
                         return col;
                     },
 
@@ -400,7 +402,9 @@ class Map extends Component {
                         return d.path;
                     },
                     getColor: (d) => {
-                        let col = _hexToRgb(tripsAttr.mode[d.mode].color);
+                        let col = _hexToRgb(
+                            cityioData.ABM2.attr.mode[d.mode].color
+                        );
                         return col;
                     },
                     opacity: 0.2,

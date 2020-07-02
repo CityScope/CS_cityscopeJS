@@ -70,8 +70,9 @@
         },
         "layers": {
             "ABM": {
-                "startSimHour": 25200,
-                "endSimHour": 50400,
+                "startSimHour": 0,
+                "endSimHour": 86400,
+                "currentSimHour": 43200,
                 "animationSpeed": 20
             },
             "heatmap": {

@@ -3,11 +3,10 @@ import { useSelector } from "react-redux";
 import Fab from "@material-ui/core/Fab";
 import MenuIcon from "@material-ui/icons/Menu";
 import EditIcon from "@material-ui/icons/Edit";
-import CancelIcon from "@material-ui/icons/Cancel";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import NearMeIcon from "@material-ui/icons/NearMe";
 import NavigationIcon from "@material-ui/icons/Navigation";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
-
 import Tooltip from "@material-ui/core/Tooltip";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -34,16 +33,16 @@ export default function FABMenu(props) {
         <List className={classes.root}>
             <ListItem>
                 <Tooltip title="Open Layer + Settings Menu">
-                    <Fab color="secondary" onClick={toggleDrawer}>
+                    <Fab color="default" onClick={toggleDrawer}>
                         <MenuIcon />
                     </Fab>
                 </Tooltip>
             </ListItem>
             <ListItem>
                 <Tooltip title="Toggle Edit Grid Mode, send to cityIO">
-                    <Fab color="secondary" onClick={handleToggle("EDIT")}>
+                    <Fab color="default" onClick={handleToggle("EDIT")}>
                         {menuState.includes("EDIT") ? (
-                            <CancelIcon style={{ color: "e91e63" }} />
+                            <CloudUploadIcon />
                         ) : (
                             <EditIcon />
                         )}
@@ -52,7 +51,7 @@ export default function FABMenu(props) {
             </ListItem>
             <ListItem>
                 <Tooltip title="Reset View/Toggle Ortho">
-                    <Fab color="secondary" onClick={handleToggle("RESET_VIEW")}>
+                    <Fab color="default" onClick={handleToggle("RESET_VIEW")}>
                         {menuState.includes("RESET_VIEW") ? (
                             <NavigationIcon />
                         ) : (
@@ -63,15 +62,13 @@ export default function FABMenu(props) {
             </ListItem>
             <ListItem>
                 <Tooltip title="Save/Load Scenario">
-                    <div>
-                        <Fab
-                            disabled={menuState.includes("EDIT")}
-                            color="secondary"
-                            onClick={toggleSaveDrawer}
-                        >
-                            <InsertDriveFileIcon style={{ color: "FFF" }} />
-                        </Fab>
-                    </div>
+                    <Fab
+                        disabled={menuState.includes("EDIT")}
+                        color="default"
+                        onClick={toggleSaveDrawer}
+                    >
+                        <InsertDriveFileIcon />
+                    </Fab>
                 </Tooltip>
             </ListItem>
         </List>

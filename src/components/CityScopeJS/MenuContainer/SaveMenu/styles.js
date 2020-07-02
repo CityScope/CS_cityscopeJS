@@ -1,26 +1,17 @@
 import { makeStyles } from "@material-ui/core/styles";
 
-export const useStyles = makeStyles({
+export const useStyles = makeStyles((theme) => ({
     root: {
+        padding: theme.spacing(0, 1),
+
         display: "flex",
         paddingLeft: 16,
         paddingRight: 16,
     },
-    paper: {
-        background: "#1D1F21",
-    },
     list: {
-        width: "23vw",
-        color: "#FFF",
-        display: "flex",
-        flexDirection: "column",
+        paddingLeft: 16,
+        paddingRight: 16,
+        width: 300,
+        padding: theme.spacing(0, 1),
     },
-    text: {
-        marginLeft: 16,
-        marginTop: 12,
-        flexGrow: 1,
-        fontSize: 20,
-        marginBottom: 12,
-        fontWeight: "lighter",
-    },
-});
+}));
