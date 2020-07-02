@@ -6,10 +6,7 @@ export const getScenarioIndices = (
     setScenarioNames,
     setLoadingState
 ) => {
-    var getURL =
-        (tableName === "mockAPI"
-            ? settings.cityIO.mockURL
-            : settings.cityIO.baseURL + tableName) + "/meta/hashes";
+    var getURL = settings.cityIO.baseURL + tableName + "/meta/hashes";
     const options = {
         method: "get",
         url: getURL,
@@ -49,12 +46,7 @@ export const getScenarioIndices = (
 
 export const getScenarioName = (tableName, id) => {
     const getURL =
-        (tableName === "mockAPI"
-            ? settings.cityIO.mockURL
-            : settings.cityIO.baseURL + tableName) +
-        "/scenarios" +
-        id +
-        "/info";
+        settings.cityIO.baseURL + tableName + "/scenarios" + id + "/info";
     const options = {
         method: "get",
         url: getURL,

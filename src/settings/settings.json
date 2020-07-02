@@ -2,7 +2,6 @@
     "docsURL": "https://raw.githubusercontent.com/CityScope/CS_cityscopeJS/master/docs/",
 
     "cityIO": {
-        "mockURL": "http://localhost:3001",
         "baseURL": "https://cityio.media.mit.edu/api/table/",
         "interval": 500,
         "cityIOmodules": [

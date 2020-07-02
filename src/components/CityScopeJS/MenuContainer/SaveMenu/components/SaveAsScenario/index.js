@@ -30,10 +30,7 @@ export default function SaveAsScenario(props) {
     const scenarioNames = useSelector((state) => state.SCENARIO_NAMES);
 
     const getScenarioIndex = () => {
-        var getURL =
-            (tableName === "mockAPI"
-                ? settings.cityIO.mockURL
-                : settings.cityIO.baseURL + tableName) + "/meta/hashes";
+        var getURL = settings.cityIO.baseURL + tableName + "/meta/hashes";
         const options = {
             method: "get",
             url: getURL,
@@ -69,11 +66,7 @@ export default function SaveAsScenario(props) {
         };
 
         var postURL =
-            (tableName === "mockAPI"
-                ? settings.cityIO.mockURL
-                : settings.cityIO.baseURL + "update/" + tableName) +
-            "/scenarios" +
-            id;
+            settings.cityIO.baseURL + "update/" + tableName + "/scenarios" + id;
 
         const options = {
             method: "post",
