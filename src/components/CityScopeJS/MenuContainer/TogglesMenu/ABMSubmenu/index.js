@@ -79,7 +79,7 @@ function ABMSubmenu(props) {
                     <FormControlLabel
                         value="mode"
                         control={<Radio />}
-                        label="Mode Choise"
+                        label="Mode Choice"
                     />
                     <FormControlLabel
                         value="profile"
