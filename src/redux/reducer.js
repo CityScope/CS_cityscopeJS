@@ -12,6 +12,7 @@ import {
     LISTEN_TO_TYPES_LIST,
     LISTEN_TO_GRID_CREATOR,
     LISTEN_TO_BASE_MAP_CENTER,
+    LISTEN_TO_ABM_MODE,
 } from "./actions";
 import initialState from "./initialState";
 
@@ -28,6 +29,8 @@ export default function reducer(state = initialState, action) {
             return { ...state, MAP: action.data };
         case LISTEN_TO_ABM_SLIDERS:
             return { ...state, SLIDERS: action.data };
+        case LISTEN_TO_ABM_MODE:
+            return { ...state, ABM_MODE: action.data };
         case LISTEN_TO_ACCESS_TOGGLE:
             return { ...state, ACCESS_TOGGLE: action.data };
         case LISTEN_TO_EDIT_MENU:

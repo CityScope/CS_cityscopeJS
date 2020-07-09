@@ -16,6 +16,11 @@ export function listenToSlidersEvents(data) {
     return { type: LISTEN_TO_ABM_SLIDERS, data };
 }
 
+export const LISTEN_TO_ABM_MODE = "LISTEN_TO_ABM_MODE";
+export function listenToABMmode(data) {
+    return { type: LISTEN_TO_ABM_MODE, data };
+}
+
 export const LISTEN_TO_ACCESS_TOGGLE = "LISTEN_TO_ACCESS_TOGGLE";
 export function listenToAccessToggle(data) {
     return { type: LISTEN_TO_ACCESS_TOGGLE, data };

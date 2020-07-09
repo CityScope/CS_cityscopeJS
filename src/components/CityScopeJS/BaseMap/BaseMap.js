@@ -353,7 +353,7 @@ class Map extends Component {
      */
     _renderLayers() {
         const zoomLevel = this.state.viewState.zoom;
-        const { cityioData, selectedType, menu } = this.props;
+        const { cityioData, selectedType, menu, ABMmode } = this.props;
 
         let layers = [];
 
@@ -367,7 +367,7 @@ class Map extends Component {
                     getTimestamps: (d) => d.timestamps,
                     getColor: (d) => {
                         let col = _hexToRgb(
-                            cityioData.ABM2.attr.mode[d.mode].color
+                            cityioData.ABM2.attr[ABMmode][d[ABMmode]].color
                         );
                         return col;
                     },
@@ -378,6 +378,13 @@ class Map extends Component {
                     rounded: true,
                     trailLength: 500,
                     currentTime: this.props.sliders.time[1],
+
+                    updateTriggers: {
+                        getColor: ABMmode,
+                    },
+                    transitions: {
+                        getColor: 500,
+                    },
                 })
             );
         }
@@ -403,12 +410,19 @@ class Map extends Component {
                     },
                     getColor: (d) => {
                         let col = _hexToRgb(
-                            cityioData.ABM2.attr.mode[d.mode].color
+                            cityioData.ABM2.attr[ABMmode][d[ABMmode]].color
                         );
                         return col;
                     },
                     opacity: 0.2,
                     getWidth: 1.5,
+
+                    updateTriggers: {
+                        getColor: ABMmode,
+                    },
+                    transitions: {
+                        getColor: 500,
+                    },
                 })
             );
         }
@@ -561,6 +575,7 @@ const mapStateToProps = (state) => {
         menu: state.MENU,
         accessToggle: state.ACCESS_TOGGLE,
         selectedType: state.SELECTED_TYPE,
+        ABMmode: state.ABM_MODE,
     };
 };
 

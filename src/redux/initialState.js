@@ -24,6 +24,7 @@ const initialState = {
         ],
         speed: settings.map.layers.ABM.animationSpeed,
     },
+    ABM_MODE: "mode",
     ACCESS_TOGGLE: 0,
     SELECTED_TYPE: null,
     READY: false,

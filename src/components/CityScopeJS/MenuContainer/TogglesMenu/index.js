@@ -15,7 +15,7 @@ import Switch from "@material-ui/core/Switch";
 import { makeStyles } from "@material-ui/core/styles";
 
 function TogglesMenu(props) {
-    let drawerWidth = 350;
+    let drawerWidth = 300;
     const useStyles = makeStyles((theme) => ({
         drawer: {
             display: "flex",
@@ -86,7 +86,7 @@ function TogglesMenu(props) {
 
                         listOfToggles[i] === "ABM" && (
                             <Collapse in={checked} style={{ width: "100%" }}>
-                                <ABMSubmenu />
+                                <ABMSubmenu tripsData={cityioData.ABM2.attr} />
                             </Collapse>
                         )
                     }
