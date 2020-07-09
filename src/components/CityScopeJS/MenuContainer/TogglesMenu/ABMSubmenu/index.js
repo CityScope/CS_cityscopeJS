@@ -63,7 +63,7 @@ function ABMSubmenu(props) {
     const [tripTypeValue, settripTypeValue] = React.useState("mode");
 
     const handleABMmodeChange = (event) => {
-        dispatch(listenToABMmode(tripTypeValue));
+        dispatch(listenToABMmode(event.target.value));
         settripTypeValue(event.target.value);
     };
 
