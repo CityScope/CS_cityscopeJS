@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CellMeta } from "./CellMeta/CellMeta";
 import { PaintBrush } from "./PaintBrush/PaintBrush";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { listenToSlidersEvents } from "../../../redux/actions";
 import {
     _proccessAccessData,
@@ -18,111 +18,86 @@ import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../../settings/settings.json";
 import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
+import AnimationComponent from "./AnimationComponent";
 
-class Map extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            menu: [],
-            cityioData: null,
-            selectedType: null,
-            draggingWhileEditing: false,
-            selectedCellsState: null,
-            pickingRadius: 40,
-            viewState: settings.map.initialViewState,
-        };
-        this.animationFrame = null;
-    }
+export default function Map(props) {
+    const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
+    const [selectedCellsState, setSelectedCellsState] = useState(null);
+    const [viewState, setViewState] = useState(settings.map.initialViewState);
+    const [keyDownState, setKeyDownState] = useState(null);
+    const [mousePos, setMousePos] = useState(null);
+    const [mouseDown, setMouseDown] = useState(null);
+    const [hoveredObj, setHoveredObj] = useState(null);
+    const [access, setAccess] = useState(null);
+    const [GEOGRID, setGEOGRID] = useState(null);
+    const [loaded, setLoaded] = useState(false);
+    const effects = useRef();
 
-    componentWillUnmount() {
-        if (this.animationFrame) {
-            window.cancelAnimationFrame(this.animationFrame);
-        }
-    }
+    const dispatch = useDispatch();
 
-    componentDidMount() {
+    const pickingRadius = 40;
+
+    const [
+        cityioData,
+        sliders,
+        menu,
+        accessToggle,
+        selectedType,
+        ABMmode,
+    ] = useSelector((state) => [
+        state.CITYIO,
+        state.SLIDERS,
+        state.MENU,
+        state.ACCESS_TOGGLE,
+        state.SELECTED_TYPE,
+        state.ABM_MODE,
+    ]);
+
+    var ABMOn = menu.includes("ABM");
+    var rotateOn = menu.includes("ROTATE");
+    var shadowsOn = menu.includes("SHADOWS");
+    var editOn = menu.includes("EDIT");
+    var resetViewOn = menu.includes("RESET_VIEW");
+
+    useEffect(() => {
         // fix deck view rotate
-        this._rightClickViewRotate();
+        _rightClickViewRotate();
         // setup sun effects
-        this._setupSunEffects();
+        _setupSunEffects();
         // zoom map on CS table location
-        this._setViewStateToTableHeader();
-        // start ainmation/sim/roate
-        this._animate();
-    }
+        _setViewStateToTableHeader();
+        setLoaded(true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    /**
-     * handels events as they derived from redux props
-     */
-    componentDidUpdate(prevProps, prevState) {
-        this._updateSunDirecation(this.props.sliders.time[1]);
+    useEffect(() => {
+        if (!loaded) return;
+        updateSunDirection(sliders.time[1]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sliders.time]);
 
-        if (prevProps.menu !== prevState.menu) {
-            this.setState({ menu: this.props.menu });
+    useEffect(() => {
+        if (!loaded) return;
+        let shadowColor = shadowsOn ? [0, 0, 0, 0.5] : [0, 0, 0, 0];
+        effects.current[0].shadowColor = shadowColor;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [shadowsOn]);
+
+    useEffect(() => {
+        setGEOGRID(_proccessGridData(cityioData));
+
+        if (cityioData.access) {
+            setAccess(_proccessAccessData(cityioData));
         }
+    }, [cityioData]);
 
-        const { cityioData } = this.props;
-        if (prevState.cityioData !== cityioData) {
-            // get cityio data from props
-
-            this.setState({
-                cityioData: cityioData,
-                GEOGRID: _proccessGridData(cityioData),
-            });
-
-            // ! workaround for preloading access layer data
-            if (cityioData.access) {
-                this.setState({ access: _proccessAccessData(cityioData) });
-            }
-        }
-
-        // toggle ABM animation
-        if (
-            !prevProps.menu.includes("ABM") &&
-            this.props.menu.includes("ABM")
-        ) {
-            this.setState({ animateABM: true });
-        } else if (
-            prevProps.menu.includes("ABM") &&
-            !this.props.menu.includes("ABM")
-        ) {
-            this.setState({ animateABM: false });
-        }
-
-        // toggle rotate animation
-        if (
-            !prevProps.menu.includes("ROTATE") &&
-            this.props.menu.includes("ROTATE")
-        ) {
-            this.setState({ animateCamera: true });
-        } else if (
-            prevProps.menu.includes("ROTATE") &&
-            !this.props.menu.includes("ROTATE")
-        ) {
-            this.setState({ animateCamera: false });
-        }
-        if (
-            !prevProps.menu.includes("SHADOWS") &&
-            this.props.menu.includes("SHADOWS")
-        ) {
-            this._effects[0].shadowColor = [0, 0, 0, 0.5];
-        }
-
-        if (
-            prevProps.menu.includes("SHADOWS") &&
-            !this.props.menu.includes("SHADOWS")
-        ) {
-            this._effects[0].shadowColor = [0, 0, 0, 0];
-        }
-        //  toggle edit mode and send to cityio
-        if (
-            prevProps.menu.includes("EDIT") &&
-            !this.props.menu.includes("EDIT")
-        ) {
-            // take props from grid and send
+    useEffect(() => {
+        if (!loaded) return;
+        if (!editOn) {
             let dataProps = [];
-            for (let i = 0; i < this.state.GEOGRID.features.length; i++) {
-                dataProps[i] = this.state.GEOGRID.features[i].properties;
+
+            for (let i = 0; i < GEOGRID.features.length; i++) {
+                dataProps[i] = GEOGRID.features[i].properties;
             }
             _postMapEditsToCityIO(
                 dataProps,
@@ -130,77 +105,67 @@ class Map extends Component {
                 "/GEOGRIDDATA"
             );
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [editOn]);
 
-        // toggle reset view mode
-        if (
-            !prevProps.menu.includes("RESET_VIEW") &&
-            this.props.menu.includes("RESET_VIEW")
-        ) {
-            this._setViewStateToTableHeader();
-        } else if (
-            prevProps.menu.includes("RESET_VIEW") &&
-            !this.props.menu.includes("RESET_VIEW")
-        ) {
-            this.setState({
-                viewState: {
-                    ...this.state.viewState,
-                    pitch: 45,
-                },
+    useEffect(() => {
+        if (!loaded) return;
+        if (resetViewOn) {
+            _setViewStateToTableHeader();
+        } else {
+            setViewState({
+                ...viewState,
+                pitch: 45,
             });
         }
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [resetViewOn]);
 
-    _onViewStateChange = ({ viewState }) => {
-        viewState.orthographic = this.props.menu.includes("RESET_VIEW")
-            ? true
-            : false;
-
-        this.setState({ viewState });
+    const onViewStateChange = ({ viewState }) => {
+        viewState.orthographic = menu.includes("RESET_VIEW") ? true : false;
+        setViewState(viewState);
     };
 
-    /**
-     * resets the camera viewport
-     * to cityIO header data
-     * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
-     */
-    _setViewStateToTableHeader() {
-        const header = this.props.cityioData.GEOGRID.properties.header;
+    // /**
+    //  * resets the camera viewport
+    //  * to cityIO header data
+    //  * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
+    //  */
+    const _setViewStateToTableHeader = () => {
+        const header = cityioData.GEOGRID.properties.header;
 
-        this.setState({
-            viewState: {
-                ...this.state.viewState,
-                longitude: header.longitude,
-                latitude: header.latitude,
-                zoom: 15,
-                pitch: 0,
-                bearing: 360 - header.rotation,
-                orthographic: true,
-            },
+        setViewState({
+            ...viewState,
+            longitude: header.longitude,
+            latitude: header.latitude,
+            zoom: 15,
+            pitch: 0,
+            bearing: 360 - header.rotation,
+            orthographic: true,
         });
-    }
+    };
 
-    _setupSunEffects() {
+    const _setupSunEffects = () => {
         const ambientLight = new AmbientLight({
             color: [255, 255, 255],
             intensity: 0.85,
         });
-        let dirLightSettings = {
+        const dirLight = new _SunLight({
             timestamp: 1554927200000,
             color: [255, 255, 255],
             intensity: 1.0,
             _shadow: true,
-        };
-        const dirLight = new _SunLight(dirLightSettings);
+        });
         const lightingEffect = new LightingEffect({ ambientLight, dirLight });
         lightingEffect.shadowColor = [0, 0, 0, 0.5];
-        this._effects = [lightingEffect];
-    }
+        effects.current = [lightingEffect];
+    };
 
-    _updateSunDirecation = (time) => {
+    const updateSunDirection = (time) => {
         var currentDateMidnight = new Date();
         currentDateMidnight.setHours(0, 0, 0, 0);
         var date = new Date(currentDateMidnight.getTime() + time * 1000);
-        this._effects[0].directionalLights[0].timestamp = Date.UTC(
+        effects.current[0].directionalLights[0].timestamp = Date.UTC(
             date.getFullYear(),
             date.getMonth(),
             date.getDay(),
@@ -210,85 +175,42 @@ class Map extends Component {
         );
     };
 
-    _animate() {
-        if (this.state.animateCamera) {
-            let bearing = this.state.viewState.bearing
-                ? this.state.viewState.bearing
-                : 0;
-            bearing < 360 ? (bearing += 0.05) : (bearing = 0);
-            this.setState({
-                viewState: {
-                    ...this.state.viewState,
-                    bearing: bearing,
-                },
-            });
-        }
-
-        if (this.state.animateABM) {
-            const time = this.props.sliders.time[1];
-            const speed = this.props.sliders.speed;
-            const startHour = this.props.sliders.time[0];
-            const endHour = this.props.sliders.time[2];
-            let t = parseInt(time) + parseInt(speed);
-            if (time < startHour || time > endHour) {
-                t = startHour;
-            }
-
-            this.props.listenToSlidersEvents({
-                ...this.props.sliders,
-                time: [
-                    this.props.sliders.time[0],
-                    t,
-                    this.props.sliders.time[2],
-                ],
-            });
-
-            // upddate sun position
-            this._updateSunDirecation(t);
-        }
-        // ! start the req animation frame
-        this.animationFrame = window.requestAnimationFrame(
-            this._animate.bind(this)
-        );
-    }
-
-    /**
-     * Description. fix deck issue
-     * with rotate right botton
-     */
-    _rightClickViewRotate() {
+    // /**
+    //  * Description. fix deck issue
+    //  * with rotate right botton
+    //  */
+    const _rightClickViewRotate = () => {
         document
             .getElementById("deckgl-wrapper")
             .addEventListener("contextmenu", (evt) => evt.preventDefault());
-    }
+    };
 
-    /**
-     * Description. uses deck api to
-     * collect objects in a region
-     * @argument{object} e  picking event
-     */
-    _mulipleObjPicked = (e) => {
-        const dim = this.state.pickingRadius;
+    // /**
+    //  * Description. uses deck api to
+    //  * collect objects in a region
+    //  * @argument{object} e  picking event
+    //  */
+    const _multipleObjPicked = (e) => {
+        const dim = pickingRadius;
         const x = e.x - dim / 2;
         const y = e.y - dim / 2;
-        let mulipleObj = this.deckGL.pickObjects({
+        let multipleObj = deckGL.current.pickObjects({
             x: x,
             y: y,
             width: dim,
             height: dim,
         });
-        return mulipleObj;
+        return multipleObj;
     };
 
-    /**
-     * Description. allow only to pick cells that are
-     *  not of CityScope TUI & that are interactable
-     * so to not overlap TUI activity
-     */
-    _handleGridcellEditing = (e) => {
-        const { selectedType } = this.props;
+    // /**
+    //  * Description. allow only to pick cells that are
+    //  *  not of CityScope TUI & that are interactable
+    //  * so to not overlap TUI activity
+    //  */
+    const _handleGridcellEditing = (e) => {
         const { height, color, name } = selectedType;
-        const multiSelectedObj = this._mulipleObjPicked(e);
+        const multiSelectedObj = _multipleObjPicked(e);
         multiSelectedObj.forEach((selected) => {
             const thisCellProps = selected.object.properties;
             if (thisCellProps && thisCellProps.interactive) {
@@ -297,63 +219,50 @@ class Map extends Component {
                 thisCellProps.name = name;
             }
         });
-        this.setState({
-            selectedCellsState: multiSelectedObj,
-        });
+        setSelectedCellsState(multiSelectedObj);
     };
 
-    /**
-     * Description.
-     * draw target area around mouse
-     */
-    _renderPaintBrush = () => {
-        if (this.props.menu.includes("EDIT")) {
+    // /**
+    //  * Description.
+    //  * draw target area around mouse
+    //  */
+
+    const _renderPaintBrush = () => {
+        if (menu.includes("EDIT")) {
             return (
-                this.props.selectedType && (
+                selectedType && (
                     <PaintBrush
-                        mousePos={this.state.mousePos}
-                        selectedType={this.props.selectedType}
-                        divSize={this.state.pickingRadius}
-                        mouseDown={this.state.mouseDown}
-                        hoveredCells={this.state.hoveredObj}
+                        mousePos={mousePos}
+                        selectedType={selectedType}
+                        divSize={pickingRadius}
+                        mouseDown={mouseDown}
+                        hoveredCells={hoveredObj}
                     />
                 )
             );
         } else {
             return (
-                this.state.hoveredObj && (
-                    <CellMeta
-                        mousePos={this.state.mousePos}
-                        hoveredObj={this.state.hoveredObj}
-                    />
+                hoveredObj && (
+                    <CellMeta mousePos={mousePos} hoveredObj={hoveredObj} />
                 )
             );
         }
     };
 
-    _handleKeyUp = () => {
-        this.setState({ keyDownState: null });
-    };
-
-    _handleKeyDown = (e) => {
-        this.setState({ keyDownState: e.nativeEvent.key });
-    };
-
-    /**
-     * remap line width
-     */
-    _remapValues = (value) => {
+    // /**
+    //  * remap line width
+    //  */
+    const _remapValues = (value) => {
         let remap =
             value > 15 && value < 25 ? 3 : value < 15 && value > 10 ? 12 : 30;
         return remap;
     };
 
-    /**
-     * renders deck gl layers
-     */
-    _renderLayers() {
-        const zoomLevel = this.state.viewState.zoom;
-        const { cityioData, selectedType, menu, ABMmode } = this.props;
+    // /**
+    //  * renders deck gl layers
+    //  */
+    const _renderLayers = () => {
+        const zoomLevel = viewState.zoom;
 
         let layers = [];
 
@@ -373,11 +282,11 @@ class Map extends Component {
                     },
 
                     getWidth: 1,
-                    widthScale: this._remapValues(zoomLevel),
+                    widthScale: _remapValues(zoomLevel),
                     opacity: 0.8,
                     rounded: true,
                     trailLength: 500,
-                    currentTime: this.props.sliders.time[1],
+                    currentTime: sliders.time[1],
 
                     updateTriggers: {
                         getColor: ABMmode,
@@ -431,7 +340,7 @@ class Map extends Component {
             layers.push(
                 new GeoJsonLayer({
                     id: "GRID",
-                    data: this.state.GEOGRID,
+                    data: GEOGRID,
                     visible: menu.includes("GRID") ? true : false,
                     pickable: true,
                     extruded: true,
@@ -445,42 +354,42 @@ class Map extends Component {
                         if (
                             selectedType &&
                             menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
+                            keyDownState !== "Shift"
                         )
-                            this._handleGridcellEditing(event);
+                            _handleGridcellEditing(event);
                     },
 
                     onDrag: (event) => {
                         if (
                             selectedType &&
                             menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
+                            keyDownState !== "Shift"
                         )
-                            this._handleGridcellEditing(event);
+                            _handleGridcellEditing(event);
                     },
 
                     onDragStart: () => {
                         if (
                             selectedType &&
                             menu.includes("EDIT") &&
-                            this.state.keyDownState !== "Shift"
+                            keyDownState !== "Shift"
                         ) {
-                            this.setState({ draggingWhileEditing: true });
+                            setDraggingWhileEditing(true);
                         }
                     },
 
                     onHover: (e) => {
                         if (e.object) {
-                            this.setState({ hoveredObj: e });
+                            setHoveredObj(e);
                         }
                     },
 
                     onDragEnd: () => {
-                        this.setState({ draggingWhileEditing: false });
+                        setDraggingWhileEditing(false);
                     },
                     updateTriggers: {
-                        getFillColor: this.state.selectedCellsState,
-                        getElevation: this.state.selectedCellsState,
+                        getFillColor: selectedCellsState,
+                        getElevation: selectedCellsState,
                     },
                     transitions: {
                         getFillColor: 500,
@@ -498,89 +407,67 @@ class Map extends Component {
                     colorRange: settings.map.layers.heatmap.colors,
                     radiusPixels: 200,
                     opacity: 0.25,
-                    data: this.state.access,
+                    data: access,
                     getPosition: (d) => d.coordinates,
-                    getWeight: (d) => d.values[this.props.accessToggle],
+                    getWeight: (d) => d.values[accessToggle],
                     updateTriggers: {
-                        getWeight: [this.props.accessToggle],
+                        getWeight: [accessToggle],
                     },
                 })
             );
         }
 
         return layers;
-    }
-
-    render() {
-        return (
-            <div
-                className="baseMap"
-                onKeyDown={this._handleKeyDown}
-                onKeyUp={this._handleKeyUp}
-                onMouseMove={(e) =>
-                    this.setState({
-                        mousePos: e.nativeEvent,
-                    })
-                }
-                onMouseUp={() =>
-                    this.setState({
-                        mouseDown: false,
-                    })
-                }
-                onMouseDown={() =>
-                    this.setState({
-                        mouseDown: true,
-                    })
-                }
-            >
-                <React.Fragment>{this._renderPaintBrush()}</React.Fragment>
-
-                <DeckGL
-                    ref={(ref) => {
-                        // save a reference to the Deck instance
-                        this.deckGL = ref && ref.deck;
-                    }}
-                    viewState={this.state.viewState}
-                    onViewStateChange={this._onViewStateChange}
-                    layers={this._renderLayers()}
-                    effects={this._effects}
-                    controller={{
-                        touchZoom: true,
-                        touchRotate: true,
-                        dragPan: !this.state.draggingWhileEditing,
-                        dragRotate: !this.state.draggingWhileEditing,
-                        keyboard: false,
-                    }}
-                >
-                    <StaticMap
-                        asyncRender={false}
-                        dragRotate={true}
-                        reuseMaps={true}
-                        mapboxApiAccessToken={
-                            process.env.REACT_APP_MAPBOX_TOKEN
-                        }
-                        mapStyle={settings.map.mapStyle.blue}
-                        preventStyleDiffing={true}
-                    />
-                </DeckGL>
-            </div>
-        );
-    }
-}
-
-const mapStateToProps = (state) => {
-    return {
-        cityioData: state.CITYIO,
-        sliders: state.SLIDERS,
-        menu: state.MENU,
-        accessToggle: state.ACCESS_TOGGLE,
-        selectedType: state.SELECTED_TYPE,
-        ABMmode: state.ABM_MODE,
     };
-};
 
-const mapDispatchToProps = {
-    listenToSlidersEvents: listenToSlidersEvents,
-};
+    const deckGL = useRef();
 
-export default connect(mapStateToProps, mapDispatchToProps)(Map);
+    return (
+        <div
+            className="baseMap"
+            onKeyDown={(e) => {
+                setKeyDownState(e.nativeEvent.key);
+            }}
+            onKeyUp={() => setKeyDownState(null)}
+            onMouseMove={(e) => setMousePos(e.nativeEvent)}
+            onMouseUp={() => setMouseDown(false)}
+            onMouseDown={() => setMouseDown(true)}
+        >
+            <>{_renderPaintBrush()}</>
+            <AnimationComponent
+                toggles={{ ABMOn, rotateOn }}
+                state={{ sliders, viewState }}
+                updaters={{
+                    listenToSlidersEvents,
+                    updateSunDirection,
+                    setViewState,
+                }}
+                dispatch={dispatch}
+            />
+
+            <DeckGL
+                ref={deckGL}
+                viewState={viewState}
+                onViewStateChange={onViewStateChange}
+                layers={_renderLayers()}
+                effects={effects.current}
+                controller={{
+                    touchZoom: true,
+                    touchRotate: true,
+                    dragPan: !draggingWhileEditing,
+                    dragRotate: !draggingWhileEditing,
+                    keyboard: false,
+                }}
+            >
+                <StaticMap
+                    asyncRender={false}
+                    dragRotate={true}
+                    reuseMaps={true}
+                    mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+                    mapStyle={settings.map.mapStyle.blue}
+                    preventStyleDiffing={true}
+                />
+            </DeckGL>
+        </div>
+    );
+}
