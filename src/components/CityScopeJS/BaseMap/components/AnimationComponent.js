@@ -18,10 +18,12 @@ class AnimationComponent extends Component {
     }
 
     _animate() {
-        const { toggles, state, updaters, dispatch } = this.props;
-        const { rotateOn, ABMOn } = toggles;
-        const { viewState, sliders } = state;
-        const { listenToSlidersEvents, sunEffects, setViewState } = updaters;
+        const {
+            toggles: { rotateOn, ABMOn },
+            state: { viewState, sliders },
+            updaters: { listenToSlidersEvents, sunEffects, setViewState },
+            dispatch,
+        } = this.props;
         if (rotateOn) {
             let bearing = viewState.bearing ? viewState.bearing : 0;
             bearing < 360 ? (bearing += 0.05) : (bearing = 0);

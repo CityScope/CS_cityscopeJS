@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import CityIO from "./CityIO/cityIO";
 import MenuContainer from "./MenuContainer/MenuContainer";
-import MapContainer from "./BaseMap/BaseMapContainer";
+import MapContainer from "./BaseMap";
 import VisContainer from "./VisContainer/VisContainer";
 import LoadingSpinner from "./CityIO/LoadingSpinner";
 

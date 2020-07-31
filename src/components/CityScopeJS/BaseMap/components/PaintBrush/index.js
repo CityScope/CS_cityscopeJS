@@ -1,6 +1,6 @@
 import React from "react";
 import { PaintBrush } from "./PaintBrush";
-import { CellMeta } from "../CellMeta/CellMeta";
+import { CellMeta } from "../CellMeta";
 
 export default function PaintBrushContainer({
     editOn,

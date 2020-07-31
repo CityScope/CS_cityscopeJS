@@ -1,5 +1,5 @@
 import React from "react";
-import { testHex, hexToRgb } from "../utils/BaseMapUtils";
+import { testHex, hexToRgb } from "../../utils/BaseMapUtils";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 /**

@@ -1,22 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
-import PaintBrush from "./PaintBrush";
+import PaintBrush from "./components/PaintBrush";
 import { useSelector, useDispatch } from "react-redux";
 import { listenToSlidersEvents } from "../../../redux/actions";
 import {
     _proccessAccessData,
     _proccessGridData,
     _postMapEditsToCityIO,
-    _handleGridcellEditing,
 } from "./utils/BaseMapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
-import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
 import settings from "../../../settings/settings.json";
-import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
-import AnimationComponent from "./AnimationComponent";
+import AnimationComponent from "./components/AnimationComponent";
 import { updateSunDirection, _setupSunEffects } from "./utils/EffectsUtils";
+import {
+    AccessLayer,
+    AggregatedTripsLayer,
+    ABMLayer,
+    GridLayer,
+} from "./layers";
 
 export default function Map(props) {
     const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
@@ -30,6 +32,7 @@ export default function Map(props) {
     const [GEOGRID, setGEOGRID] = useState(null);
     const [loaded, setLoaded] = useState(false);
     const effectsRef = useRef();
+    const deckGL = useRef();
 
     const dispatch = useDispatch();
 
@@ -153,186 +156,52 @@ export default function Map(props) {
             .addEventListener("contextmenu", (evt) => evt.preventDefault());
     };
 
-    //  * remap line width
-    const _remapValues = (value) => {
-        let remap =
-            value > 15 && value < 25 ? 3 : value < 15 && value > 10 ? 12 : 30;
-        return remap;
+    const layersKey = {
+        ABM: ABMLayer({
+            data: cityioData.ABM2.trips,
+            cityioData,
+            ABMmode,
+            zoomLevel: viewState.zoom,
+            sliders,
+        }),
+        AGGREGATED_TRIPS: AggregatedTripsLayer({
+            data: cityioData.ABM2.trips,
+            cityioData,
+            ABMmode,
+        }),
+        GRID: GridLayer({
+            data: GEOGRID,
+            visible: menu.includes("GRID"),
+            state: {
+                selectedType,
+                keyDownState,
+                selectedCellsState,
+                pickingRadius,
+            },
+            updaters: {
+                setSelectedCellsState,
+                setDraggingWhileEditing,
+                setHoveredObj,
+            },
+            deckGL,
+        }),
+        ACCESS: AccessLayer({
+            data: access,
+            accessToggle,
+        }),
     };
 
-    //  * renders deck gl layers
+    const layerOrder = ["ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS"];
+
     const _renderLayers = () => {
-        const zoomLevel = viewState.zoom;
-
         let layers = [];
-
-        if (menu.includes("ABM")) {
-            layers.push(
-                new TripsLayer({
-                    id: "ABM",
-                    visible: menu.includes("ABM") ? true : false,
-                    data: cityioData.ABM2.trips,
-                    getPath: (d) => d.path,
-                    getTimestamps: (d) => d.timestamps,
-                    getColor: (d) => {
-                        let col = _hexToRgb(
-                            cityioData.ABM2.attr[ABMmode][d[ABMmode]].color
-                        );
-                        return col;
-                    },
-
-                    getWidth: 1,
-                    widthScale: _remapValues(zoomLevel),
-                    opacity: 0.8,
-                    rounded: true,
-                    trailLength: 500,
-                    currentTime: sliders.time[1],
-
-                    updateTriggers: {
-                        getColor: ABMmode,
-                    },
-                    transitions: {
-                        getColor: 500,
-                    },
-                })
-            );
+        for (var layer of layerOrder) {
+            if (menu.includes(layer)) {
+                layers.push(layersKey[layer]);
+            }
         }
-
-        if (menu.includes("AGGREGATED_TRIPS")) {
-            layers.push(
-                new PathLayer({
-                    id: "AGGREGATED_TRIPS",
-                    visible: menu.includes("AGGREGATED_TRIPS") ? true : false,
-                    _shadow: false,
-                    data: cityioData.ABM2.trips,
-                    getPath: (d) => {
-                        const noisePath =
-                            Math.random() < 0.5
-                                ? Math.random() * 0.00005
-                                : Math.random() * -0.00005;
-                        for (let i in d.path) {
-                            d.path[i][0] = d.path[i][0] + noisePath;
-                            d.path[i][1] = d.path[i][1] + noisePath;
-                            d.path[i][2] = d.mode[0] * 2;
-                        }
-                        return d.path;
-                    },
-                    getColor: (d) => {
-                        let col = _hexToRgb(
-                            cityioData.ABM2.attr[ABMmode][d[ABMmode]].color
-                        );
-                        return col;
-                    },
-                    opacity: 0.2,
-                    getWidth: 1.5,
-
-                    updateTriggers: {
-                        getColor: ABMmode,
-                    },
-                    transitions: {
-                        getColor: 500,
-                    },
-                })
-            );
-        }
-
-        if (menu.includes("GRID")) {
-            layers.push(
-                new GeoJsonLayer({
-                    id: "GRID",
-                    data: GEOGRID,
-                    visible: menu.includes("GRID") ? true : false,
-                    pickable: true,
-                    extruded: true,
-                    wireframe: true,
-                    lineWidthScale: 1,
-                    lineWidthMinPixels: 2,
-                    getElevation: (d) => d.properties.height,
-                    getFillColor: (d) => d.properties.color,
-
-                    onClick: (event) => {
-                        if (
-                            selectedType &&
-                            menu.includes("EDIT") &&
-                            keyDownState !== "Shift"
-                        )
-                            _handleGridcellEditing(
-                                event,
-                                selectedType,
-                                setSelectedCellsState,
-                                pickingRadius,
-                                deckGL
-                            );
-                    },
-
-                    onDrag: (event) => {
-                        if (
-                            selectedType &&
-                            menu.includes("EDIT") &&
-                            keyDownState !== "Shift"
-                        )
-                            _handleGridcellEditing(
-                                event,
-                                selectedType,
-                                setSelectedCellsState,
-                                pickingRadius,
-                                deckGL
-                            );
-                    },
-
-                    onDragStart: () => {
-                        if (
-                            selectedType &&
-                            menu.includes("EDIT") &&
-                            keyDownState !== "Shift"
-                        ) {
-                            setDraggingWhileEditing(true);
-                        }
-                    },
-
-                    onHover: (e) => {
-                        if (e.object) {
-                            setHoveredObj(e);
-                        }
-                    },
-
-                    onDragEnd: () => {
-                        setDraggingWhileEditing(false);
-                    },
-                    updateTriggers: {
-                        getFillColor: selectedCellsState,
-                        getElevation: selectedCellsState,
-                    },
-                    transitions: {
-                        getFillColor: 500,
-                        getElevation: 500,
-                    },
-                })
-            );
-        }
-
-        if (menu.includes("ACCESS")) {
-            layers.push(
-                new HeatmapLayer({
-                    id: "ACCESS",
-                    visible: menu.includes("ACCESS"),
-                    colorRange: settings.map.layers.heatmap.colors,
-                    radiusPixels: 200,
-                    opacity: 0.25,
-                    data: access,
-                    getPosition: (d) => d.coordinates,
-                    getWeight: (d) => d.values[accessToggle],
-                    updateTriggers: {
-                        getWeight: [accessToggle],
-                    },
-                })
-            );
-        }
-
         return layers;
     };
-
-    const deckGL = useRef();
 
     return (
         <div
