@@ -1,24 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-import { CellMeta } from "./CellMeta/CellMeta";
-import { PaintBrush } from "./PaintBrush/PaintBrush";
+import PaintBrush from "./PaintBrush";
 import { useSelector, useDispatch } from "react-redux";
 import { listenToSlidersEvents } from "../../../redux/actions";
 import {
     _proccessAccessData,
     _proccessGridData,
     _postMapEditsToCityIO,
-    testHex,
-    hexToRgb,
-} from "./BaseMapUtils";
+    _handleGridcellEditing,
+} from "./utils/BaseMapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { HeatmapLayer, PathLayer, GeoJsonLayer } from "deck.gl";
-import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../../../settings/settings.json";
 import { _hexToRgb } from "../../GridEditor/EditorMap/EditorMap";
 import AnimationComponent from "./AnimationComponent";
+import { updateSunDirection, _setupSunEffects } from "./utils/EffectsUtils";
 
 export default function Map(props) {
     const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
@@ -31,7 +29,7 @@ export default function Map(props) {
     const [access, setAccess] = useState(null);
     const [GEOGRID, setGEOGRID] = useState(null);
     const [loaded, setLoaded] = useState(false);
-    const effects = useRef();
+    const effectsRef = useRef();
 
     const dispatch = useDispatch();
 
@@ -63,7 +61,7 @@ export default function Map(props) {
         // fix deck view rotate
         _rightClickViewRotate();
         // setup sun effects
-        _setupSunEffects();
+        _setupSunEffects(effectsRef);
         // zoom map on CS table location
         _setViewStateToTableHeader();
         setLoaded(true);
@@ -72,14 +70,14 @@ export default function Map(props) {
 
     useEffect(() => {
         if (!loaded) return;
-        updateSunDirection(sliders.time[1]);
+        updateSunDirection(sliders.time[1], effectsRef);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sliders.time]);
 
     useEffect(() => {
         if (!loaded) return;
         let shadowColor = shadowsOn ? [0, 0, 0, 0.5] : [0, 0, 0, 0];
-        effects.current[0].shadowColor = shadowColor;
+        effectsRef.current[0].shadowColor = shadowColor;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [shadowsOn]);
 
@@ -145,36 +143,6 @@ export default function Map(props) {
         });
     };
 
-    const _setupSunEffects = () => {
-        const ambientLight = new AmbientLight({
-            color: [255, 255, 255],
-            intensity: 0.85,
-        });
-        const dirLight = new _SunLight({
-            timestamp: 1554927200000,
-            color: [255, 255, 255],
-            intensity: 1.0,
-            _shadow: true,
-        });
-        const lightingEffect = new LightingEffect({ ambientLight, dirLight });
-        lightingEffect.shadowColor = [0, 0, 0, 0.5];
-        effects.current = [lightingEffect];
-    };
-
-    const updateSunDirection = (time) => {
-        var currentDateMidnight = new Date();
-        currentDateMidnight.setHours(0, 0, 0, 0);
-        var date = new Date(currentDateMidnight.getTime() + time * 1000);
-        effects.current[0].directionalLights[0].timestamp = Date.UTC(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDay(),
-            date.getHours(),
-            date.getMinutes(),
-            date.getSeconds()
-        );
-    };
-
     // /**
     //  * Description. fix deck issue
     //  * with rotate right botton
@@ -185,82 +153,14 @@ export default function Map(props) {
             .addEventListener("contextmenu", (evt) => evt.preventDefault());
     };
 
-    // /**
-    //  * Description. uses deck api to
-    //  * collect objects in a region
-    //  * @argument{object} e  picking event
-    //  */
-    const _multipleObjPicked = (e) => {
-        const dim = pickingRadius;
-        const x = e.x - dim / 2;
-        const y = e.y - dim / 2;
-        let multipleObj = deckGL.current.pickObjects({
-            x: x,
-            y: y,
-            width: dim,
-            height: dim,
-        });
-        return multipleObj;
-    };
-
-    // /**
-    //  * Description. allow only to pick cells that are
-    //  *  not of CityScope TUI & that are interactable
-    //  * so to not overlap TUI activity
-    //  */
-    const _handleGridcellEditing = (e) => {
-        const { height, color, name } = selectedType;
-        const multiSelectedObj = _multipleObjPicked(e);
-        multiSelectedObj.forEach((selected) => {
-            const thisCellProps = selected.object.properties;
-            if (thisCellProps && thisCellProps.interactive) {
-                thisCellProps.color = testHex(color) ? hexToRgb(color) : color;
-                thisCellProps.height = height;
-                thisCellProps.name = name;
-            }
-        });
-        setSelectedCellsState(multiSelectedObj);
-    };
-
-    // /**
-    //  * Description.
-    //  * draw target area around mouse
-    //  */
-
-    const _renderPaintBrush = () => {
-        if (menu.includes("EDIT")) {
-            return (
-                selectedType && (
-                    <PaintBrush
-                        mousePos={mousePos}
-                        selectedType={selectedType}
-                        divSize={pickingRadius}
-                        mouseDown={mouseDown}
-                        hoveredCells={hoveredObj}
-                    />
-                )
-            );
-        } else {
-            return (
-                hoveredObj && (
-                    <CellMeta mousePos={mousePos} hoveredObj={hoveredObj} />
-                )
-            );
-        }
-    };
-
-    // /**
     //  * remap line width
-    //  */
     const _remapValues = (value) => {
         let remap =
             value > 15 && value < 25 ? 3 : value < 15 && value > 10 ? 12 : 30;
         return remap;
     };
 
-    // /**
     //  * renders deck gl layers
-    //  */
     const _renderLayers = () => {
         const zoomLevel = viewState.zoom;
 
@@ -356,7 +256,13 @@ export default function Map(props) {
                             menu.includes("EDIT") &&
                             keyDownState !== "Shift"
                         )
-                            _handleGridcellEditing(event);
+                            _handleGridcellEditing(
+                                event,
+                                selectedType,
+                                setSelectedCellsState,
+                                pickingRadius,
+                                deckGL
+                            );
                     },
 
                     onDrag: (event) => {
@@ -365,7 +271,13 @@ export default function Map(props) {
                             menu.includes("EDIT") &&
                             keyDownState !== "Shift"
                         )
-                            _handleGridcellEditing(event);
+                            _handleGridcellEditing(
+                                event,
+                                selectedType,
+                                setSelectedCellsState,
+                                pickingRadius,
+                                deckGL
+                            );
                     },
 
                     onDragStart: () => {
@@ -433,7 +345,14 @@ export default function Map(props) {
             onMouseUp={() => setMouseDown(false)}
             onMouseDown={() => setMouseDown(true)}
         >
-            <>{_renderPaintBrush()}</>
+            <PaintBrush
+                editOn={editOn}
+                mousePos={mousePos}
+                selectedType={selectedType}
+                pickingRadius={pickingRadius}
+                mouseDown={mouseDown}
+                hoveredObj={hoveredObj}
+            />
             <AnimationComponent
                 toggles={{ ABMOn, rotateOn }}
                 state={{ sliders, viewState }}
@@ -444,13 +363,12 @@ export default function Map(props) {
                 }}
                 dispatch={dispatch}
             />
-
             <DeckGL
                 ref={deckGL}
                 viewState={viewState}
                 onViewStateChange={onViewStateChange}
                 layers={_renderLayers()}
-                effects={effects.current}
+                effects={effectsRef.current}
                 controller={{
                     touchZoom: true,
                     touchRotate: true,

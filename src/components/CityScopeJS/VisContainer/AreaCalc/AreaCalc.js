@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { rgbToHex } from "../../BaseMap/BaseMapUtils";
+import { rgbToHex } from "../../BaseMap/utils/BaseMapUtils";
 import DownloadRawData from "../DownloadRawData/DownloadRawData";
 import { RadialChart, Hint } from "react-vis";
 import List from "@material-ui/core/List";
