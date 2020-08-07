@@ -30,6 +30,7 @@ export default function Map(props) {
     const [hoveredObj, setHoveredObj] = useState(null);
     const [access, setAccess] = useState(null);
     const [GEOGRID, setGEOGRID] = useState(null);
+    const [ABM, setABM] = useState({});
     const [loaded, setLoaded] = useState(false);
     const effectsRef = useRef();
     const deckGL = useRef();
@@ -89,6 +90,10 @@ export default function Map(props) {
 
         if (cityioData.access) {
             setAccess(_proccessAccessData(cityioData));
+        }
+
+        if (cityioData.ABM2) {
+            setABM(cityioData.ABM2);
         }
     }, [cityioData]);
 
@@ -158,14 +163,14 @@ export default function Map(props) {
 
     const layersKey = {
         ABM: ABMLayer({
-            data: cityioData.ABM2.trips,
+            data: ABM.trips,
             cityioData,
             ABMmode,
             zoomLevel: viewState.zoom,
             sliders,
         }),
         AGGREGATED_TRIPS: AggregatedTripsLayer({
-            data: cityioData.ABM2.trips,
+            data: ABM.trips,
             cityioData,
             ABMmode,
         }),
