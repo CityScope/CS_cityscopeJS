@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6f7ad1038088e9188d25b30cc3d239db",
+    "revision": "83254bd6346816a72d3f50c40b42eb6c",
     "url": "https://cityscope.media.mit.edu/CS_cityscopeJS/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/css/2.c6e343d6.chunk.css"
   },
   {
-    "revision": "2917c9e9ad8ae55eab81",
+    "revision": "968b63f48649a88c2738",
     "url": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/css/main.7109ebba.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/2.4b4e668e.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "2917c9e9ad8ae55eab81",
-    "url": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/main.9e08dfea.chunk.js"
+    "revision": "968b63f48649a88c2738",
+    "url": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/main.10d56cb9.chunk.js"
   },
   {
     "revision": "a1beac5cb4679259f6cb",
