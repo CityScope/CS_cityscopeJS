@@ -176,7 +176,7 @@ export default function Map(props) {
         }),
         GRID: GridLayer({
             data: GEOGRID,
-            visible: menu.includes("GRID"),
+            editOn: menu.includes("EDIT"),
             state: {
                 selectedType,
                 keyDownState,

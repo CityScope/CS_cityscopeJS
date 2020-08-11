@@ -3,7 +3,7 @@ import { _handleGridcellEditing } from "../utils/BaseMapUtils";
 
 export default function GridLayer({
     data,
-    visible,
+    editOn,
     state: { selectedType, keyDownState, selectedCellsState, pickingRadius },
     updaters: { setSelectedCellsState, setDraggingWhileEditing, setHoveredObj },
     deckGL,
@@ -20,7 +20,7 @@ export default function GridLayer({
         getFillColor: (d) => d.properties.color,
 
         onClick: (event) => {
-            if (selectedType && visible && keyDownState !== "Shift")
+            if (selectedType && editOn && keyDownState !== "Shift")
                 _handleGridcellEditing(
                     event,
                     selectedType,
@@ -31,7 +31,7 @@ export default function GridLayer({
         },
 
         onDrag: (event) => {
-            if (selectedType && visible && keyDownState !== "Shift")
+            if (selectedType && editOn && keyDownState !== "Shift")
                 _handleGridcellEditing(
                     event,
                     selectedType,
@@ -42,7 +42,7 @@ export default function GridLayer({
         },
 
         onDragStart: () => {
-            if (selectedType && visible && keyDownState !== "Shift") {
+            if (selectedType && editOn && keyDownState !== "Shift") {
                 setDraggingWhileEditing(true);
             }
         },
