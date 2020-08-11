@@ -98,8 +98,6 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
         },
     };
     axios(options).catch((error) => {
-        console.log(error);
-
         console.log("ERROR:", error);
     });
 };
