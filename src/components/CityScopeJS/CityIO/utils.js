@@ -6,16 +6,9 @@ export const getScenarioIndices = (
     setScenarioNames,
     setLoadingState
 ) => {
-    var getURL = settings.cityIO.baseURL + tableName + "/meta/hashes";
-    const options = {
-        method: "get",
-        url: getURL,
-        headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-        },
-    };
-    axios(options)
+    var url = settings.cityIO.baseURL + tableName + "/meta/hashes";
+    axios
+        .get(url)
         .then((res) => {
             const metaDataKeys = Object.keys(res.data);
             const scenarioIndices = metaDataKeys
@@ -45,15 +38,7 @@ export const getScenarioIndices = (
 };
 
 export const getScenarioName = (tableName, id) => {
-    const getURL =
+    const url =
         settings.cityIO.baseURL + tableName + "/scenarios" + id + "/info";
-    const options = {
-        method: "get",
-        url: getURL,
-        headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-        },
-    };
-    return axios(options);
+    return axios.get(url);
 };
