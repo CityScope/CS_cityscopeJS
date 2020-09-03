@@ -37,14 +37,11 @@ const prepareData = (struct, typesList, geoJsonFeatures, gridProps) => {
     typesList.forEach((oldType) => {
         newTypesList[oldType.name] = oldType;
 
-        // // fixes JSON => string in material-table
-        // newTypesList[oldType.name].LBCS = JSON.parse(
-        //     JSON.stringify(oldType.LBCS)
-        // );
-        // newTypesList[oldType.name].NAICS = JSON.parse(
-        //     JSON.stringify(oldType.NAICS)
-        // );
+        // fixes JSON => string in material-table
+        newTypesList[oldType.name].LBCS = JSON.parse(oldType.LBCS);
+        newTypesList[oldType.name].NAICS = JSON.parse(oldType.NAICS);
     });
+
 
     geoGridObject.properties.types = newTypesList;
 
