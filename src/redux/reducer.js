@@ -14,6 +14,7 @@ import {
     LISTEN_TO_BASE_MAP_CENTER,
     LISTEN_TO_ABM_MODE,
     SET_LOADING_MODULES,
+    REMOVE_LOADING_MODULES,
 } from "./actions";
 import initialState from "./initialState";
 
@@ -43,7 +44,19 @@ export default function reducer(state = initialState, action) {
         case SET_SCENARIO_NAMES:
             return { ...state, SCENARIO_NAMES: action.data };
         case SET_LOADING_MODULES:
-            return { ...state, LOADING_MODULES: action.data };
+            return {
+                ...state,
+                LOADING_MODULES: [
+                    ...new Set([...state.LOADING_MODULES, ...action.data]),
+                ],
+            };
+        case REMOVE_LOADING_MODULES:
+            return {
+                ...state,
+                LOADING_MODULES: state.LOADING_MODULES.filter(
+                    (x) => !action.data.includes(x)
+                ),
+            };
 
         //! Editor
         case LISTEN_TO_ROW_EDIT:

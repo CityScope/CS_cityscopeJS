@@ -56,6 +56,11 @@ export function setLoadingModules(data) {
     return { type: SET_LOADING_MODULES, data };
 }
 
+export const REMOVE_LOADING_MODULES = "REMOVE_LOADING_MODULES";
+export function removeLoadingModules(data) {
+    return { type: REMOVE_LOADING_MODULES, data };
+}
+
 /**
  * Editor Actions
  */

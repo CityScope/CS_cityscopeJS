@@ -7,6 +7,7 @@ import {
     setLoadingState,
     setScenarioNames,
     setLoadingModules,
+    removeLoadingModules,
 } from "../../../redux/actions";
 import settings from "../../../settings/settings.json";
 import { getScenarioIndices } from "./utils";
@@ -77,7 +78,7 @@ export default function CityIO(props) {
         }, cityioData);
         modulesData.tableName = tableName;
 
-        dispatch(setLoadingModules([]));
+        dispatch(removeLoadingModules(loadingModules));
 
         // send to cityio
         dispatch(getCityioData(modulesData));
