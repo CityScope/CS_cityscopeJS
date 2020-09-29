@@ -51,9 +51,9 @@ export function setScenarioNames(data) {
     return { type: SET_SCENARIO_NAMES, data };
 }
 
-export const SET_LOADING_MODULES = "SET_LOADING_MODULES";
-export function setLoadingModules(data) {
-    return { type: SET_LOADING_MODULES, data };
+export const ADD_LOADING_MODULES = "ADD_LOADING_MODULES";
+export function addLoadingModules(data) {
+    return { type: ADD_LOADING_MODULES, data };
 }
 
 export const REMOVE_LOADING_MODULES = "REMOVE_LOADING_MODULES";

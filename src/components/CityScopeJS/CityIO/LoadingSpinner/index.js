@@ -11,10 +11,7 @@ const override = css`
 `;
 
 function LoadingSpinner() {
-    const [loading, loadingModules] = useSelector((state) => [
-        state.LOADING,
-        state.LOADING_MODULES,
-    ]);
+    const [loadingModules] = useSelector((state) => [state.LOADING_MODULES]);
     return (
         <div
             style={{
@@ -45,7 +42,7 @@ function LoadingSpinner() {
                             css={override}
                             size={20}
                             color="white"
-                            loading={loading}
+                            loading={true}
                         />
                     </div>
                 );
