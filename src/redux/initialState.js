@@ -16,6 +16,7 @@ const initialState = {
     CITYIO: {},
     SCENARIO_NAMES: [],
     MAP: {},
+    LOADING_MODULES: [],
     SLIDERS: {
         time: [
             settings.map.layers.ABM.startSimHour,

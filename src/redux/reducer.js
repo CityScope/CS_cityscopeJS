@@ -13,6 +13,7 @@ import {
     LISTEN_TO_GRID_CREATOR,
     LISTEN_TO_BASE_MAP_CENTER,
     LISTEN_TO_ABM_MODE,
+    SET_LOADING_MODULES,
 } from "./actions";
 import initialState from "./initialState";
 
@@ -41,6 +42,8 @@ export default function reducer(state = initialState, action) {
             return { ...state, LOADING: action.data };
         case SET_SCENARIO_NAMES:
             return { ...state, SCENARIO_NAMES: action.data };
+        case SET_LOADING_MODULES:
+            return { ...state, LOADING_MODULES: action.data };
 
         //! Editor
         case LISTEN_TO_ROW_EDIT:

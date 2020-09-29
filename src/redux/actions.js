@@ -51,6 +51,11 @@ export function setScenarioNames(data) {
     return { type: SET_SCENARIO_NAMES, data };
 }
 
+export const SET_LOADING_MODULES = "SET_LOADING_MODULES";
+export function setLoadingModules(data) {
+    return { type: SET_LOADING_MODULES, data };
+}
+
 /**
  * Editor Actions
  */

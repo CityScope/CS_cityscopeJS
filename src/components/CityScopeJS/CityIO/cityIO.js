@@ -6,6 +6,7 @@ import {
     setReadyState,
     setLoadingState,
     setScenarioNames,
+    setLoadingModules,
 } from "../../../redux/actions";
 import settings from "../../../settings/settings.json";
 import { getScenarioIndices } from "./utils";
@@ -50,15 +51,18 @@ export default function CityIO(props) {
     async function getModules() {
         const newHashes = await getAPICall(cityioURL + "/meta/hashes");
         const promises = [];
+        const loadingModules = [];
         const pickedModules = settings.cityIO.cityIOmodules;
         // for each of the modules in settings, add api call to promises
         pickedModules.forEach((module) => {
             if (hashes[module] !== newHashes[module]) {
                 promises.push(getAPICall(cityioURL + "/" + module));
+                loadingModules.push(module);
             } else {
                 promises.push(null);
             }
         });
+        dispatch(setLoadingModules(loadingModules));
         const modules = await Promise.all(promises);
         setHashes(newHashes);
 
@@ -72,6 +76,8 @@ export default function CityIO(props) {
             }
         }, cityioData);
         modulesData.tableName = tableName;
+
+        dispatch(setLoadingModules([]));
 
         // send to cityio
         dispatch(getCityioData(modulesData));
