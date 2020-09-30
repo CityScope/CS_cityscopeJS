@@ -1,4 +1,7 @@
 import axios from "axios";
+import { addLoadingModules } from "../../../../redux/actions";
+import store from "../../../../redux/store";
+import settings from "../../../../settings/settings.json";
 
 /**
  * conver rgb to hex
@@ -85,6 +88,17 @@ export const _proccessAccessData = (data) => {
  * with grid edits payload
  */
 export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
+    const expectUpdateModules = new Set(
+        settings.cityIO.cityIOmodules
+            .filter((val) => val.expectUpdate)
+            .map((val) => val.name)
+    );
+    const cityIOKeys = new Set(Object.keys(store.getState().CITYIO));
+
+    const loadingModules = [...cityIOKeys].filter((i) =>
+        expectUpdateModules.has(i)
+    );
+
     let postURL =
         "https://cityio.media.mit.edu/api/table/update/" + tableName + endPoint;
 
@@ -97,9 +111,15 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
             Accept: "application/json",
         },
     };
-    axios(options).catch((error) => {
-        console.log("ERROR:", error);
-    });
+    axios(options)
+        .then((res) => {
+            if (res.data.status === "ok") {
+                store.dispatch(addLoadingModules(loadingModules));
+            }
+        })
+        .catch((error) => {
+            console.log("ERROR:", error);
+        });
 };
 
 // /**

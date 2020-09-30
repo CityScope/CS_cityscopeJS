@@ -1,6 +1,6 @@
 import Provider from "../../redux/Provider";
 import "./Router.css";
-import configureStore from "../../redux/store";
+import store from "../../redux/store";
 import CityScopeJS from "../CityScopeJS/CityScopeJS";
 import { ThemeProvider } from "@material-ui/styles";
 import React, { Component } from "react";
@@ -42,7 +42,7 @@ export default class Router extends Component {
         return (
             <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <Provider store={configureStore()}>
+                <Provider store={store}>
                     <AppRouter />
                 </Provider>
             </ThemeProvider>

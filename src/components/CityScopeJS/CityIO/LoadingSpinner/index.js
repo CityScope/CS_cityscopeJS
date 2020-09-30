@@ -2,6 +2,7 @@ import React from "react";
 import { css } from "@emotion/core";
 import { useSelector } from "react-redux";
 import PulseLoader from "react-spinners/PulseLoader";
+import Typography from "@material-ui/core/Typography";
 
 const override = css`
     display: block;
@@ -10,7 +11,7 @@ const override = css`
 `;
 
 function LoadingSpinner() {
-    const loading = useSelector((state) => state.LOADING);
+    const [loadingModules] = useSelector((state) => [state.LOADING_MODULES]);
     return (
         <div
             style={{
@@ -18,14 +19,34 @@ function LoadingSpinner() {
                 bottom: 50,
                 right: 50,
                 zIndex: 1,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
             }}
         >
-            <PulseLoader
-                css={override}
-                size={20}
-                color="white"
-                loading={loading}
-            />
+            {loadingModules.map((module) => {
+                return (
+                    <div
+                        key={module}
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            marginBottom: "3px",
+                            marginTop: "3px",
+                        }}
+                    >
+                        <Typography style={{ marginRight: "10px" }}>
+                            {module}
+                        </Typography>
+                        <PulseLoader
+                            css={override}
+                            size={20}
+                            color="white"
+                            loading={true}
+                        />
+                    </div>
+                );
+            })}
         </div>
     );
 }
