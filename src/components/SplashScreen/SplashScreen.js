@@ -8,18 +8,16 @@ import TextField from "@material-ui/core/TextField";
 import SendIcon from "@material-ui/icons/Send";
 import Fab from "@material-ui/core/Fab";
 import Button from "@material-ui/core/Button";
+import GetGITdate from "./GetGITdate";
 
 const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(2),
     },
-
     root: {
-        maxWidth: "50%",
         "& > *": {
             margin: theme.spacing(1),
         },
-
         textAlign: "center",
         rounded: true,
         maxHeight: "50%",
@@ -29,13 +27,14 @@ const useStyles = makeStyles((theme) => ({
 
     inputRoot: {
         fontSize: 60,
+        width: 300,
     },
     labelRoot: {
-        fontSize: 50,
+        fontSize: 20,
         color: "white",
         "&$labelFocused": {
-            fontSize: 10,
             color: "white",
+            fontSize: 10,
         },
     },
     labelFocused: { color: "white" },
@@ -86,7 +85,7 @@ export default function SplashScreen() {
                         },
                     }}
                     id="outlined-basic"
-                    label="CityScope Project..."
+                    label="Type CityScope Project Name..."
                 ></TextField>
                 <div>
                     {textFieldContent && (
@@ -137,6 +136,8 @@ export default function SplashScreen() {
                 </Typography>
             </div>
             <Box p={5} />
+
+            <GetGITdate />
         </div>
     );
 }
