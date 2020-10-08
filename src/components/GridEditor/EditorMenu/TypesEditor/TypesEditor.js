@@ -83,7 +83,7 @@ export default function TypesEditor() {
                                             data.push(newData);
                                             return { ...prevState, data };
                                         });
-                                    }, 600);
+                                    }, 50);
                                 }),
                             onRowUpdate: (newData, oldData) =>
                                 new Promise((resolve) => {
@@ -104,7 +104,7 @@ export default function TypesEditor() {
 
                                         // dispath change to redux
                                         dispatch(listenToRowEdits(newData));
-                                    }, 600);
+                                    }, 50);
                                 }),
                             onRowDelete: (oldData) =>
                                 new Promise((resolve) => {
@@ -118,7 +118,7 @@ export default function TypesEditor() {
                                             );
                                             return { ...prevState, data };
                                         });
-                                    }, 600);
+                                    }, 50);
                                 }),
                         }}
                     />

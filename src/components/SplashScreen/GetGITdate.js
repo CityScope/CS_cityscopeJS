@@ -18,11 +18,9 @@ export default function GetGITdate() {
             .then((response) => {
                 response.json().then((json) => {
                     setGitMeta({
-                        author: json.commit.author.login,
-                        branch: json.name,
+                        author: json.commit.commit.author.name,
                         date: json.commit.commit.author.date,
                         sha: json.commit.sha,
-                        link: json._links.html,
                     });
                 });
             })
@@ -37,7 +35,6 @@ export default function GetGITdate() {
     const gitMetaComp = (
         <>
             <Typography variant="caption">
-                
                 <h2>CityScopeJS Development Tracking</h2>
                 <h4>Last Commit</h4>
                 <div>Author: {JSON.parse(JSON.stringify(gitMeta.author))}</div>
