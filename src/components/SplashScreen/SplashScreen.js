@@ -20,9 +20,16 @@ const useStyles = makeStyles((theme) => ({
         },
         textAlign: "center",
         rounded: true,
-        maxHeight: "50%",
-        paddingTop: 65,
+        paddingTop: 100,
         margin: "auto",
+        padding: 2,
+        maxWidth: 600,
+    },
+
+    flex: {
+        display: "flex",
+        alignItems: "baseline",
+        justifyContent: "space-evenly",
     },
 
     inputRoot: {
@@ -60,10 +67,12 @@ export default function SplashScreen() {
 
     return (
         <div className={classes.root}>
-            <Typography variant="h1" gutterBottom>
+            <Typography variant="h3" gutterBottom>
                 CityScopeJS
             </Typography>
-            <Typography gutterBottom>
+            <Box p={2} />
+
+            <Typography variant="h6" gutterBottom>
                 CityScopeJS is a unified front-end for MIT CityScope project, an
                 open-source urban modeling and simulation platform. CityScopeJS
                 allows users to examine different urban-design alternatives, and
@@ -104,40 +113,40 @@ export default function SplashScreen() {
             </div>
 
             <Box p={5} />
-            <div>
+            <div className={classes.flex}>
                 <Fab
                     color="default"
                     href="https://cityscope.media.mit.edu/CS_cityscopeJS/?editor"
                 >
                     <EditIcon />
                 </Fab>
-            </div>
 
-            <div className={classes.caption}>
-                <Typography variant="caption" gutterBottom>
-                    Click here to design and deploy a new CityScope project
-                    using Grid Editor
-                </Typography>
-            </div>
+                <div className={classes.caption}>
+                    <Typography variant="caption" gutterBottom>
+                        Click here to design and deploy a new CityScope project
+                        using Grid Editor
+                    </Typography>
+                </div>
 
-            <Box p={2} />
-            <div>
+                <Box p={2} />
                 <Fab
                     href="http://github.com/CityScope/CS_cityscopeJS/"
                     color="default"
                 >
                     <GitHubIcon />
                 </Fab>
-            </div>
-            <div className={classes.caption}>
-                <Typography variant="caption" gutterBottom>
-                    This open-source project is developed by the CityScope
-                    Network. Join us!
-                </Typography>
+
+                <div className={classes.caption}>
+                    <Typography variant="caption" gutterBottom>
+                        This open-source project is developed by the CityScope
+                        Network. Join us!
+                    </Typography>
+                </div>
             </div>
             <Box p={5} />
 
             <GetGITdate />
+            <Box p={5} />
         </div>
     );
 }
