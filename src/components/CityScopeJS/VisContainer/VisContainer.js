@@ -2,17 +2,23 @@ import React from "react";
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import ListItem from "@material-ui/core/ListItem";
 import Typography from "@material-ui/core/Typography";
 import Radar from "./Radar/Radar";
 import BarChart from "./BarChart/BarChart";
 import AreaCalc from "./AreaCalc/AreaCalc";
+import DataTable from "./DataTable";
 
 import Paper from "@material-ui/core/Paper";
 
-function VisContainer(props) {
+export default function VisContainer() {
     const drawerWidth = 450;
+
+    const [cityioData, menu] = useSelector((state) => [
+        state.CITYIO,
+        state.MENU,
+    ]);
 
     const useStyles = makeStyles((theme) => ({
         paper: {
@@ -25,12 +31,12 @@ function VisContainer(props) {
             width: drawerWidth,
         },
     }));
-
     const classes = useStyles();
-    const showRadar = props.menu && props.menu.includes("RADAR");
+
+    const showRadar = menu && menu.includes("RADAR");
 
     return (
-        <React.Fragment>
+        <>
             {showRadar && (
                 <Drawer
                     variant="persistent"
@@ -46,12 +52,15 @@ function VisContainer(props) {
                                 Urban Indicators
                             </Typography>
                         </ListItem>
+                        <ListItem>
+                            <DataTable></DataTable>
+                        </ListItem>
 
                         <div className={classes.paper}>
                             <Paper elevation={10}>
                                 <ListItem>
                                     <Radar
-                                        cityioData={props.cityioData}
+                                        cityioData={cityioData}
                                         drawerWidth={drawerWidth}
                                     />
                                 </ListItem>
@@ -62,7 +71,7 @@ function VisContainer(props) {
                             <Paper elevation={10}>
                                 <ListItem>
                                     <BarChart
-                                        cityioData={props.cityioData}
+                                        cityioData={cityioData}
                                         drawerWidth={drawerWidth}
                                     />
                                 </ListItem>
@@ -72,7 +81,7 @@ function VisContainer(props) {
                             <Paper elevation={10}>
                                 <ListItem>
                                     <AreaCalc
-                                        cityioData={props.cityioData}
+                                        cityioData={cityioData}
                                         drawerWidth={drawerWidth}
                                     />
                                 </ListItem>
@@ -81,17 +90,6 @@ function VisContainer(props) {
                     </List>
                 </Drawer>
             )}
-        </React.Fragment>
+        </>
     );
 }
-
-// export default EditMenuMain;
-
-const mapStateToProps = (state) => {
-    return {
-        cityioData: state.CITYIO,
-        menu: state.MENU,
-    };
-};
-
-export default connect(mapStateToProps, null)(VisContainer);
