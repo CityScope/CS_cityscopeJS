@@ -36,12 +36,20 @@ const prepareData = (struct, typesList, geoJsonFeatures, gridProps) => {
 
     typesList.forEach((oldType) => {
         newTypesList[oldType.name] = oldType;
+        //material-table creates strings for these items
+        // so in first "Commit to cityIO", these must be turned into
+        // Json objects. On Second commit, these are already objects,
+        // hence the two conditions below
 
-        // fixes JSON => string in material-table
-        newTypesList[oldType.name].LBCS = JSON.parse(oldType.LBCS);
-        newTypesList[oldType.name].NAICS = JSON.parse(oldType.NAICS);
+        newTypesList[oldType.name].LBCS =
+            typeof oldType.LBCS == String
+                ? JSON.parse(oldType.LBCS)
+                : oldType.LBCS;
+        newTypesList[oldType.name].NAICS =
+            typeof oldType.LBCS == String
+                ? JSON.parse(oldType.NAICS)
+                : oldType.NAICS;
     });
-
 
     geoGridObject.properties.types = newTypesList;
 
