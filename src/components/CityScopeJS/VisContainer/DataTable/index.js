@@ -2,15 +2,19 @@ import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { DataGrid } from "@material-ui/data-grid";
 
-export default function DataTable() {
+export default function DataTable({ dataType }) {
     const [cityioData] = useSelector((state) => [state.CITYIO]);
 
+    console.log("data", cityioData);
     const data = useMemo(
-        () => cityioData.indicators.map((d, i) => ({ id: i + 1, ...d })),
+        () => cityioData[dataType].map((d, i) => ({ id: i + 1, ...d })),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
+        [dataType]
     );
 
+    console.log("data", data);
+
+    console.log(dataType);
     const columns = useMemo(
         () =>
             Object.keys(data[0]).map((d) => ({
@@ -29,8 +33,6 @@ export default function DataTable() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
-
-    console.log(data);
 
     return (
         <div style={{ height: 400, width: "100%" }}>
