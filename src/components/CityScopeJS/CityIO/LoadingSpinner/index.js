@@ -17,7 +17,7 @@ function LoadingSpinner() {
             style={{
                 position: "fixed",
                 bottom: 50,
-                right: 50,
+                right: "50%",
                 zIndex: 1,
                 display: "flex",
                 flexDirection: "column",
@@ -36,7 +36,7 @@ function LoadingSpinner() {
                         }}
                     >
                         <Typography style={{ marginRight: "10px" }}>
-                            {module}
+                            loading {module}
                         </Typography>
                         <PulseLoader
                             css={override}

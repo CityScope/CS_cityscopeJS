@@ -50,6 +50,17 @@ function VisContainer(props) {
                         <div className={classes.paper}>
                             <Paper elevation={10}>
                                 <ListItem>
+                                    <AreaCalc
+                                        cityioData={props.cityioData}
+                                        drawerWidth={drawerWidth}
+                                    />
+                                </ListItem>
+                            </Paper>
+                        </div>
+
+                        <div className={classes.paper}>
+                            <Paper elevation={10}>
+                                <ListItem>
                                     <Radar
                                         cityioData={props.cityioData}
                                         drawerWidth={drawerWidth}
@@ -68,16 +79,7 @@ function VisContainer(props) {
                                 </ListItem>
                             </Paper>
                         </div>
-                        <div className={classes.paper}>
-                            <Paper elevation={10}>
-                                <ListItem>
-                                    <AreaCalc
-                                        cityioData={props.cityioData}
-                                        drawerWidth={drawerWidth}
-                                    />
-                                </ListItem>
-                            </Paper>
-                        </div>
+                      
                     </List>
                 </Drawer>
             )}
