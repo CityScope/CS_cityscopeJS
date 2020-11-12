@@ -13,6 +13,8 @@ import ShadowSubmenu from "./ShadowSubmenu";
 import AccessSubmenu from "./AccessSubmenu";
 import Switch from "@material-ui/core/Switch";
 import { makeStyles } from "@material-ui/core/styles";
+import Close from "@material-ui/icons/Cancel";
+import Fab from "@material-ui/core/Fab";
 
 function TogglesMenu(props) {
     let drawerWidth = 300;
@@ -119,17 +121,26 @@ function TogglesMenu(props) {
             }}
             anchor="left"
             open={open}
-            onClose={toggleDrawer}
+            // onClose={toggleDrawer}
+            variant="persistent"
         >
             <List className={classes.list}>
+                <ListItem
+                    style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                    <Fab color="default" onClick={toggleDrawer}>
+                        <Close />
+                    </Fab>
+                </ListItem>
                 <ListItem>
-                    <Typography variant="h6" gutterBottom>
+                    <Typography variant="h5" gutterBottom>
                         MIT CityScope
                     </Typography>
                 </ListItem>
+
                 <ListItem>
                     <Typography variant="caption" gutterBottom>
-                        Toggle layers visibility
+                        Toggle CityScope layers visability
                     </Typography>
                 </ListItem>
                 {togglesCompsArray}

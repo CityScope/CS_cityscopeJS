@@ -15,7 +15,7 @@ import GridEditor from "../GridEditor/GridEditor";
 const theme = createMuiTheme({
     palette: {
         type: "dark",
-        background: { default: "#000", paper: "#29323c" },
+        background: { default: "#000", paper: "#1f252d" },
     },
 });
 
