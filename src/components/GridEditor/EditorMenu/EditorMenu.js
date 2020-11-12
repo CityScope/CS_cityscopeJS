@@ -9,7 +9,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Typography from "@material-ui/core/Typography";
 
-export default function EditMenu() {
+export default function EditorMenu() {
     const useStyles = makeStyles((theme) => ({
         drawer: {
             width: "50%",

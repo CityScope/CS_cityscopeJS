@@ -5,7 +5,6 @@ import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { GeoJsonLayer } from "deck.gl";
-import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import settings from "../GridEditorSettings.json";
 import { listenToBaseMapCenter } from "../../../redux/actions";
 
@@ -42,8 +41,7 @@ class BaseMap extends Component {
     componentDidMount() {
         // fix deck view rotate
         this._rightClickViewRotate();
-        // setup sun effects
-        this._setupEffects();
+     
         // zoom map on CS table location
         this._setViewStateToTableHeader();
     }
@@ -91,17 +89,7 @@ class BaseMap extends Component {
         });
     }
 
-    _setupEffects() {
-        const ambientLight = new AmbientLight({
-            color: [255, 255, 255],
-            intensity: 0.85,
-        });
-        const dirLight = new _SunLight(this.dirLightSettings);
-        const lightingEffect = new LightingEffect({ ambientLight, dirLight });
-        lightingEffect.shadowColor = [0, 0, 0, 0.5];
-        this._effects = [lightingEffect];
-    }
-
+   
     /**
      * Description. fix deck issue
      * with rotate right botton
@@ -277,7 +265,6 @@ class BaseMap extends Component {
                     viewState={this.state.viewState}
                     onViewStateChange={this._onViewStateChange}
                     layers={this._renderLayers()}
-                    effects={this._effects}
                     controller={{
                         touchZoom: true,
                         touchRotate: true,

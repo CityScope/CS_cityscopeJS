@@ -121,7 +121,6 @@ function TogglesMenu(props) {
             }}
             anchor="left"
             open={open}
-            // onClose={toggleDrawer}
             variant="persistent"
         >
             <List className={classes.list}>
