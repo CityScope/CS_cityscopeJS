@@ -15,27 +15,24 @@ import { testHex, hexToRgb } from "../../BaseMap/utils/BaseMapUtils";
 import TypeInfo from "./TypeInfo";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
+import Box from "@material-ui/core/Box";
 
 function EditMenu(props) {
     const useStyles = makeStyles((theme) => ({
         drawer: {
-            width: 250,
+            width: 300,
             zIndex: theme.zIndex.drawer + 1,
-        },
-        paper: {
-            display: "flex",
-            "& > *": {
-                padding: theme.spacing(5),
-            },
         },
 
         marginAutoContainer: {
             width: "100%",
             display: "flex",
+            margin: "auto",
         },
         marginAutoItem: {
             margin: "auto",
-            width: "90%",
+            width: "80%",
+            height: "80%",
         },
     }));
 
@@ -68,7 +65,7 @@ function EditMenu(props) {
     // create the types themselves
     const createTypesIcons = (LanduseTypesList) => {
         let iconsArr = [];
-        Object.keys(LanduseTypesList).forEach((type) => {
+        Object.keys(LanduseTypesList).forEach((type, index) => {
             let col = LanduseTypesList[type].color;
             // get the LBCS/NAICS types info
             let LBCS = parseTypeInfo(
@@ -90,65 +87,84 @@ function EditMenu(props) {
 
             iconsArr.push(
                 <React.Fragment key={Math.random()}>
-                    <ListItem
-                        key={Math.random()}
-                        alignItems="flex-start"
-                        button
-                        variant="raised"
-                        selected={selected}
-                        onClick={(event) =>
-                            handleListItemClick(
-                                event,
-                                type,
-                                LanduseTypesList[type]
-                            )
-                        }
-                        className={classes.list}
-                    >
-                        <ListItemAvatar key={Math.random()}>
-                            <Avatar style={{ backgroundColor: rgbCol }}>
-                                {type.charAt(0)}
-                            </Avatar>
-                        </ListItemAvatar>
-
-                        <ListItemText
+                    <Paper elevation={5}>
+                        <ListItem
                             key={Math.random()}
-                            classes={{
-                                primary: classes.listItemPrimaryText,
-                                secondary: classes.listItemSecondaryText,
-                            }}
-                            primary={type}
-                        />
-                    </ListItem>
+                            alignItems="flex-start"
+                            button
+                            variant="raised"
+                            selected={selected}
+                            onClick={(event) =>
+                                handleListItemClick(
+                                    event,
+                                    type,
+                                    LanduseTypesList[type]
+                                )
+                            }
+                            className={classes.list}
+                        >
+                            <ListItemAvatar key={Math.random()}>
+                                <Avatar style={{ backgroundColor: rgbCol }}>
+                                    {type.charAt(0)}
+                                </Avatar>
+                            </ListItemAvatar>
+
+                            <ListItemText
+                                key={Math.random()}
+                                classes={{
+                                    primary: classes.listItemPrimaryText,
+                                    secondary: classes.listItemSecondaryText,
+                                }}
+                                primary={type}
+                            />
+                        </ListItem>
+                    </Paper>
 
                     {typeHasHeightProps && (
                         <Collapse in={selected} key={Math.random()}>
-                            <div className={classes.paper}>
-                                <Paper elevation={10}>
-                                    {LBCS && (
-                                        <>
-                                            <Typography gutterBottom>
-                                                LBCS
-                                            </Typography>
-                                            <TypeInfo typeInfo={LBCS} />
-                                        </>
-                                    )}
+                            <div className={classes.marginAutoContainer}>
+                                <div className={classes.marginAutoItem}>
+                                    <Paper elevation={10}>
+                                        <Box
+                                            display="flex"
+                                            flexDirection="row"
+                                            p={1}
+                                            m={1}
+                                        >
+                                            <Box p={1}>
+                                                {LBCS && (
+                                                    <>
+                                                        <Typography
+                                                            gutterBottom
+                                                        >
+                                                            LBCS
+                                                        </Typography>
+                                                        <TypeInfo
+                                                            typeInfo={LBCS}
+                                                        />
+                                                    </>
+                                                )}
+                                            </Box>
+                                            <Box p={1}>
+                                                {NAICS && (
+                                                    <>
+                                                        <Typography
+                                                            gutterBottom
+                                                        >
+                                                            NAICS
+                                                        </Typography>
+                                                        <TypeInfo
+                                                            typeInfo={NAICS}
+                                                        />
+                                                    </>
+                                                )}
+                                            </Box>
+                                        </Box>
 
-                                    {NAICS && (
-                                        <>
-                                            <Typography gutterBottom>
-                                                NAICS
-                                            </Typography>
-                                            <TypeInfo typeInfo={NAICS} />
-                                        </>
-                                    )}
-                                    <Typography gutterBottom>
-                                        Set Height
-                                    </Typography>
-                                    <div
-                                        className={classes.marginAutoContainer}
-                                    >
                                         <div className={classes.marginAutoItem}>
+                                            <Typography gutterBottom>
+                                                Set Height
+                                            </Typography>
                                             <Slider
                                                 key={Math.random()}
                                                 value={height}
@@ -173,8 +189,8 @@ function EditMenu(props) {
                                                 marks={marks}
                                             ></Slider>
                                         </div>
-                                    </div>
-                                </Paper>
+                                    </Paper>
+                                </div>
                             </div>
                         </Collapse>
                     )}
