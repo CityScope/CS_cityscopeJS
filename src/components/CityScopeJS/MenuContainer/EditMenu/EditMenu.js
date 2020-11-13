@@ -62,13 +62,8 @@ function EditMenu(props) {
         let iconsArr = [];
         Object.keys(LanduseTypesList).forEach((type) => {
             let col = LanduseTypesList[type].color;
-            let LBCS = JSON.parse(
-                props.cityioData.GEOGRID.properties.types[type].LBCS
-            );
-            let NAICS = JSON.parse(
-                props.cityioData.GEOGRID.properties.types[type].NAICS
-            );
-
+            let LBCS = props.cityioData.GEOGRID.properties.types[type].LBCS;
+            let NAICS = props.cityioData.GEOGRID.properties.types[type].NAICS;
             if (testHex(col)) {
                 col = hexToRgb(col);
             }
@@ -116,12 +111,26 @@ function EditMenu(props) {
                         <Collapse in={selected} key={Math.random()}>
                             <div className={classes.paper}>
                                 <Paper elevation={10}>
-                                    <Typography gutterBottom>LBCS</Typography>
-                                    {LBCS && <TypeInfo typeInfo={LBCS} />}
-                                    <Typography gutterBottom>NAICS</Typography>
-                                    {NAICS && <TypeInfo typeInfo={NAICS} />}
+                                    {LBCS && (
+                                        <>
+                                            {" "}
+                                            <Typography gutterBottom>
+                                                LBCS
+                                            </Typography>{" "}
+                                            <TypeInfo typeInfo={LBCS} />
+                                        </>
+                                    )}
+
+                                    {NAICS && (
+                                        <>
+                                            <Typography gutterBottom>
+                                                NAICS
+                                            </Typography>{" "}
+                                            <TypeInfo typeInfo={NAICS} />
+                                        </>
+                                    )}
                                     <Typography gutterBottom>
-                                        Set hight
+                                        Set Height
                                     </Typography>
                                     <div
                                         className={classes.marginAutoContainer}

@@ -8,7 +8,7 @@ export default function TypeInfo(props) {
 
     const careateData = () => {
         let data = [];
-        props.typeInfo.forEach((attr) => {
+        props.typeInfo.forEach((attr) => {            
             data.push({
                 angle: attr.proportion,
                 label: JSON.stringify(attr.use),
@@ -44,7 +44,7 @@ export default function TypeInfo(props) {
             onSeriesMouseOut={() => setHoveredRadial(false)}
             width={radialRadius}
             height={radialRadius}
-            padAngle={0.01}
+            padAngle={0.02}
         >
             {hoveredRadial !== false && (
                 <Hint value={hoveredRadial}>
