@@ -13,10 +13,7 @@ export default function TypeInfo(props) {
         // array for data
         let data = [];
         // check type info: if string, parse, else object
-        let info =
-            typeof props.typeInfo == "string"
-                ? JSON.parse(props.typeInfo)
-                : props.typeInfo;
+        let info = props.typeInfo;
         // get the type data
         info.forEach((attr, index) => {
             data.push({

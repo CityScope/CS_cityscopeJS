@@ -57,13 +57,27 @@ function EditMenu(props) {
         dispatch(listenToEditMenu(typeProps));
     };
 
+    const parseTypeInfo = (typeInfo) => {
+        //! check type info: if string, parse, else object
+        let info =
+            typeof typeInfo == "string" ? JSON.parse(typeInfo) : typeInfo;
+
+        return info;
+    };
+
     // create the types themselves
     const createTypesIcons = (LanduseTypesList) => {
         let iconsArr = [];
         Object.keys(LanduseTypesList).forEach((type) => {
             let col = LanduseTypesList[type].color;
-            let LBCS = props.cityioData.GEOGRID.properties.types[type].LBCS;
-            let NAICS = props.cityioData.GEOGRID.properties.types[type].NAICS;
+            // get the LBCS/NAICS types info
+            let LBCS = parseTypeInfo(
+                props.cityioData.GEOGRID.properties.types[type].LBCS
+            );
+            let NAICS = parseTypeInfo(
+                props.cityioData.GEOGRID.properties.types[type].NAICS
+            );
+
             if (testHex(col)) {
                 col = hexToRgb(col);
             }
@@ -113,10 +127,9 @@ function EditMenu(props) {
                                 <Paper elevation={10}>
                                     {LBCS && (
                                         <>
-                                            {" "}
                                             <Typography gutterBottom>
                                                 LBCS
-                                            </Typography>{" "}
+                                            </Typography>
                                             <TypeInfo typeInfo={LBCS} />
                                         </>
                                     )}
@@ -125,7 +138,7 @@ function EditMenu(props) {
                                         <>
                                             <Typography gutterBottom>
                                                 NAICS
-                                            </Typography>{" "}
+                                            </Typography>
                                             <TypeInfo typeInfo={NAICS} />
                                         </>
                                     )}
