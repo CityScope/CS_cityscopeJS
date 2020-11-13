@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "https://cityscope.media.mit.edu/CS_cityscopeJS/precache-manifest.3a6f340ab37720e1209426f7adb3f431.js"
+  "https://cityscope.media.mit.edu/CS_cityscopeJS/precache-manifest.2624641ff18742484a0be02aa6723a62.js"
 );
 
 self.addEventListener('message', (event) => {
