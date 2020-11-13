@@ -9,16 +9,24 @@ import { listenToEditMenu } from "../../../../redux/actions";
 import { connect } from "react-redux";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import { testHex, hexToRgb } from "../../BaseMap/utils/BaseMapUtils";
+import TypeInfo from "./TypeInfo";
+import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
 
 function EditMenu(props) {
     const useStyles = makeStyles((theme) => ({
         drawer: {
-            width: 300,
+            width: 250,
             zIndex: theme.zIndex.drawer + 1,
+        },
+        paper: {
+            display: "flex",
+            "& > *": {
+                padding: theme.spacing(5),
+            },
         },
 
         marginAutoContainer: {
@@ -27,7 +35,7 @@ function EditMenu(props) {
         },
         marginAutoItem: {
             margin: "auto",
-            width: "80%",
+            width: "90%",
         },
     }));
 
@@ -38,8 +46,8 @@ function EditMenu(props) {
     const height = selectedType ? selectedType.height : null;
 
     const marks = [
-        { value: 0, label: "0 floors" },
-        { value: 50, label: "50 floors" },
+        { value: 0, label: "min" },
+        { value: 100, label: "max" },
     ];
 
     const handleListItemClick = (event, name, typeProps) => {
@@ -54,6 +62,13 @@ function EditMenu(props) {
         let iconsArr = [];
         Object.keys(LanduseTypesList).forEach((type) => {
             let col = LanduseTypesList[type].color;
+            let LBCS = JSON.parse(
+                props.cityioData.GEOGRID.properties.types[type].LBCS
+            );
+            let NAICS = JSON.parse(
+                props.cityioData.GEOGRID.properties.types[type].NAICS
+            );
+
             if (testHex(col)) {
                 col = hexToRgb(col);
             }
@@ -66,13 +81,6 @@ function EditMenu(props) {
 
             iconsArr.push(
                 <React.Fragment key={Math.random()}>
-                    <Divider
-                        key={Math.random()}
-                        variant="inset"
-                        component="li"
-                        classes={{ root: classes.dividerColor }}
-                    />
-
                     <ListItem
                         key={Math.random()}
                         alignItems="flex-start"
@@ -105,37 +113,53 @@ function EditMenu(props) {
                     </ListItem>
 
                     {typeHasHeightProps && (
-                        <div className={classes.marginAutoContainer}>
-                            <div className={classes.marginAutoItem}>
-                                <Collapse in={selected} key={Math.random()}>
-                                    <Slider
-                                        key={Math.random()}
-                                        value={height}
-                                        valueLabelDisplay="auto"
-                                        className={classes.slider}
-                                        onChangeCommitted={(event, value) =>
-                                            dispatch(
-                                                listenToEditMenu({
-                                                    ...selectedType,
-                                                    height: value,
-                                                })
-                                            )
-                                        }
-                                        getAriaLabel={(index) =>
-                                            index.toString()
-                                        }
-                                        min={0}
-                                        max={50}
-                                        marks={marks}
-                                    ></Slider>
-                                </Collapse>
+                        <Collapse in={selected} key={Math.random()}>
+                            <div className={classes.paper}>
+                                <Paper elevation={10}>
+                                    <Typography gutterBottom>LBCS</Typography>
+                                    {LBCS && <TypeInfo typeInfo={LBCS} />}
+                                    <Typography gutterBottom>NAICS</Typography>
+                                    {NAICS && <TypeInfo typeInfo={NAICS} />}
+                                    <Typography gutterBottom>
+                                        Set hight
+                                    </Typography>
+                                    <div
+                                        className={classes.marginAutoContainer}
+                                    >
+                                        <div className={classes.marginAutoItem}>
+                                            <Slider
+                                                key={Math.random()}
+                                                value={height}
+                                                valueLabelDisplay="auto"
+                                                className={classes.slider}
+                                                onChangeCommitted={(
+                                                    event,
+                                                    value
+                                                ) =>
+                                                    dispatch(
+                                                        listenToEditMenu({
+                                                            ...selectedType,
+                                                            height: value,
+                                                        })
+                                                    )
+                                                }
+                                                getAriaLabel={(index) =>
+                                                    index.toString()
+                                                }
+                                                min={marks[0].value}
+                                                max={marks[1].value}
+                                                marks={marks}
+                                            ></Slider>
+                                        </div>
+                                    </div>
+                                </Paper>
                             </div>
-                        </div>
+                        </Collapse>
                     )}
                 </React.Fragment>
             );
         });
-        return iconsArr;
+        return <List>{iconsArr}</List>;
     };
 
     return (
@@ -148,9 +172,7 @@ function EditMenu(props) {
                 paper: classes.drawer,
             }}
         >
-            <List>
-                {createTypesIcons(props.cityioData.GEOGRID.properties.types)}
-            </List>
+            {createTypesIcons(props.cityioData.GEOGRID.properties.types)}
         </Drawer>
     );
 }
