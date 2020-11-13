@@ -17,7 +17,7 @@ export default function TypesEditor() {
                 color: LanduseTypesList[type].color,
                 height: LanduseTypesList[type].height
                     ? LanduseTypesList[type].height
-                    : null,
+                    : 0,
                 LBCS: JSON.stringify(LanduseTypesList[type].LBCS),
                 NAICS: JSON.stringify(LanduseTypesList[type].NAICS),
                 interactive: LanduseTypesList[type].interactive,
@@ -87,6 +87,8 @@ export default function TypesEditor() {
                                 }),
                             onRowUpdate: (newData, oldData) =>
                                 new Promise((resolve) => {
+                                    console.log(newData, oldData);
+
                                     setTimeout(() => {
                                         resolve();
                                         if (oldData) {
