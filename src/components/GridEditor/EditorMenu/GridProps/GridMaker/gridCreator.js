@@ -109,6 +109,7 @@ export const gridCreator = (gridProps) => {
                 height: rndType.height,
                 name: rndType.name,
                 interactive: rndType.interactive,
+                id: i
             },
         };
 

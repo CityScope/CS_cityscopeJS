@@ -134,27 +134,31 @@ export default function CommitGrid(props) {
                 "/GEOGRIDDATA",
         };
 
-        const options = {
-            method: "post",
-            url: requestsList.geoGridURL,
-            data: geoGridObj,
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            },
+        const geoGridOptions = (URL, DATA) => {
+            return {
+                method: "post",
+                url: URL,
+                data: DATA,
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+            };
         };
 
-        axios(options)
+        axios(geoGridOptions(requestsList.geoGridURL, geoGridObj))
             .then(function (response) {
                 setReqResonse(reqResonseUI(response, tableName));
             })
             // then reset GEOGRIDDATA of that new grid
 
             .then(function () {
-                options.url = requestsList.geoGridDataURL;
-                options.data = {};
-                axios(options);
+                axios(geoGridOptions(requestsList.geoGridDataURL, {}));
                 console.log("removed GEOGRIDDATA");
+            })
+            .then(function () {
+                axios(geoGridOptions(requestsList.geoGridDataURL, geoGridObj));
+                console.log("mirrored GEOGRID to GEOGRIDDATA");
             })
             .catch((error) => {
                 console.log("ERROR:", error);
