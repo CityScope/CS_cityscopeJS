@@ -18,8 +18,13 @@ export default function TypesEditor() {
                 height: LanduseTypesList[type].height
                     ? LanduseTypesList[type].height
                     : 0,
-                LBCS: JSON.stringify(LanduseTypesList[type].LBCS),
-                NAICS: JSON.stringify(LanduseTypesList[type].NAICS),
+
+                LBCS: LanduseTypesList[type].LBCS
+                    ? JSON.stringify(LanduseTypesList[type].LBCS)
+                    : null,
+                NAICS: LanduseTypesList[type].NAICS
+                    ? JSON.stringify(LanduseTypesList[type].NAICS)
+                    : null,
                 interactive: LanduseTypesList[type].interactive,
             });
         });
@@ -41,13 +46,15 @@ export default function TypesEditor() {
         ],
         data: createtypesArray(settings.GEOGRID.properties.types),
     });
+
+    const dispatch = useDispatch();
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [rowColor, setRowColor] = useState(null);
+
     // redux the type list on every change
     useEffect(() => {
         dispatch(listeonToTypesList(state.data));
     });
-    const dispatch = useDispatch();
-    const [selectedRow, setSelectedRow] = useState(null);
-    const [rowColor, setRowColor] = useState(null);
 
     return (
         <div style={{ maxWidth: "100%" }}>

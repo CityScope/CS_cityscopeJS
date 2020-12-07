@@ -42,11 +42,11 @@ const prepareData = (struct, typesList, geoJsonFeatures, gridProps) => {
         // hence the two conditions below
 
         newTypesList[oldType.name].LBCS =
-            typeof oldType.LBCS == String
+            typeof oldType.LBCS == "string"
                 ? JSON.parse(oldType.LBCS)
                 : oldType.LBCS;
         newTypesList[oldType.name].NAICS =
-            typeof oldType.LBCS == String
+            typeof oldType.NAICS == "string"
                 ? JSON.parse(oldType.NAICS)
                 : oldType.NAICS;
     });
@@ -76,7 +76,6 @@ const prepareData = (struct, typesList, geoJsonFeatures, gridProps) => {
 
     // lastly get the grid features
     geoGridObject.features = geoJsonFeatures;
-
     return geoGridObject;
 };
 
