@@ -27,6 +27,8 @@ export default function TypeInfo(props) {
     };
 
     const data = careateData();
+
+    /*
     const boxStyle = { height: "10px", width: "10px" };
 
     function buildValue(hoveredCell) {
@@ -37,6 +39,7 @@ export default function TypeInfo(props) {
             y: radius * Math.sin(truedAngle),
         };
     }
+    */
 
     return (
         <>
