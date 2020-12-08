@@ -124,6 +124,12 @@ export default function Map(props) {
     }, [editOn]);
 
     useEffect(() => {
+        if (!selectionOn && selectedFeaturesState.length > 0) {
+          ws_ref.current._onGridDUpdate(roboscopeScale, selectedFeaturesState.map(index => GEOGRID.features[index].properties));
+        }
+    }, [selectionOn]);
+    
+    useEffect(() => {
         if (!loaded) return;
         if (resetViewOn) {
             _setViewStateToTableHeader();
@@ -189,16 +195,20 @@ export default function Map(props) {
         GRID: GridLayer({
             data: GEOGRID,
             editOn: menu.includes("EDIT"),
+            menu: menu,
             state: {
                 selectedType,
                 keyDownState,
                 selectedCellsState,
                 pickingRadius,
+                selectedFeaturesState,
+                roboscopeScale
             },
             updaters: {
                 setSelectedCellsState,
                 setDraggingWhileEditing,
                 setHoveredObj,
+                setSelectedFeaturesState
             },
             deckGL,
             ws_ref

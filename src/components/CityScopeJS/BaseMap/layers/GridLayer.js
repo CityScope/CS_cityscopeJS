@@ -18,7 +18,13 @@ export default function GridLayer({
         lineWidthScale: 1,
         lineWidthMinPixels: 2,
         getElevation: (d) => d.properties.height,
-        getFillColor: (d) => d.properties.color,
+        getFillColor: (d) => {
+          if (selectedFeaturesState.length > 0) {
+            return (selectedFeaturesState.includes(d.properties.id)) ? d.properties.color : color_opc(d.properties.color, 150);
+          } else {
+            return d.properties.color;
+          } 
+        },
 
         onClick: (event) => {
             if (selectedType && editOn && keyDownState !== "Shift")
@@ -29,6 +35,7 @@ export default function GridLayer({
                     pickingRadius,
                     deckGL,
                     ws_ref,
+                    selectedFeaturesState
                 );
         },
 
@@ -41,6 +48,7 @@ export default function GridLayer({
                     pickingRadius,
                     deckGL,
                     ws_ref,
+                    selectedFeaturesState
                 );
         },
 
@@ -59,9 +67,10 @@ export default function GridLayer({
         onDragEnd: () => {
             setDraggingWhileEditing(false);
         },
+        
         updateTriggers: {
-            getFillColor: selectedCellsState,
-            getElevation: selectedCellsState,
+            getFillColor: {selectedCellsState,selectedFeaturesState},
+            getElevation: {selectedCellsState,selectedFeaturesState},
         },
         transitions: {
             getFillColor: 500,

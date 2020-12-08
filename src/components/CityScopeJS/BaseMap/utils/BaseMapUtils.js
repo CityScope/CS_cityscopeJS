@@ -152,6 +152,7 @@ export const _handleGridcellEditing = (
     pickingRadius,
     deckGLRef,
     ws_ref,
+    selectedFeaturesState
 ) => {
     const { height, color, name } = selectedType;
     const multiSelectedObj = _multipleObjPicked(e, pickingRadius, deckGLRef);
@@ -162,9 +163,19 @@ export const _handleGridcellEditing = (
               thisCellProps.color = testHex(color) ? hexToRgb(color) : color;
               thisCellProps.height = height;
               thisCellProps.name = name;
+              if (selectedFeaturesState.includes(thisCellProps.id)) {
                 ws_ref.current._onGridUpdate(thisCellProps);
+              }
             }
         }
     });
     setSelectedCellsState(multiSelectedObj);
 };
+
+// /**
+//  * Roboscope Color Modifier: 
+//    - Opaque for selected pixels and transparent for unselected pixels 
+//  */
+export const color_opc = (color, op) => {
+  return [color[0], color[1], color[2], op]
+}
