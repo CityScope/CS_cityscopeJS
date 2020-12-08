@@ -19,7 +19,7 @@ export default function App(props) {
             {ready && (
                 <>
                     <MenuContainer tableName={tableName} />
-                    <MapContainer />
+                    <MapContainer tableName={tableName}/>
                     <VisContainer />
                 </>
             )}
