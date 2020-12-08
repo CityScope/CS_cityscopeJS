@@ -19,6 +19,7 @@ import {
     AggregatedTripsLayer,
     ABMLayer,
     GridLayer,
+    RoboscopeSelection
 } from "./layers";
 
 export default function Map(props) {
@@ -33,6 +34,10 @@ export default function Map(props) {
     const [GEOGRID, setGEOGRID] = useState(null);
     const [ABM, setABM] = useState({});
     const [loaded, setLoaded] = useState(false);
+    //roboscope
+    const [count, setCount] = useState(1);
+    const [selectedFeaturesState, setSelectedFeaturesState] = useState([]);
+    const [roboscopeScale, setScale] = useState(1);
     const ws_ref = useRef();
 
     const effectsRef = useRef();
@@ -62,6 +67,7 @@ export default function Map(props) {
     var rotateOn = menu.includes("ROTATE");
     var shadowsOn = menu.includes("SHADOWS");
     var editOn = menu.includes("EDIT");
+    var selectionOn = menu.includes("SELECTION");
     var resetViewOn = menu.includes("RESET_VIEW");
 
     useEffect(() => {
@@ -201,9 +207,16 @@ export default function Map(props) {
             data: access,
             accessToggle,
         }),
+        SELECTION: RoboscopeSelection({
+            data: GEOGRID,
+            editOn: menu.includes("EDIT"),
+            state: { menu },
+            updaters: { setSelectedFeaturesState, setScale},
+            deckGL
+        })
     };
 
-    const layerOrder = ["ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS"];
+    const layerOrder = ["ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS", "SELECTION"];
 
     const _renderLayers = () => {
         let layers = [];
