@@ -22,6 +22,16 @@
                 "showOnInit": true,
                 "requireModule": "GEOGRID"
             },
+            "SELECTION": {
+                "displayName": "Scale Roboscope Grid",
+                "showOnInit": false,
+                "requireModule": "roboscope"
+            },
+            "TRANSLATE": {
+                "displayName": "Translate Roboscope Grid",
+                "showOnInit": false,
+                "requireModule": "roboscope"
+            },
             "ABM": {
                 "displayName": "Mobility Simulation",
                 "showOnInit": false,

@@ -32,7 +32,7 @@ function TogglesMenu(props) {
     }));
 
     const classes = useStyles();
-    const { open, toggleDrawer, handleToggle } = props;
+    const { open, toggleDrawer, handleToggle,  tableName} = props;
 
     const { menuState, cityioData } = useSelector((state) => ({
         menuState: state.MENU,
@@ -49,6 +49,7 @@ function TogglesMenu(props) {
     let togglesCompsArray = [];
     // array of loaded API modules
     const loadedModules = Object.keys(cityioData);
+    loadedModules.push(tableName)
     // create each toggle
     for (let i = 0; i < listOfToggles.length; i++) {
         // check if the mdoule of this toggle
