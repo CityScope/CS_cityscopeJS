@@ -37,14 +37,14 @@ export default function Map(props) {
     //roboscope
     const [count, setCount] = useState(1);
     const [selectedFeaturesState, setSelectedFeaturesState] = useState([]);
+    const [dragStart, setDragStart] = useState(-1);
+    const [resetDrag, setResetDrag] = useState(false);
     const [roboscopeScale, setScale] = useState(1);
     const ws_ref = useRef();
 
     const effectsRef = useRef();
     const deckGL = useRef();
-
     const dispatch = useDispatch();
-
     const pickingRadius = 40;
 
     const [
@@ -68,6 +68,7 @@ export default function Map(props) {
     var shadowsOn = menu.includes("SHADOWS");
     var editOn = menu.includes("EDIT");
     var selectionOn = menu.includes("SELECTION");
+    var translateOn = menu.includes("TRANSLATE");
     var resetViewOn = menu.includes("RESET_VIEW");
 
     useEffect(() => {
@@ -128,6 +129,13 @@ export default function Map(props) {
           ws_ref.current._onGridDUpdate(roboscopeScale, selectedFeaturesState.map(index => GEOGRID.features[index].properties));
         }
     }, [selectionOn]);
+    
+    
+    useEffect(() => {
+        if (!translateOn && selectedFeaturesState.length > 0) {
+          ws_ref.current._onGridDUpdate(roboscopeScale, selectedFeaturesState.map(index => GEOGRID.features[index].properties));
+        }
+    }, [translateOn]);
     
     useEffect(() => {
         if (!loaded) return;
@@ -202,12 +210,16 @@ export default function Map(props) {
                 selectedCellsState,
                 pickingRadius,
                 selectedFeaturesState,
+                dragStart,
+                resetDrag,
                 roboscopeScale
             },
             updaters: {
                 setSelectedCellsState,
                 setDraggingWhileEditing,
                 setHoveredObj,
+                setDragStart,
+                setResetDrag,
                 setSelectedFeaturesState
             },
             deckGL,
