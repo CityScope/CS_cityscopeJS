@@ -12,6 +12,7 @@ import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import settings from "../../../settings/settings.json";
 import AnimationComponent from "./components/AnimationComponent";
+import WebSocket from "./components/WebSocket";
 import { updateSunDirection, _setupSunEffects } from "./utils/EffectsUtils";
 import {
     AccessLayer,
@@ -32,6 +33,8 @@ export default function Map(props) {
     const [GEOGRID, setGEOGRID] = useState(null);
     const [ABM, setABM] = useState({});
     const [loaded, setLoaded] = useState(false);
+    const ws_ref = useRef();
+
     const effectsRef = useRef();
     const deckGL = useRef();
 
@@ -127,6 +130,9 @@ export default function Map(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resetViewOn]);
 
+    const _onWSUpdate = (new_data) => {
+      //TODO: table update
+    }
     const onViewStateChange = ({ viewState }) => {
         viewState.orthographic = menu.includes("RESET_VIEW") ? true : false;
         setViewState(viewState);
@@ -189,6 +195,7 @@ export default function Map(props) {
                 setHoveredObj,
             },
             deckGL,
+            ws_ref
         }),
         ACCESS: AccessLayer({
             data: access,
@@ -219,6 +226,7 @@ export default function Map(props) {
             onMouseUp={() => setMouseDown(false)}
             onMouseDown={() => setMouseDown(true)}
         >
+          {(props.tableName==="roboscope") ? <WebSocket ref={ws_ref} GEOGRID={GEOGRID} onChange={_onWSUpdate}/> : null}
             <PaintBrush
                 editOn={editOn}
                 mousePos={mousePos}

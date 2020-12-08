@@ -150,16 +150,20 @@ export const _handleGridcellEditing = (
     selectedType,
     setSelectedCellsState,
     pickingRadius,
-    deckGLRef
+    deckGLRef,
+    ws_ref,
 ) => {
     const { height, color, name } = selectedType;
     const multiSelectedObj = _multipleObjPicked(e, pickingRadius, deckGLRef);
     multiSelectedObj.forEach((selected) => {
         const thisCellProps = selected.object.properties;
         if (thisCellProps && thisCellProps.interactive) {
-            thisCellProps.color = testHex(color) ? hexToRgb(color) : color;
-            thisCellProps.height = height;
-            thisCellProps.name = name;
+            if (thisCellProps.height !== height || thisCellProps.name !== name) {
+              thisCellProps.color = testHex(color) ? hexToRgb(color) : color;
+              thisCellProps.height = height;
+              thisCellProps.name = name;
+                ws_ref.current._onGridUpdate(thisCellProps);
+            }
         }
     });
     setSelectedCellsState(multiSelectedObj);

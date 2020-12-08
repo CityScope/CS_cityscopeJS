@@ -7,6 +7,7 @@ export default function GridLayer({
     state: { selectedType, keyDownState, selectedCellsState, pickingRadius },
     updaters: { setSelectedCellsState, setDraggingWhileEditing, setHoveredObj },
     deckGL,
+    ws_ref
 }) {
     return new GeoJsonLayer({
         id: "GRID",
@@ -26,7 +27,8 @@ export default function GridLayer({
                     selectedType,
                     setSelectedCellsState,
                     pickingRadius,
-                    deckGL
+                    deckGL,
+                    ws_ref,
                 );
         },
 
@@ -37,7 +39,8 @@ export default function GridLayer({
                     selectedType,
                     setSelectedCellsState,
                     pickingRadius,
-                    deckGL
+                    deckGL,
+                    ws_ref,
                 );
         },
 
