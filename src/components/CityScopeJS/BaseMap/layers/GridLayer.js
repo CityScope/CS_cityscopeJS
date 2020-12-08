@@ -4,8 +4,9 @@ import { _handleGridcellEditing, translate, color_opc } from "../utils/BaseMapUt
 export default function GridLayer({
     data,
     editOn,
-    state: { selectedType, keyDownState, selectedCellsState, pickingRadius },
-    updaters: { setSelectedCellsState, setDraggingWhileEditing, setHoveredObj },
+    menu,
+    state: { selectedType, keyDownState, selectedCellsState, pickingRadius, selectedFeaturesState, dragStart, resetDrag, roboscopeScale},
+    updaters: { setSelectedCellsState, setDraggingWhileEditing, setHoveredObj, setDragStart, setResetDrag, setSelectedFeaturesState},
     deckGL,
     ws_ref
 }) {
