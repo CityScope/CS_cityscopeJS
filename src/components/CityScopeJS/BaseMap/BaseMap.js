@@ -35,7 +35,6 @@ export default function Map(props) {
     const [ABM, setABM] = useState({});
     const [loaded, setLoaded] = useState(false);
     //roboscope
-    const [count, setCount] = useState(1);
     const [selectedFeaturesState, setSelectedFeaturesState] = useState([]);
     const [dragStart, setDragStart] = useState(-1);
     const [resetDrag, setResetDrag] = useState(false);

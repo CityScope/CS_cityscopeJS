@@ -52,8 +52,11 @@ export default function GridLayer({
                     selectedFeaturesState
                 );
             if (resetDrag==false){
-              setResetDrag(true);
-              setDragStart(deckGL.current.pickObjects({x: event.x, y: event.y})[0].index);
+              var temp = deckGL.current.pickObjects({x: event.x, y: event.y})[0]
+              if (temp != null) {
+                setResetDrag(true);
+                setDragStart(temp.index);
+              }
             }
         },
 
@@ -76,10 +79,12 @@ export default function GridLayer({
             setDraggingWhileEditing(false);
             if (menu.includes("TRANSLATE") && !editOn && !menu.includes("SELECTION")) {
               if (selectedFeaturesState.includes(dragStart)) {
-                let dragEnd = deckGL.current.pickObjects({x: e.x, y: e.y})[0].index;
-                var temp = translate(data.properties.header, selectedFeaturesState, dragStart, dragEnd);
-                setSelectedFeaturesState(temp);
-                ws_ref.current._onGridDUpdate(roboscopeScale, temp.map(index => data.features[index].properties));
+                let dragEnd = deckGL.current.pickObjects({x: e.x, y: e.y})[0];
+                if (dragEnd != null) {
+                  var temp = translate(data.properties.header, selectedFeaturesState, dragStart, dragEnd.index);
+                  setSelectedFeaturesState(temp);
+                  ws_ref.current._onGridDUpdate(roboscopeScale, temp.map(index => data.features[index].properties));
+                }
               }
             }
         },
