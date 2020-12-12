@@ -1,7 +1,6 @@
 {
     "name": "cityscopejs",
     "version": "1.0.0",
-    "private": true,
     "homepage": "https://cityscope.media.mit.edu/CS_cityscopeJS",
     "dependencies": {
         "@material-ui/core": "^4.11.0",
@@ -9,7 +8,7 @@
         "axios": "^0.19.2",
         "deck.gl": "^7.3.15",
         "gh-pages": "^2.2.0",
-        "material-table": "^1.69.1",
+        "material-table": "1.68.0",
         "numeric": "^1.2.6",
         "proj4": "^2.6.2",
         "react": "^16.14.0",

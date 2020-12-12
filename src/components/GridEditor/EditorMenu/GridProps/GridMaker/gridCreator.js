@@ -1,5 +1,4 @@
 import proj4 from "proj4";
-import settings from "../../../GridEditorSettings.json";
 import { _hexToRgb } from "../../../EditorMap/EditorMap";
 
 function deg_to_rad(deg) {
@@ -14,7 +13,7 @@ const randomProperty = (obj) => {
     return obj[keys[(keys.length * Math.random()) << 0]];
 };
 
-export const gridCreator = (gridProps) => {
+export const gridCreator = (gridProps, typesList) => {
     let top_left_lon = parseFloat(gridProps.longitude);
     let top_left_lat = parseFloat(gridProps.latitude);
     let rotation = parseFloat(gridProps.rotation);
@@ -93,7 +92,9 @@ export const gridCreator = (gridProps) => {
         features: [],
     };
 
-    let types = settings.GEOGRID.properties.types;
+    // get a list of types that is updated based on
+    // the current redux state of the types list table
+    let types = typesList;
 
     for (let i = 0; i < x_rot_trans.length; i++) {
         let rndType = randomProperty(types);
@@ -109,7 +110,7 @@ export const gridCreator = (gridProps) => {
                 height: rndType.height,
                 name: rndType.name,
                 interactive: rndType.interactive,
-                id: i
+                id: i,
             },
         };
 
@@ -135,6 +136,5 @@ export const gridCreator = (gridProps) => {
         gridPnts.push(geojsonPolygon);
     }
     geojsonFeatureCollection.features = gridPnts;
-
     return geojsonFeatureCollection;
 };
