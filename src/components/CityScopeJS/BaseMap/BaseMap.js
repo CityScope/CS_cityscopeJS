@@ -151,8 +151,8 @@ export default function Map(props) {
     }, [resetViewOn]);
 
     const _onWSUpdate = (new_data) => {
-      //TODO: table update
     }
+    
     const onViewStateChange = ({ viewState }) => {
         viewState.orthographic = menu.includes("RESET_VIEW") ? true : false;
         setViewState(viewState);
@@ -229,7 +229,7 @@ export default function Map(props) {
         })
     };
 
-    if (props.tableName==="roboscope") {
+    if (cityioData.tableName==="roboscope") {
       layersKey.GRID = RoboscopeGridLayer({
           data: GEOGRID,
           editOn: menu.includes("EDIT"),
@@ -280,7 +280,7 @@ export default function Map(props) {
             onMouseUp={() => setMouseDown(false)}
             onMouseDown={() => setMouseDown(true)}
         >
-          {(props.tableName==="roboscope") ? <WebSocket ref={ws_ref} GEOGRID={GEOGRID} onChange={_onWSUpdate}/> : null}
+          {(cityioData.tableName==="roboscope") ? <WebSocket ref={ws_ref} GEOGRID={GEOGRID} onChange={_onWSUpdate}/> : null}
             <PaintBrush
                 editOn={editOn}
                 mousePos={mousePos}

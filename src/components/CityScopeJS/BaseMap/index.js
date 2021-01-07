@@ -27,7 +27,6 @@ class MapContainer extends Component {
                     <BaseMap
                         menu={this.props.menu}
                         selectedType={this.props.selectedType}
-                        tableName={this.props.tableName}
                     />
                 </ProjectionMapping>
             </div>

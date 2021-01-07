@@ -44,7 +44,6 @@ function MenuContainer(props) {
                 open={state.drawerOpen}
                 toggleDrawer={toggleDrawer}
                 handleToggle={handleToggle}
-                tableName={tableName}
             />
             <FABMenu
                 toggleDrawer={toggleDrawer}
