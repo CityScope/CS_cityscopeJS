@@ -94,8 +94,6 @@ export default function TypesEditor() {
                                 }),
                             onRowUpdate: (newData, oldData) =>
                                 new Promise((resolve) => {
-                                    console.log(newData, oldData);
-
                                     setTimeout(() => {
                                         resolve();
                                         if (oldData) {
