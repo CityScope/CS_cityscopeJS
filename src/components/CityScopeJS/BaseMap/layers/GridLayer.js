@@ -1,14 +1,12 @@
 import { GeoJsonLayer } from "deck.gl";
-import { _handleGridcellEditing, translate, color_opc } from "../utils/BaseMapUtils";
+import { _handleGridcellEditing } from "../utils/BaseMapUtils";
 
 export default function GridLayer({
     data,
     editOn,
-    menu,
-    state: { selectedType, keyDownState, selectedCellsState, pickingRadius, selectedFeaturesState, dragStart, resetDrag, roboscopeScale},
-    updaters: { setSelectedCellsState, setDraggingWhileEditing, setHoveredObj, setDragStart, setResetDrag, setSelectedFeaturesState},
+    state: { selectedType, keyDownState, selectedCellsState, pickingRadius },
+    updaters: { setSelectedCellsState, setDraggingWhileEditing, setHoveredObj },
     deckGL,
-    ws_ref
 }) {
     return new GeoJsonLayer({
         id: "GRID",
@@ -19,13 +17,7 @@ export default function GridLayer({
         lineWidthScale: 1,
         lineWidthMinPixels: 2,
         getElevation: (d) => d.properties.height,
-        getFillColor: (d) => {
-          if (selectedFeaturesState.length > 0) {
-            return (selectedFeaturesState.includes(d.properties.id)) ? d.properties.color : color_opc(d.properties.color, 150);
-          } else {
-            return d.properties.color;
-          } 
-        },
+        getFillColor: (d) => d.properties.color,
 
         onClick: (event) => {
             if (selectedType && editOn && keyDownState !== "Shift")
@@ -34,9 +26,7 @@ export default function GridLayer({
                     selectedType,
                     setSelectedCellsState,
                     pickingRadius,
-                    deckGL,
-                    ws_ref,
-                    selectedFeaturesState
+                    deckGL
                 );
         },
 
@@ -47,26 +37,14 @@ export default function GridLayer({
                     selectedType,
                     setSelectedCellsState,
                     pickingRadius,
-                    deckGL,
-                    ws_ref,
-                    selectedFeaturesState
+                    deckGL
                 );
-            if (resetDrag==false){
-              var temp = deckGL.current.pickObjects({x: event.x, y: event.y})[0]
-              if (temp != null) {
-                setResetDrag(true);
-                setDragStart(temp.index);
-              }
-            }
         },
 
-        onDragStart: (e) => {
+        onDragStart: () => {
             if (selectedType && editOn && keyDownState !== "Shift") {
                 setDraggingWhileEditing(true);
-            } else if (menu.includes("TRANSLATE") && keyDownState !== "Shift") {
-                setDraggingWhileEditing(true);
-                setResetDrag(false);
-            } 
+            }
         },
 
         onHover: (e) => {
@@ -75,23 +53,12 @@ export default function GridLayer({
             }
         },
 
-        onDragEnd: (e) => {
+        onDragEnd: () => {
             setDraggingWhileEditing(false);
-            if (menu.includes("TRANSLATE") && !editOn && !menu.includes("SELECTION")) {
-              if (selectedFeaturesState.includes(dragStart)) {
-                let dragEnd = deckGL.current.pickObjects({x: e.x, y: e.y})[0];
-                if (dragEnd != null) {
-                  var temp = translate(data.properties.header, selectedFeaturesState, dragStart, dragEnd.index);
-                  setSelectedFeaturesState(temp);
-                  ws_ref.current._onGridDUpdate(roboscopeScale, temp.map(index => data.features[index].properties));
-                }
-              }
-            }
         },
-        
         updateTriggers: {
-            getFillColor: {selectedCellsState,selectedFeaturesState},
-            getElevation: {selectedCellsState,selectedFeaturesState},
+            getFillColor: selectedCellsState,
+            getElevation: selectedCellsState,
         },
         transitions: {
             getFillColor: 500,
