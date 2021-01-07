@@ -19,7 +19,8 @@ import {
     AggregatedTripsLayer,
     ABMLayer,
     GridLayer,
-    RoboscopeSelection
+    RoboscopeSelection,
+    RoboscopeGridLayer
 } from "./layers";
 
 export default function Map(props) {
@@ -202,27 +203,18 @@ export default function Map(props) {
         GRID: GridLayer({
             data: GEOGRID,
             editOn: menu.includes("EDIT"),
-            menu: menu,
             state: {
                 selectedType,
                 keyDownState,
                 selectedCellsState,
                 pickingRadius,
-                selectedFeaturesState,
-                dragStart,
-                resetDrag,
-                roboscopeScale
             },
             updaters: {
                 setSelectedCellsState,
                 setDraggingWhileEditing,
                 setHoveredObj,
-                setDragStart,
-                setResetDrag,
-                setSelectedFeaturesState
             },
             deckGL,
-            ws_ref
         }),
         ACCESS: AccessLayer({
             data: access,
@@ -237,6 +229,34 @@ export default function Map(props) {
         })
     };
 
+    if (props.tableName==="roboscope") {
+      layersKey.GRID = RoboscopeGridLayer({
+          data: GEOGRID,
+          editOn: menu.includes("EDIT"),
+          menu: menu,
+          state: {
+              selectedType,
+              keyDownState,
+              selectedCellsState,
+              pickingRadius,
+              selectedFeaturesState,
+              dragStart,
+              resetDrag,
+              roboscopeScale
+          },
+          updaters: {
+              setSelectedCellsState,
+              setDraggingWhileEditing,
+              setHoveredObj,
+              setDragStart,
+              setResetDrag,
+              setSelectedFeaturesState
+          },
+          deckGL,
+          ws_ref
+      })
+    }
+    
     const layerOrder = ["ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS", "SELECTION"];
 
     const _renderLayers = () => {
