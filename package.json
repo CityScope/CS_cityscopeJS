@@ -9,7 +9,7 @@
         "deck.gl": "^7.3.15",
         "gh-pages": "^2.2.0",
         "nebula.gl": "^0.19.3",
-        "material-table": "^1.68.0",
+        "material-table": "1.68.0",
         "numeric": "^1.2.6",
         "proj4": "^2.6.2",
         "react": "^16.14.0",
