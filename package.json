@@ -1,6 +1,8 @@
 {
     "name": "cityscopejs",
     "version": "1.0.0",
+    "repository": "https://github.com/CityScope/CS_cityscopeJS",
+    "license": "GPL3",
     "homepage": "https://cityscope.media.mit.edu/CS_cityscopeJS",
     "dependencies": {
         "@material-ui/core": "^4.11.0",
@@ -25,11 +27,15 @@
         "typescript": "^3.9.7"
     },
     "scripts": {
+        "preinstall": "npx npm-force-resolutions",
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "gh": "react-scripts build && gh-pages -d build"
+    },
+    "resolutions": {
+        "@turf/difference": "6.0.1"
     },
     "eslintConfig": {
         "extends": "react-app"
