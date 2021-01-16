@@ -1,17 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Router from "./components/Router/Router";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import Provider from "./redux/Provider";
+import store from "./redux/store";
 
-const root = document.getElementById("root");
-const render = () => {
-    return ReactDOM.render(<Router />, root);
-};
-
-render(Router);
-
-if (module.hot) {
-    module.hot.accept(Router, () => {
-        const hotModule = require("./components/Router/Router").default;
-        render(hotModule);
-    });
-}
+ReactDOM.render(
+    <Provider store={store}>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </Provider>,
+    document.getElementById("root")
+);

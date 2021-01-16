@@ -41,7 +41,7 @@ class BaseMap extends Component {
     componentDidMount() {
         // fix deck view rotate
         this._rightClickViewRotate();
-     
+
         // zoom map on CS table location
         this._setViewStateToTableHeader();
     }
@@ -89,7 +89,6 @@ class BaseMap extends Component {
         });
     }
 
-   
     /**
      * Description. fix deck issue
      * with rotate right botton

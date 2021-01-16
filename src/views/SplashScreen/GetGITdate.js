@@ -34,7 +34,7 @@ export default function GetGITdate() {
 
     const gitMetaComp = (
         <>
-            <Typography variant="caption">
+            <Typography color="textSecondary" variant="caption">
                 <h2>CityScopeJS Development Tracking</h2>
                 <h4>Last Commit</h4>
                 <div>Author: {JSON.parse(JSON.stringify(gitMeta.author))}</div>

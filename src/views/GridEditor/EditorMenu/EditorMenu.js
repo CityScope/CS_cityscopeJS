@@ -12,7 +12,9 @@ import Typography from "@material-ui/core/Typography";
 export default function EditorMenu() {
     const useStyles = makeStyles((theme) => ({
         drawer: {
-            width: "50%",
+            width: "30%",
+            top: 48,
+            height: "calc(100% + 48)",
         },
     }));
 

@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 export default function GridMaker(props) {
     const dispatch = useDispatch();
     const reduxState = useSelector((state) => state);
- 
 
     const handleGridCreation = () => {
         let grid = gridCreator(props.gridProps, reduxState.TYPES_LIST);

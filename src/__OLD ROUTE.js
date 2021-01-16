@@ -1,13 +1,13 @@
-import Provider from "../../redux/Provider";
+import Provider from "./redux/Provider";
 import "./Router.css";
-import store from "../../redux/store";
-import CityScopeJS from "../CityScopeJS/CityScopeJS";
+import store from "./redux/store";
+import CityScopeJS from "./views/CityScopeJS";
 import { ThemeProvider } from "@material-ui/styles";
 import React, { Component } from "react";
 import { createMuiTheme } from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import SplashScreen from "../SplashScreen/SplashScreen";
-import GridEditor from "../GridEditor/GridEditor";
+import SplashScreen from "./views/SplashScreen";
+import GridEditor from "./views/GridEditor";
 
 /**
  *  ! https://material-ui.com/customization/palette/

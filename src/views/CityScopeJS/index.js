@@ -6,7 +6,7 @@ import MapContainer from "./BaseMap";
 import VisContainer from "./VisContainer/VisContainer";
 import LoadingSpinner from "./CityIO/LoadingSpinner";
 
-export default function App(props) {
+export default function CityScopeJS(props) {
     // wait for 'ready' flag from cityIO when app is ready to start
     const ready = useSelector((state) => state.READY);
     // get the table name for cityIO comp
