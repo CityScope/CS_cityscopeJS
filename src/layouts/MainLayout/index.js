@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const DashboardLayout = () => {
+const MainLayout = () => {
     const classes = useStyles();
     const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
@@ -56,4 +56,4 @@ const DashboardLayout = () => {
     );
 };
 
-export default DashboardLayout;
+export default MainLayout;

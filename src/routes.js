@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import DashboardLayout from "./layouts/DashboardLayout";
+import MainLayout from "./layouts/MainLayout";
 import NotFoundView from "./views/NotFoundView";
 import GridEditor from "./views/GridEditor";
 import CityScopeJS from "./views/CityScopeJS";
@@ -9,7 +9,7 @@ import SplashScreen from "./views/SplashScreen";
 const routes = [
     {
         path: "/",
-        element: <DashboardLayout />,
+        element: <MainLayout />,
         children: [
             { path: "/", element: <SplashScreen /> },
             { path: "/csjs", element: <CityScopeJS /> },
