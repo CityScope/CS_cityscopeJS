@@ -12,9 +12,9 @@ import Typography from "@material-ui/core/Typography";
 export default function EditorMenu() {
     const useStyles = makeStyles((theme) => ({
         drawer: {
-            width: "30%",
+            width: "50%",
             top: 48,
-            height: "calc(100% + 48)",
+            height: "calc(100% - 48px)",
         },
     }));
 
@@ -32,10 +32,10 @@ export default function EditorMenu() {
         >
             <List>
                 <ListItem>
-                    <Typography variant="h5">CityScope Grid Editor</Typography>
+                    <Typography variant="h1">CityScope Grid Editor</Typography>
                 </ListItem>
                 <ListItem>
-                    <Typography variant="caption">
+                    <Typography >
                         Tool for creating CityScope endpoints with virtual
                         editable girds, types, and props, and deploy them to
                         cityIO.

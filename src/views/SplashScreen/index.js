@@ -46,6 +46,18 @@ export default function SplashScreen() {
                 </Typography>
                 <Divider className={classes.divider} light />
                 <Grid container spacing={2}>
+                    <Grid item xs={12} l={6} md={6} xl={6}>
+                        <Typography
+                            color="textPrimary"
+                            variant="h6"
+                            gutterBottom
+                        >
+                            CityScopeJS is an open-source project, developed by
+                            MIT, the CityScope Network, and contributers from
+                            all over the world. Join us!
+                        </Typography>
+                    </Grid>
+
                     <Grid
                         item
                         xs={12}
@@ -60,23 +72,6 @@ export default function SplashScreen() {
                         >
                             <GitHubIcon />
                         </Fab>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        l={6}
-                        md={6}
-                        xl={6}
-                        className={classes.gridCell}
-                    >
-                        <Typography
-                            color="textPrimary"
-                            variant="h6"
-                            gutterBottom
-                        >
-                            This open-source project is developed by the
-                            CityScope Network. Join us!
-                        </Typography>
                     </Grid>
                 </Grid>
                 <Divider className={classes.divider} light />

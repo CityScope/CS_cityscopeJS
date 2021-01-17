@@ -7,35 +7,26 @@ const theme = createMuiTheme({
     },
     palette: {
         background: {
-            default: colors.blueGrey[900],
-            paper: colors.blueGrey[900],
-            dark: colors.blueGrey[300],
+            default: "#ff5278",
+            paper: "#18191a",
+            dark: "#ff5278",
         },
         primary: {
-            main: colors.blueGrey[900],
+            main: "#18191a",
         },
         secondary: {
-            main: colors.blueGrey[100],
+            main: "#ff5278",
         },
         text: {
-            primary: colors.blueGrey[100],
-            secondary: colors.blueGrey[300],
+            primary: colors.grey[100],
+            secondary: "#ff5278",
         },
     },
-    /*rermoved override shadow props*/
-    // shadows,
-    typography,
 
+    typography,
     shape: {
-        borderRadius: 16,
+        borderRadius: 20,
     },
-    // overrides: {
-    //     MuiAppBar: {
-    //         colorPrimary: {
-    //             backgroundColor: "black",
-    //         },
-    //     },
-    // },
 });
 
 export default theme;

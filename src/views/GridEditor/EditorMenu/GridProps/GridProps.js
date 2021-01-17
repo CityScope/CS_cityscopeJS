@@ -10,6 +10,10 @@ import Paper from "@material-ui/core/Paper";
 
 export default function GridProps() {
     const useStyles = makeStyles((theme) => ({
+        notchedOutline: {
+            borderWidth: "1px",
+            borderColor: theme.palette.text.secondary,
+        },
         root: {
             "& .MuiTextField-root": {
                 margin: theme.spacing(1),
@@ -47,9 +51,14 @@ export default function GridProps() {
     return (
         <Paper elevation={3} className={classes.paper}>
             <form className={classes.root} noValidate autoComplete="off">
-                <Typography variant="h6">Grid Properties</Typography>
+                <Typography variant="h2">Grid Properties</Typography>
                 <div className={classes.root}>
                     <TextField
+                        InputProps={{
+                            classes: {
+                                notchedOutline: classes.notchedOutline,
+                            },
+                        }}
                         onChange={(event) => handleChangeForm(event)}
                         variant="outlined"
                         className={classes.textField}
@@ -60,6 +69,11 @@ export default function GridProps() {
                 </div>
                 <div className={classes.root}>
                     <TextField
+                        InputProps={{
+                            classes: {
+                                notchedOutline: classes.notchedOutline,
+                            },
+                        }}
                         onChange={(event) => handleChangeForm(event)}
                         variant="outlined"
                         className={classes.textField}
@@ -70,6 +84,11 @@ export default function GridProps() {
                     />
 
                     <TextField
+                        InputProps={{
+                            classes: {
+                                notchedOutline: classes.notchedOutline,
+                            },
+                        }}
                         onChange={(event) => handleChangeForm(event)}
                         variant="outlined"
                         className={classes.textField}
@@ -94,6 +113,9 @@ export default function GridProps() {
                         defaultValue={formValues.nrows}
                         type="number"
                         InputProps={{
+                            classes: {
+                                notchedOutline: classes.notchedOutline,
+                            },
                             inputProps: {
                                 max: 100,
                                 min: 0,
@@ -110,6 +132,9 @@ export default function GridProps() {
                         defaultValue={formValues.ncols}
                         type="number"
                         InputProps={{
+                            classes: {
+                                notchedOutline: classes.notchedOutline,
+                            },
                             inputProps: {
                                 max: 100,
                                 min: 0,
@@ -126,6 +151,9 @@ export default function GridProps() {
                         defaultValue={formValues.rotation}
                         type="number"
                         InputProps={{
+                            classes: {
+                                notchedOutline: classes.notchedOutline,
+                            },
                             inputProps: {
                                 max: 360,
                                 min: 0,
@@ -142,6 +170,9 @@ export default function GridProps() {
                         defaultValue={formValues.cellSize}
                         type="number"
                         InputProps={{
+                            classes: {
+                                notchedOutline: classes.notchedOutline,
+                            },
                             inputProps: {
                                 max: 1000,
                                 min: 0,
@@ -151,6 +182,11 @@ export default function GridProps() {
                 </div>
                 <div className={classes.root}>
                     <TextField
+                        InputProps={{
+                            classes: {
+                                notchedOutline: classes.notchedOutline,
+                            },
+                        }}
                         onChange={(event) => handleChangeForm(event)}
                         variant="outlined"
                         id="projection"
