@@ -39,11 +39,10 @@ const MainLayout = () => {
 
     return (
         <div className={classes.root}>
-            <NavBar
-                onMobileClose={() => setMobileNavOpen(false)}
-                openMobile={isMobileNavOpen}
+            <NavBar openMobile={!isMobileNavOpen} />
+            <TopBar
+                onMobileNavOpen={() => setMobileNavOpen(!isMobileNavOpen)}
             />
-            <TopBar onMobileNavOpen={() => setMobileNavOpen(true)} />
 
             <div className={classes.wrapper}>
                 <div className={classes.contentContainer}>

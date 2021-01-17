@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import {
     AppBar,
     Box,
-    Hidden,
     IconButton,
     Toolbar,
     Typography,
@@ -18,6 +17,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
+    
     const classes = useStyles();
 
     return (
@@ -38,11 +38,11 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
                 </RouterLink>
                 <Box flexGrow={1} />
 
-                <Hidden lgUp>
+  
                     <IconButton onClick={onMobileNavOpen}>
                         <MenuIcon color='secondary' />
                     </IconButton>
-                </Hidden>
+   
             </Toolbar>
         </AppBar>
     );
