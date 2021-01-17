@@ -30,7 +30,7 @@ export default function FABMenu(props) {
     const { handleToggle, toggleDrawer, toggleSaveDrawer } = props;
 
     return (
-        <List className={classes.root}>
+        <List  className={classes.root}>
             <ListItem>
                 <Tooltip title="Open Layer + Settings Menu">
                     <Fab color="default" onClick={toggleDrawer}>

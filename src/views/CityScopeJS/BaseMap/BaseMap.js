@@ -18,7 +18,7 @@ import {
     AggregatedTripsLayer,
     ABMLayer,
     GridLayer,
-} from "./layers";
+} from "./deckglLayers";
 
 export default function Map(props) {
     const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);

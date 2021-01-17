@@ -51,12 +51,8 @@
                 "displayName": "Toggle Shadows",
                 "showOnInit": true,
                 "requireModule": "GEOGRID"
-            },
-            "KEYSTONE": {
-                "displayName": "Projection Mapping",
-                "showOnInit": false,
-                "requireModule": false
             }
+           
         }
     },
 

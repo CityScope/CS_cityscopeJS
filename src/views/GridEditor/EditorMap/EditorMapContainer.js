@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect } from "../../../views/CityScopeJS/node_modules/react-redux";
+import { connect } from "react-redux";
 import BaseMap from "./BaseMap.js.js";
 
 class BaseMapContainer extends Component {

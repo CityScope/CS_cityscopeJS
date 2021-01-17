@@ -39,7 +39,7 @@ function MenuContainer(props) {
     const showEditMenu = menuState && menuState.includes("EDIT");
 
     return (
-        <div>
+        <>
             <TogglesMenu
                 open={state.drawerOpen}
                 toggleDrawer={toggleDrawer}
@@ -57,7 +57,7 @@ function MenuContainer(props) {
                 toggleDrawer={toggleSaveDrawer}
                 open={state.saveDrawerOpen}
             />
-        </div>
+        </>
     );
 }
 
