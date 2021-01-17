@@ -22,6 +22,8 @@ const getAPICall = async (URL) => {
 };
 
 export default function CityIO(props) {
+    console.log(props);
+    
     const { tableName } = props;
     const [hashId, setHashId] = useState(null);
     const [hashes, setHashes] = useState({});
@@ -82,7 +84,7 @@ export default function CityIO(props) {
 
         // send to cityio
         dispatch(getCityioData(modulesData));
-        console.log("done updating from cityIO");
+        console.log( "done updating from cityIO");
 
         // initializes rendering of Menu and Map containers
         dispatch(setReadyState(true));

@@ -10,19 +10,19 @@ export default function CityScopeJS(props) {
     // wait for 'ready' flag from cityIO when app is ready to start
     const ready = useSelector((state) => state.READY);
     // get the table name for cityIO comp
-    const { tableName } = props;
+    const tableName = "corktown";
 
     return (
         <>
             <CityIO tableName={tableName} />
-            {/* if ready, render the app*/}
+           {/* if ready, render the app */}
             {ready && (
                 <>
                     <MenuContainer tableName={tableName} />
                     <MapContainer />
                     <VisContainer />
                 </>
-            )}
+            )} 
             <LoadingSpinner />
         </>
     );
