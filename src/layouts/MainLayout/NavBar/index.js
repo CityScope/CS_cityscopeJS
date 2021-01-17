@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
+import GitHubIcon from "@material-ui/icons/GitHub";
 import {
     Box,
     Drawer,
-    Hidden,
+    Fab,
     List,
     Typography,
     makeStyles,
@@ -82,9 +83,17 @@ const NavBar = ({ onMobileClose, openMobile }) => {
                     </List>
                 </CardContent>
             </Card>
-            <Box flex={0.5} />
+            <Box flexGrow={1} />
             <Card elevation={5} p={2}>
                 <CardContent position={"bottom"}>
+                    <Fab
+                        href="http://github.com/CityScope/CS_cityscopeJS/"
+                        color="default"
+                        size="small"
+                    >
+                        <GitHubIcon />
+                    </Fab>
+                    <Box p={2}/>
                     <Typography align="left" variant="h5">
                         MIT CityScope
                     </Typography>

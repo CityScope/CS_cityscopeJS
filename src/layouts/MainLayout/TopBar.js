@@ -2,9 +2,12 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import clsx from "clsx";
 import PropTypes from "prop-types";
+
+
 import {
     AppBar,
     Box,
+
     IconButton,
     Toolbar,
     Typography,
@@ -17,7 +20,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
-    
     const classes = useStyles();
 
     return (
@@ -31,18 +33,16 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
                     <Typography
                         className={classes.name}
                         color="textPrimary"
-                        variant="h2"
+                        variant="h5"
                     >
                         MIT CityScope
                     </Typography>
                 </RouterLink>
                 <Box flexGrow={1} />
 
-  
-                    <IconButton onClick={onMobileNavOpen}>
-                        <MenuIcon color='secondary' />
-                    </IconButton>
-   
+                <IconButton color="inherit" onClick={onMobileNavOpen}>
+                    <MenuIcon />
+                </IconButton>
             </Toolbar>
         </AppBar>
     );
