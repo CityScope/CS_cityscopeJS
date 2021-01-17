@@ -40,7 +40,7 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
 
                 <Hidden lgUp>
                     <IconButton onClick={onMobileNavOpen}>
-                        <MenuIcon />
+                        <MenuIcon color='secondary' />
                     </IconButton>
                 </Hidden>
             </Toolbar>
