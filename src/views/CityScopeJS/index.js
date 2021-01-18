@@ -5,15 +5,8 @@ import MenuContainer from "./MenuContainer/MenuContainer";
 import MapContainer from "./DeckglMap";
 import VisContainer from "./VisContainer/VisContainer";
 import LoadingSpinner from "./CityIO/LoadingSpinner";
-import {
-    Box,
-    Container,
-    Typography,
-    makeStyles,
-    Grid,
-    Card,
-    CardContent,
-} from "@material-ui/core";
+import MissingTableInfo from "./MissingTableInfo";
+import { makeStyles, Grid, Card, CardContent , Container} from "@material-ui/core";
 import Page from "../../layouts/Page";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,71 +40,38 @@ export default function CityScopeJS() {
 
     return (
         <Page className={classes.root} title="CitySCopeJS">
-            {!tableName && (
-                <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
-                    height="100%"
-                >
-                    <Container maxWidth="sm">
-                        <Typography
-                            align="center"
-                            color="textPrimary"
-                            variant="h1"
-                        >
-                            CityScopeJS
-                        </Typography>
-                        <Typography
-                            align="center"
-                            color="textPrimary"
-                            variant="h5"
-                        >
-                            Enter your CityScopeJS project name in the search
-                            bar:
-                        </Typography>
-                        <Typography
-                            align="center"
-                            variant="h5"
-                            color="textSecondary"
-                        >
-                            (this page URL)/csjs?cityscope=projectName
-                        </Typography>
-                    </Container>
-                </Box>
-            )}
-
+            {!tableName && <MissingTableInfo />}
             {tableName && <CityIO tableName={tableName} />}
             {ready && (
                 <>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} l={4} md={4} xl={4} container>
-                            <Grid item container direction="column" spacing={2}>
-                                <Grid item xs={12} l={12} md={12} xl={12}>
-                                    <Card elevation={15}>
-                                        <CardContent>
-                                            <Typography
-                                                color="textPrimary"
-                                                variant="h6"
-                                            >
-                                                Menu
-                                            </Typography>
-                                            <MenuContainer
-                                                tableName={tableName}
-                                            />
-                                        </CardContent>
-                                    </Card>
+                    <Container maxWidth={false}>
+                        <Grid container spacing={5}>
+                            <Grid item xs={10} l={3} md={3} xl={3} container>
+                                <Grid
+                                    item
+                                    container
+                                    direction="column"
+                                    spacing={2}
+                                >
+                                    <Grid item xs={12} l={12} md={12} xl={12}>
+                                        <Card elevation={15}>
+                                            <CardContent>
+                                                <MenuContainer
+                                                    tableName={tableName}
+                                                />
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
 
-                        <Grid item xs={12} l={8} md={8} xl={8} >
-                            <Card elevation={15}>
-                                <MapContainer />
-                            </Card>
+                            <Grid item xs={12} l={9} md={9} xl={9}>
+                                <Card elevation={15}>
+                                    <MapContainer />
+                                </Card>
+                            </Grid>
                         </Grid>
-                    </Grid>
-
+                    </Container>
                     <VisContainer />
                 </>
             )}

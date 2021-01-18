@@ -26,9 +26,9 @@ function MenuContainer(props) {
     return (
         <>
             <FABMenu handleToggle={handleToggle} />
-            <TogglesMenu handleToggle={handleToggle} />
-            <EditMenu key={"EDIT"} />
             <SaveMenu tableName={tableName} handleToggle={handleToggle} />
+            <TogglesMenu handleToggle={handleToggle} />
+            <EditMenu />
         </>
     );
 }

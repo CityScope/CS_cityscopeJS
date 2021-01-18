@@ -1,6 +1,4 @@
 import React from "react";
-import Drawer from "@material-ui/core/Drawer";
-import { makeStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 import { useSelector, useDispatch } from "react-redux";
 import List from "@material-ui/core/List";
@@ -14,29 +12,9 @@ import Avatar from "@material-ui/core/Avatar";
 import { testHex, hexToRgb } from "../../DeckglMap/utils/BaseMapUtils";
 import TypeInfo from "./TypeInfo";
 import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 
 function EditMenu(props) {
-    const useStyles = makeStyles((theme) => ({
-        drawer: {
-            width: 300,
-            zIndex: theme.zIndex.drawer + 1,
-        },
-
-        marginAutoContainer: {
-            width: "100%",
-            display: "flex",
-            margin: "auto",
-        },
-        marginAutoItem: {
-            margin: "auto",
-            width: "80%",
-            height: "80%",
-        },
-    }));
-
-    const classes = useStyles();
     const [selectedIndex, setSelectedIndex] = React.useState(null);
     const dispatch = useDispatch();
     let selectedType = useSelector((state) => state.SELECTED_TYPE);
@@ -86,136 +64,83 @@ function EditMenu(props) {
             }
 
             iconsArr.push(
-                <React.Fragment key={Math.random()}>
-                    <Paper elevation={5}>
-                        <ListItem
-                            key={Math.random()}
-                            alignItems="flex-start"
-                            button
-                            variant="raised"
-                            selected={selected}
-                            onClick={(event) =>
-                                handleListItemClick(
-                                    event,
-                                    type,
-                                    LanduseTypesList[type]
-                                )
-                            }
-                            className={classes.list}
-                        >
-                            <ListItemAvatar key={Math.random()}>
-                                <Avatar style={{ backgroundColor: rgbCol }}>
-                                    {type.charAt(0)}
-                                </Avatar>
-                            </ListItemAvatar>
+                <>
+                    <ListItem
+                        key={Math.random()}
+                        alignItems="flex-start"
+                        button
+                        variant="raised"
+                        selected={selected}
+                        onClick={(event) =>
+                            handleListItemClick(
+                                event,
+                                type,
+                                LanduseTypesList[type]
+                            )
+                        }
+                    >
+                        <ListItemAvatar key={Math.random()}>
+                            <Avatar style={{ backgroundColor: rgbCol, color:'black' }}>
+                                {type.charAt(0)}
+                            </Avatar>
+                        </ListItemAvatar>
 
-                            <ListItemText
-                                key={Math.random()}
-                                classes={{
-                                    primary: classes.listItemPrimaryText,
-                                    secondary: classes.listItemSecondaryText,
-                                }}
-                                primary={type}
-                            />
-                        </ListItem>
-                    </Paper>
+                        <ListItemText key={Math.random()} primary={type} />
+                    </ListItem>
 
                     {typeHasHeightProps && (
                         <Collapse in={selected} key={Math.random()}>
-                            <div className={classes.marginAutoContainer}>
-                                <div className={classes.marginAutoItem}>
-                                    <Paper elevation={10}>
-                                        <Box
-                                            display="flex"
-                                            flexDirection="row"
-                                            p={1}
-                                            m={1}
-                                        >
-                                            <Box p={1}>
-                                                {LBCS && (
-                                                    <>
-                                                        <Typography
-                                                            gutterBottom
-                                                        >
-                                                            LBCS
-                                                        </Typography>
-                                                        <TypeInfo
-                                                            typeInfo={LBCS}
-                                                        />
-                                                    </>
-                                                )}
-                                            </Box>
-                                            <Box p={1}>
-                                                {NAICS && (
-                                                    <>
-                                                        <Typography
-                                                            gutterBottom
-                                                        >
-                                                            NAICS
-                                                        </Typography>
-                                                        <TypeInfo
-                                                            typeInfo={NAICS}
-                                                        />
-                                                    </>
-                                                )}
-                                            </Box>
-                                        </Box>
-
-                                        <div className={classes.marginAutoItem}>
+                            <Box display="flex" flexDirection="row" p={1} m={1}>
+                                <Box p={1}>
+                                    {LBCS && (
+                                        <>
                                             <Typography gutterBottom>
-                                                Set Height
+                                                LBCS
                                             </Typography>
-                                            <Slider
-                                                key={Math.random()}
-                                                value={height}
-                                                valueLabelDisplay="auto"
-                                                className={classes.slider}
-                                                onChangeCommitted={(
-                                                    event,
-                                                    value
-                                                ) =>
-                                                    dispatch(
-                                                        listenToEditMenu({
-                                                            ...selectedType,
-                                                            height: value,
-                                                        })
-                                                    )
-                                                }
-                                                getAriaLabel={(index) =>
-                                                    index.toString()
-                                                }
-                                                min={marks[0].value}
-                                                max={marks[1].value}
-                                                marks={marks}
-                                            ></Slider>
-                                        </div>
-                                    </Paper>
-                                </div>
-                            </div>
+                                            <TypeInfo typeInfo={LBCS} />
+                                        </>
+                                    )}
+                                </Box>
+                                <Box p={1}>
+                                    {NAICS && (
+                                        <>
+                                            <Typography gutterBottom>
+                                                NAICS
+                                            </Typography>
+                                            <TypeInfo typeInfo={NAICS} />
+                                        </>
+                                    )}
+                                </Box>
+                            </Box>
+
+                            <Typography gutterBottom>Set Height</Typography>
+                            <Slider
+                                key={Math.random()}
+                                value={height}
+                                valueLabelDisplay="auto"
+                                onChangeCommitted={(event, value) =>
+                                    dispatch(
+                                        listenToEditMenu({
+                                            ...selectedType,
+                                            height: value,
+                                        })
+                                    )
+                                }
+                                getAriaLabel={(index) => index.toString()}
+                                min={marks[0].value}
+                                max={marks[1].value}
+                                marks={marks}
+                            ></Slider>
                         </Collapse>
                     )}
-                </React.Fragment>
+                </>
             );
         });
         return <List>{iconsArr}</List>;
     };
 
-    return (
-        <Drawer
-            className={classes.drawer}
-            variant="persistent"
-            anchor="right"
-            open={true}
-            classes={{
-                paper: classes.drawer,
-            }}
-        >
-            {createTypesIcons(props.cityioData.GEOGRID.properties.types)}
-        </Drawer>
-    );
+    return <>{createTypesIcons(props.cityioData.GEOGRID.properties.types)}</>;
 }
-
-// export default EditMenuMain;
 
 const mapStateToProps = (state) => {
     return {
