@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import BaseMap from "../BaseMap/BaseMap";
+import BaseMap from "../DeckglMap";
 import { connect } from "react-redux";
 import { ProjectionMapping } from "./ProjectionMapping";
 

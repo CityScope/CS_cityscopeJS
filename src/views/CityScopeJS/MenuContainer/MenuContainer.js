@@ -11,19 +11,6 @@ function MenuContainer(props) {
     const menuState = useSelector((state) => state.MENU);
     const dispatch = useDispatch();
 
-    const [state, setState] = React.useState({
-        drawerOpen: false,
-        saveDrawerOpen: false,
-    });
-
-    const toggleDrawer = () => {
-        setState({ ...state, drawerOpen: !state.drawerOpen });
-    };
-
-    const toggleSaveDrawer = () => {
-        setState({ ...state, saveDrawerOpen: !state.saveDrawerOpen });
-    };
-
     const handleToggle = (value) => () => {
         const i = menuState.indexOf(value);
         const updatedMenuState = [...menuState];
@@ -36,27 +23,12 @@ function MenuContainer(props) {
         dispatch(listenToMenuUI(updatedMenuState));
     };
 
-    const showEditMenu = menuState && menuState.includes("EDIT");
-
     return (
         <>
-            <TogglesMenu
-                open={state.drawerOpen}
-                toggleDrawer={toggleDrawer}
-                handleToggle={handleToggle}
-            />
-            <FABMenu
-                toggleDrawer={toggleDrawer}
-                handleToggle={handleToggle}
-                toggleSaveDrawer={toggleSaveDrawer}
-            />
-            {showEditMenu && <EditMenu key={"EDIT"} />}
-            <SaveMenu
-                tableName={tableName}
-                handleToggle={handleToggle}
-                toggleDrawer={toggleSaveDrawer}
-                open={state.saveDrawerOpen}
-            />
+            <FABMenu handleToggle={handleToggle} />
+            <TogglesMenu handleToggle={handleToggle} />
+            <EditMenu key={"EDIT"} />
+            <SaveMenu tableName={tableName} handleToggle={handleToggle} />
         </>
     );
 }

@@ -2,10 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import CityIO from "./CityIO/cityIO";
 import MenuContainer from "./MenuContainer/MenuContainer";
-import MapContainer from "./BaseMap";
+import MapContainer from "./DeckglMap";
 import VisContainer from "./VisContainer/VisContainer";
 import LoadingSpinner from "./CityIO/LoadingSpinner";
-import { Box, Container, Typography, makeStyles } from "@material-ui/core";
+import {
+    Box,
+    Container,
+    Typography,
+    makeStyles,
+    Grid,
+    Card,
+    CardContent,
+} from "@material-ui/core";
 import Page from "../../layouts/Page";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +52,7 @@ export default function CityScopeJS() {
                     display="flex"
                     flexDirection="column"
                     justifyContent="center"
-                    height='100%'
+                    height="100%"
                 >
                     <Container maxWidth="sm">
                         <Typography
@@ -76,8 +84,34 @@ export default function CityScopeJS() {
             {tableName && <CityIO tableName={tableName} />}
             {ready && (
                 <>
-                    <MenuContainer tableName={tableName} />
-                    <MapContainer />
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} l={4} md={4} xl={4} container>
+                            <Grid item container direction="column" spacing={2}>
+                                <Grid item xs={12} l={12} md={12} xl={12}>
+                                    <Card elevation={15}>
+                                        <CardContent>
+                                            <Typography
+                                                color="textPrimary"
+                                                variant="h6"
+                                            >
+                                                Menu
+                                            </Typography>
+                                            <MenuContainer
+                                                tableName={tableName}
+                                            />
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        <Grid item xs={12} l={8} md={8} xl={8} >
+                            <Card elevation={15}>
+                                <MapContainer />
+                            </Card>
+                        </Grid>
+                    </Grid>
+
                     <VisContainer />
                 </>
             )}

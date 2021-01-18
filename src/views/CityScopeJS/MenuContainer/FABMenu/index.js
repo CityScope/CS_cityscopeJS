@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import Fab from "@material-ui/core/Fab";
-import MenuIcon from "@material-ui/icons/Menu";
 import EditIcon from "@material-ui/icons/Edit";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import NearMeIcon from "@material-ui/icons/NearMe";
@@ -10,34 +9,13 @@ import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import Tooltip from "@material-ui/core/Tooltip";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import { makeStyles } from "@material-ui/core/styles";
 
 export default function FABMenu(props) {
-    const useStyles = makeStyles({
-        root: {
-            display: "flex",
-            flexDirection: "column",
-            position: "fixed",
-            paddingLeft: 16,
-            paddingTop: 8,
-            zIndex: 1,
-        },
-    });
-
-    const classes = useStyles();
-
     const menuState = useSelector((state) => state.MENU);
-    const { handleToggle, toggleDrawer, toggleSaveDrawer } = props;
+    const { handleToggle, toggleSaveDrawer } = props;
 
     return (
-        <List  className={classes.root}>
-            <ListItem>
-                <Tooltip title="Open Layer + Settings Menu">
-                    <Fab color="default" onClick={toggleDrawer}>
-                        <MenuIcon />
-                    </Fab>
-                </Tooltip>
-            </ListItem>
+        <List>
             <ListItem>
                 <Tooltip title="Toggle Edit Grid Mode, send to cityIO">
                     <Fab color="default" onClick={handleToggle("EDIT")}>

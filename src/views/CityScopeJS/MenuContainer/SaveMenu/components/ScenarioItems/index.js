@@ -9,7 +9,7 @@ import settings from "../../../../../../settings/settings.json";
 import ListItem from "@material-ui/core/ListItem";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { _postMapEditsToCityIO } from "../../../../BaseMap/utils/BaseMapUtils";
+import { _postMapEditsToCityIO } from "../../../../DeckglMap/utils/BaseMapUtils";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { getScenarioIndices } from "../../../../CityIO/utils";
 

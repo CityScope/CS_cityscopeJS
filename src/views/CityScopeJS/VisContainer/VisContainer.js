@@ -79,7 +79,6 @@ function VisContainer(props) {
                                 </ListItem>
                             </Paper>
                         </div>
-                      
                     </List>
                 </Drawer>
             )}

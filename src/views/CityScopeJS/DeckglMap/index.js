@@ -20,7 +20,7 @@ import {
     GridLayer,
 } from "./deckglLayers";
 
-export default function Map(props) {
+export default function Map() {
     const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
     const [selectedCellsState, setSelectedCellsState] = useState(null);
     const [viewState, setViewState] = useState(settings.map.initialViewState);

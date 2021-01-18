@@ -60,66 +60,70 @@ export default function TypesEditor() {
     return (
         <Grid container>
             <Grid item xs={12} s={12} m={4} l={4} xl={4}>
-        <MaterialTable
-            title={<Typography variant='h2'>Types Editor</Typography>}
-            columns={state.columns}
-            data={state.data}
-            options={{
-                paging: false,
-                search: false,
-                selection: false,
-                rowStyle: (rowData) => ({
-                    backgroundColor:
-                        selectedRow === rowData.tableData.id ? rowColor : null,
-                }),
-            }}
-            onRowClick={(evt, row) => {
-                setSelectedRow(row.tableData.id);
-                setRowColor(row.color);
-                dispatch(listenToRowEdits(row));
-            }}
-            editable={{
-                onRowAdd: (newData) =>
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve();
-                            setState((prevState) => {
-                                const data = [...prevState.data];
-                                data.push(newData);
-                                return { ...prevState, data };
-                            });
-                        }, 50);
-                    }),
-                onRowUpdate: (newData, oldData) =>
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve();
-                            if (oldData) {
-                                setState((prevState) => {
-                                    const data = [...prevState.data];
-                                    data[data.indexOf(oldData)] = newData;
+                <MaterialTable
+                    title={<Typography variant="h2">Types Editor</Typography>}
+                    columns={state.columns}
+                    data={state.data}
+                    options={{
+                        paging: false,
+                        search: false,
+                        selection: false,
+                        rowStyle: (rowData) => ({
+                            backgroundColor:
+                                selectedRow === rowData.tableData.id
+                                    ? rowColor
+                                    : null,
+                        }),
+                    }}
+                    onRowClick={(evt, row) => {
+                        setSelectedRow(row.tableData.id);
+                        setRowColor(row.color);
+                        dispatch(listenToRowEdits(row));
+                    }}
+                    editable={{
+                        onRowAdd: (newData) =>
+                            new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve();
+                                    setState((prevState) => {
+                                        const data = [...prevState.data];
+                                        data.push(newData);
+                                        return { ...prevState, data };
+                                    });
+                                }, 50);
+                            }),
+                        onRowUpdate: (newData, oldData) =>
+                            new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve();
+                                    if (oldData) {
+                                        setState((prevState) => {
+                                            const data = [...prevState.data];
+                                            data[
+                                                data.indexOf(oldData)
+                                            ] = newData;
 
-                                    return { ...prevState, data };
-                                });
-                            }
+                                            return { ...prevState, data };
+                                        });
+                                    }
 
-                            // dispath change to redux
-                            dispatch(listenToRowEdits(newData));
-                        }, 50);
-                    }),
-                onRowDelete: (oldData) =>
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve();
-                            setState((prevState) => {
-                                const data = [...prevState.data];
-                                data.splice(data.indexOf(oldData), 1);
-                                return { ...prevState, data };
-                            });
-                        }, 50);
-                    }),
-            }}
-        />
+                                    // dispath change to redux
+                                    dispatch(listenToRowEdits(newData));
+                                }, 50);
+                            }),
+                        onRowDelete: (oldData) =>
+                            new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve();
+                                    setState((prevState) => {
+                                        const data = [...prevState.data];
+                                        data.splice(data.indexOf(oldData), 1);
+                                        return { ...prevState, data };
+                                    });
+                                }, 50);
+                            }),
+                    }}
+                />
             </Grid>
         </Grid>
     );
