@@ -262,7 +262,7 @@ export default function Map(props) {
                     dragRotate={true}
                     reuseMaps={true}
                     mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-                    mapStyle={settings.map.mapStyle.blue}
+                    mapStyle={settings.map.mapStyle.sat}
                     preventStyleDiffing={true}
                 />
             </DeckGL>

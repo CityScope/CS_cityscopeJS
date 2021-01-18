@@ -39,12 +39,12 @@ export default function CityScopeJS() {
 
     return (
         <Page className={classes.root} title="CitySCopeJS">
-            {!ready && (
+            {!tableName && (
                 <Box
                     display="flex"
                     flexDirection="column"
-                    height="100%"
                     justifyContent="center"
+                    height='100%'
                 >
                     <Container maxWidth="sm">
                         <Typography
