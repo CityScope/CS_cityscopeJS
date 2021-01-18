@@ -218,6 +218,11 @@ export default function Map(props) {
             onMouseMove={(e) => setMousePos(e.nativeEvent)}
             onMouseUp={() => setMouseDown(false)}
             onMouseDown={() => setMouseDown(true)}
+            style={{
+                height: "100vh",
+                width: "100vw",
+                position: "relative",
+            }}
         >
             <PaintBrush
                 editOn={editOn}
@@ -237,6 +242,7 @@ export default function Map(props) {
                 }}
                 dispatch={dispatch}
             />
+
             <DeckGL
                 ref={deckGL}
                 viewState={viewState}
