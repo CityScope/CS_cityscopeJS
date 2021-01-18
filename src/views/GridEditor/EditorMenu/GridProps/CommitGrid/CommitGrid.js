@@ -14,9 +14,9 @@ const reqResonseUI = (response, tableName) => {
         tableName;
     // create the feedback text
     let resText = (
-        <Typography variant="caption">
+        <Typography color="textPrimary" variant="caption">
             CityIO is {response.data.status}. Grid deployed to{" "}
-            <Link href={cityscopeJSendpoint}>{cityscopeJSendpoint}</Link>
+            <Link color="textSecondary" href={cityscopeJSendpoint}>{cityscopeJSendpoint}</Link>
         </Typography>
     );
 

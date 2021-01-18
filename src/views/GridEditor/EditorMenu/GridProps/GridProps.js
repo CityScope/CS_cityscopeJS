@@ -193,7 +193,7 @@ export default function GridProps() {
                         label="Projection"
                         defaultValue={formValues.projection}
                         type="string"
-                        helperText="Note: wrong projection might break app. Find the relevant projection at: https://epsg.io/"
+                        helperText="Default projection should work for most CityScope cases. Find specific projections at: https://epsg.io/"
                     />
                 </div>
                 <div className={classes.root}>

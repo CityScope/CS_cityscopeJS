@@ -44,16 +44,6 @@ const useStyles = makeStyles(() => ({
         top: 48,
         height: "calc(100% - 48px)",
     },
-    desktopDrawer: {
-        width: 256,
-        top: 48,
-        height: "calc(100% - 48px)",
-    },
-    avatar: {
-        cursor: "pointer",
-        width: 64,
-        height: 64,
-    },
 }));
 
 const NavBar = ({ onMobileClose, openMobile }) => {
@@ -68,21 +58,19 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     }, [location.pathname]);
 
     const content = (
-        <Box height="100%" display="flex" flexDirection="column" p={2}>
-            <Card elevation={5}>
-                <CardContent>
-                    <List>
-                        {items.map((item) => (
-                            <NavItem
-                                href={item.href}
-                                key={item.title}
-                                title={item.title}
-                                icon={item.icon}
-                            />
-                        ))}
-                    </List>
-                </CardContent>
-            </Card>
+        <Box height="100%" display="flex" flexDirection="column" p={3}>
+            <List>
+                {items.map((item) => (
+                    <NavItem
+                        style={{ padding:'2vh' }}
+                        href={item.href}
+                        key={item.title}
+                        title={item.title}
+                        icon={item.icon}
+                    />
+                ))}
+            </List>
+
             <Box flexGrow={1} />
             <Card elevation={5} p={2}>
                 <CardContent position={"bottom"}>
@@ -93,7 +81,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
                     >
                         <GitHubIcon />
                     </Fab>
-                    <Box p={2}/>
+                    <Box p={2} />
                     <Typography align="left" variant="h5">
                         MIT CityScope
                     </Typography>

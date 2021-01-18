@@ -12,9 +12,10 @@ import Typography from "@material-ui/core/Typography";
 export default function EditorMenu() {
     const useStyles = makeStyles((theme) => ({
         drawer: {
-            width: "50%",
+            width: "40%",
             top: 48,
             height: "calc(100% - 48px)",
+            zIndex:1
         },
     }));
 
@@ -24,7 +25,7 @@ export default function EditorMenu() {
         <Drawer
             className={classes.drawer}
             variant="persistent"
-            anchor="right"
+            anchor="left"
             open={true}
             classes={{
                 paper: classes.drawer,

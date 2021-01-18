@@ -36,6 +36,12 @@ const theme = createMuiTheme({
                     "12px 12px 16px 0 rgba(0,0,0),-8px -8px 12px 0 rgba(40,41,42)",
             },
         },
+        MuiButton: {
+            root: {
+                boxShadow:
+                    "12px 12px 16px 0 rgba(0,0,0),-8px -8px 12px 0 rgba(40,41,42)",
+            },
+        },
     },
 });
 
