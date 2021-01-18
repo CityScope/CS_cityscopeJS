@@ -5,9 +5,21 @@ import MenuContainer from "./MenuContainer/MenuContainer";
 import MapContainer from "./BaseMap";
 import VisContainer from "./VisContainer/VisContainer";
 import LoadingSpinner from "./CityIO/LoadingSpinner";
-import { Box, Container, Typography } from "@material-ui/core";
+import { Box, Container, Typography, makeStyles } from "@material-ui/core";
+import Page from "../../layouts/Page";
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        margin: "auto",
+        height: "100%",
+        paddingBottom: theme.spacing(3),
+        paddingTop: theme.spacing(3),
+    },
+}));
 
 export default function CityScopeJS() {
+    const classes = useStyles();
+
     // get the table name for cityIO comp
     const [tableName, setTableName] = useState(null);
     // on init, get the adress URL
@@ -26,7 +38,7 @@ export default function CityScopeJS() {
     const ready = useSelector((state) => state.READY);
 
     return (
-        <>
+        <Page className={classes.root} title="CitySCopeJS">
             {!ready && (
                 <Box
                     display="flex"
@@ -70,6 +82,6 @@ export default function CityScopeJS() {
                 </>
             )}
             <LoadingSpinner />
-        </>
+        </Page>
     );
 }

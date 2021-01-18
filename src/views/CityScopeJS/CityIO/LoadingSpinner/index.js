@@ -1,54 +1,37 @@
 import React from "react";
-import { css } from "@emotion/core";
 import { useSelector } from "react-redux";
-import PulseLoader from "react-spinners/PulseLoader";
-import Typography from "@material-ui/core/Typography";
+import { Typography, Box } from "@material-ui/core";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
-const override = css`
-    display: block;
-    margin: 0 auto;
-    border-color: none;
-`;
-
-function LoadingSpinner() {
+const LoadingSpinner = () => {
     const [loadingModules] = useSelector((state) => [state.LOADING_MODULES]);
+
     return (
-        <div
-            style={{
-                position: "fixed",
-                bottom: 50,
-                right: "50%",
-                zIndex: 1,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-            }}
-        >
-            {loadingModules.map((module) => {
+        <>
+            {loadingModules.map((module, index) => {
                 return (
-                    <div
+                    <Box
+                        position="fixed"
+                        bottom={index * 50}
+                        right="2vw"
+                        width="10vw"
+                        zIndex="9999"
+                        margin="0"
                         key={module}
-                        style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            marginBottom: "3px",
-                            marginTop: "3px",
-                        }}
                     >
-                        <Typography style={{ marginRight: "10px" }}>
-                            loading {module}
+                        <LinearProgress />
+                        <Typography
+                            variant="h6"
+                            color="secondary"
+                            style={{ marginRight: "10px" }}
+                        >
+                            {module}
                         </Typography>
-                        <PulseLoader
-                            css={override}
-                            size={20}
-                            color="white"
-                            loading={true}
-                        />
-                    </div>
+                    </Box>
                 );
             })}
-        </div>
+        </>
     );
-}
+};
 
 export default LoadingSpinner;
