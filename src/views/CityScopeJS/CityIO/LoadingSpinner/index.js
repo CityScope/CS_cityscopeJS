@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Typography, Box } from "@material-ui/core";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
+
 const LoadingSpinner = () => {
     const [loadingModules] = useSelector((state) => [state.LOADING_MODULES]);
 
@@ -19,10 +20,10 @@ const LoadingSpinner = () => {
                         margin="0"
                         key={module}
                     >
-                        <LinearProgress />
+                        <LinearProgress color={'secondary'} />
                         <Typography
                             variant="h6"
-                            color="secondary"
+                            color="primary"
                             style={{ marginRight: "10px" }}
                         >
                             {module}

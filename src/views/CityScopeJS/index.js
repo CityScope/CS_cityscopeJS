@@ -5,6 +5,8 @@ import MenuContainer from "./MenuContainer";
 import MapContainer from "./DeckglMap";
 import LoadingSpinner from "./CityIO/LoadingSpinner";
 import MissingTableInfo from "./MissingTableInfo";
+import VisContainer from "./VisContainer";
+
 import {
     makeStyles,
     Grid,
@@ -43,15 +45,17 @@ export default function CityScopeJS() {
     // wait for 'ready' flag from cityIO when app is ready to start
     const ready = useSelector((state) => state.READY);
 
+    const cityIOdata = useSelector((state) => state.CITYIO);
+
     return (
         <Page className={classes.root} title="CitySCopeJS">
             {!tableName && <MissingTableInfo />}
             {tableName && <CityIO tableName={tableName} />}
             {ready && (
                 <>
-                    <Container maxWidth={false}>
+                    <Container maxWidth={false}  >
                         <Grid container spacing={5}>
-                            <Grid item xs={6} l={3} md={3} xl={3} container>
+                            <Grid item xs={6} l={3} md={3} xl={2} container>
                                 <Grid
                                     item
                                     container
@@ -59,7 +63,14 @@ export default function CityScopeJS() {
                                     spacing={2}
                                 >
                                     <Grid item xs={12} l={12} md={12} xl={12}>
-                                        <Card elevation={15}>
+                                        <Card
+                                            elevation={15}
+                                            style={{
+                                                // allow scrolling 
+                                                maxHeight: "100vh",
+                                                overflow: "auto",
+                                            }}
+                                        >
                                             <CardContent>
                                                 <MenuContainer
                                                     tableName={tableName}
@@ -70,9 +81,15 @@ export default function CityScopeJS() {
                                 </Grid>
                             </Grid>
 
-                            <Grid item xs={6} l={9} md={9} xl={9}>
+                            <Grid item xs={6} l={6} md={6} xl={8}>
                                 <Card elevation={15}>
                                     <MapContainer />
+                                </Card>
+                            </Grid>
+
+                            <Grid item xs={3} l={3} md={3} xl={2}>
+                                <Card elevation={15}>
+                                    <VisContainer cityIOdata={cityIOdata} />
                                 </Card>
                             </Grid>
                         </Grid>

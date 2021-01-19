@@ -2,17 +2,24 @@ import React from "react";
 import Slider from "@material-ui/core/Slider";
 import { useSelector, useDispatch } from "react-redux";
 import List from "@material-ui/core/List";
-import Collapse from "@material-ui/core/Collapse";
+import {
+    Collapse,
+    Typography,
+    CardContent,
+    Avatar,
+    ListItemAvatar,
+    ListItem,
+    ListItemText,
+    Grid,
+    Card,
+} from "@material-ui/core";
+import Divider from "@material-ui/core/Divider";
+
 import { listenToEditMenu } from "../../../../redux/actions";
 import { connect } from "react-redux";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
+
 import { testHex, hexToRgb } from "../../DeckglMap/utils/BaseMapUtils";
 import TypeInfo from "./TypeInfo";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
 
 function EditMenu(props) {
     const [selectedIndex, setSelectedIndex] = React.useState(null);
@@ -28,7 +35,7 @@ function EditMenu(props) {
     const handleListItemClick = (event, name, typeProps) => {
         // ! injects the type name into the attributes themselves
         typeProps.name = name;
-        setSelectedIndex(name);
+        setSelectedIndex(selectedIndex == null ? name : null);
         dispatch(listenToEditMenu(typeProps));
     };
 
@@ -64,7 +71,7 @@ function EditMenu(props) {
             }
 
             iconsArr.push(
-                <>
+                <div key={Math.random()}>
                     <ListItem
                         alignItems="flex-start"
                         button
@@ -93,51 +100,86 @@ function EditMenu(props) {
                     </ListItem>
 
                     {typeHasHeightProps && (
-                        <Collapse in={selected} key={Math.random()}>
-                            <Box display="flex" flexDirection="row" p={1} m={1}>
-                                <Box p={1}>
-                                    {LBCS && (
-                                        <>
+                        <Collapse in={selected}>
+                            <Card elevation={15}>
+                                <CardContent>
+                                    <Grid container spacing={3}>
+                                        <Grid
+                                            item
+                                            xs={6}
+                                            l={6}
+                                            md={6}
+                                            xl={6}
+                                            container
+                                        >
+                                            {LBCS && (
+                                                <>
+                                                    <Typography gutterBottom>
+                                                        LBCS
+                                                    </Typography>
+                                                    <TypeInfo typeInfo={LBCS} />
+                                                </>
+                                            )}
+                                        </Grid>
+                                        <Grid
+                                            item
+                                            xs={6}
+                                            l={6}
+                                            md={6}
+                                            xl={6}
+                                            container
+                                        >
+                                            {NAICS && (
+                                                <>
+                                                    <Typography gutterBottom>
+                                                        NAICS
+                                                    </Typography>
+                                                    <TypeInfo
+                                                        typeInfo={NAICS}
+                                                    />
+                                                </>
+                                            )}
+                                        </Grid>
+                                        <Grid
+                                            item
+                                            xs={12}
+                                            l={12}
+                                            md={12}
+                                            xl={12}
+                                            container
+                                        >
                                             <Typography gutterBottom>
-                                                LBCS
+                                                Set Height
                                             </Typography>
-                                            <TypeInfo typeInfo={LBCS} />
-                                        </>
-                                    )}
-                                </Box>
-                                <Box p={1}>
-                                    {NAICS && (
-                                        <>
-                                            <Typography gutterBottom>
-                                                NAICS
-                                            </Typography>
-                                            <TypeInfo typeInfo={NAICS} />
-                                        </>
-                                    )}
-                                </Box>
-                            </Box>
-
-                            <Typography gutterBottom>Set Height</Typography>
-                            <Slider
-                                key={Math.random()}
-                                value={height}
-                                valueLabelDisplay="auto"
-                                onChangeCommitted={(event, value) =>
-                                    dispatch(
-                                        listenToEditMenu({
-                                            ...selectedType,
-                                            height: value,
-                                        })
-                                    )
-                                }
-                                getAriaLabel={(index) => index.toString()}
-                                min={marks[0].value}
-                                max={marks[1].value}
-                                marks={marks}
-                            ></Slider>
+                                            <Slider
+                                                value={height}
+                                                valueLabelDisplay="auto"
+                                                onChangeCommitted={(
+                                                    event,
+                                                    value
+                                                ) =>
+                                                    dispatch(
+                                                        listenToEditMenu({
+                                                            ...selectedType,
+                                                            height: value,
+                                                        })
+                                                    )
+                                                }
+                                                getAriaLabel={(index) =>
+                                                    index.toString()
+                                                }
+                                                min={marks[0].value}
+                                                max={marks[1].value}
+                                                marks={marks}
+                                            ></Slider>
+                                        </Grid>
+                                    </Grid>
+                                </CardContent>
+                            </Card>
                         </Collapse>
                     )}
-                </>
+                    <Divider />
+                </div>
             );
         });
         return <List>{iconsArr}</List>;

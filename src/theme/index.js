@@ -12,8 +12,8 @@ const theme = createMuiTheme({
             dark: "#ff5278",
         },
         primary: {
-            main: "#18191a",
-            light: "colors.grey[100]",
+            main: "#FFF",
+            light: "colors.grey[500]",
         },
         secondary: {
             main: "#ff5278",
@@ -30,6 +30,9 @@ const theme = createMuiTheme({
     },
 
     overrides: {
+        MuiAppBar: {
+            colorPrimary: { backgroundColor: "#18191a", color: "#FFF" },
+        },
         MuiCard: {
             root: {
                 boxShadow:

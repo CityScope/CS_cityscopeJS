@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { RadialChart, Hint } from "react-vis";
-import Typography from "@material-ui/core/Typography";
+import { Typography } from "@material-ui/core";
 
 export default function TypeInfo(props) {
     const COLOR_SCALE = ["#85C4C8", "#C22E00", "#1E96BE", "#EC9370", "#F6D18A"];
 
-    const radialRadius = 75;
+    const radialRadius = 50;
     const [hoveredRadial, setHoveredRadial] = useState(false);
 
     // method to create data for radial chart
@@ -66,7 +66,7 @@ export default function TypeInfo(props) {
                         <div
                             style={{
                                 background: "rgba(0,0,0,0.8)",
-                                fontSize: 14,
+                                fontSize: 10,
                             }}
                         >
                             <Typography variant={"caption"} gutterBottom>

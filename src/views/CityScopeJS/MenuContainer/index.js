@@ -5,12 +5,10 @@ import EditMenu from "./EditMenu/EditMenu";
 import TogglesMenu from "./TogglesMenu";
 import FABMenu from "./FABMenu";
 import SaveMenu from "./SaveMenu";
-import VisContainer from "../VisContainer";
 
 function MenuContainer(props) {
     const { tableName } = props;
     const menuState = useSelector((state) => state.MENU);
-    const cityIOdata = useSelector((state) => state.CITYIO);
     const dispatch = useDispatch();
 
     const handleToggle = (value) => () => {
@@ -31,7 +29,6 @@ function MenuContainer(props) {
             <SaveMenu tableName={tableName} handleToggle={handleToggle} />
             <TogglesMenu handleToggle={handleToggle} />
             <EditMenu />
-            <VisContainer cityIOdata={cityIOdata} />
         </>
     );
 }
