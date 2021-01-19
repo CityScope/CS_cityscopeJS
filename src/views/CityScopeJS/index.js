@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import CityIO from "./CityIO/cityIO";
-import MenuContainer from "./MenuContainer/MenuContainer";
+import MenuContainer from "./MenuContainer";
 import MapContainer from "./DeckglMap";
-import VisContainer from "./VisContainer/VisContainer";
 import LoadingSpinner from "./CityIO/LoadingSpinner";
 import MissingTableInfo from "./MissingTableInfo";
-import { makeStyles, Grid, Card, CardContent , Container} from "@material-ui/core";
+import {
+    makeStyles,
+    Grid,
+    Card,
+    CardContent,
+    Container,
+} from "@material-ui/core";
 import Page from "../../layouts/Page";
 
 const useStyles = makeStyles((theme) => ({
@@ -46,7 +51,7 @@ export default function CityScopeJS() {
                 <>
                     <Container maxWidth={false}>
                         <Grid container spacing={5}>
-                            <Grid item xs={10} l={3} md={3} xl={3} container>
+                            <Grid item xs={6} l={3} md={3} xl={3} container>
                                 <Grid
                                     item
                                     container
@@ -65,14 +70,13 @@ export default function CityScopeJS() {
                                 </Grid>
                             </Grid>
 
-                            <Grid item xs={12} l={9} md={9} xl={9}>
+                            <Grid item xs={6} l={9} md={9} xl={9}>
                                 <Card elevation={15}>
                                     <MapContainer />
                                 </Card>
                             </Grid>
                         </Grid>
                     </Container>
-                    <VisContainer />
                 </>
             )}
             <LoadingSpinner />

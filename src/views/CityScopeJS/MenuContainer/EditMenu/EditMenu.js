@@ -66,7 +66,6 @@ function EditMenu(props) {
             iconsArr.push(
                 <>
                     <ListItem
-                        key={Math.random()}
                         alignItems="flex-start"
                         button
                         variant="raised"
@@ -79,13 +78,18 @@ function EditMenu(props) {
                             )
                         }
                     >
-                        <ListItemAvatar key={Math.random()}>
-                            <Avatar style={{ backgroundColor: rgbCol, color:'black' }}>
+                        <ListItemAvatar>
+                            <Avatar
+                                style={{
+                                    backgroundColor: rgbCol,
+                                    color: "black",
+                                }}
+                            >
                                 {type.charAt(0)}
                             </Avatar>
                         </ListItemAvatar>
 
-                        <ListItemText key={Math.random()} primary={type} />
+                        <ListItemText primary={type} />
                     </ListItem>
 
                     {typeHasHeightProps && (

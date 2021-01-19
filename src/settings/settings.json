@@ -37,11 +37,6 @@
                 "showOnInit": false,
                 "requireModule": "access"
             },
-            "RADAR": {
-                "displayName": "Urban Indicators",
-                "showOnInit": false,
-                "requireModule": "indicators"
-            },
             "ROTATE": {
                 "displayName": "Rotate Camera",
                 "showOnInit": false,

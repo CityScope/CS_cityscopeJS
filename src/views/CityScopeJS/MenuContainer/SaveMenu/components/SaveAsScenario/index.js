@@ -11,7 +11,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import { makeStyles } from "@material-ui/core/styles";
 
 export default function SaveAsScenario(props) {
     const maxNumOfScenarios = 10;
@@ -25,14 +24,6 @@ export default function SaveAsScenario(props) {
     const handleClose = () => {
         setOpen(false);
     };
-
-    const useStyles = makeStyles((theme) => ({
-        button: {
-            margin: theme.spacing(1),
-        },
-    }));
-
-    const classes = useStyles();
 
     const cityioData = useSelector((state) => state.CITYIO);
     const scenarioNames = useSelector((state) => state.SCENARIO_NAMES);
@@ -100,13 +91,12 @@ export default function SaveAsScenario(props) {
     };
 
     return (
-        <div style={{ marginLeft: 12 }}>
+        <>
             <Button
                 disabled={scenarioNames.length >= maxNumOfScenarios}
                 variant="outlined"
                 color="default"
                 onClick={handleClickOpen}
-                className={classes.button}
                 startIcon={<CloudUploadIcon />}
             >
                 Save Scenario
@@ -143,6 +133,6 @@ export default function SaveAsScenario(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 }
