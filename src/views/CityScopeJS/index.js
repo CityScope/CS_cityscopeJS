@@ -49,11 +49,11 @@ export default function CityScopeJS() {
 
     return (
         <Page className={classes.root} title="CitySCopeJS">
-            {!tableName && <MissingTableInfo />}
-            {tableName && <CityIO tableName={tableName} />}
-            {ready && (
-                <>
-                    <Container maxWidth={false}  >
+            <Container maxWidth={false}>
+                {!tableName && <MissingTableInfo />}
+                {tableName && <CityIO tableName={tableName} />}
+                {ready && (
+                    <>
                         <Grid container spacing={5}>
                             <Grid item xs={6} l={3} md={3} xl={2} container>
                                 <Grid
@@ -66,8 +66,8 @@ export default function CityScopeJS() {
                                         <Card
                                             elevation={15}
                                             style={{
-                                                // allow scrolling 
-                                                maxHeight: "100vh",
+                                                // allow scrolling
+                                                maxHeight: "85vh",
                                                 overflow: "auto",
                                             }}
                                         >
@@ -82,7 +82,14 @@ export default function CityScopeJS() {
                             </Grid>
 
                             <Grid item xs={6} l={6} md={6} xl={8}>
-                                <Card elevation={15}>
+                                <Card
+                                    elevation={15}
+                                    style={{
+                                        height: "85vh",
+                                        width: "100%",
+                                        position: "relative",
+                                    }}
+                                >
                                     <MapContainer />
                                 </Card>
                             </Grid>
@@ -93,10 +100,11 @@ export default function CityScopeJS() {
                                 </Card>
                             </Grid>
                         </Grid>
-                    </Container>
-                </>
-            )}
-            <LoadingSpinner />
+                    </>
+                )}
+
+                <LoadingSpinner />
+            </Container>
         </Page>
     );
 }

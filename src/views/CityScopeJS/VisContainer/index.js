@@ -7,16 +7,16 @@ import BarChart from "./BarChart/BarChart";
 import AreaCalc from "./AreaCalc/AreaCalc";
 
 function VisContainer(props) {
-    const indicatorsData = props.cityIOdata.cityIOdata;
+    const indicatorsData = props.cityIOdata;    
     return (
         <>
-            {props.cityIOdata && (
+            {indicatorsData && (
                 <List>
                     <ListItem>
-                        {/* <AreaCalc
+                        <AreaCalc
                             cityioData={indicatorsData}
-                            drawerWidth={300}
-                        /> */}
+                         
+                        />
                     </ListItem>
                     <ListItem>
                         {/* <Radar cityioData={indicatorsData} drawerWidth={300} /> */}

@@ -218,11 +218,6 @@ export default function Map() {
             onMouseMove={(e) => setMousePos(e.nativeEvent)}
             onMouseUp={() => setMouseDown(false)}
             onMouseDown={() => setMouseDown(true)}
-            style={{
-                height: "100vh",
-                width: "100vw",
-                position: "relative",
-            }}
         >
             <PaintBrush
                 editOn={editOn}

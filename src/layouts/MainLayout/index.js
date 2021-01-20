@@ -12,41 +12,25 @@ const useStyles = makeStyles((theme) => ({
         overflow: "hidden",
         width: "100%",
     },
-    wrapper: {
-        display: "flex",
-        flex: "1 1 auto",
-        overflow: "hidden",
-        paddingTop: 48,
-    },
-    contentContainer: {
-        display: "flex",
-        flex: "1 1 auto",
-        overflow: "hidden",
-    },
+
     content: {
+        paddingTop: 48,
         flex: "1 1 auto",
-        height: "100%",
+        height: "100vh",
         overflow: "auto",
     },
 }));
 
 const MainLayout = () => {
     const classes = useStyles();
-    const [isMobileNavOpen, setMobileNavOpen] = useState(true);
+    const [navMenuState, setNavMenuState] = useState(true);
 
     return (
         <div className={classes.root}>
-            <NavBar openMobile={!isMobileNavOpen} />
-            <TopBar
-                onMobileNavOpen={() => setMobileNavOpen(!isMobileNavOpen)}
-            />
-
-            <div className={classes.wrapper}>
-                <div className={classes.contentContainer}>
-                    <div className={classes.content}>
-                        <Outlet />
-                    </div>
-                </div>
+            <NavBar openMobile={!navMenuState} />
+            <TopBar onMobileNavOpen={() => setNavMenuState(!navMenuState)} />
+            <div className={classes.content}>
+                <Outlet />
             </div>
         </div>
     );

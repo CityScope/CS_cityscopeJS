@@ -15,7 +15,7 @@ export default function EditorMenu() {
             width: "40%",
             top: 48,
             height: "calc(100% - 48px)",
-            zIndex:1
+            zIndex: 1,
         },
     }));
 
@@ -36,7 +36,7 @@ export default function EditorMenu() {
                     <Typography variant="h1">CityScope Grid Editor</Typography>
                 </ListItem>
                 <ListItem>
-                    <Typography >
+                    <Typography>
                         Tool for creating CityScope endpoints with virtual
                         editable girds, types, and props, and deploy them to
                         cityIO.
