@@ -4,29 +4,25 @@ import "react-vis/dist/style.css";
 import "./Radar.css";
 import { DiscreteColorLegend } from "react-vis";
 
-const radarSize = 100;
+const radarSize = 300;
+const colorRange = ["#ff5278", "#52cfff"];
 
 export default function Radar(props) {
-    console.log('r');
-    
-    const [setRadarData, radarData] = useState(null);
-
-    const colorRange = ["#fc03ec", "#79C7E3"];
+    const [radarData, setRadarData] = useState(null);
 
     const createRadarData = (indicators) => {
-        let radarData = {};
-        let refData = {};
+        let r = {};
+        let f = {};
         let domains = [];
         for (let i = 0; i < indicators.length; i++) {
             if (indicators[i].viz_type === "radar") {
-                radarData[indicators[i].name] = [indicators[i].value];
-                refData[indicators[i].name] = [indicators[i].ref_value];
+                r[indicators[i].name] = [indicators[i].value];
+                f[indicators[i].name] = [indicators[i].ref_value];
                 indicators[i].domain = [0, 1];
                 domains.push(indicators[i]);
             }
         }
-        const d = { radarData: [radarData, refData], domains: domains };
-        return d;
+        return { radarData: [r, f], domains: domains };
     };
 
     useEffect(() => {
@@ -37,15 +33,13 @@ export default function Radar(props) {
             props.cityioData.indicators.length > 0
         ) {
             const d = createRadarData(props.cityioData.indicators);
-            console.log(d);
-
             setRadarData(d);
         }
     }, [props]);
 
     return (
         <div>
-            {props.cityioData.indicators && false && (
+            {radarData && radarData.domains && (
                 <>
                     <RadarChart
                         className="Radar blur"

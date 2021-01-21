@@ -154,7 +154,7 @@ function EditMenu(props) {
                                             <Slider
                                                 value={height}
                                                 valueLabelDisplay="auto"
-                                                onChangeCommitted={(
+                                                onChange={(
                                                     event,
                                                     value
                                                 ) =>

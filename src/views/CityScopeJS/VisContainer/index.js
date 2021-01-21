@@ -1,28 +1,22 @@
 import React from "react";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Typography from "@material-ui/core/Typography";
+import { List, ListItem } from "@material-ui/core";
 import Radar from "./Radar";
-import BarChart from "./BarChart/BarChart";
-import AreaCalc from "./AreaCalc/AreaCalc";
+import BarChart from "./BarChart";
+import AreaCalc from "./AreaCalc";
 
 function VisContainer(props) {
-    const indicatorsData = props.cityIOdata;
     return (
         <>
-            {indicatorsData && (
+            {props.cityIOdata && (
                 <List>
-                    <ListItem>
-                        <AreaCalc cityioData={indicatorsData} />
+                    <ListItem alignItems="center">
+                        <AreaCalc cityioData={props.cityIOdata} />
                     </ListItem>
                     <ListItem>
-                        <Radar cityioData={indicatorsData} />
+                        <Radar cityioData={props.cityIOdata} />
                     </ListItem>
                     <ListItem>
-                        {/* <BarChart
-                            cityioData={indicatorsData}
-                            drawerWidth={300}
-                        /> */}
+                        <BarChart cityioData={props.cityIOdata} />
                     </ListItem>
                 </List>
             )}

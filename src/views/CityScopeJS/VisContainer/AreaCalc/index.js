@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { rgbToHex } from "../../DeckglMap/utils/BaseMapUtils";
-import DownloadRawData from "../DownloadRawData/DownloadRawData";
 import { RadialChart, Hint } from "react-vis";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -8,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import "react-vis/dist/style.css";
 
 export default function AreaCalc(props) {
-    const radialRadius = 200;
+    const radialRadius = 250;
     const [hoveredRadial, setHoveredRadial] = useState(false);
     const [areaData, setAreaData] = useState(null);
 
@@ -64,19 +63,21 @@ export default function AreaCalc(props) {
 
     return (
         <List>
-            <ListItem>
-                {hoveredRadial.name ? (
-                    <Typography gutterBottom>
-                        {hoveredRadial.name}: {hoveredRadial.area} sqm
-                    </Typography>
-                ) : (
-                    <Typography gutterBottom>Hover on chart...</Typography>
-                )}
-            </ListItem>
-
             {areaData && areaData.children && (
                 <>
                     <ListItem>
+                        {hoveredRadial.name ? (
+                            <Typography gutterBottom>
+                                {hoveredRadial.name}: {hoveredRadial.area} sqm
+                            </Typography>
+                        ) : (
+                            <Typography gutterBottom>
+                                Hover on chart...
+                            </Typography>
+                        )}
+                    </ListItem>
+
+                    <ListItem alignItems="center">
                         <RadialChart
                             colorType="literal"
                             animation={true}
@@ -119,13 +120,6 @@ export default function AreaCalc(props) {
                                 </Hint>
                             )}
                         </RadialChart>
-                    </ListItem>
-
-                    <ListItem>
-                        <DownloadRawData
-                            data={areaData.children}
-                            title={"area data"}
-                        />
                     </ListItem>
                 </>
             )}

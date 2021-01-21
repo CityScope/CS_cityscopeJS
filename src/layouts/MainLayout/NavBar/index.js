@@ -40,7 +40,7 @@ const items = [
 
 const useStyles = makeStyles(() => ({
     mobileDrawer: {
-        width: 256,
+        width: 200,
         top: 48,
         height: "calc(100% - 48px)",
     },
@@ -62,7 +62,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             <List>
                 {items.map((item) => (
                     <NavItem
-                        style={{ padding:'2vh' }}
+                        style={{ padding: "2vh" }}
                         href={item.href}
                         key={item.title}
                         title={item.title}

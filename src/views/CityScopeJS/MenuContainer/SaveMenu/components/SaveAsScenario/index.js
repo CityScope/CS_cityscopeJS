@@ -3,13 +3,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { setLoadingState } from "../../../../../../redux/actions";
 import settings from "../../../../../../settings/settings.json";
 import axios from "axios";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import {
+    Button,
+    TextField,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+} from "@material-ui/core";
+
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 
 export default function SaveAsScenario(props) {

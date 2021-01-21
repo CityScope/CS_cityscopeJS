@@ -95,7 +95,13 @@ export default function CityScopeJS() {
                             </Grid>
 
                             <Grid item xs={3} l={3} md={3} xl={2}>
-                                <Card elevation={15}>
+                                <Card
+                                    elevation={15}
+                                    style={{
+                                        maxHeight: "85vh",
+                                        overflow: "auto",
+                                    }}
+                                >
                                     <VisContainer cityIOdata={cityIOdata} />
                                 </Card>
                             </Grid>
