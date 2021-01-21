@@ -3,11 +3,8 @@ import { Link as RouterLink } from "react-router-dom";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
-
 import {
     AppBar,
-    Box,
-
     IconButton,
     Toolbar,
     Typography,
@@ -29,6 +26,9 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
             {...rest}
         >
             <Toolbar variant="dense">
+                <IconButton color="inherit" onClick={onMobileNavOpen}>
+                    <MenuIcon />
+                </IconButton>
                 <RouterLink to="/">
                     <Typography
                         className={classes.name}
@@ -38,11 +38,6 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
                         MIT CityScope
                     </Typography>
                 </RouterLink>
-                <Box flexGrow={1} />
-
-                <IconButton color="inherit" onClick={onMobileNavOpen}>
-                    <MenuIcon />
-                </IconButton>
             </Toolbar>
         </AppBar>
     );

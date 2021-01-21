@@ -1,23 +1,19 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { CircularGridLines, RadarChart } from "react-vis";
-import "../../../../../node_modules/react-vis/dist/style.css";
+import "react-vis/dist/style.css";
 import "./Radar.css";
 import { DiscreteColorLegend } from "react-vis";
 
-class Radar extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            domains: [],
-            radarData: [],
-        };
-        this.radarSize = this.props.drawerWidth - 50;
+const radarSize = 100;
 
-        this.colorRange = ["#fc03ec", "#79C7E3"];
-    }
+export default function Radar(props) {
+    console.log('r');
+    
+    const [setRadarData, radarData] = useState(null);
 
-    generateData() {
-        const indicators = this.props.cityioData.indicators;
+    const colorRange = ["#fc03ec", "#79C7E3"];
+
+    const createRadarData = (indicators) => {
         let radarData = {};
         let refData = {};
         let domains = [];
@@ -29,34 +25,34 @@ class Radar extends Component {
                 domains.push(indicators[i]);
             }
         }
-        this.setState({ radarData: [radarData, refData], domains: domains });
-    }
+        const d = { radarData: [radarData, refData], domains: domains };
+        return d;
+    };
 
-    componentDidMount() {
-        this.setState({ indicators: this.props.indicators });
-        this.generateData();
-    }
-
-    componentDidUpdate(prevProps) {
+    useEffect(() => {
         if (
-            prevProps.cityioData.indicators !== this.props.cityioData.indicators
+            props &&
+            props.cityioData &&
+            props.cityioData.indicators &&
+            props.cityioData.indicators.length > 0
         ) {
-            this.setState({ indicators: this.props.indicators });
-            console.log("new radar data..");
-            this.generateData();
-        }
-    }
+            const d = createRadarData(props.cityioData.indicators);
+            console.log(d);
 
-    render() {
-        if (this.props.cityioData.indicators) {
-            return (
-                <div>
+            setRadarData(d);
+        }
+    }, [props]);
+
+    return (
+        <div>
+            {props.cityioData.indicators && false && (
+                <>
                     <RadarChart
                         className="Radar blur"
                         animation
-                        data={this.state.radarData}
-                        domains={this.state.domains}
-                        colorRange={this.colorRange}
+                        data={radarData.radarData}
+                        domains={radarData.domains}
+                        colorRange={colorRange}
                         style={{
                             polygons: {
                                 fillOpacity: 0.2,
@@ -77,13 +73,13 @@ class Radar extends Component {
                             },
                         }}
                         margin={{
-                            left: this.radarSize / 6,
-                            top: this.radarSize / 6,
-                            bottom: this.radarSize / 6,
-                            right: this.radarSize / 6,
+                            left: radarSize / 6,
+                            top: radarSize / 6,
+                            bottom: radarSize / 6,
+                            right: radarSize / 6,
                         }}
-                        width={this.radarSize}
-                        height={this.radarSize}
+                        width={radarSize}
+                        height={radarSize}
                     >
                         <CircularGridLines
                             style={{
@@ -99,15 +95,12 @@ class Radar extends Component {
                             )}
                         />
                     </RadarChart>
-
                     <DiscreteColorLegend
                         items={["Design", "Reference"]}
-                        colors={this.colorRange}
+                        colors={colorRange}
                     />
-                </div>
-            );
-        } else return null;
-    }
+                </>
+            )}
+        </div>
+    );
 }
-
-export default Radar;

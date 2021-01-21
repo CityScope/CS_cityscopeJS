@@ -5,11 +5,12 @@ import { RadialChart, Hint } from "react-vis";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Typography from "@material-ui/core/Typography";
+import "react-vis/dist/style.css";
 
 export default function AreaCalc(props) {
     const radialRadius = 200;
     const [hoveredRadial, setHoveredRadial] = useState(false);
-    const [areaData, setAreaDAta] = useState(null);
+    const [areaData, setAreaData] = useState(null);
 
     const calcArea = () => {
         let gridProps = props.cityioData.GEOGRID.properties;
@@ -58,7 +59,7 @@ export default function AreaCalc(props) {
     };
 
     useEffect(() => {
-        setAreaDAta(calcArea());
+        setAreaData(calcArea());
     }, [props]);
 
     return (
