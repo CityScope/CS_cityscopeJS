@@ -30,6 +30,23 @@ const theme = createMuiTheme({
     },
 
     overrides: {
+        MuiListItem: {
+            root: {
+                "&$selected": {
+                    backgroundColor: "#18191a",
+                    boxShadow:
+                        "12px 12px 16px 0 rgba(0,0,0),-8px -8px 12px 0 rgba(40,41,42)",
+                    "&:hover": {
+                        backgroundColor: "#ff5278",
+                    },
+                },
+            },
+            button: {
+                "&:hover": {
+                    backgroundColor: "#ff5278",
+                },
+            },
+        },
         MuiAppBar: {
             colorPrimary: { backgroundColor: "#18191a", color: "#FFF" },
         },
