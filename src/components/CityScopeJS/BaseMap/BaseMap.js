@@ -126,14 +126,14 @@ export default function Map(props) {
 
     useEffect(() => {
         if (!selectionOn && selectedFeaturesState.length > 0) {
-          ws_ref.current._onGridDUpdate(roboscopeScale, selectedFeaturesState.map(index => GEOGRID.features[index].properties));
+          ws_ref.current[0](roboscopeScale, selectedFeaturesState.map(index => GEOGRID.features[index].properties));
         }
     }, [selectionOn]);
     
     
     useEffect(() => {
         if (!translateOn && selectedFeaturesState.length > 0) {
-          ws_ref.current._onGridDUpdate(roboscopeScale, selectedFeaturesState.map(index => GEOGRID.features[index].properties));
+          ws_ref.current[0](roboscopeScale, selectedFeaturesState.map(index => GEOGRID.features[index].properties));
         }
     }, [translateOn]);
     
@@ -150,7 +150,9 @@ export default function Map(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resetViewOn]);
 
-    const _onWSUpdate = (new_data) => {
+    const _onWSUpdate = (new_GEOGRID, new_data) => {
+      setGEOGRID(new_GEOGRID);
+      setSelectedCellsState(new_data)
     }
     
     const onViewStateChange = ({ viewState }) => {

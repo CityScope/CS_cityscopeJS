@@ -164,7 +164,7 @@ export const _handleGridcellEditing = (
               thisCellProps.height = height;
               thisCellProps.name = name;
               if (selectedFeaturesState.includes(thisCellProps.id)) {
-                ws_ref.current._onGridUpdate(thisCellProps);
+                ws_ref.current[1](thisCellProps);
               }
             }
         }

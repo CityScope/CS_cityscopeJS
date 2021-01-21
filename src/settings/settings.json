@@ -32,6 +32,11 @@
                 "showOnInit": false,
                 "requireModule": "roboscope"
             },
+            "WEBSOCKETS": {
+                "displayName": "Connect Websockets",
+                "showOnInit": true,
+                "requireModule": "roboscope"
+            },
             "ABM": {
                 "displayName": "Mobility Simulation",
                 "showOnInit": false,

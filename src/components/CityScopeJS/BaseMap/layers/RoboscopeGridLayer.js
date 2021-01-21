@@ -80,7 +80,7 @@ export default function GridLayer({
                     ws_ref,
                     selectedFeaturesState
                 );
-            if (resetDrag==false){
+            if (!resetDrag){
               var temp = deckGL.current.pickObjects({x: event.x, y: event.y})[0]
               if (temp != null) {
                 setResetDrag(true);
@@ -112,7 +112,7 @@ export default function GridLayer({
                 if (dragEnd != null) {
                   var temp = translate(data.properties.header, selectedFeaturesState, dragStart, dragEnd.index);
                   setSelectedFeaturesState(temp);
-                  ws_ref.current._onGridDUpdate(roboscopeScale, temp.map(index => data.features[index].properties));
+                  ws_ref.current[0](roboscopeScale, temp.map(index => data.features[index].properties));
                 }
               }
             }

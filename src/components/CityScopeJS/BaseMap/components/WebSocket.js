@@ -1,57 +1,112 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
+import BounceLoader from "react-spinners/BounceLoader";
+import { css } from "@emotion/core";
 import io from "socket.io-client";
+import { useSelector } from "react-redux";
+import Typography from "@material-ui/core/Typography";
 
-class WebSocket extends Component {
-  constructor(props) {
-      super(props);
-      this.state = {
-        websocketState: false,
-      };
-  }
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: none;
+`;
+
+const client = io.connect("http://127.0.0.1:8080/");
+const WebSocket = (props, ref) => {
+  const menu = useSelector((state) => state.MENU);
+  var wsON = menu.includes("WEBSOCKETS");
+    
+  useEffect(() => {
+    console.log(wsON, props.GEOGRID);
+    if (wsON && props.GEOGRID!=null) {
+      client.connect();
+      client.emit("onInit", props.GEOGRID.features, props.GEOGRID.properties);
+      console.log("socket connected, onInit");
+    } 
+    
+    if (!wsON) {
+      client.disconnect();
+    }
+  }, [wsON, props.GEOGRID]);
   
-  componentWillMount() {
-    this.ioClient = io.connect("http://127.0.0.1:8080/");
-  }
-  
-  componentDidMount() {
-    let prev_state = this.state.websocketState;
-    this.ioClient.on("welcome", (socket) => {
-      console.log(socket);
-      if (prev_state === false) {
-        this.setState({ websocketState: true });
-        this.ioClient.emit("onInit", this.props.GEOGRID.features, this.props.GEOGRID.properties);
+  useEffect(() => {
+    client.on("welcome", (socket) => {
+      if (props.GEOGRID!=null && wsON) {
+        client.emit("onInit", props.GEOGRID.features, props.GEOGRID.properties);
+        console.log("socket");
       }
-      console.log("updating cityio init")
     });
     
-    this.ioClient.on("roboscopeInput", (data) => {
+    client.on("roboscopeInput", (data) => {
       let dataProps = this.props.GEOGRID; 
       for (let i = 0; i < data.length; i++) {
         dataProps.features[data[i].id].properties = data[i]
       }
-      this.props.onChange(dataProps);
+      this.props.onChange(dataProps, data);
     });
     
-    this.ioClient.on("waveTest", (data) => {
+    client.on("waveTest", (data) => {
       let dataProps = this.props.GEOGRID; 
       for (let i = 0; i < data.length; i++) {
         dataProps.features[data[i].id].properties = data[i]
       } 
-      this.props.onChange(dataProps);  
+      this.props.onChange(dataProps, data);  
     });
+  }, [props.GEOGRID]);
+
+  const _onPixelUpdate = (pack) => {
+    client.emit("pixelUpdate", pack);
   }
   
-  _onGridUpdate = (pack) => {
-    this.ioClient.emit("pixelUpdate", pack);
+  const _onGridDUpdate = (scale, data) => {
+    client.emit("gridUpdate", scale, data);
+  }
+  ref.current = [_onGridDUpdate, _onPixelUpdate]
+  
+  let Loader = (<span/>)
+  if (wsON) {
+    Loader = (
+      <React.Fragment>
+        <div
+          style={{
+              position: "fixed",
+              top: 50,
+              right: 50,
+              zIndex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+          }}
+      >
+          <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                marginBottom: "3px",
+                marginTop: "3px",
+              }}
+          >
+            <Typography style={{ paddingTop: "5px", marginRight: "10px", fontSize:"13px"}}>
+                Websockets Connected
+            </Typography>
+            <BounceLoader
+                 css={override}
+                 size={25}
+                 color="white"
+                 loading={true}
+             />
+          </div>
+      </div>
+      </React.Fragment>
+    )
   }
   
-  _onGridDUpdate = (scale, data) => {
-    this.ioClient.emit("gridUpdate", scale, data);
-  }
-  
-  render() {
-    return <span />;
-  }
+  return (
+    <div>
+      {Loader}
+    </div>
+    
+  );
 }
 
-export default WebSocket;
+export default forwardRef(WebSocket)
