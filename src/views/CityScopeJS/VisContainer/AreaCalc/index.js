@@ -14,7 +14,9 @@ export default function AreaCalc(props) {
     const calcArea = () => {
         let gridProps = props.cityioData.GEOGRID.properties;
         let cellSize = gridProps.header.cellSize;
-        let geoGridData = props.cityioData.GEOGRIDDATA;
+        let geoGridData = props.cityioData.GEOGRIDDATA.features;
+        console.log(geoGridData);
+        
         let calcAreaObj = {};
         geoGridData.forEach((gridCellData) => {
             let typeName = gridCellData.name;
