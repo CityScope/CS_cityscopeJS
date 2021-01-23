@@ -6,6 +6,7 @@ import {
     Collapse,
     Typography,
     CardContent,
+    Box,
     Avatar,
     ListItemAvatar,
     ListItem,
@@ -14,10 +15,8 @@ import {
     Card,
 } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
-
 import { listenToEditMenu } from "../../../../redux/actions";
 import { connect } from "react-redux";
-
 import { testHex, hexToRgb } from "../../DeckglMap/utils/BaseMapUtils";
 import TypeInfo from "./TypeInfo";
 
@@ -35,7 +34,7 @@ function EditMenu(props) {
     const handleListItemClick = (event, name, typeProps) => {
         // ! injects the type name into the attributes themselves
         typeProps.name = name;
-        setSelectedIndex(selectedIndex == null ? name : null);
+        setSelectedIndex(name);
         dispatch(listenToEditMenu(typeProps));
     };
 
@@ -43,7 +42,6 @@ function EditMenu(props) {
         //! check type info: if string, parse, else object
         let info =
             typeof typeInfo == "string" ? JSON.parse(typeInfo) : typeInfo;
-
         return info;
     };
 
@@ -51,6 +49,11 @@ function EditMenu(props) {
     const createTypesIcons = (LanduseTypesList) => {
         let iconsArr = [];
         Object.keys(LanduseTypesList).forEach((type, index) => {
+            // get type description if exist
+            let description = LanduseTypesList[type].description
+                ? LanduseTypesList[type].description
+                : null;
+
             let col = LanduseTypesList[type].color;
             // get the LBCS/NAICS types info
             let LBCS = parseTypeInfo(
@@ -99,10 +102,20 @@ function EditMenu(props) {
                         <ListItemText primary={type} />
                     </ListItem>
 
-                    {typeHasHeightProps && (
-                        <Collapse in={selected}>
+                    <Collapse in={selected}>
+                        <Box spacing={1} p={1} m={1}>
                             <Card elevation={15}>
                                 <CardContent>
+                                    <Typography variant="h5">
+                                        Type Information
+                                    </Typography>
+
+                                    {description && (
+                                        <Typography variant="caption">
+                                            {description}
+                                        </Typography>
+                                    )}
+                                    <Box spacing={1} p={1} m={1} />
                                     <Grid container spacing={3}>
                                         <Grid
                                             item
@@ -114,9 +127,10 @@ function EditMenu(props) {
                                         >
                                             {LBCS && (
                                                 <>
-                                                    <Typography gutterBottom>
+                                                    <Typography variant="caption">
                                                         LBCS
                                                     </Typography>
+
                                                     <TypeInfo typeInfo={LBCS} />
                                                 </>
                                             )}
@@ -131,7 +145,7 @@ function EditMenu(props) {
                                         >
                                             {NAICS && (
                                                 <>
-                                                    <Typography gutterBottom>
+                                                    <Typography variant="caption">
                                                         NAICS
                                                     </Typography>
                                                     <TypeInfo
@@ -140,44 +154,53 @@ function EditMenu(props) {
                                                 </>
                                             )}
                                         </Grid>
-                                        <Grid
-                                            item
-                                            xs={12}
-                                            l={12}
-                                            md={12}
-                                            xl={12}
-                                            container
-                                        >
-                                            <Typography gutterBottom>
-                                                Set Height
-                                            </Typography>
-                                            <Slider
-                                                value={height}
-                                                valueLabelDisplay="auto"
-                                                onChange={(
-                                                    event,
-                                                    value
-                                                ) =>
-                                                    dispatch(
-                                                        listenToEditMenu({
-                                                            ...selectedType,
-                                                            height: value,
-                                                        })
-                                                    )
-                                                }
-                                                getAriaLabel={(index) =>
-                                                    index.toString()
-                                                }
-                                                min={marks[0].value}
-                                                max={marks[1].value}
-                                                marks={marks}
-                                            ></Slider>
-                                        </Grid>
+
+                                        {typeHasHeightProps && (
+                                            <>
+                                                <Grid
+                                                    item
+                                                    xs={10}
+                                                    l={10}
+                                                    md={10}
+                                                    xl={10}
+                                                    container
+                                                >
+                                                    <Typography gutterBottom>
+                                                        Set Height
+                                                    </Typography>
+
+                                                    <Slider
+                                                        value={height}
+                                                        valueLabelDisplay="auto"
+                                                        onChange={(
+                                                            event,
+                                                            value
+                                                        ) =>
+                                                            dispatch(
+                                                                listenToEditMenu(
+                                                                    {
+                                                                        ...selectedType,
+                                                                        height: value,
+                                                                    }
+                                                                )
+                                                            )
+                                                        }
+                                                        getAriaLabel={(index) =>
+                                                            index.toString()
+                                                        }
+                                                        min={marks[0].value}
+                                                        max={marks[1].value}
+                                                        marks={marks}
+                                                    />
+                                                </Grid>
+                                            </>
+                                        )}
                                     </Grid>
                                 </CardContent>
                             </Card>
-                        </Collapse>
-                    )}
+                        </Box>
+                    </Collapse>
+
                     <Divider />
                 </div>
             );

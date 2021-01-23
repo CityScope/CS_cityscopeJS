@@ -1,7 +1,7 @@
 // // export default EditMenuMain;
 
 import React from "react";
-import TypesEditor from "./TypesEditor/TypesEditor";
+import TypesEditor from "./TypesEditor";
 import GridProps from "./GridProps";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";

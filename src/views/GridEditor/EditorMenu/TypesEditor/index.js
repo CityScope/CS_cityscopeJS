@@ -15,6 +15,7 @@ export default function TypesEditor() {
         Object.keys(LanduseTypesList).forEach((type) => {
             typesArray.push({
                 name: type,
+                description: "description for: " + type,
                 color: LanduseTypesList[type].color,
                 height: LanduseTypesList[type].height
                     ? LanduseTypesList[type].height
@@ -35,6 +36,8 @@ export default function TypesEditor() {
     const [state, setState] = React.useState({
         columns: [
             { title: "Type", field: "name" },
+            { title: "Description", field: "description" },
+
             { title: "Height", field: "height", type: "numeric" },
             {
                 title: "Interactive",
@@ -59,7 +62,7 @@ export default function TypesEditor() {
 
     return (
         <Grid container>
-            <Grid item xs={12} s={12} m={4} l={4} xl={4}>
+            <Grid item xs={12} s={12} m={12} l={12} xl={12}>
                 <MaterialTable
                     title={<Typography variant="h2">Types Editor</Typography>}
                     columns={state.columns}

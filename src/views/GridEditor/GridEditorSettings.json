@@ -68,33 +68,9 @@
                         }
                     ],
                     "interactive": "Web",
-                    "color": "#1F78B4",
+                    "color": "#B32745",
                     "height": 4,
                     "sqm_pperson": 400
-                },
-                "Light Industrial": {
-                    "LBCS": [
-                        {
-                            "proportion": 1,
-                            "use": {
-                                "3110": 1
-                            }
-                        }
-                    ],
-                    "NAICS": [
-                        {
-                            "proportion": 1,
-                            "use": {
-                                "3336": 0.5,
-                                "5413": 0.1,
-                                "5417": 0.4
-                            }
-                        }
-                    ],
-                    "interactive": "Web",
-                    "color": "#CAB2D6",
-                    "height": 4,
-                    "sqm_pperson": 50
                 },
                 "Office": {
                     "LBCS": [
@@ -114,7 +90,7 @@
                         }
                     ],
                     "interactive": "Web",
-                    "color": "#E31A1C",
+                    "color": "#FF5277",
                     "height": 10,
                     "sqm_pperson": 20
                 },
@@ -129,10 +105,10 @@
                     ],
                     "NAICS": null,
                     "interactive": "Web",
-                    "color": "#B2DF8A",
+                    "color": "#38C9FF",
                     "sqm_pperson": 1
                 },
-                "Parking": {
+                "Road": {
                     "LBCS": [
                         {
                             "proportion": 1,
@@ -143,7 +119,7 @@
                     ],
                     "NAICS": null,
                     "interactive": "Web",
-                    "color": "#646464",
+                    "color": "#308FB3",
                     "height": 1,
                     "sqm_pperson": 4
                 },
@@ -184,7 +160,7 @@
                         }
                     ],
                     "interactive": "Web",
-                    "color": "#FB9A99",
+                    "color": "#FF835E",
                     "height": 4,
                     "sqm_pperson": 150
                 },
@@ -209,7 +185,7 @@
                         }
                     ],
                     "interactive": "Web",
-                    "color": "#E31A1C",
+                    "color": "#A2FF91",
                     "height": 10,
                     "sqm_pperson": 50
                 },
@@ -234,7 +210,7 @@
                         }
                     ],
                     "interactive": "Web",
-                    "color": "#6A3D9A",
+                    "color": "#E83FB8",
                     "height": 4,
                     "sqm_pperson": 60
                 },
@@ -283,7 +259,7 @@
                         }
                     ],
                     "interactive": "Web",
-                    "color": "#E31A1C",
+                    "color": "#E945FF",
                     "height": 20,
                     "sqm_pperson": 50
                 },
@@ -298,7 +274,7 @@
                     ],
                     "NAICS": null,
                     "interactive": "Web",
-                    "color": "#FFFF33",
+                    "color": "#7FB34B",
                     "height": 4,
                     "sqm_pperson": 320
                 }

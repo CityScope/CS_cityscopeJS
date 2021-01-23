@@ -4,7 +4,7 @@ import { RadialChart, Hint } from "react-vis";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Typography from "@material-ui/core/Typography";
-import '../../../../../node_modules/react-vis/dist/style.css';
+import "../../../../../node_modules/react-vis/dist/style.css";
 
 export default function AreaCalc(props) {
     const radialRadius = 250;
@@ -16,7 +16,7 @@ export default function AreaCalc(props) {
             let gridProps = props.cityioData.GEOGRID.properties;
             let cellSize = gridProps.header.cellSize;
             let geoGridData = props.cityioData.GEOGRIDDATA;
-            console.log(geoGridData);
+            
 
             let calcAreaObj = {};
             geoGridData.forEach((gridCellData) => {
