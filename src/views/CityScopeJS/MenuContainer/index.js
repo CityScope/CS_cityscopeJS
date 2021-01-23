@@ -5,8 +5,19 @@ import EditMenu from "./EditMenu";
 import TogglesMenu from "./TogglesMenu";
 import FABMenu from "./FABMenu";
 import SaveMenu from "./SaveMenu";
+import { Collapse } from "@material-ui/core";
 
 function MenuContainer(props) {
+    //
+
+    const [selectedIndex, setSelectedIndex] = React.useState(null);
+    const handleListItemClick = (event, name, typeProps) => {
+        // ! injects the type name into the attributes themselves
+
+        setSelectedIndex(name);
+    };
+
+    //
     const { tableName } = props;
     const menuState = useSelector((state) => state.MENU);
     const dispatch = useDispatch();
@@ -28,7 +39,9 @@ function MenuContainer(props) {
             <FABMenu handleToggle={handleToggle} />
             <SaveMenu tableName={tableName} handleToggle={handleToggle} />
             <TogglesMenu handleToggle={handleToggle} />
-            <EditMenu />
+            <Collapse in={selectedIndex}>
+                <EditMenu />
+            </Collapse>
         </>
     );
 }
