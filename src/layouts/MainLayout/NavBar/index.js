@@ -40,7 +40,7 @@ const items = [
 
 const useStyles = makeStyles(() => ({
     mobileDrawer: {
-        width: 200,
+        width: '50vw',
         top: 48,
         height: "calc(100% - 48px)",
     },
