@@ -16,7 +16,9 @@ const reqResonseUI = (response, tableName) => {
     let resText = (
         <Typography color="textPrimary" variant="caption">
             CityIO is {response.data.status}. Grid deployed to{" "}
-            <Link color="textSecondary" href={cityscopeJSendpoint}>{cityscopeJSendpoint}</Link>
+            <Link color="textSecondary" href={cityscopeJSendpoint}>
+                {cityscopeJSendpoint}
+            </Link>
         </Typography>
     );
 
@@ -28,8 +30,8 @@ const reqResonseUI = (response, tableName) => {
  * @param {typesList} typesList List of types form table editor
  *
  */
-const prepareData = (struct, typesList, geoJsonFeatures, gridProps) => {
-    let geoGridObject = struct;
+const makeGEOGRIDobject = (struct, typesList, geoJsonFeatures, gridProps) => {
+    let GEOGRID_object = struct;
 
     // take types list and prepare to csJS format
     let newTypesList = {};
@@ -51,32 +53,45 @@ const prepareData = (struct, typesList, geoJsonFeatures, gridProps) => {
                 : oldType.NAICS;
     });
 
-    geoGridObject.properties.types = newTypesList;
+    GEOGRID_object.properties.types = newTypesList;
 
     // inject table props to grid
-    geoGridObject.properties.header = gridProps;
-    geoGridObject.properties.header.longitude = parseFloat(
-        geoGridObject.properties.header.longitude
+    GEOGRID_object.properties.header = gridProps;
+    GEOGRID_object.properties.header.longitude = parseFloat(
+        GEOGRID_object.properties.header.longitude
     );
-    geoGridObject.properties.header.latitude = parseFloat(
-        geoGridObject.properties.header.latitude
+    GEOGRID_object.properties.header.latitude = parseFloat(
+        GEOGRID_object.properties.header.latitude
     );
-    geoGridObject.properties.header.rotation = parseFloat(
-        geoGridObject.properties.header.rotation
+    GEOGRID_object.properties.header.rotation = parseFloat(
+        GEOGRID_object.properties.header.rotation
     );
-    geoGridObject.properties.header.nrows = parseFloat(
-        geoGridObject.properties.header.nrows
+    GEOGRID_object.properties.header.nrows = parseFloat(
+        GEOGRID_object.properties.header.nrows
     );
-    geoGridObject.properties.header.ncols = parseFloat(
-        geoGridObject.properties.header.ncols
+    GEOGRID_object.properties.header.ncols = parseFloat(
+        GEOGRID_object.properties.header.ncols
     );
-    geoGridObject.properties.header.cellSize = parseFloat(
-        geoGridObject.properties.header.cellSize
+    GEOGRID_object.properties.header.cellSize = parseFloat(
+        GEOGRID_object.properties.header.cellSize
     );
 
     // lastly get the grid features
-    geoGridObject.features = geoJsonFeatures;
-    return geoGridObject;
+    GEOGRID_object.features = geoJsonFeatures;
+    return GEOGRID_object;
+};
+
+/**
+ *
+ * @param {typesList} typesList List of types form table editor
+ *
+ */
+const makeGEOGRIDDATAobject = (geoJsonFeatures) => {
+    let GEOGRIDDATA_object = [];
+    geoJsonFeatures.forEach((element) => {
+        GEOGRIDDATA_object.push(element.properties);
+    });
+    return GEOGRIDDATA_object;
 };
 
 export default function CommitGrid(props) {
@@ -86,19 +101,20 @@ export default function CommitGrid(props) {
     const hasGrid = reduxState.GRID_CREATED;
 
     const downloadObjectAsJson = () => {
-        let struct = settings.GEOGRID;
+        let GEOGRIDstruct = settings.GEOGRID;
+
         let typesList = reduxState.TYPES_LIST;
         let geoJsonFeatures = reduxState.GRID_CREATED.features;
         let gridProps = props.gridProps;
-        let geoGridObj = prepareData(
-            struct,
+        let GEOGRID_object = makeGEOGRIDobject(
+            GEOGRIDstruct,
             typesList,
             geoJsonFeatures,
             gridProps
         );
         var dataStr =
             "data:text/json;charset=utf-8," +
-            encodeURIComponent(JSON.stringify(geoGridObj));
+            encodeURIComponent(JSON.stringify(GEOGRID_object));
         var downloadAnchorNode = document.createElement("a");
         downloadAnchorNode.setAttribute("href", dataStr);
         downloadAnchorNode.setAttribute("download", "grid.json");
@@ -108,19 +124,21 @@ export default function CommitGrid(props) {
     };
 
     const postGridToCityIO = () => {
-        let struct = settings.GEOGRID;
+        let GEOGRIDstruct = settings.GEOGRID;
         let typesList = reduxState.TYPES_LIST;
         let geoJsonFeatures = reduxState.GRID_CREATED.features;
         let gridProps = props.gridProps;
         // take grid struct from settings
-        let geoGridObj = prepareData(
-            struct,
+        let GEOGRID_object = makeGEOGRIDobject(
+            GEOGRIDstruct,
             typesList,
             geoJsonFeatures,
             gridProps
         );
 
-        let tableName = geoGridObj.properties.header.tableName.toLowerCase();
+        let GEOGRIDDATA_object = makeGEOGRIDDATAobject(geoJsonFeatures);
+
+        let tableName = GEOGRID_object.properties.header.tableName.toLowerCase();
         let requestsList = {
             geoGridURL:
                 "https://cityio.media.mit.edu/api/table/update/" +
@@ -145,7 +163,7 @@ export default function CommitGrid(props) {
             };
         };
 
-        axios(geoGridOptions(requestsList.geoGridURL, geoGridObj))
+        axios(geoGridOptions(requestsList.geoGridURL, GEOGRID_object))
             .then(function (response) {
                 setReqResonse(reqResonseUI(response, tableName));
             })
@@ -156,7 +174,12 @@ export default function CommitGrid(props) {
                 console.log("removed GEOGRIDDATA");
             })
             .then(function () {
-                axios(geoGridOptions(requestsList.geoGridDataURL, geoGridObj));
+                axios(
+                    geoGridOptions(
+                        requestsList.geoGridDataURL,
+                        GEOGRIDDATA_object
+                    )
+                );
                 console.log("mirrored GEOGRID to GEOGRIDDATA");
             })
             .catch((error) => {

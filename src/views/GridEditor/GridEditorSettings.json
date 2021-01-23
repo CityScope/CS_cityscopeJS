@@ -6,6 +6,17 @@
             "blue": "mapbox://styles/relnox/ck0h5xn701bpr1dqs3he2lecq?fresh=true"
         }
     },
+
+   "GEOGRIDDATA": {
+        "color": [
+          0,0,0
+        ],
+        "height": 0,
+        "id": 0,
+        "interactive": "Web",
+        "name": "name"
+      },
+
     "GEOGRID": {
         "features": [],
         "properties": {
