@@ -57,9 +57,9 @@ function MenuContainer(props) {
                     </Button>
                 </ListItem>
 
-                <Collapse in={selectedIndex}>
+                {/* <Collapse in={selectedIndex}> */}
                     <EditMenu />
-                </Collapse>
+                {/* </Collapse> */}
 
                 <ListItem>
                     <SaveMenu
