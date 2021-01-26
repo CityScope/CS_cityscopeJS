@@ -2,8 +2,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import Typography from "@material-ui/core/Typography";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import settings from "../../../../settings/settings.json";
 import Collapse from "@material-ui/core/Collapse";
@@ -42,23 +40,21 @@ function TogglesMenu(props) {
             const thisToggle = (
                 <div key={listOfToggles[i]}>
                     <ListItem>
+                        <Switch
+                            edge="start"
+                            onChange={handleToggle(listOfToggles[i])}
+                            checked={checked}
+                        />
                         <ListItemText
                             primary={togglesMeta[listOfToggles[i]].displayName}
                         />
-                        <ListItemSecondaryAction>
-                            <Switch
-                                edge="end"
-                                onChange={handleToggle(listOfToggles[i])}
-                                checked={checked}
-                            />
-                        </ListItemSecondaryAction>
                     </ListItem>
 
                     {
                         // ! Handle submenus of ABM/ACCESS
 
                         listOfToggles[i] === "SHADOWS" && (
-                            <Collapse in={checked} style={{ width: "100%" }}>
+                            <Collapse in={checked}>
                                 <ShadowSubmenu />
                             </Collapse>
                         )
@@ -68,7 +64,7 @@ function TogglesMenu(props) {
                         // ! Handle submenus of ABM/ACCESS
 
                         listOfToggles[i] === "ABM" && (
-                            <Collapse in={checked} style={{ width: "100%" }}>
+                            <Collapse in={checked}>
                                 <ABMSubmenu tripsData={cityioData.ABM2.attr} />
                             </Collapse>
                         )
@@ -77,7 +73,6 @@ function TogglesMenu(props) {
                         <Collapse
                             in={checked}
                             style={{
-                                width: "80%",
                                 marginLeft: 24,
                             }}
                         >
@@ -90,19 +85,7 @@ function TogglesMenu(props) {
         }
     }
 
-    return (
-        <List>
-            <ListItem
-                style={{ display: "flex", justifyContent: "flex-end" }}
-            ></ListItem>
-            <ListItem>
-                <Typography variant="caption" gutterBottom>
-                    Toggle CityScope layers visability
-                </Typography>
-            </ListItem>
-            {togglesCompsArray}
-        </List>
-    );
+    return <List>{togglesCompsArray}</List>;
 }
 
 export default TogglesMenu;

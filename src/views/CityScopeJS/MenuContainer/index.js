@@ -3,19 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { listenToMenuUI } from "../../../redux/actions";
 import EditMenu from "./EditMenu";
 import TogglesMenu from "./TogglesMenu";
-import FABMenu from "./FABMenu";
 import SaveMenu from "./SaveMenu";
-import { Collapse } from "@material-ui/core";
+import { Collapse, Button, List, ListItem } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import NearMeIcon from "@material-ui/icons/NearMe";
+import NavigationIcon from "@material-ui/icons/Navigation";
 
 function MenuContainer(props) {
     //
 
     const [selectedIndex, setSelectedIndex] = React.useState(null);
-    const handleListItemClick = (event, name, typeProps) => {
-        // ! injects the type name into the attributes themselves
-
-        setSelectedIndex(name);
-    };
 
     //
     const { tableName } = props;
@@ -36,12 +34,60 @@ function MenuContainer(props) {
 
     return (
         <>
-            <FABMenu handleToggle={handleToggle} />
-            <SaveMenu tableName={tableName} handleToggle={handleToggle} />
+            <List>
+                <ListItem>
+                    <Button
+                        startIcon={
+                            menuState.includes("EDIT") ? (
+                                <>
+                                    <CloudUploadIcon />
+                                    Send to cityIO
+                                </>
+                            ) : (
+                                <>
+                                    <EditIcon />
+                                    Edit Mode
+                                </>
+                            )
+                        }
+                        color="default"
+                        onClick={handleToggle("EDIT")}
+                    >
+                        {/* setSelectedIndex(selectedIndex ? false : true)}> */}
+                    </Button>
+                </ListItem>
+
+                <Collapse in={selectedIndex}>
+                    <EditMenu />
+                </Collapse>
+
+                <ListItem>
+                    <SaveMenu
+                        tableName={tableName}
+                        handleToggle={handleToggle}
+                    />
+                </ListItem>
+                <ListItem>
+                    <Button
+                        startIcon={
+                            menuState.includes("RESET_VIEW") ? (
+                                <>
+                                    <NavigationIcon />
+                                    Reset View
+                                </>
+                            ) : (
+                                <>
+                                    <NearMeIcon />
+                                    ISO/Perspective
+                                </>
+                            )
+                        }
+                        color="default"
+                        onClick={handleToggle("RESET_VIEW")}
+                    />
+                </ListItem>
+            </List>
             <TogglesMenu handleToggle={handleToggle} />
-            <Collapse in={selectedIndex}>
-                <EditMenu />
-            </Collapse>
         </>
     );
 }

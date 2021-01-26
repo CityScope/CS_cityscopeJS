@@ -94,7 +94,7 @@ export default function CityScopeJS() {
                                 </Card>
                             </Grid>
 
-                            <Grid item xs={3} l={3} md={3} xl={2}>
+                            <Grid item xs={6} l={3} md={3} xl={2}>
                                 <Card
                                     elevation={15}
                                     style={{
