@@ -35,18 +35,40 @@ export default function TypesEditor() {
 
     const [state, setState] = React.useState({
         columns: [
-            { title: "Type", field: "name" },
-            { title: "Description", field: "description" },
+            {
+                title: "Type",
+                field: "name",
+            },
+            {
+                title: "Description",
+                field: "description",
+            },
 
-            { title: "Height", field: "height", type: "numeric" },
+            {
+                title: "Height",
+                field: "height",
+                type: "numeric",
+            },
             {
                 title: "Interactive",
                 field: "interactive",
                 lookup: { No: "No", Web: "Web", TUI: "TUI" },
             },
-            { title: "Color", field: "color", type: "string" },
-            { title: "LBCS", field: "LBCS", type: "string" },
-            { title: "NAICS", field: "NAICS", type: "string" },
+            {
+                title: "Color",
+                field: "color",
+                type: "string",
+            },
+            {
+                title: "LBCS",
+                field: "LBCS",
+                type: "string",
+            },
+            {
+                title: "NAICS",
+                field: "NAICS",
+                type: "string",
+            },
         ],
         data: createtypesArray(settings.GEOGRID.properties.types),
     });
@@ -65,6 +87,7 @@ export default function TypesEditor() {
             <Grid item xs={12} s={12} m={12} l={12} xl={12}>
                 <MaterialTable
                     title={<Typography variant="h2">Types Editor</Typography>}
+                    // columns={state.columns}
                     columns={state.columns}
                     data={state.data}
                     options={{
@@ -72,6 +95,8 @@ export default function TypesEditor() {
                         search: false,
                         selection: false,
                         rowStyle: (rowData) => ({
+                            fontFamily: "Roboto Mono",
+                            fontSize: 12,
                             backgroundColor:
                                 selectedRow === rowData.tableData.id
                                     ? rowColor

@@ -35,7 +35,7 @@ export default function SplashScreen() {
                 </Typography>
                 <Divider className={classes.divider} light />
 
-                <Typography color="textPrimary" variant="h3">
+                <Typography color="textPrimary" variant="h5">
                     CityScopeJS is a unified front-end for MIT CityScope
                     project, an open-source urban modeling and simulation
                     platform. CityScopeJS allows users to examine different
