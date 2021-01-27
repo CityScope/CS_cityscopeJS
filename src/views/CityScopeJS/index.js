@@ -43,16 +43,19 @@ export default function CityScopeJS() {
     }, []);
 
     // wait for 'ready' flag from cityIO when app is ready to start
-    const ready = useSelector((state) => state.READY);
-
+    const isReady = useSelector((state) => state.READY);
     const cityIOdata = useSelector((state) => state.CITYIO);
+
+    console.log(isReady);
+    
+
 
     return (
         <Page className={classes.root} title="CitySCopeJS">
             <Container maxWidth={false}>
-                {!tableName && <MissingTableInfo />}
+                {!isReady && <MissingTableInfo />}
                 {tableName && <CityIO tableName={tableName} />}
-                {ready && (
+                {isReady && (
                     <>
                         <Grid container spacing={5}>
                             <Grid item xs={6} l={3} md={3} xl={2} container>

@@ -11,8 +11,8 @@ const routes = [
         path: "/",
         element: <MainLayout />,
         children: [
-            { path: "/", element: <SplashScreen /> },
-            { path: "/csjs", element: <CityScopeJS /> },
+            { path: "/home", element: <SplashScreen /> },
+            { path: "/", element: <CityScopeJS /> },
             { path: "/editor", element: <GridEditor /> },
             { path: "*", element: <Navigate to="/404" /> },
             { path: "404", element: <NotFoundView /> },

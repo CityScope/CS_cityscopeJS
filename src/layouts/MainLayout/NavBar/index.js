@@ -21,13 +21,13 @@ import NavItem from "./NavItem";
 
 const items = [
     {
-        href: "/",
+        href: "/home",
         icon: HomeIcon,
         title: "Home",
     },
 
     {
-        href: "/csjs",
+        href: "/",
         icon: MapIcon,
         title: "CityScopeJS",
     },
@@ -40,7 +40,7 @@ const items = [
 
 const useStyles = makeStyles(() => ({
     mobileDrawer: {
-        width: '50vw',
+        width: "50vw",
         top: 48,
         height: "calc(100% - 48px)",
     },
