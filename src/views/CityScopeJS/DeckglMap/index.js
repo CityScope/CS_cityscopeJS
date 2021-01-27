@@ -116,19 +116,11 @@ export default function Map() {
 
     useEffect(() => {
         if (!loaded) return;
-        if (resetViewOn) {
-            _setViewStateToTableHeader();
-        } else {
-            setViewState({
-                ...viewState,
-                pitch: 45,
-            });
-        }
+        _setViewStateToTableHeader();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resetViewOn]);
 
     const onViewStateChange = ({ viewState }) => {
-        viewState.orthographic = menu.includes("RESET_VIEW") ? true : false;
         setViewState(viewState);
     };
 

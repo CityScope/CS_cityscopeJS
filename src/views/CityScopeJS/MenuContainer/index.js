@@ -4,18 +4,12 @@ import { listenToMenuUI } from "../../../redux/actions";
 import EditMenu from "./EditMenu";
 import TogglesMenu from "./TogglesMenu";
 import SaveMenu from "./SaveMenu";
-import { Collapse, Button, List, ListItem } from "@material-ui/core";
+import { Button, List, ListItem } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import NearMeIcon from "@material-ui/icons/NearMe";
 import NavigationIcon from "@material-ui/icons/Navigation";
 
 function MenuContainer(props) {
-    //
-
-    const [selectedIndex, setSelectedIndex] = React.useState(null);
-
-    //
     const { tableName } = props;
     const menuState = useSelector((state) => state.MENU);
     const dispatch = useDispatch();
@@ -52,14 +46,10 @@ function MenuContainer(props) {
                         }
                         color="default"
                         onClick={handleToggle("EDIT")}
-                    >
-                        {/* setSelectedIndex(selectedIndex ? false : true)}> */}
-                    </Button>
+                    ></Button>
                 </ListItem>
 
-                {/* <Collapse in={selectedIndex}> */}
-                    <EditMenu />
-                {/* </Collapse> */}
+                <EditMenu />
 
                 <ListItem>
                     <SaveMenu
@@ -70,17 +60,10 @@ function MenuContainer(props) {
                 <ListItem>
                     <Button
                         startIcon={
-                            menuState.includes("RESET_VIEW") ? (
-                                <>
-                                    <NavigationIcon />
-                                    Reset View
-                                </>
-                            ) : (
-                                <>
-                                    <NearMeIcon />
-                                    ISO/Perspective
-                                </>
-                            )
+                            <>
+                                <NavigationIcon />
+                                Reset View
+                            </>
                         }
                         color="default"
                         onClick={handleToggle("RESET_VIEW")}

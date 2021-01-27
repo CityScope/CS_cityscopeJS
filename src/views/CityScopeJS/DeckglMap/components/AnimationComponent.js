@@ -38,6 +38,7 @@ class AnimationComponent extends Component {
             const speed = sliders.speed;
             const startHour = sliders.time[0];
             const endHour = sliders.time[2];
+
             let t = parseInt(time) + parseInt(speed);
             if (time < startHour || time > endHour) {
                 t = startHour;

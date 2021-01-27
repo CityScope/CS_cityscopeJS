@@ -46,10 +46,6 @@ export default function CityScopeJS() {
     const isReady = useSelector((state) => state.READY);
     const cityIOdata = useSelector((state) => state.CITYIO);
 
-    console.log(isReady);
-    
-
-
     return (
         <Page className={classes.root} title="CitySCopeJS">
             <Container maxWidth={false}>
