@@ -14,6 +14,8 @@ import { getScenarioIndices } from "./utils";
 
 const getAPICall = async (URL) => {
     try {
+        // ! should add 'retry' here
+        // ! https://stackoverflow.com/questions/56074531/how-to-retry-5xx-requests-using-axios
         const response = await axios.get(URL);
         return response.data;
     } catch (err) {
