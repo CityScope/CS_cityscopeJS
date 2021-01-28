@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "repository": "https://github.com/takesei/SynecoScope",
     "license": "GPL-3.0-only",
-    "homepage": "https://synecoculture.org",
+    "homepage": "https://synecoculture.org/SynecoScope",
     "dependencies": {
         "@material-ui/core": "^4.11.0",
         "@material-ui/icons": "^4.9.1",
