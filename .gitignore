@@ -22,3 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .prettierrc
+
+.ipynb_checkpoints/
+CityGML/
+__pycache__/
