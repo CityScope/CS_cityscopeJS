@@ -7,10 +7,15 @@ name = "pypi"
 numpy = "*"
 pandas = "*"
 requests = "*"
+fastapi = "*"
+sqlalchemy = "*"
+uvicorn = "*"
+orjson = "*"
 
 [dev-packages]
 cs-brix = "*"
 jupyterlab = "*"
+neovim = "*"
 
 [requires]
 python_version = "3.8"
