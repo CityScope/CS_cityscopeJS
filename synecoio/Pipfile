@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+numpy = "*"
+pandas = "*"
+requests = "*"
+fastapi = "*"
+sqlalchemy = "*"
+uvicorn = "*"
+orjson = "*"
+redis = "*"
+pyyaml = "*"
+
+[dev-packages]
+cs-brix = "*"
+jupyterlab = "*"
+neovim = "*"
+
+[requires]
+python_version = "3.8"
