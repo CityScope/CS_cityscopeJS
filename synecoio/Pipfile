@@ -11,6 +11,8 @@ fastapi = "*"
 sqlalchemy = "*"
 uvicorn = "*"
 orjson = "*"
+redis = "*"
+pyyaml = "*"
 
 [dev-packages]
 cs-brix = "*"
