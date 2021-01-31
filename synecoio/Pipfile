@@ -13,6 +13,9 @@ uvicorn = "*"
 orjson = "*"
 redis = "*"
 pyyaml = "*"
+gunicorn = "*"
+uvloop = "*"
+httptools = "*"
 
 [dev-packages]
 cs-brix = "*"
