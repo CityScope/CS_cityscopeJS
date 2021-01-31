@@ -146,8 +146,10 @@ async def get_table(
         mods = {}
         for _k in list(cont.keys()):
             k = _k.decode()
-            if re_mod.match(k):
-                mods[re_mod.sub("", k)] = cont.pop(_k)
+            if k in ('Header', 'Geogrid', 'Types'):
+                cont[_k] = json.loads(cont[_k])
+            else:
+                mods[re_mod.sub("", k)] = json.loads(cont.pop(_k))
         return {'Meta': meta, 'Modules': mods, **cont}
     return get_field(db, table, field)
 
@@ -172,7 +174,8 @@ async def post_table(
         str: Response 404
     """
     que = check_bodykeys(body)
-    for field, cont in que:
+    for field, _cont in que:
+        cont = json.dumps(_cont)
         db(1).hset(table, field, cont)
         db(0).hset(table, field, hashlib.sha256(cont.encode()).hexdigest())
     return Response(status_code=status.HTTP_200_OK)
