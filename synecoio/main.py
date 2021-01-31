@@ -18,7 +18,7 @@ async def root():
     Returns:
       Dict[str, str]: Welcome to SynecoAI!!
     """
-    return {'msg': 'welcome to SynecoIO!!'}
+    return {'msg': "welcome to SynecoIO!! documents're located baseurl/docs"}
 
 app.include_router(synecoio.router)
 app.include_router(simio.router)
