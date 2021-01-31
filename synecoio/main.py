@@ -5,6 +5,7 @@ from typing import Optional, List
 
 import routers.cityio as cityio
 import routers.synecoio as synecoio
+import routers.simio as simio
 
 app = FastAPI()
 
@@ -20,4 +21,5 @@ async def root():
     return {'msg': 'welcome to SynecoIO!!'}
 
 app.include_router(synecoio.router)
+app.include_router(simio.router)
 app.include_router(cityio.router)
