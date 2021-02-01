@@ -4,7 +4,7 @@ from starlette.requests import Request
 from typing import Optional, List
 
 import routers.cityio as cityio
-import routers.synecoio as synecoio
+import routers.namaphio as namaphio
 import routers.simio as simio
 
 app = FastAPI()
@@ -16,10 +16,10 @@ async def root():
       Returns constant welcome message. Use this when you check the connection.
 
     Returns:
-      Dict[str, str]: Welcome to SynecoAI!!
+      Dict[str, str]: Welcome to namaphIO!!
     """
-    return {'msg': "welcome to SynecoIO!! documents're located baseurl/docs"}
+    return {'msg': "welcome to namaphIO!! documents're located baseurl/docs"}
 
-app.include_router(synecoio.router)
+app.include_router(namaphio.router)
 app.include_router(simio.router)
 app.include_router(cityio.router)

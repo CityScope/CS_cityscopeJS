@@ -24,6 +24,6 @@ COPY . $WORKDIR
 ENV WORKER 8
 ENV PORT 8080
 ENV HOST 0.0.0.0
-ENV REDISHOST db_redis
+ENV REDISHOST namaphdb
 
 CMD gunicorn -w ${WORKER} -k uvicorn.workers.UvicornWorker main:app --bind ${HOST}:${PORT}
