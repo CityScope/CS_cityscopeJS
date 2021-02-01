@@ -21,6 +21,7 @@ httptools = "*"
 cs-brix = "*"
 jupyterlab = "*"
 neovim = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.8"

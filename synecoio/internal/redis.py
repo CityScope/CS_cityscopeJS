@@ -2,6 +2,8 @@ import redis
 from starlette.requests import Request
 import yaml
 
+import os
+
 from typing import Union, List
 
 
@@ -20,7 +22,7 @@ with open('./config.yml', 'r') as f:
     config = yaml.safe_load(f)['redis']
 
 get_database = register_db(
-    host=config['host'],
-    port=config['port'],
-    db=config['db']
+    host=os.environ.get('REDISHOST', config['host']),
+    port=os.environ.get('REDISPORT', config['port']),
+    db=os.environ.get('REDISDB', config['db']),
 )
