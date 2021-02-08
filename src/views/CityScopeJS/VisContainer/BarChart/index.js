@@ -71,6 +71,7 @@ export default function BarChart(props) {
                                     style={{
                                         text: {
                                             fill: "#FFF",
+                                            fontFamily: "Roboto Mono",
                                         },
                                     }}
                                     tickLabelAngle={90}
@@ -87,9 +88,15 @@ export default function BarChart(props) {
                         </Box>
                         <Box alignContent="center">
                             {hoveredNode && (
-                                <Typography variant="caption" gutterBottom>
-                                    {hoveredNode.x} : {hoveredNode.y}
-                                </Typography>
+                                <>
+                                    <Typography variant="caption" gutterBottom>
+                                        {hoveredNode.x}
+                                    </Typography>
+                                    <Box m={3} />
+                                    <Typography gutterBottom>
+                                        {hoveredNode.y}
+                                    </Typography>
+                                </>
                             )}
                         </Box>
                     </Box>

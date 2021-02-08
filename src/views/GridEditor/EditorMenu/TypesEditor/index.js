@@ -5,6 +5,7 @@ import { Grid, Typography } from "@material-ui/core";
 import {
     listenToRowEdits,
     listeonToTypesList,
+    listenToGridCreator,
 } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
 import settings from "../../GridEditorSettings.json";
@@ -118,7 +119,7 @@ export default function TypesEditor() {
                                         data.push(newData);
                                         return { ...prevState, data };
                                     });
-                                }, 50);
+                                }, 500);
                             }),
                         onRowUpdate: (newData, oldData) =>
                             new Promise((resolve) => {
@@ -137,7 +138,7 @@ export default function TypesEditor() {
 
                                     // dispath change to redux
                                     dispatch(listenToRowEdits(newData));
-                                }, 50);
+                                }, 500);
                             }),
                         onRowDelete: (oldData) =>
                             new Promise((resolve) => {
@@ -148,7 +149,9 @@ export default function TypesEditor() {
                                         data.splice(data.indexOf(oldData), 1);
                                         return { ...prevState, data };
                                     });
-                                }, 50);
+
+                                    dispatch(listenToGridCreator(null));
+                                }, 500);
                             }),
                     }}
                 />

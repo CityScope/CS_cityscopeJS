@@ -13,7 +13,7 @@ const theme = createMuiTheme({
         },
         primary: {
             main: "#FFF",
-            light: "colors.grey[500]",
+            light: "#ff5278",
         },
         secondary: {
             main: "#ff5278",
@@ -49,6 +49,12 @@ const theme = createMuiTheme({
         },
         MuiAppBar: {
             colorPrimary: { backgroundColor: "#18191a", color: "#FFF" },
+        },
+        MuiDivider: {
+            root: {
+                backgroundColor: "#FFF",
+                opacity: 0.1,
+            },
         },
         MuiCard: {
             root: {

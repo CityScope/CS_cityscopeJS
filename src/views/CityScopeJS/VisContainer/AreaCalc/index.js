@@ -16,7 +16,6 @@ export default function AreaCalc(props) {
             let gridProps = props.cityioData.GEOGRID.properties;
             let cellSize = gridProps.header.cellSize;
             let geoGridData = props.cityioData.GEOGRIDDATA;
-            
 
             let calcAreaObj = {};
             geoGridData.forEach((gridCellData) => {
@@ -66,64 +65,64 @@ export default function AreaCalc(props) {
     return (
         <List>
             {areaData && areaData.children && (
-                <>
-                    <ListItem>
-                        {hoveredRadial.name ? (
-                            <Typography gutterBottom>
-                                {hoveredRadial.name}: {hoveredRadial.area} sqm
-                            </Typography>
-                        ) : (
-                            <Typography gutterBottom>
-                                Hover on chart...
-                            </Typography>
-                        )}
-                    </ListItem>
-
-                    <ListItem alignItems="center">
-                        <RadialChart
-                            colorType="literal"
-                            animation={true}
-                            className={"donut-chart-example"}
-                            innerRadius={radialRadius / 2 - radialRadius / 5}
-                            radius={radialRadius / 2}
-                            getLabel={(d) => d.name}
-                            labelsRadiusMultiplier={0.95}
-                            labelsStyle={{
-                                textAnchor: "middle",
-
-                                fontSize: 11,
-                                fill: "#FFF",
-                                textShadow: "2px 2px 2px #000",
-                            }}
-                            showLabels
-                            getAngle={(d) => d.area}
-                            data={areaData.children}
-                            onValueMouseOver={(evt) => setHoveredRadial(evt)}
-                            onSeriesMouseOut={() => setHoveredRadial(false)}
-                            width={radialRadius}
-                            height={radialRadius}
-                            padAngle={0.01}
-                        >
-                            {hoveredRadial !== false && (
-                                <Hint value={hoveredRadial}>
-                                    <div
-                                        style={{
-                                            background: "rgba(0,0,0,0.8)",
-                                            fontSize: 14,
-                                        }}
+                <ListItem alignItems="center">
+                    <RadialChart
+                        colorType="literal"
+                        animation={true}
+                        className={"donut-chart-example"}
+                        innerRadius={radialRadius / 2 - radialRadius / 5}
+                        radius={radialRadius / 2}
+                        getLabel={(d) => d.name}
+                        labelsRadiusMultiplier={0.95}
+                        labelsStyle={{
+                            textAnchor: "middle",
+                            font: "sans-serif",
+                            fontSize: 11,
+                            fill: "#FFF",
+                            textShadow: "2px 2px 2px #000",
+                            fontFamily: "Roboto Mono",
+                        }}
+                        showLabels
+                        getAngle={(d) => d.area}
+                        data={areaData.children}
+                        onValueMouseOver={(evt) => setHoveredRadial(evt)}
+                        onSeriesMouseOut={() => setHoveredRadial(false)}
+                        width={radialRadius}
+                        height={radialRadius}
+                        padAngle={0.01}
+                    >
+                        {hoveredRadial !== false && (
+                            <Hint value={hoveredRadial}>
+                                <div
+                                    style={{
+                                        background: "rgba(0,0,0,0.8)",
+                                        fontSize: 14,
+                                    }}
+                                >
+                                    <Typography
+                                        variant={"caption"}
+                                        gutterBottom
                                     >
-                                        <Typography
-                                            variant={"caption"}
-                                            gutterBottom
-                                        >
-                                            Area: {hoveredRadial.area} sqm
-                                        </Typography>
-                                    </div>
-                                </Hint>
-                            )}
-                        </RadialChart>
+                                        Area: {hoveredRadial.area} sqm
+                                    </Typography>
+                                </div>
+                            </Hint>
+                        )}
+                    </RadialChart>
+                </ListItem>
+            )}
+
+            {hoveredRadial.name && (
+                <List>
+                    <ListItem>
+                        <Typography variant="caption">
+                            {hoveredRadial.name}
+                        </Typography>
                     </ListItem>
-                </>
+                    <ListItem>
+                        <Typography>{hoveredRadial.area} sqm</Typography>
+                    </ListItem>
+                </List>
             )}
         </List>
     );

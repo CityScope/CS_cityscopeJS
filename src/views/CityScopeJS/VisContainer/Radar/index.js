@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { CircularGridLines, RadarChart } from "react-vis";
+import { CircularGridLines, RadarChart, DiscreteColorLegend } from "react-vis";
 import "react-vis/dist/style.css";
 import "./Radar.css";
-import { DiscreteColorLegend } from "react-vis";
 
 const radarSize = 300;
-const colorRange = ["#ff5278", "#52cfff"];
+const colorRange = ["#ff5278", "#660016"];
 
 export default function Radar(props) {
     const [radarData, setRadarData] = useState(null);
@@ -57,10 +56,13 @@ export default function Radar(props) {
                                     opacity: 0,
                                     fontWeight: 700,
                                     fill: "white",
+                                    fontFamily: "Roboto Mono",
                                 },
                                 strokeWidth: 0,
                             },
                             labels: {
+                                fontFamily: "Roboto Mono",
+
                                 textAnchor: "middle",
                                 fontSize: 10,
                                 fill: "white",
@@ -92,6 +94,9 @@ export default function Radar(props) {
                     <DiscreteColorLegend
                         items={["Design", "Reference"]}
                         colors={colorRange}
+                        style={{
+                            fontFamily: "Roboto Mono",
+                        }}
                     />
                 </>
             )}
