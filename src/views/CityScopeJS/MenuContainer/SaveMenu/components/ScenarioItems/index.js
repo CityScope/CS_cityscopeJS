@@ -6,15 +6,12 @@ import {
 } from "../../../../../../redux/actions";
 import axios from "axios";
 import settings from "../../../../../../settings/settings.json";
-import ListItem from "@material-ui/core/ListItem";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import { ListItem, Button, Typography, List } from "@material-ui/core";
 import { _postMapEditsToCityIO } from "../../../../DeckglMap/utils/BaseMapUtils";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { getScenarioIndices } from "../../../../CityIO/utils";
 
 function ScenarioItems(props) {
-    const { toggleDrawer } = props;
     const cityioData = useSelector((state) => state.CITYIO);
     const scenarioNames = useSelector((state) => state.SCENARIO_NAMES);
     const dispatch = useDispatch();
@@ -75,7 +72,6 @@ function ScenarioItems(props) {
                     onClick={() => {
                         dispatch(setLoadingState(true));
                         getScenario(cityioData.tableName, scenario.id);
-                        toggleDrawer();
                     }}
                 >
                     <Typography variant="h6">{scenario.name}</Typography>
@@ -91,7 +87,7 @@ function ScenarioItems(props) {
             </ListItem>
         ));
 
-    return <div>{generateListItems()}</div>;
+    return <List>{generateListItems()}</List>;
 }
 
 export default ScenarioItems;

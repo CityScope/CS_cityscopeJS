@@ -12,11 +12,15 @@ function VisContainer(props) {
                     <ListItem alignItems="center">
                         <AreaCalc cityioData={props.cityIOdata} />
                     </ListItem>
+
                     <Divider />
+
                     <ListItem>
                         <Radar cityioData={props.cityIOdata} />
                     </ListItem>
+
                     <Divider />
+
                     <ListItem>
                         <BarChart cityioData={props.cityIOdata} />
                     </ListItem>

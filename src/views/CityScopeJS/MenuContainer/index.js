@@ -4,7 +4,7 @@ import { listenToMenuUI } from "../../../redux/actions";
 import EditMenu from "./EditMenu";
 import TogglesMenu from "./TogglesMenu";
 import SaveMenu from "./SaveMenu";
-import { Button, List, ListItem } from "@material-ui/core";
+import { Button, Typography, List, ListItem } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import NavigationIcon from "@material-ui/icons/Navigation";
@@ -30,6 +30,9 @@ function MenuContainer(props) {
         <>
             <List>
                 <ListItem>
+                    <Typography variant={"h2"}>Grid Edit</Typography>
+                </ListItem>
+                <ListItem>
                     <Button
                         startIcon={
                             menuState.includes("EDIT") ? (
@@ -52,10 +55,16 @@ function MenuContainer(props) {
                 <EditMenu />
 
                 <ListItem>
+                    <Typography variant={"h2"}>Scenarios</Typography>
+                </ListItem>
+                <ListItem>
                     <SaveMenu
                         tableName={tableName}
                         handleToggle={handleToggle}
                     />
+                </ListItem>
+                <ListItem>
+                    <Typography variant={"h2"}>View Options</Typography>
                 </ListItem>
                 <ListItem>
                     <Button
@@ -70,6 +79,7 @@ function MenuContainer(props) {
                     />
                 </ListItem>
             </List>
+
             <TogglesMenu handleToggle={handleToggle} />
         </>
     );
