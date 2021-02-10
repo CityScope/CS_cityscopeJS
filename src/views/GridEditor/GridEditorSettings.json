@@ -25,6 +25,7 @@
                 "cellSize": 50,
                 "latitude": 42.3664655,
                 "longitude": -71.0854323,
+                "tz":-5,
                 "ncols": 20,
                 "nrows": 20,
                 "rotation": 0,

@@ -28,6 +28,7 @@ export default function GridProps() {
         tableName: "CityScopeJS",
         latitude: settings.GEOGRID.properties.header.latitude,
         longitude: settings.GEOGRID.properties.header.longitude,
+        tz:settings.GEOGRID.properties.header.tz, 
         nrows: settings.GEOGRID.properties.header.nrows,
         ncols: settings.GEOGRID.properties.header.nrows,
         rotation: settings.GEOGRID.properties.header.rotation,
@@ -90,6 +91,20 @@ export default function GridProps() {
                     id="longitude"
                     label="Longitude"
                     defaultValue={formValues.longitude}
+                    type="number"
+                />
+                <TextField
+                    InputProps={{
+                        classes: {
+                            notchedOutline: classes.notchedOutline,
+                        },
+                    }}
+                    onChange={(event) => handleChangeForm(event)}
+                    variant="outlined"
+                    className={classes.textField}
+                    id="tz"
+                    label="Time Zone (GMT)"
+                    defaultValue={formValues.tz}
                     type="number"
                 />
             </div>
