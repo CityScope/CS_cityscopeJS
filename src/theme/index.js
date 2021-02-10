@@ -66,6 +66,11 @@ const theme = createMuiTheme({
             root: {
                 boxShadow:
                     "12px 12px 16px 0 rgba(0,0,0),-8px -8px 12px 0 rgba(40,41,42)",
+                "&:hover": {
+                    boxShadow:
+                        "12px 12px 16px 0  #000,-2px -2px 16px 0  #ff5278",
+                },
+                width: "100%",
             },
         },
     },
