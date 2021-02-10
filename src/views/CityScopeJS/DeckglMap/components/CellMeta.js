@@ -12,7 +12,7 @@ export const CellMeta = (props) => {
     return (
         <div
             style={{
-                borderRadius: "15%",
+                borderRadius: "10%",
                 position: "fixed",
                 pointerEvents: "none",
                 backgroundColor: "rgba(0,0,0,0.5)",
@@ -21,6 +21,7 @@ export const CellMeta = (props) => {
                 zIndex: 1,
                 left: mousePos.clientX,
                 top: mousePos.clientY,
+                fontFamily:'monospace',
                 fontSize: "0.65em",
                 fontWeight: 500,
             }}
