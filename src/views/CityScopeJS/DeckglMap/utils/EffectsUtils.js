@@ -1,6 +1,7 @@
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 
 var currentDateMidnight = new Date();
+// set initial midnight to GMT 0 
 currentDateMidnight.setHours(0, 0, 0, 0);
 
 export const _setupSunEffects = (effectsRef, tableHeader) => {
@@ -23,11 +24,8 @@ export const _setupSunEffects = (effectsRef, tableHeader) => {
     effectsRef.current = [lightingEffect];
 };
 
-export const updateSunDirection = (time, effectsRef) => {
-    console.log(currentDateMidnight);
-    
+export const updateSunDirection = (time, effectsRef) => {    
     const thisLocationTime = currentDateMidnight.getTime() + time * 1000;
-
     var date = new Date(thisLocationTime);
 
     effectsRef.current[0].directionalLights[0].timestamp = Date.UTC(
