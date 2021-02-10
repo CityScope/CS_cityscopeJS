@@ -65,7 +65,7 @@ export default function Map() {
         // fix deck view rotate
         _rightClickViewRotate();
         // setup sun effects
-        _setupSunEffects(effectsRef);
+        _setupSunEffects(effectsRef, cityioData.GEOGRID.properties.header);
         // zoom map on CS table location
         _setViewStateToTableHeader();
         setLoaded(true);
