@@ -4,13 +4,14 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(1),
         position: "fixed",
-        top: "50vh",
-        zIndex: 1000
-    }
+        top: "1vh",
+        zIndex: 5000,
+        maxWidth: "50vw",
+    },
 }));
 
 export default function DeleteLocalStorage() {

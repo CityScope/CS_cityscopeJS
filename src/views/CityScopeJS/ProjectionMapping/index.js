@@ -4,10 +4,6 @@ import { connect } from "react-redux";
 import { ProjectionMapping } from "./ProjectionMapping";
 
 class MapContainer extends Component {
-    _checkKeystone = () => {
-        return this.props.menu.includes("KEYSTONE") ? true : false;
-    };
-
     render() {
         return (
             <div
@@ -22,7 +18,7 @@ class MapContainer extends Component {
                         height: "100vh",
                         width: "100vw",
                     }}
-                    isEditMode={this._checkKeystone()}
+                    isEditMode={true}
                 >
                     <BaseMap
                         menu={this.props.menu}

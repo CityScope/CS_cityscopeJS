@@ -127,23 +127,31 @@ export class ProjectionMapping extends React.Component<Props, State> {
 
             this.targetPoints = [...sourcePoints] as RectPoints;
             this.setState({ sourcePoints });
+
+      if (localStorage.getItem("projMap")) {
+                console.log("loading prev. projMap...");
+                let ls: any = localStorage.getItem("projMap");
+                this.setState(JSON.parse(ls));
+            }  
+
+
         }
     }
     componentDidUpdate(prevProps: any, prevState: State) {
         // if entered keystone mode
-        if (!prevProps.isEditMode && this.props.isEditMode) {
-            // if found prev. keystone data
-            if (localStorage.getItem("projMap")) {
-                console.log("loading prev. projMap...");
-                let ls: any = localStorage.getItem("projMap");
-                this.setState(JSON.parse(ls));
-            }
+        // if (!prevProps.isEditMode && this.props.isEditMode) {
+        //     // if found prev. keystone data
+        //     if (localStorage.getItem("projMap")) {
+        //         console.log("loading prev. projMap...");
+        //         let ls: any = localStorage.getItem("projMap");
+        //         this.setState(JSON.parse(ls));
+        //     }  }
             // if left keystone mode
-        } else if (prevProps.isEditMode && !this.props.isEditMode) {
+        // } else if (prevProps.isEditMode && !this.props.isEditMode) {
             console.log("saving edited projMap...");
             // save whatever keystone was in state
             localStorage.setItem("projMap", JSON.stringify(prevState));
-        }
+      
     }
 
     componentWillUnmount() {

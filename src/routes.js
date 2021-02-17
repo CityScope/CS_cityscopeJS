@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
-import NotFoundView from "./views/NotFound/NotFoundView";
+import NotFoundView from "./views/Errors/NotFoundView";
 import GridEditor from "./views/GridEditor";
 import CityScopeJS from "./views/CityScopeJS";
 import SplashScreen from "./views/SplashScreen";

@@ -4,8 +4,9 @@ import CityIO from "./CityIO/cityIO";
 import MenuContainer from "./MenuContainer";
 import MapContainer from "./DeckglMap";
 import LoadingSpinner from "./CityIO/LoadingSpinner";
-import MissingTableInfo from "./MissingTableInfo";
+import MissingTableInfo from "../Errors/MissingTableInfo";
 import VisContainer from "./VisContainer";
+import ProjectionMapping from "./ProjectionMapping";
 
 import {
     makeStyles,
@@ -53,6 +54,7 @@ export default function CityScopeJS() {
                 {tableName && <CityIO tableName={tableName} />}
                 {isReady && (
                     <>
+                        {/* <ProjectionMapping/> */}
                         <Grid container spacing={5}>
                             <Grid item xs={6} l={3} md={3} xl={2} container>
                                 <Grid
