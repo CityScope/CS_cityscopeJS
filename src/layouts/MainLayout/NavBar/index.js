@@ -40,9 +40,11 @@ const items = [
 
 const useStyles = makeStyles(() => ({
     mobileDrawer: {
-        width: "50vw",
+        width: "30vw",
         top: 48,
         height: "calc(100% - 48px)",
+        boxShadow:
+            "22px 22px 22px 0 rgba(0,0,0)",
     },
 }));
 
@@ -100,6 +102,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
                 classes={{ paper: classes.mobileDrawer }}
                 onClose={onMobileClose}
                 open={openMobile}
+                elevation={10}
                 variant="persistent"
             >
                 {content}
