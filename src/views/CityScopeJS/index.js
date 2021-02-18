@@ -54,7 +54,7 @@ export default function CityScopeJS() {
                 {tableName && <CityIO tableName={tableName} />}
                 {isReady && (
                     <>
-                        <ProjectionMapping />
+                        {/* <ProjectionMapping /> */}
                         <Grid container spacing={5}>
                             <Grid item xs={6} l={3} md={3} xl={2} container>
                                 <Grid
