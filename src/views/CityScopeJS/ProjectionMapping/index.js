@@ -1,31 +1,41 @@
 import React, { Component } from "react";
-import BaseMap from "../DeckglMap";
 import { connect } from "react-redux";
-import { ProjectionMapping } from "./ProjectionMapping";
+import PrjDeckGLMap from "./Components/PrjDeckGLMap";
+import Keystoner from "./Components/Keystoner";
+import DeleteLocalStorage from "./Components/deleteLocalStorage";
 
-class MapContainer extends Component {
+class ProjectionMapping extends Component {
+    _clearLocalStraoge = () => {
+        if (localStorage.getItem("projMap")) {
+            localStorage.removeItem("projMap");
+        }
+        window.location.reload();
+    };
     render() {
         return (
-            <div
-                style={{
-                    height: "100vh",
-                    width: "100vw",
-                    overflow: "hidden",
-                }}
-            >
-                <ProjectionMapping
+            <>
+                <div onClick={() => this._clearLocalStraoge()}>
+                    <DeleteLocalStorage />
+                </div>
+
+                <div
                     style={{
                         height: "100vh",
                         width: "100vw",
+                        overflow: "hidden",
                     }}
-                    isEditMode={true}
                 >
-                    <BaseMap
-                        menu={this.props.menu}
-                        selectedType={this.props.selectedType}
-                    />
-                </ProjectionMapping>
-            </div>
+                    <Keystoner
+                        style={{
+                            height: "100vh",
+                            width: "100vw",
+                        }}
+                        isEditMode={true}
+                    >
+                        <PrjDeckGLMap menu={this.props.menu} />
+                    </Keystoner>
+                </div>
+            </>
         );
     }
 }
@@ -33,8 +43,7 @@ class MapContainer extends Component {
 const mapStateToProps = (state) => {
     return {
         menu: state.MENU,
-        selectedType: state.SELECTED_TYPE,
     };
 };
 
-export default connect(mapStateToProps, null)(MapContainer);
+export default connect(mapStateToProps, null)(ProjectionMapping);

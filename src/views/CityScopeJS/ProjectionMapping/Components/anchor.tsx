@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Anchor, Vector } from "./ProjectionMapping";
+import { Anchor, Vector } from "./Keystoner";
 import { vectorToTransform } from "./util";
 
 const anchorSize = 30;

@@ -1,4 +1,4 @@
-import { Matrix3d, RectPoints, Vector } from "./ProjectionMapping";
+import { Matrix3d, RectPoints, Vector } from "./Keystoner";
 const { solve } = require("numeric");
 
 export const round = (num: number, precision: number) => {

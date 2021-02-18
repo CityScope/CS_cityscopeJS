@@ -6,7 +6,6 @@ import {
     vectorToTransform,
 } from "./util";
 
-import DeleteLocalStorage from "./deleteLocalStorage";
 
 // Component interfaces
 export interface Props {
@@ -98,7 +97,7 @@ const _setDeltaVal = () => {
     return deltaInitVals;
 };
 
-export class ProjectionMapping extends React.Component<Props, State> {
+export default class Keystoner extends React.Component<Props, State> {
     container: HTMLElement | null;
     layerTranslateDelta: Vector | undefined;
     anchorTranslateDelta: Vector | undefined;
@@ -138,17 +137,8 @@ export class ProjectionMapping extends React.Component<Props, State> {
         }
     }
     componentDidUpdate(prevProps: any, prevState: State) {
-        // if entered keystone mode
-        // if (!prevProps.isEditMode && this.props.isEditMode) {
-        //     // if found prev. keystone data
-        //     if (localStorage.getItem("projMap")) {
-        //         console.log("loading prev. projMap...");
-        //         let ls: any = localStorage.getItem("projMap");
-        //         this.setState(JSON.parse(ls));
-        //     }  }
-            // if left keystone mode
-        // } else if (prevProps.isEditMode && !this.props.isEditMode) {
-            console.log("saving edited projMap...");
+
+            console.log("saving edited projMap...", JSON.stringify(prevState));
             // save whatever keystone was in state
             localStorage.setItem("projMap", JSON.stringify(prevState));
       
@@ -233,12 +223,8 @@ export class ProjectionMapping extends React.Component<Props, State> {
         ];
     };
 
-    _clearLocalStraoge = () => {
-        if (localStorage.getItem("projMap")) {
-            localStorage.removeItem("projMap");
-        }
-        window.location.reload();
-    };
+
+
 
     render() {
         const {
@@ -256,12 +242,9 @@ export class ProjectionMapping extends React.Component<Props, State> {
         } = this.state;
 
         return (
-            <React.Fragment>
-                {isEditMode && (
-                    <div onClick={() => this._clearLocalStraoge()}>
-                        <DeleteLocalStorage />
-                    </div>
-                )}
+            <>
+              
+         
 
                 <div
                     onMouseDown={this.onMouseDown}
@@ -304,7 +287,7 @@ export class ProjectionMapping extends React.Component<Props, State> {
                         </div>
                     )}
                 </div>
-            </React.Fragment>
+            </>
         );
     }
 }
