@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useEffect, forwardRef } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 import { css } from "@emotion/core";
 import io from "socket.io-client";
@@ -38,19 +38,13 @@ const WebSocket = (props, ref) => {
     });
     
     client.on("roboscopeInput", (data) => {
-      let dataProps = this.props.GEOGRID; 
-      for (let i = 0; i < data.length; i++) {
-        dataProps.features[data[i].id].properties = data[i]
+      if (props.GEOGRID!=null) {
+        let dataProps = props.GEOGRID; 
+        for (let i = 0; i < data.length; i++) {
+          dataProps.features[data[i].id].properties = data[i]
+        }
+        props.onChange(dataProps, data);
       }
-      this.props.onChange(dataProps, data);
-    });
-    
-    client.on("waveTest", (data) => {
-      let dataProps = this.props.GEOGRID; 
-      for (let i = 0; i < data.length; i++) {
-        dataProps.features[data[i].id].properties = data[i]
-      } 
-      this.props.onChange(dataProps, data);  
     });
   }, [props.GEOGRID]);
 
