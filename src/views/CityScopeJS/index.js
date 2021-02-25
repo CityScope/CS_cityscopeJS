@@ -6,7 +6,7 @@ import MapContainer from "./DeckglMap";
 import LoadingSpinner from "./CityIO/LoadingSpinner";
 import MissingTableInfo from "../Errors/MissingTableInfo";
 import VisContainer from "./VisContainer";
-import ProjectionMapping from "./ProjectionMapping";
+// import ProjectionMapping from "./ProjectionMapping";
 
 import {
     makeStyles,

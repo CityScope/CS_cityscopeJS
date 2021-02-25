@@ -18,7 +18,7 @@ const MissingTableInfo = () => {
                     Enter your CityScopeJS project name in the search bar:
                 </Typography>
                 <Typography align="center" variant="h5" color="textSecondary">
-                    (this page URL)/csjs?cityscope=projectName
+                    (this page URL)/CS_CityScopeJS/?cityscope=projectName
                 </Typography>
             </Container>
         </Box>
