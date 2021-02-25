@@ -1,26 +1,26 @@
 {
   "files": {
     "main.css": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/css/main.257161ce.chunk.css",
-    "main.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/main.7034e610.chunk.js",
-    "main.js.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/main.7034e610.chunk.js.map",
+    "main.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/main.341739c8.chunk.js",
+    "main.js.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/main.341739c8.chunk.js.map",
     "runtime-main.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/runtime-main.4081efb7.js",
     "runtime-main.js.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/runtime-main.4081efb7.js.map",
     "static/css/2.701f8b04.chunk.css": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/css/2.701f8b04.chunk.css",
-    "static/js/2.672456f0.chunk.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/2.672456f0.chunk.js",
-    "static/js/2.672456f0.chunk.js.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/2.672456f0.chunk.js.map",
+    "static/js/2.8ac2e442.chunk.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/2.8ac2e442.chunk.js",
+    "static/js/2.8ac2e442.chunk.js.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/2.8ac2e442.chunk.js.map",
     "index.html": "https://cityscope.media.mit.edu/CS_cityscopeJS/index.html",
-    "precache-manifest.c3870027b0e7da41473fb94511a2c3db.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/precache-manifest.c3870027b0e7da41473fb94511a2c3db.js",
+    "precache-manifest.387f9a79996fe5ffde9194c88fe088b5.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/precache-manifest.387f9a79996fe5ffde9194c88fe088b5.js",
     "service-worker.js": "https://cityscope.media.mit.edu/CS_cityscopeJS/service-worker.js",
     "static/css/2.701f8b04.chunk.css.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/css/2.701f8b04.chunk.css.map",
     "static/css/main.257161ce.chunk.css.map": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/css/main.257161ce.chunk.css.map",
-    "static/js/2.672456f0.chunk.js.LICENSE.txt": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/2.672456f0.chunk.js.LICENSE.txt",
-    "static/js/main.7034e610.chunk.js.LICENSE.txt": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/main.7034e610.chunk.js.LICENSE.txt"
+    "static/js/2.8ac2e442.chunk.js.LICENSE.txt": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/2.8ac2e442.chunk.js.LICENSE.txt",
+    "static/js/main.341739c8.chunk.js.LICENSE.txt": "https://cityscope.media.mit.edu/CS_cityscopeJS/static/js/main.341739c8.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.4081efb7.js",
     "static/css/2.701f8b04.chunk.css",
-    "static/js/2.672456f0.chunk.js",
+    "static/js/2.8ac2e442.chunk.js",
     "static/css/main.257161ce.chunk.css",
-    "static/js/main.7034e610.chunk.js"
+    "static/js/main.341739c8.chunk.js"
   ]
 }
