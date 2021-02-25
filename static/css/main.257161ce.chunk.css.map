@@ -1,0 +1,1 @@
+{"version":3,"sources":["Radar.css"],"names":[],"mappings":"AAAA,wBACI,cACJ,CACA,8BACI,eACJ,CACA,+BACI,WACJ","file":"main.257161ce.chunk.css","sourcesContent":[".rv-xy-plot__axis__line {\n    stroke-width: 1;\n}\n.rv-xy-plot__axis__tick__line {\n    stroke-width: 0.5;\n}\n.rv-discrete-color-legend-item {\n    color: azure;\n}\n"]}
