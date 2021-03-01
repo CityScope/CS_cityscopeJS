@@ -1,17 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Router from "./components/Router/Router";
+import { HashRouter } from "react-router-dom";
 
-const root = document.getElementById("root");
-const render = () => {
-    return ReactDOM.render(<Router />, root);
-};
+import App from "./App";
+import Provider from "./redux/Provider";
+import store from "./redux/store";
 
-render(Router);
+// ! basename={process.env.PUBLIC_URL}
 
-if (module.hot) {
-    module.hot.accept(Router, () => {
-        const hotModule = require("./components/Router/Router").default;
-        render(hotModule);
-    });
-}
+ReactDOM.render(
+    <Provider store={store}>
+        {/* https://github.com/facebook/create-react-app/issues/1765 */}
+        <HashRouter basename={process.env.PUBLIC_URL}>
+            <App />
+        </HashRouter>
+    </Provider>,
+    document.getElementById("root")
+);

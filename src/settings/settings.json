@@ -52,11 +52,6 @@
                 "showOnInit": false,
                 "requireModule": "access"
             },
-            "RADAR": {
-                "displayName": "Urban Indicators",
-                "showOnInit": false,
-                "requireModule": "indicators"
-            },
             "ROTATE": {
                 "displayName": "Rotate Camera",
                 "showOnInit": false,
@@ -66,19 +61,14 @@
                 "displayName": "Toggle Shadows",
                 "showOnInit": true,
                 "requireModule": "GEOGRID"
-            },
-            "KEYSTONE": {
-                "displayName": "Projection Mapping",
-                "showOnInit": false,
-                "requireModule": false
             }
+           
         }
     },
 
     "map": {
         "mapStyle": {
             "sat": "mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd?fresh=true",
-            "dark": "mapbox://styles/relnox/cjl58dpkq2jjp2rmzyrdvfsds?fresh=true",
             "blue": "mapbox://styles/relnox/ck0h5xn701bpr1dqs3he2lecq?fresh=true"
         },
         "layers": {
