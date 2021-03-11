@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import GitHubIcon from "@material-ui/icons/GitHub";
+import FormatShapesIcon from "@material-ui/icons/FormatShapes";
 import {
     Box,
     Drawer,
@@ -36,6 +37,11 @@ const items = [
         icon: BarChartIcon,
         title: "Grid Editor",
     },
+    {
+        href: "/projection",
+        icon: FormatShapesIcon,
+        title: "Projection Mapping",
+    },
 ];
 
 const useStyles = makeStyles(() => ({
@@ -43,8 +49,7 @@ const useStyles = makeStyles(() => ({
         width: "30vw",
         top: 48,
         height: "calc(100% - 48px)",
-        boxShadow:
-            "22px 22px 22px 0 rgba(0,0,0)",
+        boxShadow: "22px 22px 22px 0 rgba(0,0,0)",
     },
 }));
 
