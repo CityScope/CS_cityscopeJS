@@ -2,8 +2,8 @@ import * as React from "react";
 import { Anchor, Vector } from "./Keystoner";
 import { vectorToTransform } from "./util";
 
-const anchorSize = 10;
-const halfAnchor = anchorSize / 2;
+const anchorSize = 20;
+const halfAnchor = anchorSize / 1.5;
 
 const styles = {
     container: {
@@ -11,7 +11,7 @@ const styles = {
         height: anchorSize,
         borderRadius: "50%",
         position: "absolute" as "absolute",
-        border: "4px solid white",
+        border: "1px solid white",
         cursor: "move",
     },
     "top-left": {

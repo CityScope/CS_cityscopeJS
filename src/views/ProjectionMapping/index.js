@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import CityIO from "./CityIO";
-import MissingTableInfo from "../Errors/MissingTableInfo";
 import Keystone from "./Keystone";
 
 export default function CityScopeJS() {
@@ -10,8 +9,7 @@ export default function CityScopeJS() {
 
     return (
         <>
-            {!isReady && <MissingTableInfo />}
-            <CityIO tableName={"cityscopejs"} />
+            <CityIO tableName={"corktown"} />
             {isReady && <Keystone />}
         </>
     );

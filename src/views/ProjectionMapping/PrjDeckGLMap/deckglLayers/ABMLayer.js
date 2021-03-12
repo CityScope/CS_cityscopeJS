@@ -13,7 +13,7 @@ export default function ABMLayer({
     cityioData,
     ABMmode,
     zoomLevel,
-    sliders,
+    time,
 }) {
     return new TripsLayer({
         id: "ABM",
@@ -30,7 +30,7 @@ export default function ABMLayer({
         opacity: 0.8,
         rounded: true,
         trailLength: 500,
-        currentTime: sliders.time[1],
+        currentTime: time,
 
         updateTriggers: {
             getColor: ABMmode,

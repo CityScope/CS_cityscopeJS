@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         position: "fixed",
         top: "1vh",
-        zIndex: 5000,
+        zIndex: 9999,
         maxWidth: "50vw",
     },
 }));
