@@ -1,5 +1,5 @@
 import { TripsLayer } from "@deck.gl/geo-layers";
-import { hexToRgb } from "../utils/BaseMapUtils";
+import { hexToRgb } from "../BaseMapUtils";
 
 //  * remap line width
 const _remapValues = (value) => {

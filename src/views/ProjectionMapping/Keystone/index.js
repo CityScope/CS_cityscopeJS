@@ -1,49 +1,43 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PrjDeckGLMap from "./Components/PrjDeckGLMap";
+import React from "react";
+import PrjDeckGLMap from "../PrjDeckGLMap";
 import Keystoner from "./Components/Keystoner";
 import DeleteLocalStorage from "./Components/deleteLocalStorage";
 
-class Keystone extends Component {
-    _clearLocalStraoge = () => {
+export default function Keystone(props) {
+    const clearLocalStraoge = () => {
         if (localStorage.getItem("projMap")) {
             localStorage.removeItem("projMap");
         }
         window.location.reload();
     };
-    render() {
-        return (
-            <>
-                <div onClick={() => this._clearLocalStraoge()}>
-                    <DeleteLocalStorage />
-                </div>
 
-                <div
+    return (
+        <>
+            <div onClick={() => clearLocalStraoge()}>
+                <DeleteLocalStorage />
+            </div>
+
+            <div
+                style={{
+                    height: "100vh",
+                    width: "100vw",
+                    overflow: "hidden",
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    zIndex: 9999,
+                }}
+            >
+                <Keystoner
                     style={{
                         height: "100vh",
                         width: "100vw",
-                        overflow: "hidden",
                     }}
+                    isEditMode={true}
                 >
-                    <Keystoner
-                        style={{
-                            height: "100vh",
-                            width: "100vw",
-                        }}
-                        isEditMode={true}
-                    >
-                        <PrjDeckGLMap menu={this.props.menu} />
-                    </Keystoner>
-                </div>
-            </>
-        );
-    }
+                    <PrjDeckGLMap />
+                </Keystoner>
+            </div>
+        </>
+    );
 }
-
-const mapStateToProps = (state) => {
-    return {
-        menu: state.MENU,
-    };
-};
-
-export default connect(mapStateToProps, null)(Keystone);

@@ -1,9 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import CityIO from "./CityIO/cityIO";
-import LoadingSpinner from "./CityIO/LoadingSpinner";
+import CityIO from "./CityIO";
 import MissingTableInfo from "../Errors/MissingTableInfo";
-import ProjectionMapping from "./Keystone";
+import Keystone from "./Keystone";
 
 export default function CityScopeJS() {
     // wait for 'ready' flag from cityIO when app is ready to start
@@ -13,8 +12,7 @@ export default function CityScopeJS() {
         <>
             {!isReady && <MissingTableInfo />}
             <CityIO tableName={"cityscopejs"} />
-            {isReady && <ProjectionMapping />}
-            <LoadingSpinner />
+            {isReady && <Keystone />}
         </>
     );
 }

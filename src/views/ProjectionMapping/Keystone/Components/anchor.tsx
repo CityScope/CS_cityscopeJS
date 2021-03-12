@@ -2,7 +2,7 @@ import * as React from "react";
 import { Anchor, Vector } from "./Keystoner";
 import { vectorToTransform } from "./util";
 
-const anchorSize = 30;
+const anchorSize = 10;
 const halfAnchor = anchorSize / 2;
 
 const styles = {

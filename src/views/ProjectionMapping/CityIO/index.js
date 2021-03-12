@@ -5,12 +5,10 @@ import {
     getCityioData,
     setReadyState,
     setLoadingState,
-    setScenarioNames,
     addLoadingModules,
     removeLoadingModules,
 } from "../../../redux/actions";
 import settings from "../../../settings/settings.json";
-import { getScenarioIndices } from "./utils";
 
 const getAPICall = async (URL) => {
     try {
@@ -37,7 +35,7 @@ export default function CityIO(props) {
      */
     useEffect(() => {
         const timer = setTimeout(update, settings.cityIO.interval);
-        console.log("reading cityIO every" + settings.cityIO.interval + "ms");
+        console.log("reading cityIO every -> " + settings.cityIO.interval + "ms");
         return () => clearTimeout(timer);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -98,10 +96,7 @@ export default function CityIO(props) {
         }
         // reset the state of loading flag
         dispatch(setLoadingState(true));
-        // set Scenario Names and Ids
-        getScenarioIndices(tableName, (data) =>
-            dispatch(setScenarioNames(data))
-        );
+        
         getModules();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hashId]);

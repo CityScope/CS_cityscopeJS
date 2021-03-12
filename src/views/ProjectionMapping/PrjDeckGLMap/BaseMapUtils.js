@@ -1,7 +1,7 @@
 import axios from "axios";
-import { addLoadingModules } from "../../../../redux/actions";
-import store from "../../../../redux/store";
-import settings from "../../../../settings/settings.json";
+import { addLoadingModules } from "../../../redux/actions";
+import store from "../../../redux/store";
+import settings from "../../../settings/settings.json";
 
 /**
  * conver rgb to hex

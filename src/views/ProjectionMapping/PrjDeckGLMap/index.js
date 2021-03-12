@@ -3,21 +3,21 @@ import { useSelector } from "react-redux";
 import {
     _proccessAccessData,
     _proccessGridData,
-} from "../../DeckglMap/utils/BaseMapUtils";
+} from "../../CityScopeJS/DeckglMap/utils/BaseMapUtils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
-import settings from "../../../../settings/settings.json";
+import settings from "../../../settings/settings.json";
 import {
     updateSunDirection,
     _setupSunEffects,
-} from "../../DeckglMap/utils/EffectsUtils";
+} from "../../CityScopeJS/DeckglMap/utils/EffectsUtils";
 import {
     AccessLayer,
     AggregatedTripsLayer,
     ABMLayer,
     GridLayer,
-} from "../../DeckglMap/deckglLayers";
+} from "./deckglLayers";
 
 export default function PrjDeckGLMap() {
     const [viewState, setViewState] = useState(settings.map.initialViewState);
@@ -36,14 +36,7 @@ export default function PrjDeckGLMap() {
         accessToggle,
         selectedType,
         ABMmode,
-    ] = useSelector((state) => [
-        state.CITYIO,
-        state.SLIDERS,
-        state.MENU,
-        state.ACCESS_TOGGLE,
-        state.SELECTED_TYPE,
-        state.ABM_MODE,
-    ]);
+    ] = useSelector((state) => [state.CITYIO, state.SLIDERS, state.MENU]);
 
     useEffect(() => {
         // fix deck view rotate
