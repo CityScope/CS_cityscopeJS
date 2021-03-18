@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 import settings from "../../../../../../settings/settings.json";
 import { ListItem, Button, Typography, List } from "@material-ui/core";
-import { _postMapEditsToCityIO } from "../../../../DeckglMap/utils/BaseMapUtils";
+import { _postMapEditsToCityIO } from "../../../../../../utils/utils";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { getScenarioIndices } from "../../../../CityIO/utils";
 

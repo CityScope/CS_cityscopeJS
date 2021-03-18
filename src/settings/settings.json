@@ -3,6 +3,7 @@
 
     "cityIO": {
         "baseURL": "https://cityio.media.mit.edu/api/table/",
+        "ListOfTables": "https://cityio.media.mit.edu/api/tables/list/",
         "interval": 500,
         "cityIOmodules": [
             { "name": "header", "expectUpdate": false },

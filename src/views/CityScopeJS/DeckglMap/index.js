@@ -6,13 +6,13 @@ import {
     _proccessAccessData,
     _proccessGridData,
     _postMapEditsToCityIO,
-} from "./utils/BaseMapUtils";
+} from "../../../utils/utils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import settings from "../../../settings/settings.json";
 import AnimationComponent from "./components/AnimationComponent";
-import { updateSunDirection, _setupSunEffects } from "./utils/EffectsUtils";
+import { updateSunDirection, _setupSunEffects } from "../../../utils/utils";
 import {
     AccessLayer,
     AggregatedTripsLayer,

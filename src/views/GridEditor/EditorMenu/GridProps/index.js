@@ -7,6 +7,7 @@ import CommitGrid from "./CommitGrid";
 import CenterMapButton from "./CenterMapButton/CenterMapButton";
 import settings from "../../GridEditorSettings.json";
 
+
 export default function GridProps() {
     const useStyles = makeStyles((theme) => ({
         notchedOutline: {

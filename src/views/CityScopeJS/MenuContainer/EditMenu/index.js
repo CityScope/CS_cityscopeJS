@@ -17,7 +17,7 @@ import {
 import Divider from "@material-ui/core/Divider";
 import { listenToEditMenu } from "../../../../redux/actions";
 import { connect } from "react-redux";
-import { testHex, hexToRgb } from "../../DeckglMap/utils/BaseMapUtils";
+import { testHex, hexToRgb } from "../../../../utils/utils";
 import TypeInfo from "./TypeInfo";
 
 function EditMenu(props) {

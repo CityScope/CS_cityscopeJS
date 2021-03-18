@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import {
-    _proccessAccessData,
-    _proccessGridData,
-} from "../../CityScopeJS/DeckglMap/utils/BaseMapUtils";
+import { _proccessAccessData, _proccessGridData } from "../../../utils/utils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import settings from "../../../settings/settings.json";
-import { _setupSunEffects } from "../../CityScopeJS/DeckglMap/utils/EffectsUtils";
+import { _setupSunEffects } from "../../../utils/utils";
 import {
     AccessLayer,
     AggregatedTripsLayer,
@@ -27,6 +24,18 @@ export default function PrjDeckGLMap() {
     const deckGL = useRef();
 
     const [cityioData] = useSelector((state) => [state.CITYIO]);
+
+    useEffect(() => {
+        // fix deck view rotate
+        _rightClickViewRotate();
+        // setup sun effects
+        _setupSunEffects(effectsRef, cityioData.GEOGRID.properties.header);
+        // zoom map on CS table location
+        _setViewStateToTableHeader();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        effectsRef.current[0].shadowColor = [0, 0, 0, 1];
+    }, []);
 
     useEffect(() => {
         // fix deck view rotate

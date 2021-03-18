@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { rgbToHex } from "../../DeckglMap/utils/BaseMapUtils";
+import { rgbToHex } from "../../../../utils/utils";
 import { RadialChart, Hint } from "react-vis";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";

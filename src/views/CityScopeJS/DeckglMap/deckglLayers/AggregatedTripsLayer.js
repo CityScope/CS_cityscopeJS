@@ -1,5 +1,5 @@
 import { PathLayer } from "deck.gl";
-import { hexToRgb } from "../utils/BaseMapUtils";
+import { hexToRgb } from "../../../../utils/utils";
 
 export default function AggregatedTripsLayer({ data, cityioData, ABMmode }) {
     return new PathLayer({
