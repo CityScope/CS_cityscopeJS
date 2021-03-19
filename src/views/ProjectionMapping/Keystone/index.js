@@ -15,7 +15,7 @@ export default function Keystone(props) {
 
     useEffect(() => {
         const onKeyDown = ({ key }) => {
-            if (key == " ") {
+            if (key === " ") {
                 setEditMode((editMode) => !editMode);
                 console.log(key, editMode);
             }
@@ -24,7 +24,7 @@ export default function Keystone(props) {
         return () => {
             document.removeEventListener("keydown", onKeyDown);
         };
-    }, []);
+    }, [editMode]);
 
     return (
         <>
