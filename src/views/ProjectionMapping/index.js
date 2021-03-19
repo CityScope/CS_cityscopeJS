@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import CityIO from "./CityIO";
 import Keystone from "./Keystone";
@@ -22,31 +22,35 @@ export default function CityScopeJS() {
 
     const [selectedTable, setSelectedTable] = useState(null);
 
+    const ListOfTables = () => {
+        return (
+            <Container maxWidth="md" className={classes.content}>
+                <Typography color="textPrimary" variant="h1">
+                    Projection tool
+                </Typography>
+                <Box mt={"3em"} />
+                <Typography color="textPrimary">
+                    This tool is used to project and display CityScopeJS tables
+                    in passive mode, such as projectors, TVs, or other
+                    non-interactive displays.
+                </Typography>
+                <Box mt={"2em"} />
+                <Typography color="textPrimary" variant="caption">
+                    start by selecting your CityScopeJS project. Press 'Spacebar' to toggle keystone.
+                    Note: Not all CityScope projects below are ready for CityScopeJS.
+                </Typography>
+                <Box mt={"2em"} />
+                <TableNameInput setSelectedTable={setSelectedTable} />
+            </Container>
+        );
+    };
+
     const classes = useStyles();
     return (
         <Page className={classes.root} title="Home">
+            {!isCityIOready && <ListOfTables />}
             {selectedTable && <CityIO tableName={selectedTable} />}
             {isCityIOready && selectedTable && <Keystone />}
-            {!isCityIOready && (
-                <Container maxWidth="lg" className={classes.content}>
-                    <Typography color="textPrimary" variant="h1">
-                        Projection tool
-                    </Typography>
-                    <Box mt={"3em"} />
-                    <Typography color="textPrimary">
-                        This tool is used to project and display CityScopeJS
-                        tables in passive mode, such as projectors, TVs, or
-                        other non-interactive displays.
-                    </Typography>
-                    <Box mt={"2em"} />
-                    <Typography color="textPrimary" variant="caption">
-                        start by selecting your CityScopeJS project. Note: Not
-                        all CityScope projects below are ready for CityScopeJS.
-                    </Typography>
-                    <Box mt={"2em"} />
-                    <TableNameInput setSelectedTable={setSelectedTable} />
-                </Container>
-            )}
         </Page>
     );
 }

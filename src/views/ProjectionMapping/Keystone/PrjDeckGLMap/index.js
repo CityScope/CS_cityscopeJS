@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { _proccessAccessData, _proccessGridData } from "../../../utils/utils";
+import { _proccessAccessData, _proccessGridData, _setupSunEffects } from "../../../../utils/utils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
-import settings from "../../../settings/settings.json";
-import { _setupSunEffects } from "../../../utils/utils";
+import settings from "../../../../settings/settings.json";
+
 import {
     AccessLayer,
     AggregatedTripsLayer,

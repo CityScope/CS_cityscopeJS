@@ -1,5 +1,5 @@
 import { HeatmapLayer } from "deck.gl";
-import settings from "../../../../settings/settings.json";
+import settings from "../../../../../settings/settings.json";
 
 export default function AccessLayer({ data, accessToggle }) {
     return new HeatmapLayer({

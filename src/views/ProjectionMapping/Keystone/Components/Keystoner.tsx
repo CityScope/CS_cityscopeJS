@@ -247,6 +247,7 @@ console.log(sourcePoints)
          
 
                 <div
+          
                     onMouseDown={this.onMouseDown}
                     onMouseUp={this.onMouseUp}
                     style={{
