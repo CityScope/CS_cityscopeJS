@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import settings from "../../settings/settings.json";
-import { Button, Box } from "@material-ui/core/";
+import { Button } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +49,7 @@ export default function TableNameInput({ setSelectedTable }) {
                                         "GEOGRID"
                                 )
                                 .then((res) => {
-                                    if (res.status == 200) {
+                                    if (res.status === 200) {
                                         setSelectedTable(tableName);
                                     }
                                 })
@@ -64,7 +64,7 @@ export default function TableNameInput({ setSelectedTable }) {
             });
             setTableList(buttonsArr);
         });
-    }, []);
+    }, [setSelectedTable]);
 
     return <div className={classes.root}>{tableList}</div>;
 }
