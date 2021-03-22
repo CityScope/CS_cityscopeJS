@@ -123,7 +123,6 @@ export default class Keystoner extends React.Component<Props, State> {
                 [width, height],
                 [0, height],
             ] as RectPoints;
-console.log(sourcePoints)
             this.targetPoints = [...sourcePoints] as RectPoints;
             this.setState({ sourcePoints });
 

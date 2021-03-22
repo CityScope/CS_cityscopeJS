@@ -32,8 +32,18 @@ export default function PrjDeckGLMap(props) {
         _rightClickViewRotate();
         // setup sun effects
         _setupSunEffects(effectsRef, cityioData.GEOGRID.properties.header);
-        // zoom map on CS table location
-        _setViewStateToTableHeader();
+
+        // on init, check if prev. local storage with
+        // view state exist. If so, load it.
+        if (localStorage.getItem("deckGLviewState")) {
+            console.log("loading prev. deckGLviewState...");
+            let vs = localStorage.getItem("deckGLviewState");
+            setViewState(JSON.parse(vs));
+        } else {
+            // zoom map on CS table location
+            _setViewStateToTableHeader();
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
         effectsRef.current[0].shadowColor = [0, 0, 0, 1];
     }, []);
@@ -49,6 +59,9 @@ export default function PrjDeckGLMap(props) {
     }, [cityioData]);
 
     const onViewStateChange = ({ viewState }) => {
+        //    save current view state to local sotrage
+        localStorage.setItem("deckGLviewState", JSON.stringify(viewState));
+
         setViewState(viewState);
     };
 
@@ -84,7 +97,7 @@ export default function PrjDeckGLMap(props) {
         AGGREGATED_TRIPS: AggregatedTripsLayer({
             active: viewSettings.AggregatedTripsLayer.active,
             data: ABM.trips,
-            cityioData:cityioData,
+            cityioData: cityioData,
             ABMmode: viewSettings.AggregatedTripsLayer.ABMmode,
         }),
         GRID: GridLayer({
