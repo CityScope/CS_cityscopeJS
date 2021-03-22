@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import settings from "../../settings/settings.json";
+import settings from "../settings/settings.json";
 import { Button } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 

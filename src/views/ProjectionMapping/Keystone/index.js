@@ -4,13 +4,32 @@ import Keystoner from "./Components/Keystoner";
 import DeleteLocalStorage from "./Components/deleteLocalStorage";
 
 export default function Keystone(props) {
+    const viewSettings = {
+        ABMLayer: {
+            active: true,
+            ABMmode: "mode",
+            zoomLevel: 12,
+            time: 42000,
+        },
+        AggregatedTripsLayer: {
+            active: true,
+            ABMmode: "mode",
+        },
+        GridLayer: {
+            active: true,
+        },
+        AccessLayer: {
+            active: true,
+            accessToggle: 0,
+        },
+    };
+
     const clearLocalStraoge = () => {
         if (localStorage.getItem("projMap")) {
             localStorage.removeItem("projMap");
         }
         window.location.reload();
     };
-
     const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
@@ -57,7 +76,7 @@ export default function Keystone(props) {
                         }}
                         isEditMode={editMode}
                     >
-                        <PrjDeckGLMap />
+                        <PrjDeckGLMap viewSettings={viewSettings} />
                     </Keystoner>
                 </div>
             </div>

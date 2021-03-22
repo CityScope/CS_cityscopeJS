@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import CityIO from "./CityIO";
+import CityIO from "./CityIO/";
 import Keystone from "./Keystone";
 import { Container, Typography, makeStyles, Box } from "@material-ui/core";
-import TableNameInput from "./TableNameInput";
+import TableNameInput from "../../Components/TableNameInput";
 import Page from "../../layouts/Page";
 
 export default function CityScopeJS() {
@@ -36,8 +36,9 @@ export default function CityScopeJS() {
                 </Typography>
                 <Box mt={"2em"} />
                 <Typography color="textPrimary" variant="caption">
-                    start by selecting your CityScopeJS project. Press 'Spacebar' to toggle keystone.
-                    Note: Not all CityScope projects below are ready for CityScopeJS.
+                    start by selecting your CityScopeJS project. Press
+                    'Spacebar' to toggle keystone. Note: Not all CityScope
+                    projects below are ready for CityScopeJS.
                 </Typography>
                 <Box mt={"2em"} />
                 <TableNameInput setSelectedTable={setSelectedTable} />

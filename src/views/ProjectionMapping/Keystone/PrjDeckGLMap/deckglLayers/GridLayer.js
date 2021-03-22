@@ -1,7 +1,8 @@
 import { GeoJsonLayer } from "deck.gl";
 
-export default function GridLayer({ data }) {
+export default function GridLayer({ active, data }) {
     return new GeoJsonLayer({
+        visible: active,
         id: "GRID",
         data,
         extruded: true,

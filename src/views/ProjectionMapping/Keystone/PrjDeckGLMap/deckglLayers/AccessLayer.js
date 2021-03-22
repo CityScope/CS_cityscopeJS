@@ -1,8 +1,9 @@
 import { HeatmapLayer } from "deck.gl";
 import settings from "../../../../../settings/settings.json";
 
-export default function AccessLayer({ data, accessToggle }) {
+export default function AccessLayer({ active, data, accessToggle }) {
     return new HeatmapLayer({
+        visible: active,
         id: "ACCESS",
         colorRange: settings.map.layers.heatmap.colors,
         radiusPixels: 200,

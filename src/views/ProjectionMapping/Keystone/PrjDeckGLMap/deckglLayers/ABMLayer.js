@@ -9,6 +9,7 @@ const _remapValues = (value) => {
 };
 
 export default function ABMLayer({
+    active,
     data,
     cityioData,
     ABMmode,
@@ -24,7 +25,7 @@ export default function ABMLayer({
             let col = hexToRgb(cityioData.ABM2.attr[ABMmode][d[ABMmode]].color);
             return col;
         },
-
+        visible: active,
         getWidth: 1,
         widthScale: _remapValues(zoomLevel),
         opacity: 0.8,

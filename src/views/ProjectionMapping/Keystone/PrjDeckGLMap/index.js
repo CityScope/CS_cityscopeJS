@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { _proccessAccessData, _proccessGridData, _setupSunEffects } from "../../../../utils/utils";
+import {
+    _proccessAccessData,
+    _proccessGridData,
+    _setupSunEffects,
+} from "../../../../utils/utils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import settings from "../../../../settings/settings.json";
-
 import {
     AccessLayer,
     AggregatedTripsLayer,
@@ -13,16 +16,15 @@ import {
     GridLayer,
 } from "./deckglLayers";
 
-export default function PrjDeckGLMap() {
-    const [viewState, setViewState] = useState(settings.map.initialViewState);
+export default function PrjDeckGLMap(props) {
+    const viewSettings = props.viewSettings;
 
+    const [viewState, setViewState] = useState(settings.map.initialViewState);
     const [access, setAccess] = useState(null);
     const [GEOGRID, setGEOGRID] = useState(null);
     const [ABM, setABM] = useState({});
-
     const effectsRef = useRef();
     const deckGL = useRef();
-
     const [cityioData] = useSelector((state) => [state.CITYIO]);
 
     useEffect(() => {
@@ -32,30 +34,15 @@ export default function PrjDeckGLMap() {
         _setupSunEffects(effectsRef, cityioData.GEOGRID.properties.header);
         // zoom map on CS table location
         _setViewStateToTableHeader();
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        effectsRef.current[0].shadowColor = [0, 0, 0, 1];
-    }, []);
-
-    useEffect(() => {
-        // fix deck view rotate
-        _rightClickViewRotate();
-        // setup sun effects
-        _setupSunEffects(effectsRef, cityioData.GEOGRID.properties.header);
-        // zoom map on CS table location
-        _setViewStateToTableHeader();
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
         effectsRef.current[0].shadowColor = [0, 0, 0, 1];
     }, []);
 
     useEffect(() => {
         setGEOGRID(_proccessGridData(cityioData));
-
         if (cityioData.access) {
             setAccess(_proccessAccessData(cityioData));
         }
-
         if (cityioData.ABM2) {
             setABM(cityioData.ABM2);
         }
@@ -65,10 +52,6 @@ export default function PrjDeckGLMap() {
         setViewState(viewState);
     };
 
-    //  * resets the camera viewport
-    //  * to cityIO header data
-    //  * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
-    //  */
     const _setViewStateToTableHeader = () => {
         const header = cityioData.GEOGRID.properties.header;
 
@@ -83,10 +66,6 @@ export default function PrjDeckGLMap() {
         });
     };
 
-    // /**
-    //  * Description. fix deck issue
-    //  * with rotate right botton
-    //  */
     const _rightClickViewRotate = () => {
         document
             .getElementById("deckgl-wrapper")
@@ -95,24 +74,27 @@ export default function PrjDeckGLMap() {
 
     const layersKey = {
         ABM: ABMLayer({
+            active: viewSettings.ABMLayer.active,
             data: ABM.trips,
-            cityioData,
-            ABMmode: "mode",
-            zoomLevel: viewState.zoom,
-            time: 42000,
+            cityioData: cityioData,
+            ABMmode: viewSettings.ABMLayer.ABMmode,
+            zoomLevel: viewSettings.ABMLayer.zoomLevel,
+            time: viewSettings.ABMLayer.time,
         }),
         AGGREGATED_TRIPS: AggregatedTripsLayer({
+            active: viewSettings.AggregatedTripsLayer.active,
             data: ABM.trips,
-            cityioData,
-            ABMmode: "mode",
+            cityioData:cityioData,
+            ABMmode: viewSettings.AggregatedTripsLayer.ABMmode,
         }),
         GRID: GridLayer({
+            active: viewSettings.GridLayer.active,
             data: GEOGRID,
-            deckGL,
         }),
         ACCESS: AccessLayer({
+            active: viewSettings.AccessLayer.active,
             data: access,
-            accessToggle: 0,
+            accessToggle: viewSettings.AccessLayer.accessToggle,
         }),
     };
 
@@ -127,26 +109,24 @@ export default function PrjDeckGLMap() {
     };
 
     return (
-        <div className="baseMap">
-            <DeckGL
-                ref={deckGL}
-                viewState={viewState}
-                onViewStateChange={onViewStateChange}
-                layers={_renderLayers()}
-                effects={effectsRef.current}
-                controller={{
-                    keyboard: false,
-                }}
-            >
-                <StaticMap
-                    asyncRender={false}
-                    dragRotate={true}
-                    reuseMaps={true}
-                    mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-                    mapStyle={settings.map.mapStyle.sat}
-                    preventStyleDiffing={true}
-                />
-            </DeckGL>
-        </div>
+        <DeckGL
+            ref={deckGL}
+            viewState={viewState}
+            onViewStateChange={onViewStateChange}
+            layers={_renderLayers()}
+            effects={effectsRef.current}
+            controller={{
+                keyboard: false,
+            }}
+        >
+            <StaticMap
+                asyncRender={false}
+                dragRotate={true}
+                reuseMaps={true}
+                mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+                mapStyle={settings.map.mapStyle.sat}
+                preventStyleDiffing={true}
+            />
+        </DeckGL>
     );
 }
