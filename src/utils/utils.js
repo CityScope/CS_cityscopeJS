@@ -191,6 +191,8 @@ export const _setupSunEffects = (effectsRef, tableHeader) => {
 };
 
 export const updateSunDirection = (time, effectsRef) => {
+
+    
     const thisLocationTime = currentDateMidnight.getTime() + time * 1000;
     var date = new Date(thisLocationTime);
 

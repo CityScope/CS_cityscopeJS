@@ -3,7 +3,7 @@ import typography from "./typography";
 
 const theme = createMuiTheme({
     zIndex: {
-        appBar: 1500,
+        appBar: 999,
     },
     palette: {
         background: {

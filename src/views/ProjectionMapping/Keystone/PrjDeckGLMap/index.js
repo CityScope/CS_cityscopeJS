@@ -4,6 +4,7 @@ import {
     _proccessAccessData,
     _proccessGridData,
     _setupSunEffects,
+    updateSunDirection,
 } from "../../../../utils/utils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
@@ -26,6 +27,13 @@ export default function PrjDeckGLMap(props) {
     const effectsRef = useRef();
     const deckGL = useRef();
     const [cityioData] = useSelector((state) => [state.CITYIO]);
+
+    useEffect(() => {
+        if (!effectsRef.current) {
+            return;
+        }
+        updateSunDirection(props.viewSettings.time, effectsRef);
+    }, [props.viewSettings]);
 
     useEffect(() => {
         // fix deck view rotate
@@ -92,7 +100,7 @@ export default function PrjDeckGLMap(props) {
             cityioData: cityioData,
             ABMmode: viewSettings.ABMLayer.ABMmode,
             zoomLevel: viewSettings.ABMLayer.zoomLevel,
-            time: viewSettings.ABMLayer.time,
+            time: viewSettings.time,
         }),
         AGGREGATED_TRIPS: AggregatedTripsLayer({
             active: viewSettings.AggregatedTripsLayer.active,

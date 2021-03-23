@@ -5,11 +5,11 @@ import DeleteLocalStorage from "./Components/deleteLocalStorage";
 
 export default function Keystone(props) {
     const viewSettings = {
+        time: 86400 * Math.random(),
         ABMLayer: {
             active: true,
             ABMmode: "mode",
             zoomLevel: 12,
-            time: 42000,
         },
         AggregatedTripsLayer: {
             active: true,
@@ -27,6 +27,9 @@ export default function Keystone(props) {
     const clearLocalStraoge = () => {
         if (localStorage.getItem("projMap")) {
             localStorage.removeItem("projMap");
+        }
+        if (localStorage.getItem("deckGLviewState")) {
+            localStorage.removeItem("deckGLviewState");
         }
         window.location.reload();
     };
@@ -59,13 +62,13 @@ export default function Keystone(props) {
                 // ! on top of the menus
 
                 style={{
-                    height: "100vh",
+                    height: "100%",
                     width: "100vw",
                     overflow: "hidden",
                     position: "fixed",
                     top: 0,
                     left: 0,
-                    zIndex: 9998,
+                    zIndex: 1000,
                 }}
             >
                 <div>

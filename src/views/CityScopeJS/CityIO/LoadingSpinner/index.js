@@ -16,7 +16,7 @@ const LoadingSpinner = () => {
                         bottom={index * 50}
                         right="2vw"
                         width="10vw"
-                        zIndex="9999"
+                        zIndex="101"
                         margin="0"
                         key={module}
                     >

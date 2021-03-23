@@ -48,7 +48,7 @@ export default function CityScopeJS() {
 
     const classes = useStyles();
     return (
-        <Page className={classes.root} title="Home">
+        <Page className={classes.root} title="Keystone">
             {!isCityIOready && <ListOfTables />}
             {selectedTable && <CityIO tableName={selectedTable} />}
             {isCityIOready && selectedTable && <Keystone />}

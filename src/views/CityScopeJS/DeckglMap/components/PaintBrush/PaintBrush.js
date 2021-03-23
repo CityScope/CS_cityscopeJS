@@ -34,7 +34,7 @@ export const PaintBrush = (props) => {
                 color: color,
                 borderRadius: "15%",
                 position: "fixed",
-                zIndex: 1,
+                zIndex: 10,
                 pointerEvents: "none",
                 width: divSize,
                 height: divSize,

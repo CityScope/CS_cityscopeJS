@@ -18,7 +18,7 @@ export const CellMeta = (props) => {
                 backgroundColor: "rgba(0,0,0,0.5)",
                 padding: "1vw",
                 color: "rgba(255,255,255,0.9)",
-                zIndex: 1,
+                zIndex: 10,
                 left: mousePos.clientX,
                 top: mousePos.clientY,
                 fontFamily:'monospace',
