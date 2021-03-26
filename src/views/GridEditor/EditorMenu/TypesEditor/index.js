@@ -29,6 +29,7 @@ export default function TypesEditor() {
                     ? JSON.stringify(LanduseTypesList[type].NAICS)
                     : null,
                 interactive: LanduseTypesList[type].interactive,
+                meters: LanduseTypesList[type].meters
             });
         });
         return typesArray;
@@ -48,6 +49,11 @@ export default function TypesEditor() {
             {
                 title: "Height",
                 field: "height",
+                type: "numeric",
+            },
+            {
+                title: "Height Per Floor",
+                field: "meters",
                 type: "numeric",
             },
             {
