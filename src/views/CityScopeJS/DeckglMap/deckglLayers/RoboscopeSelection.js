@@ -1,31 +1,28 @@
 import { SelectionLayer} from 'nebula.gl';
 
-const roundHalf = (num) => {
-    return Math.round(num*2)/2;
-}
-
-const setRoboscopeGrid = (new_features) => {
+const setRoboscopeGrid = (new_features, setScale, setSelectedFeaturesState, tableDim, data) => {
   let length_row = 0;
   for(let i = 0; i < new_features.length; i++){ 
     if (new_features[i+1]-new_features[i]>1) {
       length_row= new_features[i]-new_features[0];
       break;
     }
-  }
-  let scale = roundHalf(length_row/8);
-  let output = []
-  for (let row=0; row<scale*12; row++) {
-    for (let col=0; col<scale*8; col++) {
-      output.push(new_features[0]+(row*24)+col);
+  }  
+  let scale = (length_row < tableDim[0]) ? Math.floor(tableDim[0]/length_row) : 1;
+  let output = []  
+  for (let row=0; row<tableDim[1]/scale; row++) {
+    for (let col=0; col<tableDim[0]/scale; col++) {
+      output.push(new_features[0]+(row*data.properties.header.ncols)+col);
     }
   }
-  return [scale, output]
+  setScale(scale)
+  setSelectedFeaturesState(output)
 }
 
 export default function RoboscopeSelection({
     data,
     editOn,
-    state: { menu },
+    state: { menu, tableDim,  },
     updaters: { setSelectedFeaturesState, setScale},
     deckGL,
 }) {
@@ -36,9 +33,7 @@ export default function RoboscopeSelection({
       if (!menu.includes("EDIT")) {
         const new_features = pickingInfos.map((pi) => pi.index);
         new_features.sort((a,b) => a-b);
-        let [scale, output] = setRoboscopeGrid(new_features);
-        setScale(scale);
-        setSelectedFeaturesState(output);
+        setRoboscopeGrid(new_features, setScale, setSelectedFeaturesState, tableDim, data);
       }
     },
     layerIds: ['GRID'],

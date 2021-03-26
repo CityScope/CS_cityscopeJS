@@ -33,7 +33,15 @@ const WebSocket = (props, ref) => {
     client.on("welcome", (socket) => {
       if (props.GEOGRID!=null && wsON) {
         client.emit("onInit", props.GEOGRID.features, props.GEOGRID.properties);
-        console.log("socket");
+        console.log(socket);
+        props.onChange(null, null, socket);
+      }
+    });
+    
+    client.on("tableDim", (dim) => {
+      if (wsON) {
+        console.log(dim);
+        props.onChange(null, null, dim);
       }
     });
     

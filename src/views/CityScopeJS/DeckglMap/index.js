@@ -40,6 +40,7 @@ export default function Map() {
     const [dragStart, setDragStart] = useState(-1);
     const [resetDrag, setResetDrag] = useState(false);
     const [roboscopeScale, setScale] = useState(1);
+    const [tableDim, setTableDim] = useState((8,12));
     const ws_ref = useRef();
 
     const effectsRef = useRef();
@@ -143,9 +144,13 @@ export default function Map() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resetViewOn]);
 
-    const _onWSUpdate = (new_GEOGRID, new_data) => {
-      setGEOGRID(new_GEOGRID);
-      setSelectedCellsState(new_data)
+    const _onWSUpdate = (new_GEOGRID, new_data, init = false) => {
+      if (init != false) {
+        setTableDim(init);
+      } else {
+        setGEOGRID(new_GEOGRID);
+        setSelectedCellsState(new_data);
+      }
     }
     
     const onViewStateChange = ({ viewState }) => {
@@ -217,7 +222,7 @@ export default function Map() {
         SELECTION: RoboscopeSelection({
             data: GEOGRID,
             editOn: menu.includes("EDIT"),
-            state: { menu },
+            state: { menu, tableDim },
             updaters: { setSelectedFeaturesState, setScale},
             deckGL
         })
