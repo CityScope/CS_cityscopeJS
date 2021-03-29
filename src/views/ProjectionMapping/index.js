@@ -24,7 +24,7 @@ export default function CityScopeJS() {
 
     const ListOfTables = () => {
         return (
-            <Container maxWidth="md" className={classes.content}>
+            <Container maxWidth="md">
                 <Typography color="textPrimary" variant="h1">
                     Projection tool
                 </Typography>

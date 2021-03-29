@@ -6,6 +6,7 @@ import MapContainer from "./DeckglMap";
 import LoadingSpinner from "./CityIO/LoadingSpinner";
 import MissingTableInfo from "../Errors/MissingTableInfo";
 import VisContainer from "./VisContainer";
+import TableNameInput from "../../Components/TableNameInput";
 
 import {
     makeStyles,
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CityScopeJS() {
     const classes = useStyles();
+    const [selectedTable, setSelectedTable] = useState(null);
 
     // get the table name for cityIO comp
     const [tableName, setTableName] = useState(null);
@@ -42,14 +44,32 @@ export default function CityScopeJS() {
         }
     }, []);
 
+    useEffect(() => {
+        console.log(selectedTable);
+        if (selectedTable) {
+            let url = window.location.toString();
+            window.location.replace(url + "?cityscope=" + selectedTable);
+        }
+    }, [selectedTable]);
+
     // wait for 'ready' flag from cityIO when app is ready to start
     const isReady = useSelector((state) => state.READY);
     const cityIOdata = useSelector((state) => state.CITYIO);
 
     return (
         <Page className={classes.root} title="CitySCopeJS">
-            <Container maxWidth={false}>
-                {!isReady && <MissingTableInfo />}
+            <Container maxWidth={null}>
+                {!isReady && (
+                    <>
+                        <Container maxWidth="md">
+                            <MissingTableInfo />
+                            <TableNameInput
+                                setSelectedTable={setSelectedTable}
+                            />
+                        </Container>
+                    </>
+                )}
+
                 {tableName && <CityIO tableName={tableName} />}
                 {isReady && (
                     <>
