@@ -7,25 +7,20 @@ export default function TextualLayer({ data, coordinates }) {
      * defined in the data id attribute.
      *
      * data format:
-     * [
-     * {id: 450, info: 'yes!' }
-     * ]
+      [
+      {"id": 0, "info": "yes!" },   {"id": 10, "info": "I'm on ID 10!" }
+      ]
      *
      * coordinates format:
-     * [
-     *   {info: 'Colma (COLM)', coordinates: [-122.466233, 37.684638]},
-     *   ...
-     * ]
+     [
+       {"info": "yes!", coordinates: [-122.466233, 37.684638]},
+     ]
      */
 
     if (data && coordinates && coordinates.features) {
-        console.log(coordinates.features);
-
         let textLayerData = [];
 
         data.forEach((infoIteam) => {
-            console.log(coordinates.features[infoIteam.id]);
-
             textLayerData.push({
                 coordinates: [
                     coordinates.features[infoIteam.id].geometry
