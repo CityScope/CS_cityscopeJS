@@ -18,6 +18,7 @@ import {
     AggregatedTripsLayer,
     ABMLayer,
     GridLayer,
+    TextualLayer,
 } from "./deckglLayers";
 
 export default function Map() {
@@ -29,6 +30,7 @@ export default function Map() {
     const [mouseDown, setMouseDown] = useState(null);
     const [hoveredObj, setHoveredObj] = useState(null);
     const [access, setAccess] = useState(null);
+    const [textualData, setTextualData] = useState(null);
     const [GEOGRID, setGEOGRID] = useState(null);
     const [ABM, setABM] = useState({});
     const [loaded, setLoaded] = useState(false);
@@ -90,6 +92,10 @@ export default function Map() {
 
         if (cityioData.access) {
             setAccess(_proccessAccessData(cityioData));
+        }
+
+        if (cityioData.textual) {
+            setTextualData(cityioData.textual);
         }
 
         if (cityioData.ABM2) {
@@ -186,9 +192,13 @@ export default function Map() {
             data: access,
             accessToggle,
         }),
+        TEXTUAL: TextualLayer({
+            data: textualData && textualData,
+            coordinates: GEOGRID,
+        }),
     };
 
-    const layerOrder = ["ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS"];
+    const layerOrder = ["TEXTUAL", "ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS"];
 
     const _renderLayers = () => {
         let layers = [];

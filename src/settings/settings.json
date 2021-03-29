@@ -12,7 +12,8 @@
             { "name": "grid", "expectUpdate": false },
             { "name": "access", "expectUpdate": true },
             { "name": "GEOGRIDDATA", "expectUpdate": false },
-            { "name": "indicators", "expectUpdate": true }
+            { "name": "indicators", "expectUpdate": true }, 
+            { "name": "textual", "expectUpdate": true }
         ]
     },
 
@@ -43,12 +44,16 @@
                 "showOnInit": false,
                 "requireModule": false
             },
+            "TEXTUAL": {
+                "displayName": "Toggle Information",
+                "showOnInit": true,
+                "requireModule": "GEOGRID"
+            },
             "SHADOWS": {
                 "displayName": "Toggle Shadows",
                 "showOnInit": true,
                 "requireModule": "GEOGRID"
-            }
-           
+            }          
         }
     },
 
