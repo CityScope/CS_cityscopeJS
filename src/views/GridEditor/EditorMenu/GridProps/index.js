@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import GridMaker from "./GridMaker";
 import CommitGrid from "./CommitGrid";
 import CenterMapButton from "./CenterMapButton/CenterMapButton";
-import settings from "../../GridEditorSettings.json";
+import settings from "../../../../settings/GridEditorSettings.json";
 
 
 export default function GridProps() {

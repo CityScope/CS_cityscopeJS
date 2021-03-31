@@ -8,7 +8,7 @@ import {
     listenToGridCreator,
 } from "../../../../redux/actions";
 import { useDispatch } from "react-redux";
-import settings from "../../GridEditorSettings.json";
+import settings from "../../../../settings/GridEditorSettings.json";
 
 export default function TypesEditor() {
     const createtypesArray = (LanduseTypesList) => {
@@ -119,7 +119,7 @@ export default function TypesEditor() {
                                         data.push(newData);
                                         return { ...prevState, data };
                                     });
-                                }, 500);
+                                }, 200);
                             }),
                         onRowUpdate: (newData, oldData) =>
                             new Promise((resolve) => {
@@ -138,7 +138,7 @@ export default function TypesEditor() {
 
                                     // dispath change to redux
                                     dispatch(listenToRowEdits(newData));
-                                }, 500);
+                                }, 200);
                             }),
                         onRowDelete: (oldData) =>
                             new Promise((resolve) => {
@@ -151,7 +151,7 @@ export default function TypesEditor() {
                                     });
 
                                     dispatch(listenToGridCreator(null));
-                                }, 500);
+                                }, 200);
                             }),
                     }}
                 />

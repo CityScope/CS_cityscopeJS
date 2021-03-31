@@ -1,56 +1,52 @@
 {
-    "name": "cityscopejs",
-    "version": "1.0.0",
-    "repository": "https://github.com/CityScope/CS_cityscopeJS",
-    "license": "GPL3",
-    "homepage": "https://cityscope.media.mit.edu/CS_cityscopeJS",
-    "dependencies": {
-        "@material-ui/core": "^4.11.3",
-        "@material-ui/icons": "^4.11.2",
-        "axios": "^0.21.1",
-        "deck.gl": "^8.4.11",
-        "gh-pages": "^3.1.0",
-        "history": "^5.0.0",
-        "material-table": "^1.69.2",
-        "numeric": "^1.2.6",
-        "proj4": "^2.7.2",
-        "prop-types": "^15.7.2",
-        "react": "^17.0.2",
-        "react-dom": "^17.0.2",
-        "react-feather": "^2.0.9",
-        "react-helmet": "^6.1.0",
-        "react-map-gl": "^6.1.11",
-        "react-redux": "^7.2.3",
-        "react-router": "^6.0.0-beta.0",
-        "react-router-dom": "^6.0.0-beta.0",
-        "react-scripts": "^4.0.3",
-        "react-spinners": "^0.10.6",
-        "react-vis": "^1.11.7",
-        "redux": "^4.0.5",
-        "socket.io-client": "^4.0.0",
-        "styled-components": "^5.2.2",
-        "typescript": "^4.2.3"
-    },
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "gh": "react-scripts build && gh-pages -d build"
-    },
-    "eslintConfig": {
-        "extends": "react-app"
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    }
+  "name": "cityscopejs",
+  "version": "1.0.0",
+  "repository": "https://github.com/CityScope/CS_cityscopeJS",
+  "license": "GPL3",
+  "homepage": "https://cityscope.media.mit.edu/CS_cityscopeJS",
+  "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "axios": "^0.21.1",
+    "deck.gl": "^8.4.11",
+    "gh-pages": "^3.1.0",
+    "history": "^5.0.0",
+    "material-table": "^1.69.2",
+    "numeric": "^1.2.6",
+    "proj4": "^2.7.2",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-feather": "^2.0.9",
+    "react-helmet": "^6.1.0",
+    "react-map-gl": "^6.1.11",
+    "react-redux": "^7.2.3",
+    "react-router-dom": "^6.0.0-beta.0",
+    "react-scripts": "^4.0.3",
+    "react-vis": "^1.11.7",
+    "redux": "^4.0.5",
+    "typescript": "^4.2.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "gh": "react-scripts build && gh-pages -d build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }

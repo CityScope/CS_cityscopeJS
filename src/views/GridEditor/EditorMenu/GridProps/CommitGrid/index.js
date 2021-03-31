@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 import axios from "axios";
-import settings from "../../../GridEditorSettings.json";
+import settings from "../../../../../settings/GridEditorSettings.json";
 import Typography from "@material-ui/core/Typography";
 import { useSelector } from "react-redux";
 import Link from "@material-ui/core/Link";

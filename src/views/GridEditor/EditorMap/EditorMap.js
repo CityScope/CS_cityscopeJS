@@ -5,7 +5,7 @@ import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { GeoJsonLayer } from "deck.gl";
-import settings from "../GridEditorSettings.json";
+import settings from "../../../settings/GridEditorSettings.json";
 import { listenToBaseMapCenter } from "../../../redux/actions";
 
 export const _hexToRgb = (hex) => {
