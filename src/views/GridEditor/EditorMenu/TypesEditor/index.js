@@ -89,7 +89,6 @@ export default function TypesEditor() {
         <MaterialTable
           title={<Typography variant="h2">Types Editor</Typography>}
           columns={state.columns}
-          columns={state.columns}
           data={state.data}
           options={{
             paging: false,
