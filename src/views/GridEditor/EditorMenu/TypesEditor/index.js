@@ -88,12 +88,12 @@ export default function TypesEditor() {
       <Grid item xs={12} s={12} m={12} l={12} xl={12}>
         <MaterialTable
           title={<Typography variant="h2">Types Editor</Typography>}
-          // columns={state.columns}
+          columns={state.columns}
           columns={state.columns}
           data={state.data}
           options={{
             paging: false,
-            search: false,
+            search: true,
             selection: false,
             rowStyle: (rowData) => ({
               fontFamily: 'Roboto Mono',
