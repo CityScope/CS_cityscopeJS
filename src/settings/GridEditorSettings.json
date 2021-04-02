@@ -71,6 +71,7 @@
                     "interactive": "Web",
                     "color": "#B32745",
                     "height": 4,
+                    "meters": 4,
                     "sqm_pperson": 400
                 },
                 "Office": {
@@ -93,6 +94,7 @@
                     "interactive": "Web",
                     "color": "#FF5277",
                     "height": 10,
+                    "meters": 4,
                     "sqm_pperson": 20
                 },
                 "Park": {
@@ -137,6 +139,7 @@
                     "interactive": "Web",
                     "color": "#FFFF33",
                     "height": 4,
+                    "meters": 4,
                     "sqm_pperson": 90
                 },
                 "Retail": {
@@ -163,6 +166,7 @@
                     "interactive": "Web",
                     "color": "#FF835E",
                     "height": 4,
+                    "meters": 5,
                     "sqm_pperson": 150
                 },
                 "Campus": {
@@ -188,6 +192,7 @@
                     "interactive": "Web",
                     "color": "#A2FF91",
                     "height": 10,
+                    "meters": 4,
                     "sqm_pperson": 50
                 },
                 "Industrial": {
@@ -213,6 +218,7 @@
                     "interactive": "Web",
                     "color": "#E83FB8",
                     "height": 4,
+                    "meters": 4,
                     "sqm_pperson": 60
                 },
                 "Low Income housing": {
@@ -262,6 +268,7 @@
                     "interactive": "Web",
                     "color": "#E945FF",
                     "height": 20,
+                    "meters": 4,
                     "sqm_pperson": 50
                 },
                 "Residential Low Density": {
@@ -277,6 +284,7 @@
                     "interactive": "Web",
                     "color": "#7FB34B",
                     "height": 4,
+                    "meters": 4,
                     "sqm_pperson": 320
                 }
             }
