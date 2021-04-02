@@ -1,4 +1,3 @@
-import React from "react";
 import EditorMap from "./EditorMap/EditorMap";
 import EditorMenu from "./EditorMenu";
 import {
