@@ -28,6 +28,7 @@ function TogglesMenu(props) {
     let togglesCompsArray = [];
     // array of loaded API modules
     const loadedModules = Object.keys(cityioData);
+    loadedModules.push(cityioData.tableName)
     // create each toggle
     for (let i = 0; i < listOfToggles.length; i++) {
         // check if the mdoule of this toggle

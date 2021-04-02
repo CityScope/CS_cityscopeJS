@@ -72,6 +72,8 @@ export default function Map() {
     var rotateOn = menu.includes("ROTATE");
     var shadowsOn = menu.includes("SHADOWS");
     var editOn = menu.includes("EDIT");
+    var selectionOn = menu.includes("SELECTION");
+    var translateOn = menu.includes("TRANSLATE");
     var resetViewOn = menu.includes("RESET_VIEW");
 
     useEffect(() => {
@@ -131,6 +133,19 @@ export default function Map() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editOn]);
 
+    useEffect(() => {
+        if (!selectionOn && selectedFeaturesState.length > 0) {
+          ws_ref.current[0](roboscopeScale, selectedFeaturesState.map(index => GEOGRID.features[index].properties));
+        }
+    }, [selectionOn]);
+    
+    
+    useEffect(() => {
+        if (!translateOn && selectedFeaturesState.length > 0) {
+          ws_ref.current[0](roboscopeScale, selectedFeaturesState.map(index => GEOGRID.features[index].properties));
+        }
+    }, [translateOn]);
+    
     useEffect(() => {
         if (!loaded) return;
         _setViewStateToTableHeader();
