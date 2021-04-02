@@ -1,6 +1,6 @@
 import React, { useEffect, forwardRef } from "react";
 import io from "socket.io-client";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -47,7 +47,7 @@ const WebSocket = (props, ref) => {
         props.onChange(dataProps, data);
       }
     });
-  }, [props.GEOGRID]);
+  }, [props.GEOGRID, wsON]);
 
   const _onPixelUpdate = (pack) => {
     client.emit("pixelUpdate", pack);

@@ -153,7 +153,7 @@ export default function Map() {
     }, [resetViewOn]);
 
     const _onWSUpdate = (new_GEOGRID, new_data, init = false) => {
-      if (init != false) {
+      if (init !== false) {
         setTableDim(init);
       } else {
         setGEOGRID(new_GEOGRID);
