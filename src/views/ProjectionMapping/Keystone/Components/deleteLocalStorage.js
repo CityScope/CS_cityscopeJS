@@ -8,8 +8,8 @@ const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(1),
         position: "fixed",
-        top: "1vh",
-        zIndex: 5000,
+        bottom: "1vh",
+        zIndex: 1001,
         maxWidth: "50vw",
     },
 }));

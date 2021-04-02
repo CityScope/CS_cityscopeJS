@@ -1,5 +1,5 @@
 import { TripsLayer } from "@deck.gl/geo-layers";
-import { hexToRgb } from "../../../../utils/utils";
+import { hexToRgb } from "../../../../../utils/utils";
 
 //  * remap line width
 const _remapValues = (value) => {
@@ -9,11 +9,12 @@ const _remapValues = (value) => {
 };
 
 export default function ABMLayer({
+    active,
     data,
     cityioData,
     ABMmode,
     zoomLevel,
-    sliders,
+    time,
 }) {
     return new TripsLayer({
         id: "ABM",
@@ -24,13 +25,13 @@ export default function ABMLayer({
             let col = hexToRgb(cityioData.ABM2.attr[ABMmode][d[ABMmode]].color);
             return col;
         },
-
+        visible: active,
         getWidth: 1,
         widthScale: _remapValues(zoomLevel),
         opacity: 0.8,
         rounded: true,
         trailLength: 500,
-        currentTime: sliders.time[1],
+        currentTime: time,
 
         updateTriggers: {
             getColor: ABMmode,

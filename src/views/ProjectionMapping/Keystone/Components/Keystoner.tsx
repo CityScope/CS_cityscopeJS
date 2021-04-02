@@ -123,7 +123,6 @@ export default class Keystoner extends React.Component<Props, State> {
                 [width, height],
                 [0, height],
             ] as RectPoints;
-
             this.targetPoints = [...sourcePoints] as RectPoints;
             this.setState({ sourcePoints });
 
@@ -247,6 +246,7 @@ export default class Keystoner extends React.Component<Props, State> {
          
 
                 <div
+          
                     onMouseDown={this.onMouseDown}
                     onMouseUp={this.onMouseUp}
                     style={{

@@ -6,7 +6,7 @@ import {
     _proccessAccessData,
     _proccessGridData,
     _postMapEditsToCityIO,
-} from "./utils/BaseMapUtils";
+} from "../../../utils/utils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -21,6 +21,7 @@ import {
     GridLayer,
     RoboscopeSelection,
     RoboscopeGridLayer
+    TextualLayer,
 } from "./deckglLayers";
 
 export default function Map() {
@@ -32,6 +33,7 @@ export default function Map() {
     const [mouseDown, setMouseDown] = useState(null);
     const [hoveredObj, setHoveredObj] = useState(null);
     const [access, setAccess] = useState(null);
+    const [textualData, setTextualData] = useState(null);
     const [GEOGRID, setGEOGRID] = useState(null);
     const [ABM, setABM] = useState({});
     const [loaded, setLoaded] = useState(false);
@@ -101,6 +103,10 @@ export default function Map() {
 
         if (cityioData.access) {
             setAccess(_proccessAccessData(cityioData));
+        }
+
+        if (cityioData.textual) {
+            setTextualData(cityioData.textual);
         }
 
         if (cityioData.ABM2) {
@@ -225,7 +231,11 @@ export default function Map() {
             state: { menu, tableDim },
             updaters: { setSelectedFeaturesState, setScale},
             deckGL
-        })
+        }),
+        TEXTUAL: TextualLayer({
+            data: textualData && textualData,
+            coordinates: GEOGRID,
+        }),
     };
 
     if (cityioData.tableName==="roboscope") {
@@ -255,8 +265,7 @@ export default function Map() {
           ws_ref
       })
     }
-    
-    const layerOrder = ["ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS", "SELECTION"];
+    const layerOrder = ["TEXTUAL", "ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS","SELECTION"];
 
     const _renderLayers = () => {
         let layers = [];

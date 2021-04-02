@@ -5,6 +5,7 @@ import NotFoundView from "./views/Errors/NotFoundView";
 import GridEditor from "./views/GridEditor";
 import CityScopeJS from "./views/CityScopeJS";
 import SplashScreen from "./views/SplashScreen";
+import ProjectionMapping from "./views/ProjectionMapping";
 
 const routes = [
     {
@@ -14,6 +15,8 @@ const routes = [
             { path: "/home", element: <SplashScreen /> },
             { path: "/", element: <CityScopeJS /> },
             { path: "/editor", element: <GridEditor /> },
+            { path: "/projection", element: <ProjectionMapping /> },
+
             { path: "*", element: <Navigate to="/404" /> },
             { path: "404", element: <NotFoundView /> },
         ],

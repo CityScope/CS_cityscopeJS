@@ -1,5 +1,5 @@
 import { GeoJsonLayer } from "deck.gl";
-import { _handleGridcellEditing } from "../utils/BaseMapUtils";
+import { _handleGridcellEditing } from "../../../../utils/utils";
 
 export default function GridLayer({
     data,

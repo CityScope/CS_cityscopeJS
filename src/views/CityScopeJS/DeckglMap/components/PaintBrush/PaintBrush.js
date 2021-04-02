@@ -1,5 +1,5 @@
 import React from "react";
-import { testHex, hexToRgb } from "../../utils/BaseMapUtils";
+import { testHex, hexToRgb } from "../../../../../utils/utils";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 /**
@@ -34,7 +34,7 @@ export const PaintBrush = (props) => {
                 color: color,
                 borderRadius: "15%",
                 position: "fixed",
-                zIndex: 1,
+                zIndex: 10,
                 pointerEvents: "none",
                 width: divSize,
                 height: divSize,

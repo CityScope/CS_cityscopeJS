@@ -3,7 +3,7 @@ import typography from "./typography";
 
 const theme = createMuiTheme({
     zIndex: {
-        appBar: 1500,
+        appBar: 999,
     },
     palette: {
         background: {
@@ -47,6 +47,12 @@ const theme = createMuiTheme({
                 },
             },
         },
+
+        MuiOutlinedInput: {
+            notchedOutline: {
+                borderColor: "#ff5278",
+            },
+        },
         MuiAppBar: {
             colorPrimary: { backgroundColor: "#18191a", color: "#FFF" },
         },
@@ -70,7 +76,7 @@ const theme = createMuiTheme({
                     boxShadow:
                         "12px 12px 16px 0  #000,-2px -2px 16px 0  #ff5278",
                 },
-                width: "100%",
+                // width: "100%",
             },
         },
     },
