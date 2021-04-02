@@ -12,13 +12,16 @@ import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import settings from "../../../settings/settings.json";
 import AnimationComponent from "./components/AnimationComponent";
+import WebSocket from "./components/WebSocket";
 import { updateSunDirection, _setupSunEffects } from "../../../utils/utils";
 import {
     AccessLayer,
     AggregatedTripsLayer,
     ABMLayer,
     GridLayer,
-    TextualLayer,
+    RoboscopeSelection,
+    RoboscopeGridLayer,
+    TextualLayer
 } from "./deckglLayers";
 
 export default function Map() {
@@ -34,6 +37,14 @@ export default function Map() {
     const [GEOGRID, setGEOGRID] = useState(null);
     const [ABM, setABM] = useState({});
     const [loaded, setLoaded] = useState(false);
+    //roboscope
+    const [selectedFeaturesState, setSelectedFeaturesState] = useState([]);
+    const [dragStart, setDragStart] = useState(-1);
+    const [resetDrag, setResetDrag] = useState(false);
+    const [roboscopeScale, setScale] = useState(1);
+    const [tableDim, setTableDim] = useState((8,12));
+    const ws_ref = useRef();
+
     const effectsRef = useRef();
     const deckGL = useRef();
 
@@ -126,6 +137,15 @@ export default function Map() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resetViewOn]);
 
+    const _onWSUpdate = (new_GEOGRID, new_data, init = false) => {
+      if (init != false) {
+        setTableDim(init);
+      } else {
+        setGEOGRID(new_GEOGRID);
+        setSelectedCellsState(new_data);
+      }
+    }
+    
     const onViewStateChange = ({ viewState }) => {
         setViewState(viewState);
     };
@@ -192,13 +212,47 @@ export default function Map() {
             data: access,
             accessToggle,
         }),
+        SELECTION: RoboscopeSelection({
+            data: GEOGRID,
+            editOn: menu.includes("EDIT"),
+            state: { menu, tableDim },
+            updaters: { setSelectedFeaturesState, setScale},
+            deckGL
+        }),
         TEXTUAL: TextualLayer({
             data: textualData && textualData,
             coordinates: GEOGRID,
         }),
     };
 
-    const layerOrder = ["TEXTUAL", "ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS"];
+    if (cityioData.tableName==="roboscope") {
+      layersKey.GRID = RoboscopeGridLayer({
+          data: GEOGRID,
+          editOn: menu.includes("EDIT"),
+          menu: menu,
+          state: {
+              selectedType,
+              keyDownState,
+              selectedCellsState,
+              pickingRadius,
+              selectedFeaturesState,
+              dragStart,
+              resetDrag,
+              roboscopeScale
+          },
+          updaters: {
+              setSelectedCellsState,
+              setDraggingWhileEditing,
+              setHoveredObj,
+              setDragStart,
+              setResetDrag,
+              setSelectedFeaturesState
+          },
+          deckGL,
+          ws_ref
+      })
+    }
+    const layerOrder = ["TEXTUAL", "ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS","SELECTION"];
 
     const _renderLayers = () => {
         let layers = [];
@@ -221,6 +275,7 @@ export default function Map() {
             onMouseUp={() => setMouseDown(false)}
             onMouseDown={() => setMouseDown(true)}
         >
+          {(cityioData.tableName==="roboscope") ? <WebSocket ref={ws_ref} GEOGRID={GEOGRID} onChange={_onWSUpdate}/> : null}
             <PaintBrush
                 editOn={editOn}
                 mousePos={mousePos}
