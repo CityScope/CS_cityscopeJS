@@ -1,5 +1,5 @@
 import { GeoJsonLayer } from "deck.gl";
-import { _handleGridcellEditing } from "../utils/BaseMapUtils";
+import { _handleGridcellEditing } from "../../../../utils/utils";
 
 // Color Modifier: Opaque for selected pixels, transparent for unselected 
 export const color_opc = (color, op) => {

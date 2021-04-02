@@ -13,15 +13,15 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import settings from "../../../settings/settings.json";
 import AnimationComponent from "./components/AnimationComponent";
 import WebSocket from "./components/WebSocket";
-import { updateSunDirection, _setupSunEffects } from "./utils/EffectsUtils";
+import { updateSunDirection, _setupSunEffects } from "../../../utils/utils";
 import {
     AccessLayer,
     AggregatedTripsLayer,
     ABMLayer,
     GridLayer,
     RoboscopeSelection,
-    RoboscopeGridLayer
-    TextualLayer,
+    RoboscopeGridLayer,
+    TextualLayer
 } from "./deckglLayers";
 
 export default function Map() {
