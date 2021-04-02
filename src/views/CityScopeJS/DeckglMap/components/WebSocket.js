@@ -1,15 +1,8 @@
 import React, { useEffect, forwardRef } from "react";
-import BounceLoader from "react-spinners/BounceLoader";
-import { css } from "@emotion/core";
 import io from "socket.io-client";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Typography from "@material-ui/core/Typography";
-
-const override = css`
-    display: block;
-    margin: 0 auto;
-    border-color: none;
-`;
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const client = io.connect("http://127.0.0.1:8080/");
 const WebSocket = (props, ref) => {
@@ -72,7 +65,7 @@ const WebSocket = (props, ref) => {
         <div
           style={{
               position: "fixed",
-              top: 50,
+              top: 45,
               right: 50,
               zIndex: 1,
               display: "flex",
@@ -88,15 +81,10 @@ const WebSocket = (props, ref) => {
                 marginTop: "3px",
               }}
           >
-            <Typography style={{ paddingTop: "5px", marginRight: "10px", fontSize:"13px"}}>
+            <Typography style={{ paddingTop: "5px", marginRight: "10px", fontSize:"14px"}}>
                 Websockets Connected
             </Typography>
-            <BounceLoader
-                 css={override}
-                 size={25}
-                 color="white"
-                 loading={true}
-             />
+            <CircularProgress size={25}/>
           </div>
       </div>
       </React.Fragment>
