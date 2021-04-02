@@ -30,7 +30,7 @@ export default function CityIOviewer() {
             elevation={15}
             style={{ position: 'fixed', zIndex: 100, margin: 50 }}
           >
-            <Box spacing={1} p={1} m={1}>
+            <CardContent>
               <Typography color="textPrimary" variant="h1">
                 Projects Map
               </Typography>
@@ -38,7 +38,7 @@ export default function CityIOviewer() {
               <Typography color="textPrimary">
                 List of current CityScope projects around the world.
               </Typography>
-            </Box>
+            </CardContent>
           </Card>
 
           <Card

@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import FormatShapesIcon from '@material-ui/icons/FormatShapes'
