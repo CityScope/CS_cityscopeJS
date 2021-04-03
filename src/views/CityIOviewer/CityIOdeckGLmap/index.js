@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Typography, Box, Link, Card, CardContent } from '@material-ui/core'
 import { StaticMap, _MapContext } from 'react-map-gl'
 import { DeckGL } from '@deck.gl/react'
+import { FlyToInterpolator } from 'deck.gl'
+
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { ArcLayer, IconLayer, TextLayer } from '@deck.gl/layers'
 import icon from './legoio.png'
@@ -23,7 +25,8 @@ export default function CityIOdeckGLmap(props) {
     pitch: 0,
     bearing: 0,
   }
-  const [, setViewport] = useState(INIT_VIEW)
+  const [viewport, setViewport] = useState(INIT_VIEW)
+  const [initialViewState, setInitialViewState] = useState(viewport)
   // boolean for hovering flag
   let isHovering = false
 
@@ -55,11 +58,11 @@ export default function CityIOdeckGLmap(props) {
       id: 'arc-layer',
       data: markerInfo,
       pickable: true,
-      getWidth: 3,
+      getWidth: 2,
       getSourcePosition: (d) => d.coord.from,
       getTargetPosition: (d) => d.coord.to,
-      getSourceColor: (d) => [0, 0, 0],
-      getTargetColor: (d) => [255, 82, 120],
+      getSourceColor: (d) => [255, 82, 120],
+      getTargetColor: (d) => [255, 255, 255],
     }),
     new TextLayer({
       id: 'text-layer',
@@ -79,7 +82,19 @@ export default function CityIOdeckGLmap(props) {
       data: markerInfo,
       pickable: true,
       iconAtlas: icon,
-      onClick: (d) => setClicked(d),
+      onClick: (d) => {
+        setInitialViewState({
+          longitude: d.object.coord.to[0],
+          latitude: d.object.coord.to[1],
+          zoom: 8,
+          pitch: 0,
+          bearing: 0,
+          transitionDuration: 1000,
+          transitionInterpolator: new FlyToInterpolator(),
+        })
+
+        setClicked(d)
+      },
       iconMapping: {
         marker: { x: 0, y: 0, width: 768, height: 768, mask: false },
       },
@@ -92,6 +107,14 @@ export default function CityIOdeckGLmap(props) {
 
   return (
     <>
+      <div
+        elevation={15}
+        style={{ position: 'fixed', zIndex: 100, margin: 50, bottom: '8vh' }}
+      >
+        <Typography variant="h6" color="textPrimary">
+          Live view of CityScope projects worldwide.
+        </Typography>
+      </div>
       {clicked && clicked.object && (
         <Card
           elevation={15}
@@ -102,8 +125,9 @@ export default function CityIOdeckGLmap(props) {
               <Typography variant="h2" color="textPrimary">
                 CityScope {clicked.object.info.tableName}
               </Typography>
-              <Typography color="textSecondary">
+              <Typography color={'secondary'}>
                 <Link
+                  color={'secondary'}
                   href={cityscopeJSendpoint + clicked.object.info.tableName}
                 >
                   Go to this project >>>
@@ -121,12 +145,13 @@ export default function CityIOdeckGLmap(props) {
         }
         layers={layers}
         controller={true}
-        initialViewState={INIT_VIEW}
+        initialViewState={initialViewState}
         onViewportChange={setViewport}
         onViewStateChange={(d) => setZoom(d.viewState.zoom)}
         ContextProvider={_MapContext.Provider}
       >
         <StaticMap
+          onViewportChange={setViewport}
           reuseMaps
           preventStyleDiffing={true}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}

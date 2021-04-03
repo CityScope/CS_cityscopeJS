@@ -25,11 +25,6 @@ const items = [
     icon: HomeIcon,
     title: 'Home',
   },
-  {
-    href: '/cityioviewer',
-    icon: ExploreIcon,
-    title: 'CityScope Projects',
-  },
 
   {
     href: '/',
