@@ -3,8 +3,9 @@ import {
   Divider,
   Typography,
   makeStyles,
-  Box,
+  Card,
   Link,
+  CardContent,
 } from '@material-ui/core'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import GetGITdate from './GetGITdate'
@@ -25,7 +26,7 @@ export default function SplashScreen() {
   const classes = useStyles()
 
   return (
-    <Container className={classes.content}>
+    <Container>
       <Typography color="textPrimary" variant="h1">
         MIT CityScope
       </Typography>
@@ -33,36 +34,36 @@ export default function SplashScreen() {
       <Divider className={classes.divider} light />
 
       <Typography color="textPrimary" variant="h5">
-        CityScopeJS is a unified front-end for MIT CityScope project, an
-        open-source urban modeling and simulation platform. CityScopeJS allows
-        users to examine different design alternatives, and observe their impact
-        through multiple layers of urban analytics modules, such as traffic
-        models, ABM simulation, urban access, economy, storm-water, noise and
-        more.
+        MIT CityScope is an open-source urban modeling and simulation platform.
+        CityScope allows users to examine different design alternatives, and
+        observe their impact through multiple layers of urban analytics modules,
+        such as traffic models, ABM simulation, urban access, economy,
+        storm-water, noise and more.
       </Typography>
       <Divider className={classes.divider} light />
 
-      <Typography color="textPrimary" variant="caption" gutterBottom>
-        MIT CityScopeJS open-source project is developed by MIT, the City
-        Science Network, and contributers from all over the world. Join us!
-      </Typography>
-
-      <Typography>
-        <Link
-          variant={'caption'}
-          color={'secondary'}
-          href={'https://github.com/CityScope'}
-          target={'blank'}
-        >
-          <GitHubIcon fontSize={'small'} /> click here for CityScope open-source
-          development
-        </Link>
-      </Typography>
+      <Card>
+        <CardContent>
+          <Typography color="textPrimary" gutterBottom>
+            MIT CityScopeJS open-source project is developed by MIT, the City
+            Science Network, and contributers from all over the world.
+          </Typography>
+          <Typography>
+            <Link
+              variant={'caption'}
+              color={'secondary'}
+              href={'https://github.com/CityScope'}
+              target={'blank'}
+            >
+              <GitHubIcon fontSize={'small'} /> Join the CityScope open-source
+              development
+            </Link>
+          </Typography>
+          <GetGITdate />
+        </CardContent>
+      </Card>
 
       <Divider className={classes.divider} light />
-      <Box flex={1}>
-        <GetGITdate />
-      </Box>
     </Container>
   )
 }

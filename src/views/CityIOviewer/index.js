@@ -1,10 +1,9 @@
 import {
-  Container,
-  Typography,
   Card,
   CardContent,
   makeStyles,
   Grid,
+  Container,
 } from '@material-ui/core'
 import CityIOlist from './CityIOlist'
 import Page from '../../layouts/Page'
@@ -16,8 +15,8 @@ export default function CityIOviewer() {
       '& > *': {
         margin: 'auto',
         height: '100%',
-        paddingBottom: theme.spacing(2),
-        paddingTop: theme.spacing(5),
+        paddingBottom: theme.spacing(3),
+        paddingTop: theme.spacing(3),
       },
     },
   }))
@@ -26,23 +25,25 @@ export default function CityIOviewer() {
   return (
     <>
       <Page className={classes.root} title="CityScope Projects List">
-        <Grid container>
-          <Grid item xs={12} l={4} md={4} xl={4}>
-            <SplashScreen />
+        <Container>
+          <Grid container>
+            <Grid item xs={12} l={4} md={4} xl={4}>
+              <SplashScreen />
+            </Grid>
+            <Grid item xs={12} l={8} md={8} xl={8}>
+              <Card
+                elevation={15}
+                style={{
+                  height: '85vh',
+                  width: '100%',
+                  position: 'relative',
+                }}
+              >
+                <CardContent>{<CityIOlist />}</CardContent>
+              </Card>
+            </Grid>
           </Grid>
-          <Grid item xs={12} l={8} md={8} xl={8}>
-            <Card
-              elevation={15}
-              style={{
-                height: '85vh',
-                width: '100%',
-                position: 'relative',
-              }}
-            >
-              <CardContent>{<CityIOlist />}</CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+        </Container>
       </Page>
     </>
   )

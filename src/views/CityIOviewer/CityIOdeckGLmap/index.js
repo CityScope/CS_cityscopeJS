@@ -1,27 +1,23 @@
 import { useEffect, useState } from 'react'
-import { Typography, Box, Link, Card, CardContent } from '@material-ui/core'
 import { StaticMap, _MapContext } from 'react-map-gl'
 import { DeckGL } from '@deck.gl/react'
 import { FlyToInterpolator } from 'deck.gl'
-
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { ArcLayer, IconLayer, TextLayer } from '@deck.gl/layers'
 import icon from './legoio.png'
-import settings from '../../../settings/GridEditorSettings.json'
+import settings from '../../../settings/settings.json'
+import SelectedTable from './SelectedTable'
 
 // * draggable pin https://github.com/visgl/react-map-gl/tree/6.1-release/examples/draggable-markers
 
 export default function CityIOdeckGLmap(props) {
-  let cityscopeJSendpoint =
-    'https://cityscope.media.mit.edu/CS_cityscopeJS/?cityscope='
-
   const [markerInfo, setMarkerInfo] = useState([])
   const [clicked, setClicked] = useState()
   const [zoom, setZoom] = useState()
   const INIT_VIEW = {
     longitude: -71.060929,
     latitude: 42.3545259,
-    zoom: 2,
+    zoom: 1,
     pitch: 0,
     bearing: 0,
   }
@@ -38,6 +34,7 @@ export default function CityIOdeckGLmap(props) {
     let markersArr = []
     props.cityIOdata.forEach((table, index) => {
       markersArr.push({
+        table: table.table,
         index: index,
         info: table.tableHeader,
         coord: {
@@ -107,36 +104,7 @@ export default function CityIOdeckGLmap(props) {
 
   return (
     <>
-      <div
-        elevation={15}
-        style={{ position: 'fixed', zIndex: 100, margin: 50, bottom: '8vh' }}
-      >
-        <Typography variant="h6" color="textPrimary">
-          Live view of CityScope projects worldwide.
-        </Typography>
-      </div>
-      {clicked && clicked.object && (
-        <Card
-          elevation={15}
-          style={{ position: 'fixed', zIndex: 100, margin: 50, bottom: '10vh' }}
-        >
-          <CardContent>
-            <Box p={1} m={1}>
-              <Typography variant="h2" color="textPrimary">
-                CityScope {clicked.object.info.tableName}
-              </Typography>
-              <Typography color={'secondary'}>
-                <Link
-                  color={'secondary'}
-                  href={cityscopeJSendpoint + clicked.object.info.tableName}
-                >
-                  Go to this project >>>
-                </Link>
-              </Typography>
-            </Box>
-          </CardContent>
-        </Card>
-      )}
+      {clicked && clicked.object && <SelectedTable clicked={clicked} />}
 
       <DeckGL
         onHover={({ object }) => (isHovering = Boolean(object))}
