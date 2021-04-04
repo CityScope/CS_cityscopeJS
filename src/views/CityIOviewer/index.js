@@ -15,8 +15,8 @@ export default function CityIOviewer() {
       '& > *': {
         margin: 'auto',
         height: '100%',
-        paddingBottom: theme.spacing(3),
-        paddingTop: theme.spacing(3),
+        padding: theme.spacing(3),
+        
       },
     },
   }))
@@ -25,7 +25,7 @@ export default function CityIOviewer() {
   return (
     <>
       <Page className={classes.root} title="CityScope Projects List">
-        <Container>
+        <Container maxWidth="xl">
           <Grid container>
             <Grid item xs={12} l={4} md={4} xl={4}>
               <SplashScreen />

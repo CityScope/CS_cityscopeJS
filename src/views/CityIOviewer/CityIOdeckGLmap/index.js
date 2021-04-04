@@ -30,11 +30,15 @@ export default function CityIOdeckGLmap(props) {
     document
       .getElementById('deckgl-wrapper')
       .addEventListener('contextmenu', (evt) => evt.preventDefault())
+  })
+
+  useEffect(() => {
+    // set initial zoom level to refelct layers appearance
+    setZoom(INIT_VIEW.zoom)
 
     let markersArr = []
     props.cityIOdata.forEach((table, index) => {
       markersArr.push({
-        table: table.table,
         index: index,
         info: table.tableHeader,
         coord: {
