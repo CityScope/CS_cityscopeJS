@@ -11,20 +11,10 @@ import {
   Card,
   CardContent,
 } from '@material-ui/core'
-import {
-  BarChart as BarChartIcon,
-  Map as MapIcon,
-  Home as HomeIcon,
-} from 'react-feather'
+import { BarChart as BarChartIcon, Map as MapIcon } from 'react-feather'
 import NavItem from './NavItem'
 
 const items = [
-  {
-    href: '/home',
-    icon: HomeIcon,
-    title: 'Home',
-  },
-
   {
     href: '/',
     icon: MapIcon,

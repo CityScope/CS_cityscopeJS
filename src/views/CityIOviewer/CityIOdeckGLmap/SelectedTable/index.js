@@ -4,7 +4,6 @@ export default function SelectedTable(props) {
   const clicked = props.clicked
   const cityscopeJSendpoint =
     'https://cityscope.media.mit.edu/CS_cityscopeJS/?cityscope='
-  console.log(clicked)
 
   return (
     <Card

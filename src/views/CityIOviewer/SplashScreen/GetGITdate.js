@@ -34,13 +34,17 @@ export default function GetGITdate() {
 
   const gitMetaComp = (
     <>
-      <Typography color={'primary'} variant="caption">
-        <code>
-          CityScopeJS Development Tracking
-          <div>Author: {JSON.parse(JSON.stringify(gitMeta.author))}</div>
-          <div>Date: {JSON.parse(JSON.stringify(gitMeta.date))}</div>
-          <div>Hash: {JSON.parse(JSON.stringify(gitMeta.sha))}</div>
-        </code>
+      <Typography color={'primary'} variant={'h5'}>
+        CityScopeJS Development Tracking
+      </Typography>
+      <Typography color={'primary'}>
+        Author: {JSON.parse(JSON.stringify(gitMeta.author))}
+      </Typography>
+      <Typography color={'primary'}>
+        Date: {JSON.parse(JSON.stringify(gitMeta.date))}
+      </Typography>
+      <Typography color={'primary'}>
+        Hash: {JSON.parse(JSON.stringify(gitMeta.sha))}
       </Typography>
     </>
   )

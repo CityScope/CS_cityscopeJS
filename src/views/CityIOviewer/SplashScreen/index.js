@@ -4,22 +4,16 @@ import {
   Typography,
   makeStyles,
   Card,
-  Link,
   CardContent,
+  Box,
+  Link,
 } from '@material-ui/core'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import GetGITdate from './GetGITdate'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: 'auto',
-    height: '100%',
-    paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3),
-  },
-  gridCell: { textAlign: 'left' },
   divider: {
-    margin: theme.spacing(3),
+    margin: theme.spacing(2),
   },
 }))
 export default function SplashScreen() {
@@ -27,30 +21,35 @@ export default function SplashScreen() {
 
   return (
     <Container>
-      <Typography color="textPrimary" variant="h1">
-        MIT CityScope
-      </Typography>
+      <Card elevation={15}>
+        <CardContent position={'bottom'}>
+          <Typography color="textPrimary" variant="h1">
+            MIT CityScope
+          </Typography>
+
+          <Divider className={classes.divider} light />
+
+          <Typography color="textPrimary" variant="h4">
+            MIT CityScope is an open-source urban modeling and simulation
+            platform. CityScope allows users to examine different design
+            alternatives, and observe their impact through multiple layers of
+            urban analytics modules, such as traffic models, ABM simulation,
+            urban access, economy, storm-water, noise and more.
+          </Typography>
+        </CardContent>
+      </Card>
 
       <Divider className={classes.divider} light />
 
-      <Typography color="textPrimary" variant="h5">
-        MIT CityScope is an open-source urban modeling and simulation platform.
-        CityScope allows users to examine different design alternatives, and
-        observe their impact through multiple layers of urban analytics modules,
-        such as traffic models, ABM simulation, urban access, economy,
-        storm-water, noise and more.
-      </Typography>
-      <Divider className={classes.divider} light />
-
-      <Card>
-        <CardContent>
+      <Card elevation={15}>
+        <CardContent position={'bottom'}>
           <Typography color="textPrimary" gutterBottom>
             MIT CityScopeJS open-source project is developed by MIT, the City
             Science Network, and contributers from all over the world.
           </Typography>
+
           <Typography>
             <Link
-              variant={'caption'}
               color={'secondary'}
               href={'https://github.com/CityScope'}
               target={'blank'}
@@ -59,11 +58,36 @@ export default function SplashScreen() {
               development
             </Link>
           </Typography>
-          <GetGITdate />
         </CardContent>
       </Card>
 
       <Divider className={classes.divider} light />
+
+      <Card elevation={15}>
+        <CardContent position={'bottom'}>
+          <Typography color="textPrimary" gutterBottom>
+            Map view is provided via CityIO, CityScope server.
+          </Typography>
+          <Typography>
+            <Link
+              color={'secondary'}
+              href={'https://github.com/CityScope/CS_CityIO'}
+              target={'blank'}
+            >
+              <GitHubIcon fontSize={'small'} />{' '}
+              https://github.com/CityScope/CS_CityIO
+            </Link>
+          </Typography>
+        </CardContent>
+      </Card>
+
+      <Divider className={classes.divider} light />
+
+      <Card elevation={15}>
+        <CardContent position={'bottom'}>
+          <GetGITdate />
+        </CardContent>
+      </Card>
     </Container>
   )
 }
