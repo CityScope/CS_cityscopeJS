@@ -34,6 +34,20 @@ export default function PrjDeckGLMap(props) {
     updateSunDirection(props.viewSettings.time, effectsRef)
   }, [props.viewSettings])
 
+  const _setViewStateToTableHeader = () => {
+    const header = cityioData.GEOGRID.properties.header
+
+    setViewState({
+      ...viewState,
+      longitude: header.longitude,
+      latitude: header.latitude,
+      zoom: 15,
+      pitch: 0,
+      bearing: 360 - header.rotation,
+      orthographic: true,
+    })
+  }
+
   useEffect(() => {
     // fix deck view rotate
     _rightClickViewRotate()
@@ -53,7 +67,7 @@ export default function PrjDeckGLMap(props) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     effectsRef.current[0].shadowColor = [0, 0, 0, 1]
-  }, [])
+  }, [cityioData.GEOGRID.properties.header])
 
   useEffect(() => {
     setGEOGRID(_proccessGridData(cityioData))
@@ -70,20 +84,6 @@ export default function PrjDeckGLMap(props) {
     localStorage.setItem('deckGLviewState', JSON.stringify(viewState))
 
     setViewState(viewState)
-  }
-
-  const _setViewStateToTableHeader = () => {
-    const header = cityioData.GEOGRID.properties.header
-
-    setViewState({
-      ...viewState,
-      longitude: header.longitude,
-      latitude: header.latitude,
-      zoom: 15,
-      pitch: 0,
-      bearing: 360 - header.rotation,
-      orthographic: true,
-    })
   }
 
   const _rightClickViewRotate = () => {

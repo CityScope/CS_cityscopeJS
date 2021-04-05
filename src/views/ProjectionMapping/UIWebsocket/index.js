@@ -9,20 +9,18 @@ https://stackoverflow.com/questions/39728000/react-native-with-websocket-doesnt-
 */
 
 const UIWebsocket = () => {
-  var socket = new WebSocket(settings.SOCKETS.URL)
-
   const dispatch = useDispatch()
-
   useEffect(() => {
+    var socket = new WebSocket(settings.SOCKETS.URL)
+
     socket.onopen = () => {
       socket.send('CityScopeJS')
-
       socket.onmessage = ({ data }) => {
         dispatch(setUIWebsocketReady(true))
         dispatch(setUIWebsocketData(JSON.parse(data)))
       }
     }
-  }, [])
+  }, [dispatch])
   return null
 }
 
