@@ -240,7 +240,7 @@ export default function Map() {
         }),
     };
 
-    if (cityioData.tableName==="roboscope") {
+    if (cityioData.roboscope==="roboscope") {
       layersKey.GRID = RoboscopeGridLayer({
           data: GEOGRID,
           editOn: menu.includes("EDIT"),
@@ -290,7 +290,7 @@ export default function Map() {
             onMouseUp={() => setMouseDown(false)}
             onMouseDown={() => setMouseDown(true)}
         >
-          {(cityioData.tableName==="roboscope") ? <WebSocket ref={ws_ref} GEOGRID={GEOGRID} onChange={_onWSUpdate}/> : null}
+          {(cityioData.roboscope==="roboscope") ? <WebSocket ref={ws_ref} GEOGRID={GEOGRID} onChange={_onWSUpdate}/> : null}
             <PaintBrush
                 editOn={editOn}
                 mousePos={mousePos}
