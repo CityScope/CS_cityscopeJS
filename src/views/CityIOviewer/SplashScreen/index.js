@@ -1,11 +1,9 @@
 import {
-  Container,
   Divider,
   Typography,
   makeStyles,
   Card,
   CardContent,
-  Box,
   Link,
 } from '@material-ui/core'
 import GitHubIcon from '@material-ui/icons/GitHub'
@@ -20,9 +18,9 @@ export default function SplashScreen() {
   const classes = useStyles()
 
   return (
-    <Container>
+    <>
       <Card elevation={15}>
-        <CardContent position={'bottom'}>
+        <CardContent>
           <Typography color="textPrimary" variant="h1">
             MIT CityScope
           </Typography>
@@ -88,6 +86,6 @@ export default function SplashScreen() {
           <GetGITdate />
         </CardContent>
       </Card>
-    </Container>
+    </>
   )
 }

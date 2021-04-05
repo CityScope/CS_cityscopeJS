@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  makeStyles,
-  Grid,
-  Container,
-} from '@material-ui/core'
+import { makeStyles, Container } from '@material-ui/core'
 import CityIOlist from './CityIOlist'
 import Page from '../../layouts/Page'
 import SplashScreen from './SplashScreen'
@@ -16,8 +10,11 @@ export default function CityIOviewer() {
         margin: 'auto',
         height: '100%',
         padding: theme.spacing(3),
-        
       },
+    },
+    fixedPosition: {
+      position: 'relative',
+      zIndex: 100,
     },
   }))
 
@@ -25,24 +22,18 @@ export default function CityIOviewer() {
   return (
     <>
       <Page className={classes.root} title="CityScope Projects List">
-        <Container maxWidth="xl">
-          <Grid container>
-            <Grid item xs={12} l={4} md={4} xl={4}>
-              <SplashScreen />
-            </Grid>
-            <Grid item xs={12} l={8} md={8} xl={8}>
-              <Card
-                elevation={15}
-                style={{
-                  height: '85vh',
-                  width: '100%',
-                  position: 'relative',
-                }}
-              >
-                <CardContent>{<CityIOlist />}</CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+        <div
+          style={{
+            height: '50vh',
+            width: '100%',
+            position: 'relative',
+          }}
+        >
+          <CityIOlist />
+        </div>
+
+        <Container className={classes.fixedPosition}>
+          <SplashScreen />
         </Container>
       </Page>
     </>

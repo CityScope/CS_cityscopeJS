@@ -11,11 +11,10 @@ export default function SelectedTable(props) {
       style={{
         position: 'relative',
         zIndex: 100,
-        maxWidth: '50%',
       }}
     >
       <CardContent>
-        <Typography variant="h4" color="textPrimary">
+        <Typography variant="h2" color="textPrimary">
           CityScope {clicked.object.info.tableName}
         </Typography>
         <Typography>
