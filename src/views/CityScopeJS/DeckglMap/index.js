@@ -91,7 +91,7 @@ export default function Map() {
         setGEOGRID(_proccessGridData(cityioData));
 
         if (cityioData.access) {
-            setAccess(_proccessAccessData(cityioData));
+            setAccess(_proccessAccessData(cityioData.access));
         }
 
         if (cityioData.textual) {
