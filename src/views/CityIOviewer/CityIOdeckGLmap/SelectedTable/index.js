@@ -4,6 +4,7 @@ export default function SelectedTable(props) {
   const clicked = props.clicked
   const cityscopeJSendpoint =
     'https://cityscope.media.mit.edu/CS_cityscopeJS/?cityscope='
+console.log(clicked.object);
 
   return (
     <Card
@@ -15,14 +16,12 @@ export default function SelectedTable(props) {
     >
       <CardContent>
         <Typography variant="h2" color="textPrimary">
-          CityScope {clicked.object.info.tableName}
+          CityScope {clicked.object.tableName}
         </Typography>
         <Typography>
           <Link
             color={'secondary'}
-            href={
-              cityscopeJSendpoint + clicked.object.info.tableName.toLowerCase()
-            }
+            href={cityscopeJSendpoint + clicked.object.tableName.toLowerCase()}
           >
             Go to project
           </Link>{' '}
@@ -30,7 +29,7 @@ export default function SelectedTable(props) {
           <Link
             target={'blank'}
             color={'secondary'}
-            href={clicked.object.table}
+            href={clicked.object.tableURL}
           >
             view raw data on cityIO.
           </Link>

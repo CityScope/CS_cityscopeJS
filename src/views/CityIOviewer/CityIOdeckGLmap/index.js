@@ -44,8 +44,10 @@ export default function CityIOdeckGLmap(props) {
       const RND_1 = Math.random() * 10
       const RND_2 = Math.random() * 10
       markersArr.push({
+        tableURL: table.tableURL,
+        tableName: table.tableName,
         index: index,
-        info: table.tableHeader,
+        tableHeader: table.tableHeader,
         coord: {
           from: [table.tableHeader.longitude, table.tableHeader.latitude],
           to: [
@@ -111,7 +113,7 @@ export default function CityIOdeckGLmap(props) {
       data: markerInfo,
       pickable: true,
       getPosition: (d) => d.coord.to,
-      getText: (d) => (d.info.tableName ? d.info.tableName : 'no name...'),
+      getText: (d) => d.tableName,
       getColor: [255, 82, 120],
       getSize: zoom < 2 ? 0 : 5,
       getAngle: 0,
@@ -134,7 +136,6 @@ export default function CityIOdeckGLmap(props) {
           transitionDuration: 1000,
           transitionInterpolator: new FlyToInterpolator(),
         })
-        console.log(d)
 
         setClicked(d)
       },
