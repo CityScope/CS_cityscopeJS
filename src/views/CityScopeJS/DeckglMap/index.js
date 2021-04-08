@@ -42,7 +42,7 @@ export default function Map() {
     const [dragStart, setDragStart] = useState(-1);
     const [resetDrag, setResetDrag] = useState(false);
     const [roboscopeScale, setScale] = useState(1);
-    const [tableDim, setTableDim] = useState((8,12));
+    const [tableDim, setTableDim] = useState([8,12]);
     const ws_ref = useRef();
 
     const effectsRef = useRef();
