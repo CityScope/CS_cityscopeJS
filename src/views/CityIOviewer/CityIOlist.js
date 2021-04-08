@@ -14,12 +14,13 @@ export default function CityIOlist() {
     const tablesArr = await axios.get(cityIOlistURL)
     // create array of all requests
     const requestArr = tablesArr.data.map(async (urlStr) => {
+      const tableName = urlStr.split('/').pop()
       return axios
         .get(urlStr + '/GEOGRID/properties/header')
         .then((res) =>
           setTableList((oldArray) => [
             ...oldArray,
-            { table: urlStr, tableHeader: res.data },
+            { tableURL: urlStr, tableName: tableName, tableHeader: res.data },
           ]),
         )
         .catch((error) => console.log(error.toString()))

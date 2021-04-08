@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { StaticMap, _MapContext } from 'react-map-gl'
+import { _MapContext } from 'react-map-gl'
 import { DeckGL } from '@deck.gl/react'
+import { _GlobeView as GlobeView, COORDINATE_SYSTEM } from '@deck.gl/core'
+import { TileLayer } from '@deck.gl/geo-layers'
 import { FlyToInterpolator } from 'deck.gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { ArcLayer, IconLayer, TextLayer } from '@deck.gl/layers'
+import { LineLayer, IconLayer, TextLayer, BitmapLayer } from '@deck.gl/layers'
 import icon from './legoio.png'
-import settings from '../../../settings/settings.json'
+
 import SelectedTable from './SelectedTable'
 
 // * draggable pin https://github.com/visgl/react-map-gl/tree/6.1-release/examples/draggable-markers
@@ -20,7 +22,9 @@ export default function CityIOdeckGLmap(props) {
     zoom: 1,
     pitch: 0,
     bearing: 0,
+    zHeight: 2000000,
   }
+
   const [viewport, setViewport] = useState(INIT_VIEW)
   const [initialViewState, setInitialViewState] = useState(viewport)
   // boolean for hovering flag
@@ -37,43 +41,83 @@ export default function CityIOdeckGLmap(props) {
   useEffect(() => {
     let markersArr = []
     props.cityIOdata.forEach((table, index) => {
+      const RND_1 = Math.random() * 10
+      const RND_2 = Math.random() * 10
       markersArr.push({
+        tableURL: table.tableURL,
+        tableName: table.tableName,
         index: index,
-        info: table.tableHeader,
+        tableHeader: table.tableHeader,
         coord: {
           from: [table.tableHeader.longitude, table.tableHeader.latitude],
           to: [
-            table.tableHeader.longitude + Math.random(),
-            table.tableHeader.latitude + Math.random(),
-            100000,
+            table.tableHeader.longitude + RND_1,
+            table.tableHeader.latitude + RND_2,
+            INIT_VIEW.zHeight,
           ],
         },
       })
     })
     setMarkerInfo(markersArr)
-  }, [props])
+  }, [props, INIT_VIEW.zHeight])
 
   const layers = [
-    new ArcLayer({
-      id: 'arc-layer',
+    new TileLayer({
+      data:
+        'https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png',
+
+      /**
+       * 
+       * TESTS WITH OTHER TILESETS  
+       * 'https://api.mapbox.com/v4/mapbox.mapbox-streets-v8/{z}/{x}/{y}.png' +
+      '?style=' +
+      'mapbox://styles/mapbox/dark-v10' +
+      'mapbox://styles/relnox/ck0h5xn701bpr1dqs3he2lecq' +
+      'mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd' +
+      '&access_token=' +
+      process.env.REACT_APP_MAPBOX_TOKEN,
+
+     settings.map.mapStyle.sat,
+       'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+       */
+
+      minZoom: 0,
+      maxZoom: 19,
+      tileSize: 96,
+
+      renderSubLayers: (props) => {
+        const {
+          bbox: { west, south, east, north },
+        } = props.tile
+
+        return new BitmapLayer(props, {
+          data: null,
+          image: props.data,
+          _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
+          bounds: [west, south, east, north],
+        })
+      },
+    }),
+
+    new LineLayer({
+      id: 'LineLayer',
       data: markerInfo,
       pickable: true,
-      getWidth: 2,
+      getWidth: zoom < 2 ? 2 : 0,
       getSourcePosition: (d) => d.coord.from,
       getTargetPosition: (d) => d.coord.to,
-      getSourceColor: (d) => [255, 82, 120],
-      getTargetColor: (d) => [255, 255, 255],
+      getColor: (d) => [255, 82, 120],
     }),
     new TextLayer({
       id: 'text-layer',
       data: markerInfo,
       pickable: true,
       getPosition: (d) => d.coord.to,
-      getText: (d) => (d.info.tableName ? d.info.tableName : 'no name...'),
-      getColor: [255, 255, 255],
-      getSize: zoom < 3 ? 0 : 20,
+      getText: (d) => d.tableName,
+      getColor: [255, 82, 120],
+      getSize: zoom < 2 ? 0 : 5,
       getAngle: 0,
-      getPixelOffset: [30, 0],
+      getPixelOffset: [10, 5],
       getTextAnchor: 'start',
       getAlignmentBaseline: 'center',
     }),
@@ -86,7 +130,7 @@ export default function CityIOdeckGLmap(props) {
         setInitialViewState({
           longitude: d.object.coord.to[0],
           latitude: d.object.coord.to[1],
-          zoom: 8,
+          zoom: 3,
           pitch: 0,
           bearing: 0,
           transitionDuration: 1000,
@@ -100,8 +144,8 @@ export default function CityIOdeckGLmap(props) {
       },
       getIcon: (d) => 'marker',
       sizeScale: 1,
-      getSize: zoom < 5 ? 75 : 50,
-      getPosition: (d) => [d.coord.to[0], d.coord.to[1], 100000],
+      getSize: zoom < 5 ? 30 : 15,
+      getPosition: (d) => [d.coord.to[0], d.coord.to[1], INIT_VIEW.zHeight],
     }),
   ]
 
@@ -110,6 +154,7 @@ export default function CityIOdeckGLmap(props) {
       {clicked && clicked.object && <SelectedTable clicked={clicked} />}
 
       <DeckGL
+        views={new GlobeView()}
         onHover={({ object }) => (isHovering = Boolean(object))}
         getCursor={({ isDragging }) =>
           isDragging ? 'grabbing' : isHovering ? 'crosshair' : 'grab'
@@ -120,15 +165,7 @@ export default function CityIOdeckGLmap(props) {
         onViewportChange={setViewport}
         onViewStateChange={(d) => setZoom(d.viewState.zoom)}
         ContextProvider={_MapContext.Provider}
-      >
-        <StaticMap
-          onViewportChange={setViewport}
-          reuseMaps
-          preventStyleDiffing={true}
-          mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-          mapStyle={settings.map.mapStyle.sat}
-        />
-      </DeckGL>
+      ></DeckGL>
     </>
   )
 }

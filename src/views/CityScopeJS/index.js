@@ -7,7 +7,8 @@ import CSjsMain from './CSjsMain'
 
 export default function CityScopeJS() {
   // get the table name for cityIO comp
-  const [tableName, setTableName] = useState(null)
+  const [tableName, setTableName] = useState()
+  const [isDone, setIsdone] = useState(false)
   // on init, get the adress URL
   // to search for  a table
   useEffect(() => {
@@ -17,6 +18,13 @@ export default function CityScopeJS() {
     // check URL for proper CS project link
     if (url.indexOf(pre) !== -1 && cityscopePrjName.length > 0) {
       setTableName(cityscopePrjName)
+    } else {
+      /** if failed to get table name from
+       * url location, resote to the
+       * CityIO viewer
+       *
+       */
+      setIsdone(true)
     }
   }, [])
 
@@ -26,15 +34,9 @@ export default function CityScopeJS() {
 
   return (
     <>
-      {!isReady && (
-        <>
-          <CityIOviewer />
-        </>
-      )}
-
       {tableName && <CityIO tableName={tableName} />}
       {isReady && <CSjsMain cityIOdata={cityIOdata} tableName={tableName} />}
-
+      {isDone && <CityIOviewer />}
       <LoadingSpinner />
     </>
   )

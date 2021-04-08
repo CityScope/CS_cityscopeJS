@@ -4,7 +4,7 @@ import { hexToRgb } from "../../../../utils/utils";
 export default function AggregatedTripsLayer({ data, cityioData, ABMmode }) {
     return new PathLayer({
         id: "AGGREGATED_TRIPS",
-        _shadow: false,
+        shadowEnabled: false,
         data,
         getPath: (d) => {
             const noisePath =
