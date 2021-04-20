@@ -2,8 +2,8 @@
   "docsURL": "https://raw.githubusercontent.com/CityScope/CS_cityscopeJS/master/docs/",
   "SOCKETS": { "URL": "ws://localhost:8080" },
   "cityIO": {
-    "baseURL": "https://cityiotest.mirage.city/api/table/",
-    "ListOfTables": "https://cityiotest.mirage.city/api/tables/list/",
+    "baseURL": "https://cityio.media.mit.edu/api/table/",
+    "ListOfTables": "https://cityio.media.mit.edu/api/tables/list/",
     "interval": 500,
     "cityIOmodules": [
       { "name": "header", "expectUpdate": false },
