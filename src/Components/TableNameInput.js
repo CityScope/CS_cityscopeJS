@@ -34,6 +34,7 @@ export default function TableNameInput({ setSelectedTable }) {
     axios.get(cityIOlistURL).then((res) => {
       res.data.forEach((urlStr) => {
         const tableName = strToRemove(urlStr, cityIOtableBaseUrl)
+		const geogridUrl = `${cityIOtableBaseUrl}${tableName}/GEOGRID/`
         buttonsArr.push(
           <Button
             key={Math.random()}
@@ -41,7 +42,7 @@ export default function TableNameInput({ setSelectedTable }) {
             color="secondary"
             onClick={() => {
               axios
-                .get(cityIOtableBaseUrl + tableName + '/GEOGRID')
+                .get(geogridUrl)
                 .then((res) => {
                   if (res.status === 200) {
                     setSelectedTable(tableName)

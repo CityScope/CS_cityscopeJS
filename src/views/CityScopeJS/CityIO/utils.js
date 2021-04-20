@@ -6,7 +6,7 @@ export const getScenarioIndices = (
     setScenarioNames,
     setLoadingState
 ) => {
-    var url = settings.cityIO.baseURL + tableName + "/meta/hashes";
+    var url = `${settings.cityIO.baseURL}${tableName}/meta/hashes`;
     axios
         .get(url)
         .then((res) => {
@@ -39,6 +39,6 @@ export const getScenarioIndices = (
 
 export const getScenarioName = (tableName, id) => {
     const url =
-        settings.cityIO.baseURL + tableName + "/scenarios" + id + "/info";
+		`${settings.cityIO.baseURL}${tableName}/scenarios${id}/info/`;
     return axios.get(url);
 };

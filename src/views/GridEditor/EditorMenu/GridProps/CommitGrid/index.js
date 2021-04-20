@@ -4,6 +4,7 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 import axios from "axios";
 import settings from "../../../../../settings/GridEditorSettings.json";
+import globalSettings from "../../../../../settings/settings.json";
 import Typography from "@material-ui/core/Typography";
 import { useSelector } from "react-redux";
 import Link from "@material-ui/core/Link";
@@ -141,12 +142,12 @@ export default function CommitGrid(props) {
         let tableName = GEOGRID_object.properties.header.tableName.toLowerCase();
         let requestsList = {
             geoGridURL:
-                "https://cityio.media.mit.edu/api/table/update/" +
+				globalSettings.cityIO.baseURL +
                 tableName +
                 "/GEOGRID",
 
             geoGridDataURL:
-                "https://cityio.media.mit.edu/api/table/update/" +
+				globalSettings.cityIO.baseURL + 
                 tableName +
                 "/GEOGRIDDATA",
         };

@@ -17,7 +17,7 @@ function ScenarioItems(props) {
     const dispatch = useDispatch();
 
     const getScenario = (tableName, id) => {
-        const getURL = settings.cityIO.baseURL + tableName + "/scenarios" + id;
+        const getURL = `${settings.cityIO.baseURL}${tableName}/scenarios${id}/`;
         const options = {
             method: "get",
             url: getURL,
@@ -42,7 +42,7 @@ function ScenarioItems(props) {
 
     const deleteScenario = (tableName, id) => {
         const getURL =
-            settings.cityIO.baseURL + "clear/" + tableName + "/scenarios" + id;
+		`${settings.cityIO.baseURL}clear/${tableName}/scenarios${id}/`
         const options = {
             method: "get",
             url: getURL,

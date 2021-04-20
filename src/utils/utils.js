@@ -99,8 +99,7 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
     expectUpdateModules.has(i),
   )
 
-  let postURL =
-    'https://cityio.media.mit.edu/api/table/update/' + tableName + endPoint
+  let postURL = settings.cityIO.baseURL + tableName + endPoint
 
   const options = {
     method: 'post',
