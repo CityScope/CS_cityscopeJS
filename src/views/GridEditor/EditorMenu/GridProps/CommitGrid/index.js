@@ -142,14 +142,10 @@ export default function CommitGrid(props) {
         let tableName = GEOGRID_object.properties.header.tableName.toLowerCase();
         let requestsList = {
             geoGridURL:
-				globalSettings.cityIO.baseURL +
-                tableName +
-                "/GEOGRID",
+				`${globalSettings.cityIO.baseURL}${tableName}/GEOGRID/`,
 
             geoGridDataURL:
-				globalSettings.cityIO.baseURL + 
-                tableName +
-                "/GEOGRIDDATA",
+				`${globalSettings.cityIO.baseURL}${tableName}/GEOGRIDDATA/`,
         };
 
         const geoGridOptions = (URL, DATA) => {
@@ -164,28 +160,37 @@ export default function CommitGrid(props) {
             };
         };
 
-        axios(geoGridOptions(requestsList.geoGridURL, GEOGRID_object))
-            .then(function (response) {
-                setReqResonse(reqResonseUI(response, tableName));
-            })
-            // then reset GEOGRIDDATA of that new grid
+		const table_url = `${globalSettings.cityIO.baseURL}${tableName}/`;
+		const new_table_grid = {
+			"GEOGRID": GEOGRID_object,
+			"GEOGRIDDATA": GEOGRIDDATA_object
+		};
 
-            .then(function () {
-                axios(geoGridOptions(requestsList.geoGridDataURL, {}));
-                console.log("removed GEOGRIDDATA");
-            })
-            .then(function () {
-                axios(
-                    geoGridOptions(
-                        requestsList.geoGridDataURL,
-                        GEOGRIDDATA_object
-                    )
-                );
-                console.log("mirrored GEOGRID to GEOGRIDDATA");
-            })
-            .catch((error) => {
-                console.log("ERROR:", error);
-            });
+		axios(geoGridOptions(table_url, new_table_grid))
+		.catch(error => console.log(`ERROR: ${error}`));
+
+        // axios(geoGridOptions(requestsList.geoGridURL, GEOGRID_object))
+        //     .then(function (response) {
+        //         setReqResonse(reqResonseUI(response, tableName));
+        //     })
+        //     // then reset GEOGRIDDATA of that new grid
+
+        //     .then(function () {
+        //         axios(geoGridOptions(requestsList.geoGridDataURL, {}));
+        //         console.log("removed GEOGRIDDATA");
+        //     })
+        //     .then(function () {
+        //         axios(
+        //             geoGridOptions(
+        //                 requestsList.geoGridDataURL,
+        //                 GEOGRIDDATA_object
+        //             )
+        //         );
+        //         console.log("mirrored GEOGRID to GEOGRIDDATA");
+        //     })
+        //     .catch((error) => {
+        //         console.log("ERROR:", error);
+        //     });
     };
 
     return (

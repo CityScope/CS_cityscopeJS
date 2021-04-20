@@ -27,7 +27,7 @@ export default function CityIO(props) {
     const { tableName } = props;
     const [hashId, setHashId] = useState(null);
     const [hashes, setHashes] = useState({});
-    const cityioURL = `${settings.cityIO.baseURL}${tableName}`;
+    const cityioURL = `${settings.cityIO.baseURL}${tableName}/`;
     const cityioData = useSelector((state) => state.CITYIO);
 
     const dispatch = useDispatch();
@@ -44,7 +44,7 @@ export default function CityIO(props) {
 
     async function update() {
         // recursively get hashes
-        const newHashId = await getAPICall(cityioURL + "/meta/id");
+        const newHashId = await getAPICall(cityioURL + "meta/id/");
         if (hashId !== newHashId) {
             setHashId(newHashId);
         }
@@ -52,14 +52,14 @@ export default function CityIO(props) {
     }
 
     async function getModules() {
-        const newHashes = await getAPICall(cityioURL + "/meta/hashes");
+        const newHashes = await getAPICall(cityioURL + "meta/hashes/");
         const promises = [];
         const loadingModules = [];
         const pickedModules = settings.cityIO.cityIOmodules.map((x) => x.name);
         // for each of the modules in settings, add api call to promises
         pickedModules.forEach((module) => {
             if (hashes[module] !== newHashes[module]) {
-                promises.push(getAPICall(cityioURL + "/" + module));
+                promises.push(getAPICall(`${cityioURL}${module}/`));
                 loadingModules.push(module);
             } else {
                 promises.push(null);
