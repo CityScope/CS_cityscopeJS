@@ -18,9 +18,9 @@ export default function TableNameInput({ setSelectedTable }) {
   // https://stackoverflow.com/a/27098801/860099
   function strToRemove(str, strToRemove) {
     let start = str.indexOf(strToRemove)
-    return (
+    let result =
       str.slice(0, start) + str.slice(start + strToRemove.length, str.length)
-    )
+    return result
   }
 
   useEffect(() => {
@@ -32,9 +32,8 @@ export default function TableNameInput({ setSelectedTable }) {
     const cityIOtableBaseUrl = settings.cityIO.baseURL
 
     axios.get(cityIOlistURL).then((res) => {
-      res.data.forEach((urlStr) => {
-        const tableName = strToRemove(urlStr, cityIOtableBaseUrl)
-		const geogridUrl = `${cityIOtableBaseUrl}${tableName}/GEOGRID/`
+      res.data.forEach((tableName) => {
+        const geogridUrl = `${cityIOtableBaseUrl}${tableName}/GEOGRID/`
         buttonsArr.push(
           <Button
             key={Math.random()}
