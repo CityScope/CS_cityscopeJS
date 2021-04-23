@@ -15,14 +15,6 @@ export default function TableNameInput({ setSelectedTable }) {
   const classes = useStyles()
   const [tableList, setTableList] = useState()
 
-  // https://stackoverflow.com/a/27098801/860099
-  function strToRemove(str, strToRemove) {
-    let start = str.indexOf(strToRemove)
-    return (
-      str.slice(0, start) + str.slice(start + strToRemove.length, str.length)
-    )
-  }
-
   useEffect(() => {
     /**
      * Gets all tables on init
@@ -32,8 +24,8 @@ export default function TableNameInput({ setSelectedTable }) {
     const cityIOtableBaseUrl = settings.cityIO.baseURL
 
     axios.get(cityIOlistURL).then((res) => {
-      res.data.forEach((urlStr) => {
-        const tableName = strToRemove(urlStr, cityIOtableBaseUrl)
+      res.data.forEach((tableName) => {
+        const geogridUrl = `${cityIOtableBaseUrl}${tableName}/GEOGRID/`
         buttonsArr.push(
           <Button
             key={Math.random()}
@@ -41,7 +33,7 @@ export default function TableNameInput({ setSelectedTable }) {
             color="secondary"
             onClick={() => {
               axios
-                .get(cityIOtableBaseUrl + tableName + '/GEOGRID')
+                .get(geogridUrl)
                 .then((res) => {
                   if (res.status === 200) {
                     setSelectedTable(tableName)

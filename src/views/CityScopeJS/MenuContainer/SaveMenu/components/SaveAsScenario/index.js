@@ -32,7 +32,7 @@ export default function SaveAsScenario(props) {
     const scenarioNames = useSelector((state) => state.SCENARIO_NAMES);
 
     const getScenarioIndex = () => {
-        var getURL = settings.cityIO.baseURL + tableName + "/meta/hashes";
+        var getURL = `${settings.cityIO.baseURL}${tableName}/meta/hashes/`;
         const options = {
             method: "get",
             url: getURL,
@@ -67,8 +67,7 @@ export default function SaveAsScenario(props) {
             },
         };
 
-        var postURL =
-            settings.cityIO.baseURL + "update/" + tableName + "/scenarios" + id;
+        var postURL = `${settings.cityIO.baseUR}update/${tableName}/scenarios${id}/`;
 
         const options = {
             method: "post",
