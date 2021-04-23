@@ -15,14 +15,6 @@ export default function TableNameInput({ setSelectedTable }) {
   const classes = useStyles()
   const [tableList, setTableList] = useState()
 
-  // https://stackoverflow.com/a/27098801/860099
-  function strToRemove(str, strToRemove) {
-    let start = str.indexOf(strToRemove)
-    let result =
-      str.slice(0, start) + str.slice(start + strToRemove.length, str.length)
-    return result
-  }
-
   useEffect(() => {
     /**
      * Gets all tables on init
