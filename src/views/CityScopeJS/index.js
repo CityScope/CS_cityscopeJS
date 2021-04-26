@@ -14,7 +14,9 @@ export default function CityScopeJS() {
   useEffect(() => {
     let url = window.location.toString()
     let pre = 'cityscope='
-    let cityscopePrjName = url.substring(url.indexOf(pre) + pre.length)
+    let cityscopePrjName = url.substring(url.indexOf(pre) + pre.length).toLowerCase()
+
+    
     // check URL for proper CS project link
     if (url.indexOf(pre) !== -1 && cityscopePrjName.length > 0) {
       setTableName(cityscopePrjName)
