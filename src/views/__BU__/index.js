@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import CityIO from './CityIO/cityIO'
-// import CityIOviewer from '../CityIOviewer'
+import CityIOviewer from '../CityIOviewer'
 import LoadingSpinner from './CityIO/LoadingSpinner'
 import CSjsMain from './CSjsMain'
 
 export default function CityScopeJS() {
-  /** 
   // get the table name for cityIO comp
   const [tableName, setTableName] = useState()
   const [isDone, setIsdone] = useState(false)
@@ -25,27 +25,21 @@ export default function CityScopeJS() {
        * url location, resote to the
        * CityIO viewer
        *
-       *
+       */
       setIsdone(true)
     }
   }, [])
 
-  **/
-  const [cityioData, setCityioData] = useState(null)
-  
-  const tableName = 'cityscopejs'
+  // wait for 'ready' flag from cityIO when app is ready to start
+  const isReady = useSelector((state) => state.READY)
+  const cityIOdata = useSelector((state) => state.CITYIO)
+
   return (
     <>
-      {tableName && (
-        <CityIO
-          tableName={tableName}
-          cityioData={cityioData}
-          setCityioData={setCityioData}
-        />
-      )}
-      {/* {cityioData && <CSjsMain cityIOdata={cityIOdata} tableName={tableName} />} */}
-      {/* {isDone && <CityIOviewer />} */}
-      {/* <LoadingSpinner /> */}
+      {tableName && <CityIO tableName={tableName} />}
+      {isReady && <CSjsMain cityIOdata={cityIOdata} tableName={tableName} />}
+      {isDone && <CityIOviewer />}
+      <LoadingSpinner />
     </>
   )
 }

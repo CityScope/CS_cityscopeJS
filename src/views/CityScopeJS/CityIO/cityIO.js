@@ -1,110 +1,100 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import {
-    getCityioData,
-    setReadyState,
-    setLoadingState,
-    setScenarioNames,
-    addLoadingModules,
-    removeLoadingModules,
-} from "../../../redux/actions";
-import settings from "../../../settings/settings.json";
-import { getScenarioIndices } from "./utils";
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import settings from '../../../settings/settings.json'
 
 const getAPICall = async (URL) => {
-    try {
-        // ! should add 'retry' here
-        // ! https://stackoverflow.com/questions/56074531/how-to-retry-5xx-requests-using-axios
-        const response = await axios.get(URL);
-        return response.data;
-    } catch (err) {
-        console.log(err);
-    }
-};
+  try {
+    const response = await axios.get(URL)
+    return response.data
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 export default function CityIO(props) {
-    const { tableName } = props;
-    const [hashId, setHashId] = useState(null);
-    const [hashes, setHashes] = useState({});
-    const cityioURL = `${settings.cityIO.baseURL}${tableName}/`;
-    const cityioData = useSelector((state) => state.CITYIO);
+  const { tableName, cityioData, setCityioData } = props
 
-    const dispatch = useDispatch();
+  const [mainHash, setMainHash] = useState(null)
+  const [hashes, setHashes] = useState({})
+  const cityioURL = `${settings.cityIO.baseURL}${tableName}/`
 
-    /**
-     * start fetching API hashes to check for new data
-     */
-    useEffect(() => {
-        const timer = setTimeout(update, settings.cityIO.interval);
-        console.log("reading cityIO every" + settings.cityIO.interval + "ms");
-        return () => clearTimeout(timer);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  /**
+   * start fetching API hashes to check for new data
+   */
+  useEffect(() => {
+    const timer = setTimeout(getCityIOmetaHash, settings.cityIO.interval)
+    console.log('reading cityIO every' + settings.cityIO.interval + 'ms')
+    return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-    async function update() {
-        // recursively get hashes
-        const newHashId = await getAPICall(cityioURL + "meta/id/");
-        if (hashId !== newHashId) {
-            setHashId(newHashId);
-        }
-        setTimeout(update, settings.cityIO.interval);
+  /**
+   * gets the main hash of this cityIO table
+   * on a constant loop to check for updates
+   */
+  async function getCityIOmetaHash() {
+    // recursively get hashes
+    const newMainHash = await getAPICall(cityioURL + 'meta/id/')
+    // is it a new hash?
+    if (mainHash !== newMainHash) {
+      setMainHash(newMainHash)
     }
+    // do it forever
+    setTimeout(getCityIOmetaHash, settings.cityIO.interval)
+  }
 
-    async function getModules() {
-        const newHashes = await getAPICall(cityioURL + "meta/hashes/");
-        const promises = [];
-        const loadingModules = [];
-        const pickedModules = settings.cityIO.cityIOmodules.map((x) => x.name);
-        // for each of the modules in settings, add api call to promises
-        pickedModules.forEach((module) => {
-            if (hashes[module] !== newHashes[module]) {
-                promises.push(getAPICall(`${cityioURL}${module}/`));
-                loadingModules.push(module);
-            } else {
-                promises.push(null);
-            }
-        });
-        dispatch(addLoadingModules(loadingModules));
-        const modules = await Promise.all(promises);
-        setHashes(newHashes);
-
-        // update cityio object with modules data
-        const modulesData = pickedModules.reduce((obj, k, i) => {
-            if (modules[i]) {
-                console.log(`updating ${k}`);
-                return { ...obj, [k]: modules[i] };
-            } else {
-                return obj;
-            }
-        }, cityioData);
-        modulesData.tableName = tableName;
-
-        dispatch(removeLoadingModules(loadingModules));
-
-        // send to cityio
-        dispatch(getCityioData(modulesData));
-        console.log("done updating from cityIO");
-
-        // initializes rendering of Menu and Map containers
-        dispatch(setReadyState(true));
-        dispatch(setLoadingState(false));
+  useEffect(() => {
+    //! only update if hashId changes
+    if (!mainHash) {
+      return
     }
+    // if we have a new hash, start getting submodules
+    getModules()
+  }, [mainHash])
 
-    useEffect(() => {
-        //! only update if hashId changes
-        if (!hashId) {
-            return;
-        }
-        // reset the state of loading flag
-        dispatch(setLoadingState(true));
-        // set Scenario Names and Ids
-        getScenarioIndices(tableName, (data) =>
-            dispatch(setScenarioNames(data))
-        );
-        getModules();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [hashId]);
+  async function getModules() {
+    console.log('--- starting update ---')
+    // wait to get all of this table's hashes
+    const newHashes = await getAPICall(cityioURL + 'meta/hashes/')
+    // init array of GET promises
+    const promises = []
+    // init array of modules names
+    const loadingModules = []
+    // get an array of modules to update
+    const modulesToUpdate = settings.cityIO.cityIOmodules.map((x) => x.name)
+    // for each of the modules in settings, add api call to promises
+    modulesToUpdate.forEach((module) => {
+      // if this module has an old hash
+      // we assume it is about to be updated
+      if (hashes[module] !== newHashes[module]) {
+        // add this module URL to an array of GET requests
+        promises.push(getAPICall(`${cityioURL}${module}/`))
+        // and also add this module name to array
+        // of modules that we await for
+        loadingModules.push(module)
+      } else {
+        promises.push(null)
+      }
+    })
 
-    return null;
+    // get all modules data
+    const modules = await Promise.all(promises)
+    setHashes(newHashes)
+
+    // update cityio object with modules data
+    const modulesData = modulesToUpdate.reduce((obj, k, i) => {
+      if (modules[i]) {
+        console.log(`updating ${k}`)
+        return { ...obj, [k]: modules[i] }
+      } else {
+        return obj
+      }
+    }, cityioData)
+
+    modulesData.tableName = tableName
+    setCityioData(modulesData)
+    console.log('--- done updating from cityIO ---')
+  }
+
+  return null
 }
