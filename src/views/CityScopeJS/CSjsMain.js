@@ -11,7 +11,6 @@ import {
 } from '@material-ui/core'
 import Page from '../../layouts/Page'
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: 'auto',
@@ -21,11 +20,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-
 export default function CSjsMain(props) {
   const classes = useStyles()
-  const tableName = props.tableName
-  const cityIOdata = props.cityIOdata
+  const { tableName, cityIOdata } = props
 
   return (
     <Page className={classes.root} title="CitySCopeJS">
@@ -43,7 +40,7 @@ export default function CSjsMain(props) {
                   }}
                 >
                   <CardContent>
-                    <MenuContainer tableName={tableName} />
+                    {/* <MenuContainer tableName={tableName} /> */}
                   </CardContent>
                 </Card>
               </Grid>
@@ -59,8 +56,7 @@ export default function CSjsMain(props) {
                 position: 'relative',
               }}
             >
-              {/* <Test/> */}
-              <MapContainer />
+              {/* <MapContainer /> */}
             </Card>
           </Grid>
           <Grid item xs={6} l={3} md={3} xl={2}>

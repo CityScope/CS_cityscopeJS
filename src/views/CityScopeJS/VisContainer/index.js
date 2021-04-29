@@ -1,33 +1,40 @@
-import React from "react";
-import { List, ListItem, Divider } from "@material-ui/core";
-import Radar from "./Radar";
-import BarChart from "./BarChart";
-import AreaCalc from "./AreaCalc";
+import React from 'react'
+import { List, ListItem, Divider } from '@material-ui/core'
+import Radar from './Radar'
+import BarChart from './BarChart'
+import AreaCalc from './AreaCalc'
 
 function VisContainer(props) {
-    return (
-        <>
-            {props.cityIOdata && (
-                <List>
-                    <ListItem alignItems="center">
-                        <AreaCalc cityioData={props.cityIOdata} />
-                    </ListItem>
+  const cityIOdata = props.cityIOdata
+  console.log(cityIOdata)
 
-                    <Divider />
+  return (
+    <>
+      {props.cityIOdata && (
+        <List>
+          <ListItem alignItems="center">
+            <AreaCalc cityioData={cityIOdata} />
+          </ListItem>
 
-                    <ListItem>
-                        <Radar cityioData={props.cityIOdata} />
-                    </ListItem>
+          {cityIOdata.indicators && (
+            <>
+              <Divider />
 
-                    <Divider />
+              <ListItem>
+                <Radar cityioData={cityIOdata} />
+              </ListItem>
 
-                    <ListItem>
-                        <BarChart cityioData={props.cityIOdata} />
-                    </ListItem>
-                </List>
-            )}
-        </>
-    );
+              <Divider />
+
+              <ListItem>
+                <BarChart cityioData={cityIOdata} />
+              </ListItem>
+            </>
+          )}
+        </List>
+      )}
+    </>
+  )
 }
 
-export default VisContainer;
+export default VisContainer

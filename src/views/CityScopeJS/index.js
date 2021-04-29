@@ -31,7 +31,7 @@ export default function CityScopeJS() {
   }, [])
 
   **/
-  const [cityioData, setCityioData] = useState(null)
+  const [cityIOdata, setCityIOdata] = useState(null)
   
   const tableName = 'cityscopejs'
   return (
@@ -39,11 +39,11 @@ export default function CityScopeJS() {
       {tableName && (
         <CityIO
           tableName={tableName}
-          cityioData={cityioData}
-          setCityioData={setCityioData}
+          cityIOdata={cityIOdata}
+          setCityIOdata={setCityIOdata}
         />
       )}
-      {/* {cityioData && <CSjsMain cityIOdata={cityIOdata} tableName={tableName} />} */}
+      {cityIOdata && <CSjsMain cityIOdata={cityIOdata} tableName={tableName} />}
       {/* {isDone && <CityIOviewer />} */}
       {/* <LoadingSpinner /> */}
     </>

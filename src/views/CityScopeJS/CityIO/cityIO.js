@@ -12,7 +12,7 @@ const getAPICall = async (URL) => {
 }
 
 export default function CityIO(props) {
-  const { tableName, cityioData, setCityioData } = props
+  const { tableName, cityIOdata, setCityIOdata } = props
 
   const [mainHash, setMainHash] = useState(null)
   const [hashes, setHashes] = useState({})
@@ -89,10 +89,10 @@ export default function CityIO(props) {
       } else {
         return obj
       }
-    }, cityioData)
+    }, cityIOdata)
 
     modulesData.tableName = tableName
-    setCityioData(modulesData)
+    setCityIOdata(modulesData)
     console.log('--- done updating from cityIO ---')
   }
 
