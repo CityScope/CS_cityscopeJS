@@ -1,6 +1,9 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import Typography from "@material-ui/core/Typography";
 import GridMaker from "./GridMaker";
 import CommitGrid from "./CommitGrid";
@@ -35,6 +38,7 @@ export default function GridProps() {
         rotation: settings.GEOGRID.properties.header.rotation,
         cellSize: settings.GEOGRID.properties.header.cellSize,
         projection: settings.GEOGRID.properties.header.projection,
+        roboscope: settings.GEOGRID.properties.header.roboscope
     });
 
     const handleChangeForm = (event) => {
@@ -206,6 +210,19 @@ export default function GridProps() {
                     type="string"
                     helperText="Default projection should work for most CityScope cases. Find specific projections at: https://epsg.io/"
                 />
+            </div>
+            <div className={classes.root}>
+              <InputLabel id="label">Roboscope Capability</InputLabel>
+              <Select 
+                  onChange={(event) => handleChangeForm({target: {id:"roboscope", value:event.target.value}})}
+                  id="roboscope" 
+                  value={formValues.roboscope} 
+                  className={classes.textField}
+                  variant="outlined"
+              >
+                <MenuItem value="false">No</MenuItem>
+                <MenuItem value="true">Yes</MenuItem>
+              </Select>
             </div>
             <div className={classes.root}>
                 <GridMaker gridProps={formValues} />

@@ -3,39 +3,50 @@ import PaintBrush from './components/PaintBrush'
 import { useSelector, useDispatch } from 'react-redux'
 import { listenToSlidersEvents } from '../../../redux/actions'
 import {
-  _proccessAccessData,
-  _proccessGridData,
-  _postMapEditsToCityIO,
-} from '../../../utils/utils'
-import { StaticMap } from 'react-map-gl'
-import DeckGL from '@deck.gl/react'
-import 'mapbox-gl/dist/mapbox-gl.css'
-import settings from '../../../settings/settings.json'
-import AnimationComponent from './components/AnimationComponent'
-import { updateSunDirection, _setupSunEffects } from '../../../utils/utils'
+    _proccessAccessData,
+    _proccessGridData,
+    _postMapEditsToCityIO,
+} from "../../../utils/utils";
+import { StaticMap } from "react-map-gl";
+import DeckGL from "@deck.gl/react";
+import "mapbox-gl/dist/mapbox-gl.css";
+import settings from "../../../settings/settings.json";
+import AnimationComponent from "./components/AnimationComponent";
+import WebSocket from "./components/WebSocket";
+import { updateSunDirection, _setupSunEffects } from "../../../utils/utils";
 import {
-  AccessLayer,
-  AggregatedTripsLayer,
-  ABMLayer,
-  GridLayer,
-  TextualLayer,
-} from './deckglLayers'
+    AccessLayer,
+    AggregatedTripsLayer,
+    ABMLayer,
+    GridLayer,
+    RoboscopeSelection,
+    RoboscopeGridLayer,
+    TextualLayer
+} from "./deckglLayers";
 
 export default function Map() {
-  const [draggingWhileEditing, setDraggingWhileEditing] = useState(false)
-  const [selectedCellsState, setSelectedCellsState] = useState(null)
-  const [viewState, setViewState] = useState(settings.map.initialViewState)
-  const [keyDownState, setKeyDownState] = useState(null)
-  const [mousePos, setMousePos] = useState(null)
-  const [mouseDown, setMouseDown] = useState(null)
-  const [hoveredObj, setHoveredObj] = useState(null)
-  const [access, setAccess] = useState(null)
-  const [textualData, setTextualData] = useState(null)
-  const [GEOGRID, setGEOGRID] = useState(null)
-  const [ABM, setABM] = useState({})
-  const [loaded, setLoaded] = useState(false)
-  const effectsRef = useRef()
-  const deckGL = useRef()
+    const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
+    const [selectedCellsState, setSelectedCellsState] = useState(null);
+    const [viewState, setViewState] = useState(settings.map.initialViewState);
+    const [keyDownState, setKeyDownState] = useState(null);
+    const [mousePos, setMousePos] = useState(null);
+    const [mouseDown, setMouseDown] = useState(null);
+    const [hoveredObj, setHoveredObj] = useState(null);
+    const [access, setAccess] = useState(null);
+    const [textualData, setTextualData] = useState(null);
+    const [GEOGRID, setGEOGRID] = useState(null);
+    const [ABM, setABM] = useState({});
+    const [loaded, setLoaded] = useState(false);
+    //roboscope
+    const [selectedFeaturesState, setSelectedFeaturesState] = useState([]);
+    const [dragStart, setDragStart] = useState(-1);
+    const [resetDrag, setResetDrag] = useState(false);
+    const [roboscopeScale, setScale] = useState(1);
+    const [tableDim, setTableDim] = useState([8,12]);
+    const ws_ref = useRef();
+
+    const effectsRef = useRef();
+    const deckGL = useRef();
 
   const dispatch = useDispatch()
 
@@ -57,11 +68,13 @@ export default function Map() {
     state.ABM_MODE,
   ])
 
-  var ABMOn = menu.includes('ABM')
-  var rotateOn = menu.includes('ROTATE')
-  var shadowsOn = menu.includes('SHADOWS')
-  var editOn = menu.includes('EDIT')
-  var resetViewOn = menu.includes('RESET_VIEW')
+  var ABMOn = menu.includes("ABM");
+  var rotateOn = menu.includes("ROTATE");
+  var shadowsOn = menu.includes("SHADOWS");
+  var editOn = menu.includes("EDIT");
+  var selectionOn = menu.includes("SELECTION");
+  var translateOn = menu.includes("TRANSLATE");
+  var resetViewOn = menu.includes("RESET_VIEW");
 
   useEffect(() => {
 
@@ -128,6 +141,27 @@ export default function Map() {
     setViewState(viewState)
   }
 
+  useEffect(() => {
+      if (!selectionOn && selectedFeaturesState.length > 0) {
+        ws_ref.current[0](roboscopeScale, selectedFeaturesState.map(index => GEOGRID.features[index].properties));
+      }
+  }, [selectionOn]);
+  
+  
+  useEffect(() => {
+      if (!translateOn && selectedFeaturesState.length > 0) {
+        ws_ref.current[0](roboscopeScale, selectedFeaturesState.map(index => GEOGRID.features[index].properties));
+      }
+  }, [translateOn]);
+  
+  const _onWSUpdate = (new_GEOGRID, new_data, init = false) => {
+    if (init !== false) {
+      setTableDim(init);
+    } else {
+      setGEOGRID(new_GEOGRID);
+      setSelectedCellsState(new_data);
+    }
+  }
   // /**
   //  * resets the camera viewport
   //  * to cityIO header data
@@ -194,9 +228,44 @@ export default function Map() {
       data: textualData && textualData,
       coordinates: GEOGRID,
     }),
+    SELECTION: RoboscopeSelection({
+      data: GEOGRID,
+      editOn: menu.includes("EDIT"),
+      state: { menu, tableDim },
+      updaters: { setSelectedFeaturesState, setScale},
+      deckGL
+    })
   }
-
-  const layerOrder = ['TEXTUAL', 'ABM', 'AGGREGATED_TRIPS', 'GRID', 'ACCESS']
+  
+  if (cityioData.roboscope==="roboscope") {
+    layersKey.GRID = RoboscopeGridLayer({
+      data: GEOGRID,
+      editOn: menu.includes("EDIT"),
+      menu: menu,
+      state: {
+          selectedType,
+          keyDownState,
+          selectedCellsState,
+          pickingRadius,
+          selectedFeaturesState,
+          dragStart,
+          resetDrag,
+          roboscopeScale
+      },
+      updaters: {
+          setSelectedCellsState,
+          setDraggingWhileEditing,
+          setHoveredObj,
+          setDragStart,
+          setResetDrag,
+          setSelectedFeaturesState
+      },
+      deckGL,
+      ws_ref
+    })
+  }
+  
+  const layerOrder = ['TEXTUAL', 'ABM', 'AGGREGATED_TRIPS', 'GRID', 'ACCESS', 'SELECTION']
 
   const _renderLayers = () => {
     let layers = []
@@ -219,6 +288,7 @@ export default function Map() {
       onMouseUp={() => setMouseDown(false)}
       onMouseDown={() => setMouseDown(true)}
     >
+    {(cityioData.roboscope==="roboscope") ? <WebSocket ref={ws_ref} GEOGRID={GEOGRID} onChange={_onWSUpdate}/> : null}
       <PaintBrush
         editOn={editOn}
         mousePos={mousePos}

@@ -80,6 +80,7 @@ export default function CityIO(props) {
         }, cityioData);
         modulesData.tableName = tableName;
 
+        modulesData.roboscope = (modulesData.GEOGRID.properties.header.roboscope ? "roboscope" : null)
         dispatch(removeLoadingModules(loadingModules));
 
         // send to cityio
