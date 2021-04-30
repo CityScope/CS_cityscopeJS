@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
     listenToSlidersEvents,
     listenToABMmode,
-} from "../../../../../redux/actions";
+} from "../../../../redux/actions";
 import ABMLegend from "./ABMLegend";
 
 import Radio from "@material-ui/core/Radio";

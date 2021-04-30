@@ -5,7 +5,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import settings from "../../../../settings/settings.json";
 import Collapse from "@material-ui/core/Collapse";
-import ABMSubmenu from "./ABMSubmenu";
+import ABMSubmenu from "../ABMSubmenu";
 import ShadowSubmenu from "./ShadowSubmenu";
 import AccessSubmenu from "./AccessSubmenu";
 import Switch from "@material-ui/core/Switch";
