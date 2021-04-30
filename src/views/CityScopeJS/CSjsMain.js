@@ -10,6 +10,7 @@ import {
   Container,
 } from '@material-ui/core'
 import Page from '../../layouts/Page'
+import { useState } from 'react'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,13 +24,17 @@ const useStyles = makeStyles((theme) => ({
 export default function CSjsMain(props) {
   const classes = useStyles()
   const { tableName, cityIOdata } = props
+  // state func to pass to the menu components
+  // to get user interaction
+  // and send  map object
+  const [menuState, setNavMenuState] = useState()
 
   return (
     <Page className={classes.root} title="CitySCopeJS">
       <LoadingSpinner />
       <Container maxWidth={null}>
         <Grid container spacing={5}>
-          <Grid item xs={6} l={3} md={3} xl={2} container>
+          <Grid item xs={4} l={1} md={3} xl={1} container>
             <Grid item container direction="column" spacing={2}>
               <Grid item xs={12} l={12} md={12} xl={12}>
                 <Card
@@ -40,7 +45,11 @@ export default function CSjsMain(props) {
                   }}
                 >
                   <CardContent>
-                    {/* <MenuContainer tableName={tableName} /> */}
+                    <MenuContainer
+                      cityIOdata={cityIOdata}
+                      tableName={tableName}
+                      setNavMenuState={setNavMenuState}
+                    />
                   </CardContent>
                 </Card>
               </Grid>
@@ -67,7 +76,7 @@ export default function CSjsMain(props) {
                 overflow: 'auto',
               }}
             >
-              <VisContainer cityIOdata={cityIOdata} />
+              {/* <VisContainer cityIOdata={cityIOdata} /> */}
             </Card>
           </Grid>
         </Grid>

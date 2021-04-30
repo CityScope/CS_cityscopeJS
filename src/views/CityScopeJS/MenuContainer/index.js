@@ -1,88 +1,163 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { listenToMenuUI } from "../../../redux/actions";
-import EditMenu from "./EditMenu";
-import TogglesMenu from "./TogglesMenu";
-import SaveMenu from "./SaveMenu";
-import { Button, Typography, List, ListItem } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import NavigationIcon from "@material-ui/icons/Navigation";
+import EditMenu from './EditMenu'
+import TogglesMenu from './TogglesMenu'
+import SaveMenu from './SaveMenu'
+import { Button, Typography, List, ListItem } from '@material-ui/core'
+import EditIcon from '@material-ui/icons/Edit'
+import CloudUploadIcon from '@material-ui/icons/CloudUpload'
+import NavigationIcon from '@material-ui/icons/Navigation'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormGroup from '@material-ui/core/FormGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormControl from '@material-ui/core/FormControl'
+import FormLabel from '@material-ui/core/FormLabel'
+import { useState } from 'react'
 
 function MenuContainer(props) {
-    const { tableName } = props;
-    const menuState = useSelector((state) => state.MENU);
-    const dispatch = useDispatch();
+  const { cityIOdata, tableName, setNavMenuState } = props
 
-    const handleToggle = (value) => () => {
-        const i = menuState.indexOf(value);
-        const updatedMenuState = [...menuState];
-        if (i === -1) {
-            updatedMenuState.push(value);
-        } else {
-            updatedMenuState.splice(i, 1);
-        }
+  const expectedLayers = {
+    GRID: {
+      displayName: 'Grid Layer',
+      cityIOmoduleName: 'GEOGRID',
+    },
+    ABM: {
+      displayName: 'Simulation Layer',
+      cityIOmoduleName: 'ABM2',
+    },
+    AGGREGATED_TRIPS: {
+      displayName: 'Trips Layer',
+      cityIOmoduleName: 'ABM2',
+    },
+    ACCESS: {
+      displayName: 'Accessibility Layer',
+      cityIOmoduleName: 'access',
+    },
+    TEXTUAL: {
+      displayName: 'Text Layer',
+      cityIOmoduleName: 'GEOGRID',
+    },
+  }
 
-        dispatch(listenToMenuUI(updatedMenuState));
-    };
+  const viewControlItems = {
+    ROTATE: {
+      displayName: 'Rotate Camera',
+    },
+    SHADOWS: {
+      displayName: 'Toggle Shadows',
+    },
+  }
 
-    return (
-        <>
-            <List>
-                <ListItem>
-                    <Typography variant={"h2"}>Grid Edit</Typography>
-                </ListItem>
-                <ListItem>
-                    <Button
-                        startIcon={
-                            menuState.includes("EDIT") ? (
-                                <>
-                                    <CloudUploadIcon />
-                                    Send to cityIO
-                                </>
-                            ) : (
-                                <>
-                                    <EditIcon />
-                                    Edit Mode
-                                </>
-                            )
-                        }
-                        color="default"
-                        onClick={handleToggle("EDIT")}
-                    ></Button>
-                </ListItem>
+  const [state, setState] = useState({})
 
-                <EditMenu />
+  const handleChange = (event) => {
+    setState({
+      ...state,
+      [event.target.name]: event.target.checked,
+    })
+  }
 
-                <ListItem>
-                    <Typography variant={"h2"}>Scenarios</Typography>
-                </ListItem>
-                <ListItem>
-                    <SaveMenu
-                        tableName={tableName}
-                        handleToggle={handleToggle}
-                    />
-                </ListItem>
-                <ListItem>
-                    <Typography variant={"h2"}>View Options</Typography>
-                </ListItem>
-                <ListItem>
-                    <Button
-                        startIcon={
-                            <>
-                                <NavigationIcon />
-                                Reset View
-                            </>
-                        }
-                        color="default"
-                        onClick={handleToggle("RESET_VIEW")}
-                    />
-                </ListItem>
-            </List>
+  const createLayersToggles = (toggleList) => {
+    const toggleListArr = []
+    for (const toggle in toggleList) {
+      toggleListArr.push(
+        <FormControlLabel
+          value="end"
+          control={
+            <Checkbox
+              checked={state[toggle]}
+              key={Math.random()}
+              color="primary"
+            />
+          }
+          label={toggleList[toggle].displayName}
+          name={toggle}
+          key={Math.random()}
+          onChange={handleChange}
+          labelPlacement="end"
+        />,
+      )
+    }
+    return toggleListArr
+  }
+  console.log(state)
 
-            <TogglesMenu handleToggle={handleToggle} />
-        </>
-    );
+  return (
+    <>
+      <List>
+        {/* <ListItem>
+          <Typography variant={'h2'}>Grid Edit</Typography>
+        </ListItem>
+        <ListItem>
+          <Button
+            startIcon={
+              menuState.includes('EDIT') ? (
+                <>
+                  <CloudUploadIcon />
+                  Send to cityIO
+                </>
+              ) : (
+                <>
+                  <EditIcon />
+                  Edit Mode
+                </>
+              )
+            }
+            color="default"
+            onClick={handleToggle('EDIT')}
+          ></Button>
+        </ListItem>
+
+        <EditMenu />
+
+        <ListItem>
+          <Typography variant={'h2'}>Scenarios</Typography>
+        </ListItem>
+        <ListItem>
+          <SaveMenu tableName={tableName} handleToggle={handleToggle} />
+        </ListItem> */}
+
+        <ListItem>
+          <Typography variant={'h3'}>{tableName}</Typography>
+        </ListItem>
+
+        <ListItem>
+          <Typography>Display options</Typography>
+        </ListItem>
+
+        <ListItem>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">Layers</FormLabel>
+            <FormGroup aria-label="position">
+              {createLayersToggles(expectedLayers)}
+            </FormGroup>
+          </FormControl>
+        </ListItem>
+
+        <ListItem>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">View Settings</FormLabel>
+            <FormGroup aria-label="position">
+              {createLayersToggles(viewControlItems)}
+            </FormGroup>
+          </FormControl>
+        </ListItem>
+
+        <ListItem>
+          <Button
+            startIcon={
+              <>
+                <NavigationIcon />
+                Reset View
+              </>
+            }
+            color="default"
+          />
+        </ListItem>
+      </List>
+
+      {/* <TogglesMenu /> */}
+    </>
+  )
 }
 
-export default MenuContainer;
+export default MenuContainer
