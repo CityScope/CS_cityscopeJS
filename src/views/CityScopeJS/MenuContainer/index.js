@@ -10,44 +10,63 @@ import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+import ABMSubmenu from './ABMSubmenu'
+import ShadowSubmenu from './ShadowSubmenu'
+import AccessSubmenu from './AccessSubmenu'
 
 function MenuContainer(props) {
   const { cityIOdata, tableName, setNavMenuState } = props
 
   const expectedLayers = {
-    GRID_CHECKBOX: {
+    GRID_LAYER_CHECKBOX: {
       displayName: 'Grid Layer',
       cityIOmoduleName: 'GEOGRID',
+      initState: false,
     },
-    ABM_CHECKBOX: {
+    ABM_LAYER_CHECKBOX: {
       displayName: 'Simulation Layer',
       cityIOmoduleName: 'ABM2',
+      initState: false,
     },
-    AGGREGATED_TRIPS_CHECKBOX: {
+    AGGREGATED_TRIPS_LAYER_CHECKBOX: {
       displayName: 'Trips Layer',
       cityIOmoduleName: 'ABM2',
+      initState: false,
     },
-    ACCESS_CHECKBOX: {
+    ACCESS_LAYER_CHECKBOX: {
       displayName: 'Accessibility Layer',
       cityIOmoduleName: 'access',
+      initState: false,
     },
-    TEXTUAL_CHECKBOX: {
+    TEXTUAL_LAYER_CHECKBOX: {
       displayName: 'Text Layer',
       cityIOmoduleName: 'GEOGRID',
+      initState: false,
     },
   }
 
   const viewControlItems = {
+    ANIMATE_CHECKBOX: {
+      displayName: 'Animate',
+      initState: false,
+    },
     ROTATE_CHECKBOX: {
       displayName: 'Rotate Camera',
+      initState: false,
     },
     SHADOWS_CHECKBOX: {
       displayName: 'Toggle Shadows',
+      initState: false,
     },
   }
 
   const [menuState, setMenuState] = useState({})
+
+  useEffect(() => {
+    setNavMenuState(menuState)
+  }, [menuState])
 
   const handleCheckboxClick = (event) => {
     setMenuState({
@@ -63,30 +82,35 @@ function MenuContainer(props) {
     })
   }
 
-  const createLayersToggles = (toggleList) => {
+  const createCheckboxes = (toggleList) => {
     const toggleListArr = []
     for (const toggle in toggleList) {
-      toggleListArr.push(
-        <FormControlLabel
-          value="end"
-          control={
-            <Checkbox
-              checked={menuState[toggle]}
-              key={Math.random()}
-              color="primary"
-            />
-          }
-          label={toggleList[toggle].displayName}
-          name={toggle}
-          key={Math.random()}
-          onChange={handleCheckboxClick}
-          labelPlacement="end"
-        />,
-      )
+      //  get short module name for each toggle
+      const moduleName = toggleList[toggle].cityIOmoduleName
+      //  check if this toggle is a layer that requires cityIO
+      // or it's visability layer that always show
+      if (!toggleList[toggle].cityIOmoduleName || moduleName in cityIOdata) {
+        toggleListArr.push(
+          <FormControlLabel
+            value="end"
+            control={
+              <Checkbox
+                checked={menuState[toggle]}
+                key={Math.random()}
+                color="primary"
+              />
+            }
+            label={toggleList[toggle].displayName}
+            name={toggle}
+            key={Math.random()}
+            onChange={handleCheckboxClick}
+            labelPlacement="end"
+          />,
+        )
+      }
     }
     return toggleListArr
   }
-  console.log(menuState)
 
   return (
     <List>
@@ -120,7 +144,7 @@ function MenuContainer(props) {
         <FormControl component="fieldset">
           <FormLabel component="legend">Layers</FormLabel>
           <FormGroup aria-label="position">
-            {createLayersToggles(expectedLayers)}
+            {createCheckboxes(expectedLayers)}
           </FormGroup>
         </FormControl>
       </ListItem>
@@ -129,7 +153,7 @@ function MenuContainer(props) {
         <FormControl component="fieldset">
           <FormLabel component="legend">View Settings</FormLabel>
           <FormGroup aria-label="position">
-            {createLayersToggles(viewControlItems)}
+            {createCheckboxes(viewControlItems)}
           </FormGroup>
         </FormControl>
       </ListItem>
