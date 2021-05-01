@@ -3,10 +3,10 @@ import { _handleGridcellEditing } from "../../../../utils/utils";
 
 export default function GridLayer({
     data,
-    editOn,
-    state: { selectedType, keyDownState, selectedCellsState, pickingRadius },
-    updaters: { setSelectedCellsState, setDraggingWhileEditing, setHoveredObj },
-    deckGL,
+    // editOn,
+    // state: { selectedType, keyDownState, selectedCellsState, pickingRadius },
+    // updaters: { setSelectedCellsState, setDraggingWhileEditing, setHoveredObj },
+    // deckGL,
 }) {
     return new GeoJsonLayer({
         id: "GRID",
@@ -19,47 +19,47 @@ export default function GridLayer({
         getElevation: (d) => d.properties.height,
         getFillColor: (d) => d.properties.color,
 
-        onClick: (event) => {
-            if (selectedType && editOn && keyDownState !== "Shift")
-                _handleGridcellEditing(
-                    event,
-                    selectedType,
-                    setSelectedCellsState,
-                    pickingRadius,
-                    deckGL
-                );
-        },
+        // onClick: (event) => {
+        //     if (selectedType && editOn && keyDownState !== "Shift")
+        //         _handleGridcellEditing(
+        //             event,
+        //             selectedType,
+        //             setSelectedCellsState,
+        //             pickingRadius,
+        //             deckGL
+        //         );
+        // },
 
-        onDrag: (event) => {
-            if (selectedType && editOn && keyDownState !== "Shift")
-                _handleGridcellEditing(
-                    event,
-                    selectedType,
-                    setSelectedCellsState,
-                    pickingRadius,
-                    deckGL
-                );
-        },
+        // onDrag: (event) => {
+        //     if (selectedType && editOn && keyDownState !== "Shift")
+        //         _handleGridcellEditing(
+        //             event,
+        //             selectedType,
+        //             setSelectedCellsState,
+        //             pickingRadius,
+        //             deckGL
+        //         );
+        // },
 
-        onDragStart: () => {
-            if (selectedType && editOn && keyDownState !== "Shift") {
-                setDraggingWhileEditing(true);
-            }
-        },
+        // onDragStart: () => {
+        //     if (selectedType && editOn && keyDownState !== "Shift") {
+        //         setDraggingWhileEditing(true);
+        //     }
+        // },
 
-        onHover: (e) => {
-            if (e.object) {
-                setHoveredObj(e);
-            }
-        },
+        // onHover: (e) => {
+        //     if (e.object) {
+        //         setHoveredObj(e);
+        //     }
+        // },
 
-        onDragEnd: () => {
-            setDraggingWhileEditing(false);
-        },
-        updateTriggers: {
-            getFillColor: selectedCellsState,
-            getElevation: selectedCellsState,
-        },
+        // onDragEnd: () => {
+        //     setDraggingWhileEditing(false);
+        // },
+        // updateTriggers: {
+        //     getFillColor: selectedCellsState,
+        //     getElevation: selectedCellsState,
+        // },
         transitions: {
             getFillColor: 500,
             getElevation: 500,
