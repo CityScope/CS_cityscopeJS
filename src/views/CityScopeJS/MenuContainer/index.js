@@ -117,11 +117,11 @@ function MenuContainer(props) {
       <ListItem>
         <Button
           id={'EDIT_BUTTON'}
-          endIcon={menuState['editButton'] ? <CloudUploadIcon /> : <EditIcon />}
+          endIcon={menuState.EDIT_BUTTON ? <CloudUploadIcon /> : <EditIcon />}
           color="default"
           onClick={(e) => handleButtonClicks(e)}
         >
-          {menuState.editButton ? 'commit edits' : 'start editing'}
+          {menuState.EDIT_BUTTON ? 'commit edits' : 'start editing'}
         </Button>
       </ListItem>
 
