@@ -11,13 +11,13 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
 import { useEffect, useRef, useState } from 'react'
-
+import TypesMenu from './TypesMenu'
 import ABMSubmenu from './ABMSubmenu'
 import ShadowSubmenu from './ShadowSubmenu'
 import AccessSubmenu from './AccessSubmenu'
 
 function MenuContainer(props) {
-  const { cityIOdata, tableName, setNavMenuState } = props
+  const { cityIOdata, tableName, getMenuState } = props
 
   const expectedLayers = {
     GRID_LAYER_CHECKBOX: {
@@ -63,9 +63,11 @@ function MenuContainer(props) {
   }
 
   const [menuState, setMenuState] = useState({})
+  const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState()
+console.log(selectedTypeFromMenu);
 
   useEffect(() => {
-    setNavMenuState(menuState)
+    getMenuState(menuState)
   }, [menuState])
 
   const handleCheckboxClick = (event) => {
@@ -125,7 +127,10 @@ function MenuContainer(props) {
         </Button>
       </ListItem>
 
-      {/* <EditMenu /> */}
+      <TypesMenu
+        cityIOdata={cityIOdata}
+        getSelectedTypeFromMenu={getSelectedTypeFromMenu}
+      />
 
       <ListItem>
         <Typography variant={'h2'}>Scenarios</Typography>
@@ -166,6 +171,8 @@ function MenuContainer(props) {
               Reset View
             </>
           }
+          id={'RESET_VIEW_BUTTON'}
+          onClick={(e) => handleButtonClicks(e)}
           color="default"
         />
       </ListItem>

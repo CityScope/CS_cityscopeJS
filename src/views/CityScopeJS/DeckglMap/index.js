@@ -120,7 +120,6 @@ export default function Map(props) {
   }, [cityIOdata])
 
   // useEffect(() => {
-  //   if (!loaded) return
   //   if (!editOn) {
   //     let dataProps = []
 
@@ -132,11 +131,10 @@ export default function Map(props) {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [editOn])
 
-  // useEffect(() => {
-  //   if (!loaded) return
-  //   _setViewStateToTableHeader()
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [resetViewOn])
+  useEffect(() => {
+    _setViewStateToTableHeader()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetViewOn])
 
   const onViewStateChange = ({ viewState }) => {
     setViewState(viewState)
@@ -186,7 +184,7 @@ export default function Map(props) {
     // }),
     GRID: GridLayer({
       data: GEOGRID,
-      editOn: true,
+      editOn: editOn,
       state: {
         selectedType,
         keyDownState,

@@ -23,15 +23,15 @@ const useStyles = makeStyles((theme) => ({
 
 const MainLayout = () => {
   const classes = useStyles()
-  const [navMenuState, setNavMenuState] = useState(true)
+  const [navMenuState, getMenuState] = useState(true)
 
   return (
     <div className={classes.root}>
       <NavBar
         openNavDrawer={!navMenuState}
-        onMobileNavOpen={() => setNavMenuState(!navMenuState)}
+        onMobileNavOpen={() => getMenuState(!navMenuState)}
       />
-      <TopBar onMobileNavOpen={() => setNavMenuState(!navMenuState)} />
+      <TopBar onMobileNavOpen={() => getMenuState(!navMenuState)} />
       <div className={classes.content}>
         <Outlet />
       </div>

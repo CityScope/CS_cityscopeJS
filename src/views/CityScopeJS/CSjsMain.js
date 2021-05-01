@@ -27,7 +27,7 @@ export default function CSjsMain(props) {
   // state func to pass to the menu components
   // to get user interaction
   // and send  map object
-  const [menuState, setNavMenuState] = useState({})
+  const [menuState, getMenuState] = useState({})
   console.log(menuState)
 
   return (
@@ -49,7 +49,7 @@ export default function CSjsMain(props) {
                     <MenuContainer
                       cityIOdata={cityIOdata}
                       tableName={tableName}
-                      setNavMenuState={setNavMenuState}
+                      getMenuState={getMenuState}
                     />
                   </CardContent>
                 </Card>
