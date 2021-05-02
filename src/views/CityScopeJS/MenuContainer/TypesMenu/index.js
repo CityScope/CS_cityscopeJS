@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState,  useLayoutEffect } from 'react'
 import Slider from '@material-ui/core/Slider'
 import List from '@material-ui/core/List'
 
@@ -22,14 +22,13 @@ export default function TypesListMenu(props) {
   const { cityIOdata, getSelectedTypeFromMenu } = props
   const typesList = cityIOdata.GEOGRID.properties.types
   const [selectedType, setSelectedType] = useState(null)
-  const typeHeight = selectedType ? selectedType.height : 0
 
   const heightSliderMarks = [
     { value: 0, label: 'min' },
     { value: 100, label: 'max' },
   ]
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     selectedType && getSelectedTypeFromMenu(selectedType)
   }, [selectedType])
 
@@ -131,10 +130,10 @@ export default function TypesListMenu(props) {
                           <Typography gutterBottom>Set Type Height</Typography>
 
                           <Slider
-                            value={typeHeight}
+                            value={selectedType ? selectedType.height : 0}
                             defaultValue={0}
                             valueLabelDisplay="auto"
-                            onChangeCommitted={(e, val) =>
+                            onChange={(e, val) =>
                               setSelectedType({
                                 ...selectedType,
                                 height: val,

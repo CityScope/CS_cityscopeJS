@@ -7,7 +7,7 @@ import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
-import { useEffect,  useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import TypesMenu from './TypesMenu'
 import ABMSubmenu from './ABMSubmenu'
 import ShadowSubmenu from './ShadowSubmenu'
@@ -62,11 +62,11 @@ function MenuContainer(props) {
   const [menuState, setMenuState] = useState({})
   const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getMenuState(menuState)
   }, [menuState])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setMenuState({ ...menuState, SELECTED_TYPE: selectedTypeFromMenu })
   }, [selectedTypeFromMenu])
 
