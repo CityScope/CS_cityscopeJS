@@ -38,6 +38,9 @@ export default function Map(props) {
   const deckGL = useRef()
   const pickingRadius = 40
 
+  // ! temp
+  const [animationTime, setAnimationTime] = useState(0)
+
   const ABMlayerToggle = menuState.ABM_LAYER_CHECKBOX
   const rotateCameraToggle = menuState.ROTATE_CHECKBOX
   const shadowsToggle = menuState.SHADOWS_CHECKBOX
@@ -45,35 +48,7 @@ export default function Map(props) {
   const resetViewButton = menuState.RESET_VIEW_BUTTON
   const selectedType = menuState.SELECTED_TYPE
 
-  /** ANIMATION */
-  const toggleAnimate = menuState && menuState.ANIMATE_CHECKBOX
-  const [animationTime, setAnimationTime] = useState(0)
-  const requestRef = useRef()
-  const previousTimeRef = useRef()
-  useEffect(() => {
-    const animate = (time) => {
-      if (previousTimeRef.current !== undefined) {
-        setAnimationTime((prevTime) => {
-          if (prevTime < 21600 || prevTime > 43200) {
-            return 21600
-          }
-          return prevTime + 5
-        })
-      }
-      previousTimeRef.current = time
-      requestRef.current = requestAnimationFrame(animate)
-    }
-    if (toggleAnimate) {
-      console.log('animation started..')
-      requestRef.current = requestAnimationFrame(animate)
-      return () => cancelAnimationFrame(requestRef.current)
-    } else {
-      console.log('animation stopped!')
-      return () => cancelAnimationFrame(requestRef.current)
-    }
-  }, [toggleAnimate])
-  /** ANIMATION */
-
+  /** On init */
   useEffect(() => {
     // fix deck view rotate
     _rightClickViewRotate()
@@ -82,11 +57,8 @@ export default function Map(props) {
     // zoom map on CS table location
     _setViewStateToTableHeader()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
-  useEffect(() => {
-    updateSunDirection(sliders.time[1], effectsRef)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    updateSunDirection(15000, effectsRef)
   }, [])
 
   useEffect(() => {
@@ -97,15 +69,12 @@ export default function Map(props) {
 
   useEffect(() => {
     setGEOGRID(_proccessGridData(cityIOdata))
-
     if (cityIOdata.access) {
       setAccess(_proccessAccessData(cityIOdata.access))
     }
-
     if (cityIOdata.textual) {
       setTextualData(cityIOdata.textual)
     }
-
     if (cityIOdata.ABM2) {
       setABM(cityIOdata.ABM2)
     }
@@ -169,11 +138,11 @@ export default function Map(props) {
       zoomLevel: viewState.zoom,
       time: animationTime,
     }),
-    // AGGREGATED_TRIPS: AggregatedTripsLayer({
-    //   data: ABM.trips,
-    //   cityIOdata,
-    //   ABMmode:0,
-    // }),
+    AGGREGATED_TRIPS: AggregatedTripsLayer({
+      data: ABM.trips,
+      cityIOdata,
+      ABMmode: 0,
+    }),
     GRID: GridLayer({
       data: GEOGRID,
       editOn: editModeToggle,
@@ -194,10 +163,10 @@ export default function Map(props) {
       data: access,
       cellSize: cityIOdata.GEOGRID.properties.header.cellSize,
     }),
-    // TEXTUAL: TextualLayer({
-    //   data: textualData && textualData,
-    //   coordinates: GEOGRID,
-    // }),
+    TEXTUAL: TextualLayer({
+      data: textualData && textualData,
+      coordinates: GEOGRID,
+    }),
   }
 
   const layerOrder = ['TEXTUAL', 'ABM', 'AGGREGATED_TRIPS', 'GRID', 'ACCESS']
