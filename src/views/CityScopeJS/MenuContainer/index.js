@@ -1,74 +1,43 @@
-import { Button, Typography, List, ListItem } from '@material-ui/core'
+import {
+  Button,
+  Typography,
+  List,
+  ListItem,
+  Grid,
+  Slider,
+  Checkbox,
+  FormGroup,
+} from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import NavigationIcon from '@material-ui/icons/Navigation'
-import Checkbox from '@material-ui/core/Checkbox'
-import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
 import { useLayoutEffect, useState } from 'react'
 import TypesMenu from './TypesMenu'
-import ABMSubmenu from './ABMSubmenu'
+import ABMSubmenu from './ABMLayerSubmenu'
 import ShadowSubmenu from './ShadowSubmenu'
-import AccessSubmenu from './AccessSubmenu'
+import AccessSubmenu from './AccessLayerSubmenu'
+import {
+  expectedLayers,
+  viewControlItems,
+} from '../../../settings/menuSettings'
 
 function MenuContainer(props) {
   const { cityIOdata, tableName, getMenuState } = props
 
-  const expectedLayers = {
-    GRID_LAYER_CHECKBOX: {
-      displayName: 'Grid Layer',
-      cityIOmoduleName: 'GEOGRID',
-      initState: false,
-    },
-    ABM_LAYER_CHECKBOX: {
-      displayName: 'Simulation Layer',
-      cityIOmoduleName: 'ABM2',
-      initState: false,
-    },
-    AGGREGATED_TRIPS_LAYER_CHECKBOX: {
-      displayName: 'Trips Layer',
-      cityIOmoduleName: 'ABM2',
-      initState: false,
-    },
-    ACCESS_LAYER_CHECKBOX: {
-      displayName: 'Accessibility Layer',
-      cityIOmoduleName: 'access',
-      initState: false,
-    },
-    TEXTUAL_LAYER_CHECKBOX: {
-      displayName: 'Text Layer',
-      cityIOmoduleName: 'GEOGRID',
-      initState: false,
-    },
-  }
-
-  const viewControlItems = {
-    ANIMATE_CHECKBOX: {
-      displayName: 'Animate',
-      initState: false,
-    },
-    ROTATE_CHECKBOX: {
-      displayName: 'Rotate Camera',
-      initState: false,
-    },
-    SHADOWS_CHECKBOX: {
-      displayName: 'Toggle Shadows',
-      initState: false,
-    },
-  }
-
   const [menuState, setMenuState] = useState({})
-  const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState()
-
   useLayoutEffect(() => {
     getMenuState(menuState)
   }, [menuState])
 
+  const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState({})
   useLayoutEffect(() => {
     setMenuState({ ...menuState, SELECTED_TYPE: selectedTypeFromMenu })
   }, [selectedTypeFromMenu])
+
+  const [sliderVal, setSliderVal] = useState(0)
 
   const handleCheckboxClick = (event) => {
     setMenuState({
@@ -84,30 +53,57 @@ function MenuContainer(props) {
     })
   }
 
-  const createCheckboxes = (toggleList) => {
+  const createCheckboxes = (menuItemList) => {
     const toggleListArr = []
-    for (const toggle in toggleList) {
+    for (const menuItem in menuItemList) {
       //  get short module name for each toggle
-      const moduleName = toggleList[toggle].cityIOmoduleName
+      const moduleName = menuItemList[menuItem].cityIOmoduleName
+      // check if we add slider to this menuItem
+      const hasSlider = menuItemList[menuItem].hasSlider
       //  check if this toggle is a layer that requires cityIO
       // or it's visability layer that always show
-      if (!toggleList[toggle].cityIOmoduleName || moduleName in cityIOdata) {
+      if (
+        !menuItemList[menuItem].cityIOmoduleName ||
+        moduleName in cityIOdata
+      ) {
         toggleListArr.push(
-          <FormControlLabel
-            value="end"
-            control={
-              <Checkbox
-                checked={menuState[toggle]}
+          <Grid container>
+            <Grid item xs={9}>
+              <FormControlLabel
+                value="end"
+                control={
+                  <Checkbox
+                    checked={menuState[menuItem]}
+                    key={`cb-${menuItem}`}
+                    color="primary"
+                  />
+                }
+                label={menuItemList[menuItem].displayName}
+                name={menuItem}
                 key={Math.random()}
-                color="primary"
+                onChange={handleCheckboxClick}
+                labelPlacement="end"
               />
-            }
-            label={toggleList[toggle].displayName}
-            name={toggle}
-            key={Math.random()}
-            onChange={handleCheckboxClick}
-            labelPlacement="end"
-          />,
+            </Grid>
+            <Grid item xs={3}>
+              {hasSlider && (
+                <Slider
+                  key={`slider-${menuItem}`}
+                  value={sliderVal[menuItem]}
+                  valueLabelDisplay="auto"
+                  // ! pass both val and name of slider
+                  // ! to keep it between updates
+                  onChange={(e, val, menuItem) => setSliderVal({menuItem:val})}
+                  onMouseUp={(e, val) =>
+                    setMenuState({
+                      ...menuState,
+                      [menuItem + '_SLIDER']: val,
+                    })
+                  }
+                />
+              )}
+            </Grid>
+          </Grid>,
         )
       }
     }
@@ -131,11 +127,6 @@ function MenuContainer(props) {
         cityIOdata={cityIOdata}
         getSelectedTypeFromMenu={getSelectedTypeFromMenu}
       />
-
-      <ListItem>
-        <Typography variant={'h2'}>Scenarios</Typography>
-      </ListItem>
-      <ListItem>{/* <SaveMenu tableName={tableName} /> */}</ListItem>
 
       <ListItem>
         <Typography>Display options</Typography>
