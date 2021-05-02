@@ -138,10 +138,6 @@ function MenuContainer(props) {
       <ListItem>{/* <SaveMenu tableName={tableName} /> */}</ListItem>
 
       <ListItem>
-        <Typography variant={'h3'}>{tableName}</Typography>
-      </ListItem>
-
-      <ListItem>
         <Typography>Display options</Typography>
       </ListItem>
 

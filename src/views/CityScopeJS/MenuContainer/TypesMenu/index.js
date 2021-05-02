@@ -1,9 +1,8 @@
-import { useState,  useLayoutEffect } from 'react'
+import { useState, useLayoutEffect } from 'react'
 import Slider from '@material-ui/core/Slider'
 import List from '@material-ui/core/List'
 
 import {
-  Collapse,
   Typography,
   CardContent,
   Box,
@@ -43,26 +42,21 @@ export default function TypesListMenu(props) {
     return info
   }
 
+  // get the LBCS/NAICS types info
+  const LBCS = parseTypeInfo(selectedType && selectedType.LBCS)
+  const NAICS = parseTypeInfo(selectedType && selectedType.NAICS)
+  const typeHasHeightProp = selectedType && selectedType.height ? true : false
+  // get type description text if exist
+  let description =
+    selectedType && selectedType.description ? selectedType.description : null
   // create the types themselves
   const createTypesIcons = (typesList) => {
     let listMenuItemsArray = []
     Object.keys(typesList).forEach((thisType, index) => {
       //  check if this type is slelcted
       const isThisTypeSelected = selectedType && selectedType.name === thisType
-
-      // get type description text if exist
-      let description = typesList[thisType].description
-        ? typesList[thisType].description
-        : null
       // get color
       let col = typesList[thisType].color
-      // get the LBCS/NAICS types info
-      let LBCS = parseTypeInfo(
-        cityIOdata.GEOGRID.properties.types[thisType].LBCS,
-      )
-      let NAICS = parseTypeInfo(
-        cityIOdata.GEOGRID.properties.types[thisType].NAICS,
-      )
       // if type color is in hex values
       if (testHex(col)) {
         //   convert it to RGB
@@ -70,10 +64,9 @@ export default function TypesListMenu(props) {
       }
       let rgbCol = 'rgb(' + col[0] + ',' + col[1] + ',' + col[2] + ')'
       // check if this type has height prop
-      let typeHasHeightProp = typesList[thisType].height ? true : false
-
       listMenuItemsArray.push(
-        <div key={Math.random()}>
+        <>
+          <Divider />
           <ListItem
             alignItems="flex-start"
             button
@@ -94,70 +87,70 @@ export default function TypesListMenu(props) {
 
             <ListItemText primary={thisType} />
           </ListItem>
-
-          <Collapse in={isThisTypeSelected}>
-            <Box spacing={1} p={1} m={1}>
-              <Card elevation={15}>
-                <CardContent>
-                  <Typography variant="h5">Type Information</Typography>
-
-                  {description && (
-                    <Typography variant="caption">{description}</Typography>
-                  )}
-                  <Box spacing={1} p={1} m={1} />
-                  <Grid container spacing={3}>
-                    <Grid item xs={6} l={6} md={6} xl={6} container>
-                      {LBCS && (
-                        <>
-                          <Typography variant="caption">LBCS</Typography>
-
-                          <TypeInfo typeInfo={LBCS} />
-                        </>
-                      )}
-                    </Grid>
-                    <Grid item xs={6} l={6} md={6} xl={6} container>
-                      {NAICS && (
-                        <>
-                          <Typography variant="caption">NAICS</Typography>
-                          <TypeInfo typeInfo={NAICS} />
-                        </>
-                      )}
-                    </Grid>
-
-                    {typeHasHeightProp && (
-                      <>
-                        <Grid item xs={10} l={10} md={10} xl={10} container>
-                          <Typography gutterBottom>Set Type Height</Typography>
-
-                          <Slider
-                            value={selectedType ? selectedType.height : 0}
-                            defaultValue={0}
-                            valueLabelDisplay="auto"
-                            onChange={(e, val) =>
-                              setSelectedType({
-                                ...selectedType,
-                                height: val,
-                              })
-                            }
-                            min={heightSliderMarks[0].value}
-                            max={heightSliderMarks[1].value}
-                            marks={heightSliderMarks}
-                          />
-                        </Grid>
-                      </>
-                    )}
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Box>
-          </Collapse>
-
-          <Divider />
-        </div>,
+        </>,
       )
     })
     return <List>{listMenuItemsArray}</List>
   }
 
-  return <>{createTypesIcons(typesList)}</>
+  return (
+    <>
+      {selectedType && (
+        <Card elevation={15}>
+          <CardContent>
+            <Typography variant="h5">Selected Type Info</Typography>
+
+            {description && (
+              <Typography variant="caption">{description}</Typography>
+            )}
+            <Box spacing={1} p={1} m={1} />
+            <Grid container spacing={3}>
+              <Grid item xs={6} l={6} md={6} xl={6} container>
+                {LBCS && (
+                  <>
+                    <Typography variant="caption">LBCS</Typography>
+
+                    <TypeInfo typeInfo={LBCS} />
+                  </>
+                )}
+              </Grid>
+              <Grid item xs={6} l={6} md={6} xl={6} container>
+                {NAICS && (
+                  <>
+                    <Typography variant="caption">NAICS</Typography>
+                    <TypeInfo typeInfo={NAICS} />
+                  </>
+                )}
+              </Grid>
+
+              {typeHasHeightProp && (
+                <>
+                  <Grid item xs={10} l={10} md={10} xl={10} container>
+                    <Typography gutterBottom>Set Type Height</Typography>
+
+                    <Slider
+                      value={selectedType ? selectedType.height : 0}
+                      defaultValue={0}
+                      valueLabelDisplay="auto"
+                      onChange={(e, val) =>
+                        setSelectedType({
+                          ...selectedType,
+                          height: val,
+                        })
+                      }
+                      min={heightSliderMarks[0].value}
+                      max={heightSliderMarks[1].value}
+                      marks={heightSliderMarks}
+                    />
+                  </Grid>
+                </>
+              )}
+            </Grid>
+          </CardContent>
+        </Card>
+      )}
+
+      {createTypesIcons(typesList)}
+    </>
+  )
 }
