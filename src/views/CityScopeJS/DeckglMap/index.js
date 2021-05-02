@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import PaintBrush from './components/PaintBrush'
-import { useSelector, useDispatch } from 'react-redux'
-import { listenToSlidersEvents } from '../../../redux/actions'
 import {
   _proccessAccessData,
   _proccessGridData,
@@ -13,7 +11,6 @@ import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import settings from '../../../settings/settings.json'
-import AnimationComponent from './components/AnimationComponent'
 
 import {
   AccessLayer,
@@ -41,17 +38,14 @@ export default function Map(props) {
   const deckGL = useRef()
   const pickingRadius = 40
 
-  // ! temp
-  const [selectedType, setSelectedType] = useState(null)
-
-  var ABMOn =  menuState.ABM_LAYER_CHECKBOX
-  var rotateOn =  menuState.ROTATE_CHECKBOX
-  var shadowsOn =  menuState.SHADOWS_CHECKBOX
-  var editOn =menuState.EDIT_BUTTON
-  var resetViewOn =  menuState.RESET_VIEW_BUTTON
+  const ABMlayerToggle = menuState.ABM_LAYER_CHECKBOX
+  const rotateCameraToggle = menuState.ROTATE_CHECKBOX
+  const shadowsToggle = menuState.SHADOWS_CHECKBOX
+  const editModeToggle = menuState.EDIT_BUTTON
+  const resetViewButton = menuState.RESET_VIEW_BUTTON
+  const selectedType = menuState.SELECTED_TYPE
 
   /** ANIMATION */
-
   const toggleAnimate = menuState && menuState.ANIMATE_CHECKBOX
   const [animationTime, setAnimationTime] = useState(0)
   const requestRef = useRef()
@@ -87,21 +81,19 @@ export default function Map(props) {
     _setupSunEffects(effectsRef, cityIOdata.GEOGRID.properties.header)
     // zoom map on CS table location
     _setViewStateToTableHeader()
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // useEffect(() => {
-  //   updateSunDirection(sliders.time[1], effectsRef)
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
+  useEffect(() => {
+    updateSunDirection(sliders.time[1], effectsRef)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  // useEffect(() => {
-  //   if (!loaded) return
-  //   let shadowColor = shadowsOn ? [0, 0, 0, 0.5] : [0, 0, 0, 0]
-  //   effectsRef.current[0].shadowColor = shadowColor
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [shadowsOn])
+  useEffect(() => {
+    let shadowColor = shadowsToggle ? [0, 0, 0, 0.5] : [0, 0, 0, 0]
+    effectsRef.current[0].shadowColor = shadowColor
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shadowsToggle])
 
   useEffect(() => {
     setGEOGRID(_proccessGridData(cityIOdata))
@@ -119,22 +111,22 @@ export default function Map(props) {
     }
   }, [cityIOdata])
 
-  // useEffect(() => {
-  //   if (!editOn) {
-  //     let dataProps = []
+  useEffect(() => {
+    if (!editModeToggle && GEOGRID) {
+      let dataProps = []
 
-  //     for (let i = 0; i < GEOGRID.features.length; i++) {
-  //       dataProps[i] = GEOGRID.features[i].properties
-  //     }
-  //     _postMapEditsToCityIO(dataProps, cityIOdata.tableName, '/GEOGRIDDATA')
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [editOn])
+      for (let i = 0; i < GEOGRID.features.length; i++) {
+        dataProps[i] = GEOGRID.features[i].properties
+      }
+      _postMapEditsToCityIO(dataProps, cityIOdata.tableName, '/GEOGRIDDATA')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editModeToggle])
 
   useEffect(() => {
     _setViewStateToTableHeader()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resetViewOn])
+  }, [resetViewButton])
 
   const onViewStateChange = ({ viewState }) => {
     setViewState(viewState)
@@ -184,7 +176,7 @@ export default function Map(props) {
     // }),
     GRID: GridLayer({
       data: GEOGRID,
-      editOn: editOn,
+      editOn: editModeToggle,
       state: {
         selectedType,
         keyDownState,
@@ -232,14 +224,14 @@ export default function Map(props) {
       onMouseDown={() => setMouseDown(true)}
     >
       <PaintBrush
-        editOn={editOn}
+        editOn={editModeToggle}
         mousePos={mousePos}
         selectedType={selectedType}
         pickingRadius={pickingRadius}
         mouseDown={mouseDown}
         hoveredObj={hoveredObj}
       />
-      
+
       <DeckGL
         ref={deckGL}
         viewState={viewState}

@@ -28,7 +28,6 @@ export default function CSjsMain(props) {
   // to get user interaction
   // and send  map object
   const [menuState, getMenuState] = useState({})
-  console.log(menuState)
 
   return (
     <Page className={classes.root} title="CitySCopeJS">

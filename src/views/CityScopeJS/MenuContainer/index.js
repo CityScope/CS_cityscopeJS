@@ -64,11 +64,14 @@ function MenuContainer(props) {
 
   const [menuState, setMenuState] = useState({})
   const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState()
-console.log(selectedTypeFromMenu);
 
   useEffect(() => {
     getMenuState(menuState)
   }, [menuState])
+
+  useEffect(() => {
+    setMenuState({ ...menuState, SELECTED_TYPE: selectedTypeFromMenu })
+  }, [selectedTypeFromMenu])
 
   const handleCheckboxClick = (event) => {
     setMenuState({

@@ -1,4 +1,3 @@
-import React from "react";
 import { testHex, hexToRgb } from "../../../../../utils/utils";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
@@ -24,7 +23,7 @@ export const PaintBrush = (props) => {
     let mouseX = mousePos.clientX - divSize / 2;
     let mouseY = mousePos.clientY - divSize / 2;
 
-    let msg = isInteractiveCell ? selectedType.name : "Not-interactive";
+    let msg = isInteractiveCell ? selectedType.name : ": Not-interactive";
     return (
         <div
             style={{
@@ -40,6 +39,7 @@ export const PaintBrush = (props) => {
                 height: divSize,
                 left: mouseX,
                 top: mouseY,
+                fontFamily: "Roboto Mono",
             }}
         >
             <div
@@ -50,7 +50,7 @@ export const PaintBrush = (props) => {
                 }}
             >
                 {!isInteractiveCell && <ErrorOutlineIcon />}
-                {msg}:
+                {msg}
             </div>
         </div>
     );
