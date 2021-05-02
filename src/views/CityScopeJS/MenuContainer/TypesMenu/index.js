@@ -18,9 +18,10 @@ import { testHex, hexToRgb } from '../../../../utils/utils'
 import TypeInfo from './TypeInfo'
 
 export default function TypesListMenu(props) {
-  const { cityIOdata, getSelectedTypeFromMenu } = props
+  const { cityIOdata, getSelectedTypeFromMenu, getTypeHeight } = props
   const typesList = cityIOdata.GEOGRID.properties.types
   const [selectedType, setSelectedType] = useState(null)
+  const [typeHeight, setTypeHeight] = useState(null)
 
   const heightSliderMarks = [
     { value: 0, label: 'min' },
@@ -30,6 +31,14 @@ export default function TypesListMenu(props) {
   useLayoutEffect(() => {
     selectedType && getSelectedTypeFromMenu(selectedType)
   }, [selectedType])
+
+  // useLayoutEffect(() => {
+  //   selectedType && getTypeHeight(typeHeight)
+  // }, [typeHeight])
+
+  const handleSliderCommit = () => {
+    getTypeHeight(typeHeight)
+  }
 
   const handleListItemClick = (typeProps) => {
     // ! injects the type name into the attributes themselves
@@ -45,7 +54,6 @@ export default function TypesListMenu(props) {
   // get the LBCS/NAICS types info
   const LBCS = parseTypeInfo(selectedType && selectedType.LBCS)
   const NAICS = parseTypeInfo(selectedType && selectedType.NAICS)
-  const typeHasHeightProp = selectedType && selectedType.height ? true : false
   // get type description text if exist
   let description =
     selectedType && selectedType.description ? selectedType.description : null
@@ -68,6 +76,7 @@ export default function TypesListMenu(props) {
         <>
           <Divider />
           <ListItem
+            key={Math.random()}
             alignItems="flex-start"
             button
             variant="raised"
@@ -93,6 +102,7 @@ export default function TypesListMenu(props) {
     return <List>{listMenuItemsArray}</List>
   }
 
+  const typesListComps = createTypesIcons(typesList)
   return (
     <>
       {selectedType && (
@@ -123,34 +133,31 @@ export default function TypesListMenu(props) {
                 )}
               </Grid>
 
-              {typeHasHeightProp && (
-                <>
-                  <Grid item xs={10} l={10} md={10} xl={10} container>
-                    <Typography gutterBottom>Set Type Height</Typography>
+              <>
+                <Grid item xs={10} l={10} md={10} xl={10} container>
+                  <Typography gutterBottom>Set Type Height</Typography>
 
-                    <Slider
-                      value={selectedType ? selectedType.height : 0}
-                      defaultValue={0}
-                      valueLabelDisplay="auto"
-                      onChange={(e, val) =>
-                        setSelectedType({
-                          ...selectedType,
-                          height: val,
-                        })
-                      }
-                      min={heightSliderMarks[0].value}
-                      max={heightSliderMarks[1].value}
-                      marks={heightSliderMarks}
-                    />
-                  </Grid>
-                </>
-              )}
+                  <Slider
+                    disabled={
+                      selectedType && selectedType.height ? false : true
+                    }
+                    value={typeHeight}
+                    defaultValue={0}
+                    valueLabelDisplay="auto"
+                    onChange={(e, val) => setTypeHeight(val)}
+                    onMouseUp={handleSliderCommit}
+                    min={heightSliderMarks[0].value}
+                    max={heightSliderMarks[1].value}
+                    marks={heightSliderMarks}
+                  />
+                </Grid>
+              </>
             </Grid>
           </CardContent>
         </Card>
       )}
 
-      {createTypesIcons(typesList)}
+      {typesListComps}
     </>
   )
 }

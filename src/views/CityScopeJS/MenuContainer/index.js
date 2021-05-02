@@ -61,7 +61,12 @@ function MenuContainer(props) {
 
   const [menuState, setMenuState] = useState({})
   const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState()
+  const [typeHeight, getTypeHeight] = useState()
 
+
+
+  console.log(menuState);
+  
   useLayoutEffect(() => {
     getMenuState(menuState)
   }, [menuState])
@@ -69,6 +74,10 @@ function MenuContainer(props) {
   useLayoutEffect(() => {
     setMenuState({ ...menuState, SELECTED_TYPE: selectedTypeFromMenu })
   }, [selectedTypeFromMenu])
+
+  useLayoutEffect(() => {
+    setMenuState({ ...menuState, SELECTED_TYPE_HEIGHT: typeHeight })
+  }, [typeHeight])
 
   const handleCheckboxClick = (event) => {
     setMenuState({
@@ -130,6 +139,7 @@ function MenuContainer(props) {
       <TypesMenu
         cityIOdata={cityIOdata}
         getSelectedTypeFromMenu={getSelectedTypeFromMenu}
+        getTypeHeight={getTypeHeight}
       />
 
       <ListItem>
