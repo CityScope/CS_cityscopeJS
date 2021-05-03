@@ -39,13 +39,6 @@ function MenuContainer(props) {
 
   const [sliderVal, setSliderVal] = useState(0)
 
-  const handleCheckboxClick = (event) => {
-    setMenuState({
-      ...menuState,
-      [event.target.name]: event.target.checked,
-    })
-  }
-
   const handleButtonClicks = (event) => {
     setMenuState({
       ...menuState,
@@ -73,7 +66,7 @@ function MenuContainer(props) {
                 value="end"
                 control={
                   <Checkbox
-                    checked={menuState[menuItem]}
+                    checked={menuState[menuItem] && menuState[menuItem].isOn}
                     key={`cb-${menuItem}`}
                     color="primary"
                   />
@@ -81,23 +74,34 @@ function MenuContainer(props) {
                 label={menuItemList[menuItem].displayName}
                 name={menuItem}
                 key={Math.random()}
-                onChange={handleCheckboxClick}
+                onChange={(e) =>
+                  setMenuState({
+                    ...menuState,
+                    [menuItem]: {
+                      ...menuState[menuItem],
+                      isOn: e.target.checked,
+                    },
+                  })
+                }
                 labelPlacement="end"
               />
             </Grid>
             <Grid item xs={3}>
-              {hasSlider && (
+              {hasSlider && menuState[menuItem] && menuState[menuItem].isOn && (
                 <Slider
                   key={`slider-${menuItem}`}
-                  value={sliderVal[menuItem]}
+                  value={sliderVal.value}
                   valueLabelDisplay="auto"
                   // ! pass both val and name of slider
                   // ! to keep it between updates
-                  onChange={(e, val, menuItem) => setSliderVal({menuItem:val})}
+                  onChange={(e, val) => setSliderVal({ [menuItem]: val })}
                   onMouseUp={(e, val) =>
                     setMenuState({
                       ...menuState,
-                      [menuItem + '_SLIDER']: val,
+                      [menuItem]: {
+                        ...menuState[menuItem],
+                        slider: sliderVal[menuItem],
+                      },
                     })
                   }
                 />
