@@ -19,6 +19,7 @@ import {
   ABMLayer,
   GridLayer,
   TextualLayer,
+  GeojsonLayer,
 } from './deckglLayers'
 
 export default function Map() {
@@ -31,6 +32,9 @@ export default function Map() {
   const [hoveredObj, setHoveredObj] = useState(null)
   const [access, setAccess] = useState(null)
   const [textualData, setTextualData] = useState(null)
+
+  const [geojsonData, setGeojsonData] = useState(null)
+
   const [GEOGRID, setGEOGRID] = useState(null)
   const [ABM, setABM] = useState({})
   const [loaded, setLoaded] = useState(false)
@@ -52,7 +56,6 @@ export default function Map() {
     state.CITYIO,
     state.SLIDERS,
     state.MENU,
-
     state.SELECTED_TYPE,
     state.ABM_MODE,
   ])
@@ -64,8 +67,6 @@ export default function Map() {
   var resetViewOn = menu.includes('RESET_VIEW')
 
   useEffect(() => {
-
-      
     // fix deck view rotate
     _rightClickViewRotate()
     // setup sun effects
@@ -98,6 +99,10 @@ export default function Map() {
 
     if (cityioData.textual) {
       setTextualData(cityioData.textual)
+    }
+
+    if (cityioData.geojson) {
+      setGeojsonData(cityioData.geojson)
     }
 
     if (cityioData.ABM2) {
@@ -194,9 +199,20 @@ export default function Map() {
       data: textualData && textualData,
       coordinates: GEOGRID,
     }),
+
+    GEOJSON: GeojsonLayer({
+      data: geojsonData && geojsonData,
+    }),
   }
 
-  const layerOrder = ['TEXTUAL', 'ABM', 'AGGREGATED_TRIPS', 'GRID', 'ACCESS']
+  const layerOrder = [
+    'TEXTUAL',
+    'ABM',
+    'AGGREGATED_TRIPS',
+    'GEOJSON',
+    'GRID',
+    'ACCESS',
+  ]
 
   const _renderLayers = () => {
     let layers = []
