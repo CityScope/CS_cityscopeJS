@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import {
-  _proccessAccessData,
   _proccessGridData,
   _setupSunEffects,
   updateSunDirection,
@@ -72,7 +71,7 @@ export default function PrjDeckGLMap(props) {
   useEffect(() => {
     setGEOGRID(_proccessGridData(cityioData))
     if (cityioData.access) {
-      setAccess(_proccessAccessData(cityioData))
+      setAccess(cityioData)
     }
     if (cityioData.ABM2) {
       setABM(cityioData.ABM2)

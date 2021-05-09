@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import PaintBrush from './components/PaintBrush'
 import {
-  _proccessAccessData,
   _proccessGridData,
   _postMapEditsToCityIO,
   updateSunDirection,
@@ -31,11 +30,9 @@ export default function Map(props) {
   const [mousePos, setMousePos] = useState(null)
   const [mouseDown, setMouseDown] = useState(null)
   const [hoveredObj, setHoveredObj] = useState(null)
-  const [access, setAccess] = useState(null)
-  const [textualData, setTextualData] = useState(null)
-
+  const [accessLayerData, setAccessLayerData] = useState(null)
+  const [textualLayerData, setTextualLayerData] = useState(null)
   const [geojsonData, setGeojsonData] = useState(null)
-
   const [GEOGRID, setGEOGRID] = useState(null)
   const [ABM, setABM] = useState({})
   const effectsRef = useRef()
@@ -73,11 +70,12 @@ export default function Map(props) {
 
   useEffect(() => {
     setGEOGRID(_proccessGridData(cityIOdata))
+
     if (cityIOdata.access) {
-      setAccess(_proccessAccessData(cityIOdata.access))
+      setAccessLayerData(cityIOdata.access)
     }
     if (cityIOdata.textual) {
-      setTextualData(cityIOdata.textual)
+      setTextualLayerData(cityIOdata.textual)
     }
     if (cityIOdata.ABM2) {
       setABM(cityIOdata.ABM2)
@@ -168,11 +166,10 @@ export default function Map(props) {
       deckGL,
     }),
     ACCESS: AccessLayer({
-      data: access,
-      cellSize: cityIOdata.GEOGRID.properties.header.cellSize,
+      data: accessLayerData,
     }),
     TEXTUAL: TextualLayer({
-      data: textualData && textualData,
+      data: textualLayerData && textualLayerData,
       coordinates: GEOGRID,
     }),
 

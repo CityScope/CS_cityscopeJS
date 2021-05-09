@@ -65,24 +65,6 @@ export const _proccessGridData = (cityioData) => {
 }
 
 /**
- * Description. gets `props` with geojson
- * and procces the access layer data
- */
-export const _proccessAccessData = (accessData) => {
-  // get colors from settings
-  let coordinates = accessData.features.map((d) => d.geometry.coordinates)
-  let values = accessData.features.map((d) => d.properties)
-  let heatmap = []
-  for (let i = 0; i < coordinates.length; i++) {
-    heatmap.push({
-      coordinates: coordinates[i],
-      values: values[i],
-    })
-  }
-  return heatmap
-}
-
-/**
  * checks if edits are done (toggled off)
  * than returns a redux state
  * with grid edits payload
