@@ -1,7 +1,7 @@
 import MenuContainer from './MenuContainer'
-import MapContainer from './DeckglMap'
+// import MapContainer from './DeckglMap'
 import LoadingSpinner from './CityIO/LoadingSpinner'
-import VisContainer from './VisContainer'
+// import VisContainer from './VisContainer'
 import {
   makeStyles,
   Grid,
@@ -28,6 +28,7 @@ export default function CSjsMain(props) {
   // to get user interaction
   // and send  map object
   const [menuState, getMenuState] = useState({})
+  console.log('menu state', menuState && menuState)
 
   return (
     <Page className={classes.root} title="CitySCopeJS">
@@ -65,7 +66,7 @@ export default function CSjsMain(props) {
                 position: 'relative',
               }}
             >
-              <MapContainer cityIOdata={cityIOdata} menuState={menuState} />
+              {/* <MapContainer cityIOdata={cityIOdata} menuState={menuState} /> */}
             </Card>
           </Grid>
           <Grid item xs={12} l={3} md={3} xl={2}>

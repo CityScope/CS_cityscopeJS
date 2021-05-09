@@ -24,26 +24,26 @@ export default function Map(props) {
   const { menuState, cityIOdata } = props
 
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false)
-  const [selectedCellsState, setSelectedCellsState] = useState(null)
+  const [selectedCellsState, setSelectedCellsState] = useState()
   const [viewState, setViewState] = useState(settings.map.initialViewState)
-  const [keyDownState, setKeyDownState] = useState(null)
-  const [mousePos, setMousePos] = useState(null)
-  const [mouseDown, setMouseDown] = useState(null)
-  const [hoveredObj, setHoveredObj] = useState(null)
-  const [accessLayerData, setAccessLayerData] = useState(null)
-  const [textualLayerData, setTextualLayerData] = useState(null)
-  const [geojsonData, setGeojsonData] = useState(null)
-  const [GEOGRID, setGEOGRID] = useState(null)
+  const [keyDownState, setKeyDownState] = useState()
+  const [mousePos, setMousePos] = useState()
+  const [mouseDown, setMouseDown] = useState()
+  const [hoveredObj, setHoveredObj] = useState()
+  const [accessLayerData, setAccessLayerData] = useState()
+  const [textualLayerData, setTextualLayerData] = useState()
+  const [geojsonData, setGeojsonData] = useState()
+  const [GEOGRID, setGEOGRID] = useState()
   const [ABM, setABM] = useState({})
   const effectsRef = useRef()
   const deckGL = useRef()
   const pickingRadius = 40
 
   // ! temp
-  const [animationTime, setAnimationTime] = useState(0)
+  // const [animationTime, setAnimationTime] = useState(0)
 
-  const ABMlayerToggle = menuState.ABM_LAYER_CHECKBOX
-  const rotateCameraToggle = menuState.ROTATE_CHECKBOX
+  // const ABMlayerToggle = menuState.ABM_LAYER_CHECKBOX
+  // const rotateCameraToggle = menuState.ROTATE_CHECKBOX
   const shadowsToggle = menuState.SHADOWS_CHECKBOX
   const editModeToggle = menuState.EDIT_BUTTON
   const resetViewButton = menuState.RESET_VIEW_BUTTON
@@ -107,11 +107,11 @@ export default function Map(props) {
     setViewState(viewState)
   }
 
-  // /**
-  //  * resets the camera viewport
-  //  * to cityIO header data
-  //  * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
-  //  */
+  /**
+   * resets the camera viewport
+   * to cityIO header data
+   * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
+   */
   const _setViewStateToTableHeader = () => {
     const header = cityIOdata.GEOGRID.properties.header
 
@@ -142,7 +142,8 @@ export default function Map(props) {
       cityIOdata,
       ABMmode: 0,
       zoomLevel: viewState.zoom,
-      time: animationTime,
+      // ! temp
+      time: 0,
     }),
     AGGREGATED_TRIPS: AggregatedTripsLayer({
       data: ABM.trips,

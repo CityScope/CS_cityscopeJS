@@ -63,9 +63,8 @@ export default function PrjDeckGLMap(props) {
       // zoom map on CS table location
       _setViewStateToTableHeader()
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     effectsRef.current[0].shadowColor = [0, 0, 0, 1]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityioData.GEOGRID.properties.header])
 
   useEffect(() => {

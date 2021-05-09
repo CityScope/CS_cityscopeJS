@@ -50,6 +50,7 @@ export default function CityIO(props) {
     }
     // if we have a new hash, start getting submodules
     getModules()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainHash])
 
   async function getModules() {

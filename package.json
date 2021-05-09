@@ -1,8 +1,8 @@
 {
   "name": "cityscopejs",
-  "version": "1.0.0",
+  "version": "2.0.1",
   "repository": "https://github.com/CityScope/CS_cityscopeJS",
-  "license": "GPL3",
+  "license": "AGPL-3.0-or-later",
   "homepage": "https://cityscope.media.mit.edu/CS_cityscopeJS",
   "dependencies": {
     "@material-table/core": "^2.3.29",

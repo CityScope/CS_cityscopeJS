@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import CityIO from './CityIO/cityIO'
 // import CityIOviewer from '../CityIOviewer'
-import LoadingSpinner from './CityIO/LoadingSpinner'
+// import LoadingSpinner from './CityIO/LoadingSpinner'
 import CSjsMain from './CSjsMain'
 
 export default function CityScopeJS() {

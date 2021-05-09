@@ -30,6 +30,7 @@ export default function TypesListMenu(props) {
 
   useLayoutEffect(() => {
     selectedType && getSelectedTypeFromMenu(selectedType)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedType])
 
   const handleListItemClick = (typeProps) => {
