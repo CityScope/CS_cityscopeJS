@@ -18,6 +18,7 @@ import {
   ABMLayer,
   GridLayer,
   TextualLayer,
+  GeojsonLayer,
 } from './deckglLayers'
 
 export default function Map(props) {
@@ -32,6 +33,9 @@ export default function Map(props) {
   const [hoveredObj, setHoveredObj] = useState(null)
   const [access, setAccess] = useState(null)
   const [textualData, setTextualData] = useState(null)
+
+  const [geojsonData, setGeojsonData] = useState(null)
+
   const [GEOGRID, setGEOGRID] = useState(null)
   const [ABM, setABM] = useState({})
   const effectsRef = useRef()
@@ -77,6 +81,10 @@ export default function Map(props) {
     }
     if (cityIOdata.ABM2) {
       setABM(cityIOdata.ABM2)
+    }
+
+    if (cityIOdata.geojson) {
+      setGeojsonData(cityIOdata.geojson)
     }
   }, [cityIOdata])
 
@@ -167,9 +175,20 @@ export default function Map(props) {
       data: textualData && textualData,
       coordinates: GEOGRID,
     }),
+
+    GEOJSON: GeojsonLayer({
+      data: geojsonData && geojsonData,
+    }),
   }
 
-  const layerOrder = ['TEXTUAL', 'ABM', 'AGGREGATED_TRIPS', 'GRID', 'ACCESS']
+  const layerOrder = [
+    'TEXTUAL',
+    'ABM',
+    'AGGREGATED_TRIPS',
+    'GEOJSON',
+    'GRID',
+    'ACCESS',
+  ]
 
   const _renderLayers = () => {
     let layers = []

@@ -9,6 +9,7 @@
       { "name": "header", "expectUpdate": false },
       { "name": "GEOGRID", "expectUpdate": false },
       { "name": "ABM2", "expectUpdate": true },
+      { "name": "geojson", "expectUpdate": true },
       { "name": "grid", "expectUpdate": false },
       { "name": "access", "expectUpdate": true },
       { "name": "GEOGRIDDATA", "expectUpdate": false },
@@ -28,6 +29,11 @@
         "displayName": "Mobility Simulation",
         "showOnInit": false,
         "requireModule": "ABM2"
+      },
+      "GEOJSON": {
+        "displayName": "Geojson Layer",
+        "showOnInit": false,
+        "requireModule": "geojson"
       },
       "AGGREGATED_TRIPS": {
         "displayName": "Aggregated Trips",
