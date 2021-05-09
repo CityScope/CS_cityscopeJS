@@ -8,7 +8,6 @@ import {
 } from '@material-ui/core'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
-import FormLabel from '@material-ui/core/FormLabel'
 import { useLayoutEffect, useState } from 'react'
 import { expectedLayers } from '../../../../settings/menuSettings'
 
@@ -39,7 +38,7 @@ function LayersMenu(props) {
       ) {
         toggleListArr.push(
           <Grid container>
-            <Grid item xs={8}>
+            <Grid item xs={12}>
               <FormControlLabel
                 value="end"
                 control={
@@ -64,7 +63,7 @@ function LayersMenu(props) {
                 labelPlacement="end"
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12}>
               {hasSlider && menuState[menuItem] && menuState[menuItem].isOn && (
                 <Slider
                   key={`slider-${menuItem}`}
@@ -96,7 +95,6 @@ function LayersMenu(props) {
     <List>
       <ListItem>
         <FormControl component="fieldset">
-          <FormLabel component="legend">Layers</FormLabel>
           <FormGroup aria-label="position">
             {createCheckboxes(expectedLayers)}
           </FormGroup>

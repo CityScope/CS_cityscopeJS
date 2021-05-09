@@ -35,6 +35,10 @@ function MenuContainer(props) {
 
   return (
     <List>
+       <ListItem>
+        <Typography variant={"h4"}>Editing Menu</Typography>
+      </ListItem>
+
       <ListItem>
         <Button
           id={'EDIT_BUTTON'}
@@ -52,12 +56,12 @@ function MenuContainer(props) {
       />
 
       <ListItem>
-        <Typography>Layers options</Typography>
-        <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} />
+        <Typography variant={"h4"}>Layers options</Typography>
       </ListItem>
+      <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} />
 
       <ListItem>
-        <Typography>Display options</Typography>
+        <Typography variant={"h4"}>Display options</Typography>
       </ListItem>
 
       <ListItem></ListItem>

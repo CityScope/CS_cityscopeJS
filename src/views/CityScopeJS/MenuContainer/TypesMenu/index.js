@@ -54,7 +54,7 @@ export default function TypesListMenu(props) {
   const createTypesIcons = (typesList) => {
     let listMenuItemsArray = []
     Object.keys(typesList).forEach((thisType, index) => {
-      //  check if this type is slelcted
+      //  check if this type is selected
       const isThisTypeSelected = selectedType && selectedType.name === thisType
       // get color
       let col = typesList[thisType].color
@@ -100,7 +100,7 @@ export default function TypesListMenu(props) {
       {selectedType && (
         <Card elevation={15}>
           <CardContent>
-            <Typography variant="h5">Selected Type Info</Typography>
+            <Typography variant="h3">{selectedType.name}</Typography>
 
             {description && (
               <Typography variant="caption">{description}</Typography>
