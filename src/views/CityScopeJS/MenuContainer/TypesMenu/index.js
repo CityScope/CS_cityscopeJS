@@ -6,15 +6,10 @@ import {
   Typography,
   CardContent,
   Box,
-  Avatar,
-  ListItemAvatar,
-  ListItem,
-  ListItemText,
   Grid,
   Card,
+  Button,
 } from '@material-ui/core'
-import Divider from '@material-ui/core/Divider'
-import { testHex, hexToRgb } from '../../../../utils/utils'
 import TypeInfo from './TypeInfo'
 
 export default function TypesListMenu(props) {
@@ -54,41 +49,21 @@ export default function TypesListMenu(props) {
   const createTypesIcons = (typesList) => {
     let listMenuItemsArray = []
     Object.keys(typesList).forEach((thisType, index) => {
-      //  check if this type is selected
-      const isThisTypeSelected = selectedType && selectedType.name === thisType
       // get color
       let col = typesList[thisType].color
-      // if type color is in hex values
-      if (testHex(col)) {
-        //   convert it to RGB
-        col = hexToRgb(col)
-      }
-      let rgbCol = 'rgb(' + col[0] + ',' + col[1] + ',' + col[2] + ')'
       // check if this type has height prop
       listMenuItemsArray.push(
-        <>
-          <Divider />
-          <ListItem
-            alignItems="flex-start"
-            button
-            variant="raised"
-            selected={isThisTypeSelected}
-            onClick={(event) => handleListItemClick(typesList[thisType])}
-          >
-            <ListItemAvatar>
-              <Avatar
-                style={{
-                  backgroundColor: rgbCol,
-                  color: 'black',
-                }}
-              >
-                {thisType.charAt(0)}
-              </Avatar>
-            </ListItemAvatar>
-
-            <ListItemText primary={thisType} />
-          </ListItem>
-        </>,
+        <Button
+          style={{
+            margin: '0.5em',
+            border: '1px solid ' + col.toString(),
+          }}
+          variant="outlined"
+          onClick={() => handleListItemClick(typesList[thisType])}
+          color="default"
+        >
+          {thisType}
+        </Button>,
       )
     })
     return <List>{listMenuItemsArray}</List>
@@ -100,7 +75,7 @@ export default function TypesListMenu(props) {
       {selectedType && (
         <Card elevation={15}>
           <CardContent>
-            <Typography variant="h3">{selectedType.name}</Typography>
+            <Typography variant="h4">{selectedType.name}</Typography>
 
             {description && (
               <Typography variant="caption">{description}</Typography>

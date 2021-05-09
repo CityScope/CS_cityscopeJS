@@ -63,6 +63,7 @@ const theme = createMuiTheme({
         opacity: 0.1,
       },
     },
+
     MuiCard: {
       root: {
         boxShadow:
