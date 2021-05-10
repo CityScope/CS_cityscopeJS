@@ -21,7 +21,7 @@ function LayersMenu(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuState])
 
-  const [sliderVal, setSliderVal] = useState(0)
+  const [sliderVal, setSliderVal] = useState()
 
   const createCheckboxes = (menuItemList) => {
     const toggleListArr = []
@@ -67,12 +67,14 @@ function LayersMenu(props) {
               {hasSlider && menuState[menuItem] && menuState[menuItem].isOn && (
                 <Slider
                   key={`slider-${menuItem}`}
-                  value={sliderVal.value}
+                  value={sliderVal && sliderVal[menuItem]}
                   valueLabelDisplay="auto"
                   // ! pass both val and name of slider
                   // ! to keep it between updates
-                  onChange={(e, val) => setSliderVal({ [menuItem]: val })}
-                  onMouseUp={(e, val) =>
+                  onChange={(e, val) =>
+                    setSliderVal({ ...sliderVal, [menuItem]: val })
+                  }
+                  onMouseUp={() =>
                     setMenuState({
                       ...menuState,
                       [menuItem]: {
