@@ -28,6 +28,11 @@ export const expectedLayers = {
     cityIOmoduleName: 'GEOGRID',
     initState: false,
   },
+  GEOJSON_LAYER_CHECKBOX: {
+    displayName: 'GeoJson Layer',
+    cityIOmoduleName: 'geojson',
+    initState: false,
+  },
 }
 
 export const viewControlItems = {

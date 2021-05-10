@@ -27,9 +27,7 @@ export default function CSjsMain(props) {
   // state func to pass to the menu components
   // to get user interaction
   // and send  map object
-  const [menuState, getMenuState] = useState({})
-
-  console.log(menuState && menuState)
+  const [menuState, getMenuState] = useState()
 
   return (
     <Page className={classes.root} title="CitySCopeJS">
@@ -67,7 +65,9 @@ export default function CSjsMain(props) {
                 position: 'relative',
               }}
             >
-              <MapContainer cityIOdata={cityIOdata} menuState={menuState} />
+              {menuState && (
+                <MapContainer cityIOdata={cityIOdata} menuState={menuState} />
+              )}
             </Card>
           </Grid>
           <Grid item xs={12} l={3} md={3} xl={2}>

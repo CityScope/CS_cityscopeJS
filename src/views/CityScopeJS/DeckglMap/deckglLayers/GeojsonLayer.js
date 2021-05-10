@@ -4,7 +4,7 @@ import { hexToRgb } from '../../../../utils/utils'
 export default function GeojsonLayer({ data }) {
   return new GeoJsonLayer({
     id: 'GeojsonLayer',
-    data,
+    data: data,
     pickable: true,
     wireframe: true,
     stroked: false,
@@ -15,5 +15,13 @@ export default function GeojsonLayer({ data }) {
     getLineColor: (d) => hexToRgb(d.properties.stroke),
     lineWidthMinPixels: 2,
     getElevation: (d) => d.properties.height,
+    updateTriggers: {
+      getFillColor: data,
+      getElevation: data,
+    },
+    transitions: {
+      getFillColor: 500,
+      getElevation: 500,
+    },
   })
 }

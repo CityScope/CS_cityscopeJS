@@ -21,7 +21,6 @@ import { _proccessGridData } from './deckglLayers/GridLayer'
 
 export default function Map(props) {
   const { menuState, cityIOdata } = props
-
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false)
   const [selectedCellsState, setSelectedCellsState] = useState()
   const [viewState, setViewState] = useState(settings.map.initialViewState)
@@ -53,6 +52,9 @@ export default function Map(props) {
     updateSunDirection(15000, effectsRef)
   }, [])
 
+  /**
+   * update the grid layer with every change to GEOGRIDDATA
+   */
   useEffect(() => {
     setGEOGRID(_proccessGridData(cityIOdata))
   }, [cityIOdata.GEOGRIDDATA])
@@ -142,15 +144,15 @@ export default function Map(props) {
       deckGL,
     }),
     ACCESS: AccessLayer({
-      data: cityIOdata,
+      data: cityIOdata.access,
     }),
     TEXTUAL: TextualLayer({
-      data: cityIOdata.textual && cityIOdata,
-      coordinates: GEOGRID,
+      data: cityIOdata.textual && cityIOdata.textual,
+      coordinates: GEOGRID && GEOGRID,
     }),
 
     GEOJSON: GeojsonLayer({
-      data: cityIOdata.geojson && cityIOdata,
+      data: cityIOdata.geojson && cityIOdata.geojson,
     }),
   }
 
@@ -165,11 +167,15 @@ export default function Map(props) {
 
   const _renderLayers = () => {
     let layers = []
-    for (var layer of layerOrder) {
-      // if (layer in menuState) {
-      layers.push(layersKey[layer])
-      // }
+    for (var layerNameString of layerOrder) {
+      if (
+        menuState.LAYERS_MENU[layerNameString + '_LAYER_CHECKBOX'] &&
+        menuState.LAYERS_MENU[layerNameString + '_LAYER_CHECKBOX'].isOn
+      ) {
+        layers.push(layersKey[layerNameString])
+      }
     }
+
     return layers
   }
 
