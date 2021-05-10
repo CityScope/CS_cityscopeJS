@@ -34,25 +34,23 @@ export default function CSjsMain(props) {
       <LoadingSpinner />
       <Container maxWidth={null}>
         <Grid container spacing={5}>
-          <Grid item xs={12} l={2} md={3} xl={2} container>
+          <Grid item xs={12} l={2} md={2} xl={2} container>
             <Grid item container direction="column" spacing={2}>
-              <Grid item xs={12} l={12} md={12} xl={12}>
-                <Card
-                  elevation={15}
-                  style={{
-                    maxHeight: '85vh',
-                    overflow: 'auto',
-                  }}
-                >
-                  <CardContent>
-                    <MenuContainer
-                      cityIOdata={cityIOdata}
-                      tableName={tableName}
-                      getMenuState={getMenuState}
-                    />
-                  </CardContent>
-                </Card>
-              </Grid>
+              <Card
+                elevation={15}
+                style={{
+                  maxHeight: '85vh',
+                  overflow: 'auto',
+                }}
+              >
+                <CardContent>
+                  <MenuContainer
+                    cityIOdata={cityIOdata}
+                    tableName={tableName}
+                    getMenuState={getMenuState}
+                  />
+                </CardContent>
+              </Card>
             </Grid>
           </Grid>
 
@@ -65,9 +63,9 @@ export default function CSjsMain(props) {
                 position: 'relative',
               }}
             >
-              {/* {menuState && (
+              {menuState && (
                 <MapContainer cityIOdata={cityIOdata} menuState={menuState} />
-              )} */}
+              )}
             </Card>
           </Grid>
           <Grid item xs={12} l={3} md={3} xl={2}>

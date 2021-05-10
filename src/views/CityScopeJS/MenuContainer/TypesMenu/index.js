@@ -1,16 +1,14 @@
 import { useState, useMemo } from 'react'
-import Slider from '@material-ui/core/Slider'
-import List from '@material-ui/core/List'
-
 import {
+  List,
+  Slider,
   Typography,
   CardContent,
   Box,
-  Grid,
   Card,
   Button,
 } from '@material-ui/core'
-import TypeInfo from './TypeInfo'
+import { makeStyles } from '@material-ui/core/styles'
 
 export default function TypesListMenu(props) {
   const { cityIOdata, getSelectedTypeFromMenu } = props
@@ -23,6 +21,14 @@ export default function TypesListMenu(props) {
     { value: 100, label: 'max' },
   ]
 
+  const useStyles = makeStyles({
+    root: {
+      maxWidth: '100%',
+    },
+  })
+
+  const classes = useStyles()
+
   useMemo(() => {
     selectedType && getSelectedTypeFromMenu(selectedType)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -33,15 +39,9 @@ export default function TypesListMenu(props) {
     setSelectedType(typeProps)
   }
 
-  const parseTypeInfo = (typeInfo) => {
-    //! check type info: if string, parse, else object
-    let info = typeof typeInfo == 'string' ? JSON.parse(typeInfo) : typeInfo
-    return info
-  }
-
   // get the LBCS/NAICS types info
-  const LBCS = parseTypeInfo(selectedType && selectedType.LBCS)
-  const NAICS = parseTypeInfo(selectedType && selectedType.NAICS)
+  const LBCS = selectedType && selectedType.LBCS
+  const NAICS = selectedType && selectedType.NAICS
   // get type description text if exist
   let description =
     selectedType && selectedType.description ? selectedType.description : null
@@ -74,55 +74,50 @@ export default function TypesListMenu(props) {
   return (
     <>
       {selectedType && (
-        <Card elevation={15}>
+        <Card elevation={15} className={classes.root}>
           <CardContent>
             <Typography variant="h4">{selectedType.name}</Typography>
-
             {description && (
               <Typography variant="caption">{description}</Typography>
             )}
-            <Box spacing={1} p={1} m={1} />
-            <Grid container spacing={3}>
-              <Grid item xs={6} l={6} md={6} xl={6} container>
-                {LBCS && (
-                  <>
-                    <Typography variant="caption">LBCS</Typography>
-
-                    <TypeInfo typeInfo={LBCS} />
-                  </>
-                )}
-              </Grid>
-              <Grid item xs={6} l={6} md={6} xl={6} container>
-                {NAICS && (
-                  <>
-                    <Typography variant="caption">NAICS</Typography>
-                    <TypeInfo typeInfo={NAICS} />
-                  </>
-                )}
-              </Grid>
-
-              <Grid item xs={10} l={10} md={10} xl={10} container>
+            <Box display="flex" p={1} m={1} />
+            {selectedType.height && (
+              <>
                 <Typography gutterBottom>Set Type Height</Typography>
 
-                {selectedType.height && (
-                  <Slider
-                    value={typeHeight}
-                    defaultValue={0}
-                    valueLabelDisplay="auto"
-                    onChange={(e, val) => setTypeHeight(val)}
-                    onMouseUp={() =>
-                      setSelectedType({
-                        ...selectedType,
-                        height: typeHeight,
-                      })
-                    }
-                    min={heightSliderMarks[0].value}
-                    max={heightSliderMarks[1].value}
-                    marks={heightSliderMarks}
-                  />
-                )}
-              </Grid>
-            </Grid>
+                <Slider
+                  value={typeHeight}
+                  defaultValue={0}
+                  valueLabelDisplay="auto"
+                  onChange={(e, val) => setTypeHeight(val)}
+                  onMouseUp={() =>
+                    setSelectedType({
+                      ...selectedType,
+                      height: typeHeight,
+                    })
+                  }
+                  min={heightSliderMarks[0].value}
+                  max={heightSliderMarks[1].value}
+                  marks={heightSliderMarks}
+                />
+              </>
+            )}
+            {LBCS && (
+              <>
+                <Typography>LBCS</Typography>
+                <Typography variant="caption">
+                  {JSON.stringify(LBCS, null, '\t')}
+                </Typography>
+              </>
+            )}
+            {NAICS && (
+              <>
+                <Typography>NAICS</Typography>
+                <Typography variant="caption">
+                  {JSON.stringify(NAICS, null, '\t')}
+                </Typography>
+              </>
+            )}
           </CardContent>
         </Card>
       )}

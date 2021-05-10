@@ -13,7 +13,17 @@ import { expectedLayers } from '../../../../settings/menuSettings'
 function LayersMenu(props) {
   const { getLayersMenu, cityIOdata } = props
 
-  const [menuState, setMenuState] = useState({})
+  /**
+   * inital state 
+   */
+  const [menuState, setMenuState] = useState(() => {
+    let initState = {}
+    for (const menuItem in expectedLayers) {
+      initState[menuItem] = { isOn: expectedLayers[menuItem].initState }
+    }
+    return initState
+  })
+
   // return the manu state to parent component
   useLayoutEffect(() => {
     getLayersMenu(menuState)
@@ -26,21 +36,21 @@ function LayersMenu(props) {
     setSliderVal({ ...sliderVal, [menuItem]: val })
   }
 
-  const createCheckboxes = (menuItemList) => {
+  const createCheckboxes = (menuLayersList) => {
     const toggleListArr = []
-    for (const menuItem in menuItemList) {
+    for (const menuItem in menuLayersList) {
       //  get short module name for each toggle
-      const moduleName = menuItemList[menuItem].cityIOmoduleName
+      const moduleName = menuLayersList[menuItem].cityIOmoduleName
       // check if we add slider to this menuItem
-      const hasSlider = menuItemList[menuItem].hasSlider
+      const hasSlider = menuLayersList[menuItem].hasSlider
       //  check if this toggle is a layer that requires cityIO
       // or it's visability layer that we always show
       if (
-        !menuItemList[menuItem].cityIOmoduleName ||
+        !menuLayersList[menuItem].cityIOmoduleName ||
         moduleName in cityIOdata
       ) {
         toggleListArr.push(
-          <>
+          <div key={`div-${menuItem}`}>
             <Checkbox
               checked={menuState[menuItem] && menuState[menuItem].isOn}
               key={`cb-${menuItem}`}
@@ -55,7 +65,9 @@ function LayersMenu(props) {
                 })
               }
             />
-            <Typography>{menuItemList[menuItem].displayName}</Typography>
+            <Typography key={`text-${menuItem}`}>
+              {menuLayersList[menuItem].displayName}
+            </Typography>
 
             {hasSlider && menuState[menuItem] && menuState[menuItem].isOn && (
               <Slider
@@ -76,7 +88,7 @@ function LayersMenu(props) {
                 }
               />
             )}
-          </>,
+          </div>,
         )
       }
     }

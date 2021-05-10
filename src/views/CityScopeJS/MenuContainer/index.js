@@ -35,8 +35,8 @@ function MenuContainer(props) {
 
   return (
     <List>
-       <ListItem>
-        <Typography variant={"h4"}>Editing Menu</Typography>
+      <ListItem>
+        <Typography variant={'h4'}>Editing Menu</Typography>
       </ListItem>
 
       <ListItem>
@@ -46,7 +46,9 @@ function MenuContainer(props) {
           color="default"
           onClick={(e) => handleButtonClicks(e)}
         >
-          {menuState.EDIT_BUTTON ? 'commit edits' : 'start editing'}
+          <Typography variant={'h5'}>
+            {menuState.EDIT_BUTTON ? 'submit edits' : 'start editing'}
+          </Typography>
         </Button>
       </ListItem>
 
@@ -56,15 +58,13 @@ function MenuContainer(props) {
       />
 
       <ListItem>
-        <Typography variant={"h4"}>Layers options</Typography>
+        <Typography variant={'h4'}>Layers options</Typography>
       </ListItem>
       <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} />
 
       <ListItem>
-        <Typography variant={"h4"}>Display options</Typography>
+        <Typography variant={'h4'}>Display options</Typography>
       </ListItem>
-
-      <ListItem></ListItem>
     </List>
   )
 }
