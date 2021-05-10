@@ -1,5 +1,74 @@
 import { GeoJsonLayer } from 'deck.gl'
-import { _handleGridcellEditing } from '../../../../utils/utils'
+import { hexToRgb, testHex } from '../../../../utils/utils'
+
+/**
+ * Description. uses deck api to
+ * collect objects in a region
+ * @argument{object} e  picking event
+ */
+export const _multipleObjPicked = (e, pickingRadius, deckGLRef) => {
+  const dim = pickingRadius
+  const x = e.x - dim / 2
+  const y = e.y - dim / 2
+  let multipleObj = deckGLRef.current.pickObjects({
+    x: x,
+    y: y,
+    width: dim,
+    height: dim,
+  })
+  return multipleObj
+}
+
+/**
+ * Description. allow only to pick cells that are
+ *  not of CityScope TUI & that are interactable
+ * so to not overlap TUI activity
+ */
+const _handleGridcellEditing = (
+  e,
+  selectedType,
+  setSelectedCellsState,
+  pickingRadius,
+  deckGLRef,
+) => {
+  const { height, color, name } = selectedType
+  const multiSelectedObj = _multipleObjPicked(e, pickingRadius, deckGLRef)
+  multiSelectedObj.forEach((selected) => {
+    const thisCellProps = selected.object.properties
+    if (thisCellProps && thisCellProps.interactive) {
+      thisCellProps.color = testHex(color) ? hexToRgb(color) : color
+      thisCellProps.height = height
+      thisCellProps.name = name
+    }
+  })
+  setSelectedCellsState(multiSelectedObj)
+}
+
+/**
+ * Description. gets `props` with geojson
+ * and procces the interactive area
+ */
+export const _proccessGridData = (cityIOdata) => {
+  //  get the static grid
+  const GEOGRID = cityIOdata.GEOGRID
+  // if GEOGRRIDDATA exist and is the same length as our grid
+  if (
+    cityIOdata.GEOGRIDDATA &&
+    cityIOdata.GEOGRIDDATA.length === cityIOdata.GEOGRID.features.length
+  ) {
+    // get the grid data
+    const GEOGRIDDATA = cityIOdata.GEOGRIDDATA
+    // update GEOGRID features from GEOGRIDDATA on cityio
+    for (let i = 0; i < GEOGRID.features.length; i++) {
+      GEOGRID.features[i].properties = GEOGRIDDATA[i]
+
+      // inject id
+      GEOGRID.features[i].properties.id = i
+    }
+  }
+  const newGrid = JSON.parse(JSON.stringify(GEOGRID))
+  return newGrid
+}
 
 export default function GridLayer({
   data,
@@ -8,7 +77,6 @@ export default function GridLayer({
   updaters: { setSelectedCellsState, setDraggingWhileEditing, setHoveredObj },
   deckGL,
 }) {
-
   return new GeoJsonLayer({
     id: 'GRID',
     data,

@@ -1,6 +1,4 @@
 import axios from 'axios'
-import { addLoadingModules } from '../redux/actions'
-import store from '../redux/store'
 import settings from '../settings/settings.json'
 import { LightingEffect, AmbientLight, _SunLight } from '@deck.gl/core'
 
@@ -38,31 +36,7 @@ export const testHex = (hexString) => {
   return isHex
 }
 
-/**
- * Description. gets `props` with geojson
- * and procces the interactive area
- */
-export const _proccessGridData = (cityioData) => {
-  // get the static grid
-  const GEOGRID = cityioData.GEOGRID
-  // if GEOGRRIDDATA exist and is the same length as our grid
-  if (
-    cityioData.GEOGRIDDATA &&
-    cityioData.GEOGRIDDATA.length === cityioData.GEOGRID.features.length
-  ) {
-    // get the grid data
-    const GEOGRIDDATA = cityioData.GEOGRIDDATA
-    // update GEOGRID features from GEOGRIDDATA on cityio
-    for (let i = 0; i < GEOGRID.features.length; i++) {
-      GEOGRID.features[i].properties = GEOGRIDDATA[i]
 
-      // inject id
-      GEOGRID.features[i].properties.id = i
-    }
-  }
-  const newGrid = JSON.parse(JSON.stringify(GEOGRID))
-  return newGrid
-}
 
 /**
  * checks if edits are done (toggled off)
@@ -70,17 +44,6 @@ export const _proccessGridData = (cityioData) => {
  * with grid edits payload
  */
 export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
-  const expectUpdateModules = new Set(
-    settings.cityIO.cityIOmodules
-      .filter((val) => val.expectUpdate)
-      .map((val) => val.name),
-  )
-  const cityIOKeys = new Set(Object.keys(store.getState().CITYIO))
-
-  const loadingModules = [...cityIOKeys].filter((i) =>
-    expectUpdateModules.has(i),
-  )
-
   let postURL = settings.cityIO.baseURL + tableName + endPoint
 
   const options = {
@@ -95,7 +58,7 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
   axios(options)
     .then((res) => {
       if (res.data.status === 'ok') {
-        store.dispatch(addLoadingModules(loadingModules))
+        console.log('--> cityIO is updated! <--')
       }
     })
     .catch((error) => {
@@ -103,48 +66,7 @@ export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
     })
 }
 
-// /**
-//  * Description. uses deck api to
-//  * collect objects in a region
-//  * @argument{object} e  picking event
-//  */
-export const _multipleObjPicked = (e, pickingRadius, deckGLRef) => {
-  const dim = pickingRadius
-  const x = e.x - dim / 2
-  const y = e.y - dim / 2
-  let multipleObj = deckGLRef.current.pickObjects({
-    x: x,
-    y: y,
-    width: dim,
-    height: dim,
-  })
-  return multipleObj
-}
 
-// /**
-//  * Description. allow only to pick cells that are
-//  *  not of CityScope TUI & that are interactable
-//  * so to not overlap TUI activity
-//  */
-export const _handleGridcellEditing = (
-  e,
-  selectedType,
-  setSelectedCellsState,
-  pickingRadius,
-  deckGLRef,
-) => {
-  const { height, color, name } = selectedType
-  const multiSelectedObj = _multipleObjPicked(e, pickingRadius, deckGLRef)
-  multiSelectedObj.forEach((selected) => {
-    const thisCellProps = selected.object.properties
-    if (thisCellProps && thisCellProps.interactive) {
-      thisCellProps.color = testHex(color) ? hexToRgb(color) : color
-      thisCellProps.height = height
-      thisCellProps.name = name
-    }
-  })
-  setSelectedCellsState(multiSelectedObj)
-}
 
 var currentDateMidnight = new Date()
 // set initial midnight to GMT 0

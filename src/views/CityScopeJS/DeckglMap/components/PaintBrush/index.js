@@ -9,9 +9,9 @@ export default function PaintBrushContainer({
   mouseDown,
   hoveredObj,
 }) {
-  return (
-    <>
-      {editOn && selectedType && hoveredObj && (
+  const BrushSelector = () => {
+    if (editOn && Object.keys(selectedType).length && hoveredObj) {
+      return (
         <PaintBrush
           mousePos={mousePos}
           selectedType={selectedType}
@@ -19,11 +19,12 @@ export default function PaintBrushContainer({
           mouseDown={mouseDown}
           hoveredCells={hoveredObj}
         />
-      )}
-
-      {!editOn && hoveredObj && (
-        <CellMeta mousePos={mousePos} hoveredObj={hoveredObj} />
-      )}
-    </>
-  )
+      )
+    } else if (hoveredObj ) {
+      return <CellMeta mousePos={mousePos} hoveredObj={hoveredObj} />
+    } else {
+      return null
+    }
+  }
+  return <BrushSelector />
 }

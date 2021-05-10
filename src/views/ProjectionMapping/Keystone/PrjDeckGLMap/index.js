@@ -1,10 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import {
-  _proccessGridData,
-  _setupSunEffects,
-  updateSunDirection,
-} from '../../../../utils/utils'
+import { _setupSunEffects, updateSunDirection } from '../../../../utils/utils'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -68,7 +64,7 @@ export default function PrjDeckGLMap(props) {
   }, [cityioData.GEOGRID.properties.header])
 
   useEffect(() => {
-    setGEOGRID(_proccessGridData(cityioData))
+    setGEOGRID(cityioData)
     if (cityioData.access) {
       setAccess(cityioData)
     }

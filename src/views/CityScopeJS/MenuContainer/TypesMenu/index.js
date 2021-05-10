@@ -24,8 +24,6 @@ export default function TypesListMenu(props) {
   ]
 
   useMemo(() => {
-    console.log(selectedType)
-
     selectedType && getSelectedTypeFromMenu(selectedType)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedType])

@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import PaintBrush from './components/PaintBrush'
 import {
-  _proccessGridData,
   _postMapEditsToCityIO,
   updateSunDirection,
   _setupSunEffects,
@@ -10,7 +9,6 @@ import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import settings from '../../../settings/settings.json'
-
 import {
   AccessLayer,
   AggregatedTripsLayer,
@@ -19,6 +17,7 @@ import {
   TextualLayer,
   GeojsonLayer,
 } from './deckglLayers'
+import { _proccessGridData } from './deckglLayers/GridLayer'
 
 export default function Map(props) {
   const { menuState, cityIOdata } = props
@@ -30,20 +29,12 @@ export default function Map(props) {
   const [mousePos, setMousePos] = useState()
   const [mouseDown, setMouseDown] = useState()
   const [hoveredObj, setHoveredObj] = useState()
-  const [accessLayerData, setAccessLayerData] = useState()
-  const [textualLayerData, setTextualLayerData] = useState()
-  const [geojsonData, setGeojsonData] = useState()
+
   const [GEOGRID, setGEOGRID] = useState()
-  const [ABM, setABM] = useState({})
   const effectsRef = useRef()
   const deckGL = useRef()
   const pickingRadius = 40
 
-  // ! temp
-  // const [animationTime, setAnimationTime] = useState(0)
-
-  // const ABMlayerToggle = menuState.ABM_LAYER_CHECKBOX
-  // const rotateCameraToggle = menuState.ROTATE_CHECKBOX
   const shadowsToggle = menuState.SHADOWS_CHECKBOX
   const editModeToggle = menuState.EDIT_BUTTON
   const resetViewButton = menuState.RESET_VIEW_BUTTON
@@ -63,28 +54,14 @@ export default function Map(props) {
   }, [])
 
   useEffect(() => {
+    setGEOGRID(_proccessGridData(cityIOdata))
+  }, [cityIOdata.GEOGRIDDATA])
+
+  useEffect(() => {
     let shadowColor = shadowsToggle ? [0, 0, 0, 0.5] : [0, 0, 0, 0]
     effectsRef.current[0].shadowColor = shadowColor
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shadowsToggle])
-
-  useEffect(() => {
-    setGEOGRID(_proccessGridData(cityIOdata))
-
-    if (cityIOdata.access) {
-      setAccessLayerData(cityIOdata.access)
-    }
-    if (cityIOdata.textual) {
-      setTextualLayerData(cityIOdata.textual)
-    }
-    if (cityIOdata.ABM2) {
-      setABM(cityIOdata.ABM2)
-    }
-
-    if (cityIOdata.geojson) {
-      setGeojsonData(cityIOdata.geojson)
-    }
-  }, [cityIOdata])
 
   useEffect(() => {
     if (!editModeToggle && GEOGRID) {
@@ -138,16 +115,14 @@ export default function Map(props) {
 
   const layersKey = {
     ABM: ABMLayer({
-      data: ABM.trips,
-      cityIOdata,
+      data: cityIOdata,
       ABMmode: 0,
       zoomLevel: viewState.zoom,
       // ! temp
       time: 0,
     }),
     AGGREGATED_TRIPS: AggregatedTripsLayer({
-      data: ABM.trips,
-      cityIOdata,
+      data: cityIOdata,
       ABMmode: 0,
     }),
     GRID: GridLayer({
@@ -167,15 +142,15 @@ export default function Map(props) {
       deckGL,
     }),
     ACCESS: AccessLayer({
-      data: accessLayerData,
+      data: cityIOdata,
     }),
     TEXTUAL: TextualLayer({
-      data: textualLayerData && textualLayerData,
+      data: cityIOdata.textual && cityIOdata,
       coordinates: GEOGRID,
     }),
 
     GEOJSON: GeojsonLayer({
-      data: geojsonData && geojsonData,
+      data: cityIOdata.geojson && cityIOdata,
     }),
   }
 

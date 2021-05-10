@@ -1,5 +1,5 @@
 import MenuContainer from './MenuContainer'
-// import MapContainer from './DeckglMap'
+import MapContainer from './DeckglMap'
 import LoadingSpinner from './CityIO/LoadingSpinner'
 // import VisContainer from './VisContainer'
 import {
@@ -67,7 +67,7 @@ export default function CSjsMain(props) {
                 position: 'relative',
               }}
             >
-              {/* <MapContainer cityIOdata={cityIOdata} menuState={menuState} /> */}
+              <MapContainer cityIOdata={cityIOdata} menuState={menuState} />
             </Card>
           </Grid>
           <Grid item xs={12} l={3} md={3} xl={2}>
