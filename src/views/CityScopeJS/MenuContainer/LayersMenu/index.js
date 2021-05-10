@@ -37,8 +37,8 @@ function LayersMenu(props) {
         moduleName in cityIOdata
       ) {
         toggleListArr.push(
-          <Grid container>
-            <Grid item xs={12}>
+          <Grid key={Math.random()} container>
+            <Grid key={Math.random()} item xs={12}>
               <FormControlLabel
                 value="end"
                 control={

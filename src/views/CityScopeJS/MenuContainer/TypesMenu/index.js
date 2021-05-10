@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from 'react'
+import { useState, useMemo } from 'react'
 import Slider from '@material-ui/core/Slider'
 import List from '@material-ui/core/List'
 
@@ -23,7 +23,9 @@ export default function TypesListMenu(props) {
     { value: 100, label: 'max' },
   ]
 
-  useLayoutEffect(() => {
+  useMemo(() => {
+    console.log(selectedType)
+
     selectedType && getSelectedTypeFromMenu(selectedType)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedType])
@@ -54,6 +56,7 @@ export default function TypesListMenu(props) {
       // check if this type has height prop
       listMenuItemsArray.push(
         <Button
+          key={Math.random()}
           style={{
             margin: '0.5em',
             border: '1px solid ' + col.toString(),
@@ -103,22 +106,23 @@ export default function TypesListMenu(props) {
               <Grid item xs={10} l={10} md={10} xl={10} container>
                 <Typography gutterBottom>Set Type Height</Typography>
 
-                <Slider
-                  disabled={selectedType.height ? false : true}
-                  value={typeHeight}
-                  defaultValue={0}
-                  valueLabelDisplay="auto"
-                  onChange={(e, val) => setTypeHeight(val)}
-                  onMouseUp={(e, val) =>
-                    setSelectedType({
-                      ...selectedType,
-                      height: val,
-                    })
-                  }
-                  min={heightSliderMarks[0].value}
-                  max={heightSliderMarks[1].value}
-                  marks={heightSliderMarks}
-                />
+                {selectedType.height && (
+                  <Slider
+                    value={typeHeight}
+                    defaultValue={0}
+                    valueLabelDisplay="auto"
+                    onChange={(e, val) => setTypeHeight(val)}
+                    onMouseUp={() =>
+                      setSelectedType({
+                        ...selectedType,
+                        height: typeHeight,
+                      })
+                    }
+                    min={heightSliderMarks[0].value}
+                    max={heightSliderMarks[1].value}
+                    marks={heightSliderMarks}
+                  />
+                )}
               </Grid>
             </Grid>
           </CardContent>
