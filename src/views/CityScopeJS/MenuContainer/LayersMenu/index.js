@@ -1,12 +1,11 @@
 import {
   List,
   ListItem,
-  Grid,
   Slider,
   Checkbox,
   FormGroup,
+  Typography,
 } from '@material-ui/core'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import { useLayoutEffect, useState } from 'react'
 import { expectedLayers } from '../../../../settings/menuSettings'
@@ -23,6 +22,10 @@ function LayersMenu(props) {
 
   const [sliderVal, setSliderVal] = useState()
 
+  const updateSliderVal = (menuItem, val) => {
+    setSliderVal({ ...sliderVal, [menuItem]: val })
+  }
+
   const createCheckboxes = (menuItemList) => {
     const toggleListArr = []
     for (const menuItem in menuItemList) {
@@ -37,59 +40,47 @@ function LayersMenu(props) {
         moduleName in cityIOdata
       ) {
         toggleListArr.push(
-          <Grid key={Math.random()} container>
-            <Grid key={Math.random()} item xs={12}>
-              <FormControlLabel
-                value="end"
-                control={
-                  <Checkbox
-                    checked={menuState[menuItem] && menuState[menuItem].isOn}
-                    key={`cb-${menuItem}`}
-                    color="primary"
-                  />
-                }
-                label={menuItemList[menuItem].displayName}
-                name={menuItem}
-                key={Math.random()}
-                onChange={(e) =>
+          <>
+            <Checkbox
+              checked={menuState[menuItem] && menuState[menuItem].isOn}
+              key={`cb-${menuItem}`}
+              color="primary"
+              onChange={(e) =>
+                setMenuState({
+                  ...menuState,
+                  [menuItem]: {
+                    ...menuState[menuItem],
+                    isOn: e.target.checked,
+                  },
+                })
+              }
+            />
+            <Typography>{menuItemList[menuItem].displayName}</Typography>
+
+            {hasSlider && menuState[menuItem] && menuState[menuItem].isOn && (
+              <Slider
+                key={`slider-${menuItem}`}
+                value={sliderVal && sliderVal[menuItem]}
+                valueLabelDisplay="auto"
+                // ! pass both val and name of slider
+                // ! to keep it between updates
+                onChange={(e, val) => updateSliderVal(menuItem, val)}
+                onMouseUp={() =>
                   setMenuState({
                     ...menuState,
                     [menuItem]: {
                       ...menuState[menuItem],
-                      isOn: e.target.checked,
+                      slider: sliderVal[menuItem],
                     },
                   })
                 }
-                labelPlacement="end"
               />
-            </Grid>
-            <Grid item xs={12}>
-              {hasSlider && menuState[menuItem] && menuState[menuItem].isOn && (
-                <Slider
-                  key={`slider-${menuItem}`}
-                  value={sliderVal && sliderVal[menuItem]}
-                  valueLabelDisplay="auto"
-                  // ! pass both val and name of slider
-                  // ! to keep it between updates
-                  onChange={(e, val) =>
-                    setSliderVal({ ...sliderVal, [menuItem]: val })
-                  }
-                  onMouseUp={() =>
-                    setMenuState({
-                      ...menuState,
-                      [menuItem]: {
-                        ...menuState[menuItem],
-                        slider: sliderVal[menuItem],
-                      },
-                    })
-                  }
-                />
-              )}
-            </Grid>
-          </Grid>,
+            )}
+          </>,
         )
       }
     }
+
     return toggleListArr
   }
 

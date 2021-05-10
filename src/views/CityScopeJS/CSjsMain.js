@@ -65,9 +65,9 @@ export default function CSjsMain(props) {
                 position: 'relative',
               }}
             >
-              {menuState && (
+              {/* {menuState && (
                 <MapContainer cityIOdata={cityIOdata} menuState={menuState} />
-              )}
+              )} */}
             </Card>
           </Grid>
           <Grid item xs={12} l={3} md={3} xl={2}>
