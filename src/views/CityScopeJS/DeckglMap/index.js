@@ -47,9 +47,8 @@ export default function Map(props) {
     _setupSunEffects(effectsRef, cityIOdata.GEOGRID.properties.header)
     // zoom map on CS table location
     _setViewStateToTableHeader()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-
     updateSunDirection(15000, effectsRef)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   /**
@@ -57,6 +56,7 @@ export default function Map(props) {
    */
   useEffect(() => {
     setGEOGRID(_proccessGridData(cityIOdata))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityIOdata.GEOGRIDDATA])
 
   useEffect(() => {

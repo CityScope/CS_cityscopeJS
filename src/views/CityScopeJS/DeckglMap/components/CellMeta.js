@@ -19,7 +19,6 @@ export const CellMeta = (props) => {
         zIndex: 10,
         left: mousePos.clientX,
         top: mousePos.clientY,
-        fontFamily: 'monospace',
         fontSize: '0.65em',
         fontWeight: 500,
         fontFamily: 'Roboto Mono',

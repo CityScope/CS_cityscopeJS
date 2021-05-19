@@ -14,7 +14,7 @@ export default function TypesListMenu(props) {
   const { cityIOdata, getSelectedTypeFromMenu } = props
   const typesList = cityIOdata.GEOGRID.properties.types
   const [selectedType, setSelectedType] = useState(null)
-  const [typeHeight, setTypeHeight] = useState(null)
+  const [typeHeight, setTypeHeight] = useState(0)
 
   const heightSliderMarks = [
     { value: 0, label: 'min' },
@@ -36,6 +36,10 @@ export default function TypesListMenu(props) {
 
   const handleListItemClick = (typeProps) => {
     // ! injects the type name into the attributes themselves
+
+    if (typeHeight && typeProps.height) {
+      typeProps.height = typeHeight
+    }
     setSelectedType(typeProps)
   }
 
@@ -49,6 +53,7 @@ export default function TypesListMenu(props) {
   const createTypesIcons = (typesList) => {
     let listMenuItemsArray = []
     Object.keys(typesList).forEach((thisType, index) => {
+      const borderStyle = selectedType && selectedType.name == thisType ? 5 : 1
       // get color
       let col = typesList[thisType].color
       // check if this type has height prop
@@ -57,7 +62,7 @@ export default function TypesListMenu(props) {
           key={Math.random()}
           style={{
             margin: '0.5em',
-            border: '1px solid ' + col.toString(),
+            border: borderStyle + 'px solid ' + col.toString(),
           }}
           variant="outlined"
           onClick={() => handleListItemClick(typesList[thisType])}
@@ -80,8 +85,8 @@ export default function TypesListMenu(props) {
             {description && (
               <Typography variant="caption">{description}</Typography>
             )}
-            <Box display="flex" p={1} m={1} />
-            {selectedType.height && (
+
+            {selectedType && selectedType.height && (
               <>
                 <Typography gutterBottom>Set Type Height</Typography>
 

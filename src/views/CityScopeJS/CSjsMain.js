@@ -1,7 +1,7 @@
 import MenuContainer from './MenuContainer'
 import MapContainer from './DeckglMap'
 import LoadingSpinner from './CityIO/LoadingSpinner'
-// import VisContainer from './VisContainer'
+import VisContainer from './VisContainer'
 import {
   makeStyles,
   Grid,
@@ -29,12 +29,14 @@ export default function CSjsMain(props) {
   // and send  map object
   const [menuState, getMenuState] = useState()
 
+  console.log(menuState)
+
   return (
     <Page className={classes.root} title="CitySCopeJS">
       <LoadingSpinner />
       <Container maxWidth={null}>
         <Grid container spacing={5}>
-          <Grid item xs={12} l={2} md={2} xl={2} container>
+          <Grid item xs={12} l={2} md={2} xl={1} container>
             <Grid item container direction="column" spacing={2}>
               <Card
                 elevation={15}
@@ -54,7 +56,7 @@ export default function CSjsMain(props) {
             </Grid>
           </Grid>
 
-          <Grid item xs={12} l={6} md={6} xl={8}>
+          <Grid item xs={12} l={6} md={7} xl={9}>
             <Card
               elevation={15}
               style={{
@@ -76,7 +78,7 @@ export default function CSjsMain(props) {
                 overflow: 'auto',
               }}
             >
-              {/* <VisContainer cityIOdata={cityIOdata} /> */}
+              <VisContainer cityIOdata={cityIOdata} />
             </Card>
           </Grid>
         </Grid>

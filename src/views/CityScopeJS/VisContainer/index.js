@@ -6,7 +6,6 @@ import AreaCalc from './AreaCalc'
 
 function VisContainer(props) {
   const cityIOdata = props.cityIOdata
-  console.log(cityIOdata)
 
   return (
     <>
