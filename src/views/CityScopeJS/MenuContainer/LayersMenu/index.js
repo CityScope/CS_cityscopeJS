@@ -5,6 +5,7 @@ import {
   Checkbox,
   FormGroup,
   Typography,
+  Box,
 } from '@material-ui/core'
 import FormControl from '@material-ui/core/FormControl'
 import { useLayoutEffect, useState } from 'react'
@@ -51,7 +52,7 @@ function LayersMenu(props) {
       //  check if this toggle is a layer that requires cityIO
       if (moduleName in cityIOdata) {
         toggleListArr.push(
-          <div key={`div-${menuItem}`}>
+          <Box display="flex" key={`div-${menuItem}`}>
             <Checkbox
               checked={menuState[menuItem] && menuState[menuItem].isOn}
               key={`cb-${menuItem}`}
@@ -66,7 +67,7 @@ function LayersMenu(props) {
                 })
               }
             />
-            <Typography key={`text-${menuItem}`}>
+            <Typography variant={'caption'} key={`text-${menuItem}`}>
               {menuLayersList[menuItem].displayName}
             </Typography>
 
@@ -89,7 +90,7 @@ function LayersMenu(props) {
                 }
               />
             )}
-          </div>,
+          </Box>,
         )
       }
     }

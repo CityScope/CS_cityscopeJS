@@ -36,8 +36,8 @@ export default function CSjsMain(props) {
       <LoadingSpinner />
       <Container maxWidth={null}>
         <Grid container spacing={5}>
-          <Grid item xs={12} l={2} md={2} xl={1} container>
-            <Grid item container direction="column" spacing={2}>
+          <Grid item xs={12} l={2} md={2} xl={2} container>
+            <Grid item container direction="column">
               <Card
                 elevation={15}
                 style={{
@@ -56,7 +56,7 @@ export default function CSjsMain(props) {
             </Grid>
           </Grid>
 
-          <Grid item xs={12} l={6} md={7} xl={9}>
+          <Grid item xs={12} l={6} md={7} xl={8}>
             <Card
               elevation={15}
               style={{
