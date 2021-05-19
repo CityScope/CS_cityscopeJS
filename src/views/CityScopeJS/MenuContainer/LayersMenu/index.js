@@ -14,12 +14,17 @@ function LayersMenu(props) {
   const { getLayersMenu, cityIOdata } = props
 
   /**
-   * inital state 
+   * inital state
    */
   const [menuState, setMenuState] = useState(() => {
     let initState = {}
     for (const menuItem in expectedLayers) {
-      initState[menuItem] = { isOn: expectedLayers[menuItem].initState }
+      initState[menuItem] = {
+        isOn: expectedLayers[menuItem].initState,
+        slider:
+          expectedLayers[menuItem].hasSlider &&
+          expectedLayers[menuItem].initSliderValue,
+      }
     }
     return initState
   })
@@ -44,11 +49,7 @@ function LayersMenu(props) {
       // check if we add slider to this menuItem
       const hasSlider = menuLayersList[menuItem].hasSlider
       //  check if this toggle is a layer that requires cityIO
-      // or it's visability layer that we always show
-      if (
-        !menuLayersList[menuItem].cityIOmoduleName ||
-        moduleName in cityIOdata
-      ) {
+      if (moduleName in cityIOdata) {
         toggleListArr.push(
           <div key={`div-${menuItem}`}>
             <Checkbox

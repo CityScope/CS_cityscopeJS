@@ -4,7 +4,6 @@ import {
   Slider,
   Typography,
   CardContent,
-  Box,
   Card,
   Button,
 } from '@material-ui/core'
@@ -53,7 +52,7 @@ export default function TypesListMenu(props) {
   const createTypesIcons = (typesList) => {
     let listMenuItemsArray = []
     Object.keys(typesList).forEach((thisType, index) => {
-      const borderStyle = selectedType && selectedType.name == thisType ? 5 : 1
+      const borderStyle = selectedType && selectedType.name === thisType ? 5 : 1
       // get color
       let col = typesList[thisType].color
       // check if this type has height prop

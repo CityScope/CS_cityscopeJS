@@ -38,6 +38,7 @@ export default function Map(props) {
   const editModeToggle = menuState.EDIT_BUTTON
   const resetViewButton = menuState.RESET_VIEW_BUTTON
   const selectedType = menuState.SELECTED_TYPE
+  const layersMenu = menuState.LAYERS_MENU
 
   /** On init */
   useEffect(() => {
@@ -135,6 +136,9 @@ export default function Map(props) {
         keyDownState,
         selectedCellsState,
         pickingRadius,
+        opacity:
+          layersMenu.GRID_LAYER_CHECKBOX &&
+          layersMenu.GRID_LAYER_CHECKBOX.slider * 0.01,
       },
       updaters: {
         setSelectedCellsState,

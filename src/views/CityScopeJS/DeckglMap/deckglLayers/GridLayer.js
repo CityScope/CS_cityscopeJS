@@ -73,11 +73,18 @@ export const _proccessGridData = (cityIOdata) => {
 export default function GridLayer({
   data,
   editOn,
-  state: { selectedType, keyDownState, selectedCellsState, pickingRadius },
+  state: {
+    selectedType,
+    keyDownState,
+    selectedCellsState,
+    pickingRadius,
+    opacity,
+  },
   updaters: { setSelectedCellsState, setDraggingWhileEditing, setHoveredObj },
   deckGL,
 }) {
   return new GeoJsonLayer({
+    opacity,
     id: 'GRID',
     data,
     pickable: true,
