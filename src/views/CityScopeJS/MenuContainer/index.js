@@ -4,6 +4,7 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import { useLayoutEffect, useMemo, useState } from 'react'
 import TypesMenu from './TypesMenu'
 import LayersMenu from './LayersMenu'
+import VisibilityMenu from './VisibilityMenu'
 
 function MenuContainer(props) {
   const { cityIOdata, getMenuState } = props
@@ -16,6 +17,7 @@ function MenuContainer(props) {
 
   const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState({})
   const [layersMenu, getLayersMenu] = useState({})
+  const [visibiltyMenu, getVisibiltyMenu] = useState({})
 
   useMemo(() => {
     setMenuState({
@@ -65,6 +67,7 @@ function MenuContainer(props) {
       <ListItem>
         <Typography variant={'h4'}>Display options</Typography>
       </ListItem>
+      <VisibilityMenu getVisibiltyMenu={getVisibiltyMenu} />
     </List>
   )
 }

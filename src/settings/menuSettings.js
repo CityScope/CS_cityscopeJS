@@ -44,6 +44,7 @@ export const viewControlItems = {
     displayName: 'Animate',
     initState: false,
     hasSlider: true,
+    initSliderValue: 100,
   },
   ROTATE_CHECKBOX: {
     displayName: 'Rotate Camera',
@@ -53,5 +54,6 @@ export const viewControlItems = {
     displayName: 'Toggle Shadows',
     initState: false,
     hasSlider: true,
+    initSliderValue: 100,
   },
 }

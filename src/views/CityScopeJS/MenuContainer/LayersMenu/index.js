@@ -1,13 +1,5 @@
-import {
-  List,
-  ListItem,
-  Slider,
-  Checkbox,
-  FormGroup,
-  Typography,
-  Box,
-} from '@material-ui/core'
-import FormControl from '@material-ui/core/FormControl'
+import { Slider, Checkbox, Typography, Box } from '@material-ui/core'
+
 import { useLayoutEffect, useState } from 'react'
 import { expectedLayers } from '../../../../settings/menuSettings'
 
@@ -52,7 +44,7 @@ function LayersMenu(props) {
       //  check if this toggle is a layer that requires cityIO
       if (moduleName in cityIOdata) {
         toggleListArr.push(
-          <Box display="flex" key={`div-${menuItem}`}>
+          <Box display="flex"  key={`div-${menuItem}`}>
             <Checkbox
               checked={menuState[menuItem] && menuState[menuItem].isOn}
               key={`cb-${menuItem}`}
@@ -98,17 +90,7 @@ function LayersMenu(props) {
     return toggleListArr
   }
 
-  return (
-    <List>
-      <ListItem>
-        <FormControl component="fieldset">
-          <FormGroup aria-label="position">
-            {createCheckboxes(expectedLayers)}
-          </FormGroup>
-        </FormControl>
-      </ListItem>
-    </List>
-  )
+  return <>{createCheckboxes(expectedLayers)}</>
 }
 
 export default LayersMenu
