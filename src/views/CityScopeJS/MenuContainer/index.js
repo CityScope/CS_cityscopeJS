@@ -38,7 +38,7 @@ function MenuContainer(props) {
   return (
     <List>
       <ListItem>
-        <Typography variant={'h4'}>Editing Menu</Typography>
+        <Typography variant={'h3'}>Edit</Typography>
       </ListItem>
 
       <ListItem>
@@ -60,12 +60,12 @@ function MenuContainer(props) {
       />
 
       <ListItem>
-        <Typography variant={'h4'}>Layers options</Typography>
+        <Typography variant={'h3'}>Layers</Typography>
       </ListItem>
       <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} />
 
       <ListItem>
-        <Typography variant={'h4'}>Display options</Typography>
+        <Typography variant={'h3'}>Display</Typography>
       </ListItem>
       <VisibilityMenu getVisibiltyMenu={getVisibiltyMenu} />
     </List>

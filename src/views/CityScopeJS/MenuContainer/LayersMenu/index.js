@@ -1,4 +1,4 @@
-import { Slider, Checkbox, Typography, Box } from '@material-ui/core'
+import { Slider, Checkbox, FormControlLabel, Grid } from '@material-ui/core'
 
 import { useLayoutEffect, useState } from 'react'
 import { expectedLayers } from '../../../../settings/menuSettings'
@@ -28,7 +28,15 @@ function LayersMenu(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuState])
 
-  const [sliderVal, setSliderVal] = useState(0)
+  const [sliderVal, setSliderVal] = useState(() => {
+    let initState = {}
+    for (const menuItem in expectedLayers) {
+      initState[menuItem] =
+        expectedLayers[menuItem].hasSlider &&
+        expectedLayers[menuItem].initSliderValue
+    }
+    return initState
+  })
 
   const updateSliderVal = (menuItem, val) => {
     setSliderVal({ ...sliderVal, [menuItem]: val })
@@ -44,45 +52,52 @@ function LayersMenu(props) {
       //  check if this toggle is a layer that requires cityIO
       if (moduleName in cityIOdata) {
         toggleListArr.push(
-          <Box display="flex"  key={`div-${menuItem}`}>
-            <Checkbox
-              checked={menuState[menuItem] && menuState[menuItem].isOn}
-              key={`cb-${menuItem}`}
-              color="primary"
-              onChange={(e) =>
-                setMenuState({
-                  ...menuState,
-                  [menuItem]: {
-                    ...menuState[menuItem],
-                    isOn: e.target.checked,
-                  },
-                })
-              }
-            />
-            <Typography variant={'caption'} key={`text-${menuItem}`}>
-              {menuLayersList[menuItem].displayName}
-            </Typography>
+          <Grid container spacing={1} key={`gridItems-${menuItem}`}>
+            <Grid item xs={8} key={`gridItem0-${menuItem}`}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={menuState[menuItem] && menuState[menuItem].isOn}
+                    key={`cb-${menuItem}`}
+                    color="primary"
+                    onChange={(e) =>
+                      setMenuState({
+                        ...menuState,
+                        [menuItem]: {
+                          ...menuState[menuItem],
+                          isOn: e.target.checked,
+                        },
+                      })
+                    }
+                  />
+                }
+                label={menuLayersList[menuItem].displayName}
+              />
+            </Grid>
 
             {hasSlider && menuState[menuItem] && menuState[menuItem].isOn && (
-              <Slider
-                key={`slider-${menuItem}`}
-                value={sliderVal && sliderVal[menuItem]}
-                valueLabelDisplay="auto"
-                // ! pass both val and name of slider
-                // ! to keep it between updates
-                onChange={(e, val) => updateSliderVal(menuItem, val)}
-                onMouseUp={() =>
-                  setMenuState({
-                    ...menuState,
-                    [menuItem]: {
-                      ...menuState[menuItem],
-                      slider: sliderVal[menuItem],
-                    },
-                  })
-                }
-              />
+              <Grid item xs={4} key={`gridItem2-${menuItem}`}>
+                <Slider
+                  key={`slider-${menuItem}`}
+                  value={sliderVal && sliderVal[menuItem]}
+                  defaultValue={100}
+                  valueLabelDisplay="auto"
+                  // ! pass both val and name of slider
+                  // ! to keep it between updates
+                  onChange={(e, val) => {
+                    updateSliderVal(menuItem, val)
+                    setMenuState({
+                      ...menuState,
+                      [menuItem]: {
+                        ...menuState[menuItem],
+                        slider: sliderVal[menuItem],
+                      },
+                    })
+                  }}
+                />
+              </Grid>
             )}
-          </Box>,
+          </Grid>,
         )
       }
     }

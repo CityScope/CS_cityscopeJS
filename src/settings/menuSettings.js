@@ -23,7 +23,7 @@ export const expectedLayers = {
   ACCESS_LAYER_CHECKBOX: {
     displayName: 'Accessibility Layer',
     cityIOmoduleName: 'access',
-    initState: false,
+    initState: true,
     hasSlider: true,
     initSliderValue: 100,
   },
