@@ -5,6 +5,7 @@ import { useLayoutEffect, useMemo, useState } from 'react'
 import TypesMenu from './TypesMenu'
 import LayersMenu from './LayersMenu'
 import VisibilityMenu from './VisibilityMenu'
+import Anim from './Anim'
 
 function MenuContainer(props) {
   const { cityIOdata, getMenuState } = props
@@ -16,6 +17,9 @@ function MenuContainer(props) {
   }, [menuState])
 
   const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState({})
+  const [animationTime, getAnimationTime] = useState()
+console.log(animationTime);
+
   const [layersMenu, getLayersMenu] = useState({})
   const [visibiltyMenu, getVisibiltyMenu] = useState({})
 
@@ -68,6 +72,12 @@ function MenuContainer(props) {
         <Typography variant={'h3'}>Display</Typography>
       </ListItem>
       <VisibilityMenu getVisibiltyMenu={getVisibiltyMenu} />
+      {visibiltyMenu && (
+        <Anim
+          getAnimationTime={getAnimationTime}
+          visibiltyMenu={visibiltyMenu}
+        />
+      )}
     </List>
   )
 }
