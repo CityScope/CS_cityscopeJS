@@ -1,10 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import PaintBrush from './components/PaintBrush'
-import {
-  _postMapEditsToCityIO,
-  updateSunDirection,
-  _setupSunEffects,
-} from '../../../utils/utils'
+import { _postMapEditsToCityIO } from '../../../utils/utils'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -17,7 +13,26 @@ import {
   TextualLayer,
   GeojsonLayer,
 } from './deckglLayers'
+import { AmbientLight, DirectionalLight, LightingEffect } from '@deck.gl/core'
 import { _proccessGridData } from './deckglLayers/GridLayer'
+
+// create ambient light source
+const ambientLight = new AmbientLight({
+  color: [255, 255, 255],
+  intensity: 1.0,
+})
+// create directional light source
+const directionalLight = new DirectionalLight({
+  color: [255, 255, 255],
+  intensity: 1.0,
+  direction: [1, 1, -1],
+  _shadow: true,
+})
+const lightingEffect = new LightingEffect({
+  ambientLight,
+  directionalLight,
+})
+lightingEffect.shadowColor = [0, 0, 0, 0.5]
 
 export default function Map(props) {
   const { menuState, cityIOdata } = props
@@ -29,8 +44,7 @@ export default function Map(props) {
   const [mouseDown, setMouseDown] = useState()
   const [hoveredObj, setHoveredObj] = useState()
   const [GEOGRID, setGEOGRID] = useState()
-  const effectsRef = useRef()
-  const deckGL = useRef()
+  const deckGLref = useRef()
   const pickingRadius = 40
   const shadowsToggle = menuState.SHADOWS_CHECKBOX
   const editModeToggle = menuState.EDIT_BUTTON
@@ -42,11 +56,8 @@ export default function Map(props) {
   useEffect(() => {
     // fix deck view rotate
     _rightClickViewRotate()
-    // setup sun effects
-    _setupSunEffects(effectsRef, cityIOdata.GEOGRID.properties.header)
     // zoom map on CS table location
     _setViewStateToTableHeader()
-    updateSunDirection(15000, effectsRef)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -59,15 +70,8 @@ export default function Map(props) {
   }, [cityIOdata.GEOGRIDDATA])
 
   useEffect(() => {
-    let shadowColor = shadowsToggle ? [0, 0, 0, 0.5] : [0, 0, 0, 0]
-    effectsRef.current[0].shadowColor = shadowColor
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shadowsToggle])
-
-  useEffect(() => {
     if (!editModeToggle && GEOGRID) {
       let dataProps = []
-
       for (let i = 0; i < GEOGRID.features.length; i++) {
         dataProps[i] = GEOGRID.features[i].properties
       }
@@ -92,7 +96,6 @@ export default function Map(props) {
    */
   const _setViewStateToTableHeader = () => {
     const header = cityIOdata.GEOGRID.properties.header
-
     setViewState({
       ...viewState,
       longitude: header.longitude,
@@ -143,7 +146,7 @@ export default function Map(props) {
         setDraggingWhileEditing,
         setHoveredObj,
       },
-      deckGL,
+      deckGLref,
     }),
     ACCESS: AccessLayer({
       data: cityIOdata.access,
@@ -165,14 +168,15 @@ export default function Map(props) {
     'TEXTUAL',
     'ABM',
     'AGGREGATED_TRIPS',
-    'GEOJSON',
     'ACCESS',
+    'GEOJSON',
     'GRID',
   ]
 
   const renderDeckglLayers = () => {
     let layers = []
     for (var layerNameString of layerOrder) {
+      // toggle layers on and off
       if (
         menuState.LAYERS_MENU[layerNameString + '_LAYER_CHECKBOX'] &&
         menuState.LAYERS_MENU[layerNameString + '_LAYER_CHECKBOX'].isOn
@@ -204,11 +208,11 @@ export default function Map(props) {
       />
 
       <DeckGL
-        ref={deckGL}
+        ref={deckGLref}
         viewState={viewState}
         onViewStateChange={onViewStateChange}
         layers={renderDeckglLayers()}
-        // effects={effectsRef.current}
+        effects={shadowsToggle && [lightingEffect]}
         controller={{
           touchZoom: true,
           touchRotate: true,

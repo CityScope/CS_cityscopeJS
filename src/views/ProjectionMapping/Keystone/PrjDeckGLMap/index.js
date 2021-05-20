@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import { _setupSunEffects, updateSunDirection } from '../../../../utils/utils'
 import { StaticMap } from 'react-map-gl'
 import DeckGL from '@deck.gl/react'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -17,17 +16,9 @@ export default function PrjDeckGLMap(props) {
   const [access, setAccess] = useState(null)
   const [GEOGRID, setGEOGRID] = useState(null)
   const [ABM, setABM] = useState({})
-  const effectsRef = useRef()
   const deckGL = useRef()
   const [cityioData] = useSelector((state) => [state.CITYIO])
   const viewSettings = useSelector((state) => state.UI_WEBSOCKET_DATA)
-
-  useEffect(() => {
-    if (!effectsRef.current) {
-      return
-    }
-    updateSunDirection(props.viewSettings.time, effectsRef)
-  }, [props.viewSettings])
 
   const _setViewStateToTableHeader = () => {
     const header = cityioData.GEOGRID.properties.header
@@ -46,9 +37,6 @@ export default function PrjDeckGLMap(props) {
   useEffect(() => {
     // fix deck view rotate
     _rightClickViewRotate()
-    // setup sun effects
-    _setupSunEffects(effectsRef, cityioData.GEOGRID.properties.header)
-
     // on init, check if prev. local storage with
     // view state exist. If so, load it.
     if (localStorage.getItem('deckGLviewState')) {
@@ -59,7 +47,6 @@ export default function PrjDeckGLMap(props) {
       // zoom map on CS table location
       _setViewStateToTableHeader()
     }
-    effectsRef.current[0].shadowColor = [0, 0, 0, 1]
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityioData.GEOGRID.properties.header])
 
@@ -128,7 +115,6 @@ export default function PrjDeckGLMap(props) {
       viewState={viewState}
       onViewStateChange={onViewStateChange}
       layers={_renderLayers()}
-      effects={effectsRef.current}
       controller={{
         keyboard: false,
       }}
