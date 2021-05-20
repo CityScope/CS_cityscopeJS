@@ -1,14 +1,19 @@
 import { HeatmapLayer } from 'deck.gl'
-import settings from '../../../../settings/settings.json'
 
-export default function AccessLayer({ data }) {
+export default function AccessLayer({ data, opacity }) {
   const accessData = data && data.features
-
+  const colors = [
+    [233, 62, 58],
+    [237, 104, 60],
+    [243, 144, 63],
+    [253, 199, 12],
+    [255, 243, 59],
+  ]
   return new HeatmapLayer({
+    opacity,
     id: 'ACCESS',
-    colorRange: settings.map.layers.heatmap.colors,
-    radiusPixels: 200,
-    opacity: 0.5,
+    colorRange: colors,
+    radiusPixels: 100,
     threshold: 0.5,
     data: accessData && accessData,
     getPosition: (d) => d.geometry.coordinates,

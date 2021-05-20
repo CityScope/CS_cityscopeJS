@@ -29,8 +29,6 @@ export default function CSjsMain(props) {
   // and send  map object
   const [menuState, getMenuState] = useState()
 
-  console.log(menuState)
-
   return (
     <Page className={classes.root} title="CitySCopeJS">
       <LoadingSpinner />
@@ -78,7 +76,9 @@ export default function CSjsMain(props) {
                 overflow: 'auto',
               }}
             >
-              <VisContainer cityIOdata={cityIOdata} />
+              <CardContent>
+                <VisContainer cityIOdata={cityIOdata} />
+              </CardContent>
             </Card>
           </Grid>
         </Grid>

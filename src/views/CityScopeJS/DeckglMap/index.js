@@ -28,12 +28,10 @@ export default function Map(props) {
   const [mousePos, setMousePos] = useState()
   const [mouseDown, setMouseDown] = useState()
   const [hoveredObj, setHoveredObj] = useState()
-
   const [GEOGRID, setGEOGRID] = useState()
   const effectsRef = useRef()
   const deckGL = useRef()
   const pickingRadius = 40
-
   const shadowsToggle = menuState.SHADOWS_CHECKBOX
   const editModeToggle = menuState.EDIT_BUTTON
   const resetViewButton = menuState.RESET_VIEW_BUTTON
@@ -149,6 +147,9 @@ export default function Map(props) {
     }),
     ACCESS: AccessLayer({
       data: cityIOdata.access,
+      opacity:
+        layersMenu.ACCESS_LAYER_CHECKBOX &&
+        layersMenu.ACCESS_LAYER_CHECKBOX.slider * 0.01,
     }),
     TEXTUAL: TextualLayer({
       data: cityIOdata.textual && cityIOdata.textual,
@@ -165,11 +166,11 @@ export default function Map(props) {
     'ABM',
     'AGGREGATED_TRIPS',
     'GEOJSON',
-    'GRID',
     'ACCESS',
+    'GRID',
   ]
 
-  const _renderLayers = () => {
+  const renderDeckglLayers = () => {
     let layers = []
     for (var layerNameString of layerOrder) {
       if (
@@ -179,7 +180,6 @@ export default function Map(props) {
         layers.push(layersKey[layerNameString])
       }
     }
-
     return layers
   }
 
@@ -207,8 +207,8 @@ export default function Map(props) {
         ref={deckGL}
         viewState={viewState}
         onViewStateChange={onViewStateChange}
-        layers={_renderLayers()}
-        effects={effectsRef.current}
+        layers={renderDeckglLayers()}
+        // effects={effectsRef.current}
         controller={{
           touchZoom: true,
           touchRotate: true,
