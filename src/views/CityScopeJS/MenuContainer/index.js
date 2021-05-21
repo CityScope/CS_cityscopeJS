@@ -18,7 +18,7 @@ function MenuContainer(props) {
 
   const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState({})
   const [animationTime, getAnimationTime] = useState()
-console.log(animationTime);
+  console.log(animationTime)
 
   const [layersMenu, getLayersMenu] = useState({})
   const [visibiltyMenu, getVisibiltyMenu] = useState({})
@@ -75,7 +75,10 @@ console.log(animationTime);
       {visibiltyMenu && (
         <Anim
           getAnimationTime={getAnimationTime}
-          visibiltyMenu={visibiltyMenu}
+          visibiltyMenu={
+            visibiltyMenu.ANIMATE_CHECKBOX &&
+            visibiltyMenu.ANIMATE_CHECKBOX.isOn
+          }
         />
       )}
     </List>

@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef } from 'react'
 
 export default function Anim(props) {
-  const { getAnimationTime, visibiltyMenu } = props
-  const animationToggle =
-    visibiltyMenu.ANIMATE_CHECKBOX && visibiltyMenu.ANIMATE_CHECKBOX.isOn
+  const { getAnimationTime, animationToggle } = props
+
+    console.log(animationToggle);
+    
   const [animationTime, setAnimationTime] = useState(0)
   const requestRef = useRef()
   const previousTimeRef = useRef()
