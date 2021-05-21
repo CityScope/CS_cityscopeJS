@@ -3,7 +3,6 @@ import { useEffect, useState, useRef } from 'react'
 export default function Anim(props) {
   const { getAnimationTime, animationToggle } = props
 
-    console.log(animationToggle);
     
   const [animationTime, setAnimationTime] = useState(0)
   const requestRef = useRef()

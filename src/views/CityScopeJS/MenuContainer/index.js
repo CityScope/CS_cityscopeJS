@@ -28,9 +28,10 @@ function MenuContainer(props) {
       ...menuState,
       SELECTED_TYPE: selectedTypeFromMenu,
       LAYERS_MENU: layersMenu,
+      VISIBILTY_MENU: visibiltyMenu,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTypeFromMenu, layersMenu])
+  }, [selectedTypeFromMenu, layersMenu, visibiltyMenu])
 
   const handleButtonClicks = (event) => {
     setMenuState({
@@ -72,15 +73,13 @@ function MenuContainer(props) {
         <Typography variant={'h3'}>Display</Typography>
       </ListItem>
       <VisibilityMenu getVisibiltyMenu={getVisibiltyMenu} />
-      {visibiltyMenu && (
-        <Anim
-          getAnimationTime={getAnimationTime}
-          visibiltyMenu={
-            visibiltyMenu.ANIMATE_CHECKBOX &&
-            visibiltyMenu.ANIMATE_CHECKBOX.isOn
-          }
-        />
-      )}
+      {menuState.VISIBILTY_MENU &&
+        menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX && (
+          <Anim
+            getAnimationTime={getAnimationTime}
+            animationToggle={menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX.isOn}
+          />
+        )}
     </List>
   )
 }
