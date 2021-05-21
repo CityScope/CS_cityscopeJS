@@ -60,14 +60,14 @@ export default function TypesListMenu(props) {
         <Button
           key={Math.random()}
           style={{
-            margin: '0.5em',
+            margin: '0.3em',
             border: borderStyle + 'px solid ' + col.toString(),
           }}
           variant="outlined"
           onClick={() => handleListItemClick(typesList[thisType])}
           color="default"
         >
-          {thisType}
+          <Typography variant="caption">{thisType}</Typography>
         </Button>,
       )
     })

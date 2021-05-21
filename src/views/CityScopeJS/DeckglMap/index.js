@@ -48,7 +48,7 @@ export default function Map(props) {
   const pickingRadius = 40
   const shadowsToggle = menuState.SHADOWS_CHECKBOX
   const editModeToggle = menuState.EDIT_BUTTON
-  const resetViewButton = menuState.RESET_VIEW_BUTTON
+  const resetViewButton = menuState.VISIBILTY_MENU.RESET_VIEW_BUTTON
   const selectedType = menuState.SELECTED_TYPE
   const layersMenu = menuState.LAYERS_MENU
 
@@ -95,12 +95,15 @@ export default function Map(props) {
    * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
    */
   const _setViewStateToTableHeader = () => {
+    const midLenGrid = Math.floor(cityIOdata.GEOGRID.features.length / 2)
+    const midCellInGrid =
+      cityIOdata.GEOGRID.features[midLenGrid].geometry.coordinates[0][0]
     const header = cityIOdata.GEOGRID.properties.header
     setViewState({
       ...viewState,
-      longitude: header.longitude,
-      latitude: header.latitude,
-      zoom: 15,
+      longitude: midCellInGrid[0],
+      latitude: midCellInGrid[1],
+      zoom: 14,
       pitch: 0,
       bearing: 360 - header.rotation,
       orthographic: true,

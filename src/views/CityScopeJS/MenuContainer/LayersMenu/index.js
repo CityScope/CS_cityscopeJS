@@ -1,4 +1,10 @@
-import { Slider, Checkbox, FormControlLabel, Grid } from '@material-ui/core'
+import {
+  Slider,
+  Checkbox,
+  Typography,
+  FormControlLabel,
+  Grid,
+} from '@material-ui/core'
 
 import { useLayoutEffect, useState } from 'react'
 import { expectedLayers } from '../../../../settings/menuSettings'
@@ -71,7 +77,11 @@ function LayersMenu(props) {
                     }
                   />
                 }
-                label={menuLayersList[menuItem].displayName}
+                label={
+                  <Typography variant="caption">
+                    {menuLayersList[menuItem].displayName}
+                  </Typography>
+                }
               />
             </Grid>
 
