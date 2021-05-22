@@ -95,14 +95,20 @@ export default function Map(props) {
    * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
    */
   const _setViewStateToTableHeader = () => {
-    const midLenGrid = Math.floor(cityIOdata.GEOGRID.features.length / 2)
-    const midCellInGrid =
-      cityIOdata.GEOGRID.features[midLenGrid].geometry.coordinates[0][0]
+    const lastCell =
+      cityIOdata.GEOGRID.features[cityIOdata.GEOGRID.features.length - 1]
+        .geometry.coordinates[0][0]
+    const firstCell = cityIOdata.GEOGRID.features[0].geometry.coordinates[0][0]
+    const midGrid = [
+      (firstCell[0] + lastCell[0]) / 2,
+      (firstCell[1] + lastCell[1]) / 2,
+    ]
+
     const header = cityIOdata.GEOGRID.properties.header
     setViewState({
       ...viewState,
-      longitude: midCellInGrid[0],
-      latitude: midCellInGrid[1],
+      longitude: midGrid[0],
+      latitude: midGrid[1],
       zoom: 14,
       pitch: 0,
       bearing: 360 - header.rotation,
