@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import PaintBrush from './components/PaintBrush'
 import { _postMapEditsToCityIO } from '../../../utils/utils'
 import { StaticMap } from 'react-map-gl'
@@ -48,10 +48,38 @@ export default function Map(props) {
   const pickingRadius = 40
   const shadowsToggle = menuState.SHADOWS_CHECKBOX
   const editModeToggle = menuState.EDIT_BUTTON
-  const resetViewButton = menuState.VISIBILTY_MENU.RESET_VIEW_BUTTON
   const selectedType = menuState.SELECTED_TYPE
   const layersMenu = menuState.LAYERS_MENU
+  const resetViewButton = menuState.VISIBILTY_MENU.RESET_VIEW_BUTTON
+  const northViewButton = menuState.VISIBILTY_MENU.NORTH_VIEW_BUTTON
+  const orthographicViewButton = menuState.VISIBILTY_MENU.ORTHO_VIEW_BUTTON
 
+  /**
+   * resets the camera viewport
+   * to cityIO header data
+   * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
+   */
+  const _setViewStateToTableHeader = (north, ortho) => {
+    const lastCell =
+      cityIOdata.GEOGRID.features[cityIOdata.GEOGRID.features.length - 1]
+        .geometry.coordinates[0][0]
+    const firstCell = cityIOdata.GEOGRID.features[0].geometry.coordinates[0][0]
+    const midGrid = [
+      (firstCell[0] + lastCell[0]) / 2,
+      (firstCell[1] + lastCell[1]) / 2,
+    ]
+
+    const header = cityIOdata.GEOGRID.properties.header
+    setViewState({
+      ...viewState,
+      longitude: midGrid[0],
+      latitude: midGrid[1],
+      zoom: 14,
+      pitch: 0,
+      bearing: north ? 0 : 360 - header.rotation,
+      orthographic: ortho ? true : false,
+    })
+  }
   /** On init */
   useEffect(() => {
     // fix deck view rotate
@@ -80,40 +108,13 @@ export default function Map(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editModeToggle])
 
-  useEffect(() => {
-    _setViewStateToTableHeader()
+  useMemo(() => {
+    _setViewStateToTableHeader(northViewButton, orthographicViewButton)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resetViewButton])
+  }, [resetViewButton, northViewButton, orthographicViewButton])
 
   const onViewStateChange = ({ viewState }) => {
     setViewState(viewState)
-  }
-
-  /**
-   * resets the camera viewport
-   * to cityIO header data
-   * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
-   */
-  const _setViewStateToTableHeader = () => {
-    const lastCell =
-      cityIOdata.GEOGRID.features[cityIOdata.GEOGRID.features.length - 1]
-        .geometry.coordinates[0][0]
-    const firstCell = cityIOdata.GEOGRID.features[0].geometry.coordinates[0][0]
-    const midGrid = [
-      (firstCell[0] + lastCell[0]) / 2,
-      (firstCell[1] + lastCell[1]) / 2,
-    ]
-
-    const header = cityIOdata.GEOGRID.properties.header
-    setViewState({
-      ...viewState,
-      longitude: midGrid[0],
-      latitude: midGrid[1],
-      zoom: 14,
-      pitch: 0,
-      bearing: 360 - header.rotation,
-      orthographic: true,
-    })
   }
 
   // /**

@@ -102,6 +102,28 @@ function VisibilityMenu(props) {
         onClick={(e) => handleButtonClicks(e)}
         color="default"
       />
+      <Button
+        startIcon={
+          <>
+            <NavigationIcon />
+            Orthographic View
+          </>
+        }
+        id={'ORTHO_VIEW_BUTTON'}
+        onClick={(e) => handleButtonClicks(e)}
+        color="default"
+      />
+      <Button
+        startIcon={
+          <>
+            <NavigationIcon />
+            North View
+          </>
+        }
+        id={'NORTH_VIEW_BUTTON'}
+        onClick={(e) => handleButtonClicks(e)}
+        color="default"
+      />
       {createCheckboxes(viewControlItems)}
     </>
   )
