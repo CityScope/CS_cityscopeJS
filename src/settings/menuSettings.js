@@ -1,3 +1,5 @@
+import NavigationIcon from '@material-ui/icons/Navigation'
+
 export const expectedLayers = {
   GRID_LAYER_CHECKBOX: {
     displayName: 'Grid Layer',
@@ -55,5 +57,20 @@ export const viewControlItems = {
     initState: false,
     hasSlider: true,
     initSliderValue: 100,
+  },
+}
+
+export const viewControlButtons = {
+  RESET_VIEW_BUTTON: {
+    displayName: 'Reset View',
+    initState: false,
+  },
+  ORTHO_VIEW_BUTTON: {
+    displayName: 'Ortho View',
+    initState: false,
+  },
+  NORTH_VIEW_BUTTON: {
+    displayName: 'North View',
+    initState: false,
   },
 }

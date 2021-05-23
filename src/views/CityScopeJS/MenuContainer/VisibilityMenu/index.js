@@ -1,7 +1,16 @@
-import { Button, Typography, Slider, Checkbox, Box } from '@material-ui/core'
-import NavigationIcon from '@material-ui/icons/Navigation'
+import {
+  ButtonGroup,
+  Button,
+  Typography,
+  Slider,
+  Checkbox,
+  Box,
+} from '@material-ui/core'
 import { useLayoutEffect, useState } from 'react'
-import { viewControlItems } from '../../../../settings/menuSettings'
+import {
+  viewControlItems,
+  viewControlButtons,
+} from '../../../../settings/menuSettings'
 
 function VisibilityMenu(props) {
   const { getVisibiltyMenu } = props
@@ -26,11 +35,36 @@ function VisibilityMenu(props) {
 
   const [sliderVal, setSliderVal] = useState(0)
 
-  const handleButtonClicks = (event) => {
+  const handleButtonClicks = (thisButton) => {
     setMenuState({
       ...menuState,
-      [event.currentTarget.id]: !menuState[event.currentTarget.id],
+      [thisButton]: !menuState[thisButton],
     })
+  }
+
+  const createButtons = (viewControlButtons) => {
+    const buttonsArr = []
+    for (const thisButton in viewControlButtons) {
+      buttonsArr.push(
+        <Button
+          aria-label={viewControlButtons[thisButton].displayName}
+          style={{
+            margin: '0.3em',
+          }}
+          size="small"
+          key={viewControlButtons[thisButton].displayName}
+          onClick={() => handleButtonClicks(thisButton)}
+          color="default"
+        >
+          {viewControlButtons[thisButton].displayName}
+        </Button>,
+      )
+    }
+    return (
+      <ButtonGroup color="primary" aria-label="outlined  button group">
+        {buttonsArr}
+      </ButtonGroup>
+    )
   }
 
   const createCheckboxes = (menuItemList) => {
@@ -91,39 +125,7 @@ function VisibilityMenu(props) {
 
   return (
     <>
-      <Button
-        startIcon={
-          <>
-            <NavigationIcon />
-            Reset View
-          </>
-        }
-        id={'RESET_VIEW_BUTTON'}
-        onClick={(e) => handleButtonClicks(e)}
-        color="default"
-      />
-      <Button
-        startIcon={
-          <>
-            <NavigationIcon />
-            Orthographic View
-          </>
-        }
-        id={'ORTHO_VIEW_BUTTON'}
-        onClick={(e) => handleButtonClicks(e)}
-        color="default"
-      />
-      <Button
-        startIcon={
-          <>
-            <NavigationIcon />
-            North View
-          </>
-        }
-        id={'NORTH_VIEW_BUTTON'}
-        onClick={(e) => handleButtonClicks(e)}
-        color="default"
-      />
+      {createButtons(viewControlButtons)}
       {createCheckboxes(viewControlItems)}
     </>
   )
