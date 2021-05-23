@@ -33,7 +33,7 @@ export default function CityScopeJS() {
   **/
   const [cityIOdata, setCityIOdata] = useState(null)
   
-  const tableName = 'test'
+  const tableName = 'dungeonmaster'
   return (
     <>
       {tableName && (

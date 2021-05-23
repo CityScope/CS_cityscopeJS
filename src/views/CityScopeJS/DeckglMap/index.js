@@ -53,6 +53,7 @@ export default function Map(props) {
   const resetViewButton = menuState.VISIBILTY_MENU.RESET_VIEW_BUTTON
   const northViewButton = menuState.VISIBILTY_MENU.NORTH_VIEW_BUTTON
   const orthographicViewButton = menuState.VISIBILTY_MENU.ORTHO_VIEW_BUTTON
+  const animationTime = menuState.ANIMATION_TIME
 
   /**
    * resets the camera viewport
@@ -129,15 +130,20 @@ export default function Map(props) {
 
   const layersKey = {
     ABM: ABMLayer({
-      data: cityIOdata,
+      data: cityIOdata.ABM2 && cityIOdata.ABM2,
       ABMmode: 0,
       zoomLevel: viewState.zoom,
-      // ! temp
-      time: 0,
+      time: animationTime,
+      opacity:
+        layersMenu.ABM_LAYER_CHECKBOX &&
+        layersMenu.ABM_LAYER_CHECKBOX.slider * 0.01,
     }),
     AGGREGATED_TRIPS: AggregatedTripsLayer({
-      data: cityIOdata,
+      data: cityIOdata.ABM2 && cityIOdata.ABM2,
       ABMmode: 0,
+      opacity:
+        layersMenu.AGGREGATED_TRIPS_LAYER_CHECKBOX &&
+        layersMenu.AGGREGATED_TRIPS_LAYER_CHECKBOX.slider * 0.01,
     }),
     GRID: GridLayer({
       data: GEOGRID,

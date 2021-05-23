@@ -19,7 +19,7 @@ export default function Anim(props) {
           if (prevTime < 21600 || prevTime > 43200) {
             return 21600
           }
-          return prevTime + 5
+          return prevTime + 50
         })
       }
       previousTimeRef.current = time

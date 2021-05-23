@@ -4,14 +4,14 @@ export const expectedLayers = {
   GRID_LAYER_CHECKBOX: {
     displayName: 'Grid Layer',
     cityIOmoduleName: 'GEOGRID',
-    initState: true,
+    initState: false,
     hasSlider: true,
     initSliderValue: 100,
   },
   ABM_LAYER_CHECKBOX: {
     displayName: 'Simulation Layer',
     cityIOmoduleName: 'ABM2',
-    initState: false,
+    initState: true,
     hasSlider: true,
     initSliderValue: 100,
   },
@@ -25,7 +25,7 @@ export const expectedLayers = {
   ACCESS_LAYER_CHECKBOX: {
     displayName: 'Accessibility Layer',
     cityIOmoduleName: 'access',
-    initState: true,
+    initState: false,
     hasSlider: true,
     initSliderValue: 100,
   },

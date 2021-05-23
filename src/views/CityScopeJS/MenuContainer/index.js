@@ -18,8 +18,6 @@ function MenuContainer(props) {
 
   const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState({})
   const [animationTime, getAnimationTime] = useState()
-  console.log(animationTime)
-
   const [layersMenu, getLayersMenu] = useState({})
   const [visibiltyMenu, getVisibiltyMenu] = useState({})
 
@@ -29,9 +27,10 @@ function MenuContainer(props) {
       SELECTED_TYPE: selectedTypeFromMenu,
       LAYERS_MENU: layersMenu,
       VISIBILTY_MENU: visibiltyMenu,
+      ANIMATION_TIME: animationTime,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTypeFromMenu, layersMenu, visibiltyMenu])
+  }, [selectedTypeFromMenu, layersMenu, visibiltyMenu, animationTime])
 
   const handleButtonClicks = (event) => {
     setMenuState({

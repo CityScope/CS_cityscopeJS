@@ -7,26 +7,21 @@ const _remapValues = (value) => {
   return remap
 }
 
-export default function ABMLayer({
-  data,
-  cityioData,
-  ABMmode,
-  zoomLevel,
-  time,
-}) {
+export default function ABMLayer({ data, ABMmode, zoomLevel, time, opacity }) {
   return new TripsLayer({
+    opacity,
     id: 'ABM',
-    data,
+    data: data.trips,
     getPath: (d) => d.path,
     getTimestamps: (d) => d.timestamps,
     getColor: (d) => {
-      let col = hexToRgb(cityioData.ABM2.attr[ABMmode][d[ABMmode]].color)
+      let col = hexToRgb(data.attr.mode[ABMmode].color)
       return col
     },
     shadowEnabled: false,
     getWidth: 1,
     widthScale: _remapValues(zoomLevel),
-    opacity: 0.8,
+    opacity,
     rounded: true,
     trailLength: 500,
     currentTime: time,
