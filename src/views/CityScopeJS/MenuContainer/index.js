@@ -5,7 +5,7 @@ import { useLayoutEffect, useMemo, useState } from 'react'
 import TypesMenu from './TypesMenu'
 import LayersMenu from './LayersMenu'
 import VisibilityMenu from './VisibilityMenu'
-import Anim from './Anim'
+import Anim from '../../../Components/AnimationComponent'
 
 function MenuContainer(props) {
   const { cityIOdata, getMenuState } = props

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 
-export default function Anim(props) {
+export default function AnimationComponent(props) {
   const { getAnimationTime, animationToggle } = props
 
     

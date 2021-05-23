@@ -60,7 +60,7 @@ export default function Map(props) {
    * to cityIO header data
    * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
    */
-  const _setViewStateToTableHeader = (north, ortho) => {
+  const setViewStateToTableHeader = (north, ortho) => {
     const lastCell =
       cityIOdata.GEOGRID.features[cityIOdata.GEOGRID.features.length - 1]
         .geometry.coordinates[0][0]
@@ -84,9 +84,11 @@ export default function Map(props) {
   /** On init */
   useEffect(() => {
     // fix deck view rotate
-    _rightClickViewRotate()
+    document
+      .getElementById('deckgl-wrapper')
+      .addEventListener('contextmenu', (evt) => evt.preventDefault())
     // zoom map on CS table location
-    _setViewStateToTableHeader()
+    setViewStateToTableHeader()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -110,22 +112,12 @@ export default function Map(props) {
   }, [editModeToggle])
 
   useMemo(() => {
-    _setViewStateToTableHeader(northViewButton, orthographicViewButton)
+    setViewStateToTableHeader(northViewButton, orthographicViewButton)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetViewButton, northViewButton, orthographicViewButton])
 
   const onViewStateChange = ({ viewState }) => {
     setViewState(viewState)
-  }
-
-  // /**
-  //  * Description. fix deck issue
-  //  * with rotate right botton
-  //  */
-  const _rightClickViewRotate = () => {
-    document
-      .getElementById('deckgl-wrapper')
-      .addEventListener('contextmenu', (evt) => evt.preventDefault())
   }
 
   const layersKey = {

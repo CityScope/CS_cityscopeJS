@@ -61,7 +61,7 @@ function VisibilityMenu(props) {
       )
     }
     return (
-      <ButtonGroup color="primary" aria-label="outlined  button group">
+      <ButtonGroup color="primary" aria-label="outlined button group">
         {buttonsArr}
       </ButtonGroup>
     )
