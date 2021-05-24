@@ -1,7 +1,7 @@
 import MenuContainer from './MenuContainer'
 import MapContainer from './DeckglMap'
-import LoadingSpinner from './CityIO/LoadingSpinner'
-import VisContainer from './VisContainer'
+
+// import VisContainer from './VisContainer'
 import {
   makeStyles,
   Grid,
@@ -31,7 +31,6 @@ export default function CSjsMain(props) {
 
   return (
     <Page className={classes.root} title="CitySCopeJS">
-      <LoadingSpinner />
       <Container maxWidth={null}>
         <Grid container spacing={5}>
           <Grid item xs={12} l={2} md={4} xl={2} container>

@@ -11,12 +11,25 @@ const getAPICall = async (URL) => {
   }
 }
 
+const removeElement = (array, elem) => {
+  var index = array.indexOf(elem)
+  if (index > -1) {
+    array.splice(index, 1)
+  }
+  return array
+}
+
 export default function CityIO(props) {
-  const { tableName, cityIOdata, setCityIOdata } = props
+  const { tableName, cityIOdata, setCityIOdata, setLoadingModules } = props
 
   const [mainHash, setMainHash] = useState(null)
   const [hashes, setHashes] = useState({})
+  const [listLoadingModules, setListLoadingModules] = useState([])
   const cityioURL = `${settings.cityIO.baseURL}${tableName}/`
+
+  useEffect(() => {
+    setLoadingModules(listLoadingModules)
+  }, [listLoadingModules])
 
   /**
    * start fetching API hashes to check for new data
@@ -70,22 +83,26 @@ export default function CityIO(props) {
       if (hashes[module] !== newHashes[module]) {
         // add this module URL to an array of GET requests
         promises.push(getAPICall(`${cityioURL}${module}/`))
+
         // and also add this module name to array
         // of modules that we await for
         loadingModules.push(module)
       } else {
         promises.push(null)
       }
+      setListLoadingModules(loadingModules)
     })
 
     // get all modules data
+    // setLoadingModules(modulesToUpdate)
     const modules = await Promise.all(promises)
     setHashes(newHashes)
 
     // update cityio object with modules data
     const modulesData = modulesToUpdate.reduce((obj, k, i) => {
       if (modules[i]) {
-        console.log(`updating ${k}`)
+        setListLoadingModules(removeElement(listLoadingModules, k))
+
         return { ...obj, [k]: modules[i] }
       } else {
         return obj

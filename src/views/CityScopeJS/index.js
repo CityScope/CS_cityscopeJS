@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import CityIO from './CityIO/cityIO'
+import CityIO from './CityIO'
 // import CityIOviewer from '../CityIOviewer'
 // import LoadingSpinner from './CityIO/LoadingSpinner'
 import CSjsMain from './CSjsMain'
+import LoadingSpinner from '../../Components/LoadingSpinner'
 
 export default function CityScopeJS() {
   /** 
@@ -31,16 +32,19 @@ export default function CityScopeJS() {
   }, [])
 
   **/
-  const [cityIOdata, setCityIOdata] = useState(null)
-  
+  const [cityIOdata, setCityIOdata] = useState()
+  const [loadingModules, setLoadingModules] = useState([])
+
   const tableName = 'dungeonmaster'
   return (
     <>
+      <LoadingSpinner loadingModules={loadingModules} />
       {tableName && (
         <CityIO
           tableName={tableName}
           cityIOdata={cityIOdata}
           setCityIOdata={setCityIOdata}
+          setLoadingModules={setLoadingModules}
         />
       )}
       {cityIOdata && <CSjsMain cityIOdata={cityIOdata} tableName={tableName} />}
