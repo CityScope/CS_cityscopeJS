@@ -9,7 +9,9 @@ export default function AnimationComponent(props) {
   const previousTimeRef = useRef()
 
   useEffect(() => {
-    getAnimationTime(animationTime)
+    // ! this should be converted to React Context 
+    // getAnimationTime(animationTime)
+    console.log(animationTime);
   }, [animationTime])
 
   useEffect(() => {

@@ -35,7 +35,8 @@ export default function CityScopeJS() {
   const [cityIOdata, setCityIOdata] = useState()
   const [loadingModules, setLoadingModules] = useState([])
 
-  const tableName = 'dungeonmaster'
+
+  const tableName = 'cityscopejs'
   return (
     <>
       <LoadingSpinner loadingModules={loadingModules} />

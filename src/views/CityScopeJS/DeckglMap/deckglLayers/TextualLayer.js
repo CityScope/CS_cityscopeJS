@@ -1,6 +1,7 @@
 import { TextLayer } from "@deck.gl/layers";
 
 export default function TextualLayer({ data, coordinates }) {
+  if (data.text && coordinates && coordinates.features) {
     /*
      * this layer takes textual layer procuded by a 3rd party
      * module, and renders a text message near the grid cell
@@ -17,33 +18,30 @@ export default function TextualLayer({ data, coordinates }) {
      ]
      */
 
-    if (data && coordinates && coordinates.features) {
-        let textLayerData = [];
+    let textLayerData = [];
 
-        data.forEach((infoIteam) => {
-            textLayerData.push({
-                coordinates: [
-                    coordinates.features[infoIteam.id].geometry
-                        .coordinates[0][0][0],
-                    coordinates.features[infoIteam.id].geometry
-                        .coordinates[0][0][1],
-                    100,
-                ],
-                info: infoIteam.info,
-            });
-        });
+    data.text.forEach((infoIteam) => {
+      textLayerData.push({
+        coordinates: [
+          coordinates.features[infoIteam.id].geometry.coordinates[0][0][0],
+          coordinates.features[infoIteam.id].geometry.coordinates[0][0][1],
+          100,
+        ],
+        info: infoIteam.info,
+      });
+    });
 
-        return new TextLayer({
-            id: "text-layer",
-            data: textLayerData,
-            pickable: true,
-            getPosition: (d) => d.coordinates,
-            getText: (d) => d.info,
-            getColor: [255, 255, 255],
-            getSize: 30,
-            getAngle: 0,
-            getTextAnchor: "middle",
-            getAlignmentBaseline: "center",
-        });
-    }
+    return new TextLayer({
+      id: "text-layer",
+      data: textLayerData,
+      pickable: true,
+      getPosition: (d) => d.coordinates,
+      getText: (d) => d.info,
+      getColor: [255, 255, 255],
+      getSize: 30,
+      getAngle: 0,
+      getTextAnchor: "middle",
+      getAlignmentBaseline: "center",
+    });
+  }
 }

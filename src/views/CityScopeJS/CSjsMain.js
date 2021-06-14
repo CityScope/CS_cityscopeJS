@@ -1,5 +1,5 @@
-import MenuContainer from './MenuContainer'
-import MapContainer from './DeckglMap'
+import MenuContainer from "./MenuContainer";
+import MapContainer from "./DeckglMap";
 
 // import VisContainer from './VisContainer'
 import {
@@ -8,38 +8,38 @@ import {
   Card,
   CardContent,
   Container,
-} from '@material-ui/core'
-import Page from '../../layouts/Page'
-import { useState } from 'react'
+} from "@material-ui/core";
+import Page from "../../layouts/Page";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: 'auto',
-    height: '100%',
+    margin: "auto",
+    height: "100%",
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
-}))
+}));
 
 export default function CSjsMain(props) {
-  const classes = useStyles()
-  const { tableName, cityIOdata } = props
+  const classes = useStyles();
+  const { tableName, cityIOdata } = props;
   // state func to pass to the menu components
   // to get user interaction
   // and send  map object
-  const [menuState, getMenuState] = useState()
+  const [menuState, getMenuState] = useState();
 
   return (
     <Page className={classes.root} title="CitySCopeJS">
       <Container maxWidth={null}>
-        <Grid container spacing={5}>
+        <Grid container spacing={2}>
           <Grid item xs={12} l={2} md={4} xl={2} container>
             <Grid item container direction="column">
               <Card
                 elevation={15}
                 style={{
-                  maxHeight: '85vh',
-                  overflow: 'auto',
+                  maxHeight: "85vh",
+                  overflow: "auto",
                 }}
               >
                 <CardContent>
@@ -57,9 +57,9 @@ export default function CSjsMain(props) {
             <Card
               elevation={15}
               style={{
-                height: '85vh',
-                width: '100%',
-                position: 'relative',
+                height: "85vh",
+                width: "100%",
+                position: "relative",
               }}
             >
               {menuState && (
@@ -71,11 +71,12 @@ export default function CSjsMain(props) {
             <Card
               elevation={15}
               style={{
-                maxHeight: '85vh',
-                overflow: 'auto',
+                maxHeight: "85vh",
+                overflow: "auto",
               }}
             >
               <CardContent>
+                {JSON.stringify(menuState)}
                 {/* <VisContainer cityIOdata={cityIOdata} /> */}
               </CardContent>
             </Card>
@@ -83,5 +84,5 @@ export default function CSjsMain(props) {
         </Grid>
       </Container>
     </Page>
-  )
+  );
 }
