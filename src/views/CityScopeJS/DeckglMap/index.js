@@ -61,6 +61,7 @@ export default function Map(props) {
    */
 
   const setViewStateToTableHeader = (viewControlButton) => {
+    console.log(viewControlButton);
     const lastCell =
       cityIOdata.GEOGRID.features[cityIOdata.GEOGRID.features.length - 1]
         .geometry.coordinates[0][0];
@@ -118,6 +119,8 @@ export default function Map(props) {
   }, [editModeToggle]);
 
   const onViewStateChange = ({ viewState }) => {
+    viewState.orthographic =
+      viewControlButton === "ORTHO_VIEW_BUTTON" ? true : false;
     setViewState(viewState);
   };
 
