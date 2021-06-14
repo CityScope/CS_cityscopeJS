@@ -38,7 +38,7 @@ function VisibilityMenu(props) {
   const handleButtonClicks = (thisButton) => {
     setMenuState({
       ...menuState,
-      [thisButton]: !menuState[thisButton],
+      VIEW_CONTROL_BUTTONS: thisButton,
     })
   }
 

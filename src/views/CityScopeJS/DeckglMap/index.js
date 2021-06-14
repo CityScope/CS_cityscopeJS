@@ -1,10 +1,11 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import PaintBrush from "./components/PaintBrush";
 import { _postMapEditsToCityIO } from "../../../utils/utils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import settings from "../../../settings/settings.json";
+
 import {
   AccessLayer,
   AggregatedTripsLayer,
@@ -50,9 +51,7 @@ export default function Map(props) {
   const editModeToggle = menuState.EDIT_BUTTON;
   const selectedType = menuState.SELECTED_TYPE;
   const layersMenu = menuState.LAYERS_MENU;
-  const resetViewButton = menuState.VISIBILTY_MENU.RESET_VIEW_BUTTON;
-  const northViewButton = menuState.VISIBILTY_MENU.NORTH_VIEW_BUTTON;
-  const orthographicViewButton = menuState.VISIBILTY_MENU.ORTHO_VIEW_BUTTON;
+  const viewControlButton = menuState.VISIBILTY_MENU.VIEW_CONTROL_BUTTONS;
   const animationTime = menuState.ANIMATION_TIME;
 
   /**
@@ -60,7 +59,8 @@ export default function Map(props) {
    * to cityIO header data
    * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
    */
-  const setViewStateToTableHeader = (north, ortho) => {
+
+  const setViewStateToTableHeader = (viewControlButton) => {
     const lastCell =
       cityIOdata.GEOGRID.features[cityIOdata.GEOGRID.features.length - 1]
         .geometry.coordinates[0][0];
@@ -69,18 +69,24 @@ export default function Map(props) {
       (firstCell[0] + lastCell[0]) / 2,
       (firstCell[1] + lastCell[1]) / 2,
     ];
-
     const header = cityIOdata.GEOGRID.properties.header;
     setViewState({
       ...viewState,
       longitude: midGrid[0],
       latitude: midGrid[1],
-      zoom: 14,
+      zoom: viewControlButton === "RESET_VIEW_BUTTON" ? 15 : viewState.zoom,
       pitch: 0,
-      bearing: north ? 0 : 360 - header.rotation,
-      orthographic: ortho ? true : false,
+      bearing:
+        viewControlButton === "NORTH_VIEW_BUTTON" ? 0 : 360 - header.rotation,
+      orthographic: viewControlButton === "ORTHO_VIEW_BUTTON" ? true : false,
     });
   };
+
+  useEffect(() => {
+    setViewStateToTableHeader(viewControlButton);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewControlButton]);
+
   /** On init */
   useEffect(() => {
     // fix deck view rotate
@@ -110,11 +116,6 @@ export default function Map(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editModeToggle]);
-
-  useMemo(() => {
-    setViewStateToTableHeader(northViewButton, orthographicViewButton);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resetViewButton, northViewButton, orthographicViewButton]);
 
   const onViewStateChange = ({ viewState }) => {
     setViewState(viewState);
