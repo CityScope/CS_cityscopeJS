@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo } from "react";
 import {
   List,
   Slider,
@@ -6,75 +6,88 @@ import {
   CardContent,
   Card,
   Button,
-} from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
 export default function TypesListMenu(props) {
-  const { cityIOdata, getSelectedTypeFromMenu } = props
-  const typesList = cityIOdata.GEOGRID.properties.types
-  const [selectedType, setSelectedType] = useState(null)
-  const [typeHeight, setTypeHeight] = useState(0)
+  const { cityIOdata, getSelectedTypeFromMenu } = props;
+  const typesList = cityIOdata.GEOGRID.properties.types;
+  const [selectedType, setSelectedType] = useState(null);
+  const [typeHeight, setTypeHeight] = useState(0);
 
   const heightSliderMarks = [
-    { value: 0, label: 'min' },
-    { value: 100, label: 'max' },
-  ]
+    { value: 0, label: "min" },
+    { value: 100, label: "max" },
+  ];
 
   const useStyles = makeStyles({
     root: {
-      maxWidth: '100%',
+      maxWidth: "100%",
     },
-  })
+  });
 
-  const classes = useStyles()
+  const classes = useStyles();
 
   useMemo(() => {
-    selectedType && getSelectedTypeFromMenu(selectedType)
+    selectedType && getSelectedTypeFromMenu(selectedType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedType])
+  }, [selectedType]);
 
   const handleListItemClick = (typeProps) => {
     // ! injects the type name into the attributes themselves
 
     if (typeHeight && typeProps.height) {
-      typeProps.height = typeHeight
+      typeProps.height = typeHeight;
     }
-    setSelectedType(typeProps)
-  }
+    setSelectedType(typeProps);
+  };
 
   // get the LBCS/NAICS types info
-  const LBCS = selectedType && selectedType.LBCS
-  const NAICS = selectedType && selectedType.NAICS
+  const LBCS = selectedType && selectedType.LBCS;
+  const NAICS = selectedType && selectedType.NAICS;
   // get type description text if exist
   let description =
-    selectedType && selectedType.description ? selectedType.description : null
+    selectedType && selectedType.description ? selectedType.description : null;
   // create the types themselves
   const createTypesIcons = (typesList) => {
-    let listMenuItemsArray = []
+    let listMenuItemsArray = [];
     Object.keys(typesList).forEach((thisType, index) => {
-      const borderStyle = selectedType && selectedType.name === thisType ? 5 : 1
       // get color
-      let col = typesList[thisType].color
+      let col = typesList[thisType].color;
+      if (typeof col !== "string") {
+        col =
+          "rgb(" +
+          typesList[thisType].color[0] +
+          "," +
+          typesList[thisType].color[1] +
+          "," +
+          typesList[thisType].color[2] +
+          ")";
+      }
+      // set border of selectedType
+      const borderStyle =
+        selectedType && selectedType.name === thisType ? 5 : 1;
+
       // check if this type has height prop
       listMenuItemsArray.push(
         <Button
           key={Math.random()}
           style={{
-            margin: '0.3em',
-            border: borderStyle + 'px solid ' + col.toString(),
+            margin: "1em",
+            border: borderStyle + "px solid " + col,
           }}
           variant="outlined"
           onClick={() => handleListItemClick(typesList[thisType])}
           color="default"
         >
           <Typography variant="caption">{thisType}</Typography>
-        </Button>,
-      )
-    })
-    return <List>{listMenuItemsArray}</List>
-  }
+        </Button>
+      );
+    });
+    return <List>{listMenuItemsArray}</List>;
+  };
 
-  const typesListComps = createTypesIcons(typesList)
+  const typesListComps = createTypesIcons(typesList);
   return (
     <>
       {selectedType && (
@@ -110,7 +123,7 @@ export default function TypesListMenu(props) {
               <>
                 <Typography>LBCS</Typography>
                 <Typography variant="caption">
-                  {JSON.stringify(LBCS, null, '\t')}
+                  {JSON.stringify(LBCS, null, "\t")}
                 </Typography>
               </>
             )}
@@ -118,7 +131,7 @@ export default function TypesListMenu(props) {
               <>
                 <Typography>NAICS</Typography>
                 <Typography variant="caption">
-                  {JSON.stringify(NAICS, null, '\t')}
+                  {JSON.stringify(NAICS, null, "\t")}
                 </Typography>
               </>
             )}
@@ -128,5 +141,5 @@ export default function TypesListMenu(props) {
 
       {typesListComps}
     </>
-  )
+  );
 }

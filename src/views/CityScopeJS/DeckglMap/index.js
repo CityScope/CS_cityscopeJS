@@ -5,6 +5,7 @@ import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import settings from "../../../settings/settings.json";
+import AnimationComponent from "../../../Components/AnimationComponent";
 
 import {
   AccessLayer,
@@ -52,7 +53,7 @@ export default function Map(props) {
   const selectedType = menuState.SELECTED_TYPE;
   const layersMenu = menuState.LAYERS_MENU;
   const viewControlButton = menuState.VISIBILTY_MENU.VIEW_CONTROL_BUTTONS;
-  const animationTime = menuState.ANIMATION_TIME;
+  const [animationTime, getAnimationTime] = useState(0);
 
   /**
    * resets the camera viewport
@@ -61,7 +62,6 @@ export default function Map(props) {
    */
 
   const setViewStateToTableHeader = (viewControlButton) => {
-    console.log(viewControlButton);
     const lastCell =
       cityIOdata.GEOGRID.features[cityIOdata.GEOGRID.features.length - 1]
         .geometry.coordinates[0][0];
@@ -210,6 +210,15 @@ export default function Map(props) {
       onMouseUp={() => setMouseDown(false)}
       onMouseDown={() => setMouseDown(true)}
     >
+      <AnimationComponent
+        getAnimationTime={getAnimationTime}
+        animationToggle={
+          menuState.VISIBILTY_MENU &&
+          menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX &&
+          menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX.isOn
+        }
+      />
+
       <PaintBrush
         editOn={editModeToggle}
         mousePos={mousePos}

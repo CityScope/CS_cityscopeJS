@@ -1,25 +1,24 @@
-import { Button, Typography, List, ListItem } from '@material-ui/core'
-import EditIcon from '@material-ui/icons/Edit'
-import CloudUploadIcon from '@material-ui/icons/CloudUpload'
-import { useLayoutEffect, useMemo, useState } from 'react'
-import TypesMenu from './TypesMenu'
-import LayersMenu from './LayersMenu'
-import VisibilityMenu from './VisibilityMenu'
-import Anim from '../../../Components/AnimationComponent'
+import { Button, Typography, List, ListItem } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import { useLayoutEffect, useMemo, useState } from "react";
+import TypesMenu from "./TypesMenu";
+import LayersMenu from "./LayersMenu";
+import VisibilityMenu from "./VisibilityMenu";
 
 function MenuContainer(props) {
-  const { cityIOdata, getMenuState } = props
-  const [menuState, setMenuState] = useState({})
+  const { cityIOdata, getMenuState } = props;
+  const [menuState, setMenuState] = useState({});
   // return the manu state to parent component
   useLayoutEffect(() => {
-    getMenuState(menuState)
+    getMenuState(menuState);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menuState])
+  }, [menuState]);
 
-  const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState({})
-  const [animationTime, getAnimationTime] = useState(0)
-  const [layersMenu, getLayersMenu] = useState({})
-  const [visibiltyMenu, getVisibiltyMenu] = useState({})
+  const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState({});
+
+  const [layersMenu, getLayersMenu] = useState({});
+  const [visibiltyMenu, getVisibiltyMenu] = useState({});
 
   useMemo(() => {
     setMenuState({
@@ -27,33 +26,32 @@ function MenuContainer(props) {
       SELECTED_TYPE: selectedTypeFromMenu,
       LAYERS_MENU: layersMenu,
       VISIBILTY_MENU: visibiltyMenu,
-      ANIMATION_TIME: animationTime,
-    })
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTypeFromMenu, layersMenu, visibiltyMenu, animationTime])
+  }, [selectedTypeFromMenu, layersMenu, visibiltyMenu]);
 
   const handleButtonClicks = (event) => {
     setMenuState({
       ...menuState,
       [event.currentTarget.id]: !menuState[event.currentTarget.id],
-    })
-  }
+    });
+  };
 
   return (
     <List>
       <ListItem>
-        <Typography variant={'h3'}>Edit</Typography>
+        <Typography variant={"h3"}>Edit</Typography>
       </ListItem>
 
       <ListItem>
         <Button
-          id={'EDIT_BUTTON'}
+          id={"EDIT_BUTTON"}
           endIcon={menuState.EDIT_BUTTON ? <CloudUploadIcon /> : <EditIcon />}
           color="default"
           onClick={(e) => handleButtonClicks(e)}
         >
-          <Typography variant={'h5'}>
-            {menuState.EDIT_BUTTON ? 'submit edits' : 'start editing'}
+          <Typography variant={"h5"}>
+            {menuState.EDIT_BUTTON ? "submit edits" : "start editing"}
           </Typography>
         </Button>
       </ListItem>
@@ -64,23 +62,16 @@ function MenuContainer(props) {
       />
 
       <ListItem>
-        <Typography variant={'h3'}>Layers</Typography>
+        <Typography variant={"h3"}>Layers</Typography>
       </ListItem>
       <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} />
 
       <ListItem>
-        <Typography variant={'h3'}>Display</Typography>
+        <Typography variant={"h3"}>Display</Typography>
       </ListItem>
       <VisibilityMenu getVisibiltyMenu={getVisibiltyMenu} />
-      {menuState.VISIBILTY_MENU &&
-        menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX && (
-          <Anim
-            getAnimationTime={getAnimationTime}
-            animationToggle={menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX.isOn}
-          />
-        )}
     </List>
-  )
+  );
 }
 
-export default MenuContainer
+export default MenuContainer;

@@ -1,17 +1,16 @@
-import NavigationIcon from '@material-ui/icons/Navigation'
 
 export const expectedLayers = {
   GRID_LAYER_CHECKBOX: {
     displayName: 'Grid Layer',
     cityIOmoduleName: 'GEOGRID',
-    initState: false,
+    initState: true,
     hasSlider: true,
-    initSliderValue: 100,
+    initSliderValue: 50,
   },
   ABM_LAYER_CHECKBOX: {
     displayName: 'Simulation Layer',
     cityIOmoduleName: 'ABM2',
-    initState: true,
+    initState: false,
     hasSlider: true,
     initSliderValue: 100,
   },
