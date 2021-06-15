@@ -9,14 +9,13 @@ const _remapValues = (value) => {
 
 export default function ABMLayer({ data, ABMmode, zoomLevel, time, opacity }) {
   if (data.ABM2) {
-    console.log(data, ABMmode, zoomLevel, time, opacity );
     return new TripsLayer({
       opacity,
       id: "ABM",
       data: data.ABM2.trips,
       getPath: (d) => d.path,
       getTimestamps: (d) => d.timestamps,
-      getColor: (d) => hexToRgb(d.mode[ABMmode].color),
+      getColor: (d) => hexToRgb(data.ABM2.attr.mode[d.mode].color),
       shadowEnabled: false,
       getWidth: 1,
       widthScale: _remapValues(zoomLevel),
