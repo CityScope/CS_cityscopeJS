@@ -36,7 +36,7 @@ export default function CityScopeJS() {
   const [loadingModules, setLoadingModules] = useState([])
 
 
-  const tableName = 'cityscopejs'
+  const tableName = 'corktown'
   return (
     <>
       <LoadingSpinner loadingModules={loadingModules} />

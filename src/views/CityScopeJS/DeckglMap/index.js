@@ -125,15 +125,15 @@ export default function Map(props) {
   };
 
   const layersKey = {
-    ABM: ABMLayer({
-      data: cityIOdata,
-      ABMmode: 0,
-      zoomLevel: viewState.zoom,
-      time: animationTime,
-      opacity:
-        layersMenu.ABM_LAYER_CHECKBOX &&
-        layersMenu.ABM_LAYER_CHECKBOX.slider * 0.01,
-    }),
+    // ABM: ABMLayer({
+    //   data: cityIOdata,
+    //   ABMmode: 0,
+    //   zoomLevel: viewState.zoom,
+    //   time: animationTime,
+    //   opacity:
+    //     layersMenu.ABM_LAYER_CHECKBOX &&
+    //     layersMenu.ABM_LAYER_CHECKBOX.slider * 0.01,
+    // }),
     AGGREGATED_TRIPS: AggregatedTripsLayer({
       data: cityIOdata,
       ABMmode: 0,

@@ -17,7 +17,7 @@ function MenuContainer(props) {
   }, [menuState])
 
   const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState({})
-  const [animationTime, getAnimationTime] = useState()
+  const [animationTime, getAnimationTime] = useState(0)
   const [layersMenu, getLayersMenu] = useState({})
   const [visibiltyMenu, getVisibiltyMenu] = useState({})
 

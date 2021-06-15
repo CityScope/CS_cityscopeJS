@@ -6,7 +6,7 @@ export default function AggregatedTripsLayer({ data, ABMmode, opacity }) {
     return new PathLayer({
       id: "AGGREGATED_TRIPS",
       shadowEnabled: false,
-      data: data.trips,
+      data: data.ABM2.trips,
       getPath: (d) => {
         const noisePath =
           Math.random() < 0.5
@@ -15,15 +15,12 @@ export default function AggregatedTripsLayer({ data, ABMmode, opacity }) {
         for (let i in d.path) {
           d.path[i][0] = d.path[i][0] + noisePath;
           d.path[i][1] = d.path[i][1] + noisePath;
-          d.path[i][2] = data.attr.mode[0] * 2;
+          d.path[i][2] = data.ABM2.attr.mode[0] * 2;
         }
         return d.path;
       },
-      getColor: () => {
-        let col = hexToRgb(data.attr.mode[ABMmode].color);
+      getColor: (d) => hexToRgb(data.ABM2.attr.mode[d.mode].color),
 
-        return col;
-      },
       opacity,
       getWidth: 1.5,
 
