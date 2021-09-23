@@ -7,7 +7,7 @@ import LoadingSpinner from "../../Components/LoadingSpinner";
 
 export default function CityScopeJS() {
   // get the table name for cityIO comp
-  const [tableName, setTableName] = useState("corktown");
+  const [tableName, setTableName] = useState("cityscopejs");
   const [isDone, setIsdone] = useState(false);
   // on init, get the adress URL
   // to search for  a table
@@ -23,7 +23,7 @@ export default function CityScopeJS() {
       setTableName(cityscopePrjName);
     } else {
       /** if failed to get table name from
-       * url location, resote to the
+       * url location, go to the
        * CityIO viewer
        *
        */

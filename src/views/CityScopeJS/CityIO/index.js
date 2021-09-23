@@ -36,7 +36,7 @@ export default function CityIO(props) {
    */
   useEffect(() => {
     const timer = setTimeout(getCityIOmetaHash, settings.cityIO.interval)
-    console.log('reading cityIO every' + settings.cityIO.interval + 'ms')
+    console.log('reading cityIO every ' + settings.cityIO.interval + 'ms')
     return () => clearTimeout(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
