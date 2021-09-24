@@ -23,11 +23,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CSjsMain(props) {
   const classes = useStyles();
-  const { tableName, cityIOdata } = props;
-  // state func to pass to the menu components
-  // to get user interaction
-  // and send  map object
-  const [menuState, getMenuState] = useState();
 
   return (
     <Page className={classes.root} title="CitySCopeJS">
@@ -43,11 +38,7 @@ export default function CSjsMain(props) {
                 }}
               >
                 <CardContent>
-                  {/* <MenuContainer
-                    cityIOdata={cityIOdata}
-                    tableName={tableName}
-                    getMenuState={getMenuState}
-                  /> */}
+                  <MenuContainer />
                 </CardContent>
               </Card>
             </Grid>
@@ -76,7 +67,6 @@ export default function CSjsMain(props) {
               }}
             >
               <CardContent>
-                {JSON.stringify(menuState)}
                 {/* <VisContainer cityIOdata={cityIOdata} /> */}
               </CardContent>
             </Card>

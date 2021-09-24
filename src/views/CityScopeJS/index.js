@@ -4,6 +4,7 @@ import CityIOviewer from "../CityIOviewer";
 // import LoadingSpinner from './CityIO/LoadingSpinner'
 import CSjsMain from "./CSjsMain";
 import LoadingSpinner from "../../Components/LoadingSpinner";
+import { useSelector } from "react-redux";
 
 export default function CityScopeJS() {
   // get the table name for cityIO comp
@@ -31,14 +32,14 @@ export default function CityScopeJS() {
     }
   }, []);
 
-
   const [loadingModules, setLoadingModules] = useState([]);
+  const cityIOdata = useSelector((state) => state.cityIOdata);
 
   return (
     <>
       <LoadingSpinner loadingModules={loadingModules} />
       {tableName && <CityIO tableName={tableName} />}
-      {/* {cityIOdata && <CSjsMain cityIOdata={cityIOdata} tableName={tableName} />} */}
+      {tableName && <CSjsMain tableName={tableName} />}
       {/* {isDone && <CityIOviewer />} */}
     </>
   );

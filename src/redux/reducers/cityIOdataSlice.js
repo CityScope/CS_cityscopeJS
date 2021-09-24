@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const cityIOdataSlice = createSlice({
   name: "cityIOdataStore",
-  initialState: { cityIOdata: {} },
+  initialState: { cityIOdata: null },
   reducers: {
     updateCityIOdata: (state, action) => {
       state.cityIOdata = action.payload;

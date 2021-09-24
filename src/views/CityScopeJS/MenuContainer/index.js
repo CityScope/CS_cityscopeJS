@@ -5,15 +5,12 @@ import { useLayoutEffect, useMemo, useState } from "react";
 import TypesMenu from "./TypesMenu";
 import LayersMenu from "./LayersMenu";
 import VisibilityMenu from "./VisibilityMenu";
+import { useSelector } from "react-redux";
 
-function MenuContainer(props) {
-  const { cityIOdata, getMenuState } = props;
+function MenuContainer() {
+  const cityIOdata = useSelector((state) => state.cityIOdataStore.cityIOdata);
+
   const [menuState, setMenuState] = useState({});
-  // return the manu state to parent component
-  useLayoutEffect(() => {
-    getMenuState(menuState);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menuState]);
 
   const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState({});
 
@@ -38,39 +35,45 @@ function MenuContainer(props) {
   };
 
   return (
-    <List>
-      <ListItem>
-        <Typography variant={"h3"}>Edit</Typography>
-      </ListItem>
+    <>
+      {cityIOdata && (
+        <List>
+          <ListItem>
+            <Typography variant={"h3"}>Edit</Typography>
+          </ListItem>
 
-      <ListItem>
-        <Button
-          id={"EDIT_BUTTON"}
-          endIcon={menuState.EDIT_BUTTON ? <CloudUploadIcon /> : <EditIcon />}
-          color="default"
-          onClick={(e) => handleButtonClicks(e)}
-        >
-          <Typography variant={"h5"}>
-            {menuState.EDIT_BUTTON ? "submit edits" : "start editing"}
-          </Typography>
-        </Button>
-      </ListItem>
+          <ListItem>
+            <Button
+              id={"EDIT_BUTTON"}
+              endIcon={
+                menuState.EDIT_BUTTON ? <CloudUploadIcon /> : <EditIcon />
+              }
+              color="default"
+              onClick={(e) => handleButtonClicks(e)}
+            >
+              <Typography variant={"h5"}>
+                {menuState.EDIT_BUTTON ? "submit edits" : "start editing"}
+              </Typography>
+            </Button>
+          </ListItem>
 
-      <TypesMenu
-        cityIOdata={cityIOdata}
-        getSelectedTypeFromMenu={getSelectedTypeFromMenu}
-      />
+          <TypesMenu
+            cityIOdata={cityIOdata}
+            getSelectedTypeFromMenu={getSelectedTypeFromMenu}
+          />
 
-      <ListItem>
-        <Typography variant={"h3"}>Layers</Typography>
-      </ListItem>
-      <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} />
+          <ListItem>
+            <Typography variant={"h3"}>Layers</Typography>
+          </ListItem>
+          <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} />
 
-      <ListItem>
-        <Typography variant={"h3"}>Display</Typography>
-      </ListItem>
-      <VisibilityMenu getVisibiltyMenu={getVisibiltyMenu} />
-    </List>
+          <ListItem>
+            <Typography variant={"h3"}>Display</Typography>
+          </ListItem>
+          <VisibilityMenu getVisibiltyMenu={getVisibiltyMenu} />
+        </List>
+      )}
+    </>
   );
 }
 
