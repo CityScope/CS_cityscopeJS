@@ -1,37 +1,39 @@
 import { Button, Typography, List, ListItem } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import { useLayoutEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import TypesMenu from "./TypesMenu";
 import LayersMenu from "./LayersMenu";
 import VisibilityMenu from "./VisibilityMenu";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateMenu } from "../../../redux/reducers/menuSlice";
 
 function MenuContainer() {
   const cityIOdata = useSelector((state) => state.cityIOdataStore.cityIOdata);
-
-  const [menuState, setMenuState] = useState({});
+  const menuState = useSelector((state) => state.menuStateStore.menuState);
 
   const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState({});
-
   const [layersMenu, getLayersMenu] = useState({});
   const [visibiltyMenu, getVisibiltyMenu] = useState({});
 
-  useMemo(() => {
-    setMenuState({
+  useDispatch(
+    updateMenu({
       ...menuState,
       SELECTED_TYPE: selectedTypeFromMenu,
       LAYERS_MENU: layersMenu,
       VISIBILTY_MENU: visibiltyMenu,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTypeFromMenu, layersMenu, visibiltyMenu]);
+    }),
+    [selectedTypeFromMenu, layersMenu, visibiltyMenu]
+  );
 
-  const handleButtonClicks = (event) => {
-    setMenuState({
-      ...menuState,
-      [event.currentTarget.id]: !menuState[event.currentTarget.id],
-    });
+  // controls the menu state for the edit button
+  const handleEditButtonClicks = (event) => {
+    // useDispatch(
+    //   updateMenu({
+    //     ...menuState,
+    //     [event.currentTarget.id]: !menuState[event.currentTarget.id],
+    //   })
+    // );
   };
 
   return (
@@ -49,7 +51,7 @@ function MenuContainer() {
                 menuState.EDIT_BUTTON ? <CloudUploadIcon /> : <EditIcon />
               }
               color="default"
-              onClick={(e) => handleButtonClicks(e)}
+              onClick={(e) => handleEditButtonClicks(e)}
             >
               <Typography variant={"h5"}>
                 {menuState.EDIT_BUTTON ? "submit edits" : "start editing"}

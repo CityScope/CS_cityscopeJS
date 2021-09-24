@@ -17,6 +17,7 @@ import {
 } from "./deckglLayers";
 import { AmbientLight, DirectionalLight, LightingEffect } from "@deck.gl/core";
 import { _proccessGridData } from "./deckglLayers/GridLayer";
+import { useSelector } from "react-redux";
 
 // create ambient light source
 const ambientLight = new AmbientLight({
@@ -36,8 +37,12 @@ const lightingEffect = new LightingEffect({
 });
 lightingEffect.shadowColor = [0, 0, 0, 0.5];
 
-export default function Map(props) {
-  const { menuState, cityIOdata } = props;
+export default function Map() {
+  const cityIOdata = useSelector((state) =>
+    state.cityIOdataStore !== null ? state.cityIOdataStore.cityIOdata : null
+  );
+  const menuState = useSelector((state) => state.menuStateStore.menuState);
+
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
   const [selectedCellsState, setSelectedCellsState] = useState();
   const [viewState, setViewState] = useState(settings.map.initialViewState);

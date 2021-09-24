@@ -10,7 +10,6 @@ import {
   Container,
 } from "@material-ui/core";
 import Page from "../../layouts/Page";
-import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,14 +20,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CSjsMain(props) {
+export default function CSjsMain() {
   const classes = useStyles();
 
   return (
     <Page className={classes.root} title="CitySCopeJS">
       <Container maxWidth={null}>
         <Grid container spacing={2}>
-          <Grid item xs={12} l={2} md={4} xl={2} container>
+          <Grid item xs={6} l={2} md={4} xl={2} container>
             <Grid item container direction="column">
               <Card
                 elevation={15}
@@ -53,9 +52,7 @@ export default function CSjsMain(props) {
                 position: "relative",
               }}
             >
-              {/* {menuState && (
-                <MapContainer cityIOdata={cityIOdata} menuState={menuState} />
-              )} */}
+              <MapContainer />
             </Card>
           </Grid>
           <Grid item xs={12} l={3} md={12} xl={2}>

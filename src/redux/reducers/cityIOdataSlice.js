@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const cityIOdataSlice = createSlice({
-  name: "cityIOdataStore",
+  name: "cityIOdataState",
   initialState: { cityIOdata: null },
   reducers: {
     updateCityIOdata: (state, action) => {
