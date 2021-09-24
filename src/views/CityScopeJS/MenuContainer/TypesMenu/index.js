@@ -34,10 +34,11 @@ export default function TypesListMenu(props) {
   }, [selectedType]);
 
   const handleListItemClick = (typeProps) => {
+    console.log(typeProps);
     // ! injects the type name into the attributes themselves
 
     if (typeHeight && typeProps.height) {
-      typeProps.height = typeHeight;
+      typeProps = { ...typeProps, height: typeHeight };
     }
     setSelectedType(typeProps);
   };
