@@ -31,20 +31,13 @@ export default function CityScopeJS() {
     }
   }, []);
 
-  const [cityIOdata, setCityIOdata] = useState();
+
   const [loadingModules, setLoadingModules] = useState([]);
 
   return (
     <>
       <LoadingSpinner loadingModules={loadingModules} />
-      {tableName && (
-        <CityIO
-          tableName={tableName}
-          cityIOdata={cityIOdata}
-          setCityIOdata={setCityIOdata}
-          setLoadingModules={setLoadingModules}
-        />
-      )}
+      {tableName && <CityIO tableName={tableName} />}
       {/* {cityIOdata && <CSjsMain cityIOdata={cityIOdata} tableName={tableName} />} */}
       {/* {isDone && <CityIOviewer />} */}
     </>
