@@ -45,7 +45,7 @@ export default function CityScopeJS() {
           setLoadingModules={setLoadingModules}
         />
       )}
-      {cityIOdata && <CSjsMain cityIOdata={cityIOdata} tableName={tableName} />}
+      {/* {cityIOdata && <CSjsMain cityIOdata={cityIOdata} tableName={tableName} />} */}
       {/* {isDone && <CityIOviewer />} */}
     </>
   );

@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import cityIOdataSlice from "./cityIOdataSlice";
+import cityIOdataSliceReducer from "./cityIOdataSlice";
 
 export default combineReducers({
-  cityIOdataSlice: cityIOdataSlice,
+  cityIOdataStoreReducer: cityIOdataSliceReducer,
 });

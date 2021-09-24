@@ -43,11 +43,11 @@ export default function CSjsMain(props) {
                 }}
               >
                 <CardContent>
-                  <MenuContainer
+                  {/* <MenuContainer
                     cityIOdata={cityIOdata}
                     tableName={tableName}
                     getMenuState={getMenuState}
-                  />
+                  /> */}
                 </CardContent>
               </Card>
             </Grid>
@@ -62,9 +62,9 @@ export default function CSjsMain(props) {
                 position: "relative",
               }}
             >
-              {menuState && (
+              {/* {menuState && (
                 <MapContainer cityIOdata={cityIOdata} menuState={menuState} />
-              )}
+              )} */}
             </Card>
           </Grid>
           <Grid item xs={12} l={3} md={12} xl={2}>
