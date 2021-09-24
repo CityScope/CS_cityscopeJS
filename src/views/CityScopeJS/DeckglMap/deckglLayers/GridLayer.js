@@ -1,5 +1,5 @@
-import { GeoJsonLayer } from 'deck.gl'
-import { hexToRgb, testHex } from '../../../../utils/utils'
+import { GeoJsonLayer } from "deck.gl";
+import { hexToRgb, testHex } from "../../../../utils/utils";
 
 /**
  * Description. uses deck api to
@@ -7,17 +7,17 @@ import { hexToRgb, testHex } from '../../../../utils/utils'
  * @argument{object} e  picking event
  */
 export const _multipleObjPicked = (e, pickingRadius, deckGLRef) => {
-  const dim = pickingRadius
-  const x = e.x - dim / 2
-  const y = e.y - dim / 2
+  const dim = pickingRadius;
+  const x = e.x - dim / 2;
+  const y = e.y - dim / 2;
   let multipleObj = deckGLRef.current.pickObjects({
     x: x,
     y: y,
     width: dim,
     height: dim,
-  })
-  return multipleObj
-}
+  });
+  return multipleObj;
+};
 
 /**
  * Description. allow only to pick cells that are
@@ -29,20 +29,20 @@ const _handleGridcellEditing = (
   selectedType,
   setSelectedCellsState,
   pickingRadius,
-  deckGLRef,
+  deckGLRef
 ) => {
-  const { height, color, name } = selectedType
-  const multiSelectedObj = _multipleObjPicked(e, pickingRadius, deckGLRef)
+  const { height, color, name } = selectedType;
+  const multiSelectedObj = _multipleObjPicked(e, pickingRadius, deckGLRef);
   multiSelectedObj.forEach((selected) => {
-    const thisCellProps = selected.object.properties
+    const thisCellProps = selected.object.properties;
     if (thisCellProps && thisCellProps.interactive) {
-      thisCellProps.color = testHex(color) ? hexToRgb(color) : color
-      thisCellProps.height = height
-      thisCellProps.name = name
+      thisCellProps.color = testHex(color) ? hexToRgb(color) : color;
+      thisCellProps.height = height;
+      thisCellProps.name = name;
     }
-  })
-  setSelectedCellsState(multiSelectedObj)
-}
+  });
+  setSelectedCellsState(multiSelectedObj);
+};
 
 /**
  * Description. gets `props` with geojson
@@ -50,25 +50,30 @@ const _handleGridcellEditing = (
  */
 export const _proccessGridData = (cityIOdata) => {
   //  get the static grid
-  const GEOGRID = cityIOdata.GEOGRID
+  const GEOGRID = cityIOdata.GEOGRID;
+  // create a copy of the GEOGRID object
+  const newGEOGRID = JSON.parse(JSON.stringify(GEOGRID));
+
   // if GEOGRRIDDATA exist and is the same length as our grid
   if (
     cityIOdata.GEOGRIDDATA &&
     cityIOdata.GEOGRIDDATA.length === cityIOdata.GEOGRID.features.length
   ) {
     // get the grid data
-    const GEOGRIDDATA = cityIOdata.GEOGRIDDATA
+    const GEOGRIDDATA = cityIOdata.GEOGRIDDATA;
     // update GEOGRID features from GEOGRIDDATA on cityio
     for (let i = 0; i < GEOGRID.features.length; i++) {
-      GEOGRID.features[i].properties = GEOGRIDDATA[i]
+      newGEOGRID.features[i].properties = GEOGRIDDATA[i];
 
-      // inject id
-      GEOGRID.features[i].properties.id = i
+      // inject id with ES7 copy of the object
+      newGEOGRID.features[i].properties = {
+        ...newGEOGRID.features[i].properties,
+        id: i,
+      };
     }
   }
-  const newGrid = JSON.parse(JSON.stringify(GEOGRID))
-  return newGrid
-}
+  return newGEOGRID;
+};
 
 export default function GridLayer({
   data,
@@ -85,7 +90,7 @@ export default function GridLayer({
 }) {
   return new GeoJsonLayer({
     opacity,
-    id: 'GRID',
+    id: "GRID",
     data,
     pickable: true,
     extruded: true,
@@ -96,41 +101,41 @@ export default function GridLayer({
     getFillColor: (d) => d.properties.color,
 
     onClick: (event) => {
-      if (selectedType && editOn && keyDownState !== 'Shift')
+      if (selectedType && editOn && keyDownState !== "Shift")
         _handleGridcellEditing(
           event,
           selectedType,
           setSelectedCellsState,
           pickingRadius,
-          deckGLref,
-        )
+          deckGLref
+        );
     },
 
     onDrag: (event) => {
-      if (selectedType && editOn && keyDownState !== 'Shift')
+      if (selectedType && editOn && keyDownState !== "Shift")
         _handleGridcellEditing(
           event,
           selectedType,
           setSelectedCellsState,
           pickingRadius,
-          deckGLref,
-        )
+          deckGLref
+        );
     },
 
     onDragStart: () => {
-      if (selectedType && editOn && keyDownState !== 'Shift') {
-        setDraggingWhileEditing(true)
+      if (selectedType && editOn && keyDownState !== "Shift") {
+        setDraggingWhileEditing(true);
       }
     },
 
     onHover: (e) => {
       if (e.object) {
-        setHoveredObj(e)
+        setHoveredObj(e);
       }
     },
 
     onDragEnd: () => {
-      setDraggingWhileEditing(false)
+      setDraggingWhileEditing(false);
     },
     updateTriggers: {
       getFillColor: selectedCellsState,
@@ -140,5 +145,5 @@ export default function GridLayer({
       getFillColor: 500,
       getElevation: 500,
     },
-  })
+  });
 }

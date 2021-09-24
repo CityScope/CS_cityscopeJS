@@ -1,5 +1,6 @@
 import MenuContainer from "./MenuContainer";
 import MapContainer from "./DeckglMap";
+import { useSelector } from "react-redux";
 
 // import VisContainer from './VisContainer'
 import {
@@ -23,6 +24,14 @@ const useStyles = makeStyles((theme) => ({
 export default function CSjsMain() {
   const classes = useStyles();
 
+  const cityIOisDone = useSelector(
+    (state) => state.cityIOdataState.cityIOisDone
+  );
+
+  const menuIsPopulated = useSelector(
+    (state) => state.menuState.menuIsPopulated
+  );
+
   return (
     <Page className={classes.root} title="CitySCopeJS">
       <Container maxWidth={null}>
@@ -36,9 +45,7 @@ export default function CSjsMain() {
                   overflow: "auto",
                 }}
               >
-                <CardContent>
-                  <MenuContainer />
-                </CardContent>
+                <CardContent>{cityIOisDone && <MenuContainer />}</CardContent>
               </Card>
             </Grid>
           </Grid>
@@ -52,7 +59,7 @@ export default function CSjsMain() {
                 position: "relative",
               }}
             >
-              <MapContainer />
+              {menuIsPopulated && <MapContainer />}
             </Card>
           </Grid>
           <Grid item xs={12} l={3} md={12} xl={2}>

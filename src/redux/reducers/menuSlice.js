@@ -2,13 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const menuSlice = createSlice({
   name: "menuState",
-  initialState: { menu: null },
+  initialState: { menuState: {}, menuIsPopulated: false },
   reducers: {
-    updateMenu: (state, action) => {
-      state.menu = action.payload;
+    updateMenuState: (state, action) => {
+      state.menuState = action.payload;
+    },
+    toggleMenuIsPopulated: (state, action) => {
+      state.menuIsPopulated = action.payload;
     },
   },
 });
 
-export const { updateMenu } = menuSlice.actions;
+export const { updateMenuState, toggleMenuIsPopulated } = menuSlice.actions;
 export default menuSlice.reducer;

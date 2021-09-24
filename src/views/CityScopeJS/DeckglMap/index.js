@@ -38,10 +38,8 @@ const lightingEffect = new LightingEffect({
 lightingEffect.shadowColor = [0, 0, 0, 0.5];
 
 export default function Map() {
-  const cityIOdata = useSelector((state) =>
-    state.cityIOdataStore !== null ? state.cityIOdataStore.cityIOdata : null
-  );
-  const menuState = useSelector((state) => state.menuStateStore.menuState);
+  const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
+  const menuState = useSelector((state) => state.menuState.menuState);
 
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
   const [selectedCellsState, setSelectedCellsState] = useState();
@@ -104,14 +102,13 @@ export default function Map() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /**
-   * update the grid layer with every change to GEOGRIDDATA
-   */
+  // update the grid layer with every change to GEOGRIDDATA
   useEffect(() => {
     setGEOGRID(_proccessGridData(cityIOdata));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityIOdata.GEOGRIDDATA]);
 
+  // post GEOGRIDDATA changes to cityIO
   useEffect(() => {
     if (!editModeToggle && GEOGRID) {
       let dataProps = [];
@@ -205,57 +202,59 @@ export default function Map() {
   };
 
   return (
-    <div
-      className="baseMap"
-      onKeyDown={(e) => {
-        setKeyDownState(e.nativeEvent.key);
-      }}
-      onKeyUp={() => setKeyDownState(null)}
-      onMouseMove={(e) => setMousePos(e.nativeEvent)}
-      onMouseUp={() => setMouseDown(false)}
-      onMouseDown={() => setMouseDown(true)}
-    >
-      <AnimationComponent
-        getAnimationTime={getAnimationTime}
-        animationToggle={
-          menuState.VISIBILTY_MENU &&
-          menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX &&
-          menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX.isOn
-        }
-      />
-
-      <PaintBrush
-        editOn={editModeToggle}
-        mousePos={mousePos}
-        selectedType={selectedType}
-        pickingRadius={pickingRadius}
-        mouseDown={mouseDown}
-        hoveredObj={hoveredObj}
-      />
-
-      <DeckGL
-        ref={deckGLref}
-        viewState={viewState}
-        onViewStateChange={onViewStateChange}
-        layers={renderDeckglLayers()}
-        effects={shadowsToggle && [lightingEffect]}
-        controller={{
-          touchZoom: true,
-          touchRotate: true,
-          dragPan: !draggingWhileEditing,
-          dragRotate: !draggingWhileEditing,
-          keyboard: false,
+    <>
+      <div
+        className="baseMap"
+        onKeyDown={(e) => {
+          setKeyDownState(e.nativeEvent.key);
         }}
+        onKeyUp={() => setKeyDownState(null)}
+        onMouseMove={(e) => setMousePos(e.nativeEvent)}
+        onMouseUp={() => setMouseDown(false)}
+        onMouseDown={() => setMouseDown(true)}
       >
-        <StaticMap
-          asyncRender={false}
-          dragRotate={true}
-          reuseMaps={true}
-          mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-          mapStyle={settings.map.mapStyle.sat}
-          preventStyleDiffing={true}
+        <AnimationComponent
+          getAnimationTime={getAnimationTime}
+          animationToggle={
+            menuState.VISIBILTY_MENU &&
+            menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX &&
+            menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX.isOn
+          }
         />
-      </DeckGL>
-    </div>
+
+        <PaintBrush
+          editOn={editModeToggle}
+          mousePos={mousePos}
+          selectedType={selectedType}
+          pickingRadius={pickingRadius}
+          mouseDown={mouseDown}
+          hoveredObj={hoveredObj}
+        />
+
+        <DeckGL
+          ref={deckGLref}
+          viewState={viewState}
+          onViewStateChange={onViewStateChange}
+          layers={renderDeckglLayers()}
+          effects={shadowsToggle && [lightingEffect]}
+          controller={{
+            touchZoom: true,
+            touchRotate: true,
+            dragPan: !draggingWhileEditing,
+            dragRotate: !draggingWhileEditing,
+            keyboard: false,
+          }}
+        >
+          <StaticMap
+            asyncRender={false}
+            dragRotate={true}
+            reuseMaps={true}
+            mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+            mapStyle={settings.map.mapStyle.sat}
+            preventStyleDiffing={true}
+          />
+        </DeckGL>
+      </div>
+    </>
   );
 }

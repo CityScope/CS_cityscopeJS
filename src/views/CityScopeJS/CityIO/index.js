@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import settings from "../../../settings/settings.json";
-import { updateCityIOdata } from "../../../redux/reducers/cityIOdataSlice";
+import {
+  updateCityIOdata,
+  toggleCityIOisDone,
+} from "../../../redux/reducers/cityIOdataSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const getAPICall = async (URL) => {
@@ -114,6 +117,7 @@ const CityIO = (props) => {
 
     dispatch(updateCityIOdata(modulesData));
     console.log("--- done updating from cityIO ---");
+    dispatch(toggleCityIOisDone(true));
   }
 
   return null;
