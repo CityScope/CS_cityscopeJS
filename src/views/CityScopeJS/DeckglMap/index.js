@@ -115,7 +115,7 @@ export default function Map() {
       for (let i = 0; i < GEOGRID.features.length; i++) {
         dataProps[i] = GEOGRID.features[i].properties;
       }
-      _postMapEditsToCityIO(dataProps, cityIOdata.tableName, "/GEOGRIDDATA");
+      _postMapEditsToCityIO(dataProps, cityIOdata.tableName, "/GEOGRIDDATA/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editModeToggle]);
