@@ -1,7 +1,7 @@
-import { createTheme, colors } from '@material-ui/core'
+import { createMuiTheme, colors } from '@material-ui/core'
 import typography from './typography'
 
-const theme = createTheme({
+const theme = createMuiTheme({
   zIndex: {
     appBar: 999,
   },
