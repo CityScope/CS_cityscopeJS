@@ -1,7 +1,7 @@
-import { createMuiTheme, colors } from '@material-ui/core'
+import { createTheme, colors } from '@material-ui/core'
 import typography from './typography'
 
-const theme = createMuiTheme({
+const theme = createTheme({
   zIndex: {
     appBar: 999,
   },
@@ -48,7 +48,6 @@ const theme = createMuiTheme({
         },
       },
     },
-
     MuiOutlinedInput: {
       notchedOutline: {
         borderColor: '#ff5278',
@@ -63,7 +62,6 @@ const theme = createMuiTheme({
         opacity: 0.1,
       },
     },
-
     MuiCard: {
       root: {
         boxShadow:
