@@ -22,6 +22,7 @@ export default function CityScopeJS() {
       },
     },
   }))
+console.log('isCityIOready', isCityIOready)
 
   const [selectedTable, setSelectedTable] = useState(null)
 

@@ -26,7 +26,6 @@ export default function PrjDeckGLMap(props) {
   const deckGL = useRef()
   const [cityioData] = useSelector((state) => [state.CITYIO])
   const viewSettings = useSelector((state) => state.UI_WEBSOCKET_DATA)
-
   useEffect(() => {
     if (!effectsRef.current) {
       return
