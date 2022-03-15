@@ -7,7 +7,8 @@ import { useSelector } from "react-redux";
 
 export default function CityScopeJS() {
   // get the table name for cityIO comp
-  const [tableName, setTableName] = useState("cityscopejs");
+  const testTableName = "tanthuan_a0b0c1d0";
+  const [tableName, setTableName] = useState();
 
   // on init, get the adress URL to search for  a table
   useEffect(() => {
