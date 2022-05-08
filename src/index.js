@@ -10,13 +10,12 @@ const store = configureStore({
   reducer: rootReducer,
 });
 
-// ! basename={process.env.PUBLIC_URL}
-
 ReactDOM.render(
   <>
     {/* https://github.com/facebook/create-react-app/issues/1765 */}
     <Provider store={store}>
-      <HashRouter basename={process.env.PUBLIC_URL}>
+      {/* <HashRouter basename={ process.env.PUBLIC_URL}> */}
+      <HashRouter basename={'/'}>
         <App />
       </HashRouter>
     </Provider>
