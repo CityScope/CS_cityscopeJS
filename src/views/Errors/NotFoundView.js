@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Container, Typography, makeStyles } from "@material-ui/core";
-import Page from "../../layouts/Page";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +21,6 @@ const NotFoundView = () => {
   const classes = useStyles();
 
   return (
-    <Page className={classes.root} title="404">
       <Box
         display="flex"
         flexDirection="column"
@@ -37,7 +36,7 @@ const NotFoundView = () => {
           </Typography>
         </Container>
       </Box>
-    </Page>
+    
   );
 };
 

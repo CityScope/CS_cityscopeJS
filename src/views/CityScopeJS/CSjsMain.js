@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import { CardContent } from "@material-ui/core";
-import Page from "../../layouts/Page";
 
 export default function CSjsMain() {
   const cityIOisDone = useSelector(
@@ -19,14 +18,13 @@ export default function CSjsMain() {
   );
 
   return (
-    <Page title="CitySCopeJS">
+    <>
       <CardContent>
         {cityIOisDone && (
           <>
             <Drawer
               anchor={"left"}
               open={"true"}
-              // variant="temporary"
               variant="persistent"
               PaperProps={{
                 sx: {
@@ -57,6 +55,6 @@ export default function CSjsMain() {
       )}
 
       {/* <VisContainer cityIOdata={cityIOdata} /> */}
-    </Page>
+    </>
   );
 }

@@ -41,8 +41,8 @@ export default function CityIOdeckGLmap(props) {
   useEffect(() => {
     let markersArr = []
     props.cityIOdata.forEach((table, index) => {
-      const RND_1 = Math.random() * 10
-      const RND_2 = Math.random() * 10
+      const RND_1 = Math.random() * 20
+      const RND_2 = Math.random() * 20
       markersArr.push({
         tableURL: table.tableURL,
         tableName: table.tableName,
@@ -103,7 +103,7 @@ export default function CityIOdeckGLmap(props) {
       id: 'LineLayer',
       data: markerInfo,
       pickable: true,
-      getWidth: zoom < 2 ? 2 : 0,
+      getWidth: zoom < 2 ?0.5 : 0,
       getSourcePosition: (d) => d.coord.from,
       getTargetPosition: (d) => d.coord.to,
       getColor: (d) => [255, 82, 120],
@@ -115,7 +115,7 @@ export default function CityIOdeckGLmap(props) {
       getPosition: (d) => d.coord.to,
       getText: (d) => d.tableName,
       getColor: [255, 82, 120],
-      getSize: zoom < 2 ? 0 : 5,
+      getSize: zoom < 2 ? 0 : 10,
       getAngle: 0,
       getPixelOffset: [10, 5],
       getTextAnchor: 'start',
@@ -144,7 +144,7 @@ export default function CityIOdeckGLmap(props) {
       },
       getIcon: (d) => 'marker',
       sizeScale: 1,
-      getSize: zoom < 5 ? 30 : 15,
+      getSize: zoom < 5 ? 20 : 10,
       getPosition: (d) => [d.coord.to[0], d.coord.to[1], INIT_VIEW.zHeight],
     }),
   ]

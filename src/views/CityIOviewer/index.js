@@ -1,41 +1,22 @@
-import { makeStyles, Container } from '@material-ui/core'
-import CityIOlist from './CityIOlist'
-import Page from '../../layouts/Page'
-import SplashScreen from './SplashScreen'
+import CityIOlist from "./CityIOlist";
+import WelcomePage from "./WelcomePage";
+import Box from '@mui/material/Box';
+
 
 export default function CityIOviewer() {
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      '& > *': {
-        margin: 'auto',
-        height: '100%',
-        padding: theme.spacing(3),
-      },
-    },
-    fixedPosition: {
-      position: 'relative',
-      zIndex: 100,
-    },
-  }))
-
-  const classes = useStyles()
   return (
     <>
-      <Page className={classes.root} title="CityScope Projects List">
-        <div
-          style={{
-            height: '50vh',
-            width: '100%',
-            position: 'relative',
-          }}
-        >
-          <CityIOlist />
-        </div>
-
-        <Container className={classes.fixedPosition}>
-          <SplashScreen />
-        </Container>
-      </Page>
+      <CityIOlist />
+      <Box
+        style={{
+          position: "relative",
+          width: "50%",
+          top: "50px",
+          left: "50px",
+        }}
+      >
+        <WelcomePage />
+      </Box>
     </>
-  )
+  );
 }
