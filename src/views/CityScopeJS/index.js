@@ -7,10 +7,10 @@ import { useSelector } from "react-redux";
 
 export default function CityScopeJS() {
   // get the table name for cityIO comp
-  const testTableName = "corktown";
+  // const testTableName = "corktown";
   // const testTableName = "tanthuan_a0b0c1d0";
   const [tableName, setTableName] = useState();
-
+  const [cityIOviewer, setCityIOviewer] = useState(false);
   // on init, get the adress URL to search for  a table
   useEffect(() => {
     let url = window.location.toString();
@@ -22,6 +22,8 @@ export default function CityScopeJS() {
     // check URL for proper CS project link
     if (url.indexOf(pre) !== -1 && cityscopePrjName.length > 0) {
       setTableName(cityscopePrjName);
+    } else {
+      setCityIOviewer(true);
     }
   }, []);
 
@@ -35,7 +37,7 @@ export default function CityScopeJS() {
       <LoadingSpinner loadingModules={loadingModules} />
       {tableName && <CityIO tableName={tableName} />}
       {cityIOisDone && <CSjsMain tableName={tableName} />}
-      {!tableName && <CityIOviewer />}
+      {cityIOviewer && <CityIOviewer />}
     </>
   );
 }

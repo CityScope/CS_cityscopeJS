@@ -1,6 +1,6 @@
 import { Button, Typography, List, ListItem } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import EditIcon from "@mui/icons-material/Edit";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useEffect, useState } from "react";
 import TypesMenu from "./TypesMenu";
 import LayersMenu from "./LayersMenu";
