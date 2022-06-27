@@ -17,12 +17,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "strictPropertyInitialization": false,
     "suppressImplicitAnyIndexErrors": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src"
-, "src/views/CityIOviewer/.js"  ]
+    "src",
+    "src/views/CityIOviewer/.js"
+  ]
 }
