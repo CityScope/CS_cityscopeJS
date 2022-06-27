@@ -31,6 +31,13 @@ const theme = createTheme({
   },
 
   overrides: {
+
+    drawerPaper: {
+      root: {
+        backgroundColor: "#fcba03"
+      }
+    },
+
     MuiListItem: {
       root: {
         '&$selected': {

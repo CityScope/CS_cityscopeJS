@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
-import { FlexibleWidthXYPlot, XAxis, YAxis, VerticalBarSeries } from 'react-vis'
-import 'react-vis/dist/style.css'
-import { Typography, Box } from '@material-ui/core'
+import { useState, useEffect } from "react";
+// import { FlexibleWidthXYPlot, XAxis, YAxis, VerticalBarSeries } from 'react-vis'
+// import 'react-vis/dist/style.css'
+import { Typography, Box } from "@material-ui/core";
 
 export default function BarChart(props) {
-  const radarSize = 250
+  const radarSize = 250;
 
   /**
    data format 
@@ -15,8 +15,8 @@ export default function BarChart(props) {
     ]
      */
 
-  const [barChartData, setBarChartData] = useState(null)
-  const [hoveredNode, setHoveredNode] = useState(null)
+  const [barChartData, setBarChartData] = useState(null);
+  const [hoveredNode, setHoveredNode] = useState(null);
 
   useEffect(() => {
     if (
@@ -25,28 +25,28 @@ export default function BarChart(props) {
       props.cityioData.indicators &&
       props.cityioData.indicators.length > 0
     ) {
-      const d = generateData(props.cityioData.indicators)
+      const d = generateData(props.cityioData.indicators);
 
-      setBarChartData(d.barChartData)
+      setBarChartData(d.barChartData);
     }
-  }, [props])
+  }, [props]);
 
   const generateData = (indicators) => {
-    let dataArr = []
+    let dataArr = [];
 
     for (let i = 0; i < indicators.length; i++) {
-      if (indicators[i].viz_type === 'bar') {
+      if (indicators[i].viz_type === "bar") {
         dataArr.push({
           x: indicators[i].name,
           y: indicators[i].value,
-        })
+        });
       }
     }
 
     return {
       barChartData: dataArr,
-    }
-  }
+    };
+  };
 
   return (
     <>
@@ -54,7 +54,7 @@ export default function BarChart(props) {
         <>
           <Box flexDirection="column">
             <Box alignContent="center" p={3}>
-              <FlexibleWidthXYPlot
+              {/* <FlexibleWidthXYPlot
                 opacity={0.2}
                 xType="ordinal"
                 width={radarSize}
@@ -65,21 +65,21 @@ export default function BarChart(props) {
                 <XAxis
                   style={{
                     text: {
-                      fill: '#FFF',
-                      fontFamily: 'Roboto Mono',
+                      fill: "#FFF",
+                      fontFamily: "Roboto Mono",
                     },
                   }}
                   tickLabelAngle={90}
                 />
-                <YAxis style={{ text: { fill: '#FFF' } }} />
+                <YAxis style={{ text: { fill: "#FFF" } }} />
                 <VerticalBarSeries
                   animation={true}
                   onValueMouseOver={(d) => {
-                    setHoveredNode(d)
+                    setHoveredNode(d);
                   }}
                   data={barChartData}
                 />
-              </FlexibleWidthXYPlot>
+              </FlexibleWidthXYPlot> */}
             </Box>
             <Box alignContent="center">
               {hoveredNode && (
@@ -96,5 +96,5 @@ export default function BarChart(props) {
         </>
       )}
     </>
-  )
+  );
 }

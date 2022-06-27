@@ -3,27 +3,13 @@ import MapContainer from "./DeckglMap";
 import { useSelector } from "react-redux";
 
 // import VisContainer from './VisContainer'
-import {
-  makeStyles,
-  Grid,
-  Card,
-  CardContent,
-  Container,
-} from "@material-ui/core";
+
+import Drawer from "@mui/material/Drawer";
+import Box from "@mui/material/Box";
+import { CardContent } from "@material-ui/core";
 import Page from "../../layouts/Page";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: "auto",
-    height: "100%",
-    paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3),
-  },
-}));
-
 export default function CSjsMain() {
-  const classes = useStyles();
-
   const cityIOisDone = useSelector(
     (state) => state.cityIOdataState.cityIOisDone
   );
@@ -33,50 +19,44 @@ export default function CSjsMain() {
   );
 
   return (
-    <Page className={classes.root} title="CitySCopeJS">
-      <Container maxWidth={null}>
-        <Grid container spacing={2}>
-          <Grid item xs={6} l={2} md={4} xl={2} container>
-            <Grid item container direction="column">
-              <Card
-                elevation={15}
-                style={{
-                  maxHeight: "85vh",
-                  overflow: "auto",
+    <Page title="CitySCopeJS">
+      <CardContent>
+        {cityIOisDone && (
+          <>
+            <Drawer
+              anchor={"left"}
+              open={"true"}
+              // variant="temporary"
+              variant="persistent"
+              PaperProps={{
+                sx: {
+                  backgroundColor: "black",
+                  color: "white",
+                },
+              }}
+              ModalProps={{
+                keepMounted: true,
+              }}
+            >
+              <Box
+                sx={{
+                  width: 350,
                 }}
               >
-                <CardContent>{cityIOisDone && <MenuContainer />}</CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+                <MenuContainer />
+              </Box>
+            </Drawer>
+          </>
+        )}
+      </CardContent>
 
-          <Grid item xs={12} l={6} md={8} xl={8}>
-            <Card
-              elevation={15}
-              style={{
-                height: "85vh",
-                width: "100%",
-                position: "relative",
-              }}
-            >
-              {menuIsPopulated && <MapContainer />}
-            </Card>
-          </Grid>
-          <Grid item xs={12} l={3} md={12} xl={2}>
-            <Card
-              elevation={15}
-              style={{
-                maxHeight: "85vh",
-                overflow: "auto",
-              }}
-            >
-              <CardContent>
-                {/* <VisContainer cityIOdata={cityIOdata} /> */}
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Container>
+      {menuIsPopulated && (
+        <>
+          <MapContainer />;
+        </>
+      )}
+
+      {/* <VisContainer cityIOdata={cityIOdata} /> */}
     </Page>
   );
 }

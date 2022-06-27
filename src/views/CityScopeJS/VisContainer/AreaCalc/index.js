@@ -1,70 +1,70 @@
-import { useState, useEffect } from 'react'
-import { rgbToHex } from '../../../../utils/utils'
-import { RadialChart, Hint } from 'react-vis'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import Typography from '@material-ui/core/Typography'
-import '../../../../../node_modules/react-vis/dist/style.css'
+import { useState, useEffect } from "react";
+import { rgbToHex } from "../../../../utils/utils";
+// import { RadialChart, Hint } from 'react-vis'
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Typography from "@material-ui/core/Typography";
+// import '../../../../../node_modules/react-vis/dist/style.css'
 
 export default function AreaCalc(props) {
-  const radialRadius = 250
-  const [hoveredRadial, setHoveredRadial] = useState(false)
-  const [areaData, setAreaData] = useState(null)
+  const radialRadius = 250;
+  const [hoveredRadial, setHoveredRadial] = useState(false);
+  const [areaData, setAreaData] = useState(null);
 
   useEffect(() => {
     const calcArea = () => {
-      let gridProps = props.cityioData.GEOGRID.properties
-      let cellSize = gridProps.header.cellSize
-      let geoGridData = props.cityioData.GEOGRIDDATA
+      let gridProps = props.cityioData.GEOGRID.properties;
+      let cellSize = gridProps.header.cellSize;
+      let geoGridData = props.cityioData.GEOGRIDDATA;
 
-      let calcAreaObj = {}
+      let calcAreaObj = {};
       geoGridData.forEach((gridCellData) => {
-        let typeName = gridCellData.name
+        let typeName = gridCellData.name;
         if (
           //    if this type is not null
-          gridCellData.name !== 'None'
+          gridCellData.name !== "None"
         ) {
           if (calcAreaObj.hasOwnProperty(typeName)) {
-            calcAreaObj[typeName].count = calcAreaObj[typeName].count + 1
+            calcAreaObj[typeName].count = calcAreaObj[typeName].count + 1;
             // avoid landuse with no height
-            let height = gridCellData.height < 1 ? 1 : gridCellData.height
+            let height = gridCellData.height < 1 ? 1 : gridCellData.height;
             calcAreaObj[typeName].area =
-              calcAreaObj[typeName].area + height * cellSize
+              calcAreaObj[typeName].area + height * cellSize;
           } else {
-            calcAreaObj[typeName] = {}
-            calcAreaObj[typeName].area = 0
-            calcAreaObj[typeName].count = 0
-            calcAreaObj[typeName].name = typeName
+            calcAreaObj[typeName] = {};
+            calcAreaObj[typeName].area = 0;
+            calcAreaObj[typeName].count = 0;
+            calcAreaObj[typeName].name = typeName;
             calcAreaObj[typeName].color = rgbToHex(
               gridCellData.color[0],
               gridCellData.color[1],
-              gridCellData.color[2],
-            )
+              gridCellData.color[2]
+            );
           }
         }
-      })
+      });
       //  convert to react-vis happy data format
-      let radialData = []
+      let radialData = [];
       for (const k in calcAreaObj) {
-        radialData.push(calcAreaObj[k])
+        radialData.push(calcAreaObj[k]);
       }
 
       let data = {
         children: radialData,
         color: 1,
-      }
+      };
 
-      return data
-    }
-    const d = calcArea()
-    setAreaData(d)
-  }, [props])
+      return data;
+    };
+    const d = calcArea();
+    setAreaData(d);
+  }, [props]);
 
   return (
     <List>
       {areaData && areaData.children && (
         <ListItem alignItems="center">
-          <RadialChart
+          {/* <RadialChart
             colorType="literal"
             animation={true}
             className={'donut-chart-example'}
@@ -103,7 +103,7 @@ export default function AreaCalc(props) {
                 </div>
               </Hint>
             )}
-          </RadialChart>
+          </RadialChart> */}
         </ListItem>
       )}
 
@@ -118,5 +118,5 @@ export default function AreaCalc(props) {
         </List>
       )}
     </List>
-  )
+  );
 }
