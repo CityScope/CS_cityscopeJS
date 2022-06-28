@@ -40,23 +40,9 @@ export default function CityIOdeckGLmap(props) {
 
   useEffect(() => {
     let markersArr = [];
-    if (props.isLoading) {
+   
       props.cityIOdata.forEach((table, index) => {
-        markersArr.push({
-          tableURL: table.tableURL,
-          tableName: table.tableName,
-          index: index,
-          tableHeader: table.tableHeader,
-          coord: {
-            from: [table.tableHeader.longitude, table.tableHeader.latitude],
-            to: [table.tableHeader.longitude, table.tableHeader.latitude],
-          },
-        });
-      });
-    } else {
-      props.cityIOdata.forEach((table, index) => {
-        const RND_1 = Math.random() * 20;
-        const RND_2 = Math.random() * 20;
+      
         markersArr.push({
           tableURL: table.tableURL,
           tableName: table.tableName,
@@ -65,14 +51,14 @@ export default function CityIOdeckGLmap(props) {
           coord: {
             from: [table.tableHeader.longitude, table.tableHeader.latitude],
             to: [
-              table.tableHeader.longitude + RND_1,
-              table.tableHeader.latitude + RND_2,
+              table.tableHeader.longitude + index/10,
+              table.tableHeader.latitude + index/10,
               INIT_VIEW.zHeight,
             ],
           },
         });
       });
-    }
+    
     setMarkerInfo(markersArr);
   }, [props, INIT_VIEW.zHeight]);
 

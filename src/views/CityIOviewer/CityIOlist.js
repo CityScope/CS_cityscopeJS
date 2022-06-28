@@ -8,7 +8,6 @@ import settings from "../../settings/settings.json";
 export default function CityIOlist() {
   const [tableList, setTableList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  console.log("tableList", isLoading);
   const fetchCityIOtables = async () => {
     // ! https://stackoverflow.com/questions/37213783/waiting-for-all-promises-called-in-a-loop-to-finish
     const cityIOlistURL = settings.cityIO.ListOfTables;
