@@ -14,7 +14,7 @@ import {
 } from "../../../../settings/menuSettings";
 
 function VisibilityMenu(props) {
-  const { getVisibiltyMenu } = props;
+  const { getVisibilityMenu } = props;
   const [menuState, setMenuState] = useState(() => {
     let initState = {};
     for (const menuItem in viewControlItems) {
@@ -30,7 +30,7 @@ function VisibilityMenu(props) {
 
   // return the manu state to parent component
   useLayoutEffect(() => {
-    getVisibiltyMenu(menuState);
+    getVisibilityMenu(menuState);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuState]);
 
@@ -84,7 +84,6 @@ function VisibilityMenu(props) {
                   })
                 }
               />
-              
 
               <Typography variant={"caption"} key={Math.random()}>
                 {menuItemList[menuItem].displayName}

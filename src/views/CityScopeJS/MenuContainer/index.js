@@ -20,7 +20,7 @@ function MenuContainer() {
   // get local states from sub-components (TypesMenu, LayersMenu, VisibilityMenu)
   const [selectedTypeFromMenu, getSelectedTypeFromMenu] = useState({});
   const [layersMenu, getLayersMenu] = useState({});
-  const [visibiltyMenu, getVisibiltyMenu] = useState({});
+  const [visibiltyMenu, getVisibilityMenu] = useState({});
 
   useEffect(() => {
     setLocalMenuState({
@@ -39,8 +39,9 @@ function MenuContainer() {
       [event.currentTarget.id]: !localMenuState[event.currentTarget.id],
     });
   };
-
+  // dispatch the menu state to the redux store
   dispatch(updateMenuState(localMenuState));
+  // flag when the menu is populated with data from the server (cityIOdata) and is ready to be used
   dispatch(toggleMenuIsPopulated(true));
 
   return (
@@ -70,7 +71,7 @@ function MenuContainer() {
           <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} />
         </ListItem>
         <ListItem>
-          <VisibilityMenu getVisibiltyMenu={getVisibiltyMenu} />
+          <VisibilityMenu getVisibilityMenu={getVisibilityMenu} />
         </ListItem>
       </List>
     </>
