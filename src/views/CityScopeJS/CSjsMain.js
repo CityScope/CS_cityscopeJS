@@ -24,14 +24,8 @@ export default function CSjsMain() {
           <>
             <Drawer
               anchor={"left"}
-              open={"true"}
+              open={true}
               variant="persistent"
-              PaperProps={{
-                sx: {
-                  backgroundColor: "black",
-                  color: "white",
-                },
-              }}
               ModalProps={{
                 keepMounted: true,
               }}

@@ -1,4 +1,4 @@
-import { Button, Typography, List, ListItem } from "@material-ui/core";
+import { Button, Typography, List, ListItem } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useEffect, useState } from "react";
@@ -6,7 +6,10 @@ import TypesMenu from "./TypesMenu";
 import LayersMenu from "./LayersMenu";
 import VisibilityMenu from "./VisibilityMenu";
 import { useSelector, useDispatch } from "react-redux";
-import { updateMenuState, toggleMenuIsPopulated } from "../../../redux/reducers/menuSlice";
+import {
+  updateMenuState,
+  toggleMenuIsPopulated,
+} from "../../../redux/reducers/menuSlice";
 
 function MenuContainer() {
   const [localMenuState, setLocalMenuState] = useState({ EDIT_BUTTON: false });
@@ -43,19 +46,15 @@ function MenuContainer() {
     <>
       <List>
         <ListItem>
-          <Typography variant={"h3"}>Edit</Typography>
-        </ListItem>
-
-        <ListItem>
           <Button
             id={"EDIT_BUTTON"}
+            variant="outlined"
             endIcon={
               localMenuState.EDIT_BUTTON ? <CloudUploadIcon /> : <EditIcon />
             }
-            color="default"
             onClick={(e) => handleEditButtonClicks(e)}
           >
-            <Typography variant={"h5"}>
+            <Typography>
               {localMenuState.EDIT_BUTTON ? "submit edits" : "start editing"}
             </Typography>
           </Button>
@@ -66,14 +65,8 @@ function MenuContainer() {
           getSelectedTypeFromMenu={getSelectedTypeFromMenu}
         />
 
-        <ListItem>
-          <Typography variant={"h3"}>Layers</Typography>
-        </ListItem>
         <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} />
 
-        <ListItem>
-          <Typography variant={"h3"}>Display</Typography>
-        </ListItem>
         <VisibilityMenu getVisibiltyMenu={getVisibiltyMenu} />
       </List>
     </>

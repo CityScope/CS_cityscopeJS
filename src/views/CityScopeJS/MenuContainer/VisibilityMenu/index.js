@@ -5,7 +5,7 @@ import {
   Slider,
   Checkbox,
   Box,
-} from '@material-ui/core'
+} from '@mui/material'
 import { useLayoutEffect, useState } from 'react'
 import {
   viewControlItems,
@@ -48,13 +48,11 @@ function VisibilityMenu(props) {
       buttonsArr.push(
         <Button
           aria-label={viewControlButtons[thisButton].displayName}
-          style={{
-            margin: '0.3em',
-          }}
+         
           size="small"
           key={viewControlButtons[thisButton].displayName}
           onClick={() => handleButtonClicks(thisButton)}
-          color="default"
+         
         >
           {viewControlButtons[thisButton].displayName}
         </Button>,
@@ -80,7 +78,7 @@ function VisibilityMenu(props) {
             <Checkbox
               checked={menuState[menuItem] && menuState[menuItem].isOn}
               key={`cb-${menuItem}`}
-              color="primary"
+             
               name={menuItem}
               key={Math.random()}
               onChange={(e) =>

@@ -6,8 +6,7 @@ import {
   CardContent,
   Card,
   Button,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
 
 export default function TypesListMenu(props) {
   const { cityIOdata, getSelectedTypeFromMenu } = props;
@@ -19,14 +18,6 @@ export default function TypesListMenu(props) {
     { value: 0, label: "min" },
     { value: 100, label: "max" },
   ];
-
-  const useStyles = makeStyles({
-    root: {
-      maxWidth: "100%",
-    },
-  });
-
-  const classes = useStyles();
 
   useMemo(() => {
     selectedType && getSelectedTypeFromMenu(selectedType);
@@ -65,21 +56,14 @@ export default function TypesListMenu(props) {
           typesList[thisType].color[2] +
           ")";
       }
-      // set border of selectedType
-      const borderStyle =
-        selectedType && selectedType.name === thisType ? 5 : 1;
 
       // check if this type has height prop
       listMenuItemsArray.push(
         <Button
           key={Math.random()}
-          style={{
-            margin: "1em",
-            border: borderStyle + "px solid " + col,
-          }}
           variant="outlined"
+          // color={col}
           onClick={() => handleListItemClick(typesList[thisType])}
-          color="default"
         >
           <Typography variant="caption">{thisType}</Typography>
         </Button>
@@ -92,9 +76,9 @@ export default function TypesListMenu(props) {
   return (
     <>
       {selectedType && (
-        <Card elevation={15} className={classes.root}>
+        <Card elevation={15}>
           <CardContent>
-            <Typography variant="h4">{selectedType.name}</Typography>
+            <Typography>{selectedType.name}</Typography>
             {description && (
               <Typography variant="caption">{description}</Typography>
             )}
