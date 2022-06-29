@@ -29,6 +29,7 @@ function MenuContainer() {
       LAYERS_MENU: layersMenu,
       VISIBILTY_MENU: visibiltyMenu,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTypeFromMenu, layersMenu, visibiltyMenu]);
 
   // controls the menu state for the edit button
@@ -65,9 +66,12 @@ function MenuContainer() {
           getSelectedTypeFromMenu={getSelectedTypeFromMenu}
         />
 
-        <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} />
-
-        <VisibilityMenu getVisibiltyMenu={getVisibiltyMenu} />
+        <ListItem>
+          <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} />
+        </ListItem>
+        <ListItem>
+          <VisibilityMenu getVisibiltyMenu={getVisibiltyMenu} />
+        </ListItem>
       </List>
     </>
   );

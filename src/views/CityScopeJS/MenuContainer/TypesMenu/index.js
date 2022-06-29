@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
 import {
-  List,
+  Stack,
   Slider,
-  Typography,
-  CardContent,
   Card,
+  Typography,
+  ListItem,
+  CardContent,
   Button,
 } from "@mui/material";
 
@@ -25,9 +26,7 @@ export default function TypesListMenu(props) {
   }, [selectedType]);
 
   const handleListItemClick = (typeProps) => {
-    console.log(typeProps);
     // ! injects the type name into the attributes themselves
-
     if (typeHeight && typeProps.height) {
       typeProps = { ...typeProps, height: typeHeight };
     }
@@ -62,69 +61,79 @@ export default function TypesListMenu(props) {
         <Button
           key={Math.random()}
           variant="outlined"
-          // color={col}
+          sx={{
+            "&.MuiButton-text": { color: { col } },
+            border: "solid 1px " + col,
+          }}
           onClick={() => handleListItemClick(typesList[thisType])}
         >
-          <Typography variant="caption">{thisType}</Typography>
+          <Typography color={col} variant="caption">
+            {thisType}
+          </Typography>
         </Button>
       );
     });
-    return <List>{listMenuItemsArray}</List>;
+    return (
+      <Stack spacing={2} direction="column">
+        {listMenuItemsArray}
+      </Stack>
+    );
   };
 
-  const typesListComps = createTypesIcons(typesList);
   return (
     <>
+      <ListItem>{createTypesIcons(typesList)}</ListItem>
+
       {selectedType && (
-        <Card elevation={15}>
-          <CardContent>
-            <Typography>{selectedType.name}</Typography>
-            {description && (
-              <Typography variant="caption">{description}</Typography>
-            )}
+        <ListItem>
+          <Card>
+            <CardContent>
+              <Typography>{selectedType.name}</Typography>
+              {description && (
+                <Typography variant="caption">{description}</Typography>
+              )}
 
-            {selectedType && selectedType.height && (
-              <>
-                <Typography gutterBottom>Set Type Height</Typography>
+              {selectedType && selectedType.height && (
+                <>
+                  <Typography gutterBottom>Set Type Height</Typography>
 
-                <Slider
-                  value={typeHeight}
-                  defaultValue={0}
-                  valueLabelDisplay="auto"
-                  onChange={(e, val) => setTypeHeight(val)}
-                  onMouseUp={() =>
-                    setSelectedType({
-                      ...selectedType,
-                      height: typeHeight,
-                    })
-                  }
-                  min={heightSliderMarks[0].value}
-                  max={heightSliderMarks[1].value}
-                  marks={heightSliderMarks}
-                />
-              </>
-            )}
-            {LBCS && (
-              <>
-                <Typography>LBCS</Typography>
-                <Typography variant="caption">
-                  {JSON.stringify(LBCS, null, "\t")}
-                </Typography>
-              </>
-            )}
-            {NAICS && (
-              <>
-                <Typography>NAICS</Typography>
-                <Typography variant="caption">
-                  {JSON.stringify(NAICS, null, "\t")}
-                </Typography>
-              </>
-            )}
-          </CardContent>
-        </Card>
+                  <Slider
+                    value={typeHeight}
+                    defaultValue={0}
+                    valueLabelDisplay="auto"
+                    onChange={(e, val) => setTypeHeight(val)}
+                    onMouseUp={() =>
+                      setSelectedType({
+                        ...selectedType,
+                        height: typeHeight,
+                      })
+                    }
+                    min={heightSliderMarks[0].value}
+                    max={heightSliderMarks[1].value}
+                    marks={heightSliderMarks}
+                  />
+                </>
+              )}
+              {LBCS && (
+                <>
+                  <Typography>LBCS</Typography>
+                  <Typography variant="caption">
+                    {JSON.stringify(LBCS, null, "\t")}
+                  </Typography>
+                </>
+              )}
+              {NAICS && (
+                <>
+                  <Typography>NAICS</Typography>
+                  <Typography variant="caption">
+                    {JSON.stringify(NAICS, null, "\t")}
+                  </Typography>
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </ListItem>
       )}
-
-      {typesListComps}
     </>
   );
 }
