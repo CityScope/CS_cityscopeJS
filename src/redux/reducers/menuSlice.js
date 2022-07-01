@@ -6,11 +6,16 @@ export const menuSlice = createSlice({
     menuState: {},
     menuIsPopulated: false,
     editMenuState: {},
-    typesMenuState: {"none":"selected"},
+    typesMenuState: { none: "selected" },
+    layersMenuState: {},
   },
   reducers: {
     updateMenuState: (state, action) => {
       state.menuState = action.payload;
+    },
+
+    updateLayersMenuState: (state, action) => {
+      state.layersMenuState = action.payload;
     },
 
     updateTypesMenuState: (state, action) => {
@@ -28,6 +33,7 @@ export const menuSlice = createSlice({
 
 export const {
   updateMenuState,
+  updateLayersMenuState,
   updateTypesMenuState,
   toggleMenuIsPopulated,
   updateEditMenuState,

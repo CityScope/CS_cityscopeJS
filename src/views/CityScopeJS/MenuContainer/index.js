@@ -1,4 +1,4 @@
-import {  List, ListItem } from "@mui/material"
+import { List, ListItem } from "@mui/material";
 import { useState } from "react";
 import TypesMenu from "./TypesMenu";
 import LayersMenu from "./LayersMenu";
@@ -41,13 +41,9 @@ function MenuContainer() {
         <ListItem>
           <EditMenu />
         </ListItem>
-
-       
-          <TypesMenu />
-     
-
+        <TypesMenu />
         <ListItem>
-          {/* <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} /> */}
+          <LayersMenu />
         </ListItem>
         <ListItem>
           {/* <VisibilityMenu getVisibilityMenu={getVisibilityMenu} /> */}

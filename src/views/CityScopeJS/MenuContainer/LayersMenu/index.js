@@ -3,118 +3,103 @@ import {
   Checkbox,
   Typography,
   FormControlLabel,
-  ListItem,
   List,
+  ListItem,
 } from "@mui/material";
-
-import { useLayoutEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 import { expectedLayers } from "../../../../settings/menuSettings";
+import { updateLayersMenuState } from "../../../../redux/reducers/menuSlice";
 
-function LayersMenu(props) {
-  const { getLayersMenu, cityIOdata } = props;
+function LayersMenu() {
+  const dispatch = useDispatch();
+  const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
+  // get the keys from cityIOdata
+  const cityIOkeys = Object.keys(cityIOdata);
 
   /**
-   * inital state
+   * initial layer menu state
    */
-  const [menuState, setMenuState] = useState(() => {
-    let initState = {};
+  let initState = {};
+  const [layersMenuState, setLayersMenuState] = useState(() => {
     for (const menuItem in expectedLayers) {
       initState[menuItem] = {
         isOn: expectedLayers[menuItem].initState,
-        slider:
-          expectedLayers[menuItem].hasSlider &&
-          expectedLayers[menuItem].initSliderValue,
+        slider: expectedLayers[menuItem].initSliderValue,
       };
     }
     return initState;
   });
 
-  // return the manu state to parent component
-  useLayoutEffect(() => {
-    getLayersMenu(menuState);
+  useEffect(() => {
+    dispatch(updateLayersMenuState(layersMenuState));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menuState]);
+  }, [layersMenuState]);
 
-  const [sliderVal, setSliderVal] = useState(() => {
-    let initState = {};
-    for (const menuItem in expectedLayers) {
-      initState[menuItem] =
-        expectedLayers[menuItem].hasSlider &&
-        expectedLayers[menuItem].initSliderValue;
-    }
-    return initState;
-  });
+  const [sliderVal, setSliderVal] = useState({});
 
   const updateSliderVal = (menuItem, val) => {
     setSliderVal({ ...sliderVal, [menuItem]: val });
+    setLayersMenuState({
+      ...layersMenuState,
+      [menuItem]: {
+        ...layersMenuState[menuItem],
+        val: val,
+      },
+    });
   };
 
-  const createLayersControlList = (menuLayersList) => {
-    const toggleListArr = [];
-    for (const menuItem in menuLayersList) {
-      //  get short module name for each toggle
-      const moduleName = menuLayersList[menuItem].cityIOmoduleName;
-      // check if we add slider to this menuItem
-      const hasSlider = menuLayersList[menuItem].hasSlider;
-      //  check if this toggle is a layer that requires cityIO
-      if (moduleName in cityIOdata) {
+  const toggleListArr = [];
+  const makeLayerControlsMenu = () => {
+    // loop through the keys in cityIOdata and make a list of keys
+    for (const menuItem in expectedLayers) {
+      const moduleName = expectedLayers[menuItem].cityIOmoduleName;
+      // if the module name is in the data for this CS instance, make a checkbox
+      if (cityIOkeys.includes(moduleName)) {
         toggleListArr.push(
-         
-            <ListItem key={Math.random()}>
-              <FormControlLabel
-                key={Math.random()}
-                control={
-                  <Checkbox
-                    checked={menuState[menuItem] && menuState[menuItem].isOn}
-                    key={Math.random()}
-                    color="primary"
-                    onChange={(e) =>
-                      setMenuState({
-                        ...menuState,
-                        [menuItem]: {
-                          ...menuState[menuItem],
-                          isOn: e.target.checked,
-                        },
-                      })
-                    }
-                  />
-                }
-                label={
-                  <Typography variant="caption" key={Math.random()}>
-                    {menuLayersList[menuItem].displayName}
-                  </Typography>
-                }
-              />
-
-              {hasSlider && menuState[menuItem] && menuState[menuItem].isOn && (
-                <Slider
+          <ListItem>
+            <FormControlLabel
+              key={Math.random()}
+              control={
+                <Checkbox
+                  checked={
+                    layersMenuState[menuItem] && layersMenuState[menuItem].isOn
+                  }
                   key={Math.random()}
-                  value={sliderVal && sliderVal[menuItem]}
-                  defaultValue={100}
-                  valueLabelDisplay="auto"
-                  // ! pass both val and name of slider to keep it between updates
-                  onChange={(e, val) => {
-                    updateSliderVal(menuItem, val);
-                    setMenuState({
-                      ...menuState,
+                  color="primary"
+                  onChange={(e) =>
+                    setLayersMenuState({
+                      ...layersMenuState,
                       [menuItem]: {
-                        ...menuState[menuItem],
-                        slider: sliderVal[menuItem],
+                        ...layersMenuState[menuItem],
+                        isOn: e.target.checked,
                       },
-                    });
-                  }}
+                    })
+                  }
                 />
-              )}
-            </ListItem>
-      
+              }
+              label={
+                <Typography variant="caption" key={Math.random()}>
+                  {expectedLayers[menuItem].displayName}
+                </Typography>
+              }
+            />
+            {/* and make a slider  */}
+            <Slider
+              size="small"
+              defaultValue={70}
+              aria-label="Small"
+              valueLabelDisplay="auto"
+              onChangeCommitted={(_, val) => updateSliderVal(moduleName, val)}
+            />
+          </ListItem>
         );
       }
     }
-
     return toggleListArr;
   };
 
-  return <List>{createLayersControlList(expectedLayers)}</List>;
+  return <List>{makeLayerControlsMenu()}</List>;
 }
 
 export default LayersMenu;
