@@ -44,7 +44,7 @@ export default function CSjsMain() {
 
       {menuIsPopulated && (
         <>
-          <MapContainer />;
+          {/* <MapContainer />; */}
         </>
       )}
 

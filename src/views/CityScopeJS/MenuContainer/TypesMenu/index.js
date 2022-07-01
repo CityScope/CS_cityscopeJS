@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import {
   Stack,
   Slider,
@@ -8,24 +8,25 @@ import {
   CardContent,
   Button,
 } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
 
-export default function TypesListMenu(props) {
-  const { cityIOdata, getSelectedTypeFromMenu } = props;
+import { updateTypesMenuState } from "../../../../redux/reducers/menuSlice";
+
+export default function TypesListMenu() {
+  const dispatch = useDispatch();
+  const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const typesList = cityIOdata.GEOGRID.properties.types;
   const [selectedType, setSelectedType] = useState(null);
-  const [typeHeight, setTypeHeight] = useState(0);
 
+  const [typeHeight, setTypeHeight] = useState(0);
   const heightSliderMarks = [
     { value: 0, label: "min" },
     { value: 100, label: "max" },
   ];
 
-  useMemo(() => {
-    selectedType && getSelectedTypeFromMenu(selectedType);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedType]);
+  const handleListItemClick = (typeProps, thisTypeName) => {
+    typeProps = { ...typeProps, thisTypeName: thisTypeName };
 
-  const handleListItemClick = (typeProps) => {
     // ! injects the type name into the attributes themselves
     if (typeHeight && typeProps.height) {
       typeProps = { ...typeProps, height: typeHeight };
@@ -33,18 +34,30 @@ export default function TypesListMenu(props) {
     setSelectedType(typeProps);
   };
 
+  useEffect(() => {
+    console.log("selectedType", selectedType);
+    dispatch(
+      updateTypesMenuState({
+        SELECTED_TYPE: selectedType,
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedType]);
+
   // get the LBCS/NAICS types info
   const LBCS = selectedType && selectedType.LBCS;
   const NAICS = selectedType && selectedType.NAICS;
   // get type description text if exist
   let description =
     selectedType && selectedType.description ? selectedType.description : null;
+
   // create the types themselves
   const createTypesIcons = (typesList) => {
     let listMenuItemsArray = [];
     Object.keys(typesList).forEach((thisType, index) => {
       // get color
       let col = typesList[thisType].color;
+
       if (typeof col !== "string") {
         col =
           "rgb(" +
@@ -65,7 +78,7 @@ export default function TypesListMenu(props) {
             "&.MuiButton-text": { color: { col } },
             border: "solid 1px " + col,
           }}
-          onClick={() => handleListItemClick(typesList[thisType])}
+          onClick={() => handleListItemClick(typesList[thisType], thisType)}
         >
           <Typography color={col} variant="caption">
             {thisType}
@@ -102,7 +115,7 @@ export default function TypesListMenu(props) {
                     defaultValue={0}
                     valueLabelDisplay="auto"
                     onChange={(e, val) => setTypeHeight(val)}
-                    onMouseUp={() =>
+                    onChangeCommitted={() =>
                       setSelectedType({
                         ...selectedType,
                         height: typeHeight,
