@@ -1,6 +1,5 @@
-import { Button, Typography, List, ListItem } from "@mui/material";
-
-import { useEffect, useState } from "react";
+import {  List, ListItem } from "@mui/material"
+import { useState } from "react";
 import TypesMenu from "./TypesMenu";
 import LayersMenu from "./LayersMenu";
 import VisibilityMenu from "./VisibilityMenu";
@@ -43,9 +42,9 @@ function MenuContainer() {
           <EditMenu />
         </ListItem>
 
-        <ListItem>
+       
           <TypesMenu />
-        </ListItem>
+     
 
         <ListItem>
           {/* <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} /> */}
