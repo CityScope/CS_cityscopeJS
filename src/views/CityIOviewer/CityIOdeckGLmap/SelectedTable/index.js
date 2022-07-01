@@ -15,7 +15,7 @@ export default function SelectedTable(props) {
 
     "http://localhost:3000/CS_cityscopeJS/?cityscope=";
 
-  const [open, setOpen] = React.useState();
+  const [open, setOpen] = React.useState(false);
 
   // open dialog when table info has been changed
   React.useEffect(() => {
@@ -38,7 +38,7 @@ export default function SelectedTable(props) {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="table-select-dialog-description">
-          <Typography>
+          <Typography component={'span'}>
             <Link
               href={
                 cityscopeJSendpoint + clicked.object.tableName.toLowerCase()
