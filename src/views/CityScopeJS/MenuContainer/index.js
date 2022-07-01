@@ -43,7 +43,9 @@ function MenuContainer() {
           <EditMenu />
         </ListItem>
 
-        {<TypesMenu />}
+        <ListItem>
+          <TypesMenu />
+        </ListItem>
 
         <ListItem>
           {/* <LayersMenu cityIOdata={cityIOdata} getLayersMenu={getLayersMenu} /> */}

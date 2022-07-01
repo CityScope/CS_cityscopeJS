@@ -9,7 +9,6 @@ import {
   Button,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-
 import { updateTypesMenuState } from "../../../../redux/reducers/menuSlice";
 
 export default function TypesListMenu() {
@@ -35,7 +34,6 @@ export default function TypesListMenu() {
   };
 
   useEffect(() => {
-    console.log("selectedType", selectedType);
     dispatch(
       updateTypesMenuState({
         SELECTED_TYPE: selectedType,
@@ -108,7 +106,7 @@ export default function TypesListMenu() {
 
               {selectedType && selectedType.height && (
                 <>
-                  <Typography gutterBottom>Set Type Height</Typography>
+                  <Typography gutterBottom>Set Height</Typography>
 
                   <Slider
                     value={typeHeight}
