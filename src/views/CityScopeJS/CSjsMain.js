@@ -32,7 +32,7 @@ export default function CSjsMain() {
             >
               <Box
                 sx={{
-                  width: 350,
+                  width: 300,
                 }}
               >
                 <MenuContainer />

@@ -6,8 +6,9 @@ export const menuSlice = createSlice({
     menuState: {},
     menuIsPopulated: false,
     editMenuState: {},
-    typesMenuState: { none: "selected" },
+    typesMenuState: {},
     layersMenuState: {},
+    viewSettingsMenuState: {},
   },
   reducers: {
     updateMenuState: (state, action) => {
@@ -25,6 +26,11 @@ export const menuSlice = createSlice({
     updateEditMenuState: (state, action) => {
       state.editMenuState = action.payload;
     },
+
+    updateViewSettingsMenuState: (state, action) => {
+      state.viewSettingsMenuState = action.payload;
+    },
+
     toggleMenuIsPopulated: (state, action) => {
       state.menuIsPopulated = action.payload;
     },
@@ -37,5 +43,6 @@ export const {
   updateTypesMenuState,
   toggleMenuIsPopulated,
   updateEditMenuState,
+  updateViewSettingsMenuState,
 } = menuSlice.actions;
 export default menuSlice.reducer;

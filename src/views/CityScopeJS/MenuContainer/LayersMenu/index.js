@@ -57,7 +57,7 @@ function LayersMenu() {
       // if the module name is in the data for this CS instance, make a checkbox
       if (cityIOkeys.includes(moduleName)) {
         toggleListArr.push(
-          <ListItem key={Math.random()}>
+          <ListItem   key = {Math.random()}>
             <FormControlLabel
               key={Math.random()}
               control={
@@ -87,8 +87,8 @@ function LayersMenu() {
             {/* and make a slider  */}
             <Slider
               size="small"
-              defaultValue={70}
               key={Math.random()}
+              defaultValue={sliderVal[moduleName]}
               valueLabelDisplay="auto"
               onChangeCommitted={(_, val) => updateSliderVal(moduleName, val)}
             />

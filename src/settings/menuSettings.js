@@ -37,12 +37,6 @@ export const expectedLayers = {
 };
 
 export const viewControlItems = {
-  ANIMATE_CHECKBOX: {
-    displayName: "Animate",
-    initState: false,
-    hasSlider: true,
-    initSliderValue: 100,
-  },
   ROTATE_CHECKBOX: {
     displayName: "Rotate Camera",
     initState: false,
@@ -50,7 +44,6 @@ export const viewControlItems = {
   SHADOWS_CHECKBOX: {
     displayName: "Toggle Shadows",
     initState: false,
-    hasSlider: true,
     initSliderValue: 100,
   },
 };

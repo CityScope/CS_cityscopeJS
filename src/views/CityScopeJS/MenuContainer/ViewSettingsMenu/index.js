@@ -13,8 +13,8 @@ import {
   viewControlButtons,
 } from "../../../../settings/menuSettings";
 
-function VisibilityMenu(props) {
-  const { getVisibilityMenu } = props;
+function ViewSettingsMenu() {
+
   const [menuState, setMenuState] = useState(() => {
     let initState = {};
     for (const menuItem in viewControlItems) {
@@ -28,9 +28,10 @@ function VisibilityMenu(props) {
     return initState;
   });
 
-  // return the manu state to parent component
+  // return the menu state to parent component
   useLayoutEffect(() => {
-    getVisibilityMenu(menuState);
+  //  dispatch this menu state to the redux store
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuState]);
 
@@ -124,4 +125,4 @@ function VisibilityMenu(props) {
   );
 }
 
-export default VisibilityMenu;
+export default ViewSettingsMenu;
