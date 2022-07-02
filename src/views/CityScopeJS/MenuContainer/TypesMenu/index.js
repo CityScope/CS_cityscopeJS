@@ -81,9 +81,9 @@ export default function TypesListMenu() {
           sx={{
             "&.MuiButton-text": { color: { col } },
             border:
-              selectedType && selectedType.thisTypeName == thisType
-                ? "solid 3px " + col
-                : "solid 1px " + col,
+              selectedType && selectedType.thisTypeName === thisType
+                ? "solid 1px " + col
+                : "dashed 1px " + col,
           }}
           onClick={() => handleListItemClick(typesList[thisType], thisType)}
         >
