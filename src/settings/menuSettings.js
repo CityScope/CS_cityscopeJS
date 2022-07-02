@@ -32,6 +32,7 @@ export const expectedLayers = {
   GEOJSON_LAYER_CHECKBOX: {
     displayName: "GeoJson Layer",
     cityIOmoduleName: "geojson",
+    initState: false,
     initSliderValue: 50,
   },
 };

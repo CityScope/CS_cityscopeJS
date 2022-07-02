@@ -75,6 +75,7 @@ export default function TypesListMenu() {
       // check if this type has height prop
       listMenuItemsArray.push(
         <Button
+          size="small"
           key={Math.random()}
           variant="outlined"
           sx={{

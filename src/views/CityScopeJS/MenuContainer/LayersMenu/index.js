@@ -37,14 +37,14 @@ function LayersMenu() {
   }, [layersMenuState]);
 
   const [sliderVal, setSliderVal] = useState({});
-
   const updateSliderVal = (menuItem, val) => {
     setSliderVal({ ...sliderVal, [menuItem]: val });
+    
     setLayersMenuState({
       ...layersMenuState,
       [menuItem]: {
         ...layersMenuState[menuItem],
-        val: val,
+        slider: val,
       },
     });
   };
@@ -57,7 +57,7 @@ function LayersMenu() {
       // if the module name is in the data for this CS instance, make a checkbox
       if (cityIOkeys.includes(moduleName)) {
         toggleListArr.push(
-          <ListItem   key = {Math.random()}>
+          <ListItem key={Math.random()}>
             <FormControlLabel
               key={Math.random()}
               control={
@@ -88,9 +88,9 @@ function LayersMenu() {
             <Slider
               size="small"
               key={Math.random()}
-              defaultValue={sliderVal[moduleName]}
+              value={sliderVal[menuItem]}
               valueLabelDisplay="auto"
-              onChangeCommitted={(_, val) => updateSliderVal(moduleName, val)}
+              onChangeCommitted={(_, val) => updateSliderVal(menuItem, val)}
             />
           </ListItem>
         );
