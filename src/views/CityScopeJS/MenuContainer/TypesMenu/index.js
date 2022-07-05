@@ -11,17 +11,12 @@ import {
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { updateTypesMenuState } from "../../../../redux/reducers/menuSlice";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 export default function TypesListMenu() {
   const dispatch = useDispatch();
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const typesList = cityIOdata.GEOGRID.properties.types;
   const [selectedType, setSelectedType] = useState(null);
-
-  const handleClickAway = () => {
-    setSelectedType(null);
-  };
 
   const [typeHeight, setTypeHeight] = useState(0);
   const heightSliderMarks = [
@@ -101,63 +96,59 @@ export default function TypesListMenu() {
   };
 
   return (
-    <ClickAwayListener onClickAway={handleClickAway}>
-      <List>
-        <ListItem>{createTypesIcons(typesList)}</ListItem>
+    <List>
+      <ListItem>{createTypesIcons(typesList)}</ListItem>
 
-        {selectedType && (
-          <ListItem>
-            <Card>
-              <CardContent>
-                <Typography variant="h5">
-                  {selectedType.thisTypeName}
-                </Typography>
-                {description && (
-                  <Typography variant="caption">{description}</Typography>
-                )}
+      {selectedType && (
+        <ListItem>
+          <Card>
+            <CardContent>
+              <Typography variant="h5">{selectedType.thisTypeName}</Typography>
+              {description && (
+                <Typography variant="caption">{description}</Typography>
+              )}
 
-                {selectedType && selectedType.height && (
-                  <>
-                    <Typography>Set Height</Typography>
+              {selectedType && selectedType.height && (
+                <>
+                  <Typography>Set Height</Typography>
 
-                    <Slider
-                      valueLabelDisplay="auto"
-                      value={typeHeight}
-                      defaultValue={0}
-                      onChange={(e, val) => setTypeHeight(val)}
-                      onChangeCommitted={() =>
-                        setSelectedType({
-                          ...selectedType,
-                          height: typeHeight,
-                        })
-                      }
-                      min={heightSliderMarks[0].value}
-                      max={heightSliderMarks[1].value}
-                      marks={heightSliderMarks}
-                    />
-                  </>
-                )}
-                {LBCS && (
-                  <>
-                    <Typography>LBCS</Typography>
-                    <Typography variant="caption">
-                      {JSON.stringify(LBCS, null, "\t")}
-                    </Typography>
-                  </>
-                )}
-                {NAICS && (
-                  <>
-                    <Typography>NAICS</Typography>
-                    <Typography variant="caption">
-                      {JSON.stringify(NAICS, null, "\t")}
-                    </Typography>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          </ListItem>
-        )}
-      </List>
-    </ClickAwayListener>
+                  <Slider
+                    valueLabelDisplay="auto"
+                    value={typeHeight}
+                    defaultValue={0}
+                    onChange={(e, val) => setTypeHeight(val)}
+                    onChangeCommitted={() =>
+                      setSelectedType({
+                        ...selectedType,
+                        height: typeHeight,
+                      })
+                    }
+                    min={heightSliderMarks[0].value}
+                    max={heightSliderMarks[1].value}
+                    marks={heightSliderMarks}
+                  />
+                </>
+              )}
+              {LBCS && (
+                <>
+                  <Typography>LBCS</Typography>
+                  <Typography variant="caption">
+                    {JSON.stringify(LBCS, null, "\t")}
+                  </Typography>
+                </>
+              )}
+              {NAICS && (
+                <>
+                  <Typography>NAICS</Typography>
+                  <Typography variant="caption">
+                    {JSON.stringify(NAICS, null, "\t")}
+                  </Typography>
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </ListItem>
+      )}
+    </List>
   );
 }

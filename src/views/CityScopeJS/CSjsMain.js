@@ -1,5 +1,5 @@
 import MenuContainer from "./MenuContainer";
-import MapContainer from "./DeckglMap";
+import DeckGLMap from "./DeckglMap";
 import { useSelector } from "react-redux";
 
 // import VisContainer from './VisContainer'
@@ -11,10 +11,6 @@ import { CardContent } from "@material-ui/core";
 export default function CSjsMain() {
   const cityIOisDone = useSelector(
     (state) => state.cityIOdataState.cityIOisDone
-  );
-
-  const menuIsPopulated = useSelector(
-    (state) => state.menuState.menuIsPopulated
   );
 
   return (
@@ -42,13 +38,8 @@ export default function CSjsMain() {
         )}
       </CardContent>
 
-      {menuIsPopulated && (
-        <>
-          {/* <MapContainer />; */}
-        </>
-      )}
-
-      {/* <VisContainer cityIOdata={cityIOdata} /> */}
+      <DeckGLMap />
+      {/* <VisContainer  /> */}
     </>
   );
 }

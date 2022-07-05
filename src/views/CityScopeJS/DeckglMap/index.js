@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import PaintBrush from "./components/PaintBrush";
-import { _postMapEditsToCityIO } from "../../../utils/utils";
+import { postMapEditsToCityIO } from "../../../utils/utils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -16,8 +17,7 @@ import {
   GeojsonLayer,
 } from "./deckglLayers";
 import { AmbientLight, DirectionalLight, LightingEffect } from "@deck.gl/core";
-import { _proccessGridData } from "./deckglLayers/GridLayer";
-import { useSelector } from "react-redux";
+import { proccessGridData } from "./deckglLayers/GridLayer";
 
 // create ambient light source
 const ambientLight = new AmbientLight({
@@ -35,11 +35,13 @@ const lightingEffect = new LightingEffect({
   ambientLight,
   directionalLight,
 });
-lightingEffect.shadowColor = [0, 0, 0, 0.5];
+lightingEffect.shadowColor = [0, 0, 0, 1];
 
-export default function Map() {
+export default function DeckGLMap() {
+  // get cityio data from redux store
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
-  const menuState = useSelector((state) => state.menuState.menuState);
+  // get menu state from redux store
+  const menuState = useSelector((state) => state.menuState);
 
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
   const [selectedCellsState, setSelectedCellsState] = useState();
@@ -51,18 +53,18 @@ export default function Map() {
   const [GEOGRID, setGEOGRID] = useState();
   const deckGLref = useRef();
   const pickingRadius = 40;
-  const shadowsToggle = menuState.SHADOWS_CHECKBOX;
-  const editModeToggle = menuState.EDIT_BUTTON;
-  const selectedType = menuState.SELECTED_TYPE;
-  const layersMenu = menuState.LAYERS_MENU;
-  const viewControlButton = menuState.VISIBILTY_MENU.VIEW_CONTROL_BUTTONS;
+  const shadowsToggle = menuState.viewSettingsMenuState.SHADOWS_CHECKBOX;
+  const editModeToggle = menuState.editMenuState.EDIT_BUTTON;
+  const selectedType = menuState.typesMenuState.SELECTED_TYPE;
+  const layersMenu = menuState.layersMenuState;
+  const viewControlButton =
+    menuState.viewSettingsMenuState.VIEW_CONTROL_BUTTONS;
   const [animationTime, getAnimationTime] = useState(0);
-
-  /**
-   * resets the camera viewport
-   * to cityIO header data
-   * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
-   */
+  // /**
+  //  * resets the camera viewport
+  //  * to cityIO header data
+  //  * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
+  //  */
 
   const setViewStateToTableHeader = (viewControlButton) => {
     const lastCell =
@@ -78,7 +80,7 @@ export default function Map() {
       ...viewState,
       longitude: midGrid[0],
       latitude: midGrid[1],
-      zoom: viewControlButton === "RESET_VIEW_BUTTON" ? 15 : viewState.zoom,
+      zoom: viewControlButton === "RESET_VIEW_BUTTON" ? 12 : viewState.zoom,
       pitch: 0,
       bearing:
         viewControlButton === "NORTH_VIEW_BUTTON" ? 0 : 360 - header.rotation,
@@ -91,9 +93,8 @@ export default function Map() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewControlButton]);
 
-  /** On init */
+  // fix deck view rotate
   useEffect(() => {
-    // fix deck view rotate
     document
       .getElementById("deckgl-wrapper")
       .addEventListener("contextmenu", (evt) => evt.preventDefault());
@@ -104,7 +105,7 @@ export default function Map() {
 
   // update the grid layer with every change to GEOGRIDDATA
   useEffect(() => {
-    setGEOGRID(_proccessGridData(cityIOdata));
+    setGEOGRID(proccessGridData(cityIOdata));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityIOdata.GEOGRIDDATA]);
 
@@ -115,7 +116,7 @@ export default function Map() {
       for (let i = 0; i < GEOGRID.features.length; i++) {
         dataProps[i] = GEOGRID.features[i].properties;
       }
-      _postMapEditsToCityIO(dataProps, cityIOdata.tableName, "/GEOGRIDDATA/");
+      postMapEditsToCityIO(dataProps, cityIOdata.tableName, "/GEOGRIDDATA/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editModeToggle]);
@@ -133,6 +134,7 @@ export default function Map() {
       zoomLevel: viewState.zoom,
       time: animationTime,
       opacity:
+        layersMenu &&
         layersMenu.ABM_LAYER_CHECKBOX &&
         layersMenu.ABM_LAYER_CHECKBOX.slider * 0.01,
     }),
@@ -140,6 +142,7 @@ export default function Map() {
       data: cityIOdata,
       ABMmode: 0,
       opacity:
+        layersMenu &&
         layersMenu.AGGREGATED_TRIPS_LAYER_CHECKBOX &&
         layersMenu.AGGREGATED_TRIPS_LAYER_CHECKBOX.slider * 0.01,
     }),
@@ -152,6 +155,7 @@ export default function Map() {
         selectedCellsState,
         pickingRadius,
         opacity:
+          layersMenu &&
           layersMenu.GRID_LAYER_CHECKBOX &&
           layersMenu.GRID_LAYER_CHECKBOX.slider * 0.01,
       },
@@ -165,6 +169,7 @@ export default function Map() {
     ACCESS: AccessLayer({
       data: cityIOdata,
       opacity:
+        layersMenu &&
         layersMenu.ACCESS_LAYER_CHECKBOX &&
         layersMenu.ACCESS_LAYER_CHECKBOX.slider * 0.01,
     }),
@@ -192,8 +197,9 @@ export default function Map() {
     for (var layerNameString of layerOrder) {
       // toggle layers on and off
       if (
-        menuState.LAYERS_MENU[layerNameString + "_LAYER_CHECKBOX"] &&
-        menuState.LAYERS_MENU[layerNameString + "_LAYER_CHECKBOX"].isOn
+        layersMenu &&
+        layersMenu[layerNameString + "_LAYER_CHECKBOX"] &&
+        layersMenu[layerNameString + "_LAYER_CHECKBOX"].isOn
       ) {
         layers.push(layersKey[layerNameString]);
       }
@@ -204,7 +210,6 @@ export default function Map() {
   return (
     <>
       <div
-        className="baseMap"
         onKeyDown={(e) => {
           setKeyDownState(e.nativeEvent.key);
         }}
@@ -213,14 +218,14 @@ export default function Map() {
         onMouseUp={() => setMouseDown(false)}
         onMouseDown={() => setMouseDown(true)}
       >
-        <AnimationComponent
+        {/* <AnimationComponent
           getAnimationTime={getAnimationTime}
           animationToggle={
             menuState.VISIBILTY_MENU &&
             menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX &&
             menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX.isOn
           }
-        />
+        /> */}
 
         <PaintBrush
           editOn={editModeToggle}
@@ -229,7 +234,7 @@ export default function Map() {
           pickingRadius={pickingRadius}
           mouseDown={mouseDown}
           hoveredObj={hoveredObj}
-        />
+        /> 
 
         <DeckGL
           ref={deckGLref}

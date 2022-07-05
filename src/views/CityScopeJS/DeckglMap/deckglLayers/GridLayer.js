@@ -48,7 +48,7 @@ const _handleGridcellEditing = (
  * Description. gets `props` with geojson
  * and procces the interactive area
  */
-export const _proccessGridData = (cityIOdata) => {
+export const proccessGridData = (cityIOdata) => {
   //  get the static grid
   const GEOGRID = cityIOdata.GEOGRID;
   // create a copy of the GEOGRID object

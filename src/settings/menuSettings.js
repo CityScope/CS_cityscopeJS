@@ -37,10 +37,12 @@ export const expectedLayers = {
   },
 };
 
-export const viewControlItems = {
+export const viewControlCheckboxes = {
   ROTATE_CHECKBOX: {
     displayName: "Rotate Camera",
     initState: false,
+    initSliderValue: 100,
+
   },
   SHADOWS_CHECKBOX: {
     displayName: "Toggle Shadows",

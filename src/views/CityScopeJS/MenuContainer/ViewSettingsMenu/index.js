@@ -1,3 +1,4 @@
+import { useLayoutEffect, useState } from "react";
 import {
   ButtonGroup,
   Button,
@@ -7,22 +8,24 @@ import {
   List,
   ListItem,
 } from "@mui/material";
-import { useLayoutEffect, useState } from "react";
 import {
-  viewControlItems,
+  viewControlCheckboxes,
   viewControlButtons,
 } from "../../../../settings/menuSettings";
+import { updateViewSettingsMenuState } from "../../../../redux/reducers/menuSlice";
+import { useDispatch } from "react-redux";
 
 function ViewSettingsMenu() {
+  const dispatch = useDispatch();
 
-  const [menuState, setMenuState] = useState(() => {
+  const [viewSettingsMenuState, setViewSettingsMenuState] = useState(() => {
     let initState = {};
-    for (const menuItem in viewControlItems) {
+    for (const menuItem in viewControlCheckboxes) {
       initState[menuItem] = {
-        isOn: viewControlItems[menuItem].initState,
+        isOn: viewControlCheckboxes[menuItem].initState,
         slider:
-          viewControlItems[menuItem].hasSlider &&
-          viewControlItems[menuItem].initSliderValue,
+          viewControlCheckboxes[menuItem].initSliderValue &&
+          viewControlCheckboxes[menuItem].initSliderValue,
       };
     }
     return initState;
@@ -30,20 +33,32 @@ function ViewSettingsMenu() {
 
   // return the menu state to parent component
   useLayoutEffect(() => {
-  //  dispatch this menu state to the redux store
-    
+    //  dispatch this menu state to the redux store
+    dispatch(updateViewSettingsMenuState(viewSettingsMenuState));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menuState]);
+  }, [viewSettingsMenuState]);
 
-  const [sliderVal, setSliderVal] = useState(0);
+  const [sliderVal, setSliderVal] = useState({});
+  const updateSliderVal = (menuItem, val) => {
+    setSliderVal({ ...sliderVal, [menuItem]: val });
+
+    setViewSettingsMenuState({
+      ...viewSettingsMenuState,
+      [menuItem]: {
+        ...viewSettingsMenuState[menuItem],
+        slider: val,
+      },
+    });
+  };
 
   const handleButtonClicks = (thisButton) => {
-    setMenuState({
-      ...menuState,
+    setViewSettingsMenuState({
+      ...viewSettingsMenuState,
       VIEW_CONTROL_BUTTONS: thisButton,
     });
   };
 
+  // create a button group for the view control buttons
   const createButtons = (viewControlButtons) => {
     const buttonsArr = [];
     for (const thisButton in viewControlButtons) {
@@ -64,55 +79,50 @@ function ViewSettingsMenu() {
     const toggleListArr = [];
     for (const menuItem in menuItemList) {
       // check if we add slider to this menuItem
-      const hasSlider = menuItemList[menuItem].hasSlider;
-      //  check if this toggle is a layer that requires cityIO
-      // or it's visibility layer that we always show
-      if (!menuItemList[menuItem].cityIOmoduleName) {
-        toggleListArr.push(
-          <div key={Math.random()}>
-            <ListItem key={Math.random()}>
-              <Checkbox
-                key={Math.random()}
-                checked={menuState[menuItem] && menuState[menuItem].isOn}
-                name={menuItem}
-                onChange={(e) =>
-                  setMenuState({
-                    ...menuState,
-                    [menuItem]: {
-                      ...menuState[menuItem],
-                      isOn: e.target.checked,
-                    },
-                  })
-                }
-              />
+      const hasSlider = menuItemList[menuItem].initSliderValue;
 
-              <Typography variant={"caption"} key={Math.random()}>
-                {menuItemList[menuItem].displayName}
-              </Typography>
-            </ListItem>
-            {hasSlider && menuState[menuItem] && menuState[menuItem].isOn && (
-              <ListItem key={Math.random()}>
+      toggleListArr.push(
+        <div key={"viewSettingDiv_" + menuItem}>
+          <ListItem key={"viewSettingListItem_" + menuItem}>
+            <Checkbox
+              key={"viewSettingCheckBox_" + menuItem}
+              checked={
+                viewSettingsMenuState[menuItem] &&
+                viewSettingsMenuState[menuItem].isOn
+              }
+              name={menuItem}
+              onChange={(e) =>
+                setViewSettingsMenuState({
+                  ...viewSettingsMenuState,
+                  [menuItem]: {
+                    ...viewSettingsMenuState[menuItem],
+                    isOn: e.target.checked,
+                  },
+                })
+              }
+            />
+
+            <Typography
+              variant={"caption"}
+              key={"viewSettingCaption_" + menuItem}
+            >
+              {menuItemList[menuItem].displayName}
+            </Typography>
+          </ListItem>
+          {hasSlider &&
+            viewSettingsMenuState[menuItem] &&
+            viewSettingsMenuState[menuItem].isOn && (
+              <ListItem key={"viewSettingListItemSlider_" + menuItem}>
                 <Slider
-                  key={Math.random()}
-                  value={sliderVal.value}
+                  size="small"
+                  key={"viewSettingSlider_" + menuItem}
                   valueLabelDisplay="auto"
-                  // ! pass both val and name of slider to keep it between updates
-                  onChange={(e, val) => setSliderVal({ [menuItem]: val })}
-                  onMouseUp={(e, val) =>
-                    setMenuState({
-                      ...menuState,
-                      [menuItem]: {
-                        ...menuState[menuItem],
-                        slider: sliderVal[menuItem],
-                      },
-                    })
-                  }
+                  onChangeCommitted={(_, val) => updateSliderVal(menuItem, val)}
                 />
               </ListItem>
             )}
-          </div>
-        );
-      }
+        </div>
+      );
     }
     return toggleListArr;
   };
@@ -120,7 +130,7 @@ function ViewSettingsMenu() {
   return (
     <List>
       {createButtons(viewControlButtons)}
-      {createCheckboxes(viewControlItems)}
+      {createCheckboxes(viewControlCheckboxes)}
     </List>
   );
 }

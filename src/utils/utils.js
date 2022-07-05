@@ -40,7 +40,7 @@ export const testHex = (hexString) => {
  * than returns a redux state
  * with grid edits payload
  */
-export const _postMapEditsToCityIO = (data, tableName, endPoint) => {
+export const postMapEditsToCityIO = (data, tableName, endPoint) => {
   let postURL = settings.cityIO.baseURL + tableName + endPoint;
 
   const options = {

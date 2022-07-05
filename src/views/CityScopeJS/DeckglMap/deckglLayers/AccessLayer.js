@@ -9,12 +9,11 @@ export default function AccessLayer({ data, opacity }) {
     [253, 199, 12],
     [255, 243, 59],
   ];
-  return new HeatmapLayer({
-    // opacity,
-    id: "ACCESS",
+   return new HeatmapLayer({
+     id: "ACCESS",
     colorRange: colors,
-    radiusPixels: 500 * opacity,
-    threshold: 0.5,
+    intensity:  opacity ,
+    threshold: 0.05,
     data: accessData && accessData,
     getPosition: (d) => d.geometry.coordinates,
     getWeight: (d) => d.properties[0],
