@@ -40,6 +40,7 @@ lightingEffect.shadowColor = [0, 0, 0, 1];
 export default function DeckGLMap() {
   // get cityio data from redux store
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
+
   // get menu state from redux store
   const menuState = useSelector((state) => state.menuState);
 
@@ -50,7 +51,7 @@ export default function DeckGLMap() {
   const [mousePos, setMousePos] = useState();
   const [mouseDown, setMouseDown] = useState();
   const [hoveredObj, setHoveredObj] = useState();
-  const [GEOGRID, setGEOGRID] = useState();
+  const [GEOGRIDDATA, setGEOGRIDDATA] = useState();
   const deckGLref = useRef();
   const pickingRadius = 40;
   const shadowsToggle = menuState.viewSettingsMenuState.SHADOWS_CHECKBOX;
@@ -105,16 +106,16 @@ export default function DeckGLMap() {
 
   // update the grid layer with every change to GEOGRIDDATA
   useEffect(() => {
-    setGEOGRID(proccessGridData(cityIOdata));
+    setGEOGRIDDATA(proccessGridData(cityIOdata));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityIOdata.GEOGRIDDATA]);
 
   // post GEOGRIDDATA changes to cityIO
   useEffect(() => {
-    if (!editModeToggle && GEOGRID) {
+    if (!editModeToggle && GEOGRIDDATA) {
       let dataProps = [];
-      for (let i = 0; i < GEOGRID.features.length; i++) {
-        dataProps[i] = GEOGRID.features[i].properties;
+      for (let i = 0; i < GEOGRIDDATA.features.length; i++) {
+        dataProps[i] = GEOGRIDDATA.features[i].properties;
       }
       postMapEditsToCityIO(dataProps, cityIOdata.tableName, "/GEOGRIDDATA/");
     }
@@ -147,7 +148,7 @@ export default function DeckGLMap() {
         layersMenu.AGGREGATED_TRIPS_LAYER_CHECKBOX.slider * 0.01,
     }),
     GRID: GridLayer({
-      data: GEOGRID,
+      data: GEOGRIDDATA,
       editOn: editModeToggle,
       state: {
         selectedType,
@@ -175,7 +176,7 @@ export default function DeckGLMap() {
     }),
     TEXTUAL: TextualLayer({
       data: cityIOdata,
-      coordinates: GEOGRID && GEOGRID,
+      coordinates: GEOGRIDDATA && GEOGRIDDATA,
     }),
 
     GEOJSON: GeojsonLayer({

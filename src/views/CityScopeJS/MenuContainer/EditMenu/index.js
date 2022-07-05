@@ -2,7 +2,7 @@ import { Button, Typography } from "@mui/material";
 import { updateEditMenuState } from "../../../../redux/reducers/menuSlice";
 import EditIcon from "@mui/icons-material/Edit";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 export default function EditMenu() {
@@ -17,8 +17,10 @@ export default function EditMenu() {
     });
   };
 
-  // dispatch the edit menu state to the redux store
-  dispatch(updateEditMenuState(editMenu));
+  useEffect(() => {
+    // dispatch the edit menu state to the redux store
+    dispatch(updateEditMenuState(editMenu));
+  }, [editMenu]);
 
   return (
     <Button
@@ -33,5 +35,3 @@ export default function EditMenu() {
     </Button>
   );
 }
-
-

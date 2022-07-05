@@ -10,7 +10,7 @@ export default function PaintBrushContainer({
   hoveredObj,
 }) {
   const BrushSelector = () => {
-    if (editOn && Object.keys(selectedType).length && hoveredObj) {
+    if (editOn && selectedType&& Object.keys(selectedType).length && hoveredObj) {
       return (
         <PaintBrush
           mousePos={mousePos}

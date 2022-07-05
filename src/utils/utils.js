@@ -55,7 +55,7 @@ export const postMapEditsToCityIO = (data, tableName, endPoint) => {
   axios(options)
     .then((res) => {
       if (res.data.status === "ok") {
-        console.log("--> cityIO is updated! <--");
+        console.log(`--> cityIO endpoint ${postURL} was updated <--`);
       }
     })
     .catch((error) => {

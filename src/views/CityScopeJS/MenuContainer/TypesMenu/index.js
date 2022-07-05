@@ -26,8 +26,6 @@ export default function TypesListMenu() {
 
   const handleListItemClick = (typeProps, thisTypeName) => {
     typeProps = { ...typeProps, thisTypeName: thisTypeName };
-
-    // ! injects the type name into the attributes themselves
     if (typeHeight && typeProps.height) {
       typeProps = { ...typeProps, height: typeHeight };
     }

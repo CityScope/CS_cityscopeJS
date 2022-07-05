@@ -26,8 +26,7 @@ const removeElement = (array, elem) => {
 
 const CityIO = (props) => {
   const dispatch = useDispatch();
-  const cityIOdata = useSelector((state) => state.cityIOdata);
-
+  const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const { tableName } = props;
 
   const [mainHash, setMainHash] = useState(null);
@@ -97,24 +96,22 @@ const CityIO = (props) => {
       setListLoadingModules(loadingModules);
     });
 
-    // get all modules data
-    // setLoadingModules(modulesToUpdate)
-    const modules = await Promise.all(promises);
+    // GET all modules data
+    const modulesFromCityIO = await Promise.all(promises);
     setHashes(newHashes);
 
     // update cityio object with modules data
-    const modulesData = modulesToUpdate.reduce((obj, k, i) => {
-      if (modules[i]) {
-        setListLoadingModules(removeElement(listLoadingModules, k));
+    const modulesData = modulesToUpdate.reduce((obj, moduleName, index) => {
+      // if this module has data
+      if (modulesFromCityIO[index]) {
+        setListLoadingModules(removeElement(listLoadingModules, moduleName));
 
-        return { ...obj, [k]: modules[i] };
+        return { ...obj, [moduleName]: modulesFromCityIO[index] };
       } else {
         return obj;
       }
     }, cityIOdata);
-
     modulesData.tableName = tableName;
-
     dispatch(updateCityIOdata(modulesData));
     console.log("--- done updating from cityIO ---");
     dispatch(toggleCityIOisDone(true));
