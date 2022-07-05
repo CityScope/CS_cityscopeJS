@@ -142,8 +142,8 @@ export default function GridLayer({
       getElevation: selectedCellsState,
     },
     transitions: {
-      getFillColor: 500,
-      getElevation: 500,
+      getFillColor: 300,
+      getElevation: 300,
     },
   });
 }
