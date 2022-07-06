@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import PaintBrush from "./components/PaintBrush";
-import { postMapEditsToCityIO } from "../../../utils/utils";
+import { postToCityIO } from "../../../utils/utils";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -117,7 +117,7 @@ export default function DeckGLMap() {
       for (let i = 0; i < GEOGRIDDATA.features.length; i++) {
         dataProps[i] = GEOGRIDDATA.features[i].properties;
       }
-      postMapEditsToCityIO(dataProps, cityIOdata.tableName, "/GEOGRIDDATA/");
+      postToCityIO(dataProps, cityIOdata.tableName, "/GEOGRIDDATA/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editModeToggle]);
@@ -235,7 +235,7 @@ export default function DeckGLMap() {
           pickingRadius={pickingRadius}
           mouseDown={mouseDown}
           hoveredObj={hoveredObj}
-        /> 
+        />
 
         <DeckGL
           ref={deckGLref}

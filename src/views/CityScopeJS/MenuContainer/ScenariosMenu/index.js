@@ -1,11 +1,22 @@
 import { useEffect, useState } from "react";
-import settings from "../../../../settings/settings.json";
-import { Typography, ListItem, Button, List } from "@mui/material";
 import { useSelector } from "react-redux";
-import IconButton from "@mui/material/IconButton";
+import settings from "../../../../settings/settings.json";
+import {
+  Typography,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  ListItem,
+  Button,
+  List,
+  Dialog,
+  IconButton,
+  Tooltip,
+  Badge,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Badge from "@mui/material/Badge";
-import Tooltip from "@mui/material/Tooltip";
+import { postToCityIO } from "../../../../utils/utils";
 
 /** data structure for scenario list
 [
@@ -25,6 +36,7 @@ import Tooltip from "@mui/material/Tooltip";
 export default function ScenariosMenu() {
   const cityIObaseURL = settings.cityIO.baseURL;
   const [scenariosButtonsList, setScenariosButtonsList] = useState([]);
+  const [dialogOpenState, setDialogOpenState] = useState(false);
   // set historical states to be displayed in the menu
   const [historicalHashes, setHistoricalHashes] = useState([]);
   // get cityIO data from redux store
@@ -33,6 +45,14 @@ export default function ScenariosMenu() {
   const cityIOtableName = useSelector(
     (state) => state.cityIOdataState.cityIOtableName
   );
+
+  const handleClose = () => {
+    setDialogOpenState(false);
+  };
+
+  const handleOpenDialog = () => {
+    setDialogOpenState(true);
+  };
 
   const fetchJSON = async (url, options) => {
     const response = await fetch(url, options);
@@ -44,32 +64,13 @@ export default function ScenariosMenu() {
       return { parent: c.parent, meta: c };
     });
 
-  const postScenarios = async (tableName, data) => {
-    const response = await fetch(
-      `${cityIObaseURL}table/${tableName}/scenarios/`,
-      {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    let json_data;
-    try {
-      json_data = await response.json();
-    } catch (error) {
-      return "wasn't a json data";
-    }
-    return json_data;
-  };
-
   const getTableID = async (tableName) =>
     await fetchJSON(`${cityIObaseURL}table/${tableName}/meta/id/`);
 
-  async function getLastState() {
+  async function createUndoButton() {
     await getTableID(cityIOtableName)
       .then((id) => getTablePrevCommitHash(id))
       .then((prevCommitHash) => {
-        console.log(prevCommitHash);
         let undoButton = (
           <Button
             size="small"
@@ -77,31 +78,12 @@ export default function ScenariosMenu() {
             variant="outlined"
             onClick={() => {}}
           >
-            <Typography>Undo</Typography>
-
             <Typography variant="caption">
-              {prevCommitHash.meta.timestamp}
+              Go back to Last commit: {prevCommitHash.meta.timestamp}
             </Typography>
           </Button>
         );
-        // for (let i = 0; i < 10; i++) {
-        //   tempHash = await getTablePrevCommitHash(tempHash).then((c) => {
-        //    return c.parent;
-        //   });
-        //   console.log("tempHash", tempHash);
-        //   historicalHashes.push(
-        //     <Button
-        //       size="small"
-        //       key={"past_commit_button_" + i}
-        //       variant="outlined"
-        //       onClick={() => {}}
-        //     >
-        //       <Typography variant="caption">
-        //         {tempHash.substring(0, 10) + `...`}
-        //       </Typography>
-        //     </Button>
-        //   );
-        // }
+
         setHistoricalHashes(undoButton);
       });
   }
@@ -111,12 +93,12 @@ export default function ScenariosMenu() {
       const newScenario = {
         name: `${id}`,
         hash: id,
-        description: "this is ${id} description",
+        description: `this is ${id} description`,
       };
       const tempArr = cityIOdata.scenarios ? [...cityIOdata.scenarios] : [];
 
       tempArr.push(newScenario);
-      postScenarios(cityIOtableName, tempArr);
+      postToCityIO(tempArr, cityIOtableName, `/scenarios/`);
     });
   };
 
@@ -134,14 +116,11 @@ export default function ScenariosMenu() {
       tempArr.splice(index, 1);
     }
     // post the new array to the server
-    postScenarios(cityIOtableName, tempArr);
+    postToCityIO(tempArr, cityIOtableName, `/scenarios/`);
   };
 
-  useEffect(() => {
-    getLastState();
-
-    if (!cityIOdata.scenarios) return;
-    const scenariosButtons = cityIOdata.scenarios.map((scenario, i) => {
+  const createScenariosButtons = () => {
+    const scenariosButtons =cityIOdata.scenarios.map((scenario, i) => {
       return (
         <ListItem key={`scenario_li_${i}`}>
           <Tooltip
@@ -154,7 +133,7 @@ export default function ScenariosMenu() {
               size="small"
               key={"scenario_button_" + i}
               variant="outlined"
-              onClick={() => {}}
+              onClick={() => handleOpenDialog()}
             >
               <Typography variant="caption">
                 {scenario.name.substring(0, 10) + `...`}
@@ -179,31 +158,56 @@ export default function ScenariosMenu() {
         </ListItem>
       );
     });
+    return scenariosButtons
+  };
 
+  useEffect(() => {
+    createUndoButton();
+
+    if (!cityIOdata.scenarios) return;
+    const scenariosButtons = createScenariosButtons();
     setScenariosButtonsList(scenariosButtons);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityIOdata]);
 
   return (
-    <List>
-      <ListItem>
-        <Badge
-          badgeContent={
-            (cityIOdata.scenarios && cityIOdata.scenarios.length) || 0
-          }
-          color="primary"
-        >
-          <Button
-            key={"save_state_button"}
-            variant="outlined"
-            onClick={handleSaveThisState}
+    <>
+      <Dialog open={dialogOpenState} onClose={handleClose}>
+        <DialogTitle id="alert-dialog-title">
+          {"Revert to saved scenario?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            You can revert to this saved scenario by clicking the button below.
+            Reverting will delete all changes made since the last commit.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button autoFocus>Revert</Button>
+        </DialogActions>
+      </Dialog>
+      {/*  */}
+      <List>
+        <ListItem>
+          <Badge
+            badgeContent={
+              (cityIOdata.scenarios && cityIOdata.scenarios.length) || 0
+            }
+            color="primary"
           >
-            <Typography variant="caption">Save This Scenario</Typography>
-          </Button>
-        </Badge>
-      </ListItem>
-      <List sx={{ width: "100%" }}>{scenariosButtonsList}</List>
-      {historicalHashes}
-    </List>
+            <Button
+              key={"save_state_button"}
+              variant="outlined"
+              onClick={handleSaveThisState}
+            >
+              <Typography variant="caption">Save This Scenario</Typography>
+            </Button>
+          </Badge>
+        </ListItem>
+        <List sx={{ width: "100%" }}>{scenariosButtonsList}</List>
+        {historicalHashes}
+      </List>
+    </>
   );
 }
