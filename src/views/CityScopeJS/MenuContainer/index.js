@@ -2,6 +2,7 @@ import { List, ListItem } from "@mui/material";
 import TypesMenu from "./TypesMenu";
 import LayersMenu from "./LayersMenu";
 import ViewSettingsMenu from "./ViewSettingsMenu";
+import ScenariosMenu from "./ScenariosMenu";
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 
@@ -29,6 +30,9 @@ function MenuContainer() {
           <TypesMenu />
           <ListItem>
             <LayersMenu />
+          </ListItem>
+          <ListItem>
+            <ScenariosMenu />
           </ListItem>
           <ListItem>
             <ViewSettingsMenu />

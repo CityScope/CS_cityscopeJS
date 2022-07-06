@@ -13,8 +13,8 @@ export default function CSjsMain() {
       {cityIOisDone && (
         <>
           <MenuContainer />
-          <DeckGLMap />
-          <VisContainer />
+          {/* <DeckGLMap /> */}
+          {/* <VisContainer /> */}
         </>
       )}
     </>

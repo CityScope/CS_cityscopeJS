@@ -6,15 +6,7 @@ import {
   toggleCityIOisDone,
 } from "../../../redux/reducers/cityIOdataSlice";
 import { useSelector, useDispatch } from "react-redux";
-
-const getAPICall = async (URL) => {
-  try {
-    const response = await axios.get(URL);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-  }
-};
+import { getAPICall } from "../../../utils/utils";
 
 const removeElement = (array, elem) => {
   var index = array.indexOf(elem);
@@ -32,7 +24,7 @@ const CityIO = (props) => {
   const [mainHash, setMainHash] = useState(null);
   const [hashes, setHashes] = useState({});
   const [listLoadingModules, setListLoadingModules] = useState([]);
-  const cityioURL = `${settings.cityIO.baseURL}${tableName}/`;
+  const cityioURL = `${settings.cityIO.baseURL}table/${tableName}/`;
 
   /**
    * start fetching API hashes to check for new data
@@ -66,6 +58,7 @@ const CityIO = (props) => {
     }
     // if we have a new hash, start getting submodules
     getModules();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainHash]);
 
@@ -101,7 +94,7 @@ const CityIO = (props) => {
     setHashes(newHashes);
 
     // update cityio object with modules data
-    const modulesData = modulesToUpdate.reduce((obj, moduleName, index) => {
+    let modulesData = modulesToUpdate.reduce((obj, moduleName, index) => {
       // if this module has data
       if (modulesFromCityIO[index]) {
         setListLoadingModules(removeElement(listLoadingModules, moduleName));

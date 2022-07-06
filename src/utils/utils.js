@@ -2,6 +2,19 @@ import axios from "axios";
 import settings from "../settings/settings.json";
 
 /**
+ * Get API call using axios
+ */
+
+export const getAPICall = async (URL) => {
+  try {
+    const response = await axios.get(URL);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+/**
  * convert rgb to hex
  */
 export function rgbToHex(r, g, b) {
@@ -41,7 +54,7 @@ export const testHex = (hexString) => {
  * with grid edits payload
  */
 export const postMapEditsToCityIO = (data, tableName, endPoint) => {
-  let postURL = settings.cityIO.baseURL + tableName + endPoint;
+  let postURL = settings.cityIO.baseURL + "table/" + tableName + endPoint;
 
   const options = {
     method: "post",
@@ -68,7 +81,7 @@ export const getScenarioIndices = (
   setScenarioNames,
   setLoadingState
 ) => {
-  var url = `${settings.cityIO.baseURL}${tableName}/meta/hashes`;
+  var url = `${settings.cityIO.baseURL}table/${tableName}/meta/hashes`;
   axios
     .get(url)
     .then((res) => {
@@ -98,6 +111,6 @@ export const getScenarioIndices = (
 };
 
 export const getScenarioName = (tableName, id) => {
-  const url = `${settings.cityIO.baseURL}${tableName}/scenarios${id}/info/`;
+  const url = `${settings.cityIO.baseURL}table/${tableName}/scenarios${id}/info/`;
   return axios.get(url);
 };

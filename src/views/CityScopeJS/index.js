@@ -3,9 +3,11 @@ import CityIO from "./CityIO";
 import CityIOviewer from "../CityIOviewer";
 import CSjsMain from "./CSjsMain";
 import LoadingSpinner from "../../Components/LoadingSpinner";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateCityIOtableName } from "../../redux/reducers/cityIOdataSlice";
 
 export default function CityScopeJS() {
+  const dispatch = useDispatch();
   // get the table name for cityIO comp
   // const testTableName = "corktown";
   // const testTableName = "tanthuan_a0b0c1d0";
@@ -15,16 +17,18 @@ export default function CityScopeJS() {
   useEffect(() => {
     let url = window.location.toString();
     let pre = "cityscope=";
-    let cityscopePrjName = url
+    let cityIOtableName = url
       .substring(url.indexOf(pre) + pre.length)
       .toLowerCase();
 
     // check URL for proper CS project link
-    if (url.indexOf(pre) !== -1 && cityscopePrjName.length > 0) {
-      setTableName(cityscopePrjName);
+    if (url.indexOf(pre) !== -1 && cityIOtableName.length > 0) {
+      setTableName(cityIOtableName);
+      dispatch(updateCityIOtableName(cityIOtableName));
     } else {
       setCityIOviewer(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [loadingModules, setLoadingModules] = useState([]);
