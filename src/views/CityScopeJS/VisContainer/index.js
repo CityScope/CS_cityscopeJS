@@ -1,37 +1,20 @@
-import React from "react";
-import { List, ListItem, Drawer, Box } from "@mui/material";
-import Radar from "./Radar";
-import BarChart from "./BarChart";
-import AreaCalc from "./AreaCalc";
+import { List, ListItem } from "@mui/material";
+import RadarChart from "./RadarChart";
+// import BarChart from "./BarChart";
+// import AreaCalc from "./AreaCalc";
+import ResizableDrawer from "./ResizableDrawer";
 
 function VisContainer() {
   return (
-    <Drawer
-      anchor={"right"}
-      open={true}
-      variant="persistent"
-      ModalProps={{
-        keepMounted: true,
-      }}
-    >
-      <Box
-        sx={{
-          width: 200,
-        }}
-      >
-        <List>
-          <ListItem>
-            {/* <AreaCalc /> */}
-          </ListItem>
-          <ListItem>
-            {/* <Radar /> */}
-          </ListItem>
-          <ListItem>
-            {/* <BarChart /> */}
-          </ListItem>
-        </List>
-      </Box>
-    </Drawer>
+    <ResizableDrawer>
+      <List>
+        <ListItem>{/* <AreaCalc /> */}</ListItem>
+        <ListItem>
+          <RadarChart />
+        </ListItem>
+        <ListItem>{/* <BarChart /> */}</ListItem>
+      </List>
+    </ResizableDrawer>
   );
 }
 

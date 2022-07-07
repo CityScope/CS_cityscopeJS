@@ -75,3 +75,27 @@ export const postToCityIO = (data, tableName, endPoint) => {
       console.log("ERROR:", error);
     });
 };
+
+const cityIObaseURL = settings.cityIO.baseURL;
+
+export const fetchJSON = async (url, options) => {
+  const response = await fetch(url, options);
+  const data = await response.json();
+  return data;
+};
+
+export const getTablePrevCommitHash = async (id) =>
+  await fetchJSON(`${cityIObaseURL}commit/${id}/`).then((c) => {
+    return { parent: c.parent, meta: c };
+  });
+
+export const getTableID = async (tableName) =>
+  await fetchJSON(
+    `${cityIObaseURL}table/${tableName}/meta/hashes/GEOGRIDDATA/`
+  );
+
+export const getCommit = async (id) =>
+  await fetchJSON(`${cityIObaseURL}commit/${id}/`);
+
+export const getModule = async (id) =>
+  await fetchJSON(`${cityIObaseURL}module/${id}/`);
