@@ -62,10 +62,14 @@ export default function ResizableDrawer({ children }) {
             top: "50%",
             bottom: 0,
             zIndex: 1000,
+            height: "25px",
+            left: "-15px",
+            width: "25px",
+            fontSize: 5,
           }}
         >
-          <Avatar >
-            <CompareArrowsIcon />
+          <Avatar sx={{ height: "25px", width: "25px" }}>
+            <CompareArrowsIcon sx={{ height: "20px", width: "20px" }} />
           </Avatar>
         </Button>
       </Box>
