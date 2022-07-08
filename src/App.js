@@ -1,6 +1,5 @@
 import CityScopeJS from "./views/CityScopeJS";
 import { CssBaseline } from "@mui/material/";
-import React from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 

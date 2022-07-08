@@ -97,7 +97,7 @@ export default function TypesListMenu() {
 
       {selectedType && (
         <ListItem>
-          <Card>
+          <Card  sx={{width: '100%'}}>
             <CardContent>
               <Typography variant="h5">{selectedType.thisTypeName}</Typography>
               {description && (

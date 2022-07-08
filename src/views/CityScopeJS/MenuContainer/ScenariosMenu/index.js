@@ -150,6 +150,29 @@ export default function ScenariosMenu() {
 
   return (
     <>
+      {/*  */}
+      <List>
+        <ListItem >
+          <Badge
+            sx={{ width: "100%" }}
+            badgeContent={
+              (cityIOdata.scenarios && cityIOdata.scenarios.length) || 0
+            }
+            color="primary"
+          >
+            <Button
+              fullWidth={true}
+              key={"save_state_button"}
+              variant="outlined"
+              onClick={handleSaveThisState}
+            >
+              <Typography variant="caption">Save This Scenario</Typography>
+            </Button>
+          </Badge>
+        </ListItem>
+        <List>{scenariosButtonsList}</List>
+      </List>
+      {/*  */}
       <Dialog open={dialogOpenState} onClose={handleClose}>
         <DialogTitle id="alert-dialog-title">
           {"Revert to saved scenario?"}
@@ -167,27 +190,6 @@ export default function ScenariosMenu() {
           </Button>
         </DialogActions>
       </Dialog>
-      {/*  */}
-      <List>
-        <ListItem>
-          <Badge
-            badgeContent={
-              (cityIOdata.scenarios && cityIOdata.scenarios.length) || 0
-            }
-            color="primary"
-          >
-            <Button
-              fullWidth
-              key={"save_state_button"}
-              variant="outlined"
-              onClick={handleSaveThisState}
-            >
-              <Typography variant="caption">Save This Scenario</Typography>
-            </Button>
-          </Badge>
-        </ListItem>
-        <List>{scenariosButtonsList}</List>
-      </List>
     </>
   );
 }

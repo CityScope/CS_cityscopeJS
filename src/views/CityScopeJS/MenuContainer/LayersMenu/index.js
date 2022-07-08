@@ -55,42 +55,48 @@ function LayersMenu() {
       // if the module name is in the data for this CS instance, make a checkbox
       if (cityIOkeys.includes(moduleName)) {
         toggleListArr.push(
-          <ListItem key={"listItem_" + menuItem}>
-            <FormControlLabel
-              key={"formControl_" + menuItem}
-              control={
-                <Checkbox
-                  checked={
-                    layersMenuState[menuItem] && layersMenuState[menuItem].isOn
-                  }
-                  key={"checkbox_" + menuItem}
-                  color="primary"
-                  onChange={(e) =>
-                    setLayersMenuState({
-                      ...layersMenuState,
-                      [menuItem]: {
-                        ...layersMenuState[menuItem],
-                        isOn: e.target.checked,
-                      },
-                    })
-                  }
-                />
-              }
-              label={
-                <Typography variant="caption" key={"label_" + menuItem}>
-                  {expectedLayers[menuItem].displayName}
-                </Typography>
-              }
-            />
-            {/* and make a slider  */}
-            <Slider
-              size="small"
-              key={"slider_" + menuItem}
-              // value={sliderVal[menuItem]}
-              valueLabelDisplay="auto"
-              onChangeCommitted={(_, val) => updateSliderVal(menuItem, val)}
-            />
-          </ListItem>
+          <div key={menuItem}>
+            <ListItem key={"listItem_" + menuItem}>
+              <FormControlLabel
+                key={"formControl_" + menuItem}
+                control={
+                  <Checkbox
+                    checked={
+                      layersMenuState[menuItem] &&
+                      layersMenuState[menuItem].isOn
+                    }
+                    key={"checkbox_" + menuItem}
+                    color="primary"
+                    onChange={(e) =>
+                      setLayersMenuState({
+                        ...layersMenuState,
+                        [menuItem]: {
+                          ...layersMenuState[menuItem],
+                          isOn: e.target.checked,
+                        },
+                      })
+                    }
+                  />
+                }
+                label={
+                  <Typography variant="caption" key={"label_" + menuItem}>
+                    {expectedLayers[menuItem].displayName}
+                  </Typography>
+                }
+              />
+            </ListItem>
+
+            <ListItem key={"slider_" + menuItem}>
+              {/* and make a slider  */}
+              <Slider
+                size="small"
+                key={"slider_" + menuItem}
+                // value={sliderVal[menuItem]}
+                valueLabelDisplay="auto"
+                onChangeCommitted={(_, val) => updateSliderVal(menuItem, val)}
+              />
+            </ListItem>
+          </div>
         );
       }
     }
