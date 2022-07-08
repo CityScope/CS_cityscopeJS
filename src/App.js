@@ -1,18 +1,13 @@
 import CityScopeJS from "./views/CityScopeJS";
 import { CssBaseline } from "@mui/material/";
 import React from "react";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./theme";
 
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
 
 const App = () => {
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <CityScopeJS />
     </ThemeProvider>

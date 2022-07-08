@@ -1,6 +1,6 @@
 const typography = {
     fontFamily: `"Roboto Mono", sans-serif`,
-    fontSize: 10,
+    fontSize: 11,
     fontWeightLight: 100,
     fontWeightRegular: 500,
     fontWeightMedium: 700,
