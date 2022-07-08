@@ -11,6 +11,26 @@ import { Radar } from "react-chartjs-2";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
+const options = {
+  scales: {
+    r: {
+      angleLines: {
+        color: "#696969",
+      },
+      grid: {
+        color: "#696969",
+        circular: true,
+      },
+      pointLabels: {
+        color: "#C0C0C0",
+      },
+      ticks: {
+        color: "#696969",
+      },
+    },
+  },
+};
+
 export default function RadarChart() {
   ChartJS.register(
     RadialLinearScale,
@@ -55,35 +75,12 @@ export default function RadarChart() {
     return radarData;
   };
 
-  const options = {
-    title: {
-      display: true,
-      text: "Chart Title",
-    },
-    scales: {
-      r: {
-        angleLines: {
-          color: "#696969",
-        },
-        grid: {
-          color: "#696969",
-          circular: true,
-        },
-        pointLabels: {
-          color: "#C0C0C0",
-        },
-        ticks: {
-          color: "#696969",
-        },
-      },
-    },
-  };
-
   useEffect(() => {
     if (!cityIOdata.indicators) return;
-    console.log("cityIOdata.indicators", cityIOdata.indicators);
     const d = createRadarData(cityIOdata.indicators);
     setRadarData(d);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [cityIOdata]);
 
   return (

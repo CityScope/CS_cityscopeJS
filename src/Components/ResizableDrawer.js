@@ -1,15 +1,15 @@
 import { useState, useCallback } from "react";
-import { Drawer, Box, Button } from "@mui/material";
-import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
-import Avatar from "@mui/material/Avatar";
+import { Drawer, Box } from "@mui/material";
 
-export const defaultDrawerWidth = 200;
-const minDrawerWidth = 100;
+const dividerWidth = 4;
 const maxDrawerWidth =
   Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) -
-  10;
+  1;
 
-export default function ResizableDrawer({ children }) {
+export const defaultDrawerWidth = Math.floor(maxDrawerWidth / 3);
+const minDrawerWidth = 50;
+
+export default function ResizableDrawer({ children, direction }) {
   const [drawerWidth, setDrawerWidth] = useState(defaultDrawerWidth);
 
   const handleMouseDown = (e) => {
@@ -23,8 +23,14 @@ export default function ResizableDrawer({ children }) {
   };
 
   const handleMouseMove = useCallback((e) => {
-    const newWidth =
-      document.body.offsetLeft + document.body.offsetWidth - e.clientX + 20;
+    let newWidth = null;
+
+    if (direction === "right") {
+      newWidth =
+        document.body.offsetLeft + document.body.offsetWidth - e.clientX + 20;
+    } else {
+      newWidth = document.body.offsetLeft + e.clientX + 20;
+    }
     if (newWidth > minDrawerWidth && newWidth < maxDrawerWidth) {
       setDrawerWidth(newWidth);
     }
@@ -32,47 +38,32 @@ export default function ResizableDrawer({ children }) {
 
   return (
     <Drawer
-      anchor={"right"}
+      onMouseDown={(e) => handleMouseDown(e)}
+      anchor={direction}
       open={true}
       variant="persistent"
       ModalProps={{
         keepMounted: true,
       }}
-      PaperProps={{ style: { width: drawerWidth } }}
+     
     >
       <Box
         onMouseDown={(e) => handleMouseDown(e)}
         sx={{
-          width: "3px",
+          height: "100%",
+          width: `${dividerWidth}px`,
           padding: "4px 0 0",
           position: "absolute",
           top: 0,
-          left: 0,
+          left: direction === "left" ? { drawerWidth } : undefined,
+          right: direction === "right" ? undefined : "0",
+
           bottom: 0,
           zIndex: 1000,
           cursor: "ew-resize",
           backgroundColor: "gray",
         }}
-      >
-        <Button
-          size="small"
-          sx={{
-            cursor: "ew-resize",
-            position: "relative",
-            top: "50%",
-            bottom: 0,
-            zIndex: 1000,
-            height: "25px",
-            left: "-15px",
-            width: "25px",
-            fontSize: 5,
-          }}
-        >
-          <Avatar sx={{ height: "25px", width: "25px" }}>
-            <CompareArrowsIcon sx={{ height: "20px", width: "20px" }} />
-          </Avatar>
-        </Button>
-      </Box>
+      ></Box>
       {children}
     </Drawer>
   );

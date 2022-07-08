@@ -3,43 +3,30 @@ import TypesMenu from "./TypesMenu";
 import LayersMenu from "./LayersMenu";
 import ViewSettingsMenu from "./ViewSettingsMenu";
 import ScenariosMenu from "./ScenariosMenu";
-import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
+import ResizableDrawer from "../../../Components/ResizableDrawer";
 
 import EditMenu from "./EditMenu";
 
 function MenuContainer() {
   return (
-    <Drawer
-      anchor={"left"}
-      open={true}
-      variant="persistent"
-      ModalProps={{
-        keepMounted: true,
-      }}
-    >
-      <Box
-        sx={{
-          width: 300,
-        }}
-      >
-        <List>
-          <ListItem>
-            <EditMenu />
-          </ListItem>
-          <TypesMenu />
-          <ListItem>
-            <LayersMenu />
-          </ListItem>
-          <ListItem>
-            <ScenariosMenu />
-          </ListItem>
-          <ListItem>
-            <ViewSettingsMenu />
-          </ListItem>
-        </List>
-      </Box>
-    </Drawer>
+    <ResizableDrawer direction="left">
+      <List>
+        <ListItem>
+          <EditMenu />
+        </ListItem>
+        <TypesMenu />
+        <ListItem>
+          <LayersMenu />
+        </ListItem>
+        <ListItem>
+          <ScenariosMenu />
+        </ListItem>
+        <ListItem>
+          <ViewSettingsMenu />
+        </ListItem>
+      </List>
+    </ResizableDrawer>
   );
 }
 
