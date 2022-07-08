@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { Drawer, Box } from "@mui/material";
 
-const dividerWidth = 4;
+const dividerWidth = 5;
 const maxDrawerWidth =
   Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) -
   1;
@@ -34,31 +34,29 @@ export default function ResizableDrawer({ children, direction }) {
     if (newWidth > minDrawerWidth && newWidth < maxDrawerWidth) {
       setDrawerWidth(newWidth);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Drawer
-      onMouseDown={(e) => handleMouseDown(e)}
       anchor={direction}
       open={true}
       variant="persistent"
       ModalProps={{
         keepMounted: true,
       }}
-     
+      PaperProps={{ style: { width: drawerWidth } }}
+      sx={{ display: "flex", flexDirection: "column" }}
     >
       <Box
         onMouseDown={(e) => handleMouseDown(e)}
         sx={{
-          height: "100%",
           width: `${dividerWidth}px`,
-          padding: "4px 0 0",
+          padding: dividerWidth + "px 0 0",
           position: "absolute",
-          top: 0,
+          height: "100vh",
           left: direction === "left" ? { drawerWidth } : undefined,
           right: direction === "right" ? undefined : "0",
-
-          bottom: 0,
           zIndex: 1000,
           cursor: "ew-resize",
           backgroundColor: "gray",

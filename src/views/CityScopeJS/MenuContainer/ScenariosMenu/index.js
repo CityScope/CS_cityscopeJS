@@ -107,6 +107,7 @@ export default function ScenariosMenu() {
             title={scenario.description || `No description`}
           >
             <Button
+              fullWidth
               size="small"
               key={"scenario_button_" + i}
               variant="outlined"
@@ -176,6 +177,7 @@ export default function ScenariosMenu() {
             color="primary"
           >
             <Button
+              fullWidth
               key={"save_state_button"}
               variant="outlined"
               onClick={handleSaveThisState}
@@ -184,7 +186,7 @@ export default function ScenariosMenu() {
             </Button>
           </Badge>
         </ListItem>
-        <List sx={{ width: "100%" }}>{scenariosButtonsList}</List>
+        <List>{scenariosButtonsList}</List>
       </List>
     </>
   );

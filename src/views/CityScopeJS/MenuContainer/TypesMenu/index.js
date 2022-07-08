@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  Stack,
   Slider,
   Card,
   Typography,
@@ -67,35 +66,34 @@ export default function TypesListMenu() {
       }
       // check if this type has height prop
       listMenuItemsArray.push(
-        <Button
-          size="small"
-          key={Math.random()}
-          variant="outlined"
-          sx={{
-            "&.MuiButton-text": { color: { col } },
-            border:
-              selectedType && selectedType.thisTypeName === thisType
-                ? "solid 1px " + col
-                : "dashed 1px " + col,
-          }}
-          onClick={() => handleListItemClick(typesList[thisType], thisType)}
-        >
-          <Typography color={col} variant="caption">
-            {thisType}
-          </Typography>
-        </Button>
+        <ListItem key={`li_menu_${index}`}>
+          <Button
+            fullWidth
+            size="small"
+            key={Math.random()}
+            variant="outlined"
+            sx={{
+              "&.MuiButton-text": { color: { col } },
+              border:
+                selectedType && selectedType.thisTypeName === thisType
+                  ? "solid 1px " + col
+                  : "dashed 1px " + col,
+            }}
+            onClick={() => handleListItemClick(typesList[thisType], thisType)}
+          >
+            <Typography color={col} variant="caption">
+              {thisType}
+            </Typography>
+          </Button>
+        </ListItem>
       );
     });
-    return (
-      <Stack spacing={2} direction="column">
-        {listMenuItemsArray}
-      </Stack>
-    );
+    return <List>{listMenuItemsArray}</List>;
   };
 
   return (
     <List>
-      <ListItem>{createTypesIcons(typesList)}</ListItem>
+      {createTypesIcons(typesList)}
 
       {selectedType && (
         <ListItem>

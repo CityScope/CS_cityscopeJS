@@ -20,10 +20,12 @@ export default function EditMenu() {
   useEffect(() => {
     // dispatch the edit menu state to the redux store
     dispatch(updateEditMenuState(editMenu));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editMenu]);
 
   return (
     <Button
+      fullWidth
       id={"EDIT_BUTTON"}
       variant="outlined"
       endIcon={editMenu.EDIT_BUTTON ? <CloudUploadIcon /> : <EditIcon />}

@@ -3,7 +3,7 @@ import TypesMenu from "./TypesMenu";
 import LayersMenu from "./LayersMenu";
 import ViewSettingsMenu from "./ViewSettingsMenu";
 import ScenariosMenu from "./ScenariosMenu";
-import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import ResizableDrawer from "../../../Components/ResizableDrawer";
 
 import EditMenu from "./EditMenu";
@@ -11,21 +11,25 @@ import EditMenu from "./EditMenu";
 function MenuContainer() {
   return (
     <ResizableDrawer direction="left">
-      <List>
-        <ListItem>
-          <EditMenu />
-        </ListItem>
-        <TypesMenu />
-        <ListItem>
-          <LayersMenu />
-        </ListItem>
-        <ListItem>
-          <ScenariosMenu />
-        </ListItem>
-        <ListItem>
-          <ViewSettingsMenu />
-        </ListItem>
-      </List>
+      <Grid container>
+        <Grid item xs={12}>
+          <List>
+            <ListItem>
+              <EditMenu />
+            </ListItem>
+            <TypesMenu />
+            <ListItem>
+              <LayersMenu />
+            </ListItem>
+            <ListItem>
+              <ScenariosMenu />
+            </ListItem>
+            <ListItem>
+              <ViewSettingsMenu />
+            </ListItem>
+          </List>
+        </Grid>
+      </Grid>
     </ResizableDrawer>
   );
 }
