@@ -16,7 +16,7 @@ export default function CityIOlist() {
     // create array of all requests
     const requestArr = tablesArr.data.map(async (tableName) => {
       // const tableName = urlStr.split('/').pop()
-      const url = `${settings.cityIO.baseURL}${tableName}/`;
+      const url = `${settings.cityIO.baseURL}table/${tableName}/`;
       return axios
         .get(`${url}GEOGRID/properties/header/`)
         .then((res) =>
@@ -40,7 +40,7 @@ export default function CityIOlist() {
 
   return (
     <>
-      { <CityIOdeckGLmap cityIOdata={tableList} isLoading={isLoading} />}
+      {<CityIOdeckGLmap cityIOdata={tableList} isLoading={isLoading} />}
       {isLoading && <TableListLoading />}
     </>
   );

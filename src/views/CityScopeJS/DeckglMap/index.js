@@ -35,7 +35,7 @@ const lightingEffect = new LightingEffect({
   ambientLight,
   directionalLight,
 });
-lightingEffect.shadowColor = [0, 0, 0, 1];
+lightingEffect.shadowColor = [0, 0, 0, 0.6];
 
 export default function DeckGLMap() {
   // get cityio data from redux store
