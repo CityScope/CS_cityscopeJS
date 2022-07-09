@@ -13,24 +13,10 @@ import {
   IconButton,
   Tooltip,
   Badge,
+  Grid,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { postToCityIO, getModule, getTableID } from "../../../../utils/utils";
-
-/** data structure for scenario list
-[
-  {
-    name: "Scenario 1",
-    hash: "dfglkadfgkjn435rtegf",
-    description: "this is a description",
-  },
-  {
-    name: "Scenario 2",
-    hash: "dfglkadfgfjn435rtegf",
-    description: "this is yet another a description",
-  },
-];
- */
 
 export default function ScenariosMenu() {
   const [scenariosButtonsList, setScenariosButtonsList] = useState([]);
@@ -99,7 +85,7 @@ export default function ScenariosMenu() {
   const createScenariosButtons = () => {
     const scenariosButtons = cityIOdata.scenarios.map((scenario, i) => {
       return (
-        <ListItem key={`scenario_li_${i}`}>
+        <ListItem key={`scenario_grid_item_${i}`}>
           <Tooltip
             key={"scenario_tt_" + i}
             arrow
@@ -107,14 +93,14 @@ export default function ScenariosMenu() {
             title={scenario.description || `No description`}
           >
             <Button
+              key={"scenario_button_" + i}
               fullWidth
               size="small"
-              key={"scenario_button_" + i}
               variant="outlined"
               onClick={() => handleOpenDialog(scenario)}
             >
               <Typography variant="caption">
-                {scenario.name.substring(0, 10) + `...`}
+                {scenario.name.substring(0, 12) + `...`}
               </Typography>
             </Button>
           </Tooltip>
@@ -149,30 +135,26 @@ export default function ScenariosMenu() {
   }, [cityIOdata]);
 
   return (
-    <>
-      {/*  */}
-      <List>
-        <ListItem >
-          <Badge
-            sx={{ width: "100%" }}
-            badgeContent={
-              (cityIOdata.scenarios && cityIOdata.scenarios.length) || 0
-            }
-            color="primary"
-          >
-            <Button
-              fullWidth={true}
-              key={"save_state_button"}
-              variant="outlined"
-              onClick={handleSaveThisState}
-            >
-              <Typography variant="caption">Save This Scenario</Typography>
-            </Button>
-          </Badge>
-        </ListItem>
-        <List>{scenariosButtonsList}</List>
-      </List>
-      {/*  */}
+    <Grid sx={{ flexGrow: 1 }} container spacing={2}>
+      <Badge
+        sx={{ width: "100%" }}
+        badgeContent={
+          (cityIOdata.scenarios && cityIOdata.scenarios.length) || 0
+        }
+        color="primary"
+      >
+        <Button
+          fullWidth={true}
+          key={"save_state_button"}
+          variant="outlined"
+          onClick={handleSaveThisState}
+        >
+          <Typography >Save This Scenario</Typography>
+        </Button>
+      </Badge>
+
+      <List>{scenariosButtonsList}</List>
+
       <Dialog open={dialogOpenState} onClose={handleClose}>
         <DialogTitle id="alert-dialog-title">
           {"Revert to saved scenario?"}
@@ -190,6 +172,6 @@ export default function ScenariosMenu() {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Grid>
   );
 }

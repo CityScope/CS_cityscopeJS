@@ -18,10 +18,10 @@ function MenuContainer() {
             </ListItem>
             <TypesMenu />
             <ListItem>
-              <LayersMenu />
+              <ScenariosMenu />
             </ListItem>
             <ListItem>
-              <ScenariosMenu />
+              <LayersMenu />
             </ListItem>
             <ListItem>
               <ViewSettingsMenu />
