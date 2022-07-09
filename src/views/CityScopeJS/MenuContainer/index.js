@@ -5,7 +5,6 @@ import ViewSettingsMenu from "./ViewSettingsMenu";
 import ScenariosMenu from "./ScenariosMenu";
 import Grid from "@mui/material/Grid";
 import ResizableDrawer from "../../../Components/ResizableDrawer";
-
 import EditMenu from "./EditMenu";
 
 function MenuContainer() {

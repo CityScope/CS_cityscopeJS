@@ -3,8 +3,7 @@ import {
   Checkbox,
   Typography,
   FormControlLabel,
-  List,
-  ListItem,
+  Grid,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
@@ -55,8 +54,8 @@ function LayersMenu() {
       // if the module name is in the data for this CS instance, make a checkbox
       if (cityIOkeys.includes(moduleName)) {
         toggleListArr.push(
-          <div key={menuItem}>
-            <ListItem key={"listItem_" + menuItem}>
+          <Grid container spacing={2} key={`grid_con_` + menuItem}>
+            <Grid item xs={5} key={`grid_i_1_` + menuItem}>
               <FormControlLabel
                 key={"formControl_" + menuItem}
                 control={
@@ -84,26 +83,28 @@ function LayersMenu() {
                   </Typography>
                 }
               />
-            </ListItem>
-
-            <ListItem key={"slider_" + menuItem}>
-              {/* and make a slider  */}
-              <Slider
-                size="small"
-                key={"slider_" + menuItem}
-                // value={sliderVal[menuItem]}
-                valueLabelDisplay="auto"
-                onChangeCommitted={(_, val) => updateSliderVal(menuItem, val)}
-              />
-            </ListItem>
-          </div>
+            </Grid>
+            {layersMenuState[menuItem] && layersMenuState[menuItem].isOn && (
+              <Grid item xs={5} key={`grid_i_2_` + menuItem}>
+                {/* and make a slider  */}
+                <Slider
+                  size="small"
+                  key={"slider_" + menuItem}
+                  // ! issue with redux
+                  // value={sliderVal[menuItem]}
+                  valueLabelDisplay="auto"
+                  onChangeCommitted={(_, val) => updateSliderVal(menuItem, val)}
+                />
+              </Grid>
+            )}
+          </Grid>
         );
       }
     }
     return toggleListArr;
   };
 
-  return <List>{makeLayerControlsMenu()}</List>;
+  return <Grid container>{makeLayerControlsMenu()}</Grid>;
 }
 
 export default LayersMenu;
