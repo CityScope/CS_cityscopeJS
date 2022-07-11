@@ -6,6 +6,8 @@ import ScenariosMenu from "./ScenariosMenu";
 import Grid from "@mui/material/Grid";
 import ResizableDrawer from "../../../Components/ResizableDrawer";
 import EditMenu from "./EditMenu";
+import TableInfo from "./TableInfo";
+
 
 function MenuContainer() {
   return (
@@ -13,6 +15,9 @@ function MenuContainer() {
       <Grid container>
         <Grid item xs={12}>
           <List>
+          <ListItem>
+              <TableInfo />
+            </ListItem>
             <ListItem>
               <EditMenu />
             </ListItem>
