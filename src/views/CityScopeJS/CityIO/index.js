@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import settings from "../../../settings/settings.json";
 import {
   updateCityIOdata,
@@ -53,6 +52,7 @@ const CityIO = (props) => {
 
   useEffect(() => {
     //! only update if hashId changes
+
     if (!mainHash) {
       return;
     }
