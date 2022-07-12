@@ -31,6 +31,39 @@ const options = {
   },
 };
 
+const optionsNoData = {
+  scales: {
+    r: {
+      angleLines: {
+        color: "#363636",
+      },
+      grid: {
+        color: "#363636",
+        circular: true,
+      },
+      pointLabels: {
+        color: "#363636",
+      },
+      ticks: {
+        color: "#363636",
+      },
+    },
+  },
+};
+
+const noData = {
+  labels: [null, null, null],
+  datasets: [
+    {
+      label: "No indicator data...",
+      data: [null, null, null],
+      backgroundColor: "#363636",
+      borderColor: "#363636",
+      borderWidth: 1,
+    },
+  ],
+};
+
 export default function RadarChart() {
   ChartJS.register(
     RadialLinearScale,
@@ -42,7 +75,7 @@ export default function RadarChart() {
   );
 
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
-  const [radarData, setRadarData] = useState(null);
+  const [radarData, setRadarData] = useState();
 
   const createRadarData = (indicators) => {
     let radarData = {
@@ -76,18 +109,23 @@ export default function RadarChart() {
   };
 
   useEffect(() => {
-    if (!cityIOdata.indicators) return;
-    const d = createRadarData(cityIOdata.indicators);
-    setRadarData(d);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-
+    if (!cityIOdata.indicators) {
+      setRadarData(noData);
+    } else {
+      const d = createRadarData(cityIOdata.indicators);
+      setRadarData(d);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityIOdata]);
 
   return (
-    radarData && (
-      <>
-        <Radar data={radarData} options={options} />
-      </>
-    )
+    <>
+      {radarData && (
+        <Radar
+          data={radarData}
+          options={cityIOdata.indicators ? options : optionsNoData}
+        />
+      )}
+    </>
   );
 }
