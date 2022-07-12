@@ -32,6 +32,7 @@ export default function AnimationComponent(props) {
       console.log("animation stopped!");
       return () => cancelAnimationFrame(requestRef.current);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animationToggleState]);
 
   // update the getAnimationTime function with the current animation time

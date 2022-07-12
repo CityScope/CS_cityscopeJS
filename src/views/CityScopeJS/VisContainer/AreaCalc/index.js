@@ -29,26 +29,27 @@ export default function AreaCalc() {
     };
 
     geoGridData.forEach((gridCellData) => {
-      const typeName = gridCellData.name;
-      if (typeName && typeName !== "None" && typeName !== "") {
-        // check if this type is already in the array of labels (if not, add it)
-        if (data.labels.includes(typeName)) {
-          const index = data.labels.indexOf(typeName);
-          // add the value to the data array at existing label
-          data.datasets[0].data[index] =
-            gridCellData.height && gridCellData.height !== 0
-              ? data.datasets[0].data[index] + 1
-              : data.datasets[0].data[index] + 1;
-        } else {
-          data.labels.push(typeName);
-          data.datasets[0].data.push(0);
-          data.datasets[0].backgroundColor.push(
-            `rgba(${gridCellData.color[0]}, ${gridCellData.color[1]}, ${gridCellData.color[2]}, 0.2)`
-          );
-          data.datasets[0].borderColor.push(
-            `rgba(${gridCellData.color[0]}, ${gridCellData.color[1]}, ${gridCellData.color[2]}, 0.8)`
-          );
-        }
+      let typeName = gridCellData.name;
+      if (!typeName || typeName === "None" || typeName === "") {
+        typeName = "Unknown type...";
+      }
+      // check if this type is already in the array of labels (if not, add it)
+      if (data.labels.includes(typeName)) {
+        const index = data.labels.indexOf(typeName);
+        // add the value to the data array at existing label
+        data.datasets[0].data[index] =
+          gridCellData.height && gridCellData.height !== 0
+            ? data.datasets[0].data[index] + 1
+            : data.datasets[0].data[index] + 1;
+      } else {
+        data.labels.push(typeName);
+        data.datasets[0].data.push(0);
+        data.datasets[0].backgroundColor.push(
+          `rgba(${gridCellData.color[0]}, ${gridCellData.color[1]}, ${gridCellData.color[2]}, 0.2)`
+        );
+        data.datasets[0].borderColor.push(
+          `rgba(${gridCellData.color[0]}, ${gridCellData.color[1]}, ${gridCellData.color[2]}, 0.8)`
+        );
       }
     });
     setChartData(data);
@@ -60,5 +61,5 @@ export default function AreaCalc() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityIOdata]);
 
-  return <>{chartData.labels.length > 0 && <Doughnut data={chartData} />}</>;
+  return <>{geoGridData && <Doughnut data={chartData} />}</>;
 }

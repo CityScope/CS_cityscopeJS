@@ -6,7 +6,7 @@ const maxDrawerWidth =
   Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) -
   1;
 
-export const defaultDrawerWidth = Math.floor(maxDrawerWidth / 3);
+export const defaultDrawerWidth = Math.floor(maxDrawerWidth / 4);
 const minDrawerWidth = 50;
 
 export default function ResizableDrawer({ children, direction }) {

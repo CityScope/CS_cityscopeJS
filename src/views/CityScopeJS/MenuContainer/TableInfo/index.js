@@ -7,7 +7,7 @@ function TableInfo() {
   );
 
   return (
-    <Card sx={{ width: "100%" }}>
+    <Card sx={{ width: "100%" }} variant='outlined' >
       <CardContent>
         <Typography gutterBottom>CityScope</Typography>
         <Typography variant="h3">{cityIOtableName}</Typography>
