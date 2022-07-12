@@ -1,15 +1,15 @@
 import { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 
 export default function AnimationComponent(props) {
-  const { animationToggle, getAnimationTime } = props;
-  const [animationTime, setAnimationTime] = useState(0);
+  const getAnimationTime = props.getAnimationTime;
+  const animationToggleState = useSelector(
+    (state) => state.cityIOdataState.cityIOisDone
+  );
 
+  const [animationTime, setAnimationTime] = useState(0);
   const requestRef = useRef();
   const previousTimeRef = useRef();
-
-  useEffect(() => {
-    getAnimationTime(animationTime);
-  }, [animationTime]);
 
   useEffect(() => {
     const animate = (time) => {
@@ -24,7 +24,7 @@ export default function AnimationComponent(props) {
       previousTimeRef.current = time;
       requestRef.current = requestAnimationFrame(animate);
     };
-    if (animationToggle) {
+    if (animationToggleState) {
       console.log("animation started..");
       requestRef.current = requestAnimationFrame(animate);
       return () => cancelAnimationFrame(requestRef.current);
@@ -32,7 +32,12 @@ export default function AnimationComponent(props) {
       console.log("animation stopped!");
       return () => cancelAnimationFrame(requestRef.current);
     }
-  }, [animationToggle]);
+  }, [animationToggleState]);
+
+  // update the getAnimationTime function with the current animation time
+  useEffect(() => {
+    getAnimationTime(animationTime);
+  }, [animationTime]);
 
   return null;
 }

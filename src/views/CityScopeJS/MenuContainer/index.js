@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid";
 import ResizableDrawer from "../../../Components/ResizableDrawer";
 import EditMenu from "./EditMenu";
 import TableInfo from "./TableInfo";
+import AnimationMenu from "./AnimationMenu"; 
 
 
 function MenuContainer() {
@@ -30,6 +31,9 @@ function MenuContainer() {
             </ListItem>
             <ListItem>
               <ViewSettingsMenu />
+            </ListItem>
+            <ListItem>
+              <AnimationMenu />
             </ListItem>
           </List>
         </Grid>

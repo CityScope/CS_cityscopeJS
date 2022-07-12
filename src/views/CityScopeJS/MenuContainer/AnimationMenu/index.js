@@ -1,6 +1,5 @@
 import Typography from '@material-ui/core/Typography'
 import Slider from '@material-ui/core/Slider'
-import ABMLegend from './ABMLegend'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -29,18 +28,12 @@ const marks = [
   },
 ]
 
-function ABMSubmenu(props) {
-  const handleSetTimeValue = (e, newValue) => {}
-  const handleSetSpeedValue = (e, newValue) => {}
-  const [tripTypeValue, settripTypeValue] = useState('mode')
+function AnimationMenu() {
 
-  const handleABMmodeChange = (event) => {
-    settripTypeValue(event.target.value)
-  }
 
   return (
     <div>
-      <FormControl component="fieldset">
+      {/* <FormControl component="fieldset">
         <RadioGroup
           aria-label="tripType"
           name="tripType"
@@ -83,9 +76,9 @@ function ABMSubmenu(props) {
         onChange={handleSetSpeedValue}
         valueLabelDisplay="auto"
         aria-labelledby="continuous-slider"
-      />
+      /> */}
     </div>
   )
 }
 
-export default ABMSubmenu
+export default AnimationMenu

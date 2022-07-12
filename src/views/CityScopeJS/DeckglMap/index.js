@@ -210,6 +210,7 @@ export default function DeckGLMap() {
 
   return (
     <>
+      <AnimationComponent getAnimationTime={getAnimationTime} />
       <div
         onKeyDown={(e) => {
           setKeyDownState(e.nativeEvent.key);
@@ -219,15 +220,6 @@ export default function DeckGLMap() {
         onMouseUp={() => setMouseDown(false)}
         onMouseDown={() => setMouseDown(true)}
       >
-        {/* <AnimationComponent
-          getAnimationTime={getAnimationTime}
-          animationToggle={
-            menuState.VISIBILTY_MENU &&
-            menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX &&
-            menuState.VISIBILTY_MENU.ANIMATE_CHECKBOX.isOn
-          }
-        /> */}
-
         <PaintBrush
           editOn={editModeToggle}
           mousePos={mousePos}

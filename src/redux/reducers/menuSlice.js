@@ -7,6 +7,7 @@ export const menuSlice = createSlice({
     typesMenuState: {},
     layersMenuState: {},
     viewSettingsMenuState: {},
+    animationMenuState: true,
   },
   reducers: {
     updateLayersMenuState: (state, action) => {
@@ -24,6 +25,10 @@ export const menuSlice = createSlice({
     updateViewSettingsMenuState: (state, action) => {
       state.viewSettingsMenuState = action.payload;
     },
+
+    updateAnimationMenuState: (state, action) => {
+      state.animationMenuState = action.payload;
+    },
   },
 });
 
@@ -32,5 +37,6 @@ export const {
   updateTypesMenuState,
   updateEditMenuState,
   updateViewSettingsMenuState,
+  updateAnimationMenuState,
 } = menuSlice.actions;
 export default menuSlice.reducer;
