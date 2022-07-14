@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Typography, CardContent, Card } from "@mui/material";
+import { Typography } from "@mui/material";
 
 function TableInfo() {
   const cityIOtableName = useSelector(
@@ -7,12 +7,10 @@ function TableInfo() {
   );
 
   return (
-    <Card sx={{ width: "100%" }} variant='outlined' >
-      <CardContent>
-        <Typography gutterBottom>CityScope</Typography>
-        <Typography variant="h3">{cityIOtableName}</Typography>
-      </CardContent>
-    </Card>
+    <>
+      <Typography gutterBottom>CityScope</Typography>
+      <Typography variant="h3">{cityIOtableName}</Typography>
+    </>
   );
 }
 
