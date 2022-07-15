@@ -135,7 +135,7 @@ export default function ScenariosMenu() {
   }, [cityIOdata]);
 
   return (
-    <Grid sx={{ flexGrow: 1 }} container spacing={2}>
+    <Grid sx={{ flexGrow: 1 }} container >
       <Badge
         sx={{ width: "100%" }}
         badgeContent={

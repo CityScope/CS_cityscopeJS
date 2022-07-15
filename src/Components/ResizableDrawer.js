@@ -38,31 +38,36 @@ export default function ResizableDrawer({ children, direction }) {
   }, []);
 
   return (
-    <Drawer
-      anchor={direction}
-      open={true}
-      variant="persistent"
-      ModalProps={{
-        keepMounted: true,
-      }}
-      PaperProps={{ style: { width: drawerWidth } }}
-      sx={{ display: "flex", flexDirection: "column" }}
-    >
+    <>
       <Box
         onMouseDown={(e) => handleMouseDown(e)}
         sx={{
           width: `${dividerWidth}px`,
           padding: dividerWidth + "px 0 0",
-          position: "absolute",
-          height: "100vh",
-          left: direction === "left" ? { drawerWidth } : undefined,
-          right: direction === "right" ? undefined : "0",
-          zIndex: 1000,
+          position: "fixed",
+          height: "1000vh",
+          left:
+            direction === "left"
+              ? drawerWidth + "px"
+              : undefined,
+          right: direction === "right" ? drawerWidth + "px" : undefined,
+          zIndex: 10000,
           cursor: "ew-resize",
           backgroundColor: "gray",
         }}
-      ></Box>
-      {children}
-    </Drawer>
+      />
+      <Drawer
+        anchor={direction}
+        open={true}
+        variant="persistent"
+        ModalProps={{
+          keepMounted: true,
+        }}
+        PaperProps={{ style: { width: drawerWidth } }}
+        sx={{ display: "flex", flexDirection: "column" }}
+      >
+        {children}
+      </Drawer>
+    </>
   );
 }

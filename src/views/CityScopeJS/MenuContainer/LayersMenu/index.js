@@ -54,8 +54,8 @@ function LayersMenu() {
       // if the module name is in the data for this CS instance, make a checkbox
       if (cityIOkeys.includes(moduleName)) {
         toggleListArr.push(
-          <Grid container spacing={2} key={`grid_con_` + menuItem}>
-            <Grid item xs={5} key={`grid_i_1_` + menuItem}>
+          <Grid container key={`grid_con_` + menuItem}>
+            <Grid item xs={4} key={`grid_i_1_` + menuItem}>
               <FormControlLabel
                 key={"formControl_" + menuItem}
                 control={
@@ -85,7 +85,7 @@ function LayersMenu() {
               />
             </Grid>
             {layersMenuState[menuItem] && layersMenuState[menuItem].isOn && (
-              <Grid item xs={5} key={`grid_i_2_` + menuItem}>
+              <Grid item xs={8} key={`grid_i_2_` + menuItem}>
                 {/* and make a slider  */}
                 <Slider
                   size="small"
