@@ -2,23 +2,31 @@ import { Slider, Button, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAnimationMenuState } from "../../../../redux/reducers/menuSlice";
-import AnimationComponent from "../../../../Components/AnimationComponent.js";
+import AnimationComponent from "../../../../Components/AnimationComponent";
 
 function AnimationMenu() {
+  const dispatch = useDispatch();
+
   const [animationState, setAnimationState] = useState(
     useSelector((state) => state.menuState.animationMenuState)
   );
-  const [animationTime, getAnimationTime] = useState(0);
-  const dispatch = useDispatch();
 
-  // controls the menu state for the edit button
+  const [animationTime, getAnimationTime] = useState(0);
+
+  const updateSliderVal = (val) => {
+    setAnimationState({
+      ...animationState,
+      animationSpeedSliderValue: val/5,
+    });
+  };
+
+  // controls the menu state for the button
   const handleAnimationButtonClicks = (event) => {
     setAnimationState({
       ...animationState,
       [event.currentTarget.id]: !animationState[event.currentTarget.id],
     });
   };
-
 
   useEffect(() => {
     dispatch(updateAnimationMenuState(animationState));
@@ -37,7 +45,13 @@ function AnimationMenu() {
         <Typography>Toggle Animation</Typography>
       </Button>
 
-      <Slider size="small" key={"slider_animation"} valueLabelDisplay="auto" />
+      <Slider
+        size="small"
+        key={"slider_animation"}
+        valueLabelDisplay="auto"
+
+        onChangeCommitted={(_, val) => updateSliderVal(val)}
+      />
       <Typography variant="subtitle2" id="continuous-slider" gutterBottom>
         {animationTime}
       </Typography>

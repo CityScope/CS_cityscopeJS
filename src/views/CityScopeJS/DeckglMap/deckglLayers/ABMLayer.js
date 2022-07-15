@@ -19,8 +19,6 @@ export default function ABMLayer({ data, ABMmode, zoomLevel, time, opacity }) {
       shadowEnabled: false,
       getWidth: 1,
       widthScale: _remapValues(zoomLevel),
-      opacity,
-      rounded: true,
       trailLength: 500,
       currentTime: time,
 
