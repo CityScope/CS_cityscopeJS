@@ -1,9 +1,9 @@
 import { TextLayer } from "@deck.gl/layers";
 
-export default function TextualLayer({ data, coordinates }) {
+export default function TextualLayer({ data, coordinates, opacity }) {
   if (data.text && coordinates && coordinates.features) {
     /*
-     * this layer takes textual layer procuded by a 3rd party
+     * this layer takes textual layer procured by a 3rd party
      * module, and renders a text message near the grid cell
      * defined in the data id attribute.
      *
@@ -32,6 +32,7 @@ export default function TextualLayer({ data, coordinates }) {
     });
 
     return new TextLayer({
+      opacity,
       id: "text-layer",
       data: textLayerData,
       pickable: true,

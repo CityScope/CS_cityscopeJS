@@ -16,28 +16,31 @@ import {
   TextualLayer,
   GeojsonLayer,
 } from "./deckglLayers";
-import { AmbientLight, DirectionalLight, LightingEffect } from "@deck.gl/core";
+import {
+  AmbientLight,
+  LightingEffect,
+  _SunLight as SunLight,
+} from "@deck.gl/core";
 import { proccessGridData } from "./deckglLayers/GridLayer";
 
-// create ambient light source
 const ambientLight = new AmbientLight({
   color: [255, 255, 255],
   intensity: 1.0,
 });
-// create directional light source
-const directionalLight = new DirectionalLight({
+
+const dirLight = new SunLight({
+  timestamp: Date.UTC(2019, 7, 1, 22),
   color: [255, 255, 255],
   intensity: 1.0,
-  direction: [1, 1, -1],
   _shadow: true,
 });
-const lightingEffect = new LightingEffect({
-  ambientLight,
-  directionalLight,
-});
-lightingEffect.shadowColor = [0, 0, 0, 0.6];
 
 export default function DeckGLMap() {
+  const [effects] = useState(() => {
+    const lightingEffect = new LightingEffect({ ambientLight, dirLight });
+    lightingEffect.shadowColor = [0, 0, 0, 0.5];
+    return [lightingEffect];
+  });
   // get cityio data from redux store
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
 
@@ -61,6 +64,7 @@ export default function DeckGLMap() {
   const viewControlButton =
     menuState.viewSettingsMenuState.VIEW_CONTROL_BUTTONS;
   const [animationTime, getAnimationTime] = useState(0);
+
   // /**
   //  * resets the camera viewport
   //  * to cityIO header data
@@ -177,6 +181,10 @@ export default function DeckGLMap() {
     TEXTUAL: TextualLayer({
       data: cityIOdata,
       coordinates: GEOGRIDDATA && GEOGRIDDATA,
+      opacity:
+        layersMenu &&
+        layersMenu.TEXTUAL_LAYER_CHECKBOX &&
+        layersMenu.TEXTUAL_LAYER_CHECKBOX.slider * 0.01,
     }),
 
     GEOJSON: GeojsonLayer({
@@ -234,7 +242,7 @@ export default function DeckGLMap() {
           viewState={viewState}
           onViewStateChange={onViewStateChange}
           layers={renderDeckglLayers()}
-          effects={shadowsToggle && [lightingEffect]}
+          effects={ effects }
           controller={{
             touchZoom: true,
             touchRotate: true,
