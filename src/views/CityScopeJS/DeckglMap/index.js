@@ -57,7 +57,6 @@ export default function DeckGLMap() {
   const [GEOGRIDDATA, setGEOGRIDDATA] = useState();
   const deckGLref = useRef();
   const pickingRadius = 40;
-  const shadowsToggle = menuState.viewSettingsMenuState.SHADOWS_CHECKBOX;
   const editModeToggle = menuState.editMenuState.EDIT_BUTTON;
   const selectedType = menuState.typesMenuState.SELECTED_TYPE;
   const layersMenu = menuState.layersMenuState;

@@ -44,11 +44,7 @@ export const viewControlCheckboxes = {
     initSliderValue: 100,
 
   },
-  SHADOWS_CHECKBOX: {
-    displayName: "Toggle Shadows",
-    initState: false,
-    initSliderValue: 100,
-  },
+
 };
 
 export const viewControlButtons = {
