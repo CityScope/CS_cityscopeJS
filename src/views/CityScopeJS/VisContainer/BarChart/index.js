@@ -39,11 +39,6 @@ export const options = {
     },
   },
   responsive: true,
-  plugins: {
-    legend: {
-      position: "bottom",
-    },
-  },
 };
 
 export const noData = {

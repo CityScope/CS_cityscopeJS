@@ -111,6 +111,7 @@ export default function TypesListMenu() {
                   <Slider
                     valueLabelDisplay="auto"
                     value={typeHeight}
+                   size="small"
                     defaultValue={0}
                     onChange={(e, val) => setTypeHeight(val)}
                     onChangeCommitted={() =>
