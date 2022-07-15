@@ -7,7 +7,10 @@ export const menuSlice = createSlice({
     typesMenuState: {},
     layersMenuState: {},
     viewSettingsMenuState: {},
-    animationMenuState: true,
+    animationMenuState: {
+      toggleAnimationState: false,
+      animationSpeedSliderValue: 10,
+    },
   },
   reducers: {
     updateLayersMenuState: (state, action) => {

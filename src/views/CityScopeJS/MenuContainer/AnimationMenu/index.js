@@ -1,84 +1,48 @@
-import Typography from '@material-ui/core/Typography'
-import Slider from '@material-ui/core/Slider'
-import Radio from '@material-ui/core/Radio'
-import RadioGroup from '@material-ui/core/RadioGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormControl from '@material-ui/core/FormControl'
-import { useState } from 'react'
-const marks = [
-  {
-    value: 0,
-    label: '12AM',
-  },
-  {
-    value: 21600,
-    label: '6AM',
-  },
-  {
-    value: 43200,
-    label: '12PM',
-  },
-  {
-    value: 64800,
-    label: '6PM',
-  },
-  {
-    value: 86400,
-    label: '12AM',
-  },
-]
+import { Slider, Button, Typography } from "@mui/material";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateAnimationMenuState } from "../../../../redux/reducers/menuSlice";
+import AnimationComponent from "../../../../Components/AnimationComponent.js";
 
 function AnimationMenu() {
+  const [animationState, setAnimationState] = useState(
+    useSelector((state) => state.menuState.animationMenuState)
+  );
+  const [animationTime, getAnimationTime] = useState(0);
+  const dispatch = useDispatch();
 
+  // controls the menu state for the edit button
+  const handleAnimationButtonClicks = (event) => {
+    setAnimationState({
+      ...animationState,
+      [event.currentTarget.id]: !animationState[event.currentTarget.id],
+    });
+  };
+
+
+  useEffect(() => {
+    dispatch(updateAnimationMenuState(animationState));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animationState]);
 
   return (
-    <div>
-      {/* <FormControl component="fieldset">
-        <RadioGroup
-          aria-label="tripType"
-          name="tripType"
-          value={tripTypeValue}
-          onChange={handleABMmodeChange}
-        >
-          <FormControlLabel
-            value="mode"
-            control={<Radio />}
-            label="Mode Choice"
-          />
-          <FormControlLabel
-            value="profile"
-            control={<Radio />}
-            label="Profile"
-          />
-        </RadioGroup>
-      </FormControl>
+    <>
+      <AnimationComponent getAnimationTime={getAnimationTime} />
+      <Button
+        fullWidth
+        id={"toggleAnimationState"}
+        variant="outlined"
+        onClick={(e) => handleAnimationButtonClicks(e)}
+      >
+        <Typography>Toggle Animation</Typography>
+      </Button>
 
-      <ABMLegend trips={props} tripTypeValue={tripTypeValue} />
-      <Typography variant="subtitle2" id="range-slider" gutterBottom>
-        Simulation Range
-      </Typography>
-      <Slider
-        min={0}
-        max={86400}
-        marks={marks}
-        // value={sliders.time}
-        onChange={handleSetTimeValue}
-        valueLabelDisplay="off"
-        aria-labelledby="range-slider"
-      />
+      <Slider size="small" key={"slider_animation"} valueLabelDisplay="auto" />
       <Typography variant="subtitle2" id="continuous-slider" gutterBottom>
-        Simulation Speed
+        {animationTime}
       </Typography>
-      <Slider
-        min={0}
-        max={100}
-        // value={sliders.speed}
-        onChange={handleSetSpeedValue}
-        valueLabelDisplay="auto"
-        aria-labelledby="continuous-slider"
-      /> */}
-    </div>
-  )
+    </>
+  );
 }
 
-export default AnimationMenu
+export default AnimationMenu;

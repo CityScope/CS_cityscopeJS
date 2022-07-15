@@ -3,41 +3,44 @@ import { useSelector } from "react-redux";
 
 export default function AnimationComponent(props) {
   const getAnimationTime = props.getAnimationTime;
-  const animationToggleState = useSelector(
-    (state) => state.cityIOdataState.cityIOisDone
+  const animationMenuState = useSelector(
+    (state) => state.menuState.animationMenuState
   );
-
   const [animationTime, setAnimationTime] = useState(0);
   const requestRef = useRef();
   const previousTimeRef = useRef();
 
+  const animate = (time) => {
+    if (previousTimeRef.current !== undefined) {
+      setAnimationTime((prevTime) => {
+        if (prevTime < 21600 || prevTime > 43200) {
+          return 21600;
+        }
+        return prevTime + animationMenuState.animationSpeedSliderValue || 1;
+      });
+    }
+    previousTimeRef.current = time;
+    requestRef.current = requestAnimationFrame(animate);
+  };
+
   useEffect(() => {
-    const animate = (time) => {
-      if (previousTimeRef.current !== undefined) {
-        setAnimationTime((prevTime) => {
-          if (prevTime < 21600 || prevTime > 43200) {
-            return 21600;
-          }
-          return prevTime + 50;
-        });
-      }
-      previousTimeRef.current = time;
-      requestRef.current = requestAnimationFrame(animate);
-    };
-    if (animationToggleState) {
+    if (animationMenuState && animationMenuState.toggleAnimationState) {
       console.log("animation started..");
       requestRef.current = requestAnimationFrame(animate);
       return () => cancelAnimationFrame(requestRef.current);
     } else {
+      cancelAnimationFrame(previousTimeRef.current);
+      cancelAnimationFrame(requestRef.current);
       console.log("animation stopped!");
       return () => cancelAnimationFrame(requestRef.current);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animationToggleState]);
+  }, [animationMenuState]);
 
   // update the getAnimationTime function with the current animation time
   useEffect(() => {
     getAnimationTime(animationTime);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animationTime]);
 
   return null;
