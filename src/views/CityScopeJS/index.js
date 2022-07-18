@@ -2,46 +2,63 @@ import { useState, useEffect } from "react";
 import CityIO from "./CityIO";
 import CityIOviewer from "../CityIOviewer";
 import CSjsMain from "./CSjsMain";
-import LoadingSpinner from "../../Components/LoadingSpinner";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCityIOtableName } from "../../redux/reducers/cityIOdataSlice";
+import GridEditor from "../GridEditor";
+import queryString from "query-string";
 
 export default function CityScopeJS() {
   const dispatch = useDispatch();
-  // get the table name for cityIO comp
-  // const testTableName = "corktown";
-  // const testTableName = "tanthuan_a0b0c1d0";
+
   const [tableName, setTableName] = useState();
-  const [cityIOviewer, setCityIOviewer] = useState(false);
+  const [viewSelectorState, setViewSelectorState] = useState();
   // on init, get the adress URL to search for  a table
   useEffect(() => {
-    let url = window.location.toString();
-    let pre = "cityscope=";
-    let cityIOtableName = url
-      .substring(url.indexOf(pre) + pre.length)
-      .toLowerCase();
+    const location = window.location;
+    const parsed = queryString.parse(location.search);
 
-    // check URL for proper CS project link
-    if (url.indexOf(pre) !== -1 && cityIOtableName.length > 0) {
-      setTableName(cityIOtableName);
-      dispatch(updateCityIOtableName(cityIOtableName));
-    } else {
-      setCityIOviewer(true);
+    //a switch for the location.search and the parsed.tableName
+    switch (Object.keys(parsed)[0]) {
+      case "cityscope":
+        // check if this location has a tableName
+        const cityIOtableName =
+          Object.values(parsed)[0] && Object.values(parsed)[0].toLowerCase();
+        // check if tableName is a valid tableName
+        if (cityIOtableName && cityIOtableName !== "") {
+          setTableName(cityIOtableName);
+          dispatch(updateCityIOtableName(cityIOtableName));
+          setViewSelectorState("cityscopejs");
+        } else {
+          setViewSelectorState("cityio");
+        }
+        break;
+      case "editor":
+        // ! to get the table name for editing (not used yet)
+        setViewSelectorState("grideditor");
+
+        break;
+      default:
+        setViewSelectorState("cityio");
+        break;
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [loadingModules, setLoadingModules] = useState([]);
   const cityIOisDone = useSelector(
     (state) => state.cityIOdataState.cityIOisDone
   );
 
   return (
     <>
-      <LoadingSpinner loadingModules={loadingModules} />
+      {/* if we got a cityIO table name, start cityIO module */}
       {tableName && <CityIO tableName={tableName} />}
+      {/* if cityIO module is done loading, start the CSjs app */}
       {cityIOisDone && <CSjsMain tableName={tableName} />}
-      {cityIOviewer && <CityIOviewer />}
+      {/* otherwise show the editor  */}
+      {viewSelectorState === "grideditor" && <GridEditor />}
+      {/* otherwise, show the cityIOviewer */}
+      {viewSelectorState === "cityio" && <CityIOviewer />}
     </>
   );
 }
