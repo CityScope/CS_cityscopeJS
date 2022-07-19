@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import ResizableDrawer from "../../../Components/ResizableDrawer";
 
 import GridMakerMenu from "./GridMakerMenu";
-// import TypesEditor from './TypesEditor'
+import TypesEditorMenu from "./TypesEditorMenu";
 // import CommitGrid from "./CommitGridMenu";
 
 export default function EditorMenu() {
@@ -28,7 +28,9 @@ export default function EditorMenu() {
         <ListItem>
           <GridMakerMenu />
         </ListItem>
-        {/* <TypesEditor /> */}
+        <ListItem>
+          <TypesEditorMenu />
+        </ListItem>
         {/* <CommitGrid  /> */}
       </List>
     </ResizableDrawer>

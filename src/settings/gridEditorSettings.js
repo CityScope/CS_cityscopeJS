@@ -32,46 +32,6 @@ export const GridEditorSettings = {
       },
 
       types: {
-        Institutional: {
-          LBCS: [
-            {
-              proportion: 0.3,
-              use: {
-                "6700": 1,
-              },
-            },
-            {
-              proportion: 0.7,
-              use: {
-                "2310": 0.3,
-                "4100": 0.7,
-              },
-            },
-          ],
-          NAICS: [
-            {
-              proportion: 0.3,
-              use: {
-                "7121": 1,
-              },
-            },
-            {
-              proportion: 0.7,
-              use: {
-                "6111": 0.3,
-                "6113": 0.1,
-                "6115": 0.1,
-                "6116": 0.2,
-                "8133": 0.15,
-                "8134": 0.15,
-              },
-            },
-          ],
-          interactive: "Web",
-          color: "#B32745",
-          height: 4,
-          sqm_pperson: 400,
-        },
         Office: {
           LBCS: [
             {
@@ -107,21 +67,6 @@ export const GridEditorSettings = {
           interactive: "Web",
           color: "#38C9FF",
           sqm_pperson: 1,
-        },
-        Road: {
-          LBCS: [
-            {
-              proportion: 1,
-              use: {
-                "5210": 1,
-              },
-            },
-          ],
-          NAICS: null,
-          interactive: "Web",
-          color: "#308FB3",
-          height: 1,
-          sqm_pperson: 4,
         },
         Residential: {
           LBCS: [
@@ -213,70 +158,6 @@ export const GridEditorSettings = {
           color: "#E83FB8",
           height: 4,
           sqm_pperson: 60,
-        },
-        "Low Income housing": {
-          LBCS: [
-            {
-              proportion: 0.1,
-              use: {
-                "2200": 1,
-              },
-            },
-            {
-              proportion: 0.75,
-              use: {
-                "2310": 1,
-              },
-            },
-            {
-              proportion: 0.15,
-              use: {
-                "1200": 1,
-              },
-            },
-          ],
-          NAICS: [
-            {
-              proportion: 0.1,
-              use: {
-                "7224": 0.5,
-                "7225": 0.5,
-              },
-            },
-            {
-              proportion: 0.75,
-              use: {
-                "5414": 0.4,
-                "5415": 0.2,
-                "5417": 0.4,
-              },
-            },
-            {
-              proportion: 0.15,
-              use: {
-                "7211": 1,
-              },
-            },
-          ],
-          interactive: "Web",
-          color: "#E945FF",
-          height: 20,
-          sqm_pperson: 50,
-        },
-        "Residential Low Density": {
-          LBCS: [
-            {
-              proportion: 1,
-              use: {
-                "1100": 1,
-              },
-            },
-          ],
-          NAICS: null,
-          interactive: "Web",
-          color: "#7FB34B",
-          height: 4,
-          sqm_pperson: 320,
         },
       },
     },
