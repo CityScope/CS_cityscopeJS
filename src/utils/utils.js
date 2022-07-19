@@ -25,6 +25,9 @@ export function rgbToHex(r, g, b) {
   return "#" + valToHex(r) + valToHex(g) + valToHex(b);
 }
 
+
+
+
 /**
  * convert hex to rgb array
  */

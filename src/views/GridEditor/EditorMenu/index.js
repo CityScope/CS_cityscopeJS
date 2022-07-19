@@ -1,14 +1,12 @@
-// // export default EditMenuMain;
-
 import GridPropsMenu from "./GridPropsMenu";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Typography from "@mui/material/Typography";
 import ResizableDrawer from "../../../Components/ResizableDrawer";
 
+import GridMakerMenu from "./GridMakerMenu";
 // import TypesEditor from './TypesEditor'
-// import GridMaker from "./GridMaker";
-// import CommitGrid from "./CommitGrid";
+// import CommitGrid from "./CommitGridMenu";
 
 export default function EditorMenu() {
   return (
@@ -24,12 +22,15 @@ export default function EditorMenu() {
             girds, types, and props, and commit them to cityIO.
           </Typography>
         </ListItem>
+        <ListItem>
+          <GridPropsMenu />
+        </ListItem>
+        <ListItem>
+          <GridMakerMenu />
+        </ListItem>
+        {/* <TypesEditor /> */}
+        {/* <CommitGrid  /> */}
       </List>
-      <GridPropsMenu />
-
-      {/* <TypesEditor /> */}
-      {/* <GridMaker gridProps={formValues} /> */}
-      {/* <CommitGrid gridProps={formValues} /> */}
     </ResizableDrawer>
   );
 }

@@ -1,4 +1,3 @@
-import React from "react";
 import Button from "@mui/material/Button";
 import CenterFocusStrongIcon from "@mui/icons-material/CenterFocusStrong";
 import { useDispatch } from "react-redux";

@@ -6,18 +6,8 @@ import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { GeoJsonLayer } from "deck.gl";
 import settings from "../../../settings/GridEditorSettings.json";
-import { listenToBaseMapCenter } from "../../../redux/actions";
 
-export const _hexToRgb = (hex) => {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result
-        ? [
-              parseInt(result[1], 16),
-              parseInt(result[2], 16),
-              parseInt(result[3], 16),
-          ]
-        : null;
-};
+
 
 class BaseMap extends Component {
     constructor(props) {
@@ -287,16 +277,4 @@ class BaseMap extends Component {
     }
 }
 
-const mapDispatchToProps = {
-    listenToBaseMapCenter: listenToBaseMapCenter,
-};
 
-const mapStateToProps = (state) => {
-    return {
-        selectedType: state.ROW_EDIT,
-        mapCenter: state.BASE_MAP_CENTER,
-        createdGrid: state.GRID_CREATED,
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(BaseMap);

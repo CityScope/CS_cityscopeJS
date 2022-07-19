@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { updateGridProps } from "../../../../redux/reducers/editorMenuSlice";
 import { TextField, Typography, List, ListItem } from "@mui/material";
 import CenterMapButton from "./CenterMapButton";
 import { GridEditorSettings } from "../../../../settings/gridEditorSettings";
 
 export default function GridProps() {
   const settings = GridEditorSettings;
+  const dispatch = useDispatch();
   const [formValues, setFormValues] = useState({
     tableName: "test",
     latitude: settings.GEOGRID.properties.header.latitude,
@@ -21,6 +24,12 @@ export default function GridProps() {
     const { id, value } = event.target;
     setFormValues({ ...formValues, [id]: value });
   };
+
+  useEffect(() => {
+    // dispatch form values to redux store
+    dispatch(updateGridProps(formValues));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formValues]);
 
   //  get all data
   // https://stackoverflow.com/questions/56641235/react-how-to-get-values-from-material-ui-textfield-components
