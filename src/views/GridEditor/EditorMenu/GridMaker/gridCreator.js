@@ -1,5 +1,5 @@
 import proj4 from "proj4";
-import { _hexToRgb } from "../../../EditorMap/EditorMap";
+import { _hexToRgb } from "../../EditorMap/EditorMap";
 
 function deg_to_rad(deg) {
     return (deg * Math.PI) / 180;
