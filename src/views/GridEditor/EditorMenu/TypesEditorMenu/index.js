@@ -3,87 +3,88 @@ import { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { GridEditorSettings } from "../../../../settings/gridEditorSettings";
+import { updateTypesEditorState } from "../../../../redux/reducers/editorMenuSlice";
+
+const settings = GridEditorSettings;
+
+export const createTypesArray = (LandUseTypesList) => {
+  let typesArray = [];
+  Object.keys(LandUseTypesList).forEach((type) => {
+    typesArray.push({
+      name: type,
+      description: "[edit info for type: " + type + "]",
+      color: LandUseTypesList[type].color,
+      height: LandUseTypesList[type].height ? LandUseTypesList[type].height : 0,
+
+      LBCS: LandUseTypesList[type].LBCS
+        ? JSON.stringify(LandUseTypesList[type].LBCS)
+        : null,
+      NAICS: LandUseTypesList[type].NAICS
+        ? JSON.stringify(LandUseTypesList[type].NAICS)
+        : null,
+      interactive: LandUseTypesList[type].interactive,
+    });
+  });
+  return typesArray;
+};
+
+export const tableInitialState = {
+  columns: [
+    {
+      title: "Type",
+      field: "name",
+    },
+    {
+      title: "Description",
+      field: "description",
+    },
+
+    {
+      title: "Height",
+      field: "height",
+      type: "numeric",
+    },
+    {
+      title: "Interactive",
+      field: "interactive",
+      lookup: { No: "No", Web: "Web", TUI: "TUI" },
+    },
+    {
+      title: "Color",
+      field: "color",
+      type: "string",
+    },
+    {
+      title: "LBCS",
+      field: "LBCS",
+      type: "string",
+    },
+    {
+      title: "NAICS",
+      field: "NAICS",
+      type: "string",
+    },
+  ],
+  data: createTypesArray(settings.GEOGRID.properties.types),
+};
 
 export default function TypesEditorMenu() {
-  const settings = GridEditorSettings;
-
-  const createTypesArray = (LanduseTypesList) => {
-    let typesArray = [];
-    Object.keys(LanduseTypesList).forEach((type) => {
-      typesArray.push({
-        name: type,
-        description: "[edit info for type: " + type + "]",
-        color: LanduseTypesList[type].color,
-        height: LanduseTypesList[type].height
-          ? LanduseTypesList[type].height
-          : 0,
-
-        LBCS: LanduseTypesList[type].LBCS
-          ? JSON.stringify(LanduseTypesList[type].LBCS)
-          : null,
-        NAICS: LanduseTypesList[type].NAICS
-          ? JSON.stringify(LanduseTypesList[type].NAICS)
-          : null,
-        interactive: LanduseTypesList[type].interactive,
-      });
-    });
-    return typesArray;
-  };
-
-  const [state, setState] = useState({
-    columns: [
-      {
-        title: "Type",
-        field: "name",
-      },
-      {
-        title: "Description",
-        field: "description",
-      },
-
-      {
-        title: "Height",
-        field: "height",
-        type: "numeric",
-      },
-      {
-        title: "Interactive",
-        field: "interactive",
-        lookup: { No: "No", Web: "Web", TUI: "TUI" },
-      },
-      {
-        title: "Color",
-        field: "color",
-        type: "string",
-      },
-      {
-        title: "LBCS",
-        field: "LBCS",
-        type: "string",
-      },
-      {
-        title: "NAICS",
-        field: "NAICS",
-        type: "string",
-      },
-    ],
-    data: createTypesArray(settings.GEOGRID.properties.types),
-  });
-
+  const [tableState, setTableState] = useState(tableInitialState);
   const dispatch = useDispatch();
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [rowColor, setRowColor] = useState(null);
+  const [selectedRow, setSelectedRow] = useState();
+  const [rowColor, setRowColor] = useState();
 
   // redux the type list on every change
   useEffect(() => {
-    //! dispatch(listeonToTypesList(state.data));
-  });
+    // console.log(tableState);
+    // dispatch(updateTypesEditorState(tableState.data));
+  }, [tableState, selectedRow, rowColor]);
 
   return (
     <MaterialTable
-      title={<Typography variant="h2">Types Editor</Typography>}
-      columns={state.columns}
-      data={state.data}
+      title={<Typography variant="h4">Types Editor</Typography>}
+      columns={tableState.columns}
+      data={tableState.data}
       options={{
         paging: false,
         search: true,
@@ -96,14 +97,13 @@ export default function TypesEditorMenu() {
       onRowClick={(evt, row) => {
         setSelectedRow(row.tableData.id);
         setRowColor(row.color);
-        //! dispatch(listenToRowEdits(row));
       }}
       editable={{
         onRowAdd: (newData) =>
           new Promise((resolve) => {
             setTimeout(() => {
               resolve();
-              setState((prevState) => {
+              setTableState((prevState) => {
                 const data = [...prevState.data];
                 data.push(newData);
                 return { ...prevState, data };
@@ -115,35 +115,29 @@ export default function TypesEditorMenu() {
             setTimeout(() => {
               resolve();
               if (oldData) {
-                setState((prevState) => {
+                setTableState((prevState) => {
                   const data = [...prevState.data];
-                  data[data.indexOf(oldData)] = newData;
+                  const index = data.map(object => object.name).indexOf(oldData.name);
+                  console.log(index);
+                  data[index] = newData;
 
                   return { ...prevState, data };
                 });
               }
-
-              // dispatch change to redux
-              //! dispatch(listenToRowEdits(newData));
             }, 200);
           }),
         onRowDelete: (oldData) =>
           new Promise((resolve) => {
-            console.log(oldData);
-
             setTimeout(() => {
               resolve();
-              setState((prevState) => {
+              setTableState((prevState) => {
                 const data = [...prevState.data];
                 data.splice(data.indexOf(oldData), 1);
                 return { ...prevState, data };
               });
-
-              //! dispatch(listenToGridCreator(null));
             }, 200);
           }),
       }}
     />
   );
 }
-
