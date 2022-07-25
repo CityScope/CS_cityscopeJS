@@ -9,8 +9,9 @@ const settings = GridEditorSettings;
 
 export const createTypesArray = (LandUseTypesList) => {
   let typesArray = [];
-  Object.keys(LandUseTypesList).forEach((type) => {
+  Object.keys(LandUseTypesList).forEach((type, index) => {
     typesArray.push({
+      id: index,
       name: type,
       description: "[edit info for type: " + type + "]",
       color: LandUseTypesList[type].color,
@@ -25,6 +26,7 @@ export const createTypesArray = (LandUseTypesList) => {
       interactive: LandUseTypesList[type].interactive,
     });
   });
+  console.log("typesArray: ", typesArray);
   return typesArray;
 };
 
@@ -99,44 +101,54 @@ export default function TypesEditorMenu() {
         setRowColor(row.color);
       }}
       editable={{
+        // ! new row is added to the end of the table
         onRowAdd: (newData) =>
           new Promise((resolve) => {
             setTimeout(() => {
-              resolve();
               setTableState((prevState) => {
                 const data = [...prevState.data];
+                newData.id = data.length;
                 data.push(newData);
                 return { ...prevState, data };
               });
-            }, 200);
+              resolve();
+            }, 250);
           }),
+        // ! row edit is done by clicking on the row
         onRowUpdate: (newData, oldData) =>
           new Promise((resolve) => {
             setTimeout(() => {
-              resolve();
               if (oldData) {
                 setTableState((prevState) => {
-                  const data = [...prevState.data];
-                  const index = data.map(object => object.name).indexOf(oldData.name);
-                  console.log(index);
-                  data[index] = newData;
-
-                  return { ...prevState, data };
+                  const tableData = [...prevState.data];
+                  const index = tableData
+                    .map((object) => object.id)
+                    .indexOf(oldData.id);
+                  tableData[index] = newData;
+                  return { ...prevState, data: tableData };
                 });
               }
-            }, 200);
+              resolve();
+            }, 250);
           }),
-        onRowDelete: (oldData) =>
+        // ! row delete is done by clicking on the icon
+
+        onRowDelete: (oldData) => {
           new Promise((resolve) => {
             setTimeout(() => {
-              resolve();
               setTableState((prevState) => {
                 const data = [...prevState.data];
-                data.splice(data.indexOf(oldData), 1);
+                const index = data
+                  .map((object) => object.id)
+                  .indexOf(oldData.id);
+                data.splice(index, 1);
                 return { ...prevState, data };
               });
-            }, 200);
-          }),
+              resolve();
+            }, 100);
+          });
+        },
+       
       }}
     />
   );

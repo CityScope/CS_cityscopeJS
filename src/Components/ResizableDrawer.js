@@ -6,11 +6,12 @@ const maxDrawerWidth =
   Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) -
   1;
 
-export const defaultDrawerWidth = Math.floor(maxDrawerWidth / 4);
+ 
 const minDrawerWidth = 50;
 
-export default function ResizableDrawer({ children, direction }) {
-  const [drawerWidth, setDrawerWidth] = useState(defaultDrawerWidth);
+export default function ResizableDrawer({ children, direction, width }) {
+  const defaultDrawerWidth = Math.floor(maxDrawerWidth / 4);
+  const [drawerWidth, setDrawerWidth] = useState(width || defaultDrawerWidth);
 
   const handleMouseDown = (e) => {
     document.addEventListener("mouseup", handleMouseUp, true);

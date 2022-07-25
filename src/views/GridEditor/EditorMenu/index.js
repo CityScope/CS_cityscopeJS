@@ -10,7 +10,7 @@ import TypesEditorMenu from "./TypesEditorMenu";
 
 export default function EditorMenu() {
   return (
-    <ResizableDrawer direction={"left"}>
+    <ResizableDrawer direction={"left"} width={1200}>
       <List>
         <ListItem>
           <Typography variant="h2">CityScope Grid Editor</Typography>
