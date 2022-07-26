@@ -133,22 +133,21 @@ export default function TypesEditorMenu() {
           }),
         // ! row delete is done by clicking on the icon
 
-        onRowDelete: (oldData) => {
-          new Promise((resolve) => {
-            setTimeout(() => {
-              setTableState((prevState) => {
-                const data = [...prevState.data];
-                const index = data
-                  .map((object) => object.id)
-                  .indexOf(oldData.id);
-                data.splice(index, 1);
-                return { ...prevState, data };
-              });
-              resolve();
-            }, 100);
-          });
-        },
-       
+        //   onRowDelete: (oldData) => {
+        //     new Promise((resolve) => {
+        //       setTimeout(() => {
+        //         setTableState((prevState) => {
+        //           const data = [...prevState.data];
+        //           const index = data
+        //             .map((object) => object.id)
+        //             .indexOf(oldData.id);
+        //           data.splice(index, 1);
+        //           return { ...prevState, data };
+        //         });
+        //         resolve();
+        //       }, 1000);
+        //     });
+        //   },
       }}
     />
   );
