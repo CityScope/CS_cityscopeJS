@@ -10,7 +10,7 @@ import CommitGridMenu from "./CommitGridMenu";
 
 export default function EditorMenu() {
   return (
-    <ResizableDrawer direction={"left"} width={1200}>
+    <ResizableDrawer direction={"left"} width={500}>
       <List>
         <ListItem>
           <Typography variant="h2">CityScope Grid Editor</Typography>

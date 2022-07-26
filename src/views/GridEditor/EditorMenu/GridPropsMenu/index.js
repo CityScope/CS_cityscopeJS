@@ -9,7 +9,7 @@ export default function GridProps() {
   const settings = GridEditorSettings;
   const dispatch = useDispatch();
   const [formValues, setFormValues] = useState({
-    tableName: "test",
+    tableName: settings.GEOGRID.properties.header.tableName,
     latitude: settings.GEOGRID.properties.header.latitude,
     longitude: settings.GEOGRID.properties.header.longitude,
     tz: settings.GEOGRID.properties.header.tz,

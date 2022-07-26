@@ -258,6 +258,7 @@ export default function DeckGLMap() {
             mapStyle={settings.map.mapStyle.sat}
             preventStyleDiffing={true}
           />
+
         </DeckGL>
       </div>
     </>

@@ -26,7 +26,6 @@ export const createTypesArray = (LandUseTypesList) => {
       interactive: LandUseTypesList[type].interactive,
     });
   });
-  console.log("typesArray: ", typesArray);
   return typesArray;
 };
 

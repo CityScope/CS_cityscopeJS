@@ -19,6 +19,7 @@ export const GridEditorSettings = {
     features: [],
     properties: {
       header: {
+        tableName: "test",
         cellSize: 50,
         latitude: 42.3664655,
         longitude: -71.0854323,
