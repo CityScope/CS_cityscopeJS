@@ -1,5 +1,5 @@
 import { testHex, hexToRgb } from "../../../../../utils/utils";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 /**
  * cell selection

@@ -78,8 +78,14 @@ export default function TypesEditorMenu() {
 
   // redux the type list on every change
   useEffect(() => {
-    // console.log(tableState);
-    // dispatch(updateTypesEditorState(tableState.data));
+    dispatch(
+      updateTypesEditorState({
+        tableData: tableState.data,
+        selectedRow: selectedRow,
+        rowColor: rowColor,
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableState, selectedRow, rowColor]);
 
   return (
@@ -104,6 +110,7 @@ export default function TypesEditorMenu() {
         // ! new row is added to the end of the table
         onRowAdd: (newData) =>
           new Promise((resolve) => {
+            resolve();
             setTimeout(() => {
               setTableState((prevState) => {
                 const data = [...prevState.data];
@@ -111,12 +118,12 @@ export default function TypesEditorMenu() {
                 data.push(newData);
                 return { ...prevState, data };
               });
-              resolve();
-            }, 250);
+            }, 1000);
           }),
         // ! row edit is done by clicking on the row
         onRowUpdate: (newData, oldData) =>
           new Promise((resolve) => {
+            resolve();
             setTimeout(() => {
               if (oldData) {
                 setTableState((prevState) => {
@@ -128,26 +135,26 @@ export default function TypesEditorMenu() {
                   return { ...prevState, data: tableData };
                 });
               }
-              resolve();
-            }, 250);
+            }, 1000);
           }),
         // ! row delete is done by clicking on the icon
-
-        //   onRowDelete: (oldData) => {
-        //     new Promise((resolve) => {
-        //       setTimeout(() => {
+        // onRowDelete: (oldData) => {
+        //   new Promise((resolve) => {
+        //     resolve();
+        //     setTimeout(() => {
+        //       if (oldData) {
         //         setTableState((prevState) => {
-        //           const data = [...prevState.data];
-        //           const index = data
+        //           const tableData = [...prevState.data];
+        //           const index = tableData
         //             .map((object) => object.id)
         //             .indexOf(oldData.id);
-        //           data.splice(index, 1);
-        //           return { ...prevState, data };
+        //           tableData.splice(index, 1);
+        //           return { ...prevState, data: tableData };
         //         });
-        //         resolve();
-        //       }, 1000);
-        //     });
-        //   },
+        //       }
+        //     }, 1000);
+        //   });
+        // },
       }}
     />
   );

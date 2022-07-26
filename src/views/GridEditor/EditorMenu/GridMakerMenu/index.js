@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import Button from "@mui/material/Button";
 import { gridCreator } from "./gridCreator";
@@ -12,7 +11,9 @@ export default function GridMakerMenu() {
   const [grid, setGrid] = useState(null);
 
   const gridProps = useSelector((state) => state.editorMenuState.gridProps);
-  const typesList = useSelector((state) => state.editorMenuState.typesList);
+  const typesList = useSelector(
+    (state) => state.editorMenuState.typesEditorState.tableData
+  );
 
   useEffect(() => {
     dispatch(updateGridMaker(grid));

@@ -6,7 +6,7 @@ import ResizableDrawer from "../../../Components/ResizableDrawer";
 
 import GridMakerMenu from "./GridMakerMenu";
 import TypesEditorMenu from "./TypesEditorMenu";
-// import CommitGrid from "./CommitGridMenu";
+import CommitGridMenu from "./CommitGridMenu";
 
 export default function EditorMenu() {
   return (
@@ -15,12 +15,16 @@ export default function EditorMenu() {
         <ListItem>
           <Typography variant="h2">CityScope Grid Editor</Typography>
         </ListItem>
+
         <ListItem>
           <Typography>
             This editor can create and `commit` spatial layouts (`grids`) as a
             baseline for CityScope projects. Use the menus and map to edit
             girds, types, and props, and commit them to cityIO.
           </Typography>
+        </ListItem>
+        <ListItem>
+          <CommitGridMenu />
         </ListItem>
         <ListItem>
           <GridPropsMenu />
@@ -31,7 +35,6 @@ export default function EditorMenu() {
         <ListItem>
           <TypesEditorMenu />
         </ListItem>
-        {/* <CommitGrid  /> */}
       </List>
     </ResizableDrawer>
   );

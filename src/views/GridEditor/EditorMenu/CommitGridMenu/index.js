@@ -1,9 +1,8 @@
+import { useState } from "react";
 import axios from "axios";
-import { useState } from "React";
 import Button from "@mui/material/Button";
-import CloudUploadIcon from "@mui/material-icons/CloudUpload";
-import CloudDownloadIcon from "@mui/material-icons/CloudDownload";
-import settings from "../../../../settings/GridEditorSettings.json";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { GridEditorSettings } from "../../../../settings/gridEditorSettings";
 import globalSettings from "../../../../settings/settings.json";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
@@ -21,15 +20,9 @@ const reqResonseUI = (response, tableName) => {
       </Link>
     </Typography>
   );
-
   return resText;
 };
 
-/**
- *
- * @param {typesList} typesList List of types form table editor
- *
- */
 const makeGEOGRIDobject = (struct, typesList, geoJsonFeatures, gridProps) => {
   let GEOGRID_object = struct;
 
@@ -79,11 +72,6 @@ const makeGEOGRIDobject = (struct, typesList, geoJsonFeatures, gridProps) => {
   return GEOGRID_object;
 };
 
-/**
- *
- * @param {typesList} typesList List of types form table editor
- *
- */
 const makeGEOGRIDDATAobject = (geoJsonFeatures) => {
   let GEOGRIDDATA_object = [];
   geoJsonFeatures.forEach((element) => {
@@ -93,36 +81,13 @@ const makeGEOGRIDDATAobject = (geoJsonFeatures) => {
 };
 
 export default function CommitGridMenu(props) {
-  const [reqResonse, setReqResonse] = useState(null);
+  const [reqResponse, setReqResponse] = useState();
 
   const reduxState = useSelector((state) => state);
   const hasGrid = reduxState.GRID_CREATED;
 
-  const downloadObjectAsJson = () => {
-    let GEOGRIDstruct = settings.GEOGRID;
-
-    let typesList = reduxState.TYPES_LIST;
-    let geoJsonFeatures = reduxState.GRID_CREATED.features;
-    let gridProps = props.gridProps;
-    let GEOGRID_object = makeGEOGRIDobject(
-      GEOGRIDstruct,
-      typesList,
-      geoJsonFeatures,
-      gridProps
-    );
-    var dataStr =
-      "data:text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(GEOGRID_object));
-    var downloadAnchorNode = document.createElement("a");
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", "grid.json");
-    document.body.appendChild(downloadAnchorNode); // required for firefox
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
-  };
-
   const postGridToCityIO = () => {
-    let GEOGRIDstruct = settings.GEOGRID;
+    let GEOGRIDstruct = GridEditorSettings.GEOGRID;
     let typesList = reduxState.TYPES_LIST;
     let geoJsonFeatures = reduxState.GRID_CREATED.features;
     let gridProps = props.gridProps;
@@ -137,7 +102,7 @@ export default function CommitGridMenu(props) {
     let GEOGRIDDATA_object = makeGEOGRIDDATAobject(geoJsonFeatures);
     let tableName = GEOGRID_object.properties.header.tableName.toLowerCase();
 
-    const geoGridOptions = (URL, DATA) => {
+    const gridPOSToptions = (URL, DATA) => {
       return {
         method: "post",
         url: URL,
@@ -155,9 +120,9 @@ export default function CommitGridMenu(props) {
       GEOGRIDDATA: GEOGRIDDATA_object,
     };
 
-    axios(geoGridOptions(table_url, new_table_grid))
+    axios(gridPOSToptions(table_url, new_table_grid))
       .then(function (response) {
-        setReqResonse(reqResonseUI(response, tableName));
+        setReqResponse(reqResonseUI(response, tableName));
       })
       .catch((error) => console.log(`ERROR: ${error}`));
   };
@@ -177,19 +142,7 @@ export default function CommitGridMenu(props) {
             Commit Grid to cityIO
           </Button>
 
-          <Button
-            onClick={() => {
-              // ! download as json
-              downloadObjectAsJson();
-            }}
-            variant="outlined"
-            color="default"
-            startIcon={<CloudDownloadIcon />}
-          >
-            Download JSON
-          </Button>
-
-          <div style={{ width: "100%" }}> {reqResonse}</div>
+          <div style={{ width: "100%" }}> {reqResponse}</div>
         </>
       )}
     </>
