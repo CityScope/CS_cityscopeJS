@@ -23,14 +23,13 @@ export default function EditorMenu() {
             girds, types, and props, and commit them to cityIO.
           </Typography>
         </ListItem>
-        <ListItem>
-          <CommitGridMenu />
-        </ListItem>
+
         <ListItem>
           <GridPropsMenu />
         </ListItem>
         <ListItem>
           <GridMakerMenu />
+          <CommitGridMenu />
         </ListItem>
         <ListItem>
           <TypesEditorMenu />

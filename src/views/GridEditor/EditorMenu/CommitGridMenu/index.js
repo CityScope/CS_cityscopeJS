@@ -1,14 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
-import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { GridEditorSettings } from "../../../../settings/gridEditorSettings";
 import globalSettings from "../../../../settings/settings.json";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
 import Link from "@mui/material/Link";
+import LoadingButton from "@mui/lab/LoadingButton";
 
-const reqResonseUI = (response, tableName) => {
+const reqResponseUI = (response, tableName) => {
   let cityscopeJSendpoint =
     "https://cityscope.media.mit.edu/CS_cityscopeJS/?cityscope=" + tableName;
   // create the feedback text
@@ -24,52 +24,48 @@ const reqResonseUI = (response, tableName) => {
 };
 
 const makeGEOGRIDobject = (struct, typesList, geoJsonFeatures, gridProps) => {
-  let GEOGRID_object = struct;
+  let GEOGRIDObject = { ...struct };
 
   // take types list and prepare to csJS format
   let newTypesList = {};
-
   typesList.forEach((oldType) => {
-    newTypesList[oldType.name] = oldType;
+    newTypesList[oldType.name] = { ...oldType };
     //material-table creates strings for these items
     // so in first "Commit to cityIO", these must be turned into
     // Json objects. On Second commit, these are already objects,
     // hence the two conditions below
-
     newTypesList[oldType.name].LBCS =
-      typeof oldType.LBCS == "string" ? JSON.parse(oldType.LBCS) : oldType.LBCS;
+      typeof oldType.LBCS === "string"
+        ? JSON.parse(oldType.LBCS)
+        : oldType.LBCS;
     newTypesList[oldType.name].NAICS =
-      typeof oldType.NAICS == "string"
+      typeof oldType.NAICS === "string"
         ? JSON.parse(oldType.NAICS)
         : oldType.NAICS;
   });
 
-  GEOGRID_object.properties.types = newTypesList;
-
+  GEOGRIDObject.properties.types = newTypesList;
   // inject table props to grid
-  GEOGRID_object.properties.header = gridProps;
-  GEOGRID_object.properties.header.longitude = parseFloat(
-    GEOGRID_object.properties.header.longitude
-  );
-  GEOGRID_object.properties.header.latitude = parseFloat(
-    GEOGRID_object.properties.header.latitude
-  );
-  GEOGRID_object.properties.header.rotation = parseFloat(
-    GEOGRID_object.properties.header.rotation
-  );
-  GEOGRID_object.properties.header.nrows = parseFloat(
-    GEOGRID_object.properties.header.nrows
-  );
-  GEOGRID_object.properties.header.ncols = parseFloat(
-    GEOGRID_object.properties.header.ncols
-  );
-  GEOGRID_object.properties.header.cellSize = parseFloat(
-    GEOGRID_object.properties.header.cellSize
-  );
+  GEOGRIDObject.properties.header = { ...gridProps };
+
+  const toFloatArray = [
+    "longitude",
+    "latitude",
+    "rotation",
+    "nrows",
+    "ncols",
+    "cellSize",
+  ];
+  toFloatArray.forEach((element) => {
+    GEOGRIDObject.properties.header[element] = parseFloat(
+      GEOGRIDObject.properties.header[element]
+    );
+  });
 
   // lastly get the grid features
-  GEOGRID_object.features = geoJsonFeatures;
-  return GEOGRID_object;
+  GEOGRIDObject.features = geoJsonFeatures;
+  console.log(GEOGRIDObject)
+  return GEOGRIDObject;
 };
 
 const makeGEOGRIDDATAobject = (geoJsonFeatures) => {
@@ -80,27 +76,34 @@ const makeGEOGRIDDATAobject = (geoJsonFeatures) => {
   return GEOGRIDDATA_object;
 };
 
-export default function CommitGridMenu(props) {
+export default function CommitGridMenu() {
+  const [loading, setLoading] = useState(false);
   const [reqResponse, setReqResponse] = useState();
 
-  const reduxState = useSelector((state) => state);
-  const hasGrid = reduxState.GRID_CREATED;
+  const gridProps = useSelector((state) => state.editorMenuState.gridProps);
+  const typesList = useSelector(
+    (state) => state.editorMenuState.typesEditorState.tableData
+  );
+
+  const generatedGrid = useSelector((state) => state.editorMenuState.gridMaker);
+  const generatedGridBool =
+    generatedGrid &&
+    generatedGrid.features &&
+    generatedGrid.features.length > 0;
 
   const postGridToCityIO = () => {
-    let GEOGRIDstruct = GridEditorSettings.GEOGRID;
-    let typesList = reduxState.TYPES_LIST;
-    let geoJsonFeatures = reduxState.GRID_CREATED.features;
-    let gridProps = props.gridProps;
+    let GEOGRIDStructure = GridEditorSettings.GEOGRID;
+    let geoJsonFeatures = generatedGrid.features;
     // take grid struct from settings
-    let GEOGRID_object = makeGEOGRIDobject(
-      GEOGRIDstruct,
+    let GEOGRIDObject = makeGEOGRIDobject(
+      GEOGRIDStructure,
       typesList,
       geoJsonFeatures,
       gridProps
     );
 
-    let GEOGRIDDATA_object = makeGEOGRIDDATAobject(geoJsonFeatures);
-    let tableName = GEOGRID_object.properties.header.tableName.toLowerCase();
+    let GEOGRIDDATAObject = makeGEOGRIDDATAobject(geoJsonFeatures);
+    let tableName = GEOGRIDObject.properties.header.tableName.toLowerCase();
 
     const gridPOSToptions = (URL, DATA) => {
       return {
@@ -116,31 +119,39 @@ export default function CommitGridMenu(props) {
 
     const table_url = `${globalSettings.cityIO.baseURL}${tableName}/`;
     const new_table_grid = {
-      GEOGRID: GEOGRID_object,
-      GEOGRIDDATA: GEOGRIDDATA_object,
+      GEOGRID: GEOGRIDObject,
+      GEOGRIDDATA: GEOGRIDDATAObject,
     };
 
-    axios(gridPOSToptions(table_url, new_table_grid))
-      .then(function (response) {
-        setReqResponse(reqResonseUI(response, tableName));
-      })
-      .catch((error) => console.log(`ERROR: ${error}`));
+    // axios(gridPOSToptions(table_url, new_table_grid))
+    //   .then(function (response) {
+    //     setReqResponse(reqResponseUI(response, tableName));
+    //   })
+    //   .catch((error) => console.log(`ERROR: ${error}`));
   };
 
   return (
     <>
-      {hasGrid && (
+      {generatedGridBool && (
         <>
-          <Button
+          <LoadingButton
             onClick={() => {
-              postGridToCityIO();
+              setLoading(true);
+              new Promise((resolve) => {
+                setTimeout(() => {
+                  setLoading(false);
+                  postGridToCityIO();
+                }, 1500);
+                resolve();
+              });
             }}
+            loading={loading}
+            loadingPosition="start"
             variant="outlined"
-            color="default"
             startIcon={<CloudUploadIcon />}
           >
             Commit Grid to cityIO
-          </Button>
+          </LoadingButton>
 
           <div style={{ width: "100%" }}> {reqResponse}</div>
         </>

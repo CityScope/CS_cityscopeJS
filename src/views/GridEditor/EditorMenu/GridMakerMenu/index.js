@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { gridCreator } from "./gridCreator";
 import { useDispatch, useSelector } from "react-redux";
 import { updateGridMaker } from "../../../../redux/reducers/editorMenuSlice";
 
 export default function GridMakerMenu() {
   const dispatch = useDispatch();
-
-  const [grid, setGrid] = useState(null);
+  const [grid, setGrid] = useState();
+  const [loading, setLoading] = useState(false);
 
   const gridProps = useSelector((state) => state.editorMenuState.gridProps);
   const typesList = useSelector(
@@ -27,16 +27,24 @@ export default function GridMakerMenu() {
   return (
     <>
       {gridProps && typesList && (
-        <Button
-          sx={{ width: "100%" }}
+        <LoadingButton
           onClick={() => {
-            handleGridCreation();
+            setLoading(true);
+            new Promise((resolve) => {
+              setTimeout(() => {
+                setLoading(false);
+                handleGridCreation();
+              }, 100);
+              resolve();
+            });
           }}
+          loading={loading}
+          loadingPosition="start"
           variant="outlined"
           startIcon={<AutoAwesomeIcon />}
         >
           Generate Grid
-        </Button>
+        </LoadingButton>
       )}
     </>
   );

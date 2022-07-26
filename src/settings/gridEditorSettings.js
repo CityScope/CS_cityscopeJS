@@ -18,7 +18,6 @@ export const GridEditorSettings = {
   GEOGRID: {
     features: [],
     properties: {
-      geogrid_to_tui_mapping: {},
       header: {
         cellSize: 50,
         latitude: 42.3664655,

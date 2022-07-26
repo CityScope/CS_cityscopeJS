@@ -21,7 +21,7 @@ import {
   LightingEffect,
   _SunLight as SunLight,
 } from "@deck.gl/core";
-import { proccessGridData } from "./deckglLayers/GridLayer";
+import { processGridData } from "./deckglLayers/GridLayer";
 
 const ambientLight = new AmbientLight({
   color: [255, 255, 255],
@@ -109,7 +109,7 @@ export default function DeckGLMap() {
 
   // update the grid layer with every change to GEOGRIDDATA
   useEffect(() => {
-    setGEOGRIDDATA(proccessGridData(cityIOdata));
+    setGEOGRIDDATA(processGridData(cityIOdata));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityIOdata.GEOGRIDDATA]);
 
@@ -241,7 +241,7 @@ export default function DeckGLMap() {
           viewState={viewState}
           onViewStateChange={onViewStateChange}
           layers={renderDeckglLayers()}
-          effects={ effects }
+          effects={effects}
           controller={{
             touchZoom: true,
             touchRotate: true,
