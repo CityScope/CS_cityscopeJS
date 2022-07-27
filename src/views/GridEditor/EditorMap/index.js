@@ -19,12 +19,19 @@ export default function EditorMap() {
   //   _shadow: true,
   // };
 
+  const [grid, setGrid] = useState();
   const selectedType = useSelector(
     (state) => state.editorMenuState.typesEditorState.selectedRow
   );
 
   // redux grid
   const createdGrid = useSelector((state) => state.editorMenuState.gridMaker);
+  // create grid from redux store
+  useEffect(() => {
+    setGrid(createdGrid);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createdGrid]);
+
   // redux map center
   const editorMapCenter = useSelector(
     (state) => state.editorMenuState.editorMapCenter
@@ -42,13 +49,12 @@ export default function EditorMap() {
   const [viewState, setViewState] = useState(
     GridEditorSettings.map.initialViewState
   );
-  const [hoveredObj, setHoveredObj] = useState();
+  // const [hoveredObj, setHoveredObj] = useState();
   const [keyDownState, setKeyDownState] = useState();
   const [mousePos, setMousePos] = useState();
   const [mouseDown, setMouseDown] = useState();
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
   const [pickedCellsState, setPickedCellsState] = useState();
-
   const onViewStateChange = ({ viewState }) => {
     setViewState(viewState);
   };
@@ -111,8 +117,11 @@ export default function EditorMap() {
     if (!selectedType) return;
     const { height, name, color, interactive } = selectedType;
     const multiSelectedObj = multipleObjPicked(event);
-    multiSelectedObj.forEach((pickedObject) => {
-      const thisCellProps = pickedObject.object.properties;
+
+    multiSelectedObj.forEach((pickedObject, index) => {
+      // create a copy of the object
+      const thisCellProps = { ...pickedObject.object.properties };
+      // modify the copy properties to match the selected type
       thisCellProps.color = testHex(color) ? hexToRgb(color) : color;
       thisCellProps.height = parseInt(height);
       thisCellProps.name = name;
@@ -121,8 +130,20 @@ export default function EditorMap() {
       } else {
         delete thisCellProps.interactive;
       }
+      //  assign the modified copy to the grid object
+      setGrid((grid) => ({
+        ...grid,
+        features: grid.features.map((feature) => {
+          if (pickedObject.index === feature.properties.id) {
+            return {
+              ...feature,
+              properties: thisCellProps,
+            };
+          }
+          return feature;
+        }),
+      }));
     });
-    setPickedCellsState(multiSelectedObj);
   };
 
   /**
@@ -137,7 +158,7 @@ export default function EditorMap() {
           selectedType={selectedType}
           divSize={pickingRadius}
           mouseDown={mouseDown}
-          hoveredObj={hoveredObj}
+          // hoveredObj={hoveredObj}
         />
       )
     );
@@ -165,17 +186,13 @@ export default function EditorMap() {
         wireframe: true,
         visible: true,
         pickable: true,
-        data: createdGrid,
+        data: grid,
         extruded: true,
         lineWidthScale: 1,
         lineWidthMinPixels: 1,
         getElevation: (d) => d.properties.height,
         getFillColor: (d) => d.properties.color,
-        // onHover: (event) => {
-        //   if (event.object) {
-        //     setHoveredObj(event);
-        //   }
-        // },
+
         onClick: (event, cellInfo) => {
           if (!cellInfo.rightButton && keyDownState !== "Shift")
             handleGridCellEditing(event);
@@ -197,8 +214,8 @@ export default function EditorMap() {
           getElevation: pickedCellsState,
         },
         transitions: {
-          getFillColor: 500,
-          getElevation: 500,
+          getFillColor: 150,
+          getElevation: 150,
         },
       }),
     ];
