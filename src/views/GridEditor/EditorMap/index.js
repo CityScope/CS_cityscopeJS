@@ -20,16 +20,20 @@ export default function EditorMap() {
   const selectedType = useSelector(
     (state) => state.editorMenuState.typesEditorState.selectedRow
   );
+
   const createdGrid = useSelector((state) => state.editorMenuState.gridMaker);
+  const editorMapCenter = useSelector(
+    (state) => state.editorMenuState.editorMapCenter
+  );
 
   const deckGLref = useRef(null);
   const pickingRadius = 40;
 
   useEffect(() => {
     // zoom map on CS table location
-    setViewStateToTableHeader();
+    setViewStateToTableHeader(editorMapCenter);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [editorMapCenter]);
 
   const [viewState, setViewState] = useState(
     GridEditorSettings.map.initialViewState
@@ -50,11 +54,15 @@ export default function EditorMap() {
    * to cityIO header data
    * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
    */
-  const setViewStateToTableHeader = () => {
+  const setViewStateToTableHeader = (editorMapCenter) => {
     setViewState({
       ...viewState,
-      latitude: GridEditorSettings.GEOGRID.properties.header.latitude,
-      longitude: GridEditorSettings.GEOGRID.properties.header.longitude,
+      latitude:
+        (editorMapCenter && editorMapCenter.latCenter) ||
+        GridEditorSettings.GEOGRID.properties.header.latitude,
+      longitude:
+        (editorMapCenter && editorMapCenter.lonCenter) ||
+        GridEditorSettings.GEOGRID.properties.header.longitude,
       zoom: 15,
       pitch: 0,
       bearing: 0,

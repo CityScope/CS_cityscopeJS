@@ -19,7 +19,7 @@ export default function CenterMapButton(props) {
       variant="outlined"
       startIcon={<CenterFocusStrongIcon />}
     >
-      Center Map to Lat/Lon
+      Center Map to Grid
     </Button>
   );
 }
