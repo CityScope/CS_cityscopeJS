@@ -64,7 +64,6 @@ const makeGEOGRIDobject = (struct, typesList, geoJsonFeatures, gridProps) => {
 
   // lastly get the grid features
   GEOGRIDObject.features = geoJsonFeatures;
-  console.log(GEOGRIDObject);
   return GEOGRIDObject;
 };
 
@@ -79,7 +78,6 @@ const makeGEOGRIDDATAobject = (geoJsonFeatures) => {
 export default function CommitGridMenu() {
   const [loading, setLoading] = useState(false);
   const [reqResponse, setReqResponse] = useState();
-
   const gridProps = useSelector((state) => state.editorMenuState.gridProps);
   const typesList = useSelector(
     (state) => state.editorMenuState.typesEditorState.tableData

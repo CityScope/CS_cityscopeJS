@@ -4,12 +4,13 @@ import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { GeoJsonLayer } from "deck.gl";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { hexToRgb, testHex } from "../../../utils/utils";
-
+import { updateGridMaker } from "../../../redux/reducers/editorMenuSlice";
 import { GridEditorSettings } from "../../../settings/gridEditorSettings";
 
 export default function EditorMap() {
+  const dispatch = useDispatch();
   const [grid, setGrid] = useState();
   // get the selected type from the store
   const selectedType = useSelector(
@@ -85,7 +86,7 @@ export default function EditorMap() {
   /**
    * Description. uses deck api to
    * collect objects in a region
-   * @argument{object} event  picking event
+   * @argument{object} event picking event
    */
   const multipleObjPicked = (event) => {
     const dim = pickingRadius;
@@ -215,7 +216,12 @@ export default function EditorMap() {
       onKeyDown={handleKeyDown}
       onKeyUp={handleKeyUp}
       onMouseMove={(e) => setMousePos(e.nativeEvent)}
-      onMouseUp={() => setMouseDown(false)}
+      onMouseUp={() => {
+        // ! when mouse is up, dispatch the grid to the store
+        //! so it will be sent to the server when committing
+        dispatch(updateGridMaker(grid));
+        setMouseDown(false);
+      }}
       onMouseDown={() => setMouseDown(true)}
     >
       {renderEditorBrush()}
