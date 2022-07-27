@@ -5,21 +5,13 @@ import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { GeoJsonLayer } from "deck.gl";
 import { useSelector } from "react-redux";
-// import settings from "../../../settings/settings.json";
 import { hexToRgb, testHex } from "../../../utils/utils";
 
 import { GridEditorSettings } from "../../../settings/gridEditorSettings";
 
 export default function EditorMap() {
-  // light variables
-  // const dirLightSettings = {
-  //   timestamp: Date.UTC(2019, 7, 1, 12),
-  //   color: [255, 255, 255],
-  //   intensity: 1.0,
-  //   _shadow: true,
-  // };
-
   const [grid, setGrid] = useState();
+  // get the selected type from the store
   const selectedType = useSelector(
     (state) => state.editorMenuState.typesEditorState.selectedRow
   );
@@ -212,10 +204,6 @@ export default function EditorMap() {
         updateTriggers: {
           getFillColor: pickedCellsState,
           getElevation: pickedCellsState,
-        },
-        transitions: {
-          getFillColor: 150,
-          getElevation: 150,
         },
       }),
     ];

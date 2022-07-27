@@ -119,7 +119,7 @@ export default function TypesEditorMenu() {
                 data.push(newData);
                 return { ...prevState, data };
               });
-            }, 1000);
+            }, 50);
           }),
         // ! row edit is done by clicking on the row
         onRowUpdate: (newData, oldData) =>
@@ -136,7 +136,7 @@ export default function TypesEditorMenu() {
                   return { ...prevState, data: tableData };
                 });
               }
-            }, 1000);
+            }, 50);
           }),
         // ! row delete is done by clicking on the icon
         // onRowDelete: (oldData) => {

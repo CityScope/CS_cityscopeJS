@@ -64,7 +64,7 @@ const makeGEOGRIDobject = (struct, typesList, geoJsonFeatures, gridProps) => {
 
   // lastly get the grid features
   GEOGRIDObject.features = geoJsonFeatures;
-  console.log(GEOGRIDObject)
+  console.log(GEOGRIDObject);
   return GEOGRIDObject;
 };
 
@@ -105,6 +105,7 @@ export default function CommitGridMenu() {
     let GEOGRIDDATAObject = makeGEOGRIDDATAobject(geoJsonFeatures);
     let tableName = GEOGRIDObject.properties.header.tableName.toLowerCase();
 
+    // post to cityIO server 
     const gridPOSToptions = (URL, DATA) => {
       return {
         method: "post",
@@ -116,18 +117,18 @@ export default function CommitGridMenu() {
         },
       };
     };
-
-    const table_url = `${globalSettings.cityIO.baseURL}${tableName}/`;
+  
+    const table_url = `${globalSettings.cityIO.baseURL}table/${tableName}/`;
     const new_table_grid = {
       GEOGRID: GEOGRIDObject,
       GEOGRIDDATA: GEOGRIDDATAObject,
     };
 
-    // axios(gridPOSToptions(table_url, new_table_grid))
-    //   .then(function (response) {
-    //     setReqResponse(reqResponseUI(response, tableName));
-    //   })
-    //   .catch((error) => console.log(`ERROR: ${error}`));
+    axios(gridPOSToptions(table_url, new_table_grid))
+      .then(function (response) {
+        setReqResponse(reqResponseUI(response, tableName));
+      })
+      .catch((error) => console.log(`ERROR: ${error}`));
   };
 
   return (

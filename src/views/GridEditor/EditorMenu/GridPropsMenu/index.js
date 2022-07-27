@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { updateGridProps } from "../../../../redux/reducers/editorMenuSlice";
-import { TextField, Typography, List, ListItem } from "@mui/material";
+import { TextField, Typography, List, ListItem, Stack } from "@mui/material";
 import CenterMapButton from "./CenterMapButton";
 import { GridEditorSettings } from "../../../../settings/gridEditorSettings";
 
@@ -48,32 +48,34 @@ export default function GridProps() {
         />
       </ListItem>
       <ListItem>
-        <TextField
-          onChange={(event) => handleFormUpdates(event)}
-          variant="outlined"
-          id="latitude"
-          label="Latitude"
-          defaultValue={formValues.latitude}
-          type="number"
-        />
+        <Stack direction="row" spacing={1}>
+          <TextField
+            onChange={(event) => handleFormUpdates(event)}
+            variant="outlined"
+            id="latitude"
+            label="Latitude"
+            defaultValue={formValues.latitude}
+            type="number"
+          />
 
-        <TextField
-          onChange={(event) => handleFormUpdates(event)}
-          variant="outlined"
-          id="longitude"
-          label="Longitude"
-          defaultValue={formValues.longitude}
-          type="number"
-        />
+          <TextField
+            onChange={(event) => handleFormUpdates(event)}
+            variant="outlined"
+            id="longitude"
+            label="Longitude"
+            defaultValue={formValues.longitude}
+            type="number"
+          />
 
-        <TextField
-          onChange={(event) => handleFormUpdates(event)}
-          variant="outlined"
-          id="tz"
-          label="Time Zone (GMT)"
-          defaultValue={formValues.tz}
-          type="number"
-        />
+          <TextField
+            onChange={(event) => handleFormUpdates(event)}
+            variant="outlined"
+            id="tz"
+            label="Time Zone (GMT)"
+            defaultValue={formValues.tz}
+            type="number"
+          />
+        </Stack>
       </ListItem>
       <ListItem>
         <CenterMapButton
@@ -82,65 +84,67 @@ export default function GridProps() {
       </ListItem>
 
       <ListItem>
-        <TextField
-          onChange={(event) => handleFormUpdates(event)}
-          variant="outlined"
-          id="nrows"
-          label="Rows"
-          defaultValue={formValues.nrows}
-          type="number"
-          InputProps={{
-            inputProps: {
-              max: 100,
-              min: 0,
-            },
-          }}
-        />
+        <Stack direction="row" spacing={1}>
+          <TextField
+            onChange={(event) => handleFormUpdates(event)}
+            variant="outlined"
+            id="nrows"
+            label="Rows"
+            defaultValue={formValues.nrows}
+            type="number"
+            InputProps={{
+              inputProps: {
+                max: 100,
+                min: 0,
+              },
+            }}
+          />
 
-        <TextField
-          onChange={(event) => handleFormUpdates(event)}
-          variant="outlined"
-          id="ncols"
-          label="Columns"
-          defaultValue={formValues.ncols}
-          type="number"
-          InputProps={{
-            inputProps: {
-              max: 100,
-              min: 0,
-            },
-          }}
-        />
+          <TextField
+            onChange={(event) => handleFormUpdates(event)}
+            variant="outlined"
+            id="ncols"
+            label="Columns"
+            defaultValue={formValues.ncols}
+            type="number"
+            InputProps={{
+              inputProps: {
+                max: 100,
+                min: 0,
+              },
+            }}
+          />
 
-        <TextField
-          onChange={(event) => handleFormUpdates(event)}
-          variant="outlined"
-          id="rotation"
-          label="Rotation (deg)"
-          defaultValue={formValues.rotation}
-          type="number"
-          InputProps={{
-            inputProps: {
-              max: 360,
-              min: 0,
-            },
-          }}
-        />
+          <TextField
+            onChange={(event) => handleFormUpdates(event)}
+            variant="outlined"
+            id="rotation"
+            label="Rotation (deg)"
+            defaultValue={formValues.rotation}
+            type="number"
+            InputProps={{
+              inputProps: {
+                max: 360,
+                min: 0,
+              },
+            }}
+          />
 
-        <TextField
-          onChange={(event) => handleFormUpdates(event)}
-          variant="outlined"
-          id="cellSize"
-          label="Cell Size (m^2)"
-          defaultValue={formValues.cellSize}
-          type="number"
-          InputProps={{
-            inputProps: {
-              max: 1000,
-              min: 1,
-            },
-          }}
-        />
+          <TextField
+            onChange={(event) => handleFormUpdates(event)}
+            variant="outlined"
+            id="cellSize"
+            label="Cell Size (m^2)"
+            defaultValue={formValues.cellSize}
+            type="number"
+            InputProps={{
+              inputProps: {
+                max: 1000,
+                min: 1,
+              },
+            }}
+          />
+        </Stack>
       </ListItem>
       <ListItem>
         <TextField
