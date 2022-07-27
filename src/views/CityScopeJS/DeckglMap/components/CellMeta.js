@@ -8,6 +8,7 @@ import { Typography } from "@mui/material";
 export const CellMeta = (props) => {
   if (!props.mousePos) return null;
   const mousePos = props.mousePos;
+  const hoveredObj = props.hoveredObj;
 
   return (
     <div
@@ -24,11 +25,9 @@ export const CellMeta = (props) => {
         //
       }}
     >
-      <Typography>Type: {props.hoveredObj.object.properties.name}</Typography>
-      <Typography>
-        Height: {props.hoveredObj.object.properties.height}
-      </Typography>
-      <Typography>ID: s{props.hoveredObj.object.properties.id}</Typography>
+      <Typography>Type: {hoveredObj.object.properties.name}</Typography>
+      <Typography>Height: {hoveredObj.object.properties.height}</Typography>
+      <Typography>ID: {hoveredObj.object.properties.id}</Typography>
     </div>
   );
 };

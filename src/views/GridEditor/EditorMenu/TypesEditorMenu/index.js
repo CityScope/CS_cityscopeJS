@@ -98,11 +98,13 @@ export default function TypesEditorMenu() {
         selection: false,
         rowStyle: (rowData) => ({
           backgroundColor:
-            selectedRow === rowData.tableData.id ? rowColor : null,
+            selectedRow && selectedRow.tableData.id === rowData.tableData.id
+              ? rowColor
+              : null,
         }),
       }}
       onRowClick={(evt, row) => {
-        setSelectedRow(row.tableData.id);
+        setSelectedRow(row);
         setRowColor(row.color);
       }}
       editable={{

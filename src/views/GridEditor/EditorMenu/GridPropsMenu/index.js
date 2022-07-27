@@ -144,6 +144,7 @@ export default function GridProps() {
       </ListItem>
       <ListItem>
         <TextField
+          size="small"
           onChange={(event) => handleFormUpdates(event)}
           variant="outlined"
           id="projection"

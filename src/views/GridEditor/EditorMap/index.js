@@ -4,24 +4,28 @@ import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { GeoJsonLayer } from "deck.gl";
-import { useDispatch, useSelector } from "react-redux";
-import settings from "../../../settings/settings.json";
-import { hexToRgb } from "../../../utils/utils";
+import { useSelector } from "react-redux";
+// import settings from "../../../settings/settings.json";
+import { hexToRgb, testHex } from "../../../utils/utils";
+
 import { GridEditorSettings } from "../../../settings/gridEditorSettings";
 
-export const dirLightSettings = {
-  timestamp: Date.UTC(2019, 7, 1, 12),
-  color: [255, 255, 255],
-  intensity: 1.0,
-  _shadow: true,
-};
-
 export default function EditorMap() {
+  // light variables
+  // const dirLightSettings = {
+  //   timestamp: Date.UTC(2019, 7, 1, 12),
+  //   color: [255, 255, 255],
+  //   intensity: 1.0,
+  //   _shadow: true,
+  // };
+
   const selectedType = useSelector(
     (state) => state.editorMenuState.typesEditorState.selectedRow
   );
 
+  // redux grid
   const createdGrid = useSelector((state) => state.editorMenuState.gridMaker);
+  // redux map center
   const editorMapCenter = useSelector(
     (state) => state.editorMenuState.editorMapCenter
   );
@@ -38,12 +42,12 @@ export default function EditorMap() {
   const [viewState, setViewState] = useState(
     GridEditorSettings.map.initialViewState
   );
+  const [hoveredObj, setHoveredObj] = useState();
   const [keyDownState, setKeyDownState] = useState();
   const [mousePos, setMousePos] = useState();
   const [mouseDown, setMouseDown] = useState();
-  const [hoveredObj, setHoveredObj] = useState();
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
-  const [selectedCellsState, setSelectedCellsState] = useState();
+  const [pickedCellsState, setPickedCellsState] = useState();
 
   const onViewStateChange = ({ viewState }) => {
     setViewState(viewState);
@@ -83,19 +87,19 @@ export default function EditorMap() {
   /**
    * Description. uses deck api to
    * collect objects in a region
-   * @argument{object} e  picking event
+   * @argument{object} event  picking event
    */
-  const mulipleObjPicked = (e) => {
+  const multipleObjPicked = (event) => {
     const dim = pickingRadius;
-    const x = e.x - dim / 2;
-    const y = e.y - dim / 2;
-    let mulipleObj = deckGLref.pickObjects({
+    const x = event.x - dim / 2;
+    const y = event.y - dim / 2;
+    let multipleObj = deckGLref.current.pickObjects({
       x: x,
       y: y,
       width: dim,
       height: dim,
     });
-    return mulipleObj;
+    return multipleObj;
   };
 
   /**
@@ -103,14 +107,13 @@ export default function EditorMap() {
    *  not of CityScope TUI & that are interactable
    * so to not overlap TUI activity
    */
-  const handleGridCellEditing = (e) => {
+  const handleGridCellEditing = (event) => {
     if (!selectedType) return;
     const { height, name, color, interactive } = selectedType;
-    const multiSelectedObj = mulipleObjPicked(e);
-
-    multiSelectedObj.forEach((selected) => {
-      let thisCellProps = selected.object.properties;
-      thisCellProps.color = hexToRgb(color);
+    const multiSelectedObj = multipleObjPicked(event);
+    multiSelectedObj.forEach((pickedObject) => {
+      const thisCellProps = pickedObject.object.properties;
+      thisCellProps.color = testHex(color) ? hexToRgb(color) : color;
       thisCellProps.height = parseInt(height);
       thisCellProps.name = name;
       if (interactive !== "No") {
@@ -119,14 +122,14 @@ export default function EditorMap() {
         delete thisCellProps.interactive;
       }
     });
-    setSelectedCellsState(multiSelectedObj);
+    setPickedCellsState(multiSelectedObj);
   };
 
   /**
    * Description.
    * draw target area around mouse
    */
-  const _renderSelectionTarget = () => {
+  const renderEditorBrush = () => {
     return (
       selectedType && (
         <EditorBrush
@@ -134,6 +137,7 @@ export default function EditorMap() {
           selectedType={selectedType}
           divSize={pickingRadius}
           mouseDown={mouseDown}
+          hoveredObj={hoveredObj}
         />
       )
     );
@@ -159,7 +163,6 @@ export default function EditorMap() {
         stroked: false,
         filled: true,
         wireframe: true,
-        data: createdGrid,
         visible: true,
         pickable: true,
         data: createdGrid,
@@ -168,6 +171,11 @@ export default function EditorMap() {
         lineWidthMinPixels: 1,
         getElevation: (d) => d.properties.height,
         getFillColor: (d) => d.properties.color,
+        // onHover: (event) => {
+        //   if (event.object) {
+        //     setHoveredObj(event);
+        //   }
+        // },
         onClick: (event, cellInfo) => {
           if (!cellInfo.rightButton && keyDownState !== "Shift")
             handleGridCellEditing(event);
@@ -185,8 +193,8 @@ export default function EditorMap() {
           setDraggingWhileEditing(false);
         },
         updateTriggers: {
-          getFillColor: selectedCellsState,
-          getElevation: selectedCellsState,
+          getFillColor: pickedCellsState,
+          getElevation: pickedCellsState,
         },
         transitions: {
           getFillColor: 500,
@@ -201,23 +209,11 @@ export default function EditorMap() {
     <div
       onKeyDown={handleKeyDown}
       onKeyUp={handleKeyUp}
-      onMouseMove={(e) =>
-        setMousePos({
-          mousePos: e.nativeEvent,
-        })
-      }
-      onMouseUp={() =>
-        setMouseDown({
-          mouseDown: false,
-        })
-      }
-      onMouseDown={() =>
-        setMouseDown({
-          mouseDown: true,
-        })
-      }
+      onMouseMove={(e) => setMousePos(e.nativeEvent)}
+      onMouseUp={() => setMouseDown(false)}
+      onMouseDown={() => setMouseDown(true)}
     >
-      {_renderSelectionTarget()}
+      {renderEditorBrush()}
 
       <DeckGL
         ref={deckGLref}

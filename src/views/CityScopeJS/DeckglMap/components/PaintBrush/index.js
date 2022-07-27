@@ -1,5 +1,5 @@
-import { PaintBrush } from './PaintBrush'
-import { CellMeta } from '../CellMeta'
+import { PaintBrush } from "./PaintBrush";
+import { CellMeta } from "../CellMeta";
 
 export default function PaintBrushContainer({
   editOn,
@@ -10,7 +10,12 @@ export default function PaintBrushContainer({
   hoveredObj,
 }) {
   const BrushSelector = () => {
-    if (editOn && selectedType&& Object.keys(selectedType).length && hoveredObj) {
+    if (
+      editOn &&
+      selectedType &&
+      Object.keys(selectedType).length &&
+      hoveredObj
+    ) {
       return (
         <PaintBrush
           mousePos={mousePos}
@@ -19,12 +24,12 @@ export default function PaintBrushContainer({
           mouseDown={mouseDown}
           hoveredCells={hoveredObj}
         />
-      )
-    } else if (hoveredObj ) {
-      return <CellMeta mousePos={mousePos} hoveredObj={hoveredObj} />
+      );
+    } else if (hoveredObj) {
+      return <CellMeta mousePos={mousePos} hoveredObj={hoveredObj} />;
     } else {
-      return null
+      return null;
     }
-  }
-  return <BrushSelector />
+  };
+  return <BrushSelector />;
 }
