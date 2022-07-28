@@ -2,11 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import PaintBrush from "./components/PaintBrush";
 import { postToCityIO } from "../../../utils/utils";
-import { StaticMap } from "react-map-gl";
+import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import settings from "../../../settings/settings.json";
 import AnimationComponent from "../../../Components/AnimationComponent";
+// import { HeatmapLayer } from "deck.gl";
+import { HeatmapLayer } from "@deck.gl/aggregation-layers";
 
 import {
   AccessLayer,
@@ -55,6 +57,7 @@ export default function DeckGLMap() {
   const [mouseDown, setMouseDown] = useState();
   const [hoveredObj, setHoveredObj] = useState();
   const [GEOGRIDDATA, setGEOGRIDDATA] = useState();
+  const [layers, setLayers] = useState([]);
   const deckGLref = useRef();
   const pickingRadius = 40;
   const editModeToggle = menuState.editMenuState.EDIT_BUTTON;
@@ -124,6 +127,8 @@ export default function DeckGLMap() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editModeToggle]);
+
+
 
   const onViewStateChange = ({ viewState }) => {
     viewState.orthographic =
@@ -201,6 +206,24 @@ export default function DeckGLMap() {
   ];
 
   const renderDeckglLayers = () => {
+    //   new HeatmapLayer({
+    //     data: cityIOdata && cityIOdata.access && cityIOdata.access.features,
+    //     colorRange: [
+    //       [255, 255, 178],
+    //       [254, 217, 118],
+    //       [254, 178, 76],
+    //       [253, 141, 60],
+    //       [240, 59, 32],
+    //       [189, 0, 38],
+    //     ],
+    //     threshold: 0.05,
+    //     getPosition: (d) => d.geometry.coordinates,
+    //     getWeight: (d) => d.properties[0],
+    //     updateTriggers: {
+    //       getWeight: [0],
+    //     },
+    //   }),
+    // ];
     let layers = [];
     for (var layerNameString of layerOrder) {
       // toggle layers on and off
@@ -212,7 +235,7 @@ export default function DeckGLMap() {
         layers.push(layersKey[layerNameString]);
       }
     }
-    return layers;
+    setLayers(layers);
   };
 
   return (
@@ -240,7 +263,7 @@ export default function DeckGLMap() {
           ref={deckGLref}
           viewState={viewState}
           onViewStateChange={onViewStateChange}
-          layers={renderDeckglLayers()}
+          layers={layers}
           effects={effects}
           controller={{
             touchZoom: true,
@@ -250,7 +273,7 @@ export default function DeckGLMap() {
             keyboard: false,
           }}
         >
-          <StaticMap
+          <Map
             asyncRender={false}
             dragRotate={true}
             reuseMaps={true}
@@ -258,7 +281,6 @@ export default function DeckGLMap() {
             mapStyle={settings.map.mapStyle.sat}
             preventStyleDiffing={true}
           />
-
         </DeckGL>
       </div>
     </>
