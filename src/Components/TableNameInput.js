@@ -20,7 +20,8 @@ export default function TableNameInput({ setSelectedTable }) {
      * Gets all tables on init
      */
     let buttonsArr = [];
-    const cityIOlistURL = cityIOSettings.cityIO.ListOfTables;
+    const cityIOlistURL =
+      cityIOSettings.cityIO.baseURL + cityIOSettings.cityIO.ListOfTables;
     const cityIOtableBaseUrl = cityIOSettings.cityIO.baseURL + "table/";
 
     axios.get(cityIOlistURL).then((res) => {

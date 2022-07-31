@@ -1,10 +1,9 @@
 export const cityIOSettings = {
   docsURL:
     "https://raw.githubusercontent.com/CityScope/CS_cityscopeJS/master/docs/",
-  SOCKETS: { URL: "ws://localhost:8080" },
   cityIO: {
     baseURL: "https://cityio.media.mit.edu/api/",
-    ListOfTables: "https://cityio.media.mit.edu/api/tables/list/",
+    ListOfTables: "tables/list/",
     interval: 500,
     cityIOmodules: [
       { name: "header", expectUpdate: false },

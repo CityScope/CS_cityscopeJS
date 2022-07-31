@@ -10,7 +10,7 @@ export default function CityIOlist() {
   const [isLoading, setIsLoading] = useState(true);
   const fetchCityIOtables = async () => {
     // ! https://stackoverflow.com/questions/37213783/waiting-for-all-promises-called-in-a-loop-to-finish
-    const cityIOlistURL = cityIOSettings.cityIO.ListOfTables;
+    const cityIOlistURL = cityIOSettings.cityIO.baseURL +  cityIOSettings.cityIO.ListOfTables;
     // get all URLs
     const tablesArr = await axios.get(cityIOlistURL);
     // create array of all requests
