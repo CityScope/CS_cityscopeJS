@@ -1,5 +1,5 @@
 import axios from "axios";
-import settings from "../settings/settings.json";
+import {cityIOSettings} from "../settings/settings";
 
 /**
  * Get API call using axios
@@ -57,7 +57,7 @@ export const testHex = (hexString) => {
  * with grid edits payload
  */
 export const postToCityIO = (data, tableName, endPoint) => {
-  let postURL = settings.cityIO.baseURL + "table/" + tableName + endPoint;
+  let postURL = cityIOSettings.cityIO.baseURL + "table/" + tableName + endPoint;
 
   const options = {
     method: "post",
@@ -79,7 +79,7 @@ export const postToCityIO = (data, tableName, endPoint) => {
     });
 };
 
-const cityIObaseURL = settings.cityIO.baseURL;
+const cityIObaseURL = cityIOSettings.cityIO.baseURL;
 
 export const fetchJSON = async (url, options) => {
   const response = await fetch(url, options);

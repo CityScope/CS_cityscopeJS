@@ -11,7 +11,7 @@ import {
 import {
   viewControlCheckboxes,
   viewControlButtons,
-} from "../../../../settings/menuSettings";
+} from "../../../../settings/settings";
 import { updateViewSettingsMenuState } from "../../../../redux/reducers/menuSlice";
 import { useDispatch } from "react-redux";
 

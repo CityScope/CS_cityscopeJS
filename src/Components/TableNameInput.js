@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import settings from "../settings/settings.json";
+import cityIOSettings from "../settings/settings";
 import { Button } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -20,8 +20,8 @@ export default function TableNameInput({ setSelectedTable }) {
      * Gets all tables on init
      */
     let buttonsArr = [];
-    const cityIOlistURL = settings.cityIO.ListOfTables;
-    const cityIOtableBaseUrl = settings.cityIO.baseURL + "table/";
+    const cityIOlistURL = cityIOSettings.cityIO.ListOfTables;
+    const cityIOtableBaseUrl = cityIOSettings.cityIO.baseURL + "table/";
 
     axios.get(cityIOlistURL).then((res) => {
       res.data.forEach((tableName) => {

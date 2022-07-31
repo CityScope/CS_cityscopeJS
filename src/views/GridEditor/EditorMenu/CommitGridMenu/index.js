@@ -1,8 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { GridEditorSettings } from "../../../../settings/gridEditorSettings";
-import globalSettings from "../../../../settings/settings.json";
+import { GridEditorSettings } from "../../../../settings/settings";
+import {cityIOSettings} from "../../../../settings/settings";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
 import Link from "@mui/material/Link";
@@ -116,7 +116,7 @@ export default function CommitGridMenu() {
       };
     };
   
-    const table_url = `${globalSettings.cityIO.baseURL}table/${tableName}/`;
+    const table_url = `${cityIOSettings.cityIO.baseURL}table/${tableName}/`;
     const new_table_grid = {
       GEOGRID: GEOGRIDObject,
       GEOGRIDDATA: GEOGRIDDATAObject,

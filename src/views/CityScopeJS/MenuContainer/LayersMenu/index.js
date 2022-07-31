@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { expectedLayers } from "../../../../settings/menuSettings";
+import { expectedLayers } from "../../../../settings/settings";
 import { updateLayersMenuState } from "../../../../redux/reducers/menuSlice";
 
 function LayersMenu() {

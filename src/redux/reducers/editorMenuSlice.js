@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { GridEditorSettings } from "../../settings/gridEditorSettings";
+import { GridEditorSettings } from "../../settings/settings";
 
 export const editorMenuSlice = createSlice({
   name: "menuState",

@@ -7,7 +7,7 @@ import { GeoJsonLayer } from "deck.gl";
 import { useSelector, useDispatch } from "react-redux";
 import { hexToRgb, testHex } from "../../../utils/utils";
 import { updateGridMaker } from "../../../redux/reducers/editorMenuSlice";
-import { GridEditorSettings } from "../../../settings/gridEditorSettings";
+import { GridEditorSettings } from "../../../settings/settings";
 
 export default function EditorMap() {
   const dispatch = useDispatch();

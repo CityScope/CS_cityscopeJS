@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import settings from "../../../settings/settings.json";
+import {cityIOSettings} from "../../../settings/settings";
 import {
   updateCityIOdata,
   toggleCityIOisDone,
@@ -16,6 +16,7 @@ const removeElement = (array, elem) => {
 };
 
 const CityIO = (props) => {
+  const settings = cityIOSettings;
   const dispatch = useDispatch();
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const { tableName } = props;
@@ -52,13 +53,11 @@ const CityIO = (props) => {
 
   useEffect(() => {
     //! only update if hashId changes
-
     if (!mainHash) {
       return;
     }
     // if we have a new hash, start getting submodules
     getModules();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainHash]);
 
@@ -79,7 +78,6 @@ const CityIO = (props) => {
       if (hashes[module] !== newHashes[module]) {
         // add this module URL to an array of GET requests
         promises.push(getAPICall(`${cityioURL}${module}/`));
-
         // and also add this module name to array
         // of modules that we await for
         loadingModules.push(module);

@@ -5,10 +5,9 @@ import { postToCityIO } from "../../../utils/utils";
 import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
-import settings from "../../../settings/settings.json";
+import { mapSettings } from "../../../settings/settings";
 import AnimationComponent from "../../../Components/AnimationComponent";
-// import { HeatmapLayer } from "deck.gl";
-import { HeatmapLayer } from "@deck.gl/aggregation-layers";
+// import { HeatmapLayer } from "@deck.gl/aggregation-layers";
 
 import {
   AccessLayer,
@@ -51,7 +50,7 @@ export default function DeckGLMap() {
 
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
   const [selectedCellsState, setSelectedCellsState] = useState();
-  const [viewState, setViewState] = useState(settings.map.initialViewState);
+  const [viewState, setViewState] = useState(mapSettings.map.initialViewState);
   const [keyDownState, setKeyDownState] = useState();
   const [mousePos, setMousePos] = useState();
   const [mouseDown, setMouseDown] = useState();
@@ -127,8 +126,6 @@ export default function DeckGLMap() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editModeToggle]);
-
-
 
   const onViewStateChange = ({ viewState }) => {
     viewState.orthographic =
@@ -235,7 +232,7 @@ export default function DeckGLMap() {
         layers.push(layersKey[layerNameString]);
       }
     }
-    setLayers(layers);
+    return layers;
   };
 
   return (
@@ -263,7 +260,7 @@ export default function DeckGLMap() {
           ref={deckGLref}
           viewState={viewState}
           onViewStateChange={onViewStateChange}
-          layers={layers}
+          layers={renderDeckglLayers()}
           effects={effects}
           controller={{
             touchZoom: true,
@@ -278,7 +275,7 @@ export default function DeckGLMap() {
             dragRotate={true}
             reuseMaps={true}
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-            mapStyle={settings.map.mapStyle.sat}
+            mapStyle={mapSettings.map.mapStyle.sat}
             preventStyleDiffing={true}
           />
         </DeckGL>

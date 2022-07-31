@@ -2,7 +2,7 @@ import MaterialTable from "@material-table/core";
 import { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { GridEditorSettings } from "../../../../settings/gridEditorSettings";
+import { GridEditorSettings } from "../../../../settings/settings";
 import { updateTypesEditorState } from "../../../../redux/reducers/editorMenuSlice";
 
 const settings = GridEditorSettings;

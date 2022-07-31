@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { updateGridProps } from "../../../../redux/reducers/editorMenuSlice";
 import { TextField, Typography, List, ListItem, Stack } from "@mui/material";
 import CenterMapButton from "./CenterMapButton";
-import { GridEditorSettings } from "../../../../settings/gridEditorSettings";
+import { GridEditorSettings } from "../../../../settings/settings";
 
 export default function GridProps() {
   const settings = GridEditorSettings;
