@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import {cityIOSettings} from "../../../settings/settings";
+import {cityIOSettings} from "../../settings/settings";
 import {
   updateCityIOdata,
   toggleCityIOisDone,
-} from "../../../redux/reducers/cityIOdataSlice";
+} from "../../redux/reducers/cityIOdataSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { getAPICall } from "../../../utils/utils";
+import { getAPICall } from "../../utils/utils";
 
 const removeElement = (array, elem) => {
   var index = array.indexOf(elem);

@@ -1,8 +1,0 @@
-//   get the table name for cityIO comp
-const testTableName = "corktown";
-const testTableName = "tanthuan_a0b0c1d0";
-const [loadingModules, setLoadingModules] = useState([]);
-
-import LoadingSpinner from "../../Components/LoadingSpinner";
-
-<LoadingSpinner loadingModules={loadingModules} />;

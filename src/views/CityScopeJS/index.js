@@ -1,4 +1,4 @@
-import CityIO from "./CityIO";
+import CityIO from "../../Components/CityIO";
 import { useSelector } from "react-redux";
 import MenuContainer from "./MenuContainer";
 import DeckGLMap from "./DeckglMap";
@@ -21,7 +21,7 @@ export default function CityScopeJS() {
         <>
           <DeckGLMap />
           <MenuContainer />
-          {/* <VisContainer /> */}
+          <VisContainer />
         </>
       )}
     </>

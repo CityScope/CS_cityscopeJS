@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 import { useState, useEffect } from "react";
 import CityIOviewer from "./views/CityIOviewer";
+import ProjectionMapping from "./views/ProjectionMapping";
 import { useDispatch } from "react-redux";
 import { updateCityIOtableName } from "./redux/reducers/cityIOdataSlice";
 import GridEditor from "./views/GridEditor";
@@ -24,6 +25,20 @@ const App = () => {
 
   const [viewSelectorState, setViewSelectorState] = useState();
 
+  const selectView = (view) => {
+    const parsed = queryString.parse(window.location.search);
+    const cityIOtableName =
+      Object.values(parsed)[0] && Object.values(parsed)[0].toLowerCase();
+    // check if tableName is a valid tableName
+    if (cityIOtableName && cityIOtableName !== "") {
+      setTableName(cityIOtableName);
+      dispatch(updateCityIOtableName(cityIOtableName));
+      setViewSelectorState(view);
+    } else {
+      setViewSelectorState("cityio");
+    }
+  };
+
   // on init, get the adress URL to search for  a table
   useEffect(() => {
     const location = window.location;
@@ -32,22 +47,15 @@ const App = () => {
     //a switch for the location.search and the parsed.tableName
     switch (Object.keys(parsed)[0]) {
       case "cityscope":
+        selectView("cityscopejs");
+        break;
+      case "projection":
         // check if this location has a tableName
-        const cityIOtableName =
-          Object.values(parsed)[0] && Object.values(parsed)[0].toLowerCase();
-        // check if tableName is a valid tableName
-        if (cityIOtableName && cityIOtableName !== "") {
-          setTableName(cityIOtableName);
-          dispatch(updateCityIOtableName(cityIOtableName));
-          setViewSelectorState("cityscopejs");
-        } else {
-          setViewSelectorState("cityio");
-        }
+        selectView("projection");
         break;
       case "editor":
         // ! to get the table name for editing (not used yet)
         setViewSelectorState("grideditor");
-
         break;
       default:
         setViewSelectorState("cityio");
@@ -66,6 +74,8 @@ const App = () => {
         {viewSelectorState === "grideditor" && <GridEditor />}
         {/* otherwise, show the cityIOviewer */}
         {viewSelectorState === "cityio" && <CityIOviewer />}
+        {/* otherwise, show the cityIOviewer */}
+        {viewSelectorState === "projection" && <ProjectionMapping />}
       </>
     </ThemeProvider>
   );

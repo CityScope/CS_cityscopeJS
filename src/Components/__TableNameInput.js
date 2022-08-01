@@ -1,18 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import cityIOSettings from "../settings/settings";
-import { Button } from "@material-ui/core/";
-import { makeStyles } from "@material-ui/core/styles";
+import { Button } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
 export default function TableNameInput({ setSelectedTable }) {
-  const classes = useStyles();
   const [tableList, setTableList] = useState();
 
   useEffect(() => {
@@ -31,7 +22,6 @@ export default function TableNameInput({ setSelectedTable }) {
           <Button
             key={Math.random()}
             variant="outlined"
-            color="secondary"
             onClick={() => {
               axios
                 .get(geogridUrl)
@@ -52,6 +42,5 @@ export default function TableNameInput({ setSelectedTable }) {
       setTableList(buttonsArr);
     });
   }, [setSelectedTable]);
-
-  return <div className={classes.root}>{tableList}</div>;
+  return <div>{tableList}</div>;
 }
