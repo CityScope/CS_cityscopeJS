@@ -35,7 +35,7 @@ export const mapSettings = {
     },
     initialViewState: {
       maxZoom: 22,
-      zoom: 17,
+      zoom: 12,
       pitch: 0,
       bearing: 0,
     },

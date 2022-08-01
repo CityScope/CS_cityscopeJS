@@ -6,7 +6,7 @@ import ResizableDrawer from "../../../Components/ResizableDrawer";
 
 function VisContainer() {
   return (
-    <ResizableDrawer direction="right">
+    <ResizableDrawer direction="right" width={200}>
       {/*  */}
       <List>
         <ListItem>

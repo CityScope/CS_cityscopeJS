@@ -47,7 +47,7 @@ export default function EditorMap() {
   const [mousePos, setMousePos] = useState();
   const [mouseDown, setMouseDown] = useState();
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
-  const [pickedCellsState, setPickedCellsState] = useState();
+  const [pickedCellsState] = useState();
   const onViewStateChange = ({ viewState }) => {
     setViewState(viewState);
   };

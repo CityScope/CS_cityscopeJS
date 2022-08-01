@@ -35,7 +35,7 @@ function MenuContainer() {
   };
 
   return (
-    <ResizableDrawer direction="left">
+    <ResizableDrawer direction="left" width={300}>
       <List>
         <MenuItems />
       </List>

@@ -7,8 +7,6 @@ import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { mapSettings } from "../../../settings/settings";
 import AnimationComponent from "../../../Components/AnimationComponent";
-// import { HeatmapLayer } from "@deck.gl/aggregation-layers";
-
 import {
   AccessLayer,
   AggregatedTripsLayer,
@@ -17,31 +15,9 @@ import {
   TextualLayer,
   GeojsonLayer,
 } from "./deckglLayers";
-import {
-  AmbientLight,
-  LightingEffect,
-  _SunLight as SunLight,
-} from "@deck.gl/core";
 import { processGridData } from "./deckglLayers/GridLayer";
 
-const ambientLight = new AmbientLight({
-  color: [255, 255, 255],
-  intensity: 1.0,
-});
-
-const dirLight = new SunLight({
-  timestamp: Date.UTC(2019, 7, 1, 22),
-  color: [255, 255, 255],
-  intensity: 1.0,
-  _shadow: true,
-});
-
 export default function DeckGLMap() {
-  const [effects] = useState(() => {
-    const lightingEffect = new LightingEffect({ ambientLight, dirLight });
-    lightingEffect.shadowColor = [0, 0, 0, 0.5];
-    return [lightingEffect];
-  });
   // get cityio data from redux store
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
 
@@ -56,7 +32,6 @@ export default function DeckGLMap() {
   const [mouseDown, setMouseDown] = useState();
   const [hoveredObj, setHoveredObj] = useState();
   const [GEOGRIDDATA, setGEOGRIDDATA] = useState();
-  const [layers, setLayers] = useState([]);
   const deckGLref = useRef();
   const pickingRadius = 40;
   const editModeToggle = menuState.editMenuState.EDIT_BUTTON;
@@ -86,7 +61,7 @@ export default function DeckGLMap() {
       ...viewState,
       longitude: midGrid[0],
       latitude: midGrid[1],
-      zoom: viewControlButton === "RESET_VIEW_BUTTON" ? 12 : viewState.zoom,
+      zoom: viewControlButton === "RESET_VIEW_BUTTON" ? 10 : viewState.zoom,
       pitch: 0,
       bearing:
         viewControlButton === "NORTH_VIEW_BUTTON" ? 0 : 360 - header.rotation,
@@ -202,25 +177,7 @@ export default function DeckGLMap() {
     "GRID",
   ];
 
-  const renderDeckglLayers = () => {
-    //   new HeatmapLayer({
-    //     data: cityIOdata && cityIOdata.access && cityIOdata.access.features,
-    //     colorRange: [
-    //       [255, 255, 178],
-    //       [254, 217, 118],
-    //       [254, 178, 76],
-    //       [253, 141, 60],
-    //       [240, 59, 32],
-    //       [189, 0, 38],
-    //     ],
-    //     threshold: 0.05,
-    //     getPosition: (d) => d.geometry.coordinates,
-    //     getWeight: (d) => d.properties[0],
-    //     updateTriggers: {
-    //       getWeight: [0],
-    //     },
-    //   }),
-    // ];
+  const renderDeckLayers = () => {
     let layers = [];
     for (var layerNameString of layerOrder) {
       // toggle layers on and off
@@ -260,8 +217,7 @@ export default function DeckGLMap() {
           ref={deckGLref}
           viewState={viewState}
           onViewStateChange={onViewStateChange}
-          layers={renderDeckglLayers()}
-          effects={effects}
+          layers={renderDeckLayers()}
           controller={{
             touchZoom: true,
             touchRotate: true,
