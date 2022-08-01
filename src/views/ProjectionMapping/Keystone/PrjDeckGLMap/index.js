@@ -39,9 +39,9 @@ export default function PrjDeckGLMap() {
 
     // on init, check if prev. local storage with
     // view state exist. If so, load it.
-    if (localStorage.getItem("deckGLviewState")) {
-      console.log("loading prev. deckGLviewState...");
-      let vs = localStorage.getItem("deckGLviewState");
+    if (localStorage.getItem("projectionViewStateStorage")) {
+      console.log("loading prev. projectionViewStateStorage...");
+      let vs = localStorage.getItem("projectionViewStateStorage");
       setViewState(JSON.parse(vs));
     } else {
       // zoom map on CS table location
@@ -52,7 +52,10 @@ export default function PrjDeckGLMap() {
 
   const onViewStateChange = ({ viewState }) => {
     //    save current view state to local sotrage
-    localStorage.setItem("deckGLviewState", JSON.stringify(viewState));
+    localStorage.setItem(
+      "projectionViewStateStorage",
+      JSON.stringify(viewState)
+    );
 
     setViewState(viewState);
   };
@@ -97,7 +100,7 @@ export default function PrjDeckGLMap() {
       ref={deckGL}
       viewState={viewState}
       onViewStateChange={onViewStateChange}
-      layers={renderLayers()}
+      // layers={renderLayers()}
       controller={{
         keyboard: false,
       }}

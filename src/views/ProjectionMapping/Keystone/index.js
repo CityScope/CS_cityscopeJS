@@ -10,8 +10,8 @@ export default function Keystone() {
     if (localStorage.getItem("projMap")) {
       localStorage.removeItem("projMap");
     }
-    if (localStorage.getItem("deckGLviewState")) {
-      localStorage.removeItem("deckGLviewState");
+    if (localStorage.getItem("projectionViewStateStorage")) {
+      localStorage.removeItem("projectionViewStateStorage");
     }
     window.location.reload();
   };

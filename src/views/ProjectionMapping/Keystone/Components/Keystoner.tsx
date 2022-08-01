@@ -1,7 +1,6 @@
 import * as React from "react";
 import { AnchorComponent } from "./anchor";
-const {solve} = require('numeric');
-
+const { solve } = require("numeric");
 
 export const round = (num: number, precision: number) => {
   var factor = Math.pow(10, precision);
@@ -173,11 +172,12 @@ export default class Keystoner extends React.Component<Props, State> {
     window.addEventListener("mousemove", this.onMouseMove);
     if (this.container) {
       const { width, height } = this.container.getBoundingClientRect();
+      const marginInitialView = 0;
       const sourcePoints = [
-        [0, 0],
-        [width, 0],
-        [width, height],
-        [0, height],
+        [marginInitialView, marginInitialView],
+        [width - marginInitialView, marginInitialView],
+        [width - marginInitialView, height - marginInitialView],
+        [marginInitialView, height - marginInitialView],
       ] as RectPoints;
       this.targetPoints = [...sourcePoints] as RectPoints;
       this.setState({ sourcePoints });
