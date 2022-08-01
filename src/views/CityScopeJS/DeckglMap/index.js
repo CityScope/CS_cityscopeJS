@@ -61,7 +61,7 @@ export default function DeckGLMap() {
       ...viewState,
       longitude: midGrid[0],
       latitude: midGrid[1],
-      zoom: viewControlButton === "RESET_VIEW_BUTTON" ? 10 : viewState.zoom,
+      zoom: viewControlButton === "RESET_VIEW_BUTTON" ? 15 : viewState.zoom,
       pitch: 0,
       bearing:
         viewControlButton === "NORTH_VIEW_BUTTON" ? 0 : 360 - header.rotation,
