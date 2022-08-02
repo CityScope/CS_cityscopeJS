@@ -1,6 +1,5 @@
-import { Typography, Link  } from "@mui/material";
-
-import * as React from "react";
+import { Typography, Link } from "@mui/material";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -9,18 +8,20 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 export default function SelectedTable(props) {
-  const clicked = props.clicked;
+  const selectedTable = props.clicked;
+  console.log(selectedTable);
   const cityscopeJSendpoint =
     // "https://cityscope.media.mit.edu/CS_cityscopeJS/?cityscope=";
 
     "http://localhost:3000/CS_cityscopeJS/?cityscope=";
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   // open dialog when table info has been changed
-  React.useEffect(() => {
+  useEffect(() => {
     setOpen(true);
-  }, [clicked]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTable]);
 
   const handleClose = () => {
     setOpen(false);
@@ -34,20 +35,18 @@ export default function SelectedTable(props) {
       aria-describedby="table-select-dialog-description"
     >
       <DialogTitle id="table-select-dialog-title">
-        CityScope {clicked.object.tableName}
+        CityScope {selectedTable.tableName}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="table-select-dialog-description">
-          <Typography component={'span'}>
+          <Typography component={"span"}>
             <Link
-              href={
-                cityscopeJSendpoint + clicked.object.tableName.toLowerCase()
-              }
+              href={cityscopeJSendpoint + selectedTable.tableName.toLowerCase()}
             >
               Go to project
             </Link>{" "}
             or{" "}
-            <Link target={"blank"} href={clicked.object.tableURL}>
+            <Link target={"blank"} href={selectedTable.tableURL}>
               view raw data on cityIO.
             </Link>
           </Typography>

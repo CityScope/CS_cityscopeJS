@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
-import CityIOdeckGLmap from "./CityIOdeckGLmap/index";
 import TableListLoading from "./TableListLoading";
-
 import axios from "axios";
-import {cityIOSettings} from "../../settings/settings";
+import { cityIOSettings } from "../../settings/settings";
 
-export default function CityIOlist() {
-  const [tableList, setTableList] = useState([]);
+export default function CityIOlist(props) {
+  const getTablesList = props.getTablesList;
+  const [tablesList, setTableList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    tablesList && getTablesList(tablesList);
+  }, [tablesList]);
+
   const fetchCityIOtables = async () => {
     // ! https://stackoverflow.com/questions/37213783/waiting-for-all-promises-called-in-a-loop-to-finish
-    const cityIOlistURL = cityIOSettings.cityIO.baseURL +  cityIOSettings.cityIO.ListOfTables;
+    const cityIOlistURL =
+      cityIOSettings.cityIO.baseURL + cityIOSettings.cityIO.ListOfTables;
     // get all URLs
     const tablesArr = await axios.get(cityIOlistURL);
     // create array of all requests
@@ -30,7 +35,7 @@ export default function CityIOlist() {
 
     Promise.all(requestArr).then(() => {
       setIsLoading(false);
-      return tableList;
+      return tablesList;
     });
   };
 
@@ -41,7 +46,6 @@ export default function CityIOlist() {
 
   return (
     <>
-      {<CityIOdeckGLmap cityIOdata={tableList} isLoading={isLoading} />}
       {isLoading && <TableListLoading />}
     </>
   );

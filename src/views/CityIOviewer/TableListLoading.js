@@ -1,17 +1,16 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
-import LinearProgress, {
-} from "@mui/material/LinearProgress";
+import LinearProgress from "@mui/material/LinearProgress";
 import { styled } from "@mui/material/styles";
+import { useEffect, useState } from "react";
 
 export default function TableListLoading() {
-  const [progress, setProgress] = React.useState(0);
+  const [progress, setProgress] = useState(0);
 
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 10,
   }));
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
         if (oldProgress === 100) {

@@ -8,7 +8,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { LineLayer, IconLayer, TextLayer, BitmapLayer } from "@deck.gl/layers";
 import icon from "./legoio.png";
 
-import SelectedTable from "./SelectedTable";
+import SelectedTable from "../SelectedTable";
 
 // * draggable pin https://github.com/visgl/react-map-gl/tree/6.1-release/examples/draggable-markers
 
@@ -152,7 +152,7 @@ export default function CityIOdeckGLmap(props) {
 
   return (
     <>
-      {clicked && clicked.object && <SelectedTable clicked={clicked} />}
+      {clicked && clicked.object && <SelectedTable clicked={clicked.object} />}
 
       <DeckGL
         views={new GlobeView()}
