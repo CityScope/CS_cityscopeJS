@@ -8,7 +8,7 @@ import {
   //   AccessLayer,
   //   AggregatedTripsLayer,
   //   ABMLayer,
-  GridLayer,
+  // GridLayer,
 } from "./deckglLayers";
 
 export default function PrjDeckGLMap() {
@@ -60,7 +60,7 @@ export default function PrjDeckGLMap() {
     setViewState(viewState);
   };
 
-  const layersKey = {
+  // const layersKey = {
     //   ABM: ABMLayer({
     //     active: viewSettings.ABMLayer.active,
     //     data: ABM.trips,
@@ -75,25 +75,25 @@ export default function PrjDeckGLMap() {
     //     cityioData: cityIOdata,
     //     ABMmode: viewSettings.AggregatedTripsLayer.ABMmode,
     //   }),
-    GRID: GridLayer({
-      data: cityIOdata,
-    }),
+    // GRID: GridLayer({
+    //   data: cityIOdata,
+    // }),
     //   ACCESS: AccessLayer({
     //     active: viewSettings.AccessLayer.active,
     //     data: access,
     //     accessToggle: viewSettings.AccessLayer.accessToggle,
     //   }),
-  };
+  // };
 
-  const layerOrder = ["ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS"];
+  // const layerOrder = ["ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS"];
 
-  const renderLayers = () => {
-    let layers = [];
-    for (var layer of layerOrder) {
-      layers.push(layersKey[layer]);
-    }
-    return layers;
-  };
+  // const renderLayers = () => {
+  //   let layers = [];
+  //   for (var layer of layerOrder) {
+  //     layers.push(layersKey[layer]);
+  //   }
+  //   return layers;
+  // };
 
   return (
     <DeckGL

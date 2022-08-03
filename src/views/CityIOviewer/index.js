@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Typography, Link, Grid, Box } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import CityIOdeckGLmap from "./CityIOdeckGLmap/index";
-import zIndex from "@mui/material/styles/zIndex";
 
 export default function CityIOviewer() {
   // get the list of tables from CityIOlist component and pass it to SearchTablesList component

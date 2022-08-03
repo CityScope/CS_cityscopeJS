@@ -10,6 +10,7 @@ export default function CityIOlist(props) {
 
   useEffect(() => {
     tablesList && getTablesList(tablesList);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tablesList]);
 
   const fetchCityIOtables = async () => {
@@ -44,9 +45,5 @@ export default function CityIOlist(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <>
-      {isLoading && <TableListLoading />}
-    </>
-  );
+  return <>{isLoading && <TableListLoading />}</>;
 }
