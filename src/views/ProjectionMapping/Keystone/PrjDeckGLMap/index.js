@@ -1,22 +1,22 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { mapSettings } from "../../../../settings/settings";
-import {
-  //   AccessLayer,
-  //   AggregatedTripsLayer,
-  //   ABMLayer,
-  // GridLayer,
-} from "./deckglLayers";
+
+// import
+//   AccessLayer,
+//   AggregatedTripsLayer,
+//   ABMLayer,
+// GridLayer,
+// "./deckglLayers";
 
 export default function PrjDeckGLMap() {
   const settings = mapSettings;
   const [viewState, setViewState] = useState(settings.map.initialViewState);
-  const deckGL = useRef();
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
-
+console.log(viewState)
   const setViewStateToTableHeader = () => {
     const header = cityIOdata.GEOGRID.properties.header;
 
@@ -33,9 +33,9 @@ export default function PrjDeckGLMap() {
 
   useEffect(() => {
     // fix deck view rotate
-    document
-      .getElementById("deckgl-wrapper")
-      .addEventListener("contextmenu", (evt) => evt.preventDefault());
+    // document
+    //   .getElementById("deckgl-wrapper")
+    //   .addEventListener("contextmenu", (evt) => evt.preventDefault());
 
     // on init, check if prev. local storage with
     // view state exist. If so, load it.
@@ -51,7 +51,7 @@ export default function PrjDeckGLMap() {
   }, []);
 
   const onViewStateChange = ({ viewState }) => {
-    //    save current view state to local sotrage
+    //    save current view state to local storage
     localStorage.setItem(
       "projectionViewStateStorage",
       JSON.stringify(viewState)
@@ -61,57 +61,56 @@ export default function PrjDeckGLMap() {
   };
 
   // const layersKey = {
-    //   ABM: ABMLayer({
-    //     active: viewSettings.ABMLayer.active,
-    //     data: ABM.trips,
-    //     cityioData: cityIOdata,
-    //     ABMmode: viewSettings.ABMLayer.ABMmode,
-    //     zoomLevel: viewSettings.ABMLayer.zoomLevel,
-    //     time: viewSettings.time,
-    //   }),
-    //   AGGREGATED_TRIPS: AggregatedTripsLayer({
-    //     active: viewSettings.AggregatedTripsLayer.active,
-    //     data: ABM.trips,
-    //     cityioData: cityIOdata,
-    //     ABMmode: viewSettings.AggregatedTripsLayer.ABMmode,
-    //   }),
-    // GRID: GridLayer({
-    //   data: cityIOdata,
-    // }),
-    //   ACCESS: AccessLayer({
-    //     active: viewSettings.AccessLayer.active,
-    //     data: access,
-    //     accessToggle: viewSettings.AccessLayer.accessToggle,
-    //   }),
+  //   ABM: ABMLayer({
+  //     active: viewSettings.ABMLayer.active,
+  //     data: ABM.trips,
+  //     cityioData: cityIOdata,
+  //     ABMmode: viewSettings.ABMLayer.ABMmode,
+  //     zoomLevel: viewSettings.ABMLayer.zoomLevel,
+  //     time: viewSettings.time,
+  //   }),
+  //   AGGREGATED_TRIPS: AggregatedTripsLayer({
+  //     active: viewSettings.AggregatedTripsLayer.active,
+  //     data: ABM.trips,
+  //     cityioData: cityIOdata,
+  //     ABMmode: viewSettings.AggregatedTripsLayer.ABMmode,
+  //   }),
+  // GRID: GridLayer({
+  //   data: cityIOdata,
+  // }),
+  //   ACCESS: AccessLayer({
+  //     active: viewSettings.AccessLayer.active,
+  //     data: access,
+  //     accessToggle: viewSettings.AccessLayer.accessToggle,
+  //   }),
   // };
 
   // const layerOrder = ["ABM", "AGGREGATED_TRIPS", "GRID", "ACCESS"];
 
-  // const renderLayers = () => {
-  //   let layers = [];
-  //   for (var layer of layerOrder) {
-  //     layers.push(layersKey[layer]);
-  //   }
-  //   return layers;
-  // };
+  const renderLayers = () => {
+    let layers = [];
+    // for (var layer of layerOrder) {
+    //   layers.push(layersKey[layer]);
+    // }
+    return layers;
+  };
 
   return (
+
     <DeckGL
-      ref={deckGL}
-      viewState={viewState}
-      onViewStateChange={onViewStateChange}
-      // layers={renderLayers()}
-      controller={{
-        keyboard: false,
-      }}
+    viewState={viewState}
+    onViewStateChange={onViewStateChange}
+    // layers={renderLayers()}
+    layers={[]}
+    controller={{
+      keyboard: false,
+    }}
     >
       <StaticMap
-        asyncRender={false}
         dragRotate={true}
         reuseMaps={true}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         mapStyle={settings.map.mapStyle.sat}
-        preventStyleDiffing={true}
       />
     </DeckGL>
   );

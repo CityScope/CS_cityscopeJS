@@ -34,6 +34,8 @@ export const mapSettings = {
       },
     },
     initialViewState: {
+      latitude: 49.976321,
+      longitude: 36.2596876,
       maxZoom: 22,
       zoom: 12,
       pitch: 0,

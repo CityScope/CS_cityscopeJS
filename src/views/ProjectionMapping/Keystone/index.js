@@ -57,6 +57,7 @@ export default function Keystone() {
             style={{
               height: "100vh",
               width: "100vw",
+              backgroundColor: editMode ? "rgba(255,0,0)" : null ,
             }}
             isEditMode={editMode}
           >
