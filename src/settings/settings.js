@@ -37,7 +37,7 @@ export const mapSettings = {
       latitude: 49.976321,
       longitude: 36.2596876,
       maxZoom: 22,
-      zoom: 12,
+      zoom: 15,
       pitch: 0,
       bearing: 0,
     },
