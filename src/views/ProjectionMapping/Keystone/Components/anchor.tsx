@@ -1,4 +1,4 @@
-import { Anchor, Vector } from "./Keystoner";
+import { Anchor, Vector } from "./Keystoner.tsx";
 
 const anchorSize = 20;
 const halfAnchor = anchorSize / 1.5;
