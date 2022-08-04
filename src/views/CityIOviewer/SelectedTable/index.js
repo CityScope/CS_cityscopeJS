@@ -15,6 +15,9 @@ export default function SelectedTable(props) {
 
     "http://localhost:3000/CS_cityscopeJS/?cityscope=";
 
+  const projectionEndpoint =
+    "http://localhost:3000/CS_cityscopeJS/?projection=";
+
   const [open, setOpen] = useState(false);
 
   // open dialog when table info has been changed
@@ -44,6 +47,11 @@ export default function SelectedTable(props) {
               href={cityscopeJSendpoint + selectedTable.tableName.toLowerCase()}
             >
               Go to project
+            </Link>{", "}
+            <Link
+              href={projectionEndpoint + selectedTable.tableName.toLowerCase()}
+            >
+              project this table to TUI
             </Link>{" "}
             or{" "}
             <Link target={"blank"} href={selectedTable.tableURL}>

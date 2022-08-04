@@ -13,7 +13,7 @@ export default function AccessLayer({ data, opacity }) {
      id: "ACCESS",
     colorRange: colors,
     intensity:  opacity ,
-    threshold: 0.05,
+    threshold: 0.5,
     data: accessData && accessData,
     getPosition: (d) => d.geometry.coordinates,
     getWeight: (d) => d.properties[0],

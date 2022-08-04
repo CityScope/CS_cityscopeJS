@@ -12,10 +12,8 @@ export default function ProjectionMapping() {
 
   return (
     <>
-     {tableName && <CityIO tableName={tableName} />}
-      {cityIOisDone && <Keystone />} 
-
-      {/* <Keystone /> */}
+      {tableName && <CityIO tableName={tableName} />}
+      {cityIOisDone && <Keystone />}
     </>
   );
 }

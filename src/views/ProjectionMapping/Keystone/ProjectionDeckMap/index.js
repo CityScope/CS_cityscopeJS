@@ -4,17 +4,19 @@ import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { mapSettings } from "../../../../settings/settings";
-import { GeoJsonLayer, TripsLayer } from "deck.gl";
+import { GeoJsonLayer, TripsLayer, HeatmapLayer, TextLayer } from "deck.gl";
 import { processGridData } from "../../../CityScopeJS/DeckglMap/deckglLayers/GridLayer";
+import { hexToRgb } from "../../../../utils/utils";
 
 export default function ProjectionDeckMap(props) {
   const editMode = props.editMode;
   const deckGLref = useRef(null);
   const settings = mapSettings;
+  const [layer, setLayer] = useState({ layer: [], index: 0 });
   const [viewState, setViewState] = useState();
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
+  const header = cityIOdata.GEOGRID.properties.header;
   const setViewStateToTableHeader = () => {
-    const header = cityIOdata.GEOGRID.properties.header;
     setViewState({
       ...viewState,
       longitude: header.longitude,
@@ -67,34 +69,73 @@ export default function ProjectionDeckMap(props) {
 
   useEffect(() => {
     animation.id = window.requestAnimationFrame(animate);
-
     return () => window.cancelAnimationFrame(animation.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animation]);
 
-  const renderLayers = [
+  const layersArray = [
     new GeoJsonLayer({
       id: "GRID",
       data: processGridData(cityIOdata),
-      opacity: 0.8,
-      extruded: true,
+      opacity: 0.5,
+      extruded: false,
       wireframe: true,
       lineWidthScale: 1,
       lineWidthMinPixels: 2,
-      getElevation: (d) => d.properties.height,
       getFillColor: (d) => d.properties.color,
-
       transitions: {
         getFillColor: 500,
-        getElevation: 500,
       },
+    }),
+
+    new HeatmapLayer({
+      id: "ACCESS",
+      colorRange: [
+        [233, 62, 58],
+        [237, 104, 60],
+        [243, 144, 63],
+      ],
+      intensity: 0.8,
+      threshold: 0.5,
+      data: cityIOdata.access && cityIOdata.access.features,
+      getPosition: (d) => d.geometry.coordinates,
+      getWeight: (d) => d.properties[0],
+      updateTriggers: {
+        getWeight: [0],
+      },
+    }),
+
+    // text layer in the center of each grid cell from the cityIOdata.GEOGRID.features
+    new TextLayer({
+      id: "text",
+      data: cityIOdata.GEOGRID && cityIOdata.GEOGRID.features,
+      getPosition: (d) => {
+        const pntArr = d.geometry.coordinates[0];
+        const first = pntArr[1];
+        const last = pntArr[pntArr.length - 2];
+        const center = [(first[0] + last[0]) / 2, (first[1] + last[1]) / 2];
+        return center;
+      },
+
+      getText: (d) => {
+        var length = 10;
+        return d.properties.name.length > length
+          ? d.properties.name.substring(0, length - 3) + "..."
+          : d.properties.name;
+      },
+      getColor: (d) => [0, 0, 0],
+      getSize: 10,
     }),
 
     new TripsLayer({
       id: "ABM",
       data: cityIOdata.ABM2 && cityIOdata.ABM2.trips,
+      getColor: (d) => {
+        let col = hexToRgb(cityIOdata.ABM2.attr.mode[d.mode].color);
+        return col;
+      },
       getPath: (d) => d.path,
       getTimestamps: (d) => d.timestamps,
-      rounded: true,
       fadeTrail: true,
       getWidth: 10,
       trailLength: 200,
@@ -107,7 +148,7 @@ export default function ProjectionDeckMap(props) {
       ref={deckGLref}
       viewState={viewState}
       onViewStateChange={onViewStateChange}
-      layers={renderLayers}
+      layers={layersArray}
       controller={{
         keyboard: false,
       }}
