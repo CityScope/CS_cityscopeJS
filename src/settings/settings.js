@@ -27,10 +27,9 @@ export const mapSettings = {
     },
     layers: {
       ABM: {
-        startSimHour: 0,
-        endSimHour: 86400,
-        currentSimHour: 43200,
-        animationSpeed: 20,
+        endTime: 86400,
+        startTime: 43200,
+        animationSpeed: 10,
       },
     },
     initialViewState: {

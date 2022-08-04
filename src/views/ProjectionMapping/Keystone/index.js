@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import PrjDeckGLMap from "./PrjDeckGLMap";
+import ProjectionDeckMap from "./ProjectionDeckMap";
 import Keystoner from "./Components/Keystoner";
 import DeleteLocalStorage from "./Components/deleteLocalStorage";
 
@@ -61,7 +61,7 @@ export default function Keystone() {
             }}
             isEditMode={editMode}
           >
-            <PrjDeckGLMap />
+            <ProjectionDeckMap editMode = {editMode} />
           </Keystoner>
         </div>
       </div>
