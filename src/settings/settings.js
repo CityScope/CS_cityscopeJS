@@ -1,3 +1,8 @@
+export const generalSettings = {
+  csjsURL: "http://localhost:3000/CS_cityscopeJS/",
+  // "https://cityscope.media.mit.edu/CS_cityscopeJS/",
+};
+
 export const cityIOSettings = {
   docsURL:
     "https://raw.githubusercontent.com/CityScope/CS_cityscopeJS/master/docs/",

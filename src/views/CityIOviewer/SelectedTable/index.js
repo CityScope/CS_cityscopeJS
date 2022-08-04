@@ -6,17 +6,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import {generalSettings} from "../../../settings/settings";
 
 export default function SelectedTable(props) {
   const selectedTable = props.clicked;
-  console.log(selectedTable);
-  const cityscopeJSendpoint =
-    // "https://cityscope.media.mit.edu/CS_cityscopeJS/?cityscope=";
 
-    "http://localhost:3000/CS_cityscopeJS/?cityscope=";
-
-  const projectionEndpoint =
-    "http://localhost:3000/CS_cityscopeJS/?projection=";
+  const cityscopeJSendpoint = generalSettings.csjsURL + "?cityscope=";
+  const projectionEndpoint = generalSettings.csjsURL + "?projection=";
 
   const [open, setOpen] = useState(false);
 
@@ -47,7 +43,8 @@ export default function SelectedTable(props) {
               href={cityscopeJSendpoint + selectedTable.tableName.toLowerCase()}
             >
               Go to project
-            </Link>{", "}
+            </Link>
+            {", "}
             <Link
               href={projectionEndpoint + selectedTable.tableName.toLowerCase()}
             >

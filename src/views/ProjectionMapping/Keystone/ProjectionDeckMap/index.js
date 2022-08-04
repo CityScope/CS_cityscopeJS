@@ -12,7 +12,6 @@ export default function ProjectionDeckMap(props) {
   const editMode = props.editMode;
   const deckGLref = useRef(null);
   const settings = mapSettings;
-  const [layer, setLayer] = useState({ layer: [], index: 0 });
   const [viewState, setViewState] = useState();
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const header = cityIOdata.GEOGRID.properties.header;
@@ -81,7 +80,7 @@ export default function ProjectionDeckMap(props) {
       extruded: false,
       wireframe: true,
       lineWidthScale: 1,
-      lineWidthMinPixels: 2,
+      lineWidthMinPixels: 5,
       getFillColor: (d) => d.properties.color,
       transitions: {
         getFillColor: 500,
@@ -124,7 +123,7 @@ export default function ProjectionDeckMap(props) {
           : d.properties.name;
       },
       getColor: (d) => [0, 0, 0],
-      getSize: 10,
+      getSize: 8,
     }),
 
     new TripsLayer({
