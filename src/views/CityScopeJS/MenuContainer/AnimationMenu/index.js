@@ -2,7 +2,7 @@ import { Slider, Button, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAnimationMenuState } from "../../../../redux/reducers/menuSlice";
-import AnimationComponent from "../../../../Components/AnimationComponent";
+
 
 function AnimationMenu() {
   const dispatch = useDispatch();
@@ -10,8 +10,10 @@ function AnimationMenu() {
   const [animationState, setAnimationState] = useState(
     useSelector((state) => state.menuState.animationMenuState)
   );
+  const animationTime = useSelector(
+    (state) => state.animationState.animationTime
+  );
 
-  const [animationTime, getAnimationTime] = useState(0);
 
   const updateSliderVal = (val) => {
     setAnimationState({
@@ -35,7 +37,7 @@ function AnimationMenu() {
 
   return (
     <>
-      <AnimationComponent getAnimationTime={getAnimationTime} />
+
       <Button
         fullWidth
         id={"toggleAnimationState"}

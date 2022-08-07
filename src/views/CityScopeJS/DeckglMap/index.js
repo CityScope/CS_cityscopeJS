@@ -6,7 +6,6 @@ import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { mapSettings } from "../../../settings/settings";
-import AnimationComponent from "../../../Components/AnimationComponent";
 import {
   AccessLayer,
   AggregatedTripsLayer,
@@ -20,10 +19,8 @@ import { processGridData } from "./deckglLayers/GridLayer";
 export default function DeckGLMap() {
   // get cityio data from redux store
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
-
   // get menu state from redux store
   const menuState = useSelector((state) => state.menuState);
-
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
   const [selectedCellsState, setSelectedCellsState] = useState();
   const [viewState, setViewState] = useState(mapSettings.map.initialViewState);
@@ -39,13 +36,15 @@ export default function DeckGLMap() {
   const layersMenu = menuState.layersMenuState;
   const viewControlButton =
     menuState.viewSettingsMenuState.VIEW_CONTROL_BUTTONS;
-  const [animationTime, getAnimationTime] = useState(0);
+  const animationTime = useSelector(
+    (state) => state.animationState.animationTime
+  );
 
-  // /**
+  // **
   //  * resets the camera viewport
   //  * to cityIO header data
   //  * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
-  //  */
+  //  *
 
   const setViewStateToTableHeader = (viewControlButton) => {
     const lastCell =
@@ -194,7 +193,6 @@ export default function DeckGLMap() {
 
   return (
     <>
-      <AnimationComponent getAnimationTime={getAnimationTime} />
       <div
         onKeyDown={(e) => {
           setKeyDownState(e.nativeEvent.key);

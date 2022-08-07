@@ -1,8 +1,11 @@
 import { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { mapSettings } from "../settings/settings";
 
-export default function AnimationComponent(props) {
-  const getAnimationTime = props.getAnimationTime;
+import { updateAnimationTimeState } from "../redux/reducers/animationSlice";
+
+export default function AnimationComponent() {
+  const dispatch = useDispatch();
   const animationMenuState = useSelector(
     (state) => state.menuState.animationMenuState
   );
@@ -38,7 +41,7 @@ export default function AnimationComponent(props) {
 
   // update the getAnimationTime function with the current animation time
   useEffect(() => {
-    getAnimationTime(animationTime);
+    dispatch(updateAnimationTimeState(animationTime));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animationTime]);
 
