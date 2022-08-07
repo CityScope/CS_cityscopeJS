@@ -73,7 +73,7 @@ export const expectedLayers = {
   },
   TEXTUAL_LAYER_CHECKBOX: {
     displayName: "Text Layer",
-    cityIOmoduleName: "GEOGRID",
+    cityIOmoduleName: "text",
     initState: false,
     initSliderValue: 100,
   },

@@ -13,7 +13,6 @@ import { updateLayersMenuState } from "../../../../redux/reducers/menuSlice";
 function LayersMenu() {
   const dispatch = useDispatch();
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
-  console.log(cityIOdata);
   // get the keys from cityIOdata
   const cityIOkeys = Object.keys(cityIOdata);
 

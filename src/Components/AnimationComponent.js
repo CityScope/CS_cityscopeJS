@@ -12,11 +12,10 @@ export default function AnimationComponent(props) {
 
   const animate = (time) => {
     if (previousTimeRef.current !== undefined) {
-      setAnimationTime((prevTime) => {
-        if (prevTime < 21600 || prevTime > 43200) {
-          return 21600;
-        }
-        return prevTime + animationMenuState.animationSpeedSliderValue || 1;
+      setAnimationTime((t) => {
+        return t > mapSettings.map.layers.ABM.endTime
+          ? mapSettings.map.layers.ABM.startTime
+          : t + animationMenuState.animationSpeedSliderValue || 1;
       });
     }
     previousTimeRef.current = time;
