@@ -52,7 +52,7 @@ export default function ResizableDrawer({ children, direction, width }) {
               ? drawerWidth + "px"
               : undefined,
           right: direction === "right" ? drawerWidth + "px" : undefined,
-          zIndex: 10000,
+          zIndex: 1,
           cursor: "ew-resize",
           backgroundColor: "gray",
         }}

@@ -12,7 +12,7 @@ export default function CityIOviewer() {
     <>
       <CityIOdeckGLmap cityIOdata={tablesList} />
 
-      <Box sx={{ width: "100%", padding: 5}}>
+      <Box sx={{ width: "100%", padding: 5 }}>
         <CityIOlist getTablesList={getTablesList} />
 
         <Grid container spacing={2}>
@@ -26,13 +26,9 @@ export default function CityIOviewer() {
               platform. CityScope allows users to examine different design
               alternatives, and observe their impact through multiple layers of
               urban analytics.
-            </Typography>
-
-            <Typography variant="h4">
               <Link href={"https://github.com/CityScope"} target={"blank"}>
-                <GitHubIcon fontSize={"small"} /> Join the CityScope open-source
-                development
-              </Link>
+                Join the CityScope open-source development
+              </Link>  <GitHubIcon fontSize={"small"} /> 
             </Typography>
           </Grid>
         </Grid>

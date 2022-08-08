@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import {cityIOSettings} from "../../settings/settings";
+import { cityIOSettings } from "../../settings/settings";
 import {
   updateCityIOdata,
   toggleCityIOisDone,
 } from "../../redux/reducers/cityIOdataSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { getAPICall } from "../../utils/utils";
+import LoadingModules from "../../Components/LoadingModules";
 
 const removeElement = (array, elem) => {
   var index = array.indexOf(elem);
@@ -108,7 +109,7 @@ const CityIO = (props) => {
     dispatch(toggleCityIOisDone(true));
   }
 
-  return null;
+  return <LoadingModules loadingModules={listLoadingModules} />;
 };
 
 export default CityIO;

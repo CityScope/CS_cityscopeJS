@@ -4,6 +4,7 @@ import MenuContainer from "./MenuContainer";
 import DeckGLMap from "./DeckglMap";
 import VisContainer from "./VisContainer";
 import AnimationComponent from "../../Components/AnimationComponent";
+import LoadingModules from "../../Components/LoadingModules";
 
 export default function CityScopeJS() {
   const cityIOisDone = useSelector(
@@ -15,6 +16,7 @@ export default function CityScopeJS() {
 
   return (
     <>
+      {!cityIOisDone && <LoadingModules loadingModules={[tableName]} />}
       {/* if we got a cityIO table name, start cityIO module */}
       {tableName && <CityIO tableName={tableName} />}
       {/* if cityIO module is done loading, start the CSjs app */}
