@@ -103,27 +103,6 @@ function LayersMenu() {
     return toggleListArr;
   };
 
-  const tuiMenuControl = cityIOdata.tui || null;
-  useEffect(() => {
-    if (!tuiMenuControl) return;
-    tuiMenuControl.forEach((menuItem) => {
-      setLayersMenuState({
-        ...layersMenuState,
-        // [Object.keys(menuItem) + "_LAYER_CHECKBOX"]
-        GRID_LAYER_CHECKBOX
-        : {
-          ...layersMenuState[Object.keys(menuItem)],
-          isOn: Object.values(menuItem)[0],
-        },
-      });
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tuiMenuControl]);
-
-  console.log(
-    layersMenuState.GRID_LAYER_CHECKBOX && layersMenuState.GRID_LAYER_CHECKBOX
-  );
-
   return <Grid container>{makeLayerControlsMenu()}</Grid>;
 }
 

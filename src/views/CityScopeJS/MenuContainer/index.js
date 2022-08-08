@@ -7,6 +7,7 @@ import ResizableDrawer from "../../../Components/ResizableDrawer";
 import EditMenu from "./EditMenu";
 import TableInfo from "./TableInfo";
 import AnimationMenu from "./AnimationMenu";
+import TUIhandler from "../../../Components/TUIhandler";
 
 function MenuContainer() {
   const menuItemsArray = [
@@ -36,6 +37,7 @@ function MenuContainer() {
 
   return (
     <ResizableDrawer direction="left" width={300}>
+      <TUIhandler />
       <List>
         <MenuItems />
       </List>
