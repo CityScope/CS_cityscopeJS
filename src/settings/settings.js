@@ -1,12 +1,13 @@
 export const generalSettings = {
   csjsURL: "http://localhost:3000/CS_cityscopeJS/",
-  // "https://cityscope.media.mit.edu/CS_cityscopeJS/",
+  // csjsURL: "https://cityscope.media.mit.edu/CS_cityscopeJS/",
 };
 
 export const cityIOSettings = {
   docsURL:
     "https://raw.githubusercontent.com/CityScope/CS_cityscopeJS/master/docs/",
   cityIO: {
+    // baseURL: "http://127.0.0.1:5000/api/",
     baseURL: "https://cityio.media.mit.edu/api/",
     ListOfTables: "tables/list/",
     interval: 500,
@@ -21,6 +22,8 @@ export const cityIOSettings = {
       { name: "indicators", expectUpdate: true },
       { name: "textual", expectUpdate: true },
       { name: "scenarios", expectUpdate: true },
+      { name: "tui", expectUpdate: true },
+
     ],
   },
 };

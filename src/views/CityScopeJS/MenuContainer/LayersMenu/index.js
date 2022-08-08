@@ -13,6 +13,7 @@ import { updateLayersMenuState } from "../../../../redux/reducers/menuSlice";
 function LayersMenu() {
   const dispatch = useDispatch();
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
+
   // get the keys from cityIOdata
   const cityIOkeys = Object.keys(cityIOdata);
 
@@ -33,7 +34,7 @@ function LayersMenu() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layersMenuState]);
 
-  // update the layer slider value 
+  // update the layer slider value
   const [sliderVal, setSliderVal] = useState({});
   const updateSliderVal = (menuItem, val) => {
     setSliderVal({ ...sliderVal, [menuItem]: val });
@@ -67,16 +68,15 @@ function LayersMenu() {
                     }
                     key={"checkbox_" + menuItem}
                     color="primary"
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setLayersMenuState({
                         ...layersMenuState,
                         [menuItem]: {
                           ...layersMenuState[menuItem],
-                          // ! TO DO: try to control via cityIO state injection
                           isOn: e.target.checked,
                         },
-                      })
-                    }
+                      });
+                    }}
                   />
                 }
                 label={
@@ -88,12 +88,9 @@ function LayersMenu() {
             </Grid>
             {layersMenuState[menuItem] && layersMenuState[menuItem].isOn && (
               <Grid item xs={8} key={`grid_i_2_` + menuItem}>
-                {/* and make a slider  */}
                 <Slider
                   size="small"
                   key={"slider_" + menuItem}
-                  // ! issue with redux
-                  // value={sliderVal[menuItem]}
                   valueLabelDisplay="auto"
                   onChangeCommitted={(_, val) => updateSliderVal(menuItem, val)}
                 />
@@ -105,6 +102,27 @@ function LayersMenu() {
     }
     return toggleListArr;
   };
+
+  const tuiMenuControl = cityIOdata.tui || null;
+  useEffect(() => {
+    if (!tuiMenuControl) return;
+    tuiMenuControl.forEach((menuItem) => {
+      setLayersMenuState({
+        ...layersMenuState,
+        // [Object.keys(menuItem) + "_LAYER_CHECKBOX"]
+        GRID_LAYER_CHECKBOX
+        : {
+          ...layersMenuState[Object.keys(menuItem)],
+          isOn: Object.values(menuItem)[0],
+        },
+      });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tuiMenuControl]);
+
+  console.log(
+    layersMenuState.GRID_LAYER_CHECKBOX && layersMenuState.GRID_LAYER_CHECKBOX
+  );
 
   return <Grid container>{makeLayerControlsMenu()}</Grid>;
 }
