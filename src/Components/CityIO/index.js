@@ -103,8 +103,8 @@ const CityIO = (props) => {
         return obj;
       }
     }, cityIOdata);
-    modulesData.tableName = tableName;
-    dispatch(updateCityIOdata(modulesData));
+    let m = { ...modulesData, tableName: tableName };
+    dispatch(updateCityIOdata(m));
     console.log("--- done updating from cityIO ---");
     dispatch(toggleCityIOisDone(true));
   }

@@ -33,6 +33,7 @@ function LayersMenu() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layersMenuState]);
 
+  // update the layer slider value 
   const [sliderVal, setSliderVal] = useState({});
   const updateSliderVal = (menuItem, val) => {
     setSliderVal({ ...sliderVal, [menuItem]: val });
