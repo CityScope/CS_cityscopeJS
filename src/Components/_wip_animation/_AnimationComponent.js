@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { mapSettings } from "../settings/settings";
+import { mapSettings } from "../../settings/settings";
 
-import { updateAnimationTimeState } from "../redux/reducers/animationSlice";
+import { updateAnimationTimeState } from "./_animationSlice";
 
 export default function AnimationComponent() {
   const dispatch = useDispatch();

@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAnimationMenuState } from "../../../../redux/reducers/menuSlice";
 
-
 function AnimationMenu() {
   const dispatch = useDispatch();
 
@@ -14,11 +13,10 @@ function AnimationMenu() {
     (state) => state.animationState.animationTime
   );
 
-
   const updateSliderVal = (val) => {
     setAnimationState({
       ...animationState,
-      animationSpeedSliderValue: val/5,
+      animationSpeedSliderValue: val / 5,
     });
   };
 
@@ -37,7 +35,6 @@ function AnimationMenu() {
 
   return (
     <>
-
       <Button
         fullWidth
         id={"toggleAnimationState"}
@@ -51,7 +48,6 @@ function AnimationMenu() {
         size="small"
         key={"slider_animation"}
         valueLabelDisplay="auto"
-
         onChangeCommitted={(_, val) => updateSliderVal(val)}
       />
       <Typography variant="subtitle2" id="continuous-slider" gutterBottom>

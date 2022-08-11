@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import MenuContainer from "./MenuContainer";
 import DeckGLMap from "./DeckglMap";
 import VisContainer from "./VisContainer";
-import AnimationComponent from "../../Components/AnimationComponent";
+// import AnimationComponent from "../../Components/AnimationComponent";
 import LoadingModules from "../../Components/LoadingModules";
 
 export default function CityScopeJS() {
@@ -22,7 +22,7 @@ export default function CityScopeJS() {
       {/* if cityIO module is done loading, start the CSjs app */}
       {cityIOisDone && (
         <>
-          <AnimationComponent />
+          {/* <AnimationComponent /> */}
           <DeckGLMap />
           <MenuContainer />
           <VisContainer />

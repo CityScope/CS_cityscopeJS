@@ -1,12 +1,12 @@
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { hexToRgb } from "../../../../utils/utils";
 
-export default function GeojsonLayer({ data: cityIOdata, opacity: opacity }) {
+export default function GeojsonLayer({ data: cityIOdata, opacity }) {
   if (cityIOdata.geojson) {
     return new GeoJsonLayer({
       id: "GeojsonLayer",
       data: cityIOdata.geojson,
-      opacity,
+      opacity: opacity,
       pickable: true,
       wireframe: false,
       stroked: true,

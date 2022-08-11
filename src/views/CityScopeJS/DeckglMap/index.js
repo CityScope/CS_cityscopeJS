@@ -36,9 +36,37 @@ export default function DeckGLMap() {
   const layersMenu = menuState.layersMenuState;
   const viewControlButton =
     menuState.viewSettingsMenuState.VIEW_CONTROL_BUTTONS;
-  const animationTime = useSelector(
-    (state) => state.animationState.animationTime
-  );
+
+  // ! constant animation speed for now - will be updated with slider
+  const animationSpeedSliderValue =
+    menuState.animationMenuState.animationSpeedSliderValue;
+  const toggleAnimationState =
+    menuState.animationMenuState.toggleAnimationState;
+  const [animationTime, setAnimationTime] = useState(0);
+  const [animation] = useState({});
+  const animate = () => {
+    if (toggleAnimationState) {
+      // use variable outside of closure to allow toggle
+      setAnimationTime((t) => {
+        return t > mapSettings.map.layers.ABM.endTime
+          ? mapSettings.map.layers.ABM.startTime
+          : t + animationSpeedSliderValue;
+      });
+      animation.id = window.requestAnimationFrame(animate); // draw next frame
+    }
+  };
+  (function () {
+    if (!toggleAnimationState) {
+      window.cancelAnimationFrame(animation.id);
+      return;
+    }
+  })();
+  useEffect(() => {
+    animation.id = window.requestAnimationFrame(animate); // start animation
+    return () => {
+      window.cancelAnimationFrame(animation.id);
+    };
+  }, [toggleAnimationState]);
 
   // **
   //  * resets the camera viewport
