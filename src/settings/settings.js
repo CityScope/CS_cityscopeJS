@@ -7,8 +7,8 @@ export const cityIOSettings = {
   docsURL:
     "https://raw.githubusercontent.com/CityScope/CS_cityscopeJS/master/docs/",
   cityIO: {
-    // baseURL: "http://127.0.0.1:5000/api/",
-    baseURL: "https://cityio.media.mit.edu/api/",
+    baseURL: "http://127.0.0.1:5000/api/",
+    // baseURL: "https://cityio.media.mit.edu/api/",
     ListOfTables: "tables/list/",
     interval: 500,
     cityIOmodules: [

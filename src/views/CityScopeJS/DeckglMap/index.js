@@ -164,6 +164,10 @@ export default function DeckGLMap() {
 
     GEOJSON: GeojsonLayer({
       data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.GEOJSON_LAYER_CHECKBOX &&
+        layersMenu.GEOJSON_LAYER_CHECKBOX.slider * 0.01,
     }),
   };
 

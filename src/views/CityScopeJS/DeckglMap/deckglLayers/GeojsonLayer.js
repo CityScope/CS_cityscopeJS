@@ -1,11 +1,12 @@
-import { GeoJsonLayer } from "deck.gl";
+import { GeoJsonLayer } from "@deck.gl/layers";
 import { hexToRgb } from "../../../../utils/utils";
 
-export default function GeojsonLayer({ data }) {
-  if (data.geojson)
+export default function GeojsonLayer({ data: cityIOdata, opacity: opacity }) {
+  if (cityIOdata.geojson) {
     return new GeoJsonLayer({
       id: "GeojsonLayer",
-      data: data,
+      data: cityIOdata.geojson,
+      opacity,
       pickable: true,
       wireframe: false,
       stroked: true,
@@ -17,12 +18,13 @@ export default function GeojsonLayer({ data }) {
       lineWidthMinPixels: 2,
       getElevation: (d) => d.properties.height,
       updateTriggers: {
-        getFillColor: data,
-        getElevation: data,
+        getFillColor: cityIOdata,
+        getElevation: cityIOdata,
       },
       transitions: {
         getFillColor: 500,
         getElevation: 500,
       },
     });
+  }
 }
