@@ -23,7 +23,6 @@ export const cityIOSettings = {
       { name: "textual", expectUpdate: true },
       { name: "scenarios", expectUpdate: true },
       { name: "tui", expectUpdate: true },
-
     ],
   },
 };
@@ -53,7 +52,7 @@ export const expectedLayers = {
   GRID_LAYER_CHECKBOX: {
     displayName: "Grid Layer",
     cityIOmoduleName: "GEOGRID",
-    initState: true,
+    initState: false,
     initSliderValue: 50,
   },
   ABM_LAYER_CHECKBOX: {
@@ -85,6 +84,12 @@ export const expectedLayers = {
     cityIOmoduleName: "geojson",
     initState: false,
     initSliderValue: 50,
+  },
+  MESH_LAYER_CHECKBOX: {
+    displayName: "Objects Layer",
+    cityIOmoduleName: "GEOGRID",
+    initState: true,
+    initSliderValue: 100,
   },
 };
 

@@ -13,6 +13,7 @@ import {
   GridLayer,
   TextualLayer,
   GeojsonLayer,
+  MeshLayer,
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
 
@@ -55,6 +56,7 @@ export default function DeckGLMap() {
       animation.id = window.requestAnimationFrame(animate); // draw next frame
     }
   };
+  // ! self executing function to toggle animation state 
   (function () {
     if (!toggleAnimationState) {
       window.cancelAnimationFrame(animation.id);
@@ -197,6 +199,14 @@ export default function DeckGLMap() {
         layersMenu.GEOJSON_LAYER_CHECKBOX &&
         layersMenu.GEOJSON_LAYER_CHECKBOX.slider * 0.01,
     }),
+
+    MESH: MeshLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.MESH_LAYER_CHECKBOX &&
+        layersMenu.MESH_LAYER_CHECKBOX.slider * 0.01,
+    }),
   };
 
   const layerOrder = [
@@ -206,6 +216,7 @@ export default function DeckGLMap() {
     "ACCESS",
     "GEOJSON",
     "GRID",
+    "MESH",
   ];
 
   const renderDeckLayers = () => {

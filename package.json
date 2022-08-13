@@ -4,6 +4,8 @@
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
+    "@loaders.gl/core": "^3.2.7",
+    "@loaders.gl/obj": "^3.2.7",
     "@material-table/core": "^0.2.35",
     "@mui/icons-material": "^5.8.4",
     "@mui/lab": "^5.0.0-alpha.92",
