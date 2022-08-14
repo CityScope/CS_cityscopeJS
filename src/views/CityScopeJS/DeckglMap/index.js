@@ -77,7 +77,7 @@ export default function DeckGLMap() {
 
   const [effects] = useState(() => {
     const lightingEffect = new LightingEffect({ ambientLight, dirLight });
-    lightingEffect.shadowColor = [0, 0, 0, 0.5];
+    lightingEffect.shadowColor = [0, 0, 0, 0.75];
     return [lightingEffect];
   });
 

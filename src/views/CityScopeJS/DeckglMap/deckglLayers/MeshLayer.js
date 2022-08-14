@@ -19,7 +19,7 @@ export default function MeshLayer({ data: cityIOdata, opacity }) {
       getColor: (d) => [255, 255, 255, 255],
       // d.properties.color,
       getOrientation: (d) => [-180, Math.ceil(Math.random() * 360), -90],
-      getScale: (d) => [0.01, opacity * (d.properties.height / 1000), 0.01],
+      getScale: (d) => [0.02, opacity * (d.properties.height / 1000), 0.02],
       updateTriggers: {
         getScale: opacity,
       },
