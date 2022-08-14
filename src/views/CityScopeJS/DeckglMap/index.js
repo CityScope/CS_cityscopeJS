@@ -6,6 +6,8 @@ import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { mapSettings } from "../../../settings/settings";
+import { LightingEffect } from "@deck.gl/core";
+import { ambientLight, dirLight } from "./components/deckLights";
 import {
   AccessLayer,
   AggregatedTripsLayer,
@@ -56,7 +58,7 @@ export default function DeckGLMap() {
       animation.id = window.requestAnimationFrame(animate); // draw next frame
     }
   };
-  // ! self executing function to toggle animation state 
+  // ! self executing function to toggle animation state
   (function () {
     if (!toggleAnimationState) {
       window.cancelAnimationFrame(animation.id);
@@ -68,14 +70,22 @@ export default function DeckGLMap() {
     return () => {
       window.cancelAnimationFrame(animation.id);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleAnimationState]);
+
+  // ! lights
+
+  const [effects] = useState(() => {
+    const lightingEffect = new LightingEffect({ ambientLight, dirLight });
+    lightingEffect.shadowColor = [0, 0, 0, 0.5];
+    return [lightingEffect];
+  });
 
   // **
   //  * resets the camera viewport
   //  * to cityIO header data
   //  * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
   //  *
-
   const setViewStateToTableHeader = (viewControlButton) => {
     const lastCell =
       cityIOdata.GEOGRID.features[cityIOdata.GEOGRID.features.length - 1]
@@ -257,6 +267,7 @@ export default function DeckGLMap() {
         <DeckGL
           ref={deckGLref}
           viewState={viewState}
+          effects={effects}
           onViewStateChange={onViewStateChange}
           layers={renderDeckLayers()}
           controller={{
