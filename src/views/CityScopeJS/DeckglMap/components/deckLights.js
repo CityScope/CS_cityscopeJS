@@ -1,8 +1,4 @@
-import {
-
-  AmbientLight,
-  _SunLight as SunLight,
-} from "@deck.gl/core";
+import { AmbientLight, _SunLight as SunLight } from "@deck.gl/core";
 
 export const ambientLight = new AmbientLight({
   color: [255, 255, 255],

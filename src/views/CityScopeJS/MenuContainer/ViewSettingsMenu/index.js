@@ -59,7 +59,7 @@ function ViewSettingsMenu() {
   };
 
   // create a button group for the view control buttons
-  const createButtons = (viewControlButtons) => {
+  const createViewControlButtons = (viewControlButtons) => {
     const buttonsArr = [];
     for (const thisButton in viewControlButtons) {
       buttonsArr.push(
@@ -129,7 +129,7 @@ function ViewSettingsMenu() {
 
   return (
     <List>
-      {createButtons(viewControlButtons)}
+      {createViewControlButtons(viewControlButtons)}
       {createCheckboxes(viewControlCheckboxes)}
     </List>
   );

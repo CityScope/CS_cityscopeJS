@@ -6,7 +6,7 @@ import { hexToRgb, testHex } from "../../../../utils/utils";
  * collect objects in a region
  * @argument{object} e  picking event
  */
-export const _multipleObjPicked = (e, pickingRadius, deckGLRef) => {
+export const multipleObjPicked = (e, pickingRadius, deckGLRef) => {
   const dim = pickingRadius;
   const x = e.x - dim / 2;
   const y = e.y - dim / 2;
@@ -24,7 +24,7 @@ export const _multipleObjPicked = (e, pickingRadius, deckGLRef) => {
  *  not of CityScope TUI & that are interactable
  * so to not overlap TUI activity
  */
-const _handleGridcellEditing = (
+const handleGridCellEditing = (
   e,
   selectedType,
   setSelectedCellsState,
@@ -32,7 +32,7 @@ const _handleGridcellEditing = (
   deckGLRef
 ) => {
   const { height, color, name } = selectedType;
-  const multiSelectedObj = _multipleObjPicked(e, pickingRadius, deckGLRef);
+  const multiSelectedObj = multipleObjPicked(e, pickingRadius, deckGLRef);
   multiSelectedObj.forEach((selected) => {
     const thisCellProps = selected.object.properties;
     if (thisCellProps && thisCellProps.interactive) {
@@ -102,7 +102,7 @@ export default function GridLayer({
 
     onClick: (event) => {
       if (selectedType && editOn && keyDownState !== "Shift")
-        _handleGridcellEditing(
+        handleGridCellEditing(
           event,
           selectedType,
           setSelectedCellsState,
@@ -113,7 +113,7 @@ export default function GridLayer({
 
     onDrag: (event) => {
       if (selectedType && editOn && keyDownState !== "Shift")
-        _handleGridcellEditing(
+        handleGridCellEditing(
           event,
           selectedType,
           setSelectedCellsState,

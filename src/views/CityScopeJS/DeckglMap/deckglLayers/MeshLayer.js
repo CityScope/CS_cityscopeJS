@@ -1,14 +1,13 @@
 import { SimpleMeshLayer } from "@deck.gl/mesh-layers";
 import { OBJLoader } from "@loaders.gl/obj";
 
-export default function MeshLayer({ data: cityIOdata, opacity }) {
-  if (cityIOdata && cityIOdata.GEOGRID && cityIOdata.GEOGRIDDATA) {
+export default function MeshLayer({ data, opacity }) {
+  if (data && data.features) {
     return new SimpleMeshLayer({
       id: "mesh-layer",
-      data: cityIOdata.GEOGRID && cityIOdata.GEOGRID.features,
+      data: data.features,
       loaders: [OBJLoader],
-      mesh: "./model.obj",
-      // "https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/humanoid_quad.obj",
+      mesh: "./obj/model.obj",
       getPosition: (d) => {
         const pntArr = d.geometry.coordinates[0];
         const first = pntArr[1];
@@ -16,10 +15,19 @@ export default function MeshLayer({ data: cityIOdata, opacity }) {
         const center = [(first[0] + last[0]) / 2, (first[1] + last[1]) / 2];
         return center;
       },
-      getColor: (d) => [255, 255, 255, 255],
-      // d.properties.color,
-      getOrientation: (d) => [-180, Math.ceil(Math.random() * 360), -90],
-      getScale: (d) => [0.02, opacity * (d.properties.height / 1000), 0.02],
+      getColor: (d) =>
+        // d.properties.color,
+        [255, 255, 255, 255],
+
+      getOrientation: (d) => [-180, Math.ceil(Math.random() * 4) * 90, -90],
+      getScale: (d) =>
+        d.properties.height > 0
+          ? [
+              data.properties.header.cellSize / 2,
+              opacity * d.properties.height ,
+              data.properties.header.cellSize / 2,
+            ]
+          : [0, 0, 0],
       updateTriggers: {
         getScale: opacity,
       },

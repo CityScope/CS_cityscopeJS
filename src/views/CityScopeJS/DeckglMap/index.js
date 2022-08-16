@@ -7,7 +7,6 @@ import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { mapSettings } from "../../../settings/settings";
 import { LightingEffect } from "@deck.gl/core";
-import { ambientLight, dirLight } from "./components/deckLights";
 import {
   AccessLayer,
   AggregatedTripsLayer,
@@ -18,6 +17,7 @@ import {
   MeshLayer,
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
+import { AmbientLight, _SunLight as SunLight } from "@deck.gl/core";
 
 export default function DeckGLMap() {
   // get cityio data from redux store
@@ -40,11 +40,14 @@ export default function DeckGLMap() {
   const viewControlButton =
     menuState.viewSettingsMenuState.VIEW_CONTROL_BUTTONS;
 
+  const toggleEffects = menuState.viewSettingsMenuState.EFFECTS_CHECKBOX;
+
   // ! constant animation speed for now - will be updated with slider
   const animationSpeedSliderValue =
     menuState.animationMenuState.animationSpeedSliderValue;
   const toggleAnimationState =
     menuState.animationMenuState.toggleAnimationState;
+
   const [animationTime, setAnimationTime] = useState(0);
   const [animation] = useState({});
   const animate = () => {
@@ -65,6 +68,7 @@ export default function DeckGLMap() {
       return;
     }
   })();
+
   useEffect(() => {
     animation.id = window.requestAnimationFrame(animate); // start animation
     return () => {
@@ -74,12 +78,28 @@ export default function DeckGLMap() {
   }, [toggleAnimationState]);
 
   // ! lights
-
-  const [effects] = useState(() => {
-    const lightingEffect = new LightingEffect({ ambientLight, dirLight });
-    lightingEffect.shadowColor = [0, 0, 0, 0.75];
-    return [lightingEffect];
-  });
+  const [effects, setEffects] = useState(() => []);
+  // set effects to null if toggleAnimationState is false
+  useEffect(() => {
+    if (toggleEffects && toggleEffects.isOn) {
+      const ambientLight = new AmbientLight({
+        color: [255, 255, 255],
+        intensity: 1.0,
+      });
+      const dirLight = new SunLight({
+        timestamp: Date.UTC(2019, 7, 1, toggleEffects.slider % 24),
+        color: [255, 255, 255],
+        intensity: 1.0,
+        _shadow: true,
+      });
+      const lightingEffect = new LightingEffect({ ambientLight, dirLight });
+      lightingEffect.shadowColor = [0, 0, 0, 0.8];
+      setEffects([lightingEffect]);
+    } else {
+      setEffects([]);
+    }
+  }, [toggleEffects]);
+  // ! end lights
 
   // **
   //  * resets the camera viewport
@@ -158,6 +178,7 @@ export default function DeckGLMap() {
         layersMenu.ABM_LAYER_CHECKBOX &&
         layersMenu.ABM_LAYER_CHECKBOX.slider * 0.01,
     }),
+
     AGGREGATED_TRIPS: AggregatedTripsLayer({
       data: cityIOdata,
       ABMmode: 0,
@@ -166,6 +187,7 @@ export default function DeckGLMap() {
         layersMenu.AGGREGATED_TRIPS_LAYER_CHECKBOX &&
         layersMenu.AGGREGATED_TRIPS_LAYER_CHECKBOX.slider * 0.01,
     }),
+
     GRID: GridLayer({
       data: GEOGRIDDATA,
       editOn: editModeToggle,
@@ -186,6 +208,7 @@ export default function DeckGLMap() {
       },
       deckGLref,
     }),
+
     ACCESS: AccessLayer({
       data: cityIOdata,
       opacity:
@@ -193,6 +216,7 @@ export default function DeckGLMap() {
         layersMenu.ACCESS_LAYER_CHECKBOX &&
         layersMenu.ACCESS_LAYER_CHECKBOX.slider * 0.01,
     }),
+
     TEXTUAL: TextualLayer({
       data: cityIOdata,
       coordinates: GEOGRIDDATA && GEOGRIDDATA,
@@ -211,7 +235,7 @@ export default function DeckGLMap() {
     }),
 
     MESH: MeshLayer({
-      data: cityIOdata,
+      data: GEOGRIDDATA,
       opacity:
         layersMenu &&
         layersMenu.MESH_LAYER_CHECKBOX &&
@@ -220,13 +244,13 @@ export default function DeckGLMap() {
   };
 
   const layerOrder = [
-    "TEXTUAL",
-    "ABM",
-    "AGGREGATED_TRIPS",
-    "ACCESS",
-    "GEOJSON",
     "GRID",
+    "TEXTUAL",
     "MESH",
+    "GEOJSON",
+    "ACCESS",
+    "AGGREGATED_TRIPS",
+    "ABM",
   ];
 
   const renderDeckLayers = () => {
