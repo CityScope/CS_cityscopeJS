@@ -66,75 +66,82 @@ export default function TypesListMenu() {
       }
       // check if this type has height prop
       listMenuItemsArray.push(
-        <ListItem key={`li_menu_${index}`}>
-          <Button
-            fullWidth
-            size="small"
-            key={Math.random()}
-            variant="outlined"
-            sx={{
-              "&.MuiButton-text": { color: { col } },
-              border: "solid 1px " + col,
-            }}
-            onClick={() => handleListItemClick(typesList[thisType], thisType)}
-          >
-            <Typography color={col} variant="caption">
-              {thisType}
-            </Typography>
-          </Button>
+        <div key={`li_types_top_div_${index}`}>
+          <ListItem key={`li_menu_${index}`}>
+            <Button
+              fullWidth
+              size="small"
+              key={Math.random()}
+              variant="outlined"
+              sx={{
+                "&.MuiButton-text": { color: { col } },
+                border: "solid 1px " + col,
+              }}
+              onClick={() => handleListItemClick(typesList[thisType], thisType)}
+            >
+              <Typography color={col} variant="caption">
+                {thisType}
+              </Typography>
+            </Button>
+          </ListItem>
+
           {selectedType && selectedType.thisTypeName === thisType && (
-            <Card sx={{ width: "100%" }}>
-              <CardContent>
-                {description && (
-                  <Typography variant="caption">{description}</Typography>
-                )}
+            <ListItem key={`li_types_card_${index}`}>
+              <Card  key={`li_types_card_${index}`} sx={{ width: "100%" }}>
+                <CardContent>
+                  {description && (
+                    <Typography variant="caption">{description}</Typography>
+                  )}
 
-                {selectedType && selectedType.height && (
-                  <>
-                    <Typography>Set Height</Typography>
+                  {selectedType && selectedType.height && (
+                    <div                       key={`li_types_div_${index}`}
+                    >
+                      <Typography>Set Height</Typography>
 
-                    <Slider
-                      valueLabelDisplay="auto"
-                      value={typeHeight}
-                      size="small"
-                      defaultValue={0}
-                      onChange={(e, val) => setTypeHeight(val)}
-                      onChangeCommitted={() =>
-                        setSelectedType({
-                          ...selectedType,
-                          height: typeHeight,
-                        })
-                      }
-                      min={heightSliderMarks[0].value}
-                      max={heightSliderMarks[1].value}
-                      marks={heightSliderMarks}
-                    />
-                  </>
-                )}
-                {LBCS && (
-                  <>
-                    <Typography>LBCS</Typography>
-                    <Typography variant="caption">
-                      {JSON.stringify(LBCS, null, "\t")}
-                    </Typography>
-                  </>
-                )}
-                {NAICS && (
-                  <>
-                    <Typography>NAICS</Typography>
-                    <Typography variant="caption">
-                      {JSON.stringify(NAICS, null, "\t")}
-                    </Typography>
-                  </>
-                )}
-              </CardContent>
-            </Card>
+                      <Slider
+                      key={`li_types_slider_${index}`}
+                        valueLabelDisplay="auto"
+                        value={typeHeight}
+                        size="small"
+                        defaultValue={0}
+                        onChange={(e, val) => setTypeHeight(val)}
+                        onChangeCommitted={() =>
+                          setSelectedType({
+                            ...selectedType,
+                            height: typeHeight,
+                          })
+                        }
+                        min={heightSliderMarks[0].value}
+                        max={heightSliderMarks[1].value}
+                        marks={heightSliderMarks}
+                      />
+                    </div>
+                  )}
+                  {LBCS && (
+                    <div>
+                      <Typography>LBCS</Typography>
+                      <Typography variant="caption">
+                        {JSON.stringify(LBCS, null, "\t")}
+                      </Typography>
+                    </div>
+                  )}
+                  {NAICS && (
+                    <div>
+                      <Typography>NAICS</Typography>
+                      <Typography variant="caption">
+                        {JSON.stringify(NAICS, null, "\t")}
+                      </Typography>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </ListItem>
           )}
-        </ListItem>
+        </div>
       );
     });
     return <List>{listMenuItemsArray}</List>;
   };
 
-  return <List>{createTypesIcons(typesList)}</List>;
+  return <>{createTypesIcons(typesList)}</>
 }
