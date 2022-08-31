@@ -74,10 +74,7 @@ export default function TypesListMenu() {
             variant="outlined"
             sx={{
               "&.MuiButton-text": { color: { col } },
-              border:
-                selectedType && selectedType.thisTypeName === thisType
-                  ? "solid 1px " + col
-                  : "dashed 1px " + col,
+              border: "solid 1px " + col,
             }}
             onClick={() => handleListItemClick(typesList[thisType], thisType)}
           >
@@ -85,67 +82,59 @@ export default function TypesListMenu() {
               {thisType}
             </Typography>
           </Button>
+          {selectedType && selectedType.thisTypeName === thisType && (
+            <Card sx={{ width: "100%" }}>
+              <CardContent>
+                {description && (
+                  <Typography variant="caption">{description}</Typography>
+                )}
+
+                {selectedType && selectedType.height && (
+                  <>
+                    <Typography>Set Height</Typography>
+
+                    <Slider
+                      valueLabelDisplay="auto"
+                      value={typeHeight}
+                      size="small"
+                      defaultValue={0}
+                      onChange={(e, val) => setTypeHeight(val)}
+                      onChangeCommitted={() =>
+                        setSelectedType({
+                          ...selectedType,
+                          height: typeHeight,
+                        })
+                      }
+                      min={heightSliderMarks[0].value}
+                      max={heightSliderMarks[1].value}
+                      marks={heightSliderMarks}
+                    />
+                  </>
+                )}
+                {LBCS && (
+                  <>
+                    <Typography>LBCS</Typography>
+                    <Typography variant="caption">
+                      {JSON.stringify(LBCS, null, "\t")}
+                    </Typography>
+                  </>
+                )}
+                {NAICS && (
+                  <>
+                    <Typography>NAICS</Typography>
+                    <Typography variant="caption">
+                      {JSON.stringify(NAICS, null, "\t")}
+                    </Typography>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          )}
         </ListItem>
       );
     });
     return <List>{listMenuItemsArray}</List>;
   };
 
-  return (
-    <List>
-      {createTypesIcons(typesList)}
-
-      {selectedType && (
-        <ListItem>
-          <Card  sx={{width: '100%'}}>
-            <CardContent>
-              <Typography variant="h5">{selectedType.thisTypeName}</Typography>
-              {description && (
-                <Typography variant="caption">{description}</Typography>
-              )}
-
-              {selectedType && selectedType.height && (
-                <>
-                  <Typography>Set Height</Typography>
-
-                  <Slider
-                    valueLabelDisplay="auto"
-                    value={typeHeight}
-                   size="small"
-                    defaultValue={0}
-                    onChange={(e, val) => setTypeHeight(val)}
-                    onChangeCommitted={() =>
-                      setSelectedType({
-                        ...selectedType,
-                        height: typeHeight,
-                      })
-                    }
-                    min={heightSliderMarks[0].value}
-                    max={heightSliderMarks[1].value}
-                    marks={heightSliderMarks}
-                  />
-                </>
-              )}
-              {LBCS && (
-                <>
-                  <Typography>LBCS</Typography>
-                  <Typography variant="caption">
-                    {JSON.stringify(LBCS, null, "\t")}
-                  </Typography>
-                </>
-              )}
-              {NAICS && (
-                <>
-                  <Typography>NAICS</Typography>
-                  <Typography variant="caption">
-                    {JSON.stringify(NAICS, null, "\t")}
-                  </Typography>
-                </>
-              )}
-            </CardContent>
-          </Card>
-        </ListItem>
-      )}
-    </List>
-  );
+  return <List>{createTypesIcons(typesList)}</List>;
 }
