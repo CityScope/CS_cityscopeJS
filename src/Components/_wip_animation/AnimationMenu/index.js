@@ -1,7 +1,7 @@
 import { Slider, Button, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateAnimationMenuState } from "../../../../redux/reducers/menuSlice";
+import { updateAnimationMenuState } from "../../../redux/reducers/menuSlice";
 
 function AnimationMenu() {
   const dispatch = useDispatch();

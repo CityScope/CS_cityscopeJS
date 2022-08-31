@@ -43,27 +43,26 @@ export default function DeckGLMap() {
   const toggleEffects = menuState.viewSettingsMenuState.EFFECTS_CHECKBOX;
 
   // ! constant animation speed for now - will be updated with slider
-  const animationSpeedSliderValue =
-    menuState.animationMenuState.animationSpeedSliderValue;
+
   const toggleAnimationState =
-    menuState.animationMenuState.toggleAnimationState;
+    menuState.viewSettingsMenuState.ANIMATION_CHECKBOX;
 
   const [animationTime, setAnimationTime] = useState(0);
   const [animation] = useState({});
   const animate = () => {
-    if (toggleAnimationState) {
+    if (toggleAnimationState && toggleAnimationState.isOn) {
       // use variable outside of closure to allow toggle
       setAnimationTime((t) => {
         return t > mapSettings.map.layers.ABM.endTime
           ? mapSettings.map.layers.ABM.startTime
-          : t + animationSpeedSliderValue;
+          : t + toggleAnimationState.slider;
       });
       animation.id = window.requestAnimationFrame(animate); // draw next frame
     }
   };
   // ! self executing function to toggle animation state
   (function () {
-    if (!toggleAnimationState) {
+    if (toggleAnimationState && !toggleAnimationState.isOn) {
       window.cancelAnimationFrame(animation.id);
       return;
     }
@@ -79,7 +78,7 @@ export default function DeckGLMap() {
 
   // ! lights
   const [effects, setEffects] = useState(() => []);
-  // set effects to null if toggleAnimationState is false
+  // set effects to null if toggle Animation State is false
   useEffect(() => {
     if (toggleEffects && toggleEffects.isOn) {
       const ambientLight = new AmbientLight({
