@@ -1,4 +1,4 @@
-import React from "react";
+import { Typography } from "@mui/material";
 
 /**
  *
@@ -6,38 +6,28 @@ import React from "react";
  */
 
 export const CellMeta = (props) => {
-    if (!props.mousePos) return null;
-    const mousePos = props.mousePos;
+  if (!props.mousePos) return null;
+  const mousePos = props.mousePos;
+  const hoveredObj = props.hoveredObj;
 
-    return (
-        <div
-            style={{
-                borderRadius: "10%",
-                position: "fixed",
-                pointerEvents: "none",
-                backgroundColor: "rgba(0,0,0,0.5)",
-                padding: "1vw",
-                color: "rgba(255,255,255,0.9)",
-                zIndex: 10,
-                left: mousePos.clientX,
-                top: mousePos.clientY,
-                fontFamily:'monospace',
-                fontSize: "0.65em",
-                fontWeight: 500,
-            }}
-        >
-            <p>
-                Type:
-                {props.hoveredObj.object.properties.name}
-            </p>
-            <p>
-                Floors:
-                {props.hoveredObj.object.properties.height}
-            </p>
-            <p>
-                ID:
-                {props.hoveredObj.object.properties.id}
-            </p>
-        </div>
-    );
+  return (
+    <div
+      style={{
+        borderRadius: "10%",
+        position: "fixed",
+        pointerEvents: "none",
+        backgroundColor: "rgba(0,0,0,0.5)",
+        padding: "1vw",
+        color: "rgba(255,255,255,0.9)",
+        zIndex: 10,
+        left: mousePos.clientX,
+        top: mousePos.clientY,
+        //
+      }}
+    >
+      <Typography>Type: {hoveredObj.object.properties.name}</Typography>
+      <Typography>Height: {hoveredObj.object.properties.height}</Typography>
+      <Typography>ID: {hoveredObj.object.properties.id}</Typography>
+    </div>
+  );
 };

@@ -1,18 +1,19 @@
-import React from "react";
 import ReactDOM from "react-dom";
-import { HashRouter } from "react-router-dom";
 import App from "./App";
-import Provider from "./redux/Provider";
-import store from "./redux/store";
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import rootReducer from "./redux/reducers";
 
-// ! basename={process.env.PUBLIC_URL}
+const store = configureStore({
+  reducer: rootReducer,
+});
 
 ReactDOM.render(
-  <Provider store={store}>
-    {/* https://github.com/facebook/create-react-app/issues/1765 */}
-    <HashRouter>
+  <>
+    <Provider store={store}>
       <App />
-    </HashRouter>
-  </Provider>,
+    </Provider>
+  </>,
+
   document.getElementById("root")
 );

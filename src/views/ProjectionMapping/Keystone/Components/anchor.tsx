@@ -1,67 +1,66 @@
-import * as React from "react";
-import { Anchor, Vector } from "./Keystoner";
-import { vectorToTransform } from "./util";
+import { Anchor, Vector } from "./Keystoner.tsx";
 
 const anchorSize = 20;
 const halfAnchor = anchorSize / 1.5;
-
+const vectorToTransform = (vector: Vector) =>
+  `translate(${vector[0]}px, ${vector[1]}px)`;
 const styles = {
-    container: {
-        width: anchorSize,
-        height: anchorSize,
-        borderRadius: "50%",
-        position: "absolute" as "absolute",
-        border: "1px solid white",
-        cursor: "move",
-    },
-    "top-left": {
-        left: -halfAnchor,
-        top: -halfAnchor,
-    },
-    "bottom-left": {
-        left: -halfAnchor,
-        bottom: -halfAnchor,
-    },
-    "top-right": {
-        top: -halfAnchor,
-        right: -halfAnchor,
-    },
-    "bottom-right": {
-        bottom: -halfAnchor,
-        right: -halfAnchor,
-    },
+  container: {
+    width: anchorSize,
+    height: anchorSize,
+    borderRadius: "50%",
+    position: "absolute" as "absolute",
+    border: "1px solid white",
+    cursor: "move",
+  },
+  "top-left": {
+    left: -halfAnchor,
+    top: -halfAnchor,
+  },
+  "bottom-left": {
+    left: -halfAnchor,
+    bottom: -halfAnchor,
+  },
+  "top-right": {
+    top: -halfAnchor,
+    right: -halfAnchor,
+  },
+  "bottom-right": {
+    bottom: -halfAnchor,
+    right: -halfAnchor,
+  },
 };
 
 export interface Props {
-    position: Anchor;
-    onMouseEnter?: (position: Anchor) => void;
-    // tslint:disable-next-line:no-any
-    onMouseDown: (evt: any, position: Anchor) => void;
-    onMouseUp: (position: Anchor) => void;
-    translation: Vector;
-    style?: React.CSSProperties;
-    className?: string;
+  position: Anchor;
+  onMouseEnter?: (position: Anchor) => void;
+  // tslint:disable-next-line:no-any
+  onMouseDown: (evt: any, position: Anchor) => void;
+  onMouseUp: (position: Anchor) => void;
+  translation: Vector;
+  style?: React.CSSProperties;
+  className?: string;
 }
 
-export const AnchorComponent: React.StatelessComponent<Props> = ({
-    position,
-    translation,
-    onMouseEnter,
-    onMouseDown,
-    onMouseUp,
-    className = "",
-    style = {},
+export const AnchorComponent: StatelessComponent<Props> = ({
+  position,
+  translation,
+  onMouseEnter,
+  onMouseDown,
+  onMouseUp,
+  className = "",
+  style = {},
 }) => (
-    <div
-        onMouseEnter={() => onMouseEnter && onMouseEnter(position)}
-        onMouseDown={(evt) => onMouseDown(evt, position)}
-        onMouseUp={() => onMouseUp(position)}
-        className={className}
-        style={{
-            ...styles.container,
-            ...styles[position],
-            ...style,
-            transform: vectorToTransform(translation),
-        }}
-    />
+  <div
+    onMouseEnter={() => onMouseEnter && onMouseEnter(position)}
+    onMouseDown={(evt) => onMouseDown(evt, position)}
+    onMouseUp={() => onMouseUp(position)}
+    className={className}
+    style={{
+      ...styles.container,
+      ...styles[position],
+      ...style,
+      transform: vectorToTransform(translation),
+    }}
+  />
 );

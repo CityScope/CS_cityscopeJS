@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
-import PrjDeckGLMap from "./PrjDeckGLMap";
+import ProjectionDeckMap from "./ProjectionDeckMap";
 import Keystoner from "./Components/Keystoner";
 import DeleteLocalStorage from "./Components/deleteLocalStorage";
 
 export default function Keystone() {
   const [editMode, setEditMode] = useState(false);
 
-  const clearLocalStraoge = () => {
+  const clearLocalStorage = () => {
     if (localStorage.getItem("projMap")) {
       localStorage.removeItem("projMap");
     }
-    if (localStorage.getItem("deckGLviewState")) {
-      localStorage.removeItem("deckGLviewState");
+    if (localStorage.getItem("projectionViewStateStorage")) {
+      localStorage.removeItem("projectionViewStateStorage");
     }
     window.location.reload();
   };
@@ -21,7 +21,6 @@ export default function Keystone() {
     const onKeyDown = ({ key }) => {
       if (key === " ") {
         setEditMode((editMode) => !editMode);
-        console.log(key, editMode);
       }
     };
     document.addEventListener("keydown", onKeyDown);
@@ -33,7 +32,7 @@ export default function Keystone() {
   return (
     <>
       {editMode && (
-        <div onClick={() => clearLocalStraoge()}>
+        <div onClick={() => clearLocalStorage()}>
           <DeleteLocalStorage />
         </div>
       )}
@@ -58,10 +57,11 @@ export default function Keystone() {
             style={{
               height: "100vh",
               width: "100vw",
+              backgroundColor: editMode ? "rgba(255,0,0)" : null,
             }}
             isEditMode={editMode}
           >
-            <PrjDeckGLMap />
+            <ProjectionDeckMap editMode = {editMode} />
           </Keystoner>
         </div>
       </div>

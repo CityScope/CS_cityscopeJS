@@ -1,107 +1,99 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
-    FlexibleWidthXYPlot,
-    XAxis,
-    YAxis,
-    VerticalBarSeries,
-} from "react-vis";
-import "react-vis/dist/style.css";
-import { Typography, Box } from "@material-ui/core";
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
 
-export default function BarChart(props) {
-    const radarSize = 250;
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-    /**
-   data format 
-    [
-    { x: 2, y: 10 },
-    { x: 4, y: 5 },
-    { x: 12, y: 15 },
-    ]
-     */
+export const options = {
+  scales: {
+    r: {
+      angleLines: {
+        color: "#696969",
+      },
+      grid: {
+        color: "#696969",
+        circular: true,
+      },
+      pointLabels: {
+        color: "#C0C0C0",
+      },
+      ticks: {
+        color: "#696969",
+      },
+    },
+  },
+  responsive: true,
+};
 
-    const [barChartData, setBarChartData] = useState(null);
-    const [hoveredNode, setHoveredNode] = useState(null);
+export const noData = {
+  labels: ["no data..."],
+  datasets: [
+    {
+      label: "No indicator data...",
+      data: [0],
+      backgroundColor: "#696969",
+    },
+  ],
+};
 
-    useEffect(() => {
-        if (
-            props &&
-            props.cityioData &&
-            props.cityioData.indicators &&
-            props.cityioData.indicators.length > 0
-        ) {
-            const d = generateData(props.cityioData.indicators);
+export default function BarChart() {
+  const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
+  const [barChartData, setBarChartData] = useState();
 
-            setBarChartData(d.barChartData);
-        }
-    }, [props]);
+  useEffect(() => {
+    if (!cityIOdata.indicators) {
+      setBarChartData(noData);
+    } else {
+      const d = createBarChartData(cityIOdata.indicators);
+      setBarChartData(d);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cityIOdata]);
 
-    const generateData = (indicators) => {
-        let dataArr = [];
-
-        for (let i = 0; i < indicators.length; i++) {
-            if (indicators[i].viz_type === "bar") {
-                dataArr.push({
-                    x: indicators[i].name,
-                    y: indicators[i].value,
-                });
-            }
-        }
-
-        return {
-            barChartData: dataArr,
-        };
+  const createBarChartData = (indicators) => {
+    let barChartData = {
+      labels: [],
+      datasets: [
+        {
+          label: "Chart Data",
+          data: [],
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        },
+      ],
     };
 
-    return (
-        <>
-            {barChartData && (
-                <>
-                    <Box flexDirection="column">
-                        <Box alignContent="center" p={3}>
-                            <FlexibleWidthXYPlot
-                                opacity={0.2}
-                                xType="ordinal"
-                                width={radarSize}
-                                height={radarSize}
-                                stackBy="y"
-                                yDomain={[0, 1]}
-                            >
-                                <XAxis
-                                    style={{
-                                        text: {
-                                            fill: "#FFF",
-                                            fontFamily: "Roboto Mono",
-                                        },
-                                    }}
-                                    tickLabelAngle={90}
-                                />
-                                <YAxis style={{ text: { fill: "#FFF" } }} />
-                                <VerticalBarSeries
-                                    animation={true}
-                                    onValueMouseOver={(d) => {
-                                        setHoveredNode(d);
-                                    }}
-                                    data={barChartData}
-                                />
-                            </FlexibleWidthXYPlot>
-                        </Box>
-                        <Box alignContent="center">
-                            {hoveredNode && (
-                                <>
-                                    <Typography variant="caption" gutterBottom>
-                                        {hoveredNode.x}
-                                    </Typography>
-                                    <Box m={3} />
-                                    <Typography gutterBottom>
-                                        {hoveredNode.y}
-                                    </Typography>
-                                </>
-                            )}
-                        </Box>
-                    </Box>
-                </>
-            )}
-        </>
-    );
+    for (let i = 0; i < indicators.length; i++) {
+      if (indicators[i].viz_type === "bar") {
+        barChartData.labels.push(indicators[i].name);
+        barChartData.datasets[0].data.push(indicators[i].value);
+      }
+    }
+    return barChartData;
+  };
+
+  return (
+    <>
+      {barChartData && (
+        <Bar options={options} data={barChartData ? barChartData : noData} />
+      )}
+    </>
+  );
 }

@@ -1,45 +1,33 @@
-import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import CityIO from './CityIO/cityIO'
-import CityIOviewer from '../CityIOviewer'
-import LoadingSpinner from './CityIO/LoadingSpinner'
-import CSjsMain from './CSjsMain'
+import CityIO from "../../Components/CityIO";
+import { useSelector } from "react-redux";
+import MenuContainer from "./MenuContainer";
+import DeckGLMap from "./DeckglMap";
+import VisContainer from "./VisContainer";
+// import AnimationComponent from "../../Components/AnimationComponent";
+import LoadingModules from "../../Components/LoadingModules";
 
 export default function CityScopeJS() {
-  // get the table name for cityIO comp
-  const [tableName, setTableName] = useState()
-  const [isDone, setIsdone] = useState(false)
-  // on init, get the adress URL
-  // to search for  a table
-  useEffect(() => {
-    let url = window.location.toString()
-    let pre = 'cityscope='
-    let cityscopePrjName = url.substring(url.indexOf(pre) + pre.length).toLowerCase()
-
-    
-    // check URL for proper CS project link
-    if (url.indexOf(pre) !== -1 && cityscopePrjName.length > 0) {
-      setTableName(cityscopePrjName)
-    } else {
-      /** if failed to get table name from
-       * url location, resote to the
-       * CityIO viewer
-       *
-       */
-      setIsdone(true)
-    }
-  }, [])
-
-  // wait for 'ready' flag from cityIO when app is ready to start
-  const isReady = useSelector((state) => state.READY)
-  const cityIOdata = useSelector((state) => state.CITYIO)
+  const cityIOisDone = useSelector(
+    (state) => state.cityIOdataState.cityIOisDone
+  );
+  const tableName = useSelector(
+    (state) => state.cityIOdataState.cityIOtableName
+  );
 
   return (
     <>
+      {!cityIOisDone && <LoadingModules loadingModules={[tableName]} />}
+      {/* if we got a cityIO table name, start cityIO module */}
       {tableName && <CityIO tableName={tableName} />}
-      {isReady && <CSjsMain cityIOdata={cityIOdata} tableName={tableName} />}
-      {isDone && <CityIOviewer />}
-      <LoadingSpinner />
+      {/* if cityIO module is done loading, start the CSjs app */}
+      {cityIOisDone && (
+        <>
+          {/* <AnimationComponent /> */}
+          <DeckGLMap />
+          <MenuContainer />
+          <VisContainer />
+        </>
+      )}
     </>
-  )
+  );
 }
