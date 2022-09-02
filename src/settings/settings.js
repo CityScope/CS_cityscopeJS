@@ -56,19 +56,19 @@ export const expectedLayers = {
     initSliderValue: 50,
   },
   ABM_LAYER_CHECKBOX: {
-    displayName: "Simulation Layer",
+    displayName: "Animated Trips Layer",
     cityIOmoduleName: "ABM2",
     initState: false,
     initSliderValue: 100,
   },
   AGGREGATED_TRIPS_LAYER_CHECKBOX: {
-    displayName: "Trips Layer",
+    displayName: "Aggregated Trips Layer",
     cityIOmoduleName: "ABM2",
     initState: false,
     initSliderValue: 100,
   },
   ACCESS_LAYER_CHECKBOX: {
-    displayName: "Accessibility Layer",
+    displayName: "Heatmap Layer",
     cityIOmoduleName: "access",
     initState: false,
     initSliderValue: 100,
