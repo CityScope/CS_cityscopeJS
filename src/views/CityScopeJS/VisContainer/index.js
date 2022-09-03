@@ -1,4 +1,4 @@
-import { List, ListItem, Card, CardContent, Grid, Box } from "@mui/material";
+import { Card, CardContent, Grid, Box } from "@mui/material";
 import RadarChart from "./RadarChart";
 import BarChart from "./BarChart";
 import AreaCalc from "./AreaCalc";
@@ -8,7 +8,7 @@ function VisContainer() {
   return (
     <ResizableDrawer direction="right" width={300}>
       <Box sx={{ margin: 1 }}>
-        <Grid container spacing={1}  direction={"row"}>
+        <Grid container spacing={1} direction={"row"}>
           <Grid item xs={12} xl={8}>
             <Card variant="outlined" sx={{ width: "100%" }}>
               <CardContent>

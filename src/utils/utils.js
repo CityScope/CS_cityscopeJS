@@ -10,7 +10,7 @@ export const getAPICall = async (URL) => {
     const response = await axios.get(URL);
     return response.data;
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
