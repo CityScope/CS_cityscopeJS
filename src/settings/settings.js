@@ -75,45 +75,45 @@ export const mapSettings = {
 
 export const expectedLayers = {
   GRID_LAYER_CHECKBOX: {
-    displayName: "Grid Layer",
+    displayName: "CS Grid",
     cityIOmoduleName: "GEOGRID",
-    initState: false,
+    initState: true,
     initSliderValue: 50,
   },
   ABM_LAYER_CHECKBOX: {
-    displayName: "Animated Trips Layer",
+    displayName: "Animated Trips",
     cityIOmoduleName: "ABM2",
     initState: false,
     initSliderValue: 100,
   },
   AGGREGATED_TRIPS_LAYER_CHECKBOX: {
-    displayName: "Aggregated Trips Layer",
+    displayName: "Aggregated Trips",
     cityIOmoduleName: "ABM2",
     initState: false,
     initSliderValue: 100,
   },
   ACCESS_LAYER_CHECKBOX: {
-    displayName: "Heatmap Layer",
+    displayName: "Heatmap",
     cityIOmoduleName: "access",
     initState: false,
     initSliderValue: 100,
   },
   TEXTUAL_LAYER_CHECKBOX: {
-    displayName: "Text Layer",
+    displayName: "Text",
     cityIOmoduleName: "text",
     initState: false,
     initSliderValue: 100,
   },
   GEOJSON_LAYER_CHECKBOX: {
-    displayName: "GeoJson Layer",
+    displayName: "GeoJson",
     cityIOmoduleName: "geojson",
     initState: false,
     initSliderValue: 50,
   },
   MESH_LAYER_CHECKBOX: {
-    displayName: "Objects Layer",
+    displayName: "Mesh <beta>",
     cityIOmoduleName: "GEOGRID",
-    initState: true,
+    initState: false,
     initSliderValue: 100,
   },
 };
