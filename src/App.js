@@ -25,10 +25,8 @@ const App = () => {
 
   const [viewSelectorState, setViewSelectorState] = useState();
 
-  const selectView = (view) => {
-    const parsed = queryString.parse(window.location.search);
-    const cityIOtableName =
-      Object.values(parsed)[0] && Object.values(parsed)[0].toLowerCase();
+  const selectView = (view, tableName) => {
+    const cityIOtableName = tableName && tableName.toLowerCase();
     // check if tableName is a valid tableName
     if (cityIOtableName && cityIOtableName !== "") {
       setTableName(cityIOtableName);
@@ -45,21 +43,18 @@ const App = () => {
     const parsed = queryString.parse(location.search);
 
     //a switch for the location.search and the parsed.tableName
-    switch (Object.keys(parsed)[0]) {
-      case "cityscope":
-        selectView("cityscopejs");
-        break;
-      case "projection":
-        // check if this location has a tableName
-        selectView("projection");
-        break;
-      case "editor":
-        // ! to get the table name for editing (not used yet)
-        setViewSelectorState("grideditor");
-        break;
-      default:
-        setViewSelectorState("cityio");
-        break;
+    const keys = Object.keys(parsed);
+
+    if (keys.includes("cityscope")) {
+      selectView("cityscopejs", parsed.cityscope);
+    } else if (keys.includes("projection")) {
+      // check if this location has a tableName
+      selectView("projection");
+    } else if (keys.includes("editor")) {
+      // ! to get the table name for editing (not used yet)
+      setViewSelectorState("grideditor");
+    } else {
+      setViewSelectorState("cityio");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

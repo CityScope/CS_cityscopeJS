@@ -6,7 +6,7 @@ const getServerLocation = () => {
   const parsed = queryString.parse(location.search);
 
   const serverLocation =
-    "local" in parsed
+    "cityio_local" in parsed
       ? "http://127.0.0.1:5000/api/"
       : "https://cityio.media.mit.edu/api/";
   console.log("cityIO server location: ", serverLocation);
@@ -17,7 +17,7 @@ const getCSJSLocation = () => {
   const location = window.location;
   const parsed = queryString.parse(location.search);
   const csjsLocation =
-    "local" in parsed
+    "csjs_local" in parsed
       ? "http://localhost:3000/CS_cityscopeJS/"
       : "https://cityscope.media.mit.edu/CS_cityscopeJS/";
   console.log("cityScopeJS location: ", csjsLocation);
