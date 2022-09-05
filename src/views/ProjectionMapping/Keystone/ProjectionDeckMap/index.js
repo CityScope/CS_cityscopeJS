@@ -117,7 +117,7 @@ export default function ProjectionDeckMap(props) {
       },
 
       getText: (d) => {
-        var length = 10;
+        var length = 5;
         return d.properties.name.length > length
           ? d.properties.name.substring(0, length - 3) + "..."
           : d.properties.name;
@@ -148,20 +148,14 @@ export default function ProjectionDeckMap(props) {
       viewState={viewState}
       onViewStateChange={onViewStateChange}
       layers={layersArray}
-      controller={{
-        keyboard: false,
-      }}
+      controller={{}}
     >
       {!editMode && (
         <Map
           width="100%"
           height="100%"
-          asyncRender={false}
-          dragRotate={true}
-          reuseMaps={true}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           mapStyle={settings.map.mapStyle.blue}
-          preventStyleDiffing={true}
         />
       )}
     </DeckGL>

@@ -2,8 +2,16 @@ import { useState, useEffect } from "react";
 import ProjectionDeckMap from "./ProjectionDeckMap";
 import Keystoner from "./Components/Keystoner";
 import DeleteLocalStorage from "./Components/deleteLocalStorage";
+import { useSelector } from "react-redux";
 
 export default function Keystone() {
+  const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
+  console.log(cityIOdata);
+  const numCols = cityIOdata.GEOGRID.properties.header.ncols;
+  const numRows = cityIOdata.GEOGRID.properties.header.nrows;
+  const tableRatio = numCols / numRows;
+  console.log("cols:", numCols, "rows:", numRows, "table ratio:", tableRatio);
+
   const [editMode, setEditMode] = useState(false);
 
   const clearLocalStorage = () => {
@@ -44,7 +52,7 @@ export default function Keystone() {
 
         style={{
           height: "100vh",
-          width: "100vw",
+          width: `100vw`,
           overflow: "hidden",
           position: "fixed",
           top: 0,
@@ -56,12 +64,12 @@ export default function Keystone() {
           <Keystoner
             style={{
               height: "100vh",
-              width: "100vw",
-              backgroundColor: editMode ? "rgba(255,0,0)" : null,
+              width: `${tableRatio * 100}vh`,
+              backgroundColor: editMode ? "rgba(255,255,0)" : null,
             }}
             isEditMode={editMode}
           >
-            <ProjectionDeckMap editMode = {editMode} />
+            <ProjectionDeckMap editMode={editMode} />
           </Keystoner>
         </div>
       </div>

@@ -49,7 +49,7 @@ const App = () => {
       selectView("cityscopejs", parsed.cityscope);
     } else if (keys.includes("projection")) {
       // check if this location has a tableName
-      selectView("projection");
+      selectView("projection",  parsed.projection);
     } else if (keys.includes("editor")) {
       // ! to get the table name for editing (not used yet)
       setViewSelectorState("grideditor");

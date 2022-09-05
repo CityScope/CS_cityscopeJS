@@ -6,25 +6,25 @@ import ResizableDrawer from "../../../Components/ResizableDrawer";
 
 function VisContainer() {
   return (
-    <ResizableDrawer direction="right" width={300}>
+    <ResizableDrawer direction="right" width={400}>
       <Box sx={{ margin: 1 }}>
         <Grid container spacing={1} direction={"row"}>
-          <Grid item xs={12} xl={8}>
-            <Card variant="outlined" sx={{ width: "100%" }}>
+          <Grid item xs={12} md={12} lg={12} xl={12}>
+            <Card variant="outlined">
               <CardContent>
                 <RadarChart />
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} xl={4}>
-            <Card variant="outlined" sx={{ width: "100%" }}>
+          <Grid item xs={12} md={12} lg={6} xl={6}>
+            <Card variant="outlined">
               <CardContent>
                 <AreaCalc />
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} xl={4}>
-            <Card variant="outlined" sx={{ width: "100%" }}>
+          <Grid item xs={12} md={12} lg={6} xl={6}>
+            <Card variant="outlined">
               <CardContent>
                 <BarChart />
               </CardContent>
