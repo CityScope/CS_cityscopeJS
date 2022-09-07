@@ -6,7 +6,7 @@ import ResizableDrawer from "../../../Components/ResizableDrawer";
 
 function VisContainer() {
   return (
-    <ResizableDrawer direction="right" width={400}>
+    <ResizableDrawer direction="right" width={window.innerWidth / 3}>
       <Box sx={{ margin: 1 }}>
         <Grid container spacing={1} direction={"row"}>
           <Grid item xs={12} md={12} lg={12} xl={12}>

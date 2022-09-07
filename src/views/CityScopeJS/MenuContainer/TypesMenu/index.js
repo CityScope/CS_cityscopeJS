@@ -87,19 +87,18 @@ export default function TypesListMenu() {
 
           {selectedType && selectedType.thisTypeName === thisType && (
             <ListItem key={`li_types_card_${index}`}>
-              <Card  key={`li_types_card_${index}`} sx={{ width: "100%" }}>
+              <Card key={`li_types_card_${index}`} sx={{ width: "100%" }}>
                 <CardContent>
                   {description && (
                     <Typography variant="caption">{description}</Typography>
                   )}
 
                   {selectedType && selectedType.height && (
-                    <div                       key={`li_types_div_${index}`}
-                    >
+                    <div key={`li_types_div_${index}`}>
                       <Typography>Set Height</Typography>
 
                       <Slider
-                      key={`li_types_slider_${index}`}
+                        key={`li_types_slider_${index}`}
                         valueLabelDisplay="auto"
                         value={typeHeight}
                         size="small"
@@ -140,8 +139,21 @@ export default function TypesListMenu() {
         </div>
       );
     });
-    return <List>{listMenuItemsArray}</List>;
+    return (
+      <List
+        sx={{
+       
+          display: "flex",
+          flexDirection: "column",
+          maxHeight: 400,
+          overflow: "hidden",
+          overflowY: "scroll",
+        }}
+      >
+        {listMenuItemsArray}
+      </List>
+    );
   };
 
-  return <>{createTypesIcons(typesList)}</>
+  return <>{createTypesIcons(typesList)}</>;
 }

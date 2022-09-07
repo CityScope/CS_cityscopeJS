@@ -46,6 +46,7 @@ export default function DeckGLMap() {
 
   const toggleAnimationState =
     menuState.viewSettingsMenuState.ANIMATION_CHECKBOX;
+  const toggleRotateCamera = menuState.viewSettingsMenuState.ROTATE_CHECKBOX;
 
   const [animationTime, setAnimationTime] = useState(0);
   const [animation] = useState({});
@@ -75,6 +76,19 @@ export default function DeckGLMap() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleAnimationState]);
+
+  useEffect(() => {
+    if (toggleRotateCamera && toggleRotateCamera.isOn) {
+      let bearing = viewState.bearing || 0;
+      bearing < 360
+        ? (bearing += (animationTime / 10000000) * toggleRotateCamera.slider)
+        : (bearing = 0);
+      setViewState({
+        ...viewState,
+        bearing: bearing,
+      });
+    }
+  }, [toggleRotateCamera, animationTime]);
 
   // ! lights
   const [effects, setEffects] = useState(() => []);
@@ -114,13 +128,15 @@ export default function DeckGLMap() {
       (firstCell[0] + lastCell[0]) / 2,
       (firstCell[1] + lastCell[1]) / 2,
     ];
+
     const header = cityIOdata.GEOGRID.properties.header;
+
     setViewState({
       ...viewState,
       longitude: midGrid[0],
       latitude: midGrid[1],
       zoom: viewControlButton === "RESET_VIEW_BUTTON" ? 15 : viewState.zoom,
-      pitch: 0,
+      pitch: viewControlButton === "RESET_VIEW_BUTTON" ? 0 : 45,
       bearing:
         viewControlButton === "NORTH_VIEW_BUTTON" ? 0 : 360 - header.rotation,
       orthographic: viewControlButton === "ORTHO_VIEW_BUTTON" ? true : false,

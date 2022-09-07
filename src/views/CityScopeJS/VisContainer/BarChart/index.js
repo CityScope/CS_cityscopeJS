@@ -21,6 +21,9 @@ ChartJS.register(
 );
 
 export const options = {
+  maintainAspectRatio: true,
+  aspectRatio: 1, 
+
   scales: {
     r: {
       angleLines: {
@@ -73,7 +76,7 @@ export default function BarChart() {
         {
           label: "Chart Data",
           data: [],
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          backgroundColor: "rgba(255, 99, 132, 0.3)",
           borderColor: "rgba(255, 99, 132, 1)",
           borderWidth: 1,
         },
