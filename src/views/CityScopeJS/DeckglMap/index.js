@@ -77,17 +77,19 @@ export default function DeckGLMap() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleAnimationState]);
 
+  // toggle camera rotation on and off
   useEffect(() => {
     if (toggleRotateCamera && toggleRotateCamera.isOn) {
       let bearing = viewState.bearing || 0;
       bearing < 360
-        ? (bearing += (animationTime / 10000000) * toggleRotateCamera.slider)
+        ? (bearing += (animationTime / 100000000) * toggleRotateCamera.slider)
         : (bearing = 0);
       setViewState({
         ...viewState,
         bearing: bearing,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleRotateCamera, animationTime]);
 
   // ! lights
