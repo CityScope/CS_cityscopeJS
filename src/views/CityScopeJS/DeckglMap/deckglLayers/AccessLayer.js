@@ -9,16 +9,17 @@ export default function AccessLayer({ data, opacity }) {
     [253, 199, 12],
     [255, 243, 59],
   ];
-   return new HeatmapLayer({
-     id: "ACCESS",
+  return new HeatmapLayer({
+    id: "ACCESS",
     colorRange: colors,
-    intensity:  opacity,
+    // intensity:  opacity,
     threshold: 0.5,
     data: accessData && accessData,
     getPosition: (d) => d.geometry.coordinates,
-    getWeight: (d) => d.properties[0],
+    getWeight: (d) =>
+      d.properties[Math.floor(opacity * 100) % data.access.properties.length],
     updateTriggers: {
-      getWeight: [0],
+      getWeight: opacity,
     },
   });
 }
