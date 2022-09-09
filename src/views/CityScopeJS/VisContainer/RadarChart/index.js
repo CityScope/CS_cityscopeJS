@@ -17,6 +17,8 @@ const options = {
       angleLines: {
         color: "#696969",
       },
+      suggestedMin: 0,
+            suggestedMax: 1,
       grid: {
         color: "#696969",
         circular: true,
