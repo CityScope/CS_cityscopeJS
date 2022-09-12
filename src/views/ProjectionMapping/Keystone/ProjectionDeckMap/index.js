@@ -13,7 +13,9 @@ export default function ProjectionDeckMap(props) {
   const deckGLref = useRef(null);
   const settings = mapSettings;
   const [viewState, setViewState] = useState();
+
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
+  const tui = cityIOdata && cityIOdata.tui;
   const header = cityIOdata.GEOGRID.properties.header;
   const setViewStateToTableHeader = () => {
     setViewState({
@@ -41,6 +43,7 @@ export default function ProjectionDeckMap(props) {
       // zoom map on CS table location
       setViewStateToTableHeader();
     }
+    console.log(cityIOdata);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -52,6 +55,7 @@ export default function ProjectionDeckMap(props) {
     );
     // ! lock bearing to avoid odd rotation
     setViewState({ ...viewState, pitch: 0, orthographic: true });
+    console.log(viewState);
   };
 
   const [time, setTime] = useState(settings.map.layers.ABM.startTime);
@@ -75,12 +79,13 @@ export default function ProjectionDeckMap(props) {
   const layersArray = [
     new GeoJsonLayer({
       id: "GRID",
+      visible: tui && tui.GRID && tui.GRID.active,
       data: processGridData(cityIOdata),
       opacity: 0.5,
       extruded: false,
       wireframe: true,
       lineWidthScale: 1,
-      lineWidthMinPixels: 5,
+      lineWidthMinPixels: 1,
       getFillColor: (d) => d.properties.color,
       transitions: {
         getFillColor: 500,
@@ -89,6 +94,7 @@ export default function ProjectionDeckMap(props) {
 
     new HeatmapLayer({
       id: "ACCESS",
+      visible: tui && tui.ACCESS && tui.ACCESS.active,
       colorRange: [
         [233, 62, 58],
         [237, 104, 60],
@@ -107,6 +113,7 @@ export default function ProjectionDeckMap(props) {
     // text layer in the center of each grid cell from the cityIOdata.GEOGRID.features
     new TextLayer({
       id: "text",
+      visible: tui && tui.TEXT && tui.TEXT.active,
       data: cityIOdata.GEOGRID && cityIOdata.GEOGRID.features,
       getPosition: (d) => {
         const pntArr = d.geometry.coordinates[0];
@@ -115,7 +122,6 @@ export default function ProjectionDeckMap(props) {
         const center = [(first[0] + last[0]) / 2, (first[1] + last[1]) / 2];
         return center;
       },
-
       getText: (d) => {
         var length = 5;
         return d.properties.name.length > length
@@ -128,6 +134,7 @@ export default function ProjectionDeckMap(props) {
 
     new TripsLayer({
       id: "ABM",
+      visible: tui && tui.ABM && tui.ABM.active,
       data: cityIOdata.ABM2 && cityIOdata.ABM2.trips,
       getColor: (d) => {
         let col = hexToRgb(cityIOdata.ABM2.attr.mode[d.mode].color);

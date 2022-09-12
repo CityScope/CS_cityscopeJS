@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 
 export default function Keystone() {
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
-  console.log(cityIOdata);
   const numCols = cityIOdata.GEOGRID.properties.header.ncols;
   const numRows = cityIOdata.GEOGRID.properties.header.nrows;
   const tableRatio = numCols / numRows;
