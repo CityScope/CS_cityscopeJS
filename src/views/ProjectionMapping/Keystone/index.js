@@ -12,6 +12,7 @@ export default function Keystone() {
   console.log("cols:", numCols, "rows:", numRows, "table ratio:", tableRatio);
 
   const [editMode, setEditMode] = useState(false);
+  const [viewStateEditMode, setViewStateEditMode] = useState(false);
 
   const clearLocalStorage = () => {
     if (localStorage.getItem("projMap")) {
@@ -28,6 +29,10 @@ export default function Keystone() {
     const onKeyDown = ({ key }) => {
       if (key === " ") {
         setEditMode((editMode) => !editMode);
+      }
+      // if the key is 'z', display the viewState editor
+      if (key === "z") {
+        setViewStateEditMode((viewStateEditMode) => !viewStateEditMode);
       }
     };
     document.addEventListener("keydown", onKeyDown);
@@ -51,7 +56,7 @@ export default function Keystone() {
 
         style={{
           height: "100vh",
-          width: `100vw`,
+          width: "100vw",
           overflow: "hidden",
           position: "fixed",
           top: 0,
@@ -64,11 +69,14 @@ export default function Keystone() {
             style={{
               height: "100vh",
               width: `${tableRatio * 100}vh`,
-              backgroundColor: editMode ? "rgba(255,255,0)" : null,
+              backgroundColor: editMode ? "rgba(255,0,0)" : null,
             }}
             isEditMode={editMode}
           >
-            <ProjectionDeckMap editMode={editMode} />
+            <ProjectionDeckMap
+              editMode={editMode}
+              viewStateEditMode={viewStateEditMode}
+            />
           </Keystoner>
         </div>
       </div>

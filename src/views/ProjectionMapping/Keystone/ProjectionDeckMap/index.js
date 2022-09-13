@@ -7,9 +7,12 @@ import { mapSettings } from "../../../../settings/settings";
 import { GeoJsonLayer, TripsLayer, HeatmapLayer, TextLayer } from "deck.gl";
 import { processGridData } from "../../../CityScopeJS/DeckglMap/deckglLayers/GridLayer";
 import { hexToRgb } from "../../../../utils/utils";
+import { TextField, Box } from "@mui/material";
 
 export default function ProjectionDeckMap(props) {
   const editMode = props.editMode;
+  const viewStateEditMode = props.viewStateEditMode;
+
   const deckGLref = useRef(null);
   const settings = mapSettings;
   const [viewState, setViewState] = useState();
@@ -43,7 +46,6 @@ export default function ProjectionDeckMap(props) {
       // zoom map on CS table location
       setViewStateToTableHeader();
     }
-    console.log(cityIOdata);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -55,7 +57,6 @@ export default function ProjectionDeckMap(props) {
     );
     // ! lock bearing to avoid odd rotation
     setViewState({ ...viewState, pitch: 0, orthographic: true });
-    console.log(viewState);
   };
 
   const [time, setTime] = useState(settings.map.layers.ABM.startTime);
@@ -68,6 +69,47 @@ export default function ProjectionDeckMap(props) {
         : t + settings.map.layers.ABM.animationSpeed;
     });
     animation.id = window.requestAnimationFrame(animate);
+  };
+
+  // convert every item in viewState to an input field
+  // that can be edited and update the viewState with the new values
+  const ViewStateInputs = () => {
+    const viewStateInputs = Object.keys(viewState).map((key) => {
+      if (!Number.isFinite(viewState[key])) return;
+      return (
+        <TextField
+          key={key}
+          id="outlined-number"
+          label={key}
+          type="number"
+          value={viewState[key]}
+          onChange={(e) => {
+            setViewState({
+              ...viewState,
+              [key]: parseFloat(e.target.value),
+            });
+          }}
+        />
+      );
+    });
+    return (
+      <Box
+        sx={{
+          component: "form",
+          backgroundColor: "black",
+          "& .MuiTextField-root": { m: 2, width: "25ch" },
+          bottom: "1vh",
+          left: "1vw",
+          maxWidth: "10%",
+          position: "fixed",
+          zIndex: "tooltip",
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <div>{viewStateInputs}</div>
+      </Box>
+    );
   };
 
   useEffect(() => {
@@ -150,21 +192,24 @@ export default function ProjectionDeckMap(props) {
   ];
 
   return (
-    <DeckGL
-      ref={deckGLref}
-      viewState={viewState}
-      onViewStateChange={onViewStateChange}
-      layers={layersArray}
-      controller={{}}
-    >
-      {!editMode && (
-        <Map
-          width="100%"
-          height="100%"
-          mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-          mapStyle={settings.map.mapStyle.blue}
-        />
-      )}
-    </DeckGL>
+    <>
+      <DeckGL
+        ref={deckGLref}
+        viewState={viewState}
+        onViewStateChange={onViewStateChange}
+        layers={layersArray}
+        controller={{}}
+      >
+        {!editMode && (
+          <Map
+            width="100%"
+            height="100%"
+            mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+            mapStyle={settings.map.mapStyle.blue}
+          />
+        )}
+      </DeckGL>
+      {viewStateEditMode && viewState && ViewStateInputs()}
+    </>
   );
 }
