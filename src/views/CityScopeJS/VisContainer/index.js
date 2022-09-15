@@ -3,7 +3,7 @@ import RadarChart from "./RadarChart";
 import BarChart from "./BarChart";
 import AreaCalc from "./AreaCalc";
 import ResizableDrawer from "../../../Components/ResizableDrawer";
-import FirstPerson from "./FirstPerson";
+import FirstPerson from "./RenderedView";
 
 function VisContainer() {
   return (
