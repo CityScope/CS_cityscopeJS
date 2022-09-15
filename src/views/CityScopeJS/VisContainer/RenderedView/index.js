@@ -4,7 +4,7 @@ import DeckGL from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import { SimpleMeshLayer } from "@deck.gl/mesh-layers";
 import { OBJLoader } from "@loaders.gl/obj";
-import Slider from "@mui/material/Slider";
+import { Slider, Typography } from "@mui/material/";
 import { processGridData } from "../../DeckglMap/deckglLayers/GridLayer";
 import { PlaneGeometry, CubeGeometry } from "@luma.gl/engine";
 
@@ -72,8 +72,6 @@ export default function RenderedView() {
     orthographic: true,
   });
 
-
-
   return (
     <>
       <div
@@ -84,8 +82,15 @@ export default function RenderedView() {
       >
         <DeckGL
           viewState={viewState}
-          onViewStateChange={(v) => setViewState({...v.viewState, orthographic: true})}
-          controller={true}
+          onViewStateChange={(v) =>
+            setViewState({ ...v.viewState, orthographic: true, pitch: 45 })
+          }
+          controller={{
+            touchZoom: true,
+            touchRotate: true,
+
+            keyboard: false,
+          }}
           effects={[lightingEffect]}
           layers={[
             new SimpleMeshLayer({
@@ -111,7 +116,7 @@ export default function RenderedView() {
               getOrientation: (d) => [-180, 360 - header.rotation, -90],
               getScale: (d) => [
                 GEOGRID.properties.header.cellSize / 2 - 1,
-                d.properties.height ,
+                d.properties.height,
                 GEOGRID.properties.header.cellSize / 2 - 1,
               ],
               updateTriggers: {
@@ -135,16 +140,10 @@ export default function RenderedView() {
               getColor: [100, 100, 100, 255],
             }),
           ]}
-        
         />
       </div>
-
-      <Slider
-        size="small"
-        aria-label="Volume"
-        value={sliderVal}
-        onChange={handleSliderChange}
-      />
+      <Typography variant="caption">Time of Day</Typography>
+      <Slider size="small" value={sliderVal} onChange={handleSliderChange} />
     </>
   );
 }

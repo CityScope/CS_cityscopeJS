@@ -6,7 +6,6 @@ import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { mapSettings } from "../../../settings/settings";
-import { LightingEffect } from "@deck.gl/core";
 import {
   AccessLayer,
   AggregatedTripsLayer,
@@ -17,7 +16,6 @@ import {
   MeshLayer,
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
-import { AmbientLight, _SunLight as SunLight } from "@deck.gl/core";
 
 export default function DeckGLMap() {
   // get cityio data from redux store
@@ -39,8 +37,6 @@ export default function DeckGLMap() {
   const layersMenu = menuState.layersMenuState;
   const viewControlButton =
     menuState.viewSettingsMenuState.VIEW_CONTROL_BUTTONS;
-
-  const toggleEffects = menuState.viewSettingsMenuState.EFFECTS_CHECKBOX;
 
   // ! constant animation speed for now - will be updated with slider
 
@@ -92,30 +88,6 @@ export default function DeckGLMap() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleRotateCamera, animationTime]);
 
-  // ! lights
-  const [effects, setEffects] = useState(() => []);
-  // set effects to null if toggle Animation State is false
-  useEffect(() => {
-    if (toggleEffects && toggleEffects.isOn) {
-      const ambientLight = new AmbientLight({
-        color: [255, 255, 255],
-        intensity: 1.0,
-      });
-      const dirLight = new SunLight({
-        timestamp: Date.UTC(2019, 7, 1, toggleEffects.slider % 24),
-        color: [255, 255, 255],
-        intensity: 1.0,
-        _shadow: true,
-      });
-      const lightingEffect = new LightingEffect({ ambientLight, dirLight });
-      lightingEffect.shadowColor = [0, 0, 0, 0.8];
-      setEffects([lightingEffect]);
-    } else {
-      setEffects([]);
-    }
-  }, [toggleEffects]);
-  // ! end lights
-
   // **
   //  * resets the camera viewport
   //  * to cityIO header data
@@ -153,7 +125,8 @@ export default function DeckGLMap() {
   // fix deck view rotate
   useEffect(() => {
     document
-      .getElementById("deckgl-wrapper")
+      // ! a more aggressive method which prevents all right click context menu
+      // .getElementById("deckgl-wrapper")
       .addEventListener("contextmenu", (evt) => evt.preventDefault());
     // zoom map on CS table location
     setViewStateToTableHeader();
@@ -308,7 +281,6 @@ export default function DeckGLMap() {
         <DeckGL
           ref={deckGLref}
           viewState={viewState}
-          effects={effects}
           onViewStateChange={onViewStateChange}
           layers={renderDeckLayers()}
           controller={{

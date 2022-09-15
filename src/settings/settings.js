@@ -124,11 +124,7 @@ export const viewControlCheckboxes = {
     initState: false,
     initSliderValue: 100,
   },
-  EFFECTS_CHECKBOX: {
-    displayName: "Toggle Effects",
-    initState: false,
-    initSliderValue: 100,
-  },
+
   ANIMATION_CHECKBOX: {
     displayName: "Toggle Animation",
     initState: false,
