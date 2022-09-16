@@ -76,7 +76,7 @@ export default function RenderedView() {
     <>
       <div
         style={{
-          height: "30vh",
+          height:"30vh",
           position: "relative",
         }}
       >
@@ -111,9 +111,8 @@ export default function RenderedView() {
                 return center;
               },
               getColor: [255, 255, 255, 255],
-              material: material,
 
-              getOrientation: (d) => [-180, 360 - header.rotation, -90],
+              getOrientation: (d) => [-180,  header.rotation, -90],
               getScale: (d) => [
                 GEOGRID.properties.header.cellSize / 2 - 1,
                 d.properties.height,
