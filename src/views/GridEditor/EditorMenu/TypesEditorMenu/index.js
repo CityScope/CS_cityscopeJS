@@ -15,7 +15,7 @@ export const createTypesArray = (LandUseTypesList) => {
       name: type,
       description: "[edit info for type: " + type + "]",
       color: LandUseTypesList[type].color,
-      height: LandUseTypesList[type].height ? LandUseTypesList[type].height : 0,
+      height: LandUseTypesList[type].height ? LandUseTypesList[type].height : [0,0,0],
 
       LBCS: LandUseTypesList[type].LBCS
         ? JSON.stringify(LandUseTypesList[type].LBCS)
@@ -41,8 +41,18 @@ export const tableInitialState = {
     },
 
     {
-      title: "Height",
-      field: "height",
+      title: "Height Min.",
+      field: "height[0]",
+      type: "numeric",
+    },
+    {
+      title: "Height Default",
+      field: "height[1]",
+      type: "numeric",
+    },
+    {
+      title: "Height Max.",
+      field: "height[2]",
       type: "numeric",
     },
     {
@@ -101,6 +111,11 @@ export default function TypesEditorMenu() {
             selectedRow && selectedRow.tableData.id === rowData.tableData.id
               ? rowColor
               : null,
+
+          color:
+            selectedRow && selectedRow.tableData.id === rowData.tableData.id
+              ? "black"
+              : "white",
         }),
       }}
       onRowClick={(evt, row) => {

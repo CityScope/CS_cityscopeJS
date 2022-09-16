@@ -4,9 +4,9 @@ import DeckGL from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import { SimpleMeshLayer } from "@deck.gl/mesh-layers";
 import { OBJLoader } from "@loaders.gl/obj";
-import { Slider, Typography } from "@mui/material/";
+import { Slider, SliderValueLabel, Typography } from "@mui/material/";
 import { processGridData } from "../../DeckglMap/deckglLayers/GridLayer";
-import { PlaneGeometry, CubeGeometry } from "@luma.gl/engine";
+import { PlaneGeometry } from "@luma.gl/engine";
 
 const plane = new PlaneGeometry({
   type: "x,z",
@@ -14,7 +14,7 @@ const plane = new PlaneGeometry({
   ylen: 1,
 });
 
-const cube = new CubeGeometry();
+// const cube = new CubeGeometry();
 
 const material = {};
 material.ambient = 0.5;
@@ -38,7 +38,9 @@ const lightingEffect = new LightingEffect({ ambientLight, directionalLight });
 lightingEffect.shadowColor = [0, 0, 0, 0.5];
 
 export default function RenderedView() {
-  const [sliderVal, setSliderValue] = useState(30);
+  const [sliderVal, setSliderValue] = useState(
+    lightingEffect.directionalLights[0].timestamp
+  );
 
   const handleSliderChange = (event, newValue) => {
     setSliderValue(newValue);
@@ -76,7 +78,7 @@ export default function RenderedView() {
     <>
       <div
         style={{
-          height:"30vh",
+          height: "25vh",
           position: "relative",
         }}
       >
@@ -88,7 +90,6 @@ export default function RenderedView() {
           controller={{
             touchZoom: true,
             touchRotate: true,
-
             keyboard: false,
           }}
           effects={[lightingEffect]}
@@ -97,8 +98,9 @@ export default function RenderedView() {
               id: "mesh-layer",
               data: GEOGRID.features,
               loaders: [OBJLoader],
-              mesh: cube,
-              //  "./obj/model.obj",
+              mesh:
+                // cube,
+                "./obj/model.obj",
               material: material,
               getPosition: (d) => {
                 const pntArr = d.geometry.coordinates[0];
@@ -112,10 +114,10 @@ export default function RenderedView() {
               },
               getColor: [255, 255, 255, 255],
 
-              getOrientation: (d) => [-180,  header.rotation, -90],
+              getOrientation: (d) => [-180, header.rotation, -90],
               getScale: (d) => [
                 GEOGRID.properties.header.cellSize / 2 - 1,
-                d.properties.height,
+                d.properties.height[1] || d.properties.height,
                 GEOGRID.properties.header.cellSize / 2 - 1,
               ],
               updateTriggers: {
@@ -141,7 +143,9 @@ export default function RenderedView() {
           ]}
         />
       </div>
-      <Typography variant="caption">Time of Day</Typography>
+      <Typography variant="caption">
+        Time of Day {lightingEffect.directionalLights[0].timestamp}
+      </Typography>
       <Slider size="small" value={sliderVal} onChange={handleSliderChange} />
     </>
   );

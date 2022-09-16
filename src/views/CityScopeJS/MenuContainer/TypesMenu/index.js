@@ -14,20 +14,12 @@ import { updateTypesMenuState } from "../../../../redux/reducers/menuSlice";
 export default function TypesListMenu() {
   const dispatch = useDispatch();
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
-  const typesList = cityIOdata.GEOGRID.properties.types;
-  const [selectedType, setSelectedType] = useState(null);
-
-  const [typeHeight, setTypeHeight] = useState(0);
-  const heightSliderMarks = [
-    { value: 0, label: "min" },
-    { value: 100, label: "max" },
-  ];
-
+  const landUseTypesList = cityIOdata.GEOGRID.properties.types;
+  const [selectedType, setSelectedType] = useState();
+  const [localTypesState, setLocalTypesState] = useState();
+  // handle selected type
   const handleListItemClick = (typeProps, thisTypeName) => {
     typeProps = { ...typeProps, thisTypeName: thisTypeName };
-    if (typeHeight && typeProps.height) {
-      typeProps = { ...typeProps, height: typeHeight };
-    }
     setSelectedType(typeProps);
   };
 
@@ -86,36 +78,61 @@ export default function TypesListMenu() {
           </ListItem>
 
           {selectedType && selectedType.thisTypeName === thisType && (
-            <ListItem key={`li_types_card_${index}`}>
-              <Card key={`li_types_card_${index}`} sx={{ width: "100%" }}>
+            <ListItem key={`li_types_${index}`}>
+              <Card
+                variant="outlined"
+                key={`li_types_card_${index}`}
+                sx={{ width: "100%" }}
+              >
                 <CardContent>
                   {description && (
                     <Typography variant="caption">{description}</Typography>
                   )}
 
-                  {selectedType && selectedType.height && (
-                    <div key={`li_types_div_${index}`}>
-                      <Typography>Set Height</Typography>
+                  {selectedType &&
+                    selectedType.thisTypeName &&
+                    selectedType.height && (
+                      <div key={`li_types_div_${index}`}>
+                        <Typography>Set Height</Typography>
 
-                      <Slider
-                        key={`li_types_slider_${index}`}
-                        valueLabelDisplay="auto"
-                        value={typeHeight}
-                        size="small"
-                        defaultValue={0}
-                        onChange={(e, val) => setTypeHeight(val)}
-                        onChangeCommitted={() =>
-                          setSelectedType({
-                            ...selectedType,
-                            height: typeHeight,
-                          })
-                        }
-                        min={heightSliderMarks[0].value}
-                        max={heightSliderMarks[1].value}
-                        marks={heightSliderMarks}
-                      />
-                    </div>
-                  )}
+                        <Slider
+                          key={`li_types_slider_${selectedType.thisTypeName}`}
+                          valueLabelDisplay="auto"
+                          size="small"
+                          // on change update the local state
+                          onChange={(e, val) =>
+                            setLocalTypesState((localTypesState) => {
+                              const update = { ...localTypesState };
+                              const newHeight = [
+                                selectedType.height[0],
+                                val,
+                                selectedType.height[2],
+                              ];
+                              Object.assign(update, { height: newHeight });
+                              return update;
+                            })
+                          }
+                          // on change committed update the redux state
+                          onChangeCommitted={(e, val) => {
+                            setSelectedType({
+                              ...selectedType,
+                              height: [
+                                selectedType.height[0],
+                                val,
+                                selectedType.height[2],
+                              ],
+                            });
+                          }}
+                          min={selectedType.height[0]}
+                          value={
+                            localTypesState &&
+                            localTypesState[selectedType] &&
+                            localTypesState[selectedType].height[1]
+                          }
+                          max={selectedType.height[2]}
+                        />
+                      </div>
+                    )}
                   {LBCS && (
                     <div>
                       <Typography>LBCS</Typography>
@@ -139,10 +156,10 @@ export default function TypesListMenu() {
         </div>
       );
     });
+
     return (
       <List
         sx={{
-       
           display: "flex",
           flexDirection: "column",
           maxHeight: 400,
@@ -155,5 +172,5 @@ export default function TypesListMenu() {
     );
   };
 
-  return <>{createTypesIcons(typesList)}</>;
+  return <>{createTypesIcons(landUseTypesList)}</>;
 }

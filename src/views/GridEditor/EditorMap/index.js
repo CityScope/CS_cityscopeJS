@@ -103,7 +103,7 @@ export default function EditorMap() {
 
   /**
    * Description. allow only to pick cells that are
-   *  not of CityScope TUI & that are interactable
+   *  not of CityScope TUI & that are intractable
    * so to not overlap TUI activity
    */
   const handleGridCellEditing = (event) => {
@@ -116,7 +116,7 @@ export default function EditorMap() {
       const thisCellProps = { ...pickedObject.object.properties };
       // modify the copy properties to match the selected type
       thisCellProps.color = testHex(color) ? hexToRgb(color) : color;
-      thisCellProps.height = parseInt(height);
+      thisCellProps.height = height;
       thisCellProps.name = name;
       if (interactive !== "No") {
         thisCellProps.interactive = interactive;
@@ -183,7 +183,7 @@ export default function EditorMap() {
         extruded: true,
         lineWidthScale: 1,
         lineWidthMinPixels: 1,
-        getElevation: (d) => d.properties.height,
+        getElevation: (d) => d.properties.height[1],
         getFillColor: (d) => d.properties.color,
 
         onClick: (event, cellInfo) => {

@@ -158,7 +158,7 @@ export const GridEditorSettings = {
 
   GEOGRIDDATA: {
     color: [0, 0, 0],
-    height: 0,
+    height: [0, 50, 100],
     id: 0,
     interactive: "Web",
     name: "name",
@@ -200,8 +200,7 @@ export const GridEditorSettings = {
           ],
           interactive: "Web",
           color: "#FF5277",
-          height: 10,
-          sqm_pperson: 20,
+          height: [0, 50, 100],
         },
         Park: {
           LBCS: [
@@ -215,7 +214,6 @@ export const GridEditorSettings = {
           NAICS: null,
           interactive: "Web",
           color: "#38C9FF",
-          sqm_pperson: 1,
         },
         Residential: {
           LBCS: [
@@ -229,8 +227,7 @@ export const GridEditorSettings = {
           NAICS: null,
           interactive: "Web",
           color: "#FFFF33",
-          height: 4,
-          sqm_pperson: 90,
+          height: [0, 50, 100],
         },
       },
     },
