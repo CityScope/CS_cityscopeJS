@@ -99,17 +99,19 @@ export default function ProjectionDeckMap(props) {
       <Box
         sx={{
           component: "form",
-          backgroundColor: "black",
-          "& .MuiTextField-root": { m: 2, width: "25ch" },
+          backgroundColor: "rgba(0,0,0,0.95)",
+          "& .MuiTextField-root": { m: 2, width: "90%" },
           bottom: "1vh",
           left: "1vw",
-          maxWidth: "10%",
+          maxWidth: "30%",
           position: "fixed",
           zIndex: "tooltip",
         }}
         noValidate
         autoComplete="off"
       >
+        <div>Changes are saved automatically. Press [ z ] again to hide.</div>
+
         <div>{viewToggles}</div>
       </Box>
     );
