@@ -1,78 +1,33 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import Map from "react-map-gl";
-import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { mapSettings } from "../../../../settings/settings";
+import { mapSettings as settings } from "../../../../settings/settings";
 import { GeoJsonLayer, TripsLayer, HeatmapLayer, TextLayer } from "deck.gl";
 import { processGridData } from "../../../CityScopeJS/DeckglMap/deckglLayers/GridLayer";
 import { hexToRgb } from "../../../../utils/utils";
-
-import ViewStateInputs from "../Components/ViewStateInputs";
-import LayerControls from "../Components/LayerControls";
+import DeckMap from "./DeckMap";
 
 export default function ProjectionDeckMap(props) {
   const editMode = props.editMode;
   const viewStateEditMode = props.viewStateEditMode;
-  const deckGLref = useRef(null);
-  const settings = mapSettings;
-  const [viewState, setViewState] = useState();
+  const layersVisibilityControl = props.layersVisibilityControl;
+
+
+
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const TUIobject = cityIOdata && cityIOdata.tui;
-  const header = cityIOdata.GEOGRID.properties.header;
-
-  const setViewStateToTableHeader = () => {
-    setViewState({
-      ...viewState,
-      longitude: header.longitude,
-      latitude: header.latitude,
-      zoom: 15,
-      pitch: 0,
-      bearing: 360 - header.rotation,
-      orthographic: true,
-    });
-  };
-
-  useEffect(() => {
-    // fix deck view rotate
-    document
-      .getElementById("deckgl-wrapper")
-      .addEventListener("contextmenu", (evt) => evt.preventDefault());
-    // on init, check if prev. local storage with
-    // view state exist. If so, load it.
-    if (localStorage.getItem("projectionViewStateStorage")) {
-      console.log("loading prev. projectionViewStateStorage...");
-      const vs = localStorage.getItem("projectionViewStateStorage");
-      setViewState(JSON.parse(vs));
-    } else {
-      // zoom map on CS table location
-      setViewStateToTableHeader();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const onViewStateChange = ({ viewState }) => {
-    //    save current view state to local storage
-    localStorage.setItem(
-      "projectionViewStateStorage",
-      JSON.stringify(viewState)
-    );
-    // ! lock bearing to avoid odd rotation
-    setViewState({ ...viewState, pitch: 0, orthographic: true });
-  };
 
   const [time, setTime] = useState(settings.map.layers.ABM.startTime);
   const [animation] = useState({});
 
   const animate = () => {
-    TUIobject &&
-      TUIobject.ABM &&
-      TUIobject.ABM.active &&
-      setTime((t) => {
-        return t > settings.map.layers.ABM.endTime
-          ? settings.map.layers.ABM.startTime
-          : t + settings.map.layers.ABM.animationSpeed;
-      });
+    (TUIobject && TUIobject.ABM && TUIobject.ABM.active) ||
+      (layersVisibilityControl.ABM &&
+        setTime((t) => {
+          return t > settings.map.layers.ABM.endTime
+            ? settings.map.layers.ABM.startTime
+            : t + settings.map.layers.ABM.animationSpeed;
+        }));
     animation.id = window.requestAnimationFrame(animate);
   };
 
@@ -82,11 +37,13 @@ export default function ProjectionDeckMap(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animation]);
 
-  const layersArray = () => {
+  const layersArray = (layersVisibilityControl) => {
     return [
       new GeoJsonLayer({
         id: "GRID",
-        visible: (TUIobject && TUIobject.GRID && TUIobject.GRID.active) || true,
+        visible:
+          (TUIobject && TUIobject.GRID && TUIobject.GRID.active) ||
+          layersVisibilityControl.GRID,
         data: processGridData(cityIOdata),
         opacity: 0.5,
         extruded: false,
@@ -102,7 +59,8 @@ export default function ProjectionDeckMap(props) {
       new HeatmapLayer({
         id: "ACCESS",
         visible:
-          (TUIobject && TUIobject.ACCESS && TUIobject.ACCESS.active) || true,
+          (TUIobject && TUIobject.ACCESS && TUIobject.ACCESS.active) ||
+          layersVisibilityControl.ACCESS,
         colorRange: [
           [233, 62, 58],
           [237, 104, 60],
@@ -121,7 +79,9 @@ export default function ProjectionDeckMap(props) {
       // text layer in the center of each grid cell from the cityIOdata.GEOGRID.features
       new TextLayer({
         id: "text",
-        visible: (TUIobject && TUIobject.TEXT && TUIobject.TEXT.active) || true,
+        visible:
+          (TUIobject && TUIobject.TEXT && TUIobject.TEXT.active) ||
+          layersVisibilityControl.TEXT,
         data: cityIOdata.GEOGRID && cityIOdata.GEOGRID.features,
         getPosition: (d) => {
           const pntArr = d.geometry.coordinates[0];
@@ -142,7 +102,9 @@ export default function ProjectionDeckMap(props) {
 
       new TripsLayer({
         id: "ABM",
-        visible: (TUIobject && TUIobject.ABM && TUIobject.ABM.active) || true,
+        visible:
+          (TUIobject && TUIobject.ABM && TUIobject.ABM.active) ||
+          layersVisibilityControl.ABM,
         data: cityIOdata.ABM2 && cityIOdata.ABM2.trips,
         getColor: (d) => {
           let col = hexToRgb(cityIOdata.ABM2.attr.mode[d.mode].color);
@@ -159,29 +121,10 @@ export default function ProjectionDeckMap(props) {
   };
 
   return (
-    <>
-      <DeckGL
-        ref={deckGLref}
-        viewState={viewState}
-        onViewStateChange={onViewStateChange}
-        layers={layersArray()}
-        controller={{}}
-      >
-        {!editMode && (
-          <Map
-            width="100%"
-            height="100%"
-            mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-            mapStyle={settings.map.mapStyle.blue}
-          />
-        )}
-      </DeckGL>
-      {viewStateEditMode && viewState && (
-        <>
-          {/* <LayerControls layersArray={layersArray} /> */}
-          <ViewStateInputs setViewState={setViewState} viewState={viewState} />
-        </>
-      )}
-    </>
+    <DeckMap
+      editMode={editMode}
+      viewStateEditMode={viewStateEditMode}
+      layers={layersArray(layersVisibilityControl)}
+    />
   );
 }

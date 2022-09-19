@@ -9,11 +9,16 @@ export default function Keystone() {
   const numCols = cityIOdata.GEOGRID.properties.header.ncols;
   const numRows = cityIOdata.GEOGRID.properties.header.nrows;
   const tableRatio = numCols / numRows;
-  console.log("cols:", numCols, "rows:", numRows, "table ratio:", tableRatio);
 
   const [editMode, setEditMode] = useState(false);
   const [viewStateEditMode, setViewStateEditMode] = useState(false);
-  
+  const [layersVisibilityControl, setLayersVisibilityControl] = useState({
+    GRID: false,
+    ACCESS: false,
+    ABM: false,
+    TEXT: false,
+  });
+
   const clearLocalStorage = () => {
     if (localStorage.getItem("projMap")) {
       localStorage.removeItem("projMap");
@@ -39,7 +44,7 @@ export default function Keystone() {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [editMode]);
+  }, []);
 
   return (
     <>
@@ -76,6 +81,7 @@ export default function Keystone() {
             <ProjectionDeckMap
               editMode={editMode}
               viewStateEditMode={viewStateEditMode}
+              layersVisibilityControl={layersVisibilityControl}
             />
           </Keystoner>
         </div>
