@@ -7,19 +7,20 @@ import { mapSettings } from "../../../../settings/settings";
 import { GeoJsonLayer, TripsLayer, HeatmapLayer, TextLayer } from "deck.gl";
 import { processGridData } from "../../../CityScopeJS/DeckglMap/deckglLayers/GridLayer";
 import { hexToRgb } from "../../../../utils/utils";
-import { TextField, Box } from "@mui/material";
+
+import ViewStateInputs from "../Components/ViewStateInputs";
+import LayerControls from "../Components/LayerControls";
 
 export default function ProjectionDeckMap(props) {
   const editMode = props.editMode;
   const viewStateEditMode = props.viewStateEditMode;
-
   const deckGLref = useRef(null);
   const settings = mapSettings;
   const [viewState, setViewState] = useState();
-
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
-  const tui = cityIOdata && cityIOdata.tui;
+  const TUIobject = cityIOdata && cityIOdata.tui;
   const header = cityIOdata.GEOGRID.properties.header;
+
   const setViewStateToTableHeader = () => {
     setViewState({
       ...viewState,
@@ -31,6 +32,7 @@ export default function ProjectionDeckMap(props) {
       orthographic: true,
     });
   };
+
   useEffect(() => {
     // fix deck view rotate
     document
@@ -63,58 +65,15 @@ export default function ProjectionDeckMap(props) {
   const [animation] = useState({});
 
   const animate = () => {
-    setTime((t) => {
-      return t > settings.map.layers.ABM.endTime
-        ? settings.map.layers.ABM.startTime
-        : t + settings.map.layers.ABM.animationSpeed;
-    });
+    TUIobject &&
+      TUIobject.ABM &&
+      TUIobject.ABM.active &&
+      setTime((t) => {
+        return t > settings.map.layers.ABM.endTime
+          ? settings.map.layers.ABM.startTime
+          : t + settings.map.layers.ABM.animationSpeed;
+      });
     animation.id = window.requestAnimationFrame(animate);
-  };
-
-  // convert every item in viewState to an input field
-  // that can be edited and update the viewState with the new values
-  const ViewStateInputs = () => {
-    const viewToggles = Object.keys(viewState).map((key) => {
-      if (Number.isFinite(viewState[key])) {
-        return (
-          <TextField
-            key={key}
-            id="outlined-number"
-            label={key}
-            type="number"
-            value={viewState[key]}
-            onChange={(e) => {
-              setViewState({
-                ...viewState,
-                [key]: parseFloat(e.target.value),
-              });
-            }}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
-    return (
-      <Box
-        sx={{
-          component: "form",
-          backgroundColor: "rgba(0,0,0,0.95)",
-          "& .MuiTextField-root": { m: 2, width: "90%" },
-          bottom: "1vh",
-          left: "1vw",
-          maxWidth: "30%",
-          position: "fixed",
-          zIndex: "tooltip",
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <div>Changes are saved automatically. Press [ z ] again to hide.</div>
-
-        <div>{viewToggles}</div>
-      </Box>
-    );
   };
 
   useEffect(() => {
@@ -123,78 +82,81 @@ export default function ProjectionDeckMap(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animation]);
 
-  const layersArray = [
-    new GeoJsonLayer({
-      id: "GRID",
-      visible: tui && tui.GRID && tui.GRID.active,
-      data: processGridData(cityIOdata),
-      opacity: 0.5,
-      extruded: false,
-      wireframe: true,
-      lineWidthScale: 1,
-      lineWidthMinPixels: 1,
-      getFillColor: (d) => d.properties.color,
-      transitions: {
-        getFillColor: 500,
-      },
-    }),
+  const layersArray = () => {
+    return [
+      new GeoJsonLayer({
+        id: "GRID",
+        visible: (TUIobject && TUIobject.GRID && TUIobject.GRID.active) || true,
+        data: processGridData(cityIOdata),
+        opacity: 0.5,
+        extruded: false,
+        wireframe: true,
+        lineWidthScale: 1,
+        lineWidthMinPixels: 1,
+        getFillColor: (d) => d.properties.color,
+        transitions: {
+          getFillColor: 500,
+        },
+      }),
 
-    new HeatmapLayer({
-      id: "ACCESS",
-      visible: tui && tui.ACCESS && tui.ACCESS.active,
-      colorRange: [
-        [233, 62, 58],
-        [237, 104, 60],
-        [243, 144, 63],
-      ],
-      intensity: 0.8,
-      threshold: 0.5,
-      data: cityIOdata.access && cityIOdata.access.features,
-      getPosition: (d) => d.geometry.coordinates,
-      getWeight: (d) => d.properties[0],
-      updateTriggers: {
-        getWeight: [0],
-      },
-    }),
+      new HeatmapLayer({
+        id: "ACCESS",
+        visible:
+          (TUIobject && TUIobject.ACCESS && TUIobject.ACCESS.active) || true,
+        colorRange: [
+          [233, 62, 58],
+          [237, 104, 60],
+          [243, 144, 63],
+        ],
+        intensity: 0.8,
+        threshold: 0.5,
+        data: cityIOdata.access && cityIOdata.access.features,
+        getPosition: (d) => d.geometry.coordinates,
+        getWeight: (d) => d.properties[0],
+        updateTriggers: {
+          getWeight: [0],
+        },
+      }),
 
-    // text layer in the center of each grid cell from the cityIOdata.GEOGRID.features
-    new TextLayer({
-      id: "text",
-      visible: tui && tui.TEXT && tui.TEXT.active,
-      data: cityIOdata.GEOGRID && cityIOdata.GEOGRID.features,
-      getPosition: (d) => {
-        const pntArr = d.geometry.coordinates[0];
-        const first = pntArr[1];
-        const last = pntArr[pntArr.length - 2];
-        const center = [(first[0] + last[0]) / 2, (first[1] + last[1]) / 2];
-        return center;
-      },
-      getText: (d) => {
-        var length = 5;
-        return d.properties.name.length > length
-          ? d.properties.name.substring(0, length - 3) + "..."
-          : d.properties.name;
-      },
-      getColor: (d) => [0, 0, 0],
-      getSize: 8,
-    }),
+      // text layer in the center of each grid cell from the cityIOdata.GEOGRID.features
+      new TextLayer({
+        id: "text",
+        visible: (TUIobject && TUIobject.TEXT && TUIobject.TEXT.active) || true,
+        data: cityIOdata.GEOGRID && cityIOdata.GEOGRID.features,
+        getPosition: (d) => {
+          const pntArr = d.geometry.coordinates[0];
+          const first = pntArr[1];
+          const last = pntArr[pntArr.length - 2];
+          const center = [(first[0] + last[0]) / 2, (first[1] + last[1]) / 2];
+          return center;
+        },
+        getText: (d) => {
+          var length = 5;
+          return d.properties.name.length > length
+            ? d.properties.name.substring(0, length - 3) + "..."
+            : d.properties.name;
+        },
+        getColor: (d) => [0, 0, 0],
+        getSize: 8,
+      }),
 
-    new TripsLayer({
-      id: "ABM",
-      visible: tui && tui.ABM && tui.ABM.active,
-      data: cityIOdata.ABM2 && cityIOdata.ABM2.trips,
-      getColor: (d) => {
-        let col = hexToRgb(cityIOdata.ABM2.attr.mode[d.mode].color);
-        return col;
-      },
-      getPath: (d) => d.path,
-      getTimestamps: (d) => d.timestamps,
-      fadeTrail: true,
-      getWidth: 10,
-      trailLength: 200,
-      currentTime: time,
-    }),
-  ];
+      new TripsLayer({
+        id: "ABM",
+        visible: (TUIobject && TUIobject.ABM && TUIobject.ABM.active) || true,
+        data: cityIOdata.ABM2 && cityIOdata.ABM2.trips,
+        getColor: (d) => {
+          let col = hexToRgb(cityIOdata.ABM2.attr.mode[d.mode].color);
+          return col;
+        },
+        getPath: (d) => d.path,
+        getTimestamps: (d) => d.timestamps,
+        fadeTrail: true,
+        getWidth: 10,
+        trailLength: 200,
+        currentTime: time,
+      }),
+    ];
+  };
 
   return (
     <>
@@ -202,7 +164,7 @@ export default function ProjectionDeckMap(props) {
         ref={deckGLref}
         viewState={viewState}
         onViewStateChange={onViewStateChange}
-        layers={layersArray}
+        layers={layersArray()}
         controller={{}}
       >
         {!editMode && (
@@ -214,7 +176,12 @@ export default function ProjectionDeckMap(props) {
           />
         )}
       </DeckGL>
-      {viewStateEditMode && viewState && ViewStateInputs()}
+      {viewStateEditMode && viewState && (
+        <>
+          {/* <LayerControls layersArray={layersArray} /> */}
+          <ViewStateInputs setViewState={setViewState} viewState={viewState} />
+        </>
+      )}
     </>
   );
 }

@@ -13,7 +13,7 @@ export default function Keystone() {
 
   const [editMode, setEditMode] = useState(false);
   const [viewStateEditMode, setViewStateEditMode] = useState(false);
-
+  
   const clearLocalStorage = () => {
     if (localStorage.getItem("projMap")) {
       localStorage.removeItem("projMap");

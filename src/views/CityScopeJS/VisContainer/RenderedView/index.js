@@ -4,7 +4,7 @@ import DeckGL from "deck.gl";
 import { LightingEffect, AmbientLight, _SunLight } from "@deck.gl/core";
 import { SimpleMeshLayer } from "@deck.gl/mesh-layers";
 import { OBJLoader } from "@loaders.gl/obj";
-import { Slider, SliderValueLabel, Typography } from "@mui/material/";
+import { Slider, Typography } from "@mui/material/";
 import { processGridData } from "../../DeckglMap/deckglLayers/GridLayer";
 import { PlaneGeometry } from "@luma.gl/engine";
 
