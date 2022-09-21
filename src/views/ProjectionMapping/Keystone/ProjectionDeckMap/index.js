@@ -11,9 +11,6 @@ export default function ProjectionDeckMap(props) {
   const editMode = props.editMode;
   const viewStateEditMode = props.viewStateEditMode;
   const layersVisibilityControl = props.layersVisibilityControl;
-
-
-
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const TUIobject = cityIOdata && cityIOdata.tui;
 
@@ -21,13 +18,11 @@ export default function ProjectionDeckMap(props) {
   const [animation] = useState({});
 
   const animate = () => {
-    (TUIobject && TUIobject.ABM && TUIobject.ABM.active) ||
-      (layersVisibilityControl.ABM &&
-        setTime((t) => {
-          return t > settings.map.layers.ABM.endTime
-            ? settings.map.layers.ABM.startTime
-            : t + settings.map.layers.ABM.animationSpeed;
-        }));
+    setTime((t) => {
+      return t > settings.map.layers.ABM.endTime
+        ? settings.map.layers.ABM.startTime
+        : t + settings.map.layers.ABM.animationSpeed;
+    });
     animation.id = window.requestAnimationFrame(animate);
   };
 
@@ -37,13 +32,12 @@ export default function ProjectionDeckMap(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animation]);
 
-  const layersArray = (layersVisibilityControl) => {
+  const layersArray = () => {
+    if (!TUIobject) return [];
     return [
       new GeoJsonLayer({
         id: "GRID",
-        visible:
-          (TUIobject && TUIobject.GRID && TUIobject.GRID.active) ||
-          layersVisibilityControl.GRID,
+        visible: TUIobject.GRID.active,
         data: processGridData(cityIOdata),
         opacity: 0.5,
         extruded: false,
@@ -58,30 +52,27 @@ export default function ProjectionDeckMap(props) {
 
       new HeatmapLayer({
         id: "ACCESS",
-        visible:
-          (TUIobject && TUIobject.ACCESS && TUIobject.ACCESS.active) ||
-          layersVisibilityControl.ACCESS,
+        visible: TUIobject.ACCESS.active,
         colorRange: [
           [233, 62, 58],
           [237, 104, 60],
           [243, 144, 63],
         ],
-        intensity: 0.8,
+        intensity: 1,
         threshold: 0.5,
         data: cityIOdata.access && cityIOdata.access.features,
         getPosition: (d) => d.geometry.coordinates,
-        getWeight: (d) => d.properties[0],
+        getWeight: (d) =>
+          d.properties[TUIobject.ACCESS.toggleArray.curr_active] || 0,
         updateTriggers: {
-          getWeight: [0],
+          getWeight: TUIobject.ACCESS.toggleArray.curr_active,
         },
       }),
 
       // text layer in the center of each grid cell from the cityIOdata.GEOGRID.features
       new TextLayer({
         id: "text",
-        visible:
-          (TUIobject && TUIobject.TEXT && TUIobject.TEXT.active) ||
-          layersVisibilityControl.TEXT,
+        visible: TUIobject.TEXT && TUIobject.TEXT.active,
         data: cityIOdata.GEOGRID && cityIOdata.GEOGRID.features,
         getPosition: (d) => {
           const pntArr = d.geometry.coordinates[0];
@@ -102,9 +93,7 @@ export default function ProjectionDeckMap(props) {
 
       new TripsLayer({
         id: "ABM",
-        visible:
-          (TUIobject && TUIobject.ABM && TUIobject.ABM.active) ||
-          layersVisibilityControl.ABM,
+        visible: TUIobject.ABM && TUIobject.ABM.active,
         data: cityIOdata.ABM2 && cityIOdata.ABM2.trips,
         getColor: (d) => {
           let col = hexToRgb(cityIOdata.ABM2.attr.mode[d.mode].color);
@@ -122,6 +111,7 @@ export default function ProjectionDeckMap(props) {
 
   return (
     <DeckMap
+  
       editMode={editMode}
       viewStateEditMode={viewStateEditMode}
       layers={layersArray(layersVisibilityControl)}

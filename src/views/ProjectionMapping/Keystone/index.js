@@ -12,12 +12,7 @@ export default function Keystone() {
 
   const [editMode, setEditMode] = useState(false);
   const [viewStateEditMode, setViewStateEditMode] = useState(false);
-  const [layersVisibilityControl, setLayersVisibilityControl] = useState({
-    GRID: false,
-    ACCESS: false,
-    ABM: false,
-    TEXT: false,
-  });
+
 
   const clearLocalStorage = () => {
     if (localStorage.getItem("projMap")) {
@@ -81,7 +76,7 @@ export default function Keystone() {
             <ProjectionDeckMap
               editMode={editMode}
               viewStateEditMode={viewStateEditMode}
-              layersVisibilityControl={layersVisibilityControl}
+             
             />
           </Keystoner>
         </div>

@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
 import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { mapSettings as settings } from "../../../../settings/settings";
@@ -8,8 +7,19 @@ import ViewStateInputs from "../Components/ViewStateInputs";
 
 export default function DeckMap(props) {
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
+  const TUIobject = cityIOdata && cityIOdata.tui;
   const header = cityIOdata.GEOGRID.properties.header;
   const viewStateEditMode = props.viewStateEditMode;
+  const layers = props.layers;
+  const editMode = props.editMode;
+
+  const mapStyle = {
+    active: TUIobject.MAP_STYLE.active,
+    style:
+      settings.map.mapStyle[TUIobject.MAP_STYLE.style] ||
+      settings.map.mapStyle.blue,
+  };
+
   const [viewState, setViewState] = useState();
 
   const setViewStateToTableHeader = () => {
@@ -25,9 +35,6 @@ export default function DeckMap(props) {
   };
 
   const deckGLref = useRef(null);
-
-  const layers = props.layers;
-  const editMode = props.editMode;
 
   useEffect(() => {
     // fix deck view rotate
@@ -68,15 +75,15 @@ export default function DeckMap(props) {
       >
         {!editMode && (
           <Map
+            active={mapStyle.active}
             width="100%"
             height="100%"
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-            mapStyle={settings.map.mapStyle.blue}
+            mapStyle={mapStyle.style}
           />
         )}
       </DeckGL>
       {viewStateEditMode && viewState && (
-        // <LayerControls layersArray={layersArray} />
         <ViewStateInputs setViewState={setViewState} viewState={viewState} />
       )}
     </>
