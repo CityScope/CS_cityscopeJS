@@ -14,14 +14,20 @@ import {
   Tooltip,
   Badge,
   Grid,
+  TextField,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { postToCityIO, getModule, getTableID } from "../../../../utils/utils";
 
 export default function ScenariosMenu() {
   const [scenariosButtonsList, setScenariosButtonsList] = useState([]);
-  const [dialogOpenState, setDialogOpenState] = useState(false);
   const [scenarioToRestore, setScenariosToRestore] = useState();
+  const [saveDialogState, setSaveDialogState] = useState(false);
+  const [loadDialogState, setLoadDialogState] = useState(false);
+  const [scenarioTextInput, setScenarioTextInput] = useState({
+    name: "",
+    description: "",
+  });
   // get cityIO data from redux store
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   // get cityio name from redux store
@@ -30,12 +36,14 @@ export default function ScenariosMenu() {
   );
 
   const handleSaveThisState = () => {
+    handleClose();
     getTableID(cityIOtableName).then((id) => {
       const newScenario = {
         // ! to be updated from dynamic ui element
-        name: `${id}`,
+        name: scenarioTextInput.name || `${id}`,
         hash: id,
-        description: `this is ${id} description`,
+        description:
+          scenarioTextInput.description || `no description for ${id} yet.`,
       };
       const tempArr = cityIOdata.scenarios ? [...cityIOdata.scenarios] : [];
       tempArr.push(newScenario);
@@ -44,14 +52,15 @@ export default function ScenariosMenu() {
   };
 
   const handleClose = () => {
-    setDialogOpenState(false);
+    setLoadDialogState(false);
+    setSaveDialogState(false);
   };
 
   const handleOpenDialog = (scenario) => {
     // store to state the scenario to be restored
     setScenariosToRestore(scenario);
     // open dialog
-    setDialogOpenState(true);
+    setLoadDialogState(true);
   };
 
   const handleRestoreThisState = async () => {
@@ -99,9 +108,18 @@ export default function ScenariosMenu() {
               variant="outlined"
               onClick={() => handleOpenDialog(scenario)}
             >
-              <Typography variant="caption">
-                {scenario.name.substring(0, 12) + `...`}
-              </Typography>
+              <List>
+                <ListItem>
+                  <Typography>
+                    {scenario.name.substring(0, 12) + `...`}
+                  </Typography>
+                </ListItem>
+                <ListItem>
+                  <Typography variant="caption">
+                    {scenario.description.substring(0, 20) + `...`}
+                  </Typography>
+                </ListItem>
+              </List>
             </Button>
           </Tooltip>
 
@@ -135,7 +153,7 @@ export default function ScenariosMenu() {
   }, [cityIOdata]);
 
   return (
-    <Grid sx={{ flexGrow: 1 }} container >
+    <Grid sx={{ flexGrow: 1 }} container>
       <Badge
         sx={{ width: "100%" }}
         badgeContent={
@@ -147,15 +165,61 @@ export default function ScenariosMenu() {
           fullWidth={true}
           key={"save_state_button"}
           variant="outlined"
-          onClick={handleSaveThisState}
+          onClick={() => setSaveDialogState(true)}
         >
-          <Typography >Save This Scenario</Typography>
+          <Typography>Save This Scenario</Typography>
         </Button>
       </Badge>
 
       <List>{scenariosButtonsList}</List>
 
-      <Dialog open={dialogOpenState} onClose={handleClose}>
+      <Dialog open={saveDialogState} onClose={handleClose}>
+        <DialogTitle id="save-dialog-title">{"Save this Scenario"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Give your scenario a name and a description to help you remember
+            what it is about.
+          </DialogContentText>
+          <List>
+            <ListItem>
+              <TextField
+                id="name-basic"
+                label="Scenario Name"
+                variant="outlined"
+                fullWidth
+                onChange={(e) =>
+                  setScenarioTextInput({
+                    ...scenarioTextInput,
+                    name: e.target.value,
+                  })
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <TextField
+                id="desc-basic"
+                label="Description (optional)"
+                fullWidth
+                variant="outlined"
+                onChange={(e) =>
+                  setScenarioTextInput({
+                    ...scenarioTextInput,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </ListItem>
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSaveThisState} autoFocus>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={loadDialogState} onClose={handleClose}>
         <DialogTitle id="alert-dialog-title">
           {"Revert to saved scenario?"}
         </DialogTitle>
