@@ -42,7 +42,7 @@ export default function RenderedViewMap() {
 
   const refMap = useRef();
   const refDeckgl = useRef();
-  const [image, setImage] = useState(null);
+  const [renderedImage, setRenderedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [prompt, setPrompt] = useState(
     "Aerial view of the MIT Campus in Cambridge, Massachusetts, with new buildings and development in the center. Realistic. Accurate. Sunset with long shadows. Beautiful."
@@ -94,7 +94,7 @@ export default function RenderedViewMap() {
     context.globalAlpha = 1.0;
     context.drawImage(deckglCanvas, 0, 0);
     const jpegFile = mergeCanvas.toDataURL("image/jpeg");
-    setImage(jpegFile);
+    setRenderedImage(jpegFile);
     mergeCanvas.toBlob(async (blob) => {
       var formData = new FormData();
       formData.append("image", blob, "image.jpg");
@@ -114,7 +114,7 @@ export default function RenderedViewMap() {
       })
         .then(async (res) => {
           let dataUrl = await blobToDataUrl(res.data);
-          setImage(dataUrl);
+          setRenderedImage(dataUrl);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -185,7 +185,7 @@ export default function RenderedViewMap() {
                       </Typography>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={9}>
                       <TextField
                         fullWidth
                         id="outlined-basic"
@@ -196,7 +196,7 @@ export default function RenderedViewMap() {
                         onChange={(e) => setPrompt(e.target.value)}
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={3}>
                       <TextField
                         fullWidth
                         id="outlined-basic"
@@ -225,7 +225,7 @@ export default function RenderedViewMap() {
                         {isLoading && (
                           <>
                             <CircularProgress size={14} />
-                            <Typography sx={{ p: 1 }}>
+                            <Typography>
                               Rendering captured view... [can take ~15 seconds]
                             </Typography>
                           </>
@@ -344,10 +344,14 @@ export default function RenderedViewMap() {
                 <Stack spacing={2} direction="column">
                   <Typography variant="h4">Captured & Rendered View</Typography>
 
-                  {image && (
+                  {renderedImage && (
                     <img
-                      style={{ height: "576px" }}
-                      src={image}
+                      style={{
+                        height: "576px",
+                        filter: isLoading ? "blur(3px)" : "none",
+                        "-webkit-filter": isLoading ? "blur(3px)" : "none",
+                      }}
+                      src={renderedImage}
                       alt="screenshot"
                     />
                   )}
