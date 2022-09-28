@@ -1,14 +1,16 @@
-import CityScopeJS from "./views/CityScopeJS";
+import { useState, useEffect } from "react";
 import { CssBaseline } from "@mui/material/";
 import { ThemeProvider } from "@mui/material/styles";
-import theme from "./theme";
-import { useState, useEffect } from "react";
-import CityIOviewer from "./views/CityIOviewer";
-import ProjectionMapping from "./views/ProjectionMapping";
 import { useDispatch } from "react-redux";
 import { updateCityIOtableName } from "./redux/reducers/cityIOdataSlice";
-import GridEditor from "./views/GridEditor";
 import queryString from "query-string";
+import theme from "./theme";
+// views
+import CityScopeJS from "./views/CityScopeJS";
+import CityIOviewer from "./views/CityIOviewer";
+import RenderedView from "./views/RenderedView";
+import ProjectionMapping from "./views/ProjectionMapping";
+import GridEditor from "./views/GridEditor";
 
 /**
 get this tab URL and parse as a simple router to show the correct view
@@ -48,10 +50,10 @@ const App = () => {
     if (keys.includes("cityscope")) {
       selectView("cityscopejs", parsed.cityscope);
     } else if (keys.includes("projection")) {
-      // check if this location has a tableName
-      selectView("projection",  parsed.projection);
+      selectView("projection", parsed.projection);
+    } else if (keys.includes("render")) {
+      selectView("render", parsed.render);
     } else if (keys.includes("editor")) {
-      // ! to get the table name for editing (not used yet)
       setViewSelectorState("grideditor");
     } else {
       setViewSelectorState("cityio");
@@ -69,8 +71,10 @@ const App = () => {
         {viewSelectorState === "grideditor" && <GridEditor />}
         {/* otherwise, show the cityIOviewer */}
         {viewSelectorState === "cityio" && <CityIOviewer />}
-        {/* otherwise, show the cityIOviewer */}
+        {/* otherwise, show the projection */}
         {viewSelectorState === "projection" && <ProjectionMapping />}
+        {/* otherwise, show the projection */}
+        {viewSelectorState === "render" && <RenderedView />}
       </>
     </ThemeProvider>
   );

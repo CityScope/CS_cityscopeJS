@@ -14,10 +14,11 @@ export default function DeckMap(props) {
   const editMode = props.editMode;
 
   const mapStyle = {
-    active: TUIobject.MAP_STYLE.active,
+    active: TUIobject && TUIobject.MAP_STYLE && TUIobject.MAP_STYLE.active,
     style:
-      settings.map.mapStyle[TUIobject.MAP_STYLE.style] ||
-      settings.map.mapStyle.blue,
+      settings.map.mapStyle[
+        TUIobject && TUIobject.MAP_STYLE && TUIobject.MAP_STYLE.style
+      ] || settings.map.mapStyle.blue,
   };
 
   const [viewState, setViewState] = useState();
