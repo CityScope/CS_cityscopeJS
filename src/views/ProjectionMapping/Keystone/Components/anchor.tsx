@@ -1,4 +1,5 @@
-import { Anchor, Vector } from "./Keystoner.tsx";
+import React from 'react'
+import { Anchor, Vector } from "./Keystoner";
 
 const anchorSize = 20;
 const halfAnchor = anchorSize / 1.5;
@@ -42,7 +43,7 @@ export interface Props {
   className?: string;
 }
 
-export const AnchorComponent: StatelessComponent<Props> = ({
+export const AnchorComponent = ({
   position,
   translation,
   onMouseEnter,
@@ -50,7 +51,7 @@ export const AnchorComponent: StatelessComponent<Props> = ({
   onMouseUp,
   className = "",
   style = {},
-}) => (
+}: any) => (
   <div
     onMouseEnter={() => onMouseEnter && onMouseEnter(position)}
     onMouseDown={(evt) => onMouseDown(evt, position)}

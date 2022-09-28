@@ -71,6 +71,7 @@ export interface Props {
   y?: number;
   anchorStyle?: React.CSSProperties;
   anchorClassName?: string;
+  children?: React.ReactNode;
 }
 
 export interface Context {
@@ -153,11 +154,11 @@ const _setDeltaVal = () => {
 };
 
 export default class Keystoner extends React.Component<Props, State> {
-  container: HTMLElement | null;
+  container: HTMLElement | undefined | null;
   layerTranslateDelta: Vector | undefined;
   anchorTranslateDelta: Vector | undefined;
   isAnchorDragging = false;
-  targetPoints: RectPoints;
+  targetPoints: RectPoints | any;
   anchorMoving: Anchor | undefined;
   state: State = {
     matrix: defaultMatrix,
