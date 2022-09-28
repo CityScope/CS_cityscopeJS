@@ -111,7 +111,6 @@ export default function ProjectionDeckMap(props) {
 
   return (
     <DeckMap
-  
       editMode={editMode}
       viewStateEditMode={viewStateEditMode}
       layers={layersArray(layersVisibilityControl)}
