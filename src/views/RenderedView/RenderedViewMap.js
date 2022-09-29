@@ -42,6 +42,8 @@ export default function RenderedViewMap() {
 
   const refMap = useRef();
   const refDeckgl = useRef();
+  const renderDivRef = useRef();
+
   const [renderedImage, setRenderedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [prompt, setPrompt] = useState(
@@ -96,6 +98,8 @@ export default function RenderedViewMap() {
     context.drawImage(deckglCanvas, 0, 0);
     const jpegFile = mergeCanvas.toDataURL("image/jpeg");
     setRenderedImage(jpegFile);
+    renderDivRef.current?.scrollIntoView({ behavior: "smooth" });
+
     mergeCanvas.toBlob(async (blob) => {
       var formData = new FormData();
       formData.append("image", blob, "image.jpg");
@@ -142,7 +146,7 @@ export default function RenderedViewMap() {
 
   return (
     <>
-      {isLoading && <LoadingModules loadingModules={[""]} />}
+      {isLoading && <LoadingModules loadingModules={["..."]} />}
 
       <Box
         component="main"
@@ -274,11 +278,15 @@ export default function RenderedViewMap() {
                       onViewStateChange={({ viewState }) =>
                         setViewState(viewState)
                       }
-                      controller={{
-                        touchZoom: true,
-                        touchRotate: true,
-                        keyboard: false,
-                      }}
+                      controller={
+                        isLoading
+                          ? false
+                          : {
+                              touchZoom: true,
+                              touchRotate: true,
+                              keyboard: false,
+                            }
+                      }
                       layers={[
                         new SimpleMeshLayer({
                           id: "mesh-layer",
@@ -357,15 +365,17 @@ export default function RenderedViewMap() {
                   <Typography variant="h4">Captured & Rendered View</Typography>
 
                   {renderedImage && (
-                    <img
-                      style={{
-                        height: "576px",
-                        filter: isLoading ? "blur(3px)" : "none",
-                        "WebkitFilter": isLoading ? "blur(3px)" : "none",
-                      }}
-                      src={renderedImage}
-                      alt="screenshot"
-                    />
+                    <div ref={renderDivRef}>
+                      <img
+                        style={{
+                          height: "576px",
+                          filter: isLoading ? "blur(3px)" : "none",
+                          WebkitFilter: isLoading ? "blur(3px)" : "none",
+                        }}
+                        src={renderedImage}
+                        alt="screenshot"
+                      />
+                    </div>
                   )}
                 </Stack>
               </Paper>
