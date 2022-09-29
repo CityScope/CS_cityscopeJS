@@ -361,7 +361,7 @@ export default function RenderedViewMap() {
                       style={{
                         height: "576px",
                         filter: isLoading ? "blur(3px)" : "none",
-                        "-webkit-filter": isLoading ? "blur(3px)" : "none",
+                        "WebkitFilter": isLoading ? "blur(3px)" : "none",
                       }}
                       src={renderedImage}
                       alt="screenshot"
