@@ -45,9 +45,10 @@ export default function RenderedViewMap() {
   const [renderedImage, setRenderedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [prompt, setPrompt] = useState(
-    "Aerial view of the MIT Campus in Cambridge, Massachusetts, with new buildings and development in the center. Realistic. Accurate. Sunset with long shadows. Beautiful."
+    "Aerial view of the MIT Campus in Cambridge, Massachusetts. Realistic. Accurate. Sunset with long shadows. Beautiful."
   );
   const [userSeed, setUserSeed] = useState(1024);
+  const [serverURL, setServerURL] = useState("http://18.27.78.190:8080");
 
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const GEOGRID = processGridData(cityIOdata);
@@ -105,7 +106,7 @@ export default function RenderedViewMap() {
         method: "post",
         "Access-Control-Allow-Origin": "*",
         mode: "no-cors",
-        url: "http://18.27.78.190:8080/",
+        url: serverURL,
         data: formData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -171,21 +172,22 @@ export default function RenderedViewMap() {
                   }}
                 >
                   <Grid container spacing={2}>
-                    <Grid item>
-                      <Typography variant="h2">DeepScope 2.0</Typography>
+                    <Grid item xs={12} md={6}>
+                      <Typography variant="h1">DeepScope 2.0</Typography>
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <Typography>
-                        DeepScope attempts to substitute common practices of
-                        urban design with a machine-learnt, generative
-                        visualization approach. By implementing 'Stable
+                        DeepScope uses a machine learning model to generate
+                        urban scenes in real-time, based on designs preform in
+                        the CitySCcope platform. By implementing 'Stable
                         diffusion', an open-source Transformer model, this tool
                         allows for real-time prototyping and visualizations of
-                        urban design processes.
+                        urban design proposals, bypassing the need for expensive
+                        and time-consuming rendering.
                       </Typography>
                     </Grid>
 
-                    <Grid item xs={12} md={9}>
+                    <Grid item xs={12} md={7}>
                       <TextField
                         fullWidth
                         id="outlined-basic"
@@ -196,7 +198,7 @@ export default function RenderedViewMap() {
                         onChange={(e) => setPrompt(e.target.value)}
                       />
                     </Grid>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md={2}>
                       <TextField
                         fullWidth
                         id="outlined-basic"
@@ -206,11 +208,21 @@ export default function RenderedViewMap() {
                             min: 0,
                           },
                         }}
-                        label="Select a random seed (0-10000)"
+                        label="Random seed"
                         defaultValue={userSeed}
                         variant="outlined"
                         type="number"
                         onChange={(e) => setUserSeed(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                      <TextField
+                        fullWidth
+                        id="outlined-basic"
+                        label="Server URL"
+                        defaultValue={serverURL}
+                        variant="outlined"
+                        onChange={(e) => setServerURL(e.target.value)}
                       />
                     </Grid>
                     <Grid item xs={12} md={12}>
