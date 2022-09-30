@@ -37,7 +37,7 @@ export default function ProjectionDeckMap(props) {
     return [
       new GeoJsonLayer({
         id: "GRID",
-        visible: TUIobject.GRID.active,
+        visible: TUIobject.GRID && TUIobject.GRID.active,
         data: processGridData(cityIOdata),
         opacity: 0.5,
         extruded: false,
@@ -52,7 +52,7 @@ export default function ProjectionDeckMap(props) {
 
       new HeatmapLayer({
         id: "ACCESS",
-        visible: TUIobject.ACCESS.active,
+        visible: TUIobject.ACCESS && TUIobject.ACCESS.active,
         colorRange: [
           [233, 62, 58],
           [237, 104, 60],
