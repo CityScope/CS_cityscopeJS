@@ -4,7 +4,7 @@
       "cd": ".",
       "commands": [
         "source ~/GIT/venv/cityio/bin/activate && cd ~/GIT/cityIO_Flask/ && ~/GIT/venv/cityio/bin/python3 cityio_lite.py hcm volpe corktown",
-        "npm start"
+        "cd ~/GIT/cs_cityscopejs && npm start"
       ]
     }
   ]
