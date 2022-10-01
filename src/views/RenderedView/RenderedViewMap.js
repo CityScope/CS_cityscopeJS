@@ -50,7 +50,9 @@ export default function RenderedViewMap() {
     "Aerial view of the MIT Campus in Cambridge, Massachusetts. Realistic. Accurate. Sunset with long shadows. Beautiful."
   );
   const [userSeed, setUserSeed] = useState(1024);
-  const [serverURL, setServerURL] = useState("http://18.27.78.190:8080");
+  const [serverURL, setServerURL] = useState(
+    "https://virtualscope.media.mit.edu/"
+  );
 
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const GEOGRID = processGridData(cityIOdata);
