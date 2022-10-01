@@ -108,41 +108,32 @@ export default function RenderedViewMap() {
       formData.append("prompt", prompt);
       formData.append("user_seed", userSeed);
       formData.append("from", "frontend");
-      await axios({
-        method: "post",
-        "Access-Control-Allow-Origin": "*",
-        mode: "no-cors",
+
+      const config = {
+        method: "POST",
         url: serverURL,
         data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        responseType: "blob",
-      })
+        responseType: "arraybuffer",
+      };
+      await axios(config)
         .then(async (res) => {
-          let dataUrl = await blobToDataUrl(res.data);
-          setRenderedImage(dataUrl);
+          const buffer = Buffer.from(res.data, "base64");
+          const im = await blobToDataUrl(new Blob([buffer]));
+          setRenderedImage(im);
           setIsLoading(false);
         })
         .catch((error) => {
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            console.log(error.request);
-          } else {
-            console.log("Error", error.message);
-          }
+          setIsLoading(false);
+          console.log(error);
         });
     });
   };
 
-  const blobToDataUrl = (blob) => {
+  const blobToDataUrl = (data) => {
     return new Promise((r) => {
       let a = new FileReader();
       a.onload = r;
-      a.readAsDataURL(blob);
+      a.readAsDataURL(data);
     }).then((e) => e.target.result);
   };
 
