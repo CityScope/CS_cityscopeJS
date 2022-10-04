@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import CityIO from "../../Components/CityIO";
 import RenderedViewMap from "./RenderedViewMap";
+import { Container } from "@mui/material";
 
 export default function RenderedView() {
   const cityIOisDone = useSelector(
@@ -13,7 +14,9 @@ export default function RenderedView() {
   return (
     <>
       {tableName && <CityIO tableName={tableName} />}
-      {cityIOisDone && <RenderedViewMap />}
+      <Container maxWidth="md" sx={{ mt: 5, mb: 5 }}>
+        {cityIOisDone && <RenderedViewMap />}
+      </Container>
     </>
   );
 }

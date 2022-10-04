@@ -22,7 +22,6 @@ import {
   CircularProgress,
   TextField,
   Box,
-  Container,
   Typography,
   Grid,
   Paper,
@@ -139,180 +138,130 @@ export default function RenderedViewMap() {
 
   return (
     <>
-      {isLoading && <LoadingModules loadingModules={["..."]} />}
+      <Box p={2}>
+        <Grid container spacing={2}>
+          {/* TEXT */}
+          <Grid item>
+            {isLoading && <LoadingModules loadingModules={["..."]} />}
+            <Typography variant="h3">DeepScope 2.0</Typography>
+            <Typography variant="caption">
+              DeepScope uses a machine learning model to generate urban scenes
+              in real-time, based on designs preform in the CitySCcope platform.
+              By implementing 'Stable diffusion', an open-source Transformer
+              model, this tool allows for real-time prototyping and
+              visualizations of urban design proposals, bypassing the need for
+              expensive and time-consuming rendering.
+            </Typography>
+          </Grid>
 
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          height: "100vh",
-          overflow: "auto",
-        }}
-      >
-        <Container maxWidth="xl" sx={{ mt: 5, mb: 5 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Grid
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Paper
-                  variant="outlined"
+          <Grid item xs={12} md={7}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              required
+              label="Text Prompt Description of the Scene"
+              defaultValue={prompt}
+              variant="outlined"
+              onChange={(e) => setPrompt(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} md={2}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              InputProps={{
+                inputProps: {
+                  max: 10000,
+                  min: 0,
+                },
+              }}
+              label="Random seed"
+              defaultValue={userSeed}
+              variant="outlined"
+              type="number"
+              onChange={(e) => setUserSeed(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label="Server URL"
+              defaultValue={serverURL}
+              variant="outlined"
+              onChange={(e) => setServerURL(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <Button
+              fullWidth
+              color="secondary"
+              variant="outlined"
+              onClick={handleCapture}
+              disabled={isLoading}
+            >
+              {!isLoading && "Capture & Render"}
+              {isLoading && (
+                <>
+                  <CircularProgress size={14} />
+                  <Typography>
+                    Rendering captured view... [can take ~15 seconds]
+                  </Typography>
+                </>
+              )}
+            </Button>
+          </Grid>
+          {/* Deck Map */}
+          <Grid item xs={12}>
+            <Paper
+              variant="outlined"
+              sx={{
+                variant: "outlined",
+                p: 2,
+                flexDirection: "column",
+                display: "flex",
+              }}
+            >
+              <Stack spacing={2} direction="column">
+                <Typography variant="h5">CityScope Model View</Typography>
+                <Box
                   sx={{
-                    variant: "outlined",
-                    p: 2,
-                    flexDirection: "column",
-                    display: "flex",
-                    flexGrow: 1,
+                    height: "576px",
+                    minHeight: "576px",
+                    width: "auto",
+                    position: "relative",
                   }}
                 >
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                      <Typography variant="h1">DeepScope 2.0</Typography>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Typography>
-                        DeepScope uses a machine learning model to generate
-                        urban scenes in real-time, based on designs preform in
-                        the CitySCcope platform. By implementing 'Stable
-                        diffusion', an open-source Transformer model, this tool
-                        allows for real-time prototyping and visualizations of
-                        urban design proposals, bypassing the need for expensive
-                        and time-consuming rendering.
-                      </Typography>
-                    </Grid>
+                  <DeckGL
+                    ref={refDeckgl}
+                    viewState={viewState}
+                    onViewStateChange={({ viewState }) =>
+                      setViewState(viewState)
+                    }
+                    controller={
+                      isLoading
+                        ? false
+                        : {
+                            touchZoom: true,
+                            touchRotate: true,
+                            keyboard: false,
+                          }
+                    }
+                    layers={[
+                      new SimpleMeshLayer({
+                        id: "mesh-layer",
+                        data: GEOGRID.features,
+                        loaders: [OBJLoader],
+                        mesh: cube,
 
-                    <Grid item xs={12} md={7}>
-                      <TextField
-                        fullWidth
-                        id="outlined-basic"
-                        required
-                        label="Text Prompt Description of the Scene"
-                        defaultValue={prompt}
-                        variant="outlined"
-                        onChange={(e) => setPrompt(e.target.value)}
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={2}>
-                      <TextField
-                        fullWidth
-                        id="outlined-basic"
-                        InputProps={{
-                          inputProps: {
-                            max: 10000,
-                            min: 0,
-                          },
-                        }}
-                        label="Random seed"
-                        defaultValue={userSeed}
-                        variant="outlined"
-                        type="number"
-                        onChange={(e) => setUserSeed(e.target.value)}
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={3}>
-                      <TextField
-                        fullWidth
-                        id="outlined-basic"
-                        label="Server URL"
-                        defaultValue={serverURL}
-                        variant="outlined"
-                        onChange={(e) => setServerURL(e.target.value)}
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={12}>
-                      <Button
-                        fullWidth
-                        color="secondary"
-                        variant="outlined"
-                        onClick={handleCapture}
-                        disabled={isLoading}
-                      >
-                        {!isLoading && "Capture & Render"}
-                        {isLoading && (
-                          <>
-                            <CircularProgress size={14} />
-                            <Typography>
-                              Rendering captured view... [can take ~15 seconds]
-                            </Typography>
-                          </>
-                        )}
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Paper>
-              </Grid>
-            </Grid>
-            <Grid item xs={12} md={6} lg={6}>
-              <Paper
-                variant="outlined"
-                sx={{
-                  variant: "outlined",
-                  p: 2,
-                  flexDirection: "column",
-                  display: "flex",
-                }}
-              >
-                <Stack spacing={2} direction="column">
-                  <Typography variant="h4">CityScope Model View</Typography>
-                  <Box
-                    sx={{
-                      height: "576px",
-                      minHeight: "576px",
-                      width: "auto",
-                      position: "relative",
-                    }}
-                  >
-                    <DeckGL
-                      ref={refDeckgl}
-                      viewState={viewState}
-                      onViewStateChange={({ viewState }) =>
-                        setViewState(viewState)
-                      }
-                      controller={
-                        isLoading
-                          ? false
-                          : {
-                              touchZoom: true,
-                              touchRotate: true,
-                              keyboard: false,
-                            }
-                      }
-                      layers={[
-                        new SimpleMeshLayer({
-                          id: "mesh-layer",
-                          data: GEOGRID.features,
-                          loaders: [OBJLoader],
-                          mesh: cube,
-
-                          getPosition: (d) => {
-                            const pntArr = d.geometry.coordinates[0];
-                            const first = pntArr[1];
-                            const last = pntArr[pntArr.length - 2];
-                            const center = [
-                              (first[0] + last[0]) / 2,
-                              (first[1] + last[1]) / 2,
-                              // add the height of the grid cell
-                              d.properties.height.length > 1
-                                ? d.properties.height[1] > 1
-                                  ? d.properties.height[1] / 2
-                                  : 1
-                                : d.properties.height > 1
-                                ? d.properties.height / 2
-                                : 1,
-                            ];
-                            return center;
-                          },
-                          getColor: (d) =>
-                            d.properties.interactive
-                              ? d.properties.color
-                              : [0, 0, 0, 0],
-                          opacity: 0.75,
-                          getOrientation: (d) => [-180, header.rotation, -90],
-                          getScale: (d) => [
-                            GEOGRID.properties.header.cellSize / 2,
+                        getPosition: (d) => {
+                          const pntArr = d.geometry.coordinates[0];
+                          const first = pntArr[1];
+                          const last = pntArr[pntArr.length - 2];
+                          const center = [
+                            (first[0] + last[0]) / 2,
+                            (first[1] + last[1]) / 2,
+                            // add the height of the grid cell
                             d.properties.height.length > 1
                               ? d.properties.height[1] > 1
                                 ? d.properties.height[1] / 2
@@ -320,61 +269,79 @@ export default function RenderedViewMap() {
                               : d.properties.height > 1
                               ? d.properties.height / 2
                               : 1,
-                            GEOGRID.properties.header.cellSize / 2,
-                          ],
+                          ];
+                          return center;
+                        },
+                        getColor: (d) =>
+                          d.properties.interactive
+                            ? d.properties.color
+                            : [0, 0, 0, 0],
+                        opacity: 0.75,
+                        getOrientation: (d) => [-180, header.rotation, -90],
+                        getScale: (d) => [
+                          GEOGRID.properties.header.cellSize / 2,
+                          d.properties.height.length > 1
+                            ? d.properties.height[1] > 1
+                              ? d.properties.height[1] / 2
+                              : 1
+                            : d.properties.height > 1
+                            ? d.properties.height / 2
+                            : 1,
+                          GEOGRID.properties.header.cellSize / 2,
+                        ],
 
-                          updateTriggers: {
-                            getScale: GEOGRID,
-                          },
-                        }),
-                      ]}
-                    >
-                      <Map
-                        ref={refMap}
-                        preserveDrawingBuffer={true} //! This is critical to preserve the WebGL drawing buffer
-                        mapboxApiAccessToken={
-                          process.env.REACT_APP_MAPBOX_TOKEN
-                        }
-                        mapStyle={mapSettings.map.mapStyle.normal}
-                      />
-                    </DeckGL>
-                  </Box>
-                </Stack>
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={6}>
-              <Paper
-                variant="outlined"
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "auto",
-                  width: "auto",
-                }}
-              >
-                <Stack spacing={2} direction="column">
-                  <Typography variant="h4">Captured & Rendered View</Typography>
-
-                  {renderedImage && (
-                    <div ref={renderDivRef}>
-                      <img
-                        style={{
-                          height: "576px",
-                          filter: isLoading ? "blur(3px)" : "none",
-                          WebkitFilter: isLoading ? "blur(3px)" : "none",
-                        }}
-                        src={renderedImage}
-                        alt="screenshot"
-                      />
-                    </div>
-                  )}
-                </Stack>
-              </Paper>
-            </Grid>
+                        updateTriggers: {
+                          getScale: GEOGRID,
+                        },
+                      }),
+                    ]}
+                  >
+                    <Map
+                      ref={refMap}
+                      preserveDrawingBuffer={true} //! This is critical to preserve the WebGL drawing buffer
+                      mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+                      mapStyle={mapSettings.map.mapStyle.normal}
+                    />
+                  </DeckGL>
+                </Box>
+              </Stack>
+            </Paper>
           </Grid>
-        </Container>
+          {/* Result IMG */}
+          <Grid item xs={12}>
+            <Paper
+              variant="outlined"
+              sx={{
+                p: 2,
+                display: "flex",
+                flexDirection: "column",
+                height: "auto",
+                width: "auto",
+              }}
+            >
+              <Stack spacing={2} direction="column">
+                <Typography variant="h5">Captured & Rendered View</Typography>
+
+                {renderedImage && (
+                  <div ref={renderDivRef}>
+                    <img
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        minWidth: "100%",
+                        objectFit: "contain",
+                        filter: isLoading ? "blur(3px)" : "none",
+                        WebkitFilter: isLoading ? "blur(3px)" : "none",
+                      }}
+                      src={renderedImage}
+                      alt="screenshot"
+                    />
+                  </div>
+                )}
+              </Stack>
+            </Paper>
+          </Grid>
+        </Grid>
       </Box>
     </>
   );

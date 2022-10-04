@@ -2,7 +2,7 @@ import { Typography, Box } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 
 const LoadingModules = (props) => {
-  const { loadingModules, verticalPosition, barHeight } = props;
+  const { loadingModules, verticalPosition, barHeight, isFixed } = props;
   return (
     <>
       {loadingModules.map((module, index) => {
@@ -10,9 +10,9 @@ const LoadingModules = (props) => {
           <Box
             key={"box_" + module}
             sx={{
-              position: "fixed",
+              position: isFixed ? "fixed" : "absolute",
               bottom: verticalPosition === "bottom" ? (index + 1) * 10 : "auto",
-              width: "100%",
+              width: isFixed ? "100vw" : "90%",
               zIndex: 10000,
             }}
           >

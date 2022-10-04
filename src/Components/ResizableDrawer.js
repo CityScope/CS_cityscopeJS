@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { Drawer, Box } from "@mui/material";
+import Paper from "@mui/material/Paper";
 
 const dividerWidth = 5;
 const maxDrawerWidth =
@@ -65,7 +66,7 @@ export default function ResizableDrawer({ children, direction, width }) {
         PaperProps={{ style: { width: drawerWidth } }}
         sx={{ display: "flex", flexDirection: "column" }}
       >
-        {children}
+        <Paper>{children}</Paper>
       </Drawer>
     </>
   );
