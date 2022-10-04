@@ -6,7 +6,6 @@ const maxDrawerWidth =
   Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) -
   1;
 
- 
 const minDrawerWidth = 50;
 
 export default function ResizableDrawer({ children, direction, width }) {
@@ -16,11 +15,13 @@ export default function ResizableDrawer({ children, direction, width }) {
   const handleMouseDown = (e) => {
     document.addEventListener("mouseup", handleMouseUp, true);
     document.addEventListener("mousemove", handleMouseMove, true);
+    e.preventDefault();
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e) => {
     document.removeEventListener("mouseup", handleMouseUp, true);
     document.removeEventListener("mousemove", handleMouseMove, true);
+    e.preventDefault();
   };
 
   const handleMouseMove = useCallback((e) => {
@@ -47,10 +48,7 @@ export default function ResizableDrawer({ children, direction, width }) {
           padding: dividerWidth + "px 0 0",
           position: "fixed",
           height: "1000vh",
-          left:
-            direction === "left"
-              ? drawerWidth + "px"
-              : undefined,
+          left: direction === "left" ? drawerWidth + "px" : undefined,
           right: direction === "right" ? drawerWidth + "px" : undefined,
           zIndex: 1,
           cursor: "ew-resize",
