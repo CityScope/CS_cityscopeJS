@@ -1,5 +1,4 @@
 import {
-  Grid,
   Card,
   CardActions,
   CardHeader,
@@ -30,15 +29,12 @@ export default function CollapsableCard({
               title={title ? title : ""}
               subheader={subheader ? subheader : ""}
             />
-            <CardActions>
-              <Grid container sx={{ justifyContent: "center" }}>
-                <IconButton onClick={() => setExpand(!expand)}>
-                  <ArrowDropDown />
-                </IconButton>
-              </Grid>
-            </CardActions>
             <Divider variant="middle" />
-
+            <CardActions>
+              <IconButton onClick={() => setExpand(!expand)}>
+                <ArrowDropDown />
+              </IconButton>
+            </CardActions>
             <Collapse in={expand}>{children}</Collapse>
           </CardContent>
         </Card>

@@ -44,14 +44,12 @@ export default function RenderedViewMap() {
   const renderDivRef = useRef();
 
   const [renderedImage, setRenderedImage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState();
   const [prompt, setPrompt] = useState(
     "Aerial view of the MIT Campus in Cambridge, Massachusetts. Realistic. Accurate. Sunset with long shadows. Beautiful."
   );
   const [userSeed, setUserSeed] = useState(1024);
-  const [serverURL, setServerURL] = useState(
-    "https://virtualscope.media.mit.edu/"
-  );
+  const serverURL = "https://virtualscope.media.mit.edu/";
 
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const GEOGRID = processGridData(cityIOdata);
@@ -138,12 +136,11 @@ export default function RenderedViewMap() {
 
   return (
     <>
+      {isLoading && <LoadingModules loadingModules={["..."]} />}
       <Box p={2}>
         <Grid container spacing={2}>
           {/* TEXT */}
           <Grid item>
-            {isLoading && <LoadingModules loadingModules={["..."]} />}
-
             <Typography variant="caption">
               DeepScope uses a machine learning model to generate urban scenes
               in real-time, based on designs preform in the CitySCcope platform.
@@ -154,7 +151,7 @@ export default function RenderedViewMap() {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} md={7}>
+          <Grid item xs={12} md={10}>
             <TextField
               fullWidth
               id="outlined-basic"
@@ -182,16 +179,7 @@ export default function RenderedViewMap() {
               onChange={(e) => setUserSeed(e.target.value)}
             />
           </Grid>
-          <Grid item xs={12} md={3}>
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Server URL"
-              defaultValue={serverURL}
-              variant="outlined"
-              onChange={(e) => setServerURL(e.target.value)}
-            />
-          </Grid>
+
           <Grid item xs={12} md={12}>
             <Button
               fullWidth

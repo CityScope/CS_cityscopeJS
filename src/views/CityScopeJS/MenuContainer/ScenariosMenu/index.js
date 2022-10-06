@@ -13,7 +13,6 @@ import {
   IconButton,
   Tooltip,
   Badge,
-  Grid,
   TextField,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -96,14 +95,16 @@ export default function ScenariosMenu() {
       return (
         <ListItem key={`scenario_grid_item_${i}`}>
           <Tooltip
+            sx={{ width: "100%" }}
             key={"scenario_tt_" + i}
             arrow
             placement="right"
             title={scenario.description || `No description`}
           >
             <Button
+              fullWidth={true}
               key={"scenario_button_" + i}
-              fullWidth
+              sx={{ width: "100%" }}
               size="small"
               variant="outlined"
               onClick={() => handleOpenDialog(scenario)}
@@ -111,7 +112,7 @@ export default function ScenariosMenu() {
               <List>
                 <ListItem>
                   <Typography>
-                    {scenario.name.substring(0, 12) + `...`}
+                    {scenario.name.substring(0, 15) + `...`}
                   </Typography>
                 </ListItem>
                 <ListItem>
@@ -153,7 +154,7 @@ export default function ScenariosMenu() {
   }, [cityIOdata]);
 
   return (
-    <Grid sx={{ flexGrow: 1 }} container>
+    <>
       <Badge
         sx={{ width: "100%" }}
         badgeContent={
@@ -236,6 +237,6 @@ export default function ScenariosMenu() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Grid>
+    </>
   );
 }

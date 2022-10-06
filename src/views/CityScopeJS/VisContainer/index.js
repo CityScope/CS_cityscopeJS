@@ -1,4 +1,4 @@
-import { Card, CardContent, Grid, Box, CardHeader } from "@mui/material";
+import { Grid, Box } from "@mui/material";
 import RadarChart from "./RadarChart";
 import BarChart from "./BarChart";
 import AreaCalc from "./AreaCalc";
@@ -42,7 +42,7 @@ function VisContainer() {
             <CollapsableCard
               variant="outlined"
               title="DeepScope"
-              subheader="Distribution of Land-use in the Grid"
+              subheader="Visualize the Design Space"
             >
               <RenderedViewMap />
             </CollapsableCard>
