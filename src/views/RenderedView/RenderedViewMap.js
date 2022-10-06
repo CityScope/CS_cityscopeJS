@@ -143,7 +143,7 @@ export default function RenderedViewMap() {
           {/* TEXT */}
           <Grid item>
             {isLoading && <LoadingModules loadingModules={["..."]} />}
-            <Typography variant="h3">DeepScope 2.0</Typography>
+
             <Typography variant="caption">
               DeepScope uses a machine learning model to generate urban scenes
               in real-time, based on designs preform in the CitySCcope platform.

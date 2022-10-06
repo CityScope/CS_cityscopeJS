@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Card, CardContent, Grid, Box } from "@mui/material";
+import { Card, CardContent, Grid, Box, CardHeader } from "@mui/material";
 import RadarChart from "./RadarChart";
 import BarChart from "./BarChart";
 import AreaCalc from "./AreaCalc";
 import ResizableDrawer from "../../../Components/ResizableDrawer";
 import RenderedViewMap from "../../RenderedView/RenderedViewMap";
+import CollapsableCard from "../../../Components/CollapsableCard";
 
 function VisContainer() {
   return (
@@ -12,30 +12,40 @@ function VisContainer() {
       <Box p={2}>
         <Grid container spacing={1}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
-            <Card variant="outlined">
-              <CardContent>
-                <RadarChart />
-              </CardContent>
-            </Card>
+            <CollapsableCard
+              variant="outlined"
+              title="Radar Chart"
+              subheader="Metrics and KPIs"
+            >
+              <RadarChart />
+            </CollapsableCard>
           </Grid>
           <Grid item xs={12} md={12} lg={6} xl={6}>
-            <Card variant="outlined">
-              <CardContent>
-                <AreaCalc />
-              </CardContent>
-            </Card>
+            <CollapsableCard
+              variant="outlined"
+              title="Land-use"
+              subheader="Distribution of Land-use in the Grid"
+            >
+              <AreaCalc />
+            </CollapsableCard>
           </Grid>
           <Grid item xs={12} md={12} lg={6} xl={6}>
-            <Card variant="outlined">
-              <CardContent>
-                <BarChart />
-              </CardContent>
-            </Card>
+            <CollapsableCard
+              variant="outlined"
+              title="Bar Chart"
+              subheader="Metrics and KPIs"
+            >
+              <BarChart />
+            </CollapsableCard>
           </Grid>
           <Grid item xs={12} md={12} lg={12} xl={12}>
-            <Card variant="outlined">
+            <CollapsableCard
+              variant="outlined"
+              title="DeepScope"
+              subheader="Distribution of Land-use in the Grid"
+            >
               <RenderedViewMap />
-            </Card>
+            </CollapsableCard>
           </Grid>
         </Grid>
       </Box>
