@@ -295,7 +295,7 @@ export default function DeckGLMap() {
             asyncRender={false}
             dragRotate={true}
             reuseMaps={true}
-            mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+            mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
             mapStyle={mapSettings.map.mapStyle.sat}
             preventStyleDiffing={true}
           />

@@ -287,7 +287,7 @@ export default function RenderedViewMap() {
                     <Map
                       ref={refMap}
                       preserveDrawingBuffer={true} //! This is critical to preserve the WebGL drawing buffer
-                      mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+                      mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
                       mapStyle={mapSettings.map.mapStyle.normal}
                     />
                   </DeckGL>

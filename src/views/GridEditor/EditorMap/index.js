@@ -1,6 +1,6 @@
 import EditorBrush from "./EditorBrush";
 import { useEffect, useState, useRef } from "react";
-import { StaticMap } from "react-map-gl";
+import { Map } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { GeoJsonLayer } from "deck.gl";
@@ -239,11 +239,11 @@ export default function EditorMap() {
           keyboard: false,
         }}
       >
-        <StaticMap
+        <Map
           asyncRender={false}
           dragRotate={true}
           reuseMaps={true}
-          mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+          mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           mapStyle={GridEditorSettings.map.mapStyle.sat}
           preventStyleDiffing={true}
         />

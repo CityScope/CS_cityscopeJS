@@ -2,7 +2,7 @@ import { List, Grid, ListItem, Typography, Card, CardContent } from "@mui/materi
 import ResizableDrawer from "../../../Components/ResizableDrawer";
 import GridPropsMenu from "./GridPropsMenu";
 import GridMakerMenu from "./GridMakerMenu";
-import TypesEditorMenu from "./TypesEditorMenu";
+// import TypesEditorMenu from "./TypesEditorMenu";
 import CommitGridMenu from "./CommitGridMenu";
 
 export default function EditorMenu() {
@@ -23,7 +23,7 @@ export default function EditorMenu() {
       </Grid>
     </Grid>,
 
-    <TypesEditorMenu />,
+    // <TypesEditorMenu />,
   ];
 
   const MenuItems = () => {

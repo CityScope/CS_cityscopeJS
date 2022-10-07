@@ -2,10 +2,17 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { mapSettings as settings } from "../../../../settings/settings";
-import { GeoJsonLayer, TripsLayer, HeatmapLayer, TextLayer } from "deck.gl";
+import {
+  GeoJsonLayer,
+  TripsLayer,
+  HeatmapLayer,
+  TextLayer,
+  BitmapLayer,
+} from "deck.gl";
 import { processGridData } from "../../../CityScopeJS/DeckglMap/deckglLayers/GridLayer";
 import { hexToRgb } from "../../../../utils/utils";
 import DeckMap from "./DeckMap";
+import { TileLayer } from "@deck.gl/geo-layers";
 
 export default function ProjectionDeckMap(props) {
   const editMode = props.editMode;
@@ -16,6 +23,28 @@ export default function ProjectionDeckMap(props) {
 
   const [time, setTime] = useState(settings.map.layers.ABM.startTime);
   const [animation] = useState({});
+
+  const backgroundLayer = new TileLayer({
+    data:
+      "https://api.mapbox.com/styles/v1/relnox/ck0h5xn701bpr1dqs3he2lecq/tiles/256/{z}/{x}/{y}?access_token=" +
+      process.env.REACT_APP_MAPBOX_TOKEN,
+    minZoom: 0,
+    maxZoom: 21,
+    tileSize: 256,
+    visible: true,
+    id: "OSM",
+    renderSubLayers: (props) => {
+      const {
+        bbox: { west, south, east, north },
+      } = props.tile;
+
+      return new BitmapLayer(props, {
+        data: null,
+        image: props.data,
+        bounds: [west, south, east, north],
+      });
+    },
+  });
 
   const animate = () => {
     setTime((t) => {
@@ -33,7 +62,7 @@ export default function ProjectionDeckMap(props) {
   }, [animation]);
 
   const layersArray = () => {
-    if (!TUIobject) return [];
+    if (!TUIobject) return [backgroundLayer];
     return [
       new GeoJsonLayer({
         id: "GRID",
@@ -106,6 +135,7 @@ export default function ProjectionDeckMap(props) {
         trailLength: 200,
         currentTime: time,
       }),
+      backgroundLayer,
     ];
   };
 
