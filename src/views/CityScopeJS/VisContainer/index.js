@@ -24,7 +24,7 @@ function VisContainer() {
             <CollapsableCard
               variant="outlined"
               title="Land-use"
-              subheader="Distribution of Land-use in the Grid"
+              subheader="Distribution of Land-uses"
             >
               <AreaCalc />
             </CollapsableCard>

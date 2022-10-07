@@ -110,7 +110,7 @@ export default function DeckGLMap() {
       longitude: midGrid[0],
       latitude: midGrid[1],
       zoom: viewControlButton === "RESET_VIEW_BUTTON" ? 15 : viewState.zoom,
-      pitch: viewControlButton === "RESET_VIEW_BUTTON" ? 0 : 45,
+      pitch: viewControlButton === "RESET_VIEW_BUTTON" ? 0 : viewState.pitch,
       bearing:
         viewControlButton === "NORTH_VIEW_BUTTON" ? 0 : 360 - header.rotation,
       orthographic: viewControlButton === "ORTHO_VIEW_BUTTON" ? true : false,

@@ -66,13 +66,15 @@ function ViewSettingsMenu() {
         <Button
           key={Math.random()}
           size="small"
+          
           onClick={() => handleButtonClicks(thisButton)}
         >
           {viewControlButtons[thisButton].displayName}
         </Button>
       );
     }
-    return <ButtonGroup color="primary">{buttonsArr}</ButtonGroup>;
+    return <ButtonGroup fullWidth
+    sx={{width: "100%"}} color="primary">{buttonsArr}</ButtonGroup>;
   };
 
   const createCheckboxes = (menuItemList) => {
