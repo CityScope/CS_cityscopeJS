@@ -57,7 +57,7 @@ export const mapSettings = {
       sat: "mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd?fresh=true",
       blue: "mapbox://styles/relnox/ck0h5xn701bpr1dqs3he2lecq?fresh=true",
       inverse: "mapbox://styles/relnox/cjlu6w5sc1dy12rmn4kl2zljn?fresh=true",
-      normal: "mapbox://styles/relnox/cl8dv36nv000t14qik9yg4ys6?fresh=true"
+      normal: "mapbox://styles/relnox/cl8dv36nv000t14qik9yg4ys6?fresh=true",
     },
     layers: {
       ABM: {
@@ -71,6 +71,9 @@ export const mapSettings = {
       zoom: 15,
       pitch: 0,
       bearing: 0,
+      longitude: -122.41669,
+      latitude: 37.7853,
+      zoom: 13,
     },
   },
 };

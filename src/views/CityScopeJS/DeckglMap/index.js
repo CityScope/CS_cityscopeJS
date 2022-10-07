@@ -24,7 +24,7 @@ export default function DeckGLMap() {
   const menuState = useSelector((state) => state.menuState);
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
   const [selectedCellsState, setSelectedCellsState] = useState();
-  const [viewState, setViewState] = useState(mapSettings.map.initialViewState);
+  const [viewState, setViewState] = useState();
   const [keyDownState, setKeyDownState] = useState();
   const [mousePos, setMousePos] = useState();
   const [mouseDown, setMouseDown] = useState();
@@ -88,12 +88,7 @@ export default function DeckGLMap() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleRotateCamera, animationTime]);
 
-  // **
-  //  * resets the camera viewport
-  //  * to cityIO header data
-  //  * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
-  //  *
-  const setViewStateToTableHeader = (viewControlButton) => {
+  const computeMidGridCell = () => {
     const lastCell =
       cityIOdata.GEOGRID.features[cityIOdata.GEOGRID.features.length - 1]
         .geometry.coordinates[0][0];
@@ -102,25 +97,66 @@ export default function DeckGLMap() {
       (firstCell[0] + lastCell[0]) / 2,
       (firstCell[1] + lastCell[1]) / 2,
     ];
+    return midGrid;
+  };
 
+  // **
+  //  * resets the camera viewport
+  //  * to cityIO header data
+  //  * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
+  //  *
+  const setViewStateToTableHeader = () => {
     const header = cityIOdata.GEOGRID.properties.header;
-
-    setViewState({
+    const midGrid = computeMidGridCell();
+    return {
       ...viewState,
       longitude: midGrid[0],
       latitude: midGrid[1],
-      zoom: viewControlButton === "RESET_VIEW_BUTTON" ? 15 : viewState.zoom,
-      pitch: viewControlButton === "RESET_VIEW_BUTTON" ? 0 : viewState.pitch,
-      bearing:
-        viewControlButton === "NORTH_VIEW_BUTTON" ? 0 : 360 - header.rotation,
-      orthographic: viewControlButton === "ORTHO_VIEW_BUTTON" ? true : false,
-    });
+      zoom: 15,
+      pitch: 45,
+      bearing: 360 - header.rotation,
+      orthographic: false,
+    };
   };
 
   useEffect(() => {
-    setViewStateToTableHeader(viewControlButton);
+    const header = cityIOdata.GEOGRID.properties.header;
+    const midGrid = computeMidGridCell();
+
+    switch (viewControlButton) {
+      case "RESET_VIEW_BUTTON":
+        setViewState((prevViewState) => ({
+          ...prevViewState,
+          longitude: midGrid[0],
+          latitude: midGrid[1],
+          pitch: 0,
+          bearing: 0,
+          orthographic: false,
+        }));
+        break;
+
+      case "NORTH_VIEW_BUTTON":
+        setViewState((prevViewState) => ({
+          ...prevViewState,
+          bearing: 360 - header.rotation,
+        }));
+        break;
+
+      case "NORTH_VIEW_BUTTON":
+        setViewState((prevViewState) => ({
+          ...prevViewState,
+          orthographic: prevViewState.orthographic
+            ? !prevViewState.orthographic
+            : true,
+        }));
+
+        break;
+      default:
+        break;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewControlButton]);
+
 
   // fix deck view rotate
   useEffect(() => {
@@ -161,7 +197,7 @@ export default function DeckGLMap() {
     ABM: ABMLayer({
       data: cityIOdata,
       ABMmode: 0,
-      zoomLevel: viewState.zoom,
+      zoomLevel: viewState && viewState.zoom && viewState.zoom,
       time: animationTime,
       opacity:
         layersMenu &&
@@ -281,6 +317,7 @@ export default function DeckGLMap() {
         <DeckGL
           ref={deckGLref}
           viewState={viewState}
+          initialViewState={setViewStateToTableHeader()}
           onViewStateChange={onViewStateChange}
           layers={renderDeckLayers()}
           controller={{
