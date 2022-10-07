@@ -13,7 +13,7 @@ import {
   GridLayer,
   TextualLayer,
   GeojsonLayer,
-  MeshLayer,
+  // MeshLayer,
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
 
@@ -224,19 +224,19 @@ export default function DeckGLMap() {
         layersMenu.GEOJSON_LAYER_CHECKBOX.slider * 0.01,
     }),
 
-    MESH: MeshLayer({
-      data: GEOGRIDDATA,
-      opacity:
-        layersMenu &&
-        layersMenu.MESH_LAYER_CHECKBOX &&
-        layersMenu.MESH_LAYER_CHECKBOX.slider * 0.01,
-    }),
+    // MESH: MeshLayer({
+    //   data: GEOGRIDDATA,
+    //   opacity:
+    //     layersMenu &&
+    //     layersMenu.MESH_LAYER_CHECKBOX &&
+    //     layersMenu.MESH_LAYER_CHECKBOX.slider * 0.01,
+    // }),
   };
 
   const layerOrder = [
     "GRID",
     "TEXTUAL",
-    "MESH",
+    // "MESH",
     "GEOJSON",
     "ACCESS",
     "AGGREGATED_TRIPS",
