@@ -1,8 +1,15 @@
-import { List, Grid, ListItem, Typography, Card, CardContent } from "@mui/material";
+import {
+  List,
+  Grid,
+  ListItem,
+  Typography,
+  Card,
+  CardContent,
+} from "@mui/material";
 import ResizableDrawer from "../../../Components/ResizableDrawer";
 import GridPropsMenu from "./GridPropsMenu";
 import GridMakerMenu from "./GridMakerMenu";
-// import TypesEditorMenu from "./TypesEditorMenu";
+import TypesEditorMenu from "./TypesEditorMenu";
 import CommitGridMenu from "./CommitGridMenu";
 
 export default function EditorMenu() {
@@ -21,9 +28,10 @@ export default function EditorMenu() {
       <Grid item>
         <CommitGridMenu />
       </Grid>
+      <Grid item>
+        <TypesEditorMenu />
+      </Grid>
     </Grid>,
-
-    // <TypesEditorMenu />,
   ];
 
   const MenuItems = () => {
