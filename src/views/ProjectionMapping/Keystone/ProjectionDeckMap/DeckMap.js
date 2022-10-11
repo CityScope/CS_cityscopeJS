@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import DeckGL from "@deck.gl/react";
 import ViewStateInputs from "../Components/ViewStateInputs";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 export default function DeckMap(props) {
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
@@ -15,7 +16,7 @@ export default function DeckMap(props) {
     if (localStorage.getItem("projectionViewStateStorage")) {
       const vs = localStorage.getItem("projectionViewStateStorage");
       console.log("loading prev. projectionViewStateStorage...", vs);
-      return(JSON.parse(vs));
+      return JSON.parse(vs);
     } else {
       return {
         latitude: header.latitude,

@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { hexToRgb, testHex } from "../../../utils/utils";
 import { updateGridMaker } from "../../../redux/reducers/editorMenuSlice";
 import { GridEditorSettings } from "../../../settings/settings";
+import "mapbox-gl/dist/mapbox-gl.css";
+
 
 export default function EditorMap() {
   const dispatch = useDispatch();

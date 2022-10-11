@@ -16,6 +16,8 @@ import { CubeGeometry } from "@luma.gl/engine";
 import { mapSettings } from "../../settings/settings";
 import Map from "react-map-gl";
 import LoadingModules from "../../Components/LoadingModules";
+import "mapbox-gl/dist/mapbox-gl.css";
+
 import {
   Button,
   CircularProgress,

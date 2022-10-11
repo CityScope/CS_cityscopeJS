@@ -5,6 +5,7 @@ import { postToCityIO } from "../../../utils/utils";
 import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import { mapSettings } from "../../../settings/settings";
+import "mapbox-gl/dist/mapbox-gl.css";
 import {
   AccessLayer,
   AggregatedTripsLayer,
