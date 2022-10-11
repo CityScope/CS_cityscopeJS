@@ -15,7 +15,6 @@ import { processGridData } from "../CityScopeJS/DeckglMap/deckglLayers/GridLayer
 import { CubeGeometry } from "@luma.gl/engine";
 import { mapSettings } from "../../settings/settings";
 import Map from "react-map-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 import LoadingModules from "../../Components/LoadingModules";
 import {
   Button,
