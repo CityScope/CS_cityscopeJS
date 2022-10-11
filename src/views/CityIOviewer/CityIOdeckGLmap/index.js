@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { _MapContext } from "react-map-gl";
 import { DeckGL } from "@deck.gl/react";
 import { _GlobeView as GlobeView, COORDINATE_SYSTEM } from "@deck.gl/core";
 import { TileLayer } from "@deck.gl/geo-layers";
@@ -40,25 +39,24 @@ export default function CityIOdeckGLmap(props) {
 
   useEffect(() => {
     let markersArr = [];
-   
-      props.cityIOdata.forEach((table, index) => {
-      
-        markersArr.push({
-          tableURL: table.tableURL,
-          tableName: table.tableName,
-          index: index,
-          tableHeader: table.tableHeader,
-          coord: {
-            from: [table.tableHeader.longitude, table.tableHeader.latitude],
-            to: [
-              table.tableHeader.longitude + index/10,
-              table.tableHeader.latitude + index/10,
-              INIT_VIEW.zHeight,
-            ],
-          },
-        });
+
+    props.cityIOdata.forEach((table, index) => {
+      markersArr.push({
+        tableURL: table.tableURL,
+        tableName: table.tableName,
+        index: index,
+        tableHeader: table.tableHeader,
+        coord: {
+          from: [table.tableHeader.longitude, table.tableHeader.latitude],
+          to: [
+            table.tableHeader.longitude + index / 10,
+            table.tableHeader.latitude + index / 10,
+            INIT_VIEW.zHeight,
+          ],
+        },
       });
-    
+    });
+
     setMarkerInfo(markersArr);
   }, [props, INIT_VIEW.zHeight]);
 
@@ -165,7 +163,6 @@ export default function CityIOdeckGLmap(props) {
         initialViewState={initialViewState}
         onViewportChange={setViewport}
         onViewStateChange={(d) => setZoom(d.viewState.zoom)}
-        ContextProvider={_MapContext.Provider}
       ></DeckGL>
     </>
   );

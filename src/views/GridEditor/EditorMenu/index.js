@@ -1,4 +1,4 @@
-import { List, Grid, ListItem, Typography, Card, CardContent } from "@mui/material";
+import { List, ListItem, Typography, Card, CardContent } from "@mui/material";
 import ResizableDrawer from "../../../Components/ResizableDrawer";
 import GridPropsMenu from "./GridPropsMenu";
 import GridMakerMenu from "./GridMakerMenu";
@@ -13,22 +13,14 @@ export default function EditorMenu() {
       baseline for CityScope projects. Use the menus and map to edit girds,
       types, and props, and commit them to cityIO.
     </Typography>,
-    <GridPropsMenu />,
-    <Grid container spacing={2}>
-      <Grid item>
-        <GridMakerMenu />
-      </Grid>
-      <Grid item>
-        <CommitGridMenu />
-      </Grid>
-    </Grid>,
-
     <TypesEditorMenu />,
+    <GridPropsMenu />,
+    <GridMakerMenu />,
+    <CommitGridMenu />,
   ];
 
   const MenuItems = () => {
     const m = [];
-
     menuItemsArray.forEach((item, index) => {
       m.push(
         <ListItem key={index}>
@@ -42,7 +34,7 @@ export default function EditorMenu() {
   };
 
   return (
-    <ResizableDrawer direction={"left"} width={500}>
+    <ResizableDrawer direction={"left"} width={window.innerWidth / 2}>
       <List>
         <MenuItems />
       </List>

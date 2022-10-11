@@ -36,12 +36,14 @@ export default function GridProps() {
   return (
     <List>
       <ListItem>
-        <Typography variant="h4">Project Properties</Typography>
+        <Typography variant="h4">2. Grid Properties</Typography>
       </ListItem>
       <ListItem>
         <TextField
+          inputProps={{ style: { fontSize: 30 } }} // font size of input text
           onChange={(event) => handleFormUpdates(event)}
           variant="outlined"
+          fullWidth
           id="tableName"
           label="CityScope Project Name"
           defaultValue={formValues.tableName}

@@ -4,6 +4,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { gridCreator } from "./gridCreator";
 import { useDispatch, useSelector } from "react-redux";
 import { updateGridMaker } from "../../../../redux/reducers/editorMenuSlice";
+import { List, ListItem, Typography } from "@mui/material";
 
 export default function GridMakerMenu() {
   const dispatch = useDispatch();
@@ -26,26 +27,32 @@ export default function GridMakerMenu() {
 
   return (
     <>
-      {gridProps && typesList && (
-        <LoadingButton
-          onClick={() => {
-            setLoading(true);
-            new Promise((resolve) => {
-              setTimeout(() => {
-                setLoading(false);
-                handleGridCreation();
-              }, 100);
-              resolve();
-            });
-          }}
-          loading={loading}
-          loadingPosition="start"
-          variant="outlined"
-          startIcon={<AutoAwesomeIcon />}
-        >
-          Generate Grid
-        </LoadingButton>
-      )}
+      <List>
+        <ListItem>
+          <Typography variant="h4">3. Generate Random Grid</Typography>
+        </ListItem>
+        {gridProps && typesList && (
+          <LoadingButton
+            onClick={() => {
+              setLoading(true);
+              new Promise((resolve) => {
+                setTimeout(() => {
+                  setLoading(false);
+                  handleGridCreation();
+                }, 50);
+                resolve();
+              });
+            }}
+            loading={loading}
+            loadingPosition="start"
+            variant="outlined"
+            fullWidth
+            startIcon={<AutoAwesomeIcon />}
+          >
+            Generate Grid
+          </LoadingButton>
+        )}
+      </List>
     </>
   );
 }
