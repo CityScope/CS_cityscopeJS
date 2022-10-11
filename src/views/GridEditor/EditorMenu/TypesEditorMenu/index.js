@@ -4,94 +4,9 @@ import { Typography, Box, Stack, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { GridEditorSettings } from "../../../../settings/settings";
 import { updateTypesEditorState } from "../../../../redux/reducers/editorMenuSlice";
+import { createTypesArray, tableInitialState } from "./utils";
 
 const settings = GridEditorSettings;
-
-export const createTypesArray = (LandUseTypesList) => {
-  let typesArray = [];
-  Object.keys(LandUseTypesList).forEach((type, index) => {
-    typesArray.push({
-      id: index,
-      name: type,
-      description: "[edit info for type: " + type + "]",
-      color: LandUseTypesList[type].color,
-      height: LandUseTypesList[type].height,
-      "height[0]": LandUseTypesList[type].height
-        ? LandUseTypesList[type].height[0]
-        : 0,
-      "height[1]": LandUseTypesList[type].height
-        ? LandUseTypesList[type].height[1]
-        : 0,
-      "height[2]": LandUseTypesList[type].height
-        ? LandUseTypesList[type].height[2]
-        : 0,
-
-      LBCS: LandUseTypesList[type].LBCS
-        ? JSON.stringify(LandUseTypesList[type].LBCS)
-        : null,
-      NAICS: LandUseTypesList[type].NAICS
-        ? JSON.stringify(LandUseTypesList[type].NAICS)
-        : null,
-      interactive: LandUseTypesList[type].interactive,
-    });
-  });
-  return typesArray;
-};
-
-export const tableInitialState = [
-  {
-    field: "name",
-    headerName: "Type Name",
-    editable: true,
-  },
-  {
-    field: "description",
-    headerName: "Description",
-    editable: true,
-  },
-
-  {
-    field: "height[0]",
-    headerName: "Height [0]",
-    type: "number",
-    editable: true,
-  },
-  {
-    field: "height[1]",
-    headerName: "Height [1]",
-    type: "number",
-    editable: true,
-  },
-  {
-    field: "height[2]",
-    headerName: "Height [2]",
-
-    type: "number",
-    editable: true,
-  },
-  {
-    field: "interactive",
-    headerName: "Interactive",
-    type: "singleSelect",
-    valueOptions: ["No", "Web", "TUI"],
-    editable: true,
-  },
-  {
-    field: "color",
-    headerName: "Color",
-    type: "string",
-    editable: true,
-  },
-  {
-    field: "LBCS",
-    type: "string",
-    editable: true,
-  },
-  {
-    field: "NAICS",
-    type: "string",
-  },
-];
 
 export default function TypesEditorMenu() {
   const dispatch = useDispatch();
@@ -134,7 +49,7 @@ export default function TypesEditorMenu() {
       })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [typesTableRows, selectedRow, rowColor]);
+  }, [typesTableRows, selectedRow]);
 
   return (
     <>
@@ -152,112 +67,38 @@ export default function TypesEditorMenu() {
       </Stack>
       <Box sx={{ mt: 1 }}>
         <DataGrid
+          sx={{
+            boxShadow: 2,
+            border: 2,
+            borderColor: rowColor && rowColor,
+          }}
           autoHeight
-          rowHeight={38}
+          rowHeight={50}
           rows={typesTableRows}
           columns={tableInitialState}
-          experimentalFeatures={{ newEditingApi: true }}
+          // experimentalFeatures={{ newEditingApi: true }}
+          onSelectionModelChange={(ids) => {
+            setSelectedRow(typesTableRows[ids]);
+            setRowColor(typesTableRows[ids].color);
+          }}
+          onCellEditCommit={(params) => {
+            setTypesTableRows((prevRows) => {
+              const updatedRows = [...prevRows];
+              // find the row that was edited using the id field
+              const rowToEditIndex = updatedRows.findIndex(
+                (row) => row.id === params.id
+              );
+              // update the row
+              updatedRows[rowToEditIndex] = {
+                ...updatedRows[rowToEditIndex],
+                [params.field]: params.value,
+              };
+              console.log(updatedRows);
+              return updatedRows;
+            });
+          }}
         />
       </Box>
     </>
   );
 }
-
-/*
-
-export default function TypesEditorMenu() {
-  const [tableState, setTableState] = useState(tableInitialState);
-
-
-  // redux the type list on every change
-  useEffect(() => {
-    dispatch(
-      updateTypesEditorState({
-        tableData: tableState.data,
-        selectedRow: selectedRow,
-        rowColor: rowColor,
-      })
-    );
-eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tableState, selectedRow, rowColor]);
-
-  return (
-    <MaterialTable
-      title={<Typography variant="h4">Types Editor</Typography>}
-      columns={tableState.columns}
-      data={tableState.data}
-      options={{
-        paging: false,
-        search: true,
-        selection: false,
-        rowStyle: (rowData) => ({
-          backgroundColor:
-            selectedRow && selectedRow.tableData.id === rowData.tableData.id
-              ? rowColor
-              : null,
-
-          color:
-            selectedRow && selectedRow.tableData.id === rowData.tableData.id
-              ? "black"
-              : "white",
-        }),
-      }}
-      onRowClick={(evt, row) => {
-        setSelectedRow(row);
-        setRowColor(row.color);
-      }}
-      editable={{
-        // ! new row is added to the end of the table
-        onRowAdd: (newData) =>
-          new Promise((resolve) => {
-            resolve();
-            setTimeout(() => {
-              setTableState((prevState) => {
-                const data = [...prevState.data];
-                newData.id = data.length;
-                data.push(newData);
-                return { ...prevState, data };
-              });
-            }, 50);
-          }),
-        // ! row edit is done by clicking on the row
-        onRowUpdate: (newData, oldData) =>
-          new Promise((resolve) => {
-            resolve();
-            setTimeout(() => {
-              if (oldData) {
-                setTableState((prevState) => {
-                  const tableData = [...prevState.data];
-                  const index = tableData
-                    .map((object) => object.id)
-                    .indexOf(oldData.id);
-                  tableData[index] = newData;
-                  return { ...prevState, data: tableData };
-                });
-              }
-            }, 50);
-          }),
-! row delete is done by clicking on the icon
-onRowDelete: (oldData) => {
-  new Promise((resolve) => {
-    resolve();
-    setTimeout(() => {
-      if (oldData) {
-        setTableState((prevState) => {
-          const tableData = [...prevState.data];
-          const index = tableData
-            .map((object) => object.id)
-            .indexOf(oldData.id);
-          tableData.splice(index, 1);
-          return { ...prevState, data: tableData };
-        });
-      }
-    }, 1000);
-  });
-},
-      }}
-    />
-  );
-}
-
-*/

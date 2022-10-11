@@ -1,7 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import DeckGL from "@deck.gl/react";
-import { mapSettings as settings } from "../../../../settings/settings";
 import ViewStateInputs from "../Components/ViewStateInputs";
 
 export default function DeckMap(props) {

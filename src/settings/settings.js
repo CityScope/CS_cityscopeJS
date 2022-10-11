@@ -68,7 +68,6 @@ export const mapSettings = {
     },
     initialViewState: {
       maxZoom: 22,
-      zoom: 15,
       pitch: 0,
       bearing: 0,
       longitude: -122.41669,
@@ -174,7 +173,7 @@ export const GridEditorSettings = {
     properties: {
       header: {
         tableName: "test",
-        cellSize: 50,
+        cellSize: 15,
         latitude: 42.3664655,
         longitude: -71.0854323,
         tz: -5,
@@ -187,6 +186,7 @@ export const GridEditorSettings = {
 
       types: {
         Office: {
+          description: "Offices and other commercial buildings, 0-100 stories",
           LBCS: [
             {
               proportion: 1,
@@ -203,11 +203,35 @@ export const GridEditorSettings = {
               },
             },
           ],
-          interactive: "Web",
-          color: "#FF5277",
+          interactive: true,
+          color: "#2482c6",
           height: [0, 50, 100],
         },
+        Campus: {
+          description: "Campus buildings, non-interactive, 0-30 stories",
+          LBCS: [
+            {
+              proportion: 1,
+              use: {
+                "2310": 1,
+              },
+            },
+          ],
+          NAICS: [
+            {
+              proportion: 1,
+              use: {
+                "5400": 1,
+              },
+            },
+          ],
+          interactive: false,
+          color: "#ab8f39",
+          height: [0, 15, 30],
+        },
         Park: {
+          description:
+            "Parks, playgrounds, and other open spaces. No height value",
           LBCS: [
             {
               proportion: 1,
@@ -217,10 +241,12 @@ export const GridEditorSettings = {
             },
           ],
           NAICS: null,
-          interactive: "Web",
-          color: "#38C9FF",
+          interactive: true,
+          color: "#7eb346",
+          height: [0, 0, 0],
         },
         Residential: {
+          description: "Residential buildings and apartments, 0-100 stories",
           LBCS: [
             {
               proportion: 1,
@@ -230,8 +256,8 @@ export const GridEditorSettings = {
             },
           ],
           NAICS: null,
-          interactive: "Web",
-          color: "#FFFF33",
+          interactive: true,
+          color: "#b97e18",
           height: [0, 50, 100],
         },
       },

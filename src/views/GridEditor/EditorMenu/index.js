@@ -34,7 +34,7 @@ export default function EditorMenu() {
   };
 
   return (
-    <ResizableDrawer direction={"left"} width={600}>
+    <ResizableDrawer direction={"left"} width={window.innerWidth / 2}>
       <List>
         <MenuItems />
       </List>

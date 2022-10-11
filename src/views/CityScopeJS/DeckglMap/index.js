@@ -142,7 +142,7 @@ export default function DeckGLMap() {
         }));
         break;
 
-      case "NORTH_VIEW_BUTTON":
+      case "ORTHO_VIEW_BUTTON":
         setViewState((prevViewState) => ({
           ...prevViewState,
           orthographic: prevViewState.orthographic

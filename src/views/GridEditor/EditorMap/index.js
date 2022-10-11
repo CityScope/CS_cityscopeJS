@@ -110,7 +110,6 @@ export default function EditorMap() {
     if (!selectedType) return;
     const { height, name, color, interactive } = selectedType;
     const multiSelectedObj = multipleObjPicked(event);
-
     multiSelectedObj.forEach((pickedObject, index) => {
       // create a copy of the object
       const thisCellProps = { ...pickedObject.object.properties };
@@ -118,11 +117,8 @@ export default function EditorMap() {
       thisCellProps.color = testHex(color) ? hexToRgb(color) : color;
       thisCellProps.height = height;
       thisCellProps.name = name;
-      if (interactive !== "No") {
-        thisCellProps.interactive = interactive;
-      } else {
-        delete thisCellProps.interactive;
-      }
+      thisCellProps.interactive = interactive;
+
       //  assign the modified copy to the grid object
       setGrid((grid) => ({
         ...grid,
@@ -151,7 +147,6 @@ export default function EditorMap() {
           selectedType={selectedType}
           divSize={pickingRadius}
           mouseDown={mouseDown}
-          // hoveredObj={hoveredObj}
         />
       )
     );

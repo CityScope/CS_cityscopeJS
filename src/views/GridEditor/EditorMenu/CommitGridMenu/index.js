@@ -2,8 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { GridEditorSettings } from "../../../../settings/settings";
-import {cityIOSettings} from "../../../../settings/settings";
-import Typography from "@mui/material/Typography";
+import { cityIOSettings } from "../../../../settings/settings";
+import {Typography, List, ListItem} from "@mui/material";
 import { useSelector } from "react-redux";
 import Link from "@mui/material/Link";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -103,7 +103,7 @@ export default function CommitGridMenu() {
     let GEOGRIDDATAObject = makeGEOGRIDDATAobject(geoJsonFeatures);
     let tableName = GEOGRIDObject.properties.header.tableName.toLowerCase();
 
-    // post to cityIO server 
+    // post to cityIO server
     const gridPOSToptions = (URL, DATA) => {
       return {
         method: "post",
@@ -115,7 +115,7 @@ export default function CommitGridMenu() {
         },
       };
     };
-  
+
     const table_url = `${cityIOSettings.cityIO.baseURL}table/${tableName}/`;
     const new_table_grid = {
       GEOGRID: GEOGRIDObject,
@@ -130,31 +130,37 @@ export default function CommitGridMenu() {
   };
 
   return (
-    <>
-      {generatedGridBool && (
-        <>
-          <LoadingButton
-            onClick={() => {
-              setLoading(true);
-              new Promise((resolve) => {
-                setTimeout(() => {
-                  setLoading(false);
-                  postGridToCityIO();
-                }, 1500);
-                resolve();
-              });
-            }}
-            loading={loading}
-            loadingPosition="start"
-            variant="outlined"
-            startIcon={<CloudUploadIcon />}
-          >
-            Commit Grid to cityIO
-          </LoadingButton>
+    <List>
+      <ListItem>
+        <Typography variant="h4">4. Commit Grid to cityIO</Typography>
+      </ListItem>
+    
+        {generatedGridBool && (
+          <>
+            <LoadingButton
+              onClick={() => {
+                setLoading(true);
+                new Promise((resolve) => {
+                  setTimeout(() => {
+                    setLoading(false);
+                    postGridToCityIO();
+                  }, 1500);
+                  resolve();
+                });
+              }}
+              loading={loading}
+              fullWidth
+              loadingPosition="start"
+              variant="outlined"
+              startIcon={<CloudUploadIcon />}
+            >
+              Upload
+            </LoadingButton>
 
-          <div style={{ width: "100%" }}> {reqResponse}</div>
-        </>
-      )}
-    </>
+            <div style={{ width: "100%" }}> {reqResponse}</div>
+          </>
+        )}
+    
+    </List>
   );
 }
