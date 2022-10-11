@@ -4,7 +4,6 @@ import PaintBrush from "./components/PaintBrush";
 import { postToCityIO } from "../../../utils/utils";
 import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
-import "mapbox-gl/dist/mapbox-gl.css";
 import { mapSettings } from "../../../settings/settings";
 import {
   AccessLayer,

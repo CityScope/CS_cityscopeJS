@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import DeckGL from "@deck.gl/react";
 import ViewStateInputs from "../Components/ViewStateInputs";
@@ -9,37 +9,30 @@ export default function DeckMap(props) {
   const viewStateEditMode = props.viewStateEditMode;
   const layers = props.layers;
 
-  const [viewState, setViewState] = useState();
-
-  const setViewStateToTableHeader = () => {
-    setViewState({
-      ...viewState,
-      longitude: header.longitude,
-      latitude: header.latitude,
-      zoom: 15,
-      pitch: 0,
-      bearing: 360 - header.rotation,
-      orthographic: true,
-    });
-  };
-
-  const deckGLref = useRef(null);
+  const [viewState, setViewState] = useState(() => {
+    // on init, check if prev. local storage with
+    // view state exist. If so, load it.
+    if (localStorage.getItem("projectionViewStateStorage")) {
+      const vs = localStorage.getItem("projectionViewStateStorage");
+      console.log("loading prev. projectionViewStateStorage...", vs);
+      return(JSON.parse(vs));
+    } else {
+      return {
+        latitude: header.latitude,
+        longitude: header.longitude,
+        zoom: 15,
+        pitch: 0,
+        bearing: 0,
+        orthographic: true,
+      };
+    }
+  });
 
   useEffect(() => {
     // fix deck view rotate
     document
       .getElementById("deckgl-wrapper")
       .addEventListener("contextmenu", (evt) => evt.preventDefault());
-    // on init, check if prev. local storage with
-    // view state exist. If so, load it.
-    if (localStorage.getItem("projectionViewStateStorage")) {
-      console.log("loading prev. projectionViewStateStorage...");
-      const vs = localStorage.getItem("projectionViewStateStorage");
-      setViewState(JSON.parse(vs));
-    } else {
-      // zoom map on CS table location
-      setViewStateToTableHeader();
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -56,14 +49,11 @@ export default function DeckMap(props) {
   return (
     <>
       <DeckGL
-        ref={deckGLref}
+        controller={true}
         viewState={viewState}
         onViewStateChange={onViewStateChange}
         layers={layers}
-        controller={{}}
-        width="100%"
-        height="100%"
-      ></DeckGL>
+      />
       {viewStateEditMode && viewState && (
         <ViewStateInputs setViewState={setViewState} viewState={viewState} />
       )}

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import "mapbox-gl/dist/mapbox-gl.css";
 import { mapSettings as settings } from "../../../../settings/settings";
 import {
   GeoJsonLayer,
@@ -27,7 +26,7 @@ export default function ProjectionDeckMap(props) {
   const backgroundLayer = new TileLayer({
     data:
       "https://api.mapbox.com/styles/v1/relnox/ck0h5xn701bpr1dqs3he2lecq/tiles/256/{z}/{x}/{y}?access_token=" +
-      process.env.REACT_APP_MAPBOX_TOKEN,
+      process.env.REACT_APP_MAPBOX_TOKEN + '&attribution=false&logo=false',
     minZoom: 0,
     maxZoom: 21,
     tileSize: 256,

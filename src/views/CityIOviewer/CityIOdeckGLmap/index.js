@@ -3,7 +3,6 @@ import { DeckGL } from "@deck.gl/react";
 import { _GlobeView as GlobeView, COORDINATE_SYSTEM } from "@deck.gl/core";
 import { TileLayer } from "@deck.gl/geo-layers";
 import { FlyToInterpolator } from "deck.gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 import { LineLayer, IconLayer, TextLayer, BitmapLayer } from "@deck.gl/layers";
 import icon from "./legoio.png";
 

@@ -2,7 +2,6 @@ import EditorBrush from "./EditorBrush";
 import { useEffect, useState, useRef } from "react";
 import { Map } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
-import "mapbox-gl/dist/mapbox-gl.css";
 import { GeoJsonLayer } from "deck.gl";
 import { useSelector, useDispatch } from "react-redux";
 import { hexToRgb, testHex } from "../../../utils/utils";
@@ -39,9 +38,7 @@ export default function EditorMap() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorMapCenter]);
 
-  const [viewState, setViewState] = useState(
-    GridEditorSettings.map.initialViewState
-  );
+  const [viewState, setViewState] = useState();
   // const [hoveredObj, setHoveredObj] = useState();
   const [keyDownState, setKeyDownState] = useState();
   const [mousePos, setMousePos] = useState();
