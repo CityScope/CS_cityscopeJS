@@ -12,14 +12,14 @@ export default function AccessLayer({ data, opacity }) {
   return new HeatmapLayer({
     id: "ACCESS",
     colorRange: colors,
-    // intensity:  opacity,
+    debounceTimeout: 800,
+    radiusPixels: opacity * 100,
     threshold: 0.5,
     data: accessData && accessData,
     getPosition: (d) => d.geometry.coordinates,
-    getWeight: (d) =>
-      d.properties[Math.floor(opacity * 100) % data.access.properties.length],
+    // opacity: (d) => d.properties[Math.floor(opacity * 100)],
     updateTriggers: {
-      getWeight: opacity,
+      radiusPixels: opacity,
     },
   });
 }
