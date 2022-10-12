@@ -99,8 +99,8 @@ export const expectedLayers = {
   ACCESS_LAYER_CHECKBOX: {
     displayName: "Heatmap",
     cityIOmoduleName: "access",
-    initState: false,
-    initSliderValue: 100,
+    initState: true,
+    selected: 0,
   },
   TEXTUAL_LAYER_CHECKBOX: {
     displayName: "Text",
@@ -114,12 +114,6 @@ export const expectedLayers = {
     initState: false,
     initSliderValue: 50,
   },
-  // MESH_LAYER_CHECKBOX: {
-  //   displayName: "Mesh <beta>",
-  //   cityIOmoduleName: "GEOGRID",
-  //   initState: false,
-  //   initSliderValue: 100,
-  // },
 };
 
 export const viewControlCheckboxes = {

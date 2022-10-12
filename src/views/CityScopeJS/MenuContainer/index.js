@@ -35,7 +35,7 @@ function MenuContainer() {
     },
     {
       component: <LayersMenu />,
-      collapse: false,
+      collapse: true,
       title: "Layers",
       subheader: "Layers",
     },
