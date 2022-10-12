@@ -13,7 +13,6 @@ import {
   GridLayer,
   TextualLayer,
   GeojsonLayer,
-  // MeshLayer,
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
 
@@ -54,7 +53,7 @@ export default function DeckGLMap() {
           ? mapSettings.map.layers.ABM.startTime
           : t + toggleAnimationState.slider;
       });
-      animation.id = window.requestAnimationFrame(animate); // draw next frame
+      animation.id = window.requestAnimationFrame(animate);
     }
   };
   // ! self executing function to toggle animation state
@@ -157,7 +156,6 @@ export default function DeckGLMap() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewControlButton]);
 
-
   // fix deck view rotate
   useEffect(() => {
     document
@@ -259,20 +257,11 @@ export default function DeckGLMap() {
         layersMenu.GEOJSON_LAYER_CHECKBOX &&
         layersMenu.GEOJSON_LAYER_CHECKBOX.slider * 0.01,
     }),
-
-    // MESH: MeshLayer({
-    //   data: GEOGRIDDATA,
-    //   opacity:
-    //     layersMenu &&
-    //     layersMenu.MESH_LAYER_CHECKBOX &&
-    //     layersMenu.MESH_LAYER_CHECKBOX.slider * 0.01,
-    // }),
   };
 
   const layerOrder = [
     "GRID",
     "TEXTUAL",
-    // "MESH",
     "GEOJSON",
     "ACCESS",
     "AGGREGATED_TRIPS",
