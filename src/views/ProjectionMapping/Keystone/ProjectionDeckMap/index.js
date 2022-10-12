@@ -26,7 +26,8 @@ export default function ProjectionDeckMap(props) {
   const backgroundLayer = new TileLayer({
     data:
       "https://api.mapbox.com/styles/v1/relnox/ck0h5xn701bpr1dqs3he2lecq/tiles/256/{z}/{x}/{y}?access_token=" +
-      process.env.REACT_APP_MAPBOX_TOKEN + '&attribution=false&logo=false',
+      process.env.REACT_APP_MAPBOX_TOKEN +
+      "&attribution=false&logo=false",
     minZoom: 0,
     maxZoom: 21,
     tileSize: 256,
@@ -61,8 +62,9 @@ export default function ProjectionDeckMap(props) {
   }, [animation]);
 
   const layersArray = () => {
-    if (!TUIobject) return [backgroundLayer];
+    if (!TUIobject) return [];
     return [
+      backgroundLayer,
       new GeoJsonLayer({
         id: "GRID",
         visible: TUIobject.GRID && TUIobject.GRID.active,
@@ -134,7 +136,6 @@ export default function ProjectionDeckMap(props) {
         trailLength: 200,
         currentTime: time,
       }),
-      backgroundLayer,
     ];
   };
 
