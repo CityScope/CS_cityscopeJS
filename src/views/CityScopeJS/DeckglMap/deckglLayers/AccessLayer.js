@@ -1,6 +1,6 @@
 import { HeatmapLayer } from "deck.gl";
 
-export default function AccessLayer({ data, selected }) {
+export default function AccessLayer({ data, intensity, selected }) {
   const accessData = data.access && data.access.features;
 
   const colors = [
@@ -14,7 +14,11 @@ export default function AccessLayer({ data, selected }) {
     id: "ACCESS",
     colorRange: colors,
     debounceTimeout: 800,
-    threshold: 0.5,
+    radiusPixels: intensity || 35,
+    intensity:  1,
+    weightsTextureSize: 1024,
+    threshold: 0.3,
+
     data: accessData && accessData,
     getPosition: (d) => d.geometry.coordinates,
     getWeight: (d) => d.properties[selected],

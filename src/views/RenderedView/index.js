@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
 import RenderedViewMap from "./RenderedViewMap";
 import ResizableDrawer from "../../Components/ResizableDrawer";
-import { Grid } from "@mui/material";
+import { Grid, Box, Container } from "@mui/material";
+import CollapsableCard from "../../Components/CollapsableCard";
 
 export default function RenderedView() {
   const cityIOisDone = useSelector(
@@ -11,11 +12,23 @@ export default function RenderedView() {
   return (
     <>
       <ResizableDrawer direction="bottom" width={50}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={12} lg={12} xl={12}>
-            {cityIOisDone && <RenderedViewMap />}
+      <Container maxWidth="xl">
+        <Box p={1}>
+          <Grid container spacing={1}>
+            <Grid item xs={12} md={12} lg={12} xl={12}>
+              <CollapsableCard
+                collapse={true}
+                variant="outlined"
+                title="DeepScope"
+                subheader="Render the design space"
+              >
+                {cityIOisDone && <RenderedViewMap />}
+              </CollapsableCard>
+            </Grid>
           </Grid>
-        </Grid>
+
+        </Box>
+        </Container>
       </ResizableDrawer>
     </>
   );

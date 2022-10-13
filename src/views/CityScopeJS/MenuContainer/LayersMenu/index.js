@@ -20,6 +20,15 @@ function LayersMenu() {
   // get the keys from cityIOdata
   const cityIOkeys = Object.keys(cityIOdata);
 
+  // update the layer slider value
+  const [sliderVal, setSliderVal] = useState(() => {
+    const sv = {};
+    for (const menuItem in expectedLayers) {
+      sv[menuItem] = expectedLayers[menuItem].initSliderValue;
+    }
+    return sv;
+  });
+
   // initial layer menu state
   let initState = {};
   const [layersMenuState, setLayersMenuState] = useState(() => {
@@ -36,9 +45,6 @@ function LayersMenu() {
     dispatch(updateLayersMenuState(layersMenuState));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layersMenuState]);
-
-  // update the layer slider value
-  const [sliderVal, setSliderVal] = useState({});
 
   const updateSliderVal = (menuItem, val) => {
     setSliderVal({ ...sliderVal, [menuItem]: val });

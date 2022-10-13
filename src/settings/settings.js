@@ -99,7 +99,8 @@ export const expectedLayers = {
   ACCESS_LAYER_CHECKBOX: {
     displayName: "Heatmap",
     cityIOmoduleName: "access",
-    initState: true,
+    initState: false,
+    initSliderValue: 50,
     selected: 0,
   },
   TEXTUAL_LAYER_CHECKBOX: {

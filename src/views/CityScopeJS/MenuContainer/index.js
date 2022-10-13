@@ -6,7 +6,7 @@ import ScenariosMenu from "./ScenariosMenu";
 import ResizableDrawer from "../../../Components/ResizableDrawer";
 import EditMenu from "./EditMenu";
 import TableInfo from "./TableInfo";
-import SpecialLayersControlsMenu from "./SpecialLayersControlsMenu";
+import SpecialLayersControlsMenu from "./SpecialLayersControlsMenu/";
 import CollapsableCard from "../../../Components/CollapsableCard";
 
 function MenuContainer() {
@@ -31,25 +31,25 @@ function MenuContainer() {
       component: <ScenariosMenu />,
       collapse: false,
       title: "Scenarios",
-      subheader: "Scenarios",
+      subheader: "Save and Load Scenarios",
     },
     {
       component: <LayersMenu />,
-      collapse: true,
+      collapse: false,
       title: "Layers",
-      subheader: "Layers",
+      subheader: "Layers visibility",
     },
     {
       component: <SpecialLayersControlsMenu />,
-      collapse: true,
-      title: "Layers Control",
-      subheader: "Special Layers controls",
+      collapse: false,
+      title: "Sub-Layers",
+      subheader: "Controls for sub-layers",
     },
     {
       component: <ViewSettingsMenu />,
       collapse: false,
       title: "View Settings",
-      subheader: "View Settings",
+      subheader: "Toggle different visibility settings",
     },
   ];
 
