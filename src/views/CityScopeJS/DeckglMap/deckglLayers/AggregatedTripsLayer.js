@@ -8,7 +8,7 @@ export default function AggregatedTripsLayer({ data, selected, opacity }) {
       shadowEnabled: false,
       data: data.ABM2.trips,
       getPath: (d) => {
-        if (d.mode == selected) {
+        if (d.mode === selected) {
           return d.path;
         }
       },
