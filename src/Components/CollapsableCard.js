@@ -1,15 +1,13 @@
 import {
   Card,
-  CardActions,
-  CardHeader,
   CardContent,
   Collapse,
-  IconButton,
+  Button,
   Paper,
+  Typography,
   Divider,
 } from "@mui/material";
 import { ArrowDropDown } from "@mui/icons-material";
-
 import { useState } from "react";
 
 export default function CollapsableCard({
@@ -17,28 +15,33 @@ export default function CollapsableCard({
   variant,
   title,
   subheader,
+  collapse,
 }) {
-  const [expand, setExpand] = useState(true);
+  const [expand, setExpand] = useState(collapse);
 
   return (
-    <>
+    <div>
+      <Divider sx={{ mt: 1 }} />
+      <Button
+        fullWidth
+        onClick={() => setExpand(!expand)}
+        sx={{ justifyContent: "flex-start" }}
+      >
+        <ArrowDropDown />
+        <div style={{ display: "block", textAlign: "left" }}>
+          <Typography>{title ? title : ""}</Typography>
+          <Typography color={"secondary.main"} variant="caption">
+            {subheader ? subheader : ""}
+          </Typography>
+        </div>
+      </Button>
       <Paper>
-        <Card variant={variant ? variant : "outlined"}>
-          <CardContent>
-            <CardHeader
-              title={title ? title : ""}
-              subheader={subheader ? subheader : ""}
-            />
-            <Divider variant="middle" />
-            <CardActions>
-              <IconButton onClick={() => setExpand(!expand)}>
-                <ArrowDropDown />
-              </IconButton>
-            </CardActions>
-            <Collapse in={expand}>{children}</Collapse>
-          </CardContent>
-        </Card>
+        <Collapse in={expand}>
+          <Card variant={variant ? variant : "outlined"} sx={{ width: "100%" }}>
+            <CardContent>{children}</CardContent>
+          </Card>
+        </Collapse>
       </Paper>
-    </>
+    </div>
   );
 }

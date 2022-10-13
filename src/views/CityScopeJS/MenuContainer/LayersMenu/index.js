@@ -13,9 +13,21 @@ import { updateLayersMenuState } from "../../../../redux/reducers/menuSlice";
 function LayersMenu() {
   const dispatch = useDispatch();
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
+  const layersMenuReduxState = useSelector(
+    (state) => state.menuState.layersMenuState
+  );
 
   // get the keys from cityIOdata
   const cityIOkeys = Object.keys(cityIOdata);
+
+  // update the layer slider value
+  const [sliderVal, setSliderVal] = useState(() => {
+    const sv = {};
+    for (const menuItem in expectedLayers) {
+      sv[menuItem] = expectedLayers[menuItem].initSliderValue;
+    }
+    return sv;
+  });
 
   // initial layer menu state
   let initState = {};
@@ -34,15 +46,15 @@ function LayersMenu() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layersMenuState]);
 
-  // update the layer slider value
-  const [sliderVal, setSliderVal] = useState({});
   const updateSliderVal = (menuItem, val) => {
     setSliderVal({ ...sliderVal, [menuItem]: val });
+  };
 
+  const commitSliderVal = (menuItem, val) => {
     setLayersMenuState({
-      ...layersMenuState,
+      ...layersMenuReduxState,
       [menuItem]: {
-        ...layersMenuState[menuItem],
+        ...layersMenuReduxState[menuItem],
         slider: val,
       },
     });
@@ -70,9 +82,9 @@ function LayersMenu() {
                     color="primary"
                     onChange={(e) => {
                       setLayersMenuState({
-                        ...layersMenuState,
+                        ...layersMenuReduxState,
                         [menuItem]: {
-                          ...layersMenuState[menuItem],
+                          ...layersMenuReduxState[menuItem],
                           isOn: e.target.checked,
                         },
                       });
@@ -92,7 +104,9 @@ function LayersMenu() {
                   size="small"
                   key={"slider_" + menuItem}
                   valueLabelDisplay="auto"
-                  onChangeCommitted={(_, val) => updateSliderVal(menuItem, val)}
+                  onChangeCommitted={(_, val) => commitSliderVal(menuItem, val)}
+                  onChange={(_, val) => updateSliderVal(menuItem, val)}
+                  value={sliderVal[menuItem] ?? 0}
                 />
               </Grid>
             )}

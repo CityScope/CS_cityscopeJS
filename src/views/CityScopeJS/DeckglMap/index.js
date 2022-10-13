@@ -205,7 +205,10 @@ export default function DeckGLMap() {
 
     AGGREGATED_TRIPS: AggregatedTripsLayer({
       data: cityIOdata,
-      ABMmode: 0,
+      selected:
+        layersMenu &&
+        layersMenu.ABM_LAYER_CHECKBOX &&
+        layersMenu.ABM_LAYER_CHECKBOX.selected,
       opacity:
         layersMenu &&
         layersMenu.AGGREGATED_TRIPS_LAYER_CHECKBOX &&
@@ -235,10 +238,14 @@ export default function DeckGLMap() {
 
     ACCESS: AccessLayer({
       data: cityIOdata,
-      opacity:
+      selected:
         layersMenu &&
         layersMenu.ACCESS_LAYER_CHECKBOX &&
-        layersMenu.ACCESS_LAYER_CHECKBOX.slider * 0.01,
+        layersMenu.ACCESS_LAYER_CHECKBOX.selected,
+      intensity:
+        layersMenu &&
+        layersMenu.ACCESS_LAYER_CHECKBOX &&
+        layersMenu.ACCESS_LAYER_CHECKBOX.slider,
     }),
 
     TEXTUAL: TextualLayer({

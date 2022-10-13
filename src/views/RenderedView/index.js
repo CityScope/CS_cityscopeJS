@@ -1,22 +1,35 @@
 import { useSelector } from "react-redux";
-import CityIO from "../../Components/CityIO";
 import RenderedViewMap from "./RenderedViewMap";
-import { Container } from "@mui/material";
+import ResizableDrawer from "../../Components/ResizableDrawer";
+import { Grid, Box, Container } from "@mui/material";
+import CollapsableCard from "../../Components/CollapsableCard";
 
 export default function RenderedView() {
   const cityIOisDone = useSelector(
     (state) => state.cityIOdataState.cityIOisDone
   );
-  const tableName = useSelector(
-    (state) => state.cityIOdataState.cityIOtableName
-  );
 
   return (
     <>
-      {tableName && <CityIO tableName={tableName} />}
-      <Container maxWidth="md" sx={{ mt: 5, mb: 5 }}>
-        {cityIOisDone && <RenderedViewMap />}
-      </Container>
+      <ResizableDrawer direction="bottom" width={50}>
+      <Container maxWidth="xl">
+        <Box p={1}>
+          <Grid container spacing={1}>
+            <Grid item xs={12} md={12} lg={12} xl={12}>
+              <CollapsableCard
+                collapse={true}
+                variant="outlined"
+                title="DeepScope"
+                subheader="Render the design space"
+              >
+                {cityIOisDone && <RenderedViewMap />}
+              </CollapsableCard>
+            </Grid>
+          </Grid>
+
+        </Box>
+        </Container>
+      </ResizableDrawer>
     </>
   );
 }

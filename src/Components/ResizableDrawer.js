@@ -7,7 +7,7 @@ const maxDrawerWidth =
   Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) -
   1;
 
-const minDrawerWidth = 50;
+const minDrawerWidth = 5;
 
 export default function ResizableDrawer({ children, direction, width }) {
   const defaultDrawerWidth = Math.floor(maxDrawerWidth / 4);
@@ -31,11 +31,16 @@ export default function ResizableDrawer({ children, direction, width }) {
     if (direction === "right") {
       newWidth =
         document.body.offsetLeft + document.body.offsetWidth - e.clientX + 20;
-    } else {
+    } else if (direction === "left" || direction === undefined) {
       newWidth = document.body.offsetLeft + e.clientX + 20;
+    } else if (direction === "bottom") {
+      newWidth = document.documentElement.scrollHeight - e.clientY;
     }
     if (newWidth > minDrawerWidth && newWidth < maxDrawerWidth) {
       setDrawerWidth(newWidth);
+    }
+    if (newWidth > document.documentElement.scrollHeight - dividerWidth) {
+      setDrawerWidth(document.documentElement.scrollHeight - dividerWidth - 10);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -45,15 +50,26 @@ export default function ResizableDrawer({ children, direction, width }) {
       <Box
         onMouseDown={(e) => handleMouseDown(e)}
         sx={{
-          width: `${dividerWidth}px`,
           padding: dividerWidth + "px 0 0",
           position: "fixed",
-          height: "1000vh",
+          width: () => {
+            if (
+              direction === "right" ||
+              direction === "left" ||
+              direction === undefined
+            ) {
+              return `${dividerWidth}px`;
+            } else if (direction === "bottom") {
+              return "100vw";
+            }
+          },
+          height: direction === "bottom" ? `${dividerWidth}px` : "100vh",
           left: direction === "left" ? drawerWidth + "px" : undefined,
           right: direction === "right" ? drawerWidth + "px" : undefined,
-          zIndex: 9999,
-          cursor: "ew-resize",
-          backgroundColor: "gray",
+          bottom: direction === "bottom" ? drawerWidth + "px" : undefined,
+          zIndex: direction === "bottom" ? 9999 : 100,
+          cursor: "move",
+          bgcolor: drawerWidth > 10 ? "gray" : "secondary.main",
         }}
       />
       <Drawer
@@ -63,8 +79,11 @@ export default function ResizableDrawer({ children, direction, width }) {
         ModalProps={{
           keepMounted: true,
         }}
-        PaperProps={{ style: { width: drawerWidth } }}
-        sx={{ display: "flex", flexDirection: "column" }}
+        PaperProps={
+          direction === "bottom"
+            ? { style: { height: drawerWidth, zIndex: 9999 } }
+            : { style: { width: drawerWidth, zIndex: 100 } }
+        }
       >
         <Paper>{children}</Paper>
       </Drawer>

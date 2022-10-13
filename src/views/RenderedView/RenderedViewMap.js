@@ -142,6 +142,7 @@ export default function RenderedViewMap() {
         <Grid container spacing={2}>
           {/* TEXT */}
           <Grid item>
+            <Typography>DeepScope</Typography>
             <Typography variant="caption">
               DeepScope uses a machine learning model to generate urban scenes
               in real-time, based on designs preform in the CitySCcope platform.
@@ -201,7 +202,7 @@ export default function RenderedViewMap() {
             </Button>
           </Grid>
           {/* Deck Map */}
-          <Grid item xs={12}>
+          <Grid item xs={12} md={6}>
             <Paper
               variant="outlined"
               sx={{
@@ -297,7 +298,7 @@ export default function RenderedViewMap() {
             </Paper>
           </Grid>
           {/* Result IMG */}
-          <Grid item xs={12}>
+          <Grid item xs={12} md={6}>
             <Paper
               variant="outlined"
               sx={{
