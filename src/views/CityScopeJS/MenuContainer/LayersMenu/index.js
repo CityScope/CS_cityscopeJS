@@ -46,9 +46,9 @@ function LayersMenu() {
 
   const commitSliderVal = (menuItem, val) => {
     setLayersMenuState({
-      ...layersMenuState,
+      ...layersMenuReduxState,
       [menuItem]: {
-        ...layersMenuState[menuItem],
+        ...layersMenuReduxState[menuItem],
         slider: val,
       },
     });
