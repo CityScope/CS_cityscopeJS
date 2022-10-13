@@ -1,61 +1,109 @@
+import {
+  Slider,
+  Checkbox,
+  Typography,
+  FormControlLabel,
+  Grid,
+} from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { expectedLayers } from "../../../../settings/settings";
 import { useEffect, useState } from "react";
-import { ToggleButtonGroup, ToggleButton } from "@mui/material";
+import { expectedLayers } from "../../../../settings/settings";
 import { updateLayersMenuState } from "../../../../redux/reducers/menuSlice";
 
-export default function LayersMenu() {
+function LayersMenu() {
   const dispatch = useDispatch();
-
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
+
   // get the keys from cityIOdata
   const cityIOkeys = Object.keys(cityIOdata);
 
-  const [layersButtonVal, setLayersButtonVal] = useState(() => {
-    const initState = [];
+  // initial layer menu state
+  let initState = {};
+  const [layersMenuState, setLayersMenuState] = useState(() => {
     for (const menuItem in expectedLayers) {
-      if (expectedLayers[menuItem].initState) {
-        initState.push(expectedLayers[menuItem].displayName);
-      }
+      initState[menuItem] = {
+        isOn: expectedLayers[menuItem].initState,
+        slider: expectedLayers[menuItem].initSliderValue,
+      };
     }
-    console.log(initState);
     return initState;
   });
 
-  const handleToggle = (event, toggledLayer) => {
-    console.log(layersButtonVal);
-    setLayersButtonVal(toggledLayer);
-    // dispatch(updateLayersMenuState(toggledLayer));
+  useEffect(() => {
+    dispatch(updateLayersMenuState(layersMenuState));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [layersMenuState]);
+
+  // update the layer slider value
+  const [sliderVal, setSliderVal] = useState({});
+  const updateSliderVal = (menuItem, val) => {
+    setSliderVal({ ...sliderVal, [menuItem]: val });
+
+    setLayersMenuState({
+      ...layersMenuState,
+      [menuItem]: {
+        ...layersMenuState[menuItem],
+        slider: val,
+      },
+    });
   };
 
-  const MakeLayerControlsMenu = () => {
-    const toggleListArr = [];
+  const toggleListArr = [];
+  const makeLayerControlsMenu = () => {
     // loop through the keys in cityIOdata and make a list of keys
-    for (const layerMenuItem in expectedLayers) {
-      const moduleName = expectedLayers[layerMenuItem].cityIOmoduleName;
+    for (const menuItem in expectedLayers) {
+      const moduleName = expectedLayers[menuItem].cityIOmoduleName;
       // if the module name is in the data for this CS instance, make a checkbox
       if (cityIOkeys.includes(moduleName)) {
         toggleListArr.push(
-          <ToggleButton
-            key={layerMenuItem}
-            value={expectedLayers[layerMenuItem].displayName}
-          >
-            {expectedLayers[layerMenuItem].displayName}
-          </ToggleButton>
+          <Grid container key={`grid_con_` + menuItem}>
+            <Grid item xs={4} key={`grid_i_1_` + menuItem}>
+              <FormControlLabel
+                key={"formControl_" + menuItem}
+                control={
+                  <Checkbox
+                    checked={
+                      layersMenuState[menuItem] &&
+                      layersMenuState[menuItem].isOn
+                    }
+                    key={"checkbox_" + menuItem}
+                    color="primary"
+                    onChange={(e) => {
+                      setLayersMenuState({
+                        ...layersMenuState,
+                        [menuItem]: {
+                          ...layersMenuState[menuItem],
+                          isOn: e.target.checked,
+                        },
+                      });
+                    }}
+                  />
+                }
+                label={
+                  <Typography variant="caption" key={"label_" + menuItem}>
+                    {expectedLayers[menuItem].displayName}
+                  </Typography>
+                }
+              />
+            </Grid>
+            {layersMenuState[menuItem] && layersMenuState[menuItem].isOn && (
+              <Grid item xs={8} key={`grid_i_2_` + menuItem}>
+                <Slider
+                  size="small"
+                  key={"slider_" + menuItem}
+                  valueLabelDisplay="auto"
+                  onChangeCommitted={(_, val) => updateSliderVal(menuItem, val)}
+                />
+              </Grid>
+            )}
+          </Grid>
         );
       }
     }
-    return (
-      <ToggleButtonGroup
-        fullWidth
-        value={layersButtonVal}
-        orientation="vertical"
-        onChange={handleToggle}
-      >
-        {toggleListArr}
-      </ToggleButtonGroup>
-    );
+    return toggleListArr;
   };
 
-  return <MakeLayerControlsMenu />;
+  return <Grid container>{makeLayerControlsMenu()}</Grid>;
 }
+
+export default LayersMenu;
