@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   FormControlLabel,
@@ -20,16 +20,20 @@ export default function HeatmapLayerControls() {
 
   const handleChange = (item, index) => {
     setRadioValue(item);
-    dispatch(
-      updateLayersMenuState({
-        ...layersMenuState,
-        ACCESS_LAYER_CHECKBOX: {
-          ...layersMenuState.ACCESS_LAYER_CHECKBOX,
-          selected: index,
-        },
-      })
-    );
+    const newLayersMenuState = {
+      ...layersMenuState,
+      ACCESS_LAYER_CHECKBOX: {
+        ...layersMenuState.ACCESS_LAYER_CHECKBOX,
+        selected: index,
+      },
+    };
+
+    dispatch(updateLayersMenuState(newLayersMenuState));
   };
+  // set the default value of the radio button to the first item in the list
+  useEffect(() => {
+    handleChange(accessData.properties[0], 0);
+  }, []);
 
   const CreateHeatMapArray = () => {
     const accessArray = accessData.properties.map((item, index) => {
@@ -57,7 +61,7 @@ export default function HeatmapLayerControls() {
       <CollapsableCard
         variant="outlined"
         subheader="Select Heatmap Layer"
-        collapse={false}
+        collapse={true}
       >
         <CreateHeatMapArray />
       </CollapsableCard>

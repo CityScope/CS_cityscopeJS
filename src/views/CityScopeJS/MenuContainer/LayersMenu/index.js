@@ -3,7 +3,7 @@ import {
   Checkbox,
   Typography,
   FormControlLabel,
-  Grid,
+  Box,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
@@ -50,6 +50,16 @@ function LayersMenu() {
     setSliderVal({ ...sliderVal, [menuItem]: val });
   };
 
+  const handleCheckboxEvent = (menuItem, e) => {
+    setLayersMenuState({
+      ...layersMenuReduxState,
+      [menuItem]: {
+        ...layersMenuReduxState[menuItem],
+        isOn: e,
+      },
+    });
+  };
+
   const commitSliderVal = (menuItem, val) => {
     setLayersMenuState({
       ...layersMenuReduxState,
@@ -68,56 +78,48 @@ function LayersMenu() {
       // if the module name is in the data for this CS instance, make a checkbox
       if (cityIOkeys.includes(moduleName)) {
         toggleListArr.push(
-          <Grid container key={`grid_con_` + menuItem}>
-            <Grid item xs={4} key={`grid_i_1_` + menuItem}>
-              <FormControlLabel
-                key={"formControl_" + menuItem}
-                control={
-                  <Checkbox
-                    checked={
-                      layersMenuState[menuItem] &&
-                      layersMenuState[menuItem].isOn
-                    }
-                    key={"checkbox_" + menuItem}
-                    color="primary"
-                    onChange={(e) => {
-                      setLayersMenuState({
-                        ...layersMenuReduxState,
-                        [menuItem]: {
-                          ...layersMenuReduxState[menuItem],
-                          isOn: e.target.checked,
-                        },
-                      });
-                    }}
-                  />
-                }
-                label={
-                  <Typography variant="caption" key={"label_" + menuItem}>
-                    {expectedLayers[menuItem].displayName}
-                  </Typography>
-                }
-              />
-            </Grid>
-            {layersMenuState[menuItem] && layersMenuState[menuItem].isOn && (
-              <Grid item xs={8} key={`grid_i_2_` + menuItem}>
-                <Slider
-                  size="small"
-                  key={"slider_" + menuItem}
-                  valueLabelDisplay="auto"
-                  onChangeCommitted={(_, val) => commitSliderVal(menuItem, val)}
-                  onChange={(_, val) => updateSliderVal(menuItem, val)}
-                  value={sliderVal[menuItem] ?? 0}
+          <Box key={"box_" + menuItem}>
+            <FormControlLabel
+              key={"formControl_" + menuItem}
+              control={
+                <Checkbox
+                  checked={
+                    (layersMenuState[menuItem] &&
+                      layersMenuState[menuItem].isOn) ||
+                    false
+                  }
+                  key={"checkbox_" + menuItem}
+                  color="primary"
+                  onChange={(e) =>
+                    handleCheckboxEvent(menuItem, e.target.checked)
+                  }
                 />
-              </Grid>
+              }
+              label={
+                <Typography variant="caption" key={"label_" + menuItem}>
+                  {expectedLayers[menuItem].displayName}
+                </Typography>
+              }
+            />
+
+            {layersMenuState[menuItem] && layersMenuState[menuItem].isOn && (
+              <Slider
+                size="small"
+                key={"slider_" + menuItem}
+                valueLabelDisplay="auto"
+                onChangeCommitted={(_, val) => commitSliderVal(menuItem, val)}
+                onChange={(_, val) => updateSliderVal(menuItem, val)}
+                value={sliderVal[menuItem] ?? 0}
+              />
             )}
-          </Grid>
+          </Box>
         );
       }
     }
     return toggleListArr;
   };
 
-  return <Grid container>{makeLayerControlsMenu()}</Grid>;
+  return makeLayerControlsMenu();
 }
 
 export default LayersMenu;

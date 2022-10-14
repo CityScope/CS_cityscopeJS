@@ -15,17 +15,17 @@ function MenuContainer() {
       component: <TableInfo />,
       collapse: true,
     },
+
     {
-      component: <EditMenu />,
+      component: (
+        <>
+          <EditMenu />
+          <TypesMenu />
+        </>
+      ),
       collapse: false,
-      title: "Edit",
-      subheader: "Toggle Edit Mode",
-    },
-    {
-      component: <TypesMenu />,
-      collapse: false,
-      title: "Types",
-      subheader: "List of Types and their Properties",
+      title: "Edit Mode",
+      subheader: "Toggle Edit Mode & Select Types",
     },
     {
       component: <ScenariosMenu />,
@@ -34,17 +34,17 @@ function MenuContainer() {
       subheader: "Save and Load Scenarios",
     },
     {
-      component: <LayersMenu />,
-      collapse: false,
+      component: (
+        <>
+          <LayersMenu />
+          <SpecialLayersControlsMenu />
+        </>
+      ),
+      collapse: true,
       title: "Layers",
       subheader: "Layers visibility",
     },
-    {
-      component: <SpecialLayersControlsMenu />,
-      collapse: false,
-      title: "Sub-Layers",
-      subheader: "Controls for sub-layers",
-    },
+
     {
       component: <ViewSettingsMenu />,
       collapse: false,

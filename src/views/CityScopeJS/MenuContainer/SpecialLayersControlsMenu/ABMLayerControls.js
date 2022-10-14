@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   FormControlLabel,
@@ -19,20 +19,26 @@ export default function ABMLayerControls() {
   const abmData = cityIOdata.ABM2;
   const mode = abmData.attr.mode;
   const profile = abmData.attr.profile;
-  const [radioValue, setRadioValue] = useState();
+  const [radioValue, setRadioValue] = useState(null);
 
   const handleChange = (item, index) => {
     setRadioValue(item);
-    dispatch(
-      updateLayersMenuState({
-        ...layersMenuState,
-        ABM_LAYER_CHECKBOX: {
-          ...layersMenuState.ABM_LAYER_CHECKBOX,
-          selected: index,
-        },
-      })
-    );
+
+    const newAbmLayerState = {
+      ...layersMenuState,
+      ABM_LAYER_CHECKBOX: {
+        ...layersMenuState.ABM_LAYER_CHECKBOX,
+        selected: index,
+      },
+    };
+    dispatch(updateLayersMenuState(newAbmLayerState));
   };
+
+  // set the default value of the radio button to the first item in the list
+  useEffect(() => {
+    // first item in obj
+    handleChange(mode["0"].name, 0);
+  }, []);
 
   const createHeatMapArray = (object) => {
     let heatMapArray = [];
