@@ -38,6 +38,7 @@ export default function ABMLayerControls() {
   useEffect(() => {
     // first item in obj
     handleChange(mode["0"].name, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const createHeatMapArray = (object) => {
@@ -64,7 +65,7 @@ export default function ABMLayerControls() {
     <>
       <CollapsableCard
         variant="outlined"
-        subheader="Control ABM Layer"
+        subheader="Select ABM Sub-Layer"
         collapse={true}
       >
         {createHeatMapArray(mode)}

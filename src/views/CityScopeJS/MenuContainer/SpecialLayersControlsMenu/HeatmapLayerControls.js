@@ -33,6 +33,7 @@ export default function HeatmapLayerControls() {
   // set the default value of the radio button to the first item in the list
   useEffect(() => {
     handleChange(accessData.properties[0], 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const CreateHeatMapArray = () => {
@@ -60,7 +61,7 @@ export default function HeatmapLayerControls() {
     <>
       <CollapsableCard
         variant="outlined"
-        subheader="Select Heatmap Layer"
+        subheader="Select Heatmap Sub-Layer"
         collapse={true}
       >
         <CreateHeatMapArray />
