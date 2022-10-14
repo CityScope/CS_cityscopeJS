@@ -51,8 +51,6 @@ const App = () => {
       selectView("cityscopejs", parsed.cityscope);
     } else if (keys.includes("projection")) {
       selectView("projection", parsed.projection);
-    } else if (keys.includes("render")) {
-      selectView("render", parsed.render);
     } else if (keys.includes("editor")) {
       setViewSelectorState("grideditor");
     } else {

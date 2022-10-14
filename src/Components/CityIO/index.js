@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { cityIOSettings } from "../../settings/settings";
+import { cityIOSettings, generalSettings } from "../../settings/settings";
 import {
   updateCityIOdata,
   toggleCityIOisDone,
 } from "../../redux/reducers/cityIOdataSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { getAPICall } from "../../utils/utils";
-import LoadingModules from "../../Components/LoadingModules";
+import LoadingProgressBar from "../LoadingProgressBar";
 
 const removeElement = (array, elem) => {
   var index = array.indexOf(elem);
@@ -17,22 +17,51 @@ const removeElement = (array, elem) => {
 };
 
 const CityIO = (props) => {
-  const settings = cityIOSettings;
+  const waitTimeMS = 5000;
   const dispatch = useDispatch();
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
+  const cityscopeProjectURL = generalSettings.csjsURL;
+
   const { tableName } = props;
 
   const [mainHash, setMainHash] = useState(null);
   const [hashes, setHashes] = useState({});
   const [listLoadingModules, setListLoadingModules] = useState([]);
-  const cityioURL = `${settings.cityIO.baseURL}table/${tableName}/`;
+  const cityioURL = `${cityIOSettings.cityIO.baseURL}table/${tableName}/`;
+
+  // test if cityIO is up and this table exists
+  useEffect(() => {
+    const testCityIO = async () => {
+      let test = await getAPICall(cityioURL + "meta/");
+      if (test) {
+        console.log("cityIO is up, table exists");
+      } else {
+        setListLoadingModules([
+          `cityIO might be down, please check { ${tableName} } is correct. Returning to cityScopeJS at ${cityscopeProjectURL} in ${
+            waitTimeMS / 1000
+          } seconds`,
+        ]);
+
+        new Promise((resolve) => {
+          setTimeout(() => {
+            window.location.assign(cityscopeProjectURL);
+          }, waitTimeMS);
+          resolve();
+        });
+      }
+    };
+    testCityIO();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cityioURL]);
 
   /**
    * start fetching API hashes to check for new data
    */
   useEffect(() => {
-    const timer = setTimeout(getCityIOmetaHash, settings.cityIO.interval);
-    console.log("reading cityIO every " + settings.cityIO.interval + "ms");
+    const timer = setTimeout(getCityIOmetaHash, cityIOSettings.cityIO.interval);
+    console.log(
+      "reading cityIO every " + cityIOSettings.cityIO.interval + "ms"
+    );
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -49,7 +78,7 @@ const CityIO = (props) => {
       setMainHash(newMainHash);
     }
     // do it forever
-    setTimeout(getCityIOmetaHash, settings.cityIO.interval);
+    setTimeout(getCityIOmetaHash, cityIOSettings.cityIO.interval);
   }
 
   useEffect(() => {
@@ -71,7 +100,9 @@ const CityIO = (props) => {
     // init array of modules names
     const loadingModules = [];
     // get an array of modules to update
-    const modulesToUpdate = settings.cityIO.cityIOmodules.map((x) => x.name);
+    const modulesToUpdate = cityIOSettings.cityIO.cityIOmodules.map(
+      (x) => x.name
+    );
     // for each of the modules in settings, add api call to promises
     modulesToUpdate.forEach((module) => {
       // if this module has an old hash
@@ -109,7 +140,7 @@ const CityIO = (props) => {
     dispatch(toggleCityIOisDone(true));
   }
 
-  return <LoadingModules loadingModules={listLoadingModules} />;
+  return <LoadingProgressBar loadingModules={listLoadingModules} />;
 };
 
 export default CityIO;

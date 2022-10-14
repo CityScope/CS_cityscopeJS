@@ -17,7 +17,6 @@ export default function ABMLayerControls() {
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
 
   const abmData = cityIOdata.ABM2;
-  console.log(abmData);
   const mode = abmData.attr.mode;
   const profile = abmData.attr.profile;
   const [radioValue, setRadioValue] = useState();

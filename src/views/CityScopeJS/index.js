@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import MenuContainer from "./MenuContainer";
 import DeckGLMap from "./DeckglMap/index";
 import VisContainer from "./VisContainer";
-import LoadingModules from "../../Components/LoadingModules";
 import RenderedView from "../RenderedView";
 
 export default function CityScopeJS() {
@@ -16,7 +15,6 @@ export default function CityScopeJS() {
 
   return (
     <>
-      {!cityIOisDone && <LoadingModules loadingModules={[tableName]} />}
       {/* if we got a cityIO table name, start cityIO module */}
       {tableName && <CityIO tableName={tableName} />}
       {/* if cityIO module is done loading, start the CSjs app */}

@@ -16,12 +16,12 @@ const getServerLocation = () => {
 const getCSJSLocation = () => {
   const location = window.location;
   const parsed = queryString.parse(location.search);
-  const csjsLocation =
-    "csjs_local" in parsed
+  const cityscopejs_local_url =
+    "cityscopejs_local" in parsed
       ? "http://localhost:3000/CS_cityscopeJS/"
       : "https://cityscope.media.mit.edu/CS_cityscopeJS/";
-  console.log("cityScopeJS location: ", csjsLocation);
-  return csjsLocation;
+  console.log("cityScopeJS location: ", cityscopejs_local_url);
+  return cityscopejs_local_url;
 };
 
 export const generalSettings = {

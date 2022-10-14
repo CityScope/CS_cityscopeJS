@@ -15,7 +15,7 @@ import { processGridData } from "../CityScopeJS/DeckglMap/deckglLayers/GridLayer
 import { CubeGeometry } from "@luma.gl/engine";
 import { mapSettings } from "../../settings/settings";
 import Map from "react-map-gl";
-import LoadingModules from "../../Components/LoadingModules";
+import LoadingProgressBar from "../../Components/LoadingProgressBar";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import {
@@ -137,7 +137,9 @@ export default function RenderedViewMap() {
 
   return (
     <>
-      {isLoading && <LoadingModules loadingModules={["..."]} />}
+      {isLoading && (
+        <LoadingProgressBar loadingModules={["..."]} barHeight={2} />
+      )}
       <Box p={2}>
         <Grid container spacing={2}>
           {/* TEXT */}
