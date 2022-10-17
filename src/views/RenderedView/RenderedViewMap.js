@@ -17,6 +17,8 @@ import { mapSettings } from "../../settings/settings";
 import Map from "react-map-gl";
 import LoadingProgressBar from "../../Components/LoadingProgressBar";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Alert from "@mui/material/Alert";
+import { Buffer } from "buffer";
 
 import {
   Button,
@@ -50,6 +52,7 @@ export default function RenderedViewMap() {
     "Aerial view of the MIT Campus in Cambridge, Massachusetts. Realistic. Accurate. Sunset with long shadows. Beautiful."
   );
   const [userSeed, setUserSeed] = useState(1024);
+  const [errorMessage, setErrorMessage] = useState(null);
   const serverURL = "https://virtualscope.media.mit.edu/";
 
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
@@ -79,11 +82,12 @@ export default function RenderedViewMap() {
 
   const [mergeCanvas] = useState(document.createElement("canvas"));
 
-  const handleCapture = () => {
+  const handleCaptureButton = () => {
     if (!refMap.current || !refDeckgl.current) {
       return;
     }
     setIsLoading(true);
+    setErrorMessage(null);
     const mapGL = refMap.current.getMap();
     const deck = refDeckgl.current.deck;
     const mapboxCanvas = mapGL.getCanvas();
@@ -115,6 +119,7 @@ export default function RenderedViewMap() {
       };
       await axios(config)
         .then(async (res) => {
+          console.log(res.data);
           const buffer = Buffer.from(res.data, "base64");
           const im = await blobToDataUrl(new Blob([buffer]));
           setRenderedImage(im);
@@ -123,6 +128,8 @@ export default function RenderedViewMap() {
         .catch((error) => {
           setIsLoading(false);
           console.log(error);
+          setRenderedImage(null);
+          setErrorMessage(error);
         });
     });
   };
@@ -142,9 +149,14 @@ export default function RenderedViewMap() {
       )}
       <Box p={2}>
         <Grid container spacing={2}>
+          {errorMessage && (
+            <Alert sx={{ width: "100%" }} variant="outlined" severity="error">
+              {errorMessage.message &&
+                `DeepScope cannot load [${errorMessage.message}]`}
+            </Alert>
+          )}
           {/* TEXT */}
           <Grid item>
-            <Typography>DeepScope</Typography>
             <Typography variant="caption">
               DeepScope uses a machine learning model to generate urban scenes
               in real-time, based on designs preform in the CitySCcope platform.
@@ -189,7 +201,7 @@ export default function RenderedViewMap() {
               fullWidth
               color="secondary"
               variant="outlined"
-              onClick={handleCapture}
+              onClick={handleCaptureButton}
               disabled={isLoading}
             >
               {!isLoading && "Capture & Render"}
@@ -313,7 +325,6 @@ export default function RenderedViewMap() {
             >
               <Stack spacing={2} direction="column">
                 <Typography variant="h5">Captured & Rendered View</Typography>
-
                 {renderedImage && (
                   <div ref={renderDivRef}>
                     <img

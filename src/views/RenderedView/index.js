@@ -11,7 +11,7 @@ export default function RenderedView() {
 
   return (
     <>
-      <ResizableDrawer direction="bottom" width={100}>
+      <ResizableDrawer direction="bottom" width={10}>
       <Container maxWidth="xl">
         <Box p={1}>
           <Grid container spacing={1}>
