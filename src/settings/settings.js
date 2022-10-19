@@ -63,7 +63,7 @@ export const mapSettings = {
       ABM: {
         endTime: 86400,
         startTime: 43200,
-        animationSpeed: 10,
+        animationSpeed: 100,
       },
     },
     initialViewState: {
@@ -152,6 +152,7 @@ export const GridEditorSettings = {
       sat: "mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd?fresh=true",
       dark: "mapbox://styles/relnox/cjl58dpkq2jjp2rmzyrdvfsds?fresh=true",
       blue: "mapbox://styles/relnox/ck0h5xn701bpr1dqs3he2lecq?fresh=true",
+      normal: "mapbox://styles/relnox/cl8dv36nv000t14qik9yg4ys6?fresh=true",
     },
   },
 

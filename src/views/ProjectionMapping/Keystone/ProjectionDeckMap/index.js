@@ -2,51 +2,44 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { mapSettings as settings } from "../../../../settings/settings";
 import {
-  GeoJsonLayer,
+  SimpleMeshLayer,
   TripsLayer,
   HeatmapLayer,
   TextLayer,
   BitmapLayer,
 } from "deck.gl";
+import { OBJLoader } from "@loaders.gl/obj";
+import { CubeGeometry } from "@luma.gl/engine";
 import { processGridData } from "../../../CityScopeJS/DeckglMap/deckglLayers/GridLayer";
 import { hexToRgb } from "../../../../utils/utils";
 import DeckMap from "./DeckMap";
 import { TileLayer } from "@deck.gl/geo-layers";
 
 export default function ProjectionDeckMap(props) {
+  const cube = new CubeGeometry({ type: "x,z", xlen: 0, ylen: 0, zlen: 0 });
+
   const editMode = props.editMode;
   const viewStateEditMode = props.viewStateEditMode;
   const layersVisibilityControl = props.layersVisibilityControl;
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const TUIobject = cityIOdata?.tui;
 
+  const GEOGRID = processGridData(cityIOdata);
+  const header = GEOGRID.properties.header;
+
   const [time, setTime] = useState(settings.map.layers.ABM.startTime);
   const [animation] = useState({});
 
-  let mapStyle = "ck0h5xn701bpr1dqs3he2lecq";
-
-  const backgroundLayer = new TileLayer({
-    data:
-      `https://api.mapbox.com/styles/v1/relnox/${mapStyle}/tiles/256/{z}/{x}/{y}?access_token=` +
-      process.env.REACT_APP_MAPBOX_TOKEN +
-      "&attribution=false&logo=false&fresh=true",
-    minZoom: 0,
-    maxZoom: 21,
-    tileSize: 256,
-    visible: true,
-    id: "OSM",
-    renderSubLayers: (props) => {
-      const {
-        bbox: { west, south, east, north },
-      } = props.tile;
-
-      return new BitmapLayer(props, {
-        data: null,
-        image: props.data,
-        bounds: [west, south, east, north],
-      });
-    },
-  });
+  const styles = {
+    Dark: "cjs9rb33k2pix1fo833uweyjd",
+    Light: "ck0h5xn701bpr1dqs3he2lecq",
+    Normal: "cl8dv36nv000t14qik9yg4ys6",
+  };
+  const activeMapStyle =
+    TUIobject?.MAP_STYLE?.toggle_array?.names[
+      TUIobject?.MAP_STYLE?.toggle_array?.curr_active
+    ];
+  const mapStyle = activeMapStyle && styles[activeMapStyle];
 
   const animate = () => {
     setTime((t) => {
@@ -81,24 +74,64 @@ export default function ProjectionDeckMap(props) {
       ];
     } else {
       return [
-        backgroundLayer,
-        new GeoJsonLayer({
-          id: "GRID",
-          visible: TUIobject?.GRID?.active,
-          data: processGridData(cityIOdata),
-          opacity: 0.5,
-          extruded: false,
-          wireframe: true,
-          lineWidthScale: 1,
-          lineWidthMinPixels: 1,
-          getFillColor: (d) => d.properties.color,
-          transitions: {
-            getFillColor: 500,
+        new TileLayer({
+          data:
+            mapStyle &&
+            `https://api.mapbox.com/styles/v1/relnox/${mapStyle}/tiles/256/{z}/{x}/{y}?access_token=` +
+              process.env.REACT_APP_MAPBOX_TOKEN +
+              "&attribution=false&logo=false&fresh=true",
+          minZoom: 0,
+          maxZoom: 21,
+          tileSize: 256,
+          visible: true,
+          id: "OSM",
+          renderSubLayers: (props) => {
+            const {
+              bbox: { west, south, east, north },
+            } = props.tile;
+
+            return new BitmapLayer(props, {
+              data: null,
+              image: props.data,
+              bounds: [west, south, east, north],
+            });
+          },
+        }),
+
+        new SimpleMeshLayer({
+          id: "mesh-layer",
+          data: GEOGRID.features,
+          loaders: [OBJLoader],
+          mesh: cube,
+
+          getPosition: (d) => {
+            const pntArr = d.geometry.coordinates[0];
+            const first = pntArr[1];
+            const last = pntArr[pntArr.length - 2];
+            const center = [
+              (first[0] + last[0]) / 2,
+              (first[1] + last[1]) / 2,
+              1,
+            ];
+            return center;
+          },
+          getColor: (d) => d.properties.color,
+          opacity: 1,
+          getOrientation: (d) => [-180, header.rotation, -90],
+          getScale: (d) => [
+            GEOGRID.properties.header.cellSize / 2.1,
+            1,
+            GEOGRID.properties.header.cellSize / 2.1,
+          ],
+
+          updateTriggers: {
+            getScale: GEOGRID,
           },
         }),
 
         new HeatmapLayer({
           id: "ACCESS",
+
           visible: TUIobject?.ACCESS?.active,
           colorRange: [
             [233, 62, 58],
@@ -110,36 +143,20 @@ export default function ProjectionDeckMap(props) {
           data: cityIOdata?.access?.features,
           getPosition: (d) => d.geometry.coordinates,
           getWeight: (d) =>
-            d.properties[TUIobject?.ACCESS?.toggleArray?.curr_active] || 0,
+            d.properties[TUIobject?.ACCESS?.toggle_array?.curr_active],
           updateTriggers: {
-            getWeight: TUIobject?.ACCESS?.toggleArray?.curr_active,
+            getWeight: TUIobject?.ACCESS?.toggle_array?.curr_active,
           },
-        }),
-
-        // text layer in the center of each grid cell from the cityIOdata.GEOGRID.features
-        new TextLayer({
-          id: "text",
-          visible: TUIobject?.TEXT?.active,
-          data: cityIOdata?.GEOGRID?.features,
-          getPosition: (d) => {
-            const pntArr = d.geometry.coordinates[0];
-            const first = pntArr[1];
-            const last = pntArr[pntArr.length - 2];
-            const center = [(first[0] + last[0]) / 2, (first[1] + last[1]) / 2];
-            return center;
+          parameters: {
+            depthTest: false,
           },
-          getText: (d) => {
-            var length = 5;
-            return d.properties.name.length > length
-              ? d.properties.name.substring(0, length - 3) + "..."
-              : d.properties.name;
-          },
-          getColor: (d) => [0, 0, 0],
-          getSize: 8,
         }),
 
         new TripsLayer({
           id: "ABM",
+          parameters: {
+            depthTest: false,
+          },
           visible: TUIobject?.ABM?.active,
           data: cityIOdata?.ABM2?.trips,
           getColor: (d) => {
@@ -152,6 +169,31 @@ export default function ProjectionDeckMap(props) {
           getWidth: 10,
           trailLength: 200,
           currentTime: time,
+        }),
+
+        // text layer in the center of each grid cell from the cityIOdata.GEOGRID.features
+        new TextLayer({
+          parameters: {
+            depthTest: false,
+          },
+          id: "text",
+          visible: TUIobject?.TEXT?.active,
+          data: cityIOdata?.GEOGRID?.features,
+          getPosition: (d) => {
+            const pntArr = d.geometry.coordinates[0];
+            const first = pntArr[1];
+            const last = pntArr[pntArr.length - 2];
+            const center = [(first[0] + last[0]) / 2, (first[1] + last[1]) / 2];
+            return center;
+          },
+          getText: (d) => {
+            var length = 6;
+            return d.properties.name.length > length
+              ? d.properties.name.substring(0, length - 3) + ".."
+              : d.properties.name;
+          },
+          getColor: (d) => [0, 0, 0],
+          getSize: 8,
         }),
       ];
     }
