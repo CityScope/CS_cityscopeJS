@@ -18,7 +18,7 @@ export default function ProjectionDeckMap(props) {
   const viewStateEditMode = props.viewStateEditMode;
   const layersVisibilityControl = props.layersVisibilityControl;
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
-  const TUIobject = cityIOdata && cityIOdata.tui;
+  const TUIobject = cityIOdata?.tui;
 
   const [time, setTime] = useState(settings.map.layers.ABM.startTime);
   const [animation] = useState({});
@@ -67,7 +67,7 @@ export default function ProjectionDeckMap(props) {
       backgroundLayer,
       new GeoJsonLayer({
         id: "GRID",
-        visible: TUIobject.GRID && TUIobject.GRID.active,
+        visible: TUIobject?.GRID?.active,
         data: processGridData(cityIOdata),
         opacity: 0.5,
         extruded: false,
@@ -82,7 +82,7 @@ export default function ProjectionDeckMap(props) {
 
       new HeatmapLayer({
         id: "ACCESS",
-        visible: TUIobject.ACCESS && TUIobject.ACCESS.active,
+        visible: TUIobject?.ACCESS?.active,
         colorRange: [
           [233, 62, 58],
           [237, 104, 60],
@@ -90,20 +90,20 @@ export default function ProjectionDeckMap(props) {
         ],
         intensity: 1,
         threshold: 0.5,
-        data: cityIOdata.access && cityIOdata.access.features,
+        data: cityIOdata?.access?.features,
         getPosition: (d) => d.geometry.coordinates,
         getWeight: (d) =>
-          d.properties[TUIobject.ACCESS.toggleArray.curr_active] || 0,
+          d.properties[TUIobject?.ACCESS?.toggleArray?.curr_active] || 0,
         updateTriggers: {
-          getWeight: TUIobject.ACCESS.toggleArray.curr_active,
+          getWeight: TUIobject?.ACCESS?.toggleArray?.curr_active,
         },
       }),
 
       // text layer in the center of each grid cell from the cityIOdata.GEOGRID.features
       new TextLayer({
         id: "text",
-        visible: TUIobject.TEXT && TUIobject.TEXT.active,
-        data: cityIOdata.GEOGRID && cityIOdata.GEOGRID.features,
+        visible: TUIobject?.TEXT?.active,
+        data: cityIOdata?.GEOGRID?.features,
         getPosition: (d) => {
           const pntArr = d.geometry.coordinates[0];
           const first = pntArr[1];
@@ -123,8 +123,8 @@ export default function ProjectionDeckMap(props) {
 
       new TripsLayer({
         id: "ABM",
-        visible: TUIobject.ABM && TUIobject.ABM.active,
-        data: cityIOdata.ABM2 && cityIOdata.ABM2.trips,
+        visible: TUIobject?.ABM?.active,
+        data: cityIOdata?.ABM2?.trips,
         getColor: (d) => {
           let col = hexToRgb(cityIOdata.ABM2.attr.mode[d.mode].color);
           return col;
