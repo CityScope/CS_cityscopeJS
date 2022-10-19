@@ -23,11 +23,13 @@ export default function ProjectionDeckMap(props) {
   const [time, setTime] = useState(settings.map.layers.ABM.startTime);
   const [animation] = useState({});
 
+  let mapStyle = "ck0h5xn701bpr1dqs3he2lecq";
+
   const backgroundLayer = new TileLayer({
     data:
-      "https://api.mapbox.com/styles/v1/relnox/ck0h5xn701bpr1dqs3he2lecq/tiles/256/{z}/{x}/{y}?access_token=" +
+      `https://api.mapbox.com/styles/v1/relnox/${mapStyle}/tiles/256/{z}/{x}/{y}?access_token=` +
       process.env.REACT_APP_MAPBOX_TOKEN +
-      "&attribution=false&logo=false",
+      "&attribution=false&logo=false&fresh=true",
     minZoom: 0,
     maxZoom: 21,
     tileSize: 256,
@@ -62,81 +64,97 @@ export default function ProjectionDeckMap(props) {
   }, [animation]);
 
   const layersArray = () => {
-    if (!TUIobject) return [];
-    return [
-      backgroundLayer,
-      new GeoJsonLayer({
-        id: "GRID",
-        visible: TUIobject?.GRID?.active,
-        data: processGridData(cityIOdata),
-        opacity: 0.5,
-        extruded: false,
-        wireframe: true,
-        lineWidthScale: 1,
-        lineWidthMinPixels: 1,
-        getFillColor: (d) => d.properties.color,
-        transitions: {
-          getFillColor: 500,
-        },
-      }),
+    if (!TUIobject) {
+      return [
+        new TextLayer({
+          id: "text",
 
-      new HeatmapLayer({
-        id: "ACCESS",
-        visible: TUIobject?.ACCESS?.active,
-        colorRange: [
-          [233, 62, 58],
-          [237, 104, 60],
-          [243, 144, 63],
-        ],
-        intensity: 1,
-        threshold: 0.5,
-        data: cityIOdata?.access?.features,
-        getPosition: (d) => d.geometry.coordinates,
-        getWeight: (d) =>
-          d.properties[TUIobject?.ACCESS?.toggleArray?.curr_active] || 0,
-        updateTriggers: {
-          getWeight: TUIobject?.ACCESS?.toggleArray?.curr_active,
-        },
-      }),
+          data: [{ text: "Missing TUI object in cityIO" }],
+          getPosition: (d) => [
+            cityIOdata.GEOGRID.properties.header.longitude,
+            cityIOdata.GEOGRID.properties.header.latitude,
+          ],
+          getText: (d) => d.text,
+          getColor: (d) => [255, 0, 0],
+          getSize: 100,
+        }),
+      ];
+    } else {
+      return [
+        backgroundLayer,
+        new GeoJsonLayer({
+          id: "GRID",
+          visible: TUIobject?.GRID?.active,
+          data: processGridData(cityIOdata),
+          opacity: 0.5,
+          extruded: false,
+          wireframe: true,
+          lineWidthScale: 1,
+          lineWidthMinPixels: 1,
+          getFillColor: (d) => d.properties.color,
+          transitions: {
+            getFillColor: 500,
+          },
+        }),
 
-      // text layer in the center of each grid cell from the cityIOdata.GEOGRID.features
-      new TextLayer({
-        id: "text",
-        visible: TUIobject?.TEXT?.active,
-        data: cityIOdata?.GEOGRID?.features,
-        getPosition: (d) => {
-          const pntArr = d.geometry.coordinates[0];
-          const first = pntArr[1];
-          const last = pntArr[pntArr.length - 2];
-          const center = [(first[0] + last[0]) / 2, (first[1] + last[1]) / 2];
-          return center;
-        },
-        getText: (d) => {
-          var length = 5;
-          return d.properties.name.length > length
-            ? d.properties.name.substring(0, length - 3) + "..."
-            : d.properties.name;
-        },
-        getColor: (d) => [0, 0, 0],
-        getSize: 8,
-      }),
+        new HeatmapLayer({
+          id: "ACCESS",
+          visible: TUIobject?.ACCESS?.active,
+          colorRange: [
+            [233, 62, 58],
+            [237, 104, 60],
+            [243, 144, 63],
+          ],
+          intensity: 1,
+          threshold: 0.5,
+          data: cityIOdata?.access?.features,
+          getPosition: (d) => d.geometry.coordinates,
+          getWeight: (d) =>
+            d.properties[TUIobject?.ACCESS?.toggleArray?.curr_active] || 0,
+          updateTriggers: {
+            getWeight: TUIobject?.ACCESS?.toggleArray?.curr_active,
+          },
+        }),
 
-      new TripsLayer({
-        id: "ABM",
-        visible: TUIobject?.ABM?.active,
-        data: cityIOdata?.ABM2?.trips,
-        getColor: (d) => {
-          let col = hexToRgb(cityIOdata.ABM2.attr.mode[d.mode].color);
-          return col;
-        },
-        getPath: (d) => d.path,
-        getTimestamps: (d) => d.timestamps,
-        fadeTrail: true,
-        getWidth: 10,
-        trailLength: 200,
-        currentTime: time,
-      }),
-    ];
+        // text layer in the center of each grid cell from the cityIOdata.GEOGRID.features
+        new TextLayer({
+          id: "text",
+          visible: TUIobject?.TEXT?.active,
+          data: cityIOdata?.GEOGRID?.features,
+          getPosition: (d) => {
+            const pntArr = d.geometry.coordinates[0];
+            const first = pntArr[1];
+            const last = pntArr[pntArr.length - 2];
+            const center = [(first[0] + last[0]) / 2, (first[1] + last[1]) / 2];
+            return center;
+          },
+          getText: (d) => {
+            var length = 5;
+            return d.properties.name.length > length
+              ? d.properties.name.substring(0, length - 3) + "..."
+              : d.properties.name;
+          },
+          getColor: (d) => [0, 0, 0],
+          getSize: 8,
+        }),
+
+        new TripsLayer({
+          id: "ABM",
+          visible: TUIobject?.ABM?.active,
+          data: cityIOdata?.ABM2?.trips,
+          getColor: (d) => {
+            let col = hexToRgb(cityIOdata.ABM2.attr.mode[d.mode].color);
+            return col;
+          },
+          getPath: (d) => d.path,
+          getTimestamps: (d) => d.timestamps,
+          fadeTrail: true,
+          getWidth: 10,
+          trailLength: 200,
+          currentTime: time,
+        }),
+      ];
+    }
   };
 
   return (

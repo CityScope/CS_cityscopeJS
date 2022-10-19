@@ -23,7 +23,7 @@ export default function DeckMap(props) {
         longitude: header.longitude,
         zoom: 15,
         pitch: 0,
-        bearing: 0,
+        bearing: 360 - header.rotation || 0,
         orthographic: true,
       };
     }
