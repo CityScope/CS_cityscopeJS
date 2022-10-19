@@ -95,6 +95,8 @@ export default function GridLayer({
     pickable: true,
     extruded: true,
     wireframe: true,
+    //!  fixed  elevation for now
+    elevationScale: 5,
     lineWidthScale: 1,
     lineWidthMinPixels: 2,
     getElevation: (d) => d.properties.height[1],
