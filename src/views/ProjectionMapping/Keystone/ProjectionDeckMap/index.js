@@ -43,8 +43,12 @@ export default function ProjectionDeckMap(props) {
 
   const animate = () => {
     setTime((t) => {
+      const animationSpeed = TUIobject?.ABM?.slider?.value;
+
       return t > settings.map.layers.ABM.endTime
         ? settings.map.layers.ABM.startTime
+        : animationSpeed
+        ? t + animationSpeed * 100
         : t + settings.map.layers.ABM.animationSpeed;
     });
     animation.id = window.requestAnimationFrame(animate);
@@ -75,6 +79,7 @@ export default function ProjectionDeckMap(props) {
     } else {
       return [
         new TileLayer({
+          visible: TUIobject?.MAP_STYLE?.active,
           data:
             mapStyle &&
             `https://api.mapbox.com/styles/v1/relnox/${mapStyle}/tiles/256/{z}/{x}/{y}?access_token=` +
@@ -83,7 +88,6 @@ export default function ProjectionDeckMap(props) {
           minZoom: 0,
           maxZoom: 21,
           tileSize: 256,
-          visible: true,
           id: "OSM",
           renderSubLayers: (props) => {
             const {
@@ -103,7 +107,7 @@ export default function ProjectionDeckMap(props) {
           data: GEOGRID.features,
           loaders: [OBJLoader],
           mesh: cube,
-
+          visible: TUIobject?.GRID?.active,
           getPosition: (d) => {
             const pntArr = d.geometry.coordinates[0];
             const first = pntArr[1];
@@ -131,7 +135,6 @@ export default function ProjectionDeckMap(props) {
 
         new HeatmapLayer({
           id: "ACCESS",
-
           visible: TUIobject?.ACCESS?.active,
           colorRange: [
             [255, 0, 0],
