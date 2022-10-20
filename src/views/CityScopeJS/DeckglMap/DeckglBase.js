@@ -11,8 +11,7 @@ export default function DeckGLMap({
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const menuState = useSelector((state) => state.menuState);
   const [viewState, setViewState] = useState();
-  const deckGLref = useRef();
-
+  const deckGLRef = useRef();
   const viewControlButton =
     menuState.viewSettingsMenuState.VIEW_CONTROL_BUTTONS;
 
@@ -106,7 +105,7 @@ export default function DeckGLMap({
 
   return (
     <DeckGL
-      ref={deckGLref}
+      ref={deckGLRef}
       viewState={viewState}
       initialViewState={setViewStateToTableHeader()}
       onViewStateChange={onViewStateChange}

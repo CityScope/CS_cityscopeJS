@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import PaintBrush from "../../../Components/PaintBrush";
 import { postToCityIO } from "../../../utils/utils";
-import { computeMidGridCell } from "../../../utils/utils";
-
 import DeckglBase from "./DeckglBase";
 import { mapSettings } from "../../../settings/settings";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -17,6 +15,8 @@ import {
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
 
+
+
 export default function DeckGLMap() {
   // get cityio data from redux store
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
@@ -25,25 +25,25 @@ export default function DeckGLMap() {
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
   const [selectedCellsState, setSelectedCellsState] = useState();
   const [viewState, setViewState] = useState();
+
+  
+  const deckGLRef = useRef();
+
+
   const [keyDownState, setKeyDownState] = useState();
   const [mousePos, setMousePos] = useState();
   const [mouseDown, setMouseDown] = useState();
   const [hoveredObj, setHoveredObj] = useState();
   const [GEOGRIDDATA, setGEOGRIDDATA] = useState();
-  const deckGLref = useRef();
+
   const pickingRadius = 40;
   const editModeToggle = menuState.editMenuState.EDIT_BUTTON;
   const selectedType = menuState.typesMenuState.SELECTED_TYPE;
   const layersMenu = menuState.layersMenuState;
-  const viewControlButton =
-    menuState.viewSettingsMenuState.VIEW_CONTROL_BUTTONS;
 
   // ! constant animation speed for now - will be updated with slider
-
   const toggleAnimationState =
     menuState.viewSettingsMenuState.ANIMATION_CHECKBOX;
-  const toggleRotateCamera = menuState.viewSettingsMenuState.ROTATE_CHECKBOX;
-
   const [animationTime, setAnimationTime] = useState(0);
   const [animation] = useState({});
   const animate = () => {
@@ -73,68 +73,6 @@ export default function DeckGLMap() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleAnimationState]);
 
-  // toggle camera rotation on and off
-  useEffect(() => {
-    if (toggleRotateCamera && toggleRotateCamera.isOn) {
-      let bearing = viewState.bearing || 0;
-      bearing < 360
-        ? (bearing += (animationTime / 100000000) * toggleRotateCamera.slider)
-        : (bearing = 0);
-      setViewState({
-        ...viewState,
-        bearing: bearing,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toggleRotateCamera, animationTime]);
-
-  useEffect(() => {
-    const header = cityIOdata.GEOGRID.properties.header;
-    const midGrid = cityIOdata && computeMidGridCell(cityIOdata);
-
-    switch (viewControlButton) {
-      case "RESET_VIEW_BUTTON":
-        setViewState((prevViewState) => ({
-          ...prevViewState,
-          longitude: midGrid[0],
-          latitude: midGrid[1],
-          pitch: 0,
-          bearing: 0,
-          orthographic: false,
-        }));
-        break;
-
-      case "NORTH_VIEW_BUTTON":
-        setViewState((prevViewState) => ({
-          ...prevViewState,
-          bearing: 360 - header.rotation,
-        }));
-        break;
-
-      case "ORTHO_VIEW_BUTTON":
-        setViewState((prevViewState) => ({
-          ...prevViewState,
-          orthographic: prevViewState.orthographic
-            ? !prevViewState.orthographic
-            : true,
-        }));
-
-        break;
-      default:
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewControlButton]);
-
-  // fix deck view rotate
-  useEffect(() => {
-    document
-      // ! a more aggressive method which prevents all right click context menu
-      // .getElementById("deckgl-wrapper")
-      .addEventListener("contextmenu", (evt) => evt.preventDefault());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   // update the grid layer with every change to GEOGRIDDATA
   useEffect(() => {
     setGEOGRIDDATA(processGridData(cityIOdata));
@@ -152,12 +90,6 @@ export default function DeckGLMap() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editModeToggle]);
-
-  const onViewStateChange = ({ viewState }) => {
-    viewState.orthographic =
-      viewControlButton === "ORTHO_VIEW_BUTTON" ? true : false;
-    setViewState(viewState);
-  };
 
   const layersKey = {
     ABM: ABMLayer({
@@ -201,7 +133,7 @@ export default function DeckGLMap() {
         setDraggingWhileEditing,
         setHoveredObj,
       },
-      deckGLref,
+      deckGLRef,
     }),
 
     ACCESS: AccessLayer({
@@ -278,7 +210,11 @@ export default function DeckGLMap() {
           hoveredObj={hoveredObj}
         />
 
-        <DeckglBase layers={renderDeckLayers()}  draggingWhileEditing={draggingWhileEditing} />
+        <DeckglBase
+          layers={renderDeckLayers()}
+          deckGLref={deckGLRef}
+          draggingWhileEditing={draggingWhileEditing}
+        />
       </div>
     </>
   );

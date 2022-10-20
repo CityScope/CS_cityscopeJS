@@ -8,7 +8,6 @@ const store = configureStore({
   reducer: rootReducer,
 });
 
-
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
