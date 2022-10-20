@@ -54,8 +54,6 @@ export default function ProjectionDeckMap(props) {
     animation.id = window.requestAnimationFrame(animate);
   };
 
-  console.log(time, animationSpeed);
-
   useEffect(() => {
     animation.id = window.requestAnimationFrame(animate);
     return () => window.cancelAnimationFrame(animation.id);
