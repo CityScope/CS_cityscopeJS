@@ -41,24 +41,26 @@ export default function ProjectionDeckMap(props) {
     ];
   const mapStyle = activeMapStyle && styles[activeMapStyle];
 
+  const animationSpeed = TUIobject?.ABM?.slider?.value;
+
   const animate = () => {
     setTime((t) => {
-      const animationSpeed = TUIobject?.ABM?.slider?.value;
-
       return t > settings.map.layers.ABM.endTime
         ? settings.map.layers.ABM.startTime
         : animationSpeed
-        ? t + animationSpeed * 100
+        ? t + animationSpeed * 10
         : t + settings.map.layers.ABM.animationSpeed;
     });
     animation.id = window.requestAnimationFrame(animate);
   };
 
+  console.log(time, animationSpeed);
+
   useEffect(() => {
     animation.id = window.requestAnimationFrame(animate);
     return () => window.cancelAnimationFrame(animation.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animation]);
+  }, [animation, animationSpeed]);
 
   const layersArray = () => {
     if (!TUIobject) {
@@ -174,6 +176,9 @@ export default function ProjectionDeckMap(props) {
           getWidth: 10,
           trailLength: 200,
           currentTime: time,
+          updateTriggers: {
+            getColor: TUIobject,
+          },
         }),
 
         // text layer in the center of each grid cell from the cityIOdata.GEOGRID.features
