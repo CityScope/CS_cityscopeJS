@@ -1,5 +1,5 @@
 import axios from "axios";
-import {cityIOSettings} from "../settings/settings";
+import { cityIOSettings } from "../settings/settings";
 
 /**
  * Get API call using axios
@@ -24,9 +24,6 @@ export function rgbToHex(r, g, b) {
   }
   return "#" + valToHex(r) + valToHex(g) + valToHex(b);
 }
-
-
-
 
 /**
  * convert hex to rgb array
@@ -102,3 +99,20 @@ export const getCommit = async (id) =>
 
 export const getModule = async (id) =>
   await fetchJSON(`${cityIObaseURL}module/${id}/`);
+
+/**
+ * Compute the middle of the grid and return the coordinates
+ */
+
+export const computeMidGridCell = (cityIOdata) => {
+  const lastCell =
+    cityIOdata?.GEOGRID?.features[cityIOdata?.GEOGRID?.features?.length - 1]
+      ?.geometry?.coordinates[0][0];
+  const firstCell =
+    cityIOdata?.GEOGRID?.features[0]?.geometry?.coordinates[0][0];
+  const midGrid = [
+    (firstCell[0] + lastCell[0]) / 2,
+    (firstCell[1] + lastCell[1]) / 2,
+  ];
+  return midGrid;
+};

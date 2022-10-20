@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import PaintBrush from "../../../Components/PaintBrush";
+import PaintBrush from "./components/PaintBrush";
 import { postToCityIO } from "../../../utils/utils";
-import { computeMidGridCell } from "../../../utils/utils";
-
-import DeckglBase from "./DeckglBase";
+import Map from "react-map-gl";
+import DeckGL from "@deck.gl/react";
 import { mapSettings } from "../../../settings/settings";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
@@ -88,9 +87,40 @@ export default function DeckGLMap() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleRotateCamera, animationTime]);
 
+  const computeMidGridCell = () => {
+    const lastCell =
+      cityIOdata.GEOGRID.features[cityIOdata.GEOGRID.features.length - 1]
+        .geometry.coordinates[0][0];
+    const firstCell = cityIOdata.GEOGRID.features[0].geometry.coordinates[0][0];
+    const midGrid = [
+      (firstCell[0] + lastCell[0]) / 2,
+      (firstCell[1] + lastCell[1]) / 2,
+    ];
+    return midGrid;
+  };
+
+  // **
+  //  * resets the camera viewport
+  //  * to cityIO header data
+  //  * https://github.com/uber/deck.gl/blob/master/test/apps/viewport-transitions-flyTo/src/app.js
+  //  *
+  const setViewStateToTableHeader = () => {
+    const header = cityIOdata.GEOGRID.properties.header;
+    const midGrid = computeMidGridCell();
+    return {
+      ...viewState,
+      longitude: midGrid[0],
+      latitude: midGrid[1],
+      zoom: 15,
+      pitch: 45,
+      bearing: 360 - header.rotation,
+      orthographic: false,
+    };
+  };
+
   useEffect(() => {
     const header = cityIOdata.GEOGRID.properties.header;
-    const midGrid = cityIOdata && computeMidGridCell(cityIOdata);
+    const midGrid = computeMidGridCell();
 
     switch (viewControlButton) {
       case "RESET_VIEW_BUTTON":
@@ -132,6 +162,8 @@ export default function DeckGLMap() {
       // ! a more aggressive method which prevents all right click context menu
       // .getElementById("deckgl-wrapper")
       .addEventListener("contextmenu", (evt) => evt.preventDefault());
+    // zoom map on CS table location
+    setViewStateToTableHeader();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -278,7 +310,29 @@ export default function DeckGLMap() {
           hoveredObj={hoveredObj}
         />
 
-        <DeckglBase layers={renderDeckLayers()}  draggingWhileEditing={draggingWhileEditing} />
+        <DeckGL
+          ref={deckGLref}
+          viewState={viewState}
+          initialViewState={setViewStateToTableHeader()}
+          onViewStateChange={onViewStateChange}
+          layers={renderDeckLayers()}
+          controller={{
+            touchZoom: true,
+            touchRotate: true,
+            dragPan: !draggingWhileEditing,
+            dragRotate: !draggingWhileEditing,
+            keyboard: false,
+          }}
+        >
+          <Map
+            asyncRender={false}
+            dragRotate={true}
+            reuseMaps={true}
+            mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+            mapStyle={mapSettings.map.mapStyle.sat}
+            preventStyleDiffing={true}
+          />
+        </DeckGL>
       </div>
     </>
   );
