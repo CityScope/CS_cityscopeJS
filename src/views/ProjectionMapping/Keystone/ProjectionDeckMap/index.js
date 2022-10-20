@@ -134,9 +134,11 @@ export default function ProjectionDeckMap(props) {
 
           visible: TUIobject?.ACCESS?.active,
           colorRange: [
-            [233, 62, 58],
-            [237, 104, 60],
-            [243, 144, 63],
+            [255, 0, 0],
+            [255, 167, 0],
+            [255, 244, 0],
+            [163, 255, 0],
+            [44, 186, 0],
           ],
           intensity: 1,
           threshold: 0.5,
