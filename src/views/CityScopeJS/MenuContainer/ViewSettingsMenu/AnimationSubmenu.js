@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from "react";
-import { Typography, Slider, Checkbox, Switch, List, ListItem } from "@mui/material";
+import { Typography, Slider, Switch, List, ListItem } from "@mui/material";
 import { viewControlCheckboxes } from "../../../../settings/settings";
 import { updateViewSettingsMenuState } from "../../../../redux/reducers/menuSlice";
 import { useDispatch } from "react-redux";

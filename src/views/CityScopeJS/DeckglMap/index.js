@@ -86,7 +86,7 @@ export default function DeckGLMap() {
       opacity:
         layersMenu &&
         layersMenu.ABM_LAYER_CHECKBOX &&
-        layersMenu.ABM_LAYER_CHECKBOX.slider ,
+        layersMenu.ABM_LAYER_CHECKBOX.slider,
     }),
 
     AGGREGATED_TRIPS: AggregatedTripsLayer({
@@ -197,13 +197,11 @@ export default function DeckGLMap() {
           mouseDown={mouseDown}
           hoveredObj={hoveredObj}
         />
-
         <DeckglBase
-        
           setDeckGLRef={setDeckGLRef}
           layers={renderDeckLayers()}
           draggingWhileEditing={draggingWhileEditing}
-          animationTime={animationTime} 
+          animationTime={animationTime}
           toggleRotateCamera={toggleRotateCamera}
         />
       </div>
