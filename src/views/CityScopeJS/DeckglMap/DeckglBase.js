@@ -5,11 +5,11 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { computeMidGridCell } from "../../../utils/utils";
 
 export default function DeckglBase({
-  layers: layers,
-  draggingWhileEditing: draggingWhileEditing,
-  setDeckGLRef: setDeckGLRef,
-  animationTime: animationTime,
-  toggleRotateCamera: toggleRotateCamera,
+  layers,
+  draggingWhileEditing,
+  setDeckGLRef,
+  animationTime,
+  toggleRotateCamera,
 }) {
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const menuState = useSelector((state) => state.menuState);

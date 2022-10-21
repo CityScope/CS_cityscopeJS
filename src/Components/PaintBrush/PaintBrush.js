@@ -40,7 +40,6 @@ export const PaintBrush = (props) => {
           height: divSize,
           left: mouseX,
           top: mouseY,
-          pointerEvents: "none",
         }}
       />
 
@@ -50,7 +49,6 @@ export const PaintBrush = (props) => {
           position: "fixed",
           left: mouseX + divSize + 10,
           top: mouseY - 10,
-          borderRadius: "5%",
           display: "flex",
           flexDirection: "column",
           m: 1,
