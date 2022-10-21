@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from "react";
-import { Typography, Slider, Checkbox, List, ListItem } from "@mui/material";
+import { Typography, Slider, Checkbox, Switch, List, ListItem } from "@mui/material";
 import { viewControlCheckboxes } from "../../../../settings/settings";
 import { updateViewSettingsMenuState } from "../../../../redux/reducers/menuSlice";
 import { useDispatch } from "react-redux";
@@ -49,7 +49,7 @@ function AnimationSubmenu() {
       toggleListArr.push(
         <div key={"viewSettingDiv_" + menuItem}>
           <ListItem key={"viewSettingListItem_" + menuItem}>
-            <Checkbox
+            <Switch
               key={"viewSettingCheckBox_" + menuItem}
               checked={
                 viewSettingsMenuState[menuItem] &&
@@ -68,7 +68,7 @@ function AnimationSubmenu() {
             />
 
             <Typography
-              variant={"caption"}
+             
               key={"viewSettingCaption_" + menuItem}
             >
               {menuItemList[menuItem].displayName}
@@ -77,14 +77,23 @@ function AnimationSubmenu() {
           {hasSlider &&
             viewSettingsMenuState[menuItem] &&
             viewSettingsMenuState[menuItem].isOn && (
-              <ListItem key={"viewSettingListItemSlider_" + menuItem}>
-                <Slider
-                  size="small"
-                  key={"viewSettingSlider_" + menuItem}
-                  valueLabelDisplay="auto"
-                  onChangeCommitted={(_, val) => updateSliderVal(menuItem, val)}
-                />
-              </ListItem>
+              <>
+                <ListItem key={"viewSettingListItemTitle_" + menuItem}>
+                  <Typography  variant={"caption"} > {menuItemList[menuItem].sliderTitle}</Typography>
+                </ListItem>
+                <ListItem key={"viewSettingListItemSlider_" + menuItem}>
+                  <Slider
+                    step={10}
+                    marks
+                    size="small"
+                    key={"viewSettingSlider_" + menuItem}
+                    valueLabelDisplay="auto"
+                    onChangeCommitted={(_, val) =>
+                      updateSliderVal(menuItem, val)
+                    }
+                  />
+                </ListItem>
+              </>
             )}
         </div>
       );

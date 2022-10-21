@@ -91,7 +91,7 @@ export const expectedLayers = {
     displayName: "Animated Trips",
     cityIOmoduleName: "ABM2",
     initState: false,
-    initSliderValue: 100,
+    initSliderValue: 5,
   },
   AGGREGATED_TRIPS_LAYER_CHECKBOX: {
     displayName: "Aggregated Trips",
@@ -123,12 +123,14 @@ export const expectedLayers = {
 export const viewControlCheckboxes = {
   ROTATE_CHECKBOX: {
     displayName: "Rotate Camera",
+    sliderTitle: "Camera Rotation Speed",
     initState: false,
     initSliderValue: 100,
   },
 
   ANIMATION_CHECKBOX: {
     displayName: "Toggle Animation",
+    sliderTitle: "Animation Speed",
     initState: false,
     initSliderValue: 100,
   },
