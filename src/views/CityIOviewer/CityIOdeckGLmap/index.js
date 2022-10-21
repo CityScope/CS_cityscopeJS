@@ -63,31 +63,13 @@ export default function CityIOdeckGLmap(props) {
     new TileLayer({
       data:
         "https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png",
-
-      /**
-       * 
-       * TESTS WITH OTHER TILESETS  
-       * 'https://api.mapbox.com/v4/mapbox.mapbox-streets-v8/{z}/{x}/{y}.png' +
-      '?style=' +
-      'mapbox://styles/mapbox/dark-v10' +
-      'mapbox://styles/relnox/ck0h5xn701bpr1dqs3he2lecq' +
-      'mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd' +
-      '&access_token=' +
-      process.env.REACT_APP_MAPBOX_TOKEN,
-
-     settings.map.mapStyle.sat,
-       'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-       */
-
       minZoom: 0,
       maxZoom: 19,
       tileSize: 96,
-
       renderSubLayers: (props) => {
         const {
           bbox: { west, south, east, north },
         } = props.tile;
-
         return new BitmapLayer(props, {
           data: null,
           image: props.data,

@@ -4,7 +4,7 @@ import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { computeMidGridCell } from "../../../utils/utils";
 
-export default function DeckGLMap({
+export default function DeckglBase({
   layers: layers,
   draggingWhileEditing: draggingWhileEditing,
   setDeckGLRef: setDeckGLRef,

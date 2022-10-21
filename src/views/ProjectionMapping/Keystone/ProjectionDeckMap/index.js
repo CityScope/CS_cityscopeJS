@@ -29,12 +29,8 @@ export default function ProjectionDeckMap(props) {
 
   const [time, setTime] = useState(settings.map.layers.ABM.startTime);
   const [animation] = useState({});
+  const styles = settings.map.mapStyles;
 
-  const styles = {
-    Dark: "cjs9rb33k2pix1fo833uweyjd",
-    Light: "ck0h5xn701bpr1dqs3he2lecq",
-    Normal: "cl8dv36nv000t14qik9yg4ys6",
-  };
   const activeMapStyle =
     TUIobject?.MAP_STYLE?.toggle_array?.names[
       TUIobject?.MAP_STYLE?.toggle_array?.curr_active

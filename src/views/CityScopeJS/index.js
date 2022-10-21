@@ -22,8 +22,8 @@ export default function CityScopeJS() {
         <>
           <DeckGLMap />
           <MenuContainer />
-          {/* <VisContainer /> */}
-          {/* <RenderedView /> */}
+          <VisContainer />
+          <RenderedView />
         </>
       )}
     </>

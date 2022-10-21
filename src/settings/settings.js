@@ -53,12 +53,15 @@ export const cityIOSettings = {
 };
 export const mapSettings = {
   map: {
-    mapStyle: {
-      sat: "mapbox://styles/relnox/cjs9rb33k2pix1fo833uweyjd?fresh=true",
-      blue: "mapbox://styles/relnox/ck0h5xn701bpr1dqs3he2lecq?fresh=true",
-      inverse: "mapbox://styles/relnox/cjlu6w5sc1dy12rmn4kl2zljn?fresh=true",
-      normal: "mapbox://styles/relnox/cl8dv36nv000t14qik9yg4ys6?fresh=true",
+    mapboxLink: "mapbox://styles/relnox/",
+    mapboxRefreshString: "?fresh=true",
+    mapStyles: {
+      Dark: "cjs9rb33k2pix1fo833uweyjd",
+      Light: "ck0h5xn701bpr1dqs3he2lecq",
+      Inverse: "cjlu6w5sc1dy12rmn4kl2zljn",
+      Normal: "cl8dv36nv000t14qik9yg4ys6",
     },
+
     layers: {
       ABM: {
         endTime: 86400,

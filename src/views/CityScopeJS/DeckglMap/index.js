@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import PaintBrush from "../../../Components/PaintBrush";
 import { postToCityIO } from "../../../utils/utils";
@@ -12,6 +12,7 @@ import {
   GridLayer,
   TextualLayer,
   GeojsonLayer,
+  TileMapLayer,
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
 
@@ -85,10 +86,11 @@ export default function DeckGLMap() {
   }, [editModeToggle]);
 
   const layersKey = {
+    TileMap: TileMapLayer(),
+
     ABM: ABMLayer({
       data: cityIOdata,
       ABMmode: 0,
-
       time: animationTime,
       opacity:
         layersMenu &&
@@ -160,6 +162,7 @@ export default function DeckGLMap() {
   };
 
   const layerOrder = [
+    "TileMap",
     "GRID",
     "TEXTUAL",
     "GEOJSON",
@@ -170,6 +173,7 @@ export default function DeckGLMap() {
 
   const renderDeckLayers = () => {
     let layers = [];
+    layers.push(layersKey["TileMap"]);
     for (var layerNameString of layerOrder) {
       // toggle layers on and off
       if (

@@ -4,7 +4,7 @@ import { hexToRgb, testHex } from "../../../../utils/utils";
 /**
  * Description. uses deck api to
  * collect objects in a region
- * @argument{object} e  picking event
+ * @argument{object} e picking event
  */
 export const multipleObjPicked = (e, pickingRadius, deckGLRef) => {
   const dim = pickingRadius;
@@ -21,7 +21,7 @@ export const multipleObjPicked = (e, pickingRadius, deckGLRef) => {
 
 /**
  * Description. allow only to pick cells that are
- *  not of CityScope TUI & that are interactable
+ *  not of CityScope TUI & that are intractable
  * so to not overlap TUI activity
  */
 const handleGridCellEditing = (
@@ -144,8 +144,8 @@ export default function GridLayer({
       getElevation: selectedCellsState,
     },
     transitions: {
-      getFillColor: 300,
-      getElevation: 300,
+      getFillColor: 500,
+      getElevation: 150,
     },
   });
 }
