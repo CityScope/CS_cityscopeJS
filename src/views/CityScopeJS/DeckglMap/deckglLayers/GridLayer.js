@@ -49,28 +49,17 @@ const handleGridCellEditing = (
  * and process the interactive area
  */
 export const processGridData = (cityIOdata) => {
-  //  get the static grid
-  const GEOGRID = cityIOdata.GEOGRID;
   // create a copy of the GEOGRID object
-  const newGEOGRID = JSON.parse(JSON.stringify(GEOGRID));
-
+  const newGEOGRID = JSON.parse(JSON.stringify(cityIOdata.GEOGRID));
   // if GEOGRRIDDATA exist and is the same length as our grid
-  if (
-    cityIOdata.GEOGRIDDATA &&
-    cityIOdata.GEOGRIDDATA.length === cityIOdata.GEOGRID.features.length
-  ) {
-    // get the grid data
-    const GEOGRIDDATA = cityIOdata.GEOGRIDDATA;
-    // update GEOGRID features from GEOGRIDDATA on cityio
-    for (let i = 0; i < GEOGRID.features.length; i++) {
-      newGEOGRID.features[i].properties = GEOGRIDDATA[i];
-
-      // inject id with ES7 copy of the object
-      newGEOGRID.features[i].properties = {
-        ...newGEOGRID.features[i].properties,
-        id: i,
-      };
-    }
+  // update GEOGRID features from GEOGRIDDATA on cityio
+  for (let i = 0; i < cityIOdata?.GEOGRID?.features?.length; i++) {
+    newGEOGRID.features[i].properties = cityIOdata.GEOGRIDDATA[i];
+    // inject id with ES7 copy of the object
+    newGEOGRID.features[i].properties = {
+      ...newGEOGRID.features[i].properties,
+      id: i,
+    };
   }
   return newGEOGRID;
 };

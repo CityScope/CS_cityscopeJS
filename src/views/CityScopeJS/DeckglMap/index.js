@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useSelector } from "react-redux";
 import PaintBrush from "../../../Components/PaintBrush";
 import { postToCityIO } from "../../../utils/utils";
@@ -35,36 +35,27 @@ export default function DeckGLMap() {
   const selectedType = menuState.typesMenuState.SELECTED_TYPE;
   const layersMenu = menuState.layersMenuState;
 
+  const toggleRotateCamera = menuState.viewSettingsMenuState.ROTATE_CHECKBOX;
+
   // ! constant animation speed for now - will be updated with slider
   const toggleAnimationState =
     menuState.viewSettingsMenuState.ANIMATION_CHECKBOX;
   const [animationTime, setAnimationTime] = useState(0);
-  const [animation] = useState({});
-  const animate = () => {
+  useLayoutEffect(() => {
     if (toggleAnimationState && toggleAnimationState.isOn) {
-      // use variable outside of closure to allow toggle
-      setAnimationTime((t) => {
-        return t > mapSettings.map.layers.ABM.endTime
-          ? mapSettings.map.layers.ABM.startTime
-          : t + toggleAnimationState.slider;
-      });
-      animation.id = window.requestAnimationFrame(animate);
-    }
-  };
-  // ! self executing function to toggle animation state
-  (function () {
-    if (toggleAnimationState && !toggleAnimationState.isOn) {
-      window.cancelAnimationFrame(animation.id);
-      return;
-    }
-  })();
+      let timerId;
+      const f = () => {
+        setAnimationTime((t) => {
+          return t > mapSettings.map.layers.ABM.endTime
+            ? mapSettings.map.layers.ABM.startTime
+            : t + toggleAnimationState.slider;
+        });
 
-  useEffect(() => {
-    animation.id = window.requestAnimationFrame(animate); // start animation
-    return () => {
-      window.cancelAnimationFrame(animation.id);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        timerId = requestAnimationFrame(f);
+      };
+      timerId = requestAnimationFrame(f);
+      return () => cancelAnimationFrame(timerId);
+    }
   }, [toggleAnimationState]);
 
   // update the grid layer with every change to GEOGRIDDATA
@@ -95,7 +86,7 @@ export default function DeckGLMap() {
       opacity:
         layersMenu &&
         layersMenu.ABM_LAYER_CHECKBOX &&
-        layersMenu.ABM_LAYER_CHECKBOX.slider * 0.01,
+        layersMenu.ABM_LAYER_CHECKBOX.slider ,
     }),
 
     AGGREGATED_TRIPS: AggregatedTripsLayer({
@@ -208,9 +199,12 @@ export default function DeckGLMap() {
         />
 
         <DeckglBase
+        
           setDeckGLRef={setDeckGLRef}
           layers={renderDeckLayers()}
           draggingWhileEditing={draggingWhileEditing}
+          animationTime={animationTime} 
+          toggleRotateCamera={toggleRotateCamera}
         />
       </div>
     </>

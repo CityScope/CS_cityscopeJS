@@ -8,6 +8,8 @@ export default function DeckglBase({
   layers: layers,
   draggingWhileEditing: draggingWhileEditing,
   setDeckGLRef: setDeckGLRef,
+  animationTime: animationTime,
+  toggleRotateCamera: toggleRotateCamera,
 }) {
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const menuState = useSelector((state) => state.menuState);
@@ -23,20 +25,20 @@ export default function DeckglBase({
   const viewControlButton =
     menuState.viewSettingsMenuState.VIEW_CONTROL_BUTTONS;
 
-  //   // toggle camera rotation on and off
-  //   useEffect(() => {
-  //     if (toggleRotateCamera && toggleRotateCamera.isOn) {
-  //       let bearing = viewState.bearing || 0;
-  //       bearing < 360
-  //         ? (bearing += (animationTime / 100000000) * toggleRotateCamera.slider)
-  //         : (bearing = 0);
-  //       setViewState({
-  //         ...viewState,
-  //         bearing: bearing,
-  //       });
-  //     }
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, [toggleRotateCamera, animationTime]);
+  // toggle camera rotation on and off
+  useEffect(() => {
+    if (toggleRotateCamera && toggleRotateCamera.isOn) {
+      let bearing = viewState.bearing || 0;
+      bearing < 360
+        ? (bearing += (animationTime / 100000000) * toggleRotateCamera.slider)
+        : (bearing = 0);
+      setViewState({
+        ...viewState,
+        bearing: bearing,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toggleRotateCamera, animationTime]);
 
   // **
   //  * resets the camera viewport
