@@ -77,7 +77,7 @@ export default function DeckGLMap() {
   }, [editModeToggle]);
 
   const layersKey = {
-    TileMap: TileMapLayer(),
+    TILE_MAP: TileMapLayer(),
 
     ABM: ABMLayer({
       data: cityIOdata,
@@ -153,7 +153,7 @@ export default function DeckGLMap() {
   };
 
   const layerOrder = [
-    "TileMap",
+    "TILE_MAP",
     "GRID",
     "TEXTUAL",
     "GEOJSON",
@@ -164,7 +164,7 @@ export default function DeckGLMap() {
 
   const renderDeckLayers = () => {
     let layers = [];
-    layers.push(layersKey["TileMap"]);
+    layers.push(layersKey["TILE_MAP"]);
     for (var layerNameString of layerOrder) {
       // toggle layers on and off
       if (
