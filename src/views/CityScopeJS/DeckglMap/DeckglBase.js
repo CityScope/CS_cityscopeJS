@@ -7,11 +7,19 @@ import { computeMidGridCell } from "../../../utils/utils";
 export default function DeckGLMap({
   layers: layers,
   draggingWhileEditing: draggingWhileEditing,
+  setDeckGLRef: setDeckGLRef,
 }) {
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const menuState = useSelector((state) => state.menuState);
   const [viewState, setViewState] = useState();
-  const deckGLRef = useRef();
+  const ref = useRef(null);
+
+  // when ref is set, set the deckGLRef
+  useEffect(() => {
+    ref.current && setDeckGLRef(ref);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref]);
+
   const viewControlButton =
     menuState.viewSettingsMenuState.VIEW_CONTROL_BUTTONS;
 
@@ -105,7 +113,7 @@ export default function DeckGLMap({
 
   return (
     <DeckGL
-      ref={deckGLRef}
+      ref={ref}
       viewState={viewState}
       initialViewState={setViewStateToTableHeader()}
       onViewStateChange={onViewStateChange}

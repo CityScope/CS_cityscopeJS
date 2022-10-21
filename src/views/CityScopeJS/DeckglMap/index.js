@@ -15,8 +15,6 @@ import {
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
 
-
-
 export default function DeckGLMap() {
   // get cityio data from redux store
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
@@ -24,12 +22,7 @@ export default function DeckGLMap() {
   const menuState = useSelector((state) => state.menuState);
   const [draggingWhileEditing, setDraggingWhileEditing] = useState(false);
   const [selectedCellsState, setSelectedCellsState] = useState();
-  const [viewState, setViewState] = useState();
-
-  
-  const deckGLRef = useRef();
-
-
+  const [deckGLRef, setDeckGLRef] = useState(null);
   const [keyDownState, setKeyDownState] = useState();
   const [mousePos, setMousePos] = useState();
   const [mouseDown, setMouseDown] = useState();
@@ -95,7 +88,7 @@ export default function DeckGLMap() {
     ABM: ABMLayer({
       data: cityIOdata,
       ABMmode: 0,
-      zoomLevel: viewState && viewState.zoom && viewState.zoom,
+
       time: animationTime,
       opacity:
         layersMenu &&
@@ -133,7 +126,7 @@ export default function DeckGLMap() {
         setDraggingWhileEditing,
         setHoveredObj,
       },
-      deckGLRef,
+      deckGLRef: deckGLRef,
     }),
 
     ACCESS: AccessLayer({
@@ -211,8 +204,8 @@ export default function DeckGLMap() {
         />
 
         <DeckglBase
+          setDeckGLRef={setDeckGLRef}
           layers={renderDeckLayers()}
-          deckGLref={deckGLRef}
           draggingWhileEditing={draggingWhileEditing}
         />
       </div>

@@ -86,7 +86,7 @@ export default function GridLayer({
     opacity,
   },
   updaters: { setSelectedCellsState, setDraggingWhileEditing, setHoveredObj },
-  deckGLref,
+  deckGLRef,
 }) {
   return new GeoJsonLayer({
     opacity,
@@ -109,7 +109,7 @@ export default function GridLayer({
           selectedType,
           setSelectedCellsState,
           pickingRadius,
-          deckGLref
+          deckGLRef
         );
     },
 
@@ -120,7 +120,7 @@ export default function GridLayer({
           selectedType,
           setSelectedCellsState,
           pickingRadius,
-          deckGLref
+          deckGLRef
         );
     },
 
