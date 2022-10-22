@@ -183,9 +183,9 @@ export default function ProjectionDeckMap(props) {
           opacity: 1,
           getOrientation: (d) => [-180, header.rotation, -90],
           getScale: (d) => [
-            GEOGRID.properties.header.cellSize / 2.05,
+            GEOGRID.properties.header.cellSize / 2,
             1,
-            GEOGRID.properties.header.cellSize / 2.05,
+            GEOGRID.properties.header.cellSize / 2,
           ],
 
           updateTriggers: {
