@@ -4,7 +4,7 @@ import { mapSettings as settings } from "../../../../settings/settings";
 import {
   SimpleMeshLayer,
   TripsLayer,
-  HeatmapLayer,
+  // HeatmapLayer,
   TextLayer,
   BitmapLayer,
 } from "deck.gl";
@@ -129,6 +129,9 @@ export default function ProjectionDeckMap(props) {
           },
         }),
 
+        /**
+         * OLD Access layer
+         * 
         new HeatmapLayer({
           id: "ACCESS",
           visible: TUIobject?.ACCESS?.active,
@@ -150,6 +153,48 @@ export default function ProjectionDeckMap(props) {
           },
           parameters: {
             depthTest: false,
+          },
+        }),
+        * 
+        */
+       
+        new SimpleMeshLayer({
+          id: "ACCESS",
+          visible: TUIobject?.ACCESS?.active,
+          data: cityIOdata?.geo_heatmap?.features,
+          loaders: [OBJLoader],
+          mesh: cube,
+          getPosition: (d) => [
+            d.geometry.coordinates[0],
+            d.geometry.coordinates[1],
+            1,
+          ],
+
+          getColor: (d) => {
+            const accessValueName =
+              TUIobject?.ACCESS?.toggle_array?.names[
+                TUIobject?.ACCESS?.toggle_array?.curr_active
+              ] + "_access";
+            const selectedWeight = d.properties[accessValueName];
+            const r = 255 * selectedWeight;
+            const g = 255 - 255 * selectedWeight;
+            return [r, g, 0, 230];
+          },
+          opacity: 1,
+          getOrientation: (d) => [-180, header.rotation, -90],
+          getScale: (d) => [
+            GEOGRID.properties.header.cellSize / 2.05,
+            1,
+            GEOGRID.properties.header.cellSize / 2.05,
+          ],
+
+          updateTriggers: {
+            getColor: cityIOdata?.geo_heatmap?.features,
+          },
+          transitions: {
+            getColors: {
+              duration: 600,
+            },
           },
         }),
 
