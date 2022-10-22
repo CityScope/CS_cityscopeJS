@@ -48,7 +48,7 @@ export default function DeckGLMap() {
         setAnimationTime((t) => {
           return t > mapSettings.map.layers.ABM.endTime
             ? mapSettings.map.layers.ABM.startTime
-            : t + toggleAnimationState.slider;
+            : t + toggleAnimationState.slider/10;
         });
 
         timerId = requestAnimationFrame(f);
