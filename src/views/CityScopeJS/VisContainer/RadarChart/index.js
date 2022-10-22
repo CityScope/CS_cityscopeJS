@@ -14,20 +14,20 @@ import { useState, useEffect } from "react";
 const options = {
   scales: {
     r: {
+      ticks: {
+        display: false,
+      },
       angleLines: {
         color: "#696969",
       },
       suggestedMin: 0,
-            suggestedMax: 1,
+      suggestedMax: 1,
       grid: {
         color: "#696969",
         circular: true,
       },
       pointLabels: {
-        color: "#C0C0C0",
-      },
-      ticks: {
-        color: "#696969",
+        color: "#bcbcbc",
       },
     },
   },

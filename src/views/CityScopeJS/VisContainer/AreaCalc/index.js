@@ -3,6 +3,15 @@ import { useSelector } from "react-redux";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
+export const options = {
+  plugins: {
+    legend: {
+      align: "left",
+      position: "right",
+    },
+  },
+};
+
 export default function AreaCalc() {
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const [chartData, setChartData] = useState({
@@ -61,5 +70,5 @@ export default function AreaCalc() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityIOdata]);
 
-  return <>{geoGridData && <Doughnut data={chartData} />}</>;
+  return <>{geoGridData && <Doughnut data={chartData} options={options} />}</>;
 }

@@ -21,23 +21,28 @@ ChartJS.register(
 );
 
 export const options = {
+
+  plugins: {
+    legend: {
+      display: false,
+    }
+  },
   maintainAspectRatio: true,
-  aspectRatio: 1, 
+  aspectRatio: 1,
 
   scales: {
-    r: {
-      angleLines: {
-        color: "#696969",
-      },
+    y: {
+      suggestedMin: 0,
+      suggestedMax: 1,
+
       grid: {
-        color: "#696969",
-        circular: true,
+        color: "#414141",
       },
       pointLabels: {
-        color: "#C0C0C0",
+        color: "#414141",
       },
       ticks: {
-        color: "#696969",
+        color: "#414141",
       },
     },
   },
