@@ -133,7 +133,7 @@ export const computeMidGridCell = (cityIOdata) => {
 export function hslToRgb(h, s, l) {
   var r, g, b;
 
-  if (s == 0) {
+  if (s === 0) {
     r = g = b = l; // achromatic
   } else {
     function hue2rgb(p, q, t) {
