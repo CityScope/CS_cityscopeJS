@@ -14,6 +14,7 @@ import { processGridData } from "../../../CityScopeJS/DeckglMap/deckglLayers/Gri
 import { hexToRgb } from "../../../../utils/utils";
 import DeckMap from "./DeckMap";
 import { TileLayer } from "@deck.gl/geo-layers";
+import { numberToColorHsl } from "../../../../utils/utils";
 
 export default function ProjectionDeckMap(props) {
   const cube = new CubeGeometry({ type: "x,z", xlen: 0, ylen: 0, zlen: 0 });
@@ -157,7 +158,7 @@ export default function ProjectionDeckMap(props) {
         }),
         * 
         */
-       
+
         new SimpleMeshLayer({
           id: "ACCESS",
           visible: TUIobject?.ACCESS?.active,
@@ -175,10 +176,13 @@ export default function ProjectionDeckMap(props) {
               TUIobject?.ACCESS?.toggle_array?.names[
                 TUIobject?.ACCESS?.toggle_array?.curr_active
               ] + "_access";
-            const selectedWeight = d.properties[accessValueName];
-            const r = 255 * selectedWeight;
-            const g = 255 - 255 * selectedWeight;
-            return [r, g, 0, 230];
+            const selectedWeight =
+              d.properties[accessValueName] > 0 &&
+              d.properties[accessValueName] < 1
+                ? d.properties[accessValueName]
+                : 0;
+            var rgb = numberToColorHsl(selectedWeight, 0, 1);
+            return [rgb[0], rgb[1], rgb[2], 230];
           },
           opacity: 1,
           getOrientation: (d) => [-180, header.rotation, -90],
