@@ -101,9 +101,12 @@ export default function ProjectionDeckMap(props) {
         }),
 
         new GeoJsonLayer({
+          parameters: {
+            depthTest: false,
+          },
           id: "GeojsonLayer",
           data: cityIOdata?.geojson,
-          visible: TUIobject?.GRID?.active,
+          visible: TUIobject?.GEOJSON?.active,
           wireframe: false,
           stroked: true,
           filled: true,
@@ -191,9 +194,8 @@ export default function ProjectionDeckMap(props) {
 
           getColor: (d) => {
             const accessValueName =
-              TUIobject?.ACCESS?.toggle_array?.names[
-                TUIobject?.ACCESS?.toggle_array?.curr_active
-              ] + "_access";
+              TUIobject?.ACCESS?.toggle_array?.curr_active;
+
             const selectedWeight =
               d.properties[accessValueName] > 0 &&
               d.properties[accessValueName] < 1
@@ -209,14 +211,8 @@ export default function ProjectionDeckMap(props) {
             1,
             GEOGRID.properties.header.cellSize / 2,
           ],
-
           updateTriggers: {
             getColor: cityIOdata?.geo_heatmap?.features,
-          },
-          transitions: {
-            getColors: {
-              duration: 600,
-            },
           },
         }),
 
