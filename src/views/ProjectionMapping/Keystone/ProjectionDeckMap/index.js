@@ -33,12 +33,8 @@ export default function ProjectionDeckMap(props) {
   const [animation] = useState({});
   const styles = settings.map.mapStyles;
 
-  const activeMapStyle =
-    TUIobject?.MAP_STYLE?.toggle_array?.names[
-      TUIobject?.MAP_STYLE?.toggle_array?.curr_active
-    ];
+  const activeMapStyle = TUIobject?.MAP_STYLE?.toggle_array?.curr_active;
   const mapStyle = activeMapStyle && styles[activeMapStyle];
-
   const animationSpeed = TUIobject?.ABM?.slider?.value;
 
   const animate = () => {
