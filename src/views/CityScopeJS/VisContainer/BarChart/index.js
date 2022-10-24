@@ -81,8 +81,8 @@ export default function BarChart() {
         {
           label: "Chart Data",
           data: [],
-          backgroundColor: "rgba(255, 99, 132, 0.3)",
-          borderColor: "rgba(255, 99, 132, 1)",
+          backgroundColor: "#795c18dc",
+          borderColor: "#8f680c",
           borderWidth: 1,
         },
       ],
