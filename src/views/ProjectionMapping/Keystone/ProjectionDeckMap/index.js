@@ -5,6 +5,7 @@ import {
   SimpleMeshLayer,
   TripsLayer,
   // HeatmapLayer,
+  GeoJsonLayer,
   TextLayer,
   BitmapLayer,
 } from "deck.gl";
@@ -96,6 +97,23 @@ export default function ProjectionDeckMap(props) {
               image: props.data,
               bounds: [west, south, east, north],
             });
+          },
+        }),
+
+        new GeoJsonLayer({
+          id: "GeojsonLayer",
+          data: cityIOdata?.geojson,
+          visible: TUIobject?.GRID?.active,
+          wireframe: false,
+          stroked: true,
+          filled: true,
+          extruded: false,
+          lineWidthScale: 1,
+          getFillColor: (d) => hexToRgb(d.properties.fill),
+          getLineColor: (d) => hexToRgb(d.properties.stroke),
+          lineWidthMinPixels: 2,
+          updateTriggers: {
+            getFillColor: cityIOdata?.geojson,
           },
         }),
 
