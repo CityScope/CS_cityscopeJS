@@ -192,11 +192,18 @@ export default function ProjectionDeckMap(props) {
             const accessValueName =
               TUIobject?.ACCESS?.toggle_array?.curr_active;
 
-            const selectedWeight =
-              d.properties[accessValueName] > 0 &&
-              d.properties[accessValueName] < 1
-                ? d.properties[accessValueName]
-                : 0;
+            const selectedWeight = () => {
+              if (
+                d.properties[accessValueName] > 0 &&
+                d.properties[accessValueName] < 1
+              ) {
+                return d.properties[accessValueName];
+              } else if (d.properties[accessValueName] > 1) {
+                return 1;
+              } else {
+                return 0;
+              }
+            };
             var rgb = numberToColorHsl(selectedWeight, 0, 1);
             return [rgb[0], rgb[1], rgb[2], 230];
           },
