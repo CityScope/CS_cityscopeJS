@@ -86,7 +86,7 @@ export default function CityIOdeckGLmap(props) {
       getWidth: zoom < 2 ? 0.5 : 0,
       getSourcePosition: (d) => d.coord.from,
       getTargetPosition: (d) => d.coord.to,
-      getColor: (d) => [255, 82, 120],
+      getColor: [	33, 150, 243, 100],
     }),
     new TextLayer({
       id: "text-layer",

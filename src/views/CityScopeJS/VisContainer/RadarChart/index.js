@@ -86,15 +86,15 @@ export default function RadarChart() {
         {
           label: "Project Values",
           data: [],
-          backgroundColor: "rgba(0, 255, 0, 0.1)",
-          borderColor: "rgba(0, 150, 0, 1)",
+          backgroundColor: "#4caf4f2b",
+          borderColor: "#4caf50",
           borderWidth: 1.5,
         },
         {
-          label: "Reference Values",
+          label: "reference",
           data: [],
-          backgroundColor: "#00abfb4b",
-          borderColor: "#005c877c",
+          backgroundColor: "#2195f343",
+          borderColor: "#2196f3",
           borderWidth: 1.5,
         },
       ],
@@ -104,6 +104,7 @@ export default function RadarChart() {
       if (indicators[i].viz_type === "radar") {
         radarData.labels.push(indicators[i].name);
         radarData.datasets[0].data.push(indicators[i].value);
+        radarData.datasets[0].label = cityIOdata?.tableName;
         radarData.datasets[1].data.push(indicators[i].ref_value);
       }
     }

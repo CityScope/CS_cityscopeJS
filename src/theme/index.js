@@ -4,18 +4,17 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   typography,
   palette: {
-
     mode: "dark",
     primary: {
       main: "#FFF",
-      light: "#006ea0",
+      light: "#2196f3",
     },
     secondary: {
-      main: "#006ea0",
+      main: "#2196f3",
     },
     text: {
       primary: "#FFF",
-      secondary: "#006ea0",
+      secondary: "#2196f3",
     },
   },
   shape: {
@@ -24,7 +23,7 @@ const theme = createTheme({
   overrides: {
     MuiOutlinedInput: {
       notchedOutline: {
-        borderColor: "#006ea0",
+        borderColor: "#2196f3",
       },
     },
   },
