@@ -10,6 +10,8 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { numberToColorHsl } from "../../../../utils/utils";
+
 
 ChartJS.register(
   CategoryScale,
@@ -21,11 +23,10 @@ ChartJS.register(
 );
 
 export const options = {
-
   plugins: {
     legend: {
       display: false,
-    }
+    },
   },
   maintainAspectRatio: true,
   aspectRatio: 1,
@@ -81,8 +82,8 @@ export default function BarChart() {
         {
           label: "Chart Data",
           data: [],
-          backgroundColor: "#795c18dc",
-          borderColor: "#8f680c",
+          backgroundColor: [],
+          borderColor: [],
           borderWidth: 1,
         },
       ],
@@ -92,6 +93,13 @@ export default function BarChart() {
       if (indicators[i].viz_type === "bar") {
         barChartData.labels.push(indicators[i].name);
         barChartData.datasets[0].data.push(indicators[i].value);
+        var rgb = numberToColorHsl(indicators[i].value, 0, 1);
+        barChartData.datasets[0].backgroundColor.push(
+          `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.5)`
+        );
+        barChartData.datasets[0].borderColor.push(
+          `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 1)`
+        );
       }
     }
     return barChartData;

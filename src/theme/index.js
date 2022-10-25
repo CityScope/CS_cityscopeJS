@@ -8,14 +8,14 @@ const theme = createTheme({
     mode: "dark",
     primary: {
       main: "#FFF",
-      light: "#808080",
+      light: "#006ea0",
     },
     secondary: {
-      main: "#808080",
+      main: "#006ea0",
     },
     text: {
       primary: "#FFF",
-      secondary: "#808080",
+      secondary: "#006ea0",
     },
   },
   shape: {
@@ -24,7 +24,7 @@ const theme = createTheme({
   overrides: {
     MuiOutlinedInput: {
       notchedOutline: {
-        borderColor: "#808080",
+        borderColor: "#006ea0",
       },
     },
   },

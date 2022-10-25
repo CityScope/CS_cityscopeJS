@@ -86,16 +86,16 @@ export default function RadarChart() {
         {
           label: "Project Values",
           data: [],
-          backgroundColor: "#7b5704b4",
-          borderColor: "rgba(255, 0, 230, 1)",
-          borderWidth: 1,
+          backgroundColor: "rgba(0, 255, 0, 0.1)",
+          borderColor: "rgba(0, 150, 0, 1)",
+          borderWidth: 1.5,
         },
         {
           label: "Reference Values",
           data: [],
-          backgroundColor: "rgba(255, 0, 0, 1)",
-          borderColor: "rgba(255, 0, 0, 0.483)",
-          borderWidth: 1,
+          backgroundColor: "#00abfb4b",
+          borderColor: "#005c877c",
+          borderWidth: 1.5,
         },
       ],
     };
