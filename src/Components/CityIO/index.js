@@ -17,13 +17,12 @@ const removeElement = (array, elem) => {
 };
 
 const CityIO = (props) => {
+  const verbose = true; // set to true to see console logs
   const waitTimeMS = 5000;
   const dispatch = useDispatch();
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const cityscopeProjectURL = generalSettings.csjsURL;
-
   const { tableName } = props;
-
   const [mainHash, setMainHash] = useState(null);
   const [hashes, setHashes] = useState({});
   const [listLoadingModules, setListLoadingModules] = useState([]);
@@ -34,7 +33,15 @@ const CityIO = (props) => {
     const testCityIO = async () => {
       let test = await getAPICall(cityioURL + "meta/");
       if (test) {
-        console.log("cityIO is up, table exists");
+        // start fetching API hashes to check for new data
+        getCityIOmetaHash();
+        verbose &&
+          console.log(
+            "%c cityIO is up, reading cityIO every " +
+              cityIOSettings.cityIO.interval +
+              "ms",
+            "color: red"
+          );
       } else {
         setListLoadingModules([
           `cityIO might be down, please check { ${tableName} } is correct. Returning to cityScopeJS at ${cityscopeProjectURL} in ${
@@ -55,28 +62,18 @@ const CityIO = (props) => {
   }, [cityioURL]);
 
   /**
-   * start fetching API hashes to check for new data
-   */
-  useEffect(() => {
-    const timer = setTimeout(getCityIOmetaHash, cityIOSettings.cityIO.interval);
-    console.log(
-      "reading cityIO every " + cityIOSettings.cityIO.interval + "ms"
-    );
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /**
    * gets the main hash of this cityIO table
    * on a constant loop to check for updates
    */
   async function getCityIOmetaHash() {
     // recursively get hashes
-    const newMainHash = await getAPICall(cityioURL + "meta/id/");
+    await getAPICall(cityioURL + "meta/id/").then((res) => {
+      if (mainHash !== res) {
+        setMainHash(res);
+      }
+    });
     // is it a new hash?
-    if (mainHash !== newMainHash) {
-      setMainHash(newMainHash);
-    }
+
     // do it forever
     setTimeout(getCityIOmetaHash, cityIOSettings.cityIO.interval);
   }
@@ -92,7 +89,6 @@ const CityIO = (props) => {
   }, [mainHash]);
 
   async function getModules() {
-    console.log("--- starting update ---");
     // wait to get all of this table's hashes
     const newHashes = await getAPICall(cityioURL + "meta/hashes/");
     // init array of GET promises
@@ -105,6 +101,11 @@ const CityIO = (props) => {
     );
     // for each of the modules in settings, add api call to promises
     modulesToUpdate.forEach((module) => {
+      verbose &&
+        console.log(
+          "%c" + "checking {" + module + "} for updates...",
+          "color:rgb(200, 200, 0)"
+        );
       // if this module has an old hash
       // we assume it is about to be updated
       if (hashes[module] !== newHashes[module]) {
@@ -127,6 +128,13 @@ const CityIO = (props) => {
     let modulesData = modulesToUpdate.reduce((obj, moduleName, index) => {
       // if this module has data
       if (modulesFromCityIO[index]) {
+        verbose &&
+          console.log(
+            "%c {" +
+              moduleName +
+              "} state has changed on cityIO. Getting new data...",
+            "color:  rgb(0, 200, 255)"
+          );
         setListLoadingModules(removeElement(listLoadingModules, moduleName));
 
         return { ...obj, [moduleName]: modulesFromCityIO[index] };
@@ -136,7 +144,11 @@ const CityIO = (props) => {
     }, cityIOdata);
     let m = { ...modulesData, tableName: tableName };
     dispatch(updateCityIOdata(m));
-    console.log("--- done updating from cityIO ---");
+    verbose &&
+      console.log(
+        "%c --- done updating from cityIO ---",
+        "color: rgb(0, 255, 0)"
+      );
     dispatch(toggleCityIOisDone(true));
   }
 
