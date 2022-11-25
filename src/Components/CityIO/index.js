@@ -103,7 +103,7 @@ const CityIO = (props) => {
     modulesToUpdate.forEach((module) => {
       verbose &&
         console.log(
-          "%c" + "checking {" + module + "} for updates...",
+          "%c checking {" + module + "} for updates...",
           "color:rgb(200, 200, 0)"
         );
       // if this module has an old hash
