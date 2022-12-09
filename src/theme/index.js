@@ -6,24 +6,36 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#FFF",
-      light: "#2196f3",
+      main: "#eaf5fe",
+      light: "#42a5f5",
+      dark: "#074a80",
     },
     secondary: {
-      main: "#2196f3",
+      main: "#42a5f5",
+      dark: "#021423",
     },
     text: {
-      primary: "#FFF",
-      secondary: "#2196f3",
+      primary: "#f1f8fe",
+      secondary: "#297fc5",
     },
   },
   shape: {
-    borderRadius: 10,
+    borderRadius: 20,
+  },
+  // change the default style of the Mui paper component
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#021423",
+        },
+      },
+    },
   },
   overrides: {
     MuiOutlinedInput: {
       notchedOutline: {
-        borderColor: "#2196f3",
+        borderColor: "#42a5f5",
       },
     },
   },

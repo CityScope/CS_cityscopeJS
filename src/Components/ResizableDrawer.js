@@ -2,10 +2,10 @@ import { useState, useCallback } from "react";
 import { Drawer, Box } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
-const dividerWidth = 5;
+const dividerWidth = 10;
 const maxDrawerWidth =
   Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) -
-  1;
+  10;
 
 const minDrawerWidth = 5;
 
@@ -70,9 +70,35 @@ export default function ResizableDrawer({ children, direction, width }) {
           bottom: direction === "bottom" ? drawerWidth + "px" : undefined,
           zIndex: direction === "bottom" ? 9999 : 100,
           cursor: "move",
-          bgcolor: drawerWidth > 10 ? "gray" : "secondary.main",
+          bgcolor: "secondary.dark",
         }}
       />
+
+      {/* only show handles in left/right cases  */}
+      {(direction === "right" ||
+        direction === "left" ||
+        direction === undefined) && (
+        <Box
+          onMouseDown={(e) => handleMouseDown(e)}
+          onTouchStart={(e) => handleMouseDown(e)}
+          onClick={(e) =>
+            drawerWidth < 30
+              ? setDrawerWidth(maxDrawerWidth / 2)
+              : setDrawerWidth(15)
+          }
+          sx={{
+            position: "fixed",
+            top: "45%",
+            width: dividerWidth,
+            height: "10vh",
+            left: direction === "left" ? drawerWidth + "px" : undefined,
+            right: direction === "right" ? drawerWidth + "px" : undefined,
+            zIndex: 100,
+            cursor: "move",
+            bgcolor: "secondary.main",
+          }}
+        />
+      )}
       <Drawer
         anchor={direction}
         open={true}
