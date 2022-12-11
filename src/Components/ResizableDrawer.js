@@ -49,7 +49,6 @@ export default function ResizableDrawer({ children, direction, width }) {
     <>
       <Box
         onMouseDown={(e) => handleMouseDown(e)}
-        onTouchStart={(e) => handleMouseDown(e)}
         sx={{
           padding: dividerWidth + "px 0 0",
           position: "fixed",
@@ -80,6 +79,7 @@ export default function ResizableDrawer({ children, direction, width }) {
         direction === undefined) && (
         <Box
           onMouseDown={(e) => handleMouseDown(e)}
+          // on mobile devices we need to use onTouchStart instead of onMouseDown
           onTouchStart={(e) => handleMouseDown(e)}
           onClick={(e) =>
             drawerWidth < 30

@@ -15,9 +15,10 @@ export const CellMeta = (props) => {
       sx={{
         borderRadius: "5%",
         position: "fixed",
-        backgroundColor: "rgba(0,0,0,0.85)",
+        // color from theme palette 
+        backgroundColor: "primary.opacityDarkBackground",
         padding: "1vw",
-        color: "rgba(255,255,255,0.9)",
+        color: "primary.main",
         zIndex: 10,
         left: mousePos.clientX,
         top: mousePos.clientY,
