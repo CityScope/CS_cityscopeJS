@@ -89,13 +89,13 @@ export const expectedLayers = {
     initSliderValue: 50,
   },
   ABM_LAYER_CHECKBOX: {
-    displayName: "Animated Trips",
+    displayName: "Trips Volume",
     cityIOmoduleName: "ABM2",
     initState: false,
     initSliderValue: 5,
   },
   AGGREGATED_TRIPS_LAYER_CHECKBOX: {
-    displayName: "Aggregated Trips",
+    displayName: "Origin-Destination",
     cityIOmoduleName: "ABM2",
     initState: false,
     initSliderValue: 100,

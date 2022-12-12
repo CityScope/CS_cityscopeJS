@@ -1,0 +1,121 @@
+// ----------------------------------------------
+// ! FROM DeckglBase.js
+
+const toggleAnimationState = menuState.viewSettingsMenuState.ANIMATION_CHECKBOX;
+const [animationTime, setAnimationTime] = useState(0);
+useLayoutEffect(() => {
+  if (toggleAnimationState && toggleAnimationState.isOn) {
+    let timerId;
+    const f = () => {
+      setAnimationTime((t) => {
+        return t > mapSettings.map.layers.ABM.endTime
+          ? mapSettings.map.layers.ABM.startTime
+          : t + toggleAnimationState.slider / 10;
+      });
+
+      timerId = requestAnimationFrame(f);
+    };
+    timerId = requestAnimationFrame(f);
+    return () => cancelAnimationFrame(timerId);
+  }
+}, [toggleAnimationState]);
+
+// ----------------------------------------------
+
+// ! FROM index.js
+
+ABM: ABMLayer({
+    data: cityIOdata,
+    ABMmode: 0,
+    selected:
+      layersMenu &&
+      layersMenu.ABM_LAYER_CHECKBOX &&
+      layersMenu.ABM_LAYER_CHECKBOX.selected,
+    time: animationTime,
+    opacity:
+      layersMenu &&
+      layersMenu.ABM_LAYER_CHECKBOX &&
+      layersMenu.ABM_LAYER_CHECKBOX.slider,
+  }),
+
+// ----------------------------------------------
+
+// ! FROM AggregatedTripsLayer.js
+
+import { PathLayer } from "@deck.gl/layers";
+import { hexToRgb } from "../../../../utils/utils";
+
+export default function AggregatedTripsLayer({ data, selected, opacity }) {
+  return new PathLayer({
+    id: "AGGREGATED_TRIPS",
+    shadowEnabled: false,
+    data: data?.ABM2?.trips,
+    getPath: (d) => {
+      if (d.mode === selected) {
+        return d.path;
+      }
+    },
+    getColor: (d) => hexToRgb(data.ABM2.attr.mode[d.mode].color),
+
+    opacity,
+    getWidth: 3,
+
+    updateTriggers: {
+      getPath: selected,
+    },
+  });
+}
+
+// ----------------------------------------------
+
+// ! FROM ABMLayer.js
+
+return new TripsLayer({
+  // opacity,
+  id: "ABM",
+  data: data.ABM2.trips,
+  getPath: (d) => d.path,
+  getTimestamps: (d) => d.timestamps,
+  getColor: (d) => hexToRgb(data.ABM2.attr.mode[d.mode].color),
+  shadowEnabled: false,
+  getWidth: 1,
+  widthScale: opacity,
+  trailLength: 500,
+  currentTime: time,
+
+  updateTriggers: {
+    getColor: ABMmode,
+  },
+  transitions: {
+    getColor: 500,
+  },
+});
+
+// ----------------------------------------------
+
+// ! FROM index.js
+<DeckglBase
+setDeckGLRef={setDeckGLRef}
+layers={renderDeckLayers()}
+draggingWhileEditing={draggingWhileEditing}
+animationTime={animationTime}
+toggleRotateCamera={toggleRotateCamera}
+/>
+// ----------------------------------------------
+// ! FROM DeckglBase.js
+
+
+  // toggle camera rotation on and off
+  useEffect(() => {
+    if (toggleRotateCamera && toggleRotateCamera.isOn) {
+      let bearing = viewState.bearing || 0;
+      bearing < 360
+        ? (bearing += (animationTime / 100000000) * toggleRotateCamera.slider)
+        : (bearing = 0);
+      setViewState({
+        ...viewState,
+        bearing: bearing,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toggleRotateCamera, animationTime]);

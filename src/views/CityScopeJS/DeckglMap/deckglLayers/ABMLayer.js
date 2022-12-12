@@ -1,28 +1,33 @@
-import { TripsLayer } from "@deck.gl/geo-layers";
+// import { TripsLayer } from "@deck.gl/geo-layers";
 import { hexToRgb } from "../../../../utils/utils";
+import { PathLayer } from "@deck.gl/layers";
 
-
-
-export default function ABMLayer({ data, ABMmode,  time, opacity }) {
-  if (data.ABM2) {
-    return new TripsLayer({
-      // opacity,
+export default function ABMLayer({ data, selected, opacity }) {
+  if (data.ABM2 && selected) {
+    const attrGroup = selected.mode && selected.mode ? "mode" : "profile";
+    return new PathLayer({
       id: "ABM",
-      data: data.ABM2.trips,
-      getPath: (d) => d.path,
-      getTimestamps: (d) => d.timestamps,
-      getColor: (d) => hexToRgb(data.ABM2.attr.mode[d.mode].color),
       shadowEnabled: false,
-      getWidth: 1,
-      widthScale: opacity,
-      trailLength: 500,
-      currentTime: time,
-
-      updateTriggers: {
-        getColor: ABMmode,
+      data: data.ABM2.trips,
+      getPath: (d) => {
+        if (selected[attrGroup] === d[attrGroup]) {
+          return d.path;
+        }
       },
-      transitions: {
-        getColor: 500,
+      getColor: (d) => hexToRgb(data.ABM2.attr[attrGroup][d[attrGroup]].color),
+
+      opacity: opacity / 100,
+      getWidth: (d) => {
+        //! FOR NOW:  return the length of the timeStamps array
+        let len = d.path.length ? d.path.length : 1;
+        if (len > 30) {
+          len = 30 + opacity 
+        }
+        return len;
+      },
+      updateTriggers: {
+        getPath: selected,
+        getWidth: opacity,
       },
     });
   }

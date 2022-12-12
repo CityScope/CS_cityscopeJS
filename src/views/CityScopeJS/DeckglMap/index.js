@@ -1,9 +1,8 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import PaintBrush from "../../../Components/PaintBrush";
 import { postToCityIO } from "../../../utils/utils";
 import DeckglBase from "./DeckglBase";
-import { mapSettings } from "../../../settings/settings";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
   AccessLayer,
@@ -35,28 +34,7 @@ export default function DeckGLMap() {
   const selectedType = menuState.typesMenuState.SELECTED_TYPE;
   const layersMenu = menuState.layersMenuState;
 
-  const toggleRotateCamera = menuState.viewSettingsMenuState.ROTATE_CHECKBOX;
-
-  // ! constant animation speed for now - will be updated with slider
-  const toggleAnimationState =
-    menuState.viewSettingsMenuState.ANIMATION_CHECKBOX;
-  const [animationTime, setAnimationTime] = useState(0);
-  useLayoutEffect(() => {
-    if (toggleAnimationState && toggleAnimationState.isOn) {
-      let timerId;
-      const f = () => {
-        setAnimationTime((t) => {
-          return t > mapSettings.map.layers.ABM.endTime
-            ? mapSettings.map.layers.ABM.startTime
-            : t + toggleAnimationState.slider/10;
-        });
-
-        timerId = requestAnimationFrame(f);
-      };
-      timerId = requestAnimationFrame(f);
-      return () => cancelAnimationFrame(timerId);
-    }
-  }, [toggleAnimationState]);
+  const toggleRotateCamera = menuState?.viewSettingsMenuState?.ROTATE_CHECKBOX;
 
   // update the grid layer with every change to GEOGRIDDATA
   useEffect(() => {
@@ -81,8 +59,11 @@ export default function DeckGLMap() {
 
     ABM: ABMLayer({
       data: cityIOdata,
-      ABMmode: 0,
-      time: animationTime,
+      selected:
+        layersMenu &&
+        layersMenu.ABM_LAYER_CHECKBOX &&
+        layersMenu.ABM_LAYER_CHECKBOX.selected,
+
       opacity:
         layersMenu &&
         layersMenu.ABM_LAYER_CHECKBOX &&
@@ -153,13 +134,13 @@ export default function DeckGLMap() {
   };
 
   const layerOrder = [
+    "ABM",
+    "AGGREGATED_TRIPS",
     "TILE_MAP",
     "GRID",
     "TEXTUAL",
     "GEOJSON",
     "ACCESS",
-    "AGGREGATED_TRIPS",
-    "ABM",
   ];
 
   const renderDeckLayers = () => {
@@ -201,7 +182,6 @@ export default function DeckGLMap() {
           setDeckGLRef={setDeckGLRef}
           layers={renderDeckLayers()}
           draggingWhileEditing={draggingWhileEditing}
-          animationTime={animationTime}
           toggleRotateCamera={toggleRotateCamera}
         />
       </div>
