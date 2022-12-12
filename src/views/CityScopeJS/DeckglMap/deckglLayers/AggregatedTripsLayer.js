@@ -3,7 +3,7 @@ import { hexToRgb } from "../../../../utils/utils";
 
 export default function AggregatedTripsLayer({ data, selected, opacity }) {
   if (data.ABM2 && selected) {
-    const attrGroup = selected.mode && selected.mode ? "mode" : "profile";
+    const attrGroup = "mode" in selected ? "mode" : "profile";
 
     return new ArcLayer({
       id: "AGGREGATED_TRIPS",
@@ -26,7 +26,7 @@ export default function AggregatedTripsLayer({ data, selected, opacity }) {
         // ! BUGGY - the color is not changing appropriately when the selected mode changes
         return hexToRgb(data.ABM2.attr[attrGroup][d[attrGroup]].color);
       },
-      getTargetColor: [0, 0, 0, 150],
+      getTargetColor: [0, 0, 0, 100],
 
       // opacity: 0.85,
       getWidth: 5 * opacity,
@@ -38,3 +38,8 @@ export default function AggregatedTripsLayer({ data, selected, opacity }) {
     });
   }
 }
+
+
+
+
+

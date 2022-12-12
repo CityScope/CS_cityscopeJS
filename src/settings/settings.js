@@ -98,7 +98,7 @@ export const expectedLayers = {
     displayName: "Origin-Destination",
     cityIOmoduleName: "ABM2",
     initState: false,
-    initSliderValue: 100,
+    initSliderValue: 20,
   },
   ACCESS_LAYER_CHECKBOX: {
     displayName: "Heatmap",
