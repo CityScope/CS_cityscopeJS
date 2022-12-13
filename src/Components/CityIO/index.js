@@ -25,7 +25,7 @@ const CityIO = (props) => {
   const { tableName } = props;
   const [mainHash, setMainHash] = useState(null);
   const [hashes, setHashes] = useState({});
-  const [listLoadingModules, setListLoadingModules] = useState([]);
+  const [arrLoadingModules, setArrLoadingModules] = useState([]);
   const cityioURL = `${cityIOSettings.cityIO.baseURL}table/${tableName}/`;
 
   // test if cityIO is up and this table exists
@@ -43,7 +43,7 @@ const CityIO = (props) => {
             "color: red"
           );
       } else {
-        setListLoadingModules([
+        setArrLoadingModules([
           `cityIO might be down, please check { ${tableName} } is correct. Returning to cityScopeJS at ${cityscopeProjectURL} in ${
             waitTimeMS / 1000
           } seconds`,
@@ -67,13 +67,12 @@ const CityIO = (props) => {
    */
   async function getCityIOmetaHash() {
     // recursively get hashes
-    await getAPICall(cityioURL + "meta/id/").then((res) => {
+    await getAPICall(cityioURL + "meta/id/").then(async (res) => {
+      // is it a new hash?
       if (mainHash !== res) {
         setMainHash(res);
       }
     });
-    // is it a new hash?
-
     // do it forever
     setTimeout(getCityIOmetaHash, cityIOSettings.cityIO.interval);
   }
@@ -94,7 +93,7 @@ const CityIO = (props) => {
     // init array of GET promises
     const promises = [];
     // init array of modules names
-    const loadingModules = [];
+    const loadingModulesArray = [];
     // get an array of modules to update
     const modulesToUpdate = cityIOSettings.cityIO.cityIOmodules.map(
       (x) => x.name
@@ -106,18 +105,21 @@ const CityIO = (props) => {
           "%c checking {" + module + "} for updates...",
           "color:rgb(200, 200, 0)"
         );
+
+      //add this module name to array
+      // of modules that we await for
+      loadingModulesArray.push(module);
+
       // if this module has an old hash
       // we assume it is about to be updated
+
       if (hashes[module] !== newHashes[module]) {
         // add this module URL to an array of GET requests
         promises.push(getAPICall(`${cityioURL}${module}/`));
-        // and also add this module name to array
-        // of modules that we await for
-        loadingModules.push(module);
       } else {
         promises.push(null);
       }
-      setListLoadingModules(loadingModules);
+      setArrLoadingModules(loadingModulesArray);
     });
 
     // GET all modules data
@@ -135,7 +137,7 @@ const CityIO = (props) => {
               "} state has changed on cityIO. Getting new data...",
             "color:  rgb(0, 200, 255)"
           );
-        setListLoadingModules(removeElement(listLoadingModules, moduleName));
+        setArrLoadingModules(removeElement(arrLoadingModules, moduleName));
 
         return { ...obj, [moduleName]: modulesFromCityIO[index] };
       } else {
@@ -152,7 +154,7 @@ const CityIO = (props) => {
     dispatch(toggleCityIOisDone(true));
   }
 
-  return <LoadingProgressBar loadingModules={listLoadingModules} />;
+  return <LoadingProgressBar loadingModules={arrLoadingModules} />;
 };
 
 export default CityIO;

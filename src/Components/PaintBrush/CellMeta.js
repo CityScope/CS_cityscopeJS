@@ -29,7 +29,7 @@ export const CellMeta = (props) => {
     >
       <Typography>{hoveredObj.object.properties.name}</Typography>
       <Typography variant="caption">
-        Height: {hoveredObj.object.properties.height}
+        Value: {hoveredObj.object.properties.height}
       </Typography>
       <Typography variant="caption">
         ID: {hoveredObj.object.properties.id}
