@@ -12,7 +12,6 @@ import {
 import { Bar } from "react-chartjs-2";
 import { numberToColorHsl } from "../../../../utils/utils";
 
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -25,6 +24,10 @@ ChartJS.register(
 export const options = {
   plugins: {
     legend: {
+      display: false,
+    },
+
+    datalabels: {
       display: false,
     },
   },

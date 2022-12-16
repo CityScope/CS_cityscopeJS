@@ -26,7 +26,10 @@ function VisContainer() {
                 collapse={true}
                 variant="outlined"
                 title="Land-use"
-                subheader="Distribution of Land-uses"
+                subheader="Land-uses Area"
+                toolTipInfo="Land use distribution and area. Each cell is calculated for
+                its area (square meter ^ 2 per cell) times its floors (4.5
+                meters per floor)"
               >
                 <AreaCalc />
               </CollapsableCard>

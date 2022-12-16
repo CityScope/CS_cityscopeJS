@@ -7,6 +7,7 @@ import {
   CardContent,
   Button,
   List,
+  Divider,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { updateTypesMenuState } from "../../../../redux/reducers/menuSlice";
@@ -15,6 +16,11 @@ export default function TypesListMenu() {
   const dispatch = useDispatch();
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const landUseTypesList = cityIOdata.GEOGRID.properties.types;
+
+  const cellSize = cityIOdata?.GEOGRID?.properties?.header?.cellSize;
+  // covert the cell size to square kilometers
+  const squareQmPerCellSqM = cellSize * cellSize;
+
   const [selectedType, setSelectedType] = useState();
   const [localTypesState, setLocalTypesState] = useState();
   // handle selected type
@@ -88,12 +94,26 @@ export default function TypesListMenu() {
                   {description && (
                     <Typography variant="caption">{description}</Typography>
                   )}
+                  <Divider
+                    sx={{
+                      marginTop: "10px",
+                      marginBottom: "10px",
+                    }}
+                  />
 
                   {selectedType &&
                     selectedType.thisTypeName &&
                     selectedType.height && (
                       <div key={`li_types_div_${index}`}>
-                        <Typography>Set Height</Typography>
+                        <Typography>Set Floors</Typography>
+                        {localTypesState &&
+                          Array.isArray(localTypesState.height) && (
+                            <Typography variant="caption">
+                              Each cell adds{" "}
+                              {squareQmPerCellSqM * localTypesState.height[1]}
+                              m²
+                            </Typography>
+                          )}
 
                         <Slider
                           key={`li_types_slider_${selectedType.thisTypeName}`}

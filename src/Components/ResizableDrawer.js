@@ -89,15 +89,34 @@ export default function ResizableDrawer({ children, direction, width }) {
           sx={{
             position: "fixed",
             top: "45%",
-            width: dividerWidth,
+            width: dividerWidth + 5,
             height: "10vh",
             left: direction === "left" ? drawerWidth + "px" : undefined,
             right: direction === "right" ? drawerWidth + "px" : undefined,
-            zIndex: 100,
+            zIndex: 1000,
+            borderRadius: "30px",
             cursor: "move",
-            bgcolor: "secondary.main",
+            borderColor: "secondary.main",
+            bgcolor: "secondary.dark",
+            borderStyle: "solid",
+            borderWidth: "2px",
           }}
-        />
+        >
+          <Box
+            sx={{
+              transform: "rotate(90deg)",
+              position: "absolute",
+              top: "40%",
+              left: "50%",
+     
+
+    
+
+            }}
+          >
+            ...
+          </Box>
+        </Box>
       )}
       <Drawer
         anchor={direction}

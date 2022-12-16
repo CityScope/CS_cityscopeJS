@@ -12,6 +12,13 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
 const options = {
+  plugins: {
+    // dont show data labels
+    datalabels: {
+      display: false,
+    },
+  },
+
   scales: {
     r: {
       ticks: {

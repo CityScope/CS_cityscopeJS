@@ -25,7 +25,7 @@ function MenuContainer() {
       ),
       collapse: false,
       title: "Edit Mode",
-      subheader: "Toggle Edit Mode & Select Types",
+      subheader: "Select Types & Edit",
     },
     {
       component: <ScenariosMenu />,

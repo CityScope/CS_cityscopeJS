@@ -16,6 +16,7 @@
     "axios": "^1.1.2",
     "buffer": "^6.0.3",
     "chart.js": "^3.9.1",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "deck.gl": "^8.8.12",
     "gh-pages": "^4.0.0",
     "numeric": "^1.2.6",
