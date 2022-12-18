@@ -53,9 +53,6 @@ export const options = {
           360;
         return rotation < 180 ? rotation - 90 : rotation + 90;
       },
-      formatter: (context) => {
-        return context.chart.data.labels[context.dataIndex];
-      },
 
       color: (context) => {
         const color = context.dataset.borderColor[context.dataIndex];
