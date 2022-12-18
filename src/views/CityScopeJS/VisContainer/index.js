@@ -21,7 +21,7 @@ function VisContainer() {
                 <RadarChart />
               </CollapsableCard>
             </Grid>
-            <Grid item xs={12} md={12} lg={6} xl={6}>
+            <Grid item xs={12} md={12} lg={12} xl={12}>
               <CollapsableCard
                 collapse={true}
                 variant="outlined"
@@ -34,7 +34,7 @@ function VisContainer() {
                 <AreaCalc />
               </CollapsableCard>
             </Grid>
-            <Grid item xs={12} md={12} lg={6} xl={6}>
+            <Grid item xs={12} md={12} lg={12} xl={12}>
               <CollapsableCard
                 collapse={true}
                 variant="outlined"

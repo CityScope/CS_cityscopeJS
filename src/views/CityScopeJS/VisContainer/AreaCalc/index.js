@@ -13,16 +13,20 @@ import {
 export const options = {
   plugins: {
     legend: {
+      display: true,
+      position: "left",
       align: "center",
-      position: "top",
+      textDirection: "ltr",
+
       labels: {
+        usePointStyle: true,
         font: function (context) {
           var avgSize = Math.round(
             (context.chart.height + context.chart.width) / 2
           );
-          var size = Math.round(avgSize / 50);
+          var size = Math.round(avgSize / 40);
           return {
-            size: size > 5 ? size : 5,
+            size: size > 8 ? size : 8,
           };
         },
       },
@@ -31,29 +35,40 @@ export const options = {
     tooltip: {
       callbacks: {
         label: (value) => {
-          const name = value.label.slice(0, 10);
-      
+          const name = value.label;
           const val = `${value.parsed.toFixed(4) || 0} km²`;
-
-          return `${name}... ${val}`;
+          return `${name} [${val}]`;
         },
       },
     },
     datalabels: {
-      color: "#999999",
-      formatter: function (value, context) {
-        // calculate ratio of the value to the total sum of context.dataset.data
-        const ratio = value / context.dataset.data.reduce((a, b) => a + b, 0);
-        // up to 5 letters of the label
-        const label = context.chart.data.labels[context.dataIndex].slice(0, 3);
-        const area = value.toFixed(4);
-        if (ratio < 0.2) {
-          return "";
-        } else {
-          return `${label}... ${area} km²`;
-        }
+      anchor: "center", //start, center, end
+      rotation: function (context) {
+        const valuesBefore = context.dataset.data
+          .slice(0, context.dataIndex)
+          .reduce((a, b) => a + b, 0);
+        const sum = context.dataset.data.reduce((a, b) => a + b, 0);
+        const rotation =
+          ((valuesBefore + context.dataset.data[context.dataIndex] / 2) / sum) *
+          360;
+        return rotation < 180 ? rotation - 90 : rotation + 90;
       },
-      font: function (context) {
+      formatter: (context) => {
+        return context.chart.data.labels[context.dataIndex];
+      },
+
+      color: (context) => {
+        const color = context.dataset.borderColor[context.dataIndex];
+        return color;
+      },
+
+      formatter: (value, context) => {
+        // up to 5 letters of the label
+        const label = context.chart.data.labels[context.dataIndex].slice(0, 4);
+        const area = value.toFixed(3);
+        return `${label}.. ${area} km²`;
+      },
+      font: (context) => {
         var avgSize = Math.round(
           (context.chart.height + context.chart.width) / 2
         );
