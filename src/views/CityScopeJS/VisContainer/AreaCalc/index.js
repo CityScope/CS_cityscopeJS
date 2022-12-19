@@ -111,32 +111,38 @@ export default function AreaCalc() {
       // if the switch is on, only show interactive cells
       if (onlyInteractive && !gridCellData.interactive) return;
 
-      let typeName = gridCellData.name;
+      const typeName = gridCellData.name;
       if (
         !typeName ||
         typeName === "None" ||
         typeName === "none" ||
         typeName === ""
       ) {
-        typeName = "Unknown type...";
+        // typeName = "Unknown type...";
+        return;
       }
+
+      // check if the cell height val is an array of values [min,this, max]
+      const floors = Array.isArray(gridCellData.height)
+        ? gridCellData.height[1]
+        : // if not, just use the value
+        gridCellData.height
+        ? // if the value is undefined, set it to 0
+          gridCellData.height
+        : 0;
+
+      // function to add the value to the data array at existing label
+      const addAreaToExistingType = (typeName, floors, squareQmPerCell) => {
+        const index = data.labels.indexOf(typeName);
+        // add the value to the data array at existing label
+        data.datasets[0].data[index] +=
+          floors > 0 ? squareQmPerCell * floors : squareQmPerCell;
+      };
+
       // check if this type is already in the array of labels
       // if it's already there, add the value to the data array at existing label
       if (data.labels.includes(typeName)) {
-        const index = data.labels.indexOf(typeName);
-        // check if the cell height val is an array of values [min,this, max]
-        const floors = Array.isArray(gridCellData.height)
-          ? // get the height val from the array of height values at the same index
-            gridCellData.height[1]
-          : gridCellData.height;
-        // add the value to the data array at existing label
-        if (floors !== 0) {
-          data.datasets[0].data[index] =
-            squareQmPerCell * floors * (data.datasets[0].data[index] + 1);
-        } else {
-          data.datasets[0].data[index] =
-            squareQmPerCell * (data.datasets[0].data[index] + 1);
-        }
+        addAreaToExistingType(typeName, floors, squareQmPerCell);
       } else {
         //  if not, add it to the array of labels and add a new data point
         data.labels.push(typeName);
@@ -147,8 +153,10 @@ export default function AreaCalc() {
         data.datasets[0].borderColor.push(
           `rgba(${gridCellData.color[0]}, ${gridCellData.color[1]}, ${gridCellData.color[2]}, 0.8)`
         );
+        addAreaToExistingType(typeName, floors, squareQmPerCell);
       }
     });
+
     setChartData(data);
   };
 
