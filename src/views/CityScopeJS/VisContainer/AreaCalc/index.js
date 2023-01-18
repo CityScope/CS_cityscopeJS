@@ -36,8 +36,10 @@ export const options = {
       callbacks: {
         label: (value) => {
           const name = value.label;
-          const val = `${value.parsed.toFixed(4) || 0} km²`;
-          return `${name} [${val}]`;
+          const val = `${value.parsed.toFixed(0) || 0} m²`;
+          const areaSqFt = `${Math.floor(value.parsed * 10.7639) || 0} ft²`;
+
+          return `${name} [${val}] [${areaSqFt}]`;
         },
       },
     },
@@ -61,15 +63,17 @@ export const options = {
 
       formatter: (value, context) => {
         // up to 5 letters of the label
-        const label = context.chart.data.labels[context.dataIndex].slice(0, 4);
-        const area = value.toFixed(3);
-        return `${label}.. ${area} km²`;
+        const label = context.chart.data.labels[context.dataIndex].slice(0, 10);
+        const area = value.toFixed(0);
+        // add the area in millions of square feet
+        const areaSqFt = Math.floor(area * 10.7639);
+        return `${label}..\n${area} m² \n${areaSqFt} ft²`;
       },
       font: (context) => {
         var avgSize = Math.round(
           (context.chart.height + context.chart.width) / 2
         );
-        var size = Math.round(avgSize / 50);
+        var size = Math.round(avgSize / 80);
 
         return {
           size: size > 5 ? size : 0,
@@ -93,7 +97,8 @@ export default function AreaCalc() {
   const createChartData = (geoGridData) => {
     const cellSize = cityIOdata?.GEOGRID?.properties?.header?.cellSize;
     // covert the cell size to square kilometers
-    const squareQmPerCell = cellSize * cellSize * 0.000001;
+    const cellSquareMeters = cellSize * cellSize;
+
     const data = {
       labels: [],
       datasets: [
@@ -142,7 +147,7 @@ export default function AreaCalc() {
       // check if this type is already in the array of labels
       // if it's already there, add the value to the data array at existing label
       if (data.labels.includes(typeName)) {
-        addAreaToExistingType(typeName, floors, squareQmPerCell);
+        addAreaToExistingType(typeName, floors, cellSquareMeters);
       } else {
         //  if not, add it to the array of labels and add a new data point
         data.labels.push(typeName);
@@ -153,7 +158,7 @@ export default function AreaCalc() {
         data.datasets[0].borderColor.push(
           `rgba(${gridCellData.color[0]}, ${gridCellData.color[1]}, ${gridCellData.color[2]}, 0.8)`
         );
-        addAreaToExistingType(typeName, floors, squareQmPerCell);
+        addAreaToExistingType(typeName, floors, cellSquareMeters);
       }
     });
 
