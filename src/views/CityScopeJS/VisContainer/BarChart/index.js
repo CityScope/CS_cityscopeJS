@@ -23,6 +23,21 @@ ChartJS.register(
 
 export const options = {
   plugins: {
+    // format the tooltip to show the value as a percentage
+    tooltip: {
+      callbacks: {
+        label: function (context) {
+          var label = "";
+          if (context.parsed.y !== null) {
+            // label is a percentage value with 2 decimal places
+            label += context.parsed.y.toFixed(2) * 100;
+            label += "%";
+          }
+          return label;
+        },
+      },
+    },
+
     legend: {
       display: false,
     },
@@ -47,6 +62,9 @@ export const options = {
       },
       ticks: {
         color: "#414141",
+        format: {
+          style: "percent",
+        },
       },
     },
   },
