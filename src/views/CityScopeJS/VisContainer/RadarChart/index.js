@@ -35,6 +35,17 @@ const options = {
       },
       pointLabels: {
         color: "#bcbcbc",
+        // reduce font size to fit labels
+        font: function (context) {
+          var avgSize = Math.round(
+            (context.chart.height + context.chart.width) / 2
+          );
+          var size = Math.round(avgSize / 80);
+          return {
+            size: size > 5 ? size : 5,
+          };
+        }
+       
       },
     },
   },
