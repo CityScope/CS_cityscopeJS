@@ -1,4 +1,4 @@
-import { HeatmapLayer, SimpleMeshLayer } from "deck.gl";
+import { SimpleMeshLayer } from "deck.gl";
 import { CubeGeometry } from "@luma.gl/engine";
 import { OBJLoader } from "@loaders.gl/obj";
 import { numberToColorHsl } from "../../../../utils/utils";
