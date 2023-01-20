@@ -33,7 +33,7 @@ export default function AccessLayer({ data, intensity, selected }) {
 
   return new SimpleMeshLayer({
     id: "ACCESS",
-    opacity: intensity / 100 || 0.5,
+    opacity: 0.1 + intensity / 100,
 
     data: accessData && accessData,
     loaders: [OBJLoader],
@@ -48,7 +48,7 @@ export default function AccessLayer({ data, intensity, selected }) {
       const selectedWeight = (w) => {
         if (w > 0 && w < 1) {
           return w;
-        } else if (w > 1) {
+        } else if (w >= 1) {
           return 1;
         } else {
           return 0;
@@ -60,14 +60,14 @@ export default function AccessLayer({ data, intensity, selected }) {
         1
       );
 
-      return [rgb[0], rgb[1], rgb[2], 150];
+      return [rgb[0], rgb[1], rgb[2], 200];
     },
 
     getOrientation: (d) => [-180, header.rotation, -90],
     getScale: (d) => [
-      data.GEOGRID.properties.header.cellSize / 2,
-      1 + d.properties[selected] * 100,
-      data.GEOGRID.properties.header.cellSize / 2,
+      data.GEOGRID.properties.header.cellSize / (2 + intensity / 100),
+      1 + d.properties[selected] * intensity,
+      data.GEOGRID.properties.header.cellSize / (2 + intensity / 100),
     ],
     updateTriggers: {
       getScale: selected,
