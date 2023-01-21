@@ -13,7 +13,35 @@ import { useState, useEffect } from "react";
 
 const options = {
   plugins: {
-    // dont show data labels
+    tooltip: {
+      callbacks: {
+        // display tooltip with indicator name, value and description (if available)
+        label: (value) => {
+          const val = `${(value.parsed.r * 100).toFixed(2) || 0}%`;
+          // if no description is available, only show the value
+          if (
+            !value.dataset.descriptions ||
+            value.dataset.descriptions[value.dataIndex] === undefined
+          ) {
+            return [`${val}`];
+          }
+
+          // also add description to the tooltip if available
+          const description = value.dataset.descriptions[value.dataIndex];
+          // if description is longer than 30 characters, split it into two lines
+          if (description.length > 30) {
+            const splitIndex = description.lastIndexOf(" ", 30);
+            return [
+              `${val}`,
+              `${description.slice(0, splitIndex)}`,
+              `${description.slice(splitIndex + 1)}`,
+            ];
+          }
+          return [`${val}`, `${description}`];
+        },
+      },
+    },
+
     datalabels: {
       display: false,
     },
@@ -42,10 +70,9 @@ const options = {
           );
           var size = Math.round(avgSize / 80);
           return {
-            size: size > 5 ? size : 5,
+            size: size > 8 ? size : 8,
           };
-        }
-       
+        },
       },
     },
   },
@@ -107,13 +134,17 @@ export default function RadarChart() {
           backgroundColor: "#42a4f573",
           borderColor: "#42a5f5",
           borderWidth: 1.5,
+          // add descriptions array to the dataset
+          descriptions: [],
         },
         {
           label: "reference",
           data: [],
-          backgroundColor: "#0b860081",
-          borderColor: "#0b8600",
-          borderWidth: 1.5,
+          backgroundColor: "#55555581",
+          borderColor: "#b4b4b4",
+          borderWidth: 1,
+          // add descriptions array to the dataset
+          descriptions: [],
         },
       ],
     };
@@ -123,9 +154,17 @@ export default function RadarChart() {
         radarData.labels.push(indicators[i].name);
         radarData.datasets[0].data.push(indicators[i].value);
         radarData.datasets[0].label = cityIOdata?.tableName;
+
+        // push description value to the array if available
+        indicators[i].description
+          ? radarData.datasets[0].descriptions.push(indicators[i].description)
+          : radarData.datasets[0].descriptions.push("No description available");
+
+        // push reference value to the array
         radarData.datasets[1].data.push(indicators[i].ref_value);
       }
     }
+
     return radarData;
   };
 

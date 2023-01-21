@@ -27,13 +27,26 @@ export const options = {
     tooltip: {
       callbacks: {
         label: function (context) {
-          var label = "";
-          if (context.parsed.y !== null) {
-            // label is a percentage value with 2 decimal places
-            label += context.parsed.y.toFixed(2) * 100;
-            label += "%";
+          const val = `${(context.parsed.y * 100).toFixed(2) || 0}%`;
+          // if no description is available, only show the value
+          if (
+            !context.dataset.descriptions ||
+            context.dataset.descriptions[context.dataIndex] === undefined
+          ) {
+            return [`${val}`];
           }
-          return label;
+          // also add description to the tooltip if available
+          const description = context.dataset.descriptions[context.dataIndex];
+          // if description is longer than 30 characters, split it into two lines
+          if (description.length > 30) {
+            const splitIndex = description.lastIndexOf(" ", 30);
+            return [
+              `${val}`,
+              `${description.slice(0, splitIndex)}`,
+              `${description.slice(splitIndex + 1)}`,
+            ];
+          }
+          return [`${val}`, `${description}`];
         },
       },
     },
@@ -99,8 +112,10 @@ export default function BarChart() {
   const createBarChartData = (indicators) => {
     let barChartData = {
       labels: [],
+      // add descriptions array to the dataset
       datasets: [
         {
+          descriptions: [],
           label: "Chart Data",
           data: [],
           backgroundColor: [],
@@ -121,6 +136,15 @@ export default function BarChart() {
         barChartData.datasets[0].borderColor.push(
           `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 1)`
         );
+
+        // push description value to the array if available
+        indicators[i].description
+          ? barChartData.datasets[0].descriptions.push(
+              indicators[i].description
+            )
+          : barChartData.datasets[0].descriptions.push(
+              "No description available"
+            );
       }
     }
     return barChartData;
