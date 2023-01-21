@@ -54,13 +54,21 @@ export default function AccessLayer({ data, intensity, selected }) {
           return 0;
         }
       };
-      const rgb = numberToColorHsl(
-        selectedWeight(d.properties[selected]),
-        0,
-        1
-      );
-
-      return [rgb[0], rgb[1], rgb[2], 200];
+      // if the heatmap value is null or undefined, return transparent color
+      if (
+        d.properties[selected] === undefined ||
+        d.properties[selected] === null
+      ) {
+        return [0, 0, 0, 0];
+        // if the heatmap value is a float, return the color based on the value
+      } else {
+        const rgb = numberToColorHsl(
+          selectedWeight(d.properties[selected]),
+          0,
+          1
+        );
+        return [rgb[0], rgb[1], rgb[2], 200];
+      }
     },
 
     getOrientation: (d) => [-180, header.rotation, -90],
