@@ -12,6 +12,7 @@ import {
   TextualLayer,
   GeojsonLayer,
   TileMapLayer,
+  TrafficLayer,
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
 
@@ -131,6 +132,14 @@ export default function DeckGLMap() {
         layersMenu.GEOJSON_LAYER_CHECKBOX &&
         layersMenu.GEOJSON_LAYER_CHECKBOX.slider * 0.01,
     }),
+
+    TRAFFIC: TrafficLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.TRAFFIC_LAYER_CHECKBOX &&
+        layersMenu.TRAFFIC_LAYER_CHECKBOX.slider * 0.01,
+    }),
   };
 
   const layerOrder = [
@@ -141,6 +150,7 @@ export default function DeckGLMap() {
     "TEXTUAL",
     "GEOJSON",
     "ACCESS",
+    "TRAFFIC",
   ];
 
   const renderDeckLayers = () => {

@@ -49,6 +49,8 @@ export const cityIOSettings = {
       { name: "scenarios", expectUpdate: true },
       { name: "tui", expectUpdate: true },
       { name: "geo_heatmap", expectUpdate: true },
+      { name: "traffic", expectUpdate: true },
+
     ],
   },
 };
@@ -85,7 +87,7 @@ export const expectedLayers = {
   GRID_LAYER_CHECKBOX: {
     displayName: "CS Grid",
     cityIOmoduleName: "GEOGRID",
-    initState: true,
+    initState: false,
     initSliderValue: 50,
   },
   ABM_LAYER_CHECKBOX: {
@@ -117,6 +119,12 @@ export const expectedLayers = {
     displayName: "GeoJson",
     cityIOmoduleName: "geojson",
     initState: false,
+    initSliderValue: 50,
+  },
+  TRAFFIC_LAYER_CHECKBOX: {
+    displayName: "traffic",
+    cityIOmoduleName: "traffic",
+    initState: true,
     initSliderValue: 50,
   },
 };
