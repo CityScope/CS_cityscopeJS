@@ -1,39 +1,72 @@
-// import { PathLayer } from "@deck.gl/layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
-
 import { numberToColorHsl } from "../../../../utils/utils";
-
-let x = {
-  type: "Feature",
-  geometry: {
-    type: "Polygon",
-    coordinates: [
-      [
-        [-67.13734, 45.13745],
-        [-66.96466, 44.8097],
-        [-68.03252, 44.3252],
-        [-69.06, 43.98],
-      ],
-    ],
-  },
-};
 
 export default function TrafficLayer({ data, opacity }) {
   if (data.traffic) {
+    // create a new geojson object from `data.traffic`
+    // where each feature is a rectangular polygon with the coordinates of the
+    // line and the height of that feature `properties.norm_traffic` attribute.
+    let newGeoJson = {
+      type: "FeatureCollection",
+      features: data.traffic.features.map((feature) => {
+        let newFeature = {
+          type: "Feature",
+          geometry: {
+            type: "Polygon",
+            coordinates:
+              // offset the line coordinates by the width of norm_traffic in meters
+              // to create a rectangular polygon and then add the height of the norm_traffic
+              // to the coordinates to create a 3D polygon
+              [
+                [
+                  [
+                    feature.geometry.coordinates[0][0] -
+                      (feature.properties.norm_traffic / 5000) * opacity,
+                    feature.geometry.coordinates[0][1] -
+                      (feature.properties.norm_traffic / 5000) * opacity,
+                    0,
+                  ],
+                  [
+                    feature.geometry.coordinates[0][0] +
+                      (feature.properties.norm_traffic / 5000) * opacity,
+                    feature.geometry.coordinates[0][1] +
+                      (feature.properties.norm_traffic / 5000) * opacity,
+                    0,
+                  ],
+                  [
+                    feature.geometry.coordinates[1][0] +
+                      (feature.properties.norm_traffic / 5000) * opacity,
+                    feature.geometry.coordinates[1][1] +
+                      (feature.properties.norm_traffic / 5000) * opacity,
+                    0,
+                  ],
+                  [
+                    feature.geometry.coordinates[1][0] -
+                      (feature.properties.norm_traffic / 5000) * opacity,
+                    feature.geometry.coordinates[1][1] -
+                      (feature.properties.norm_traffic / 5000) * opacity,
+                    0,
+                  ],
+                ],
+              ],
+          },
+          properties: {
+            norm_traffic: feature.properties.norm_traffic,
+          },
+        };
+        return newFeature;
+      }),
+    };
+
     return new GeoJsonLayer({
       id: "TRAFFIC_TRIPS",
       shadowEnabled: false,
-      data: data.traffic,
-      id: "line-layer",
+      data: newGeoJson,
       pickable: true,
-      stroked: false,
       filled: true,
       extruded: true,
-      pointType: "circle",
-      lineWidthScale: 1,
-      lineWidthMinPixels: 0.5,
 
-      getLineColor: (d) => {
+      getFillColor: (d) => {
         const selectedWeight = (w) => {
           if (w > 0 && w < 1) {
             return w;
@@ -51,8 +84,8 @@ export default function TrafficLayer({ data, opacity }) {
         );
         return [rgb[0], rgb[1], rgb[2], 200];
       },
-      getLineWidth: (d) => d.properties.norm_traffic * 100 * opacity,
-      getElevation: (d) => d.properties.norm_traffic * 5000 * opacity,
+
+      getElevation: (d) => d.properties.norm_traffic * 500 * opacity,
 
       updateTriggers: {
         getLineColor: data,
@@ -61,53 +94,3 @@ export default function TrafficLayer({ data, opacity }) {
     });
   }
 }
-
-// export default function TrafficLayer({ data, opacity }) {
-//   if (data.traffic) {
-//     return new PathLayer({
-//       id: "TRAFFIC_TRIPS",
-//       shadowEnabled: false,
-//       data: data.traffic.features,
-
-//       id: "line-layer",
-
-//       getColor: (d) => {
-//         const selectedWeight = (w) => {
-//           if (w > 0 && w < 1) {
-//             return w;
-//           } else if (w >= 1) {
-//             return 1;
-//           } else {
-//             return 0;
-//           }
-//         };
-
-//         const rgb = numberToColorHsl(
-//           selectedWeight(1 - d.properties.norm_traffic),
-//           0,
-//           1
-//         );
-//         return [rgb[0], rgb[1], rgb[2], 200];
-//       },
-//       getWidth: (d) => d.properties.norm_traffic * 100 * opacity,
-//       getPath: (d) => [
-//         [
-//           d.geometry.coordinates[0][0],
-//           d.geometry.coordinates[0][1],
-//           d.properties.norm_traffic * 500 * opacity,
-//         ],
-//         [
-//           d.geometry.coordinates[1][0],
-//           d.geometry.coordinates[1][1],
-//           d.properties.norm_traffic * 500 * opacity,
-//         ],
-//       ],
-
-//       updateTriggers: {
-//         getColor: data,
-//         getWidth: opacity,
-//         getPath: opacity,
-//       },
-//     });
-//   }
-// }

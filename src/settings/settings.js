@@ -87,7 +87,7 @@ export const expectedLayers = {
   GRID_LAYER_CHECKBOX: {
     displayName: "CS Grid",
     cityIOmoduleName: "GEOGRID",
-    initState: false,
+    initState: true,
     initSliderValue: 50,
   },
   ABM_LAYER_CHECKBOX: {
@@ -124,7 +124,7 @@ export const expectedLayers = {
   TRAFFIC_LAYER_CHECKBOX: {
     displayName: "traffic",
     cityIOmoduleName: "traffic",
-    initState: true,
+    initState: false,
     initSliderValue: 50,
   },
 };
