@@ -21,30 +21,30 @@ export default function TrafficLayer({ data, opacity }) {
                 [
                   [
                     feature.geometry.coordinates[0][0] -
-                      (feature.properties.lanes / 75000) ,
+                      feature.properties.lanes / 75000,
                     feature.geometry.coordinates[0][1] -
-                      (feature.properties.lanes / 75000) ,
+                      feature.properties.lanes / 75000,
                     0,
                   ],
                   [
                     feature.geometry.coordinates[0][0] +
-                      (feature.properties.lanes / 75000) ,
+                      feature.properties.lanes / 75000,
                     feature.geometry.coordinates[0][1] +
-                      (feature.properties.lanes / 75000) ,
+                      feature.properties.lanes / 75000,
                     0,
                   ],
                   [
                     feature.geometry.coordinates[1][0] +
-                      (feature.properties.lanes / 75000) ,
+                      feature.properties.lanes / 75000,
                     feature.geometry.coordinates[1][1] +
-                      (feature.properties.lanes / 75000) ,
+                      feature.properties.lanes / 75000,
                     0,
                   ],
                   [
                     feature.geometry.coordinates[1][0] -
-                      (feature.properties.lanes / 75000) ,
+                      feature.properties.lanes / 75000,
                     feature.geometry.coordinates[1][1] -
-                      (feature.properties.lanes / 75000) ,
+                      feature.properties.lanes / 75000,
                     0,
                   ],
                 ],
@@ -82,10 +82,11 @@ export default function TrafficLayer({ data, opacity }) {
           0,
           1
         );
-        return [rgb[0], rgb[1], rgb[2], 225 * opacity];
+        // return the color with the opacity 
+        return [rgb[0], rgb[1], rgb[2], 200 + 55 * opacity];
       },
 
-      getElevation: (d) => d.properties.norm_traffic * 500 * opacity,
+      getElevation: (d) => d.properties.norm_traffic * 100 * opacity,
 
       updateTriggers: {
         getLineColor: data,
