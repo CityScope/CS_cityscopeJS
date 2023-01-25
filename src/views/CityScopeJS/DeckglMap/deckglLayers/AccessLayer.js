@@ -3,7 +3,12 @@ import { CubeGeometry } from "@luma.gl/engine";
 import { OBJLoader } from "@loaders.gl/obj";
 import { numberToColorHsl } from "../../../../utils/utils";
 
-export default function AccessLayer({ data, intensity, selected }) {
+export default function AccessLayer({
+  data,
+  intensity,
+  selected,
+  setLayerHoveredData,
+}) {
   const accessData = data.access && data.access.features;
   const cube = new CubeGeometry({ type: "x,z", xlen: 0, ylen: 0, zlen: 0 });
   const header = data.GEOGRID.properties.header;
@@ -32,6 +37,18 @@ export default function AccessLayer({ data, intensity, selected }) {
   // });
 
   return new SimpleMeshLayer({
+    onHover: (event) => {
+      if (event.object) {
+        setLayerHoveredData(
+          // create a string with data.access.properties[selected] and value of event.object.properties[selected] to display in the tooltip
+          `${data.access.properties[selected]}: ${Math.floor(
+            event.object.properties[selected] * 100
+          )}%`
+        );
+      }
+    },
+    pickable: true,
+
     id: "ACCESS",
     opacity: 0.1 + intensity / 100,
 

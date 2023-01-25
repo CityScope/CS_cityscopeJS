@@ -50,7 +50,6 @@ export const cityIOSettings = {
       { name: "tui", expectUpdate: true },
       { name: "geo_heatmap", expectUpdate: true },
       { name: "traffic", expectUpdate: true },
-
     ],
   },
 };

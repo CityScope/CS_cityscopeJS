@@ -1,7 +1,7 @@
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { numberToColorHsl } from "../../../../utils/utils";
 
-export default function TrafficLayer({ data, opacity }) {
+export default function TrafficLayer({ data, opacity, setLayerHoveredData }) {
   if (data.traffic) {
     // create a new geojson object from `data.traffic`
     // where each feature is a rectangular polygon with the coordinates of the
@@ -59,10 +59,21 @@ export default function TrafficLayer({ data, opacity }) {
     };
 
     return new GeoJsonLayer({
+      onHover: (event) => {
+        if (event.object) {
+          setLayerHoveredData(
+            `traffic: ${
+              Math.floor(event.object.properties.norm_traffic * 100)
+            }%`
+          );
+        }
+      },
+      pickable: true,
+
       id: "TRAFFIC_TRIPS",
       shadowEnabled: false,
       data: newGeoJson,
-      pickable: true,
+
       filled: true,
       extruded: true,
 
@@ -82,7 +93,7 @@ export default function TrafficLayer({ data, opacity }) {
           0,
           1
         );
-        // return the color with the opacity 
+        // return the color with the opacity
         return [rgb[0], rgb[1], rgb[2], 200 + 55 * opacity];
       },
 

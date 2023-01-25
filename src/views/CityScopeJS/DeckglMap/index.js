@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import PaintBrush from "../../../Components/PaintBrush";
+import { LayerHoveredTooltip } from "../../../Components/LayerHoveredTooltip";
 import { postToCityIO } from "../../../utils/utils";
 import DeckglBase from "./DeckglBase";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -29,6 +30,9 @@ export default function DeckGLMap() {
   const [mouseDown, setMouseDown] = useState();
   const [hoveredObj, setHoveredObj] = useState();
   const [GEOGRIDDATA, setGEOGRIDDATA] = useState();
+
+  // sets data from all hovered objected currently in the viewport
+  const [layerHoveredData, setLayerHoveredData] = useState();
 
   const pickingRadius = 40;
   const editModeToggle = menuState.editMenuState.EDIT_BUTTON;
@@ -105,6 +109,7 @@ export default function DeckGLMap() {
     }),
 
     ACCESS: AccessLayer({
+      setLayerHoveredData,
       data: cityIOdata,
       selected:
         layersMenu &&
@@ -134,6 +139,7 @@ export default function DeckGLMap() {
     }),
 
     TRAFFIC: TrafficLayer({
+      setLayerHoveredData,
       data: cityIOdata,
       opacity:
         layersMenu &&
@@ -180,14 +186,24 @@ export default function DeckGLMap() {
         onMouseUp={() => setMouseDown(false)}
         onMouseDown={() => setMouseDown(true)}
       >
-        <PaintBrush
-          editOn={editModeToggle}
-          mousePos={mousePos}
-          selectedType={selectedType}
-          pickingRadius={pickingRadius}
-          mouseDown={mouseDown}
-          hoveredObj={hoveredObj}
-        />
+        {layerHoveredData && (
+          <LayerHoveredTooltip
+            layerHoveredData={layerHoveredData}
+            mousePos={mousePos}
+          />
+        )}
+        {/* only show if grid layer is on */}
+        {layersMenu.GRID_LAYER_CHECKBOX &&
+          layersMenu.GRID_LAYER_CHECKBOX.isOn && (
+            <PaintBrush
+              editOn={editModeToggle}
+              mousePos={mousePos}
+              selectedType={selectedType}
+              pickingRadius={pickingRadius}
+              mouseDown={mouseDown}
+              hoveredObj={hoveredObj}
+            />
+          )}
         <DeckglBase
           setDeckGLRef={setDeckGLRef}
           layers={renderDeckLayers()}
