@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import MenuContainer from "./MenuContainer";
 import DeckGLMap from "./DeckglMap/index";
 import VisContainer from "./VisContainer";
-import RenderedView from "../RenderedView";
 
 export default function CityScopeJS() {
   const cityIOisDone = useSelector(
@@ -23,7 +22,6 @@ export default function CityScopeJS() {
           <DeckGLMap />
           <MenuContainer />
           <VisContainer />
-          <RenderedView />
         </>
       )}
     </>

@@ -8,7 +8,6 @@ import theme from "./theme";
 // views
 import CityScopeJS from "./views/CityScopeJS";
 import CityIOviewer from "./views/CityIOviewer";
-import RenderedView from "./views/RenderedView";
 import ProjectionMapping from "./views/ProjectionMapping";
 import GridEditor from "./views/GridEditor";
 
@@ -71,8 +70,6 @@ const App = () => {
         {viewSelectorState === "cityio" && <CityIOviewer />}
         {/* otherwise, show the projection */}
         {viewSelectorState === "projection" && <ProjectionMapping />}
-        {/* otherwise, show the projection */}
-        {viewSelectorState === "render" && <RenderedView />}
       </>
     </ThemeProvider>
   );
