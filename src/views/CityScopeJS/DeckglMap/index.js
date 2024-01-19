@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import PaintBrush from "../../../Components/PaintBrush";
 import { LayerHoveredTooltip } from "../../../Components/LayerHoveredTooltip";
-import { postToCityIO } from "../../../utils/utils";
 import DeckglBase from "./DeckglBase";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
@@ -16,6 +15,8 @@ import {
   TrafficLayer,
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
+import useWebSocket from "react-use-websocket"
+import { cityIOSettings } from "../../../settings/settings";
 
 export default function DeckGLMap() {
   // get cityio data from redux store
@@ -41,23 +42,37 @@ export default function DeckGLMap() {
 
   const toggleRotateCamera = menuState?.viewSettingsMenuState?.ROTATE_CHECKBOX;
 
-  // update the grid layer with every change to GEOGRIDDATA
-  useEffect(() => {
-    setGEOGRIDDATA(processGridData(cityIOdata));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cityIOdata.GEOGRIDDATA]);
+  const { sendJsonMessage } = useWebSocket(
+    cityIOSettings.cityIO.websocketURL,
+    {
+      share: true,
+      shouldReconnect: () => true,
+    },
+  )
 
-  // post GEOGRIDDATA changes to cityIO
+  // Send changes to cityIO
   useEffect(() => {
     if (!editModeToggle && GEOGRIDDATA) {
       let dataProps = [];
       for (let i = 0; i < GEOGRIDDATA.features.length; i++) {
         dataProps[i] = GEOGRIDDATA.features[i].properties;
       }
-      postToCityIO(dataProps, cityIOdata.tableName, "/GEOGRIDDATA/");
+      sendJsonMessage({
+        type: "UPDATE_GRID",
+        content: {
+          geogriddata: dataProps,
+        },
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editModeToggle]);
+  }, [editModeToggle])
+
+  // update the grid layer with every change to GEOGRIDDATA
+  useEffect(() => {
+    setGEOGRIDDATA(processGridData(cityIOdata));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cityIOdata.GEOGRIDDATA]);
+
 
   const layersKey = {
     TILE_MAP: TileMapLayer(),

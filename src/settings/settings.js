@@ -7,11 +7,24 @@ const getServerLocation = () => {
 
   const serverLocation =
     "cityio_local" in parsed
-      ? "http://127.0.0.1:5000/api/"
+      ? "http://127.0.0.1:8080/api/"
       : "https://cityio.media.mit.edu/api/";
   console.log("cityIO server location: ", serverLocation);
   return serverLocation;
 };
+
+const getWebsocketServerLocation = () => {
+  const location = window.location;
+  const parsed = queryString.parse(location.search);
+
+  const serverLocation =
+    "cityio_local" in parsed
+      ? "ws://localhost:8080/interface"
+      : "wss://cityio.media.mit.edu/interface";
+  console.log("cityIO websocket server location: ", serverLocation);
+  return serverLocation;
+};
+
 // get the location of the app (local or remote)
 const getCSJSLocation = () => {
   const location = window.location;
@@ -33,8 +46,10 @@ export const cityIOSettings = {
     "https://raw.githubusercontent.com/CityScope/CS_cityscopeJS/master/docs/",
   cityIO: {
     baseURL: getServerLocation(),
+    websocketURL: getWebsocketServerLocation(),
 
-    ListOfTables: "tables/list/",
+    ListOfTables: "table/list/",
+    headers: "table/headers/",
     interval: 500,
     cityIOmodules: [
       { name: "header", expectUpdate: false },

@@ -15,44 +15,54 @@ import {
   Badge,
   TextField,
 } from "@mui/material";
+import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
 import DeleteIcon from "@mui/icons-material/Delete";
-import { postToCityIO, getModule, getTableID } from "../../../../utils/utils";
+import RestorePageOutlinedIcon from '@mui/icons-material/RestorePageOutlined';
+import useWebSocket from "react-use-websocket"
 
 export default function ScenariosMenu() {
   const [scenariosButtonsList, setScenariosButtonsList] = useState([]);
+  const [scenariosBinButtonsList, setScenariosBinButtonsList] = useState([]);
   const [scenarioToRestore, setScenariosToRestore] = useState();
   const [saveDialogState, setSaveDialogState] = useState(false);
   const [loadDialogState, setLoadDialogState] = useState(false);
+  const [binDialogState, setBinDialogState] = useState(false);
   const [scenarioTextInput, setScenarioTextInput] = useState({
     name: "",
     description: "",
   });
   // get cityIO data from redux store
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
-  // get cityio name from redux store
-  const cityIOtableName = useSelector(
-    (state) => state.cityIOdataState.cityIOtableName
-  );
+
+  const WS_URL = "ws://localhost:8080/interface"
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
+    WS_URL,
+    {
+      share: true,
+      shouldReconnect: () => true,
+    },
+  )
 
   const handleSaveThisState = () => {
     handleClose();
-    getTableID(cityIOtableName).then((id) => {
       const newScenario = {
         // ! to be updated from dynamic ui element
-        name: scenarioTextInput.name || `${id}`,
-        hash: id,
+        name: scenarioTextInput.name || `noname`,
         description:
-          scenarioTextInput.description || `no description for ${id} yet.`,
-      };
-      const tempArr = cityIOdata.scenarios ? [...cityIOdata.scenarios] : [];
-      tempArr.push(newScenario);
-      postToCityIO(tempArr, cityIOtableName, `/scenarios/`);
-    });
+          scenarioTextInput.description || `no description yet.`,
+      }
+      sendJsonMessage({
+        type: "SAVE_SCENARIO",
+        content: newScenario,
+      })
+
+
   };
 
   const handleClose = () => {
     setLoadDialogState(false);
     setSaveDialogState(false);
+    setBinDialogState(false);
   };
 
   const handleOpenDialog = (scenario) => {
@@ -64,13 +74,11 @@ export default function ScenariosMenu() {
 
   const handleRestoreThisState = async () => {
     if (!scenarioToRestore) return;
-    await getModule(scenarioToRestore.hash)
-      .then((module) => {
-        postToCityIO(module, cityIOtableName, `/GEOGRIDDATA/`);
-      })
-      .finally(() => {
-        handleClose();
-      });
+    sendJsonMessage({
+      type: "RESTORE_SCENARIO",
+      content: {name: scenarioToRestore.name},
+    })
+    handleClose();  
   };
 
   const handleDeleteThisState = (scenario) => {
@@ -84,14 +92,37 @@ export default function ScenariosMenu() {
     var index = tempArr.indexOf(scnToDelete[0]);
     if (index !== -1) {
       // remove the scenario from the array
-      tempArr.splice(index, 1);
+      let scenarioToMod = tempArr[index]
+      sendJsonMessage({
+        type: "MODIFY_SCENARIO",
+        content: {name: scenarioToMod.name, isInBin:true},
+      })
     }
-    // post the new array to the server
-    postToCityIO(tempArr, cityIOtableName, `/scenarios/`);
+    handleClose()
+  };
+
+  const handleRestoreSce = (scenario) => {
+    // copy the scenarios array
+    const tempArr = [...cityIOdata.scenarios];
+    // find the clicked scenario in the array
+    var scnToDelete = tempArr.filter((obj) => {
+      return obj.hash === scenario.hash;
+    });
+    // find the index of the scenario to delete
+    var index = tempArr.indexOf(scnToDelete[0]);
+    if (index !== -1) {
+      // remove the scenario from the array
+      let scenarioToMod = tempArr[index]
+      sendJsonMessage({
+        type: "MODIFY_SCENARIO",
+        content: {name: scenarioToMod.name, isInBin:false},
+      })
+    }
+    handleClose()
   };
 
   const createScenariosButtons = () => {
-    const scenariosButtons = cityIOdata.scenarios.map((scenario, i) => {
+    const scenariosButtons = cityIOdata.scenarios.filter(x => !x.isInBin).map((scenario, i) => {
       return (
         <ListItem key={`scenario_grid_item_${i}`}>
           <Tooltip
@@ -130,11 +161,65 @@ export default function ScenariosMenu() {
               handleDeleteThisState(scenario);
             }}
             aria-label="delete"
-            size="small"
+            size="medium"
           >
             <DeleteIcon
               color="primary"
               key={"scenario_delicon_" + i}
+              fontSize="inherit"
+            />
+          </IconButton>
+        </ListItem>
+      );
+    });
+    return scenariosButtons;
+  };
+
+  const createBinScenariosButtons = () => {
+    const scenariosButtons = cityIOdata.scenarios.filter(x => x.isInBin).map((scenario, i) => {
+      return (
+        <ListItem key={`scenario_grid_item_${i}`}>
+          <Tooltip
+            sx={{ width: "100%" }}
+            key={"scenario_tt_" + i}
+            arrow
+            placement="right"
+            title={scenario.description || `No description`}
+          >
+            <Button
+              fullWidth={true}
+              key={"scenario_button_" + i}
+              sx={{ width: "100%" }}
+              size="small"
+              variant="outlined"
+              
+            >
+              <List>
+                <ListItem>
+                  <Typography>
+                    {scenario.name.substring(0, 15) + `...`}
+                  </Typography>
+                </ListItem>
+                <ListItem>
+                  <Typography variant="caption">
+                    {scenario.description.substring(0, 20) + `...`}
+                  </Typography>
+                </ListItem>
+              </List>
+            </Button>
+          </Tooltip>
+
+          <IconButton
+            key={"scenario_ib_" + i}
+            onClick={(e) => {
+              handleRestoreSce(scenario);
+            }}
+            aria-label="delete"
+            size="large"
+          >
+            <RestorePageOutlinedIcon
+              color="primary"
+              key={"scenario_resticon_" + i}
               fontSize="inherit"
             />
           </IconButton>
@@ -149,6 +234,8 @@ export default function ScenariosMenu() {
     if (!cityIOdata.scenarios) return;
     const scenariosButtons = createScenariosButtons();
     setScenariosButtonsList(scenariosButtons);
+    const scenariosBinButtons = createBinScenariosButtons();
+    setScenariosBinButtonsList(scenariosBinButtons);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityIOdata]);
@@ -170,6 +257,7 @@ export default function ScenariosMenu() {
         >
           <Typography>Save This Scenario</Typography>
         </Button>
+        <Button onClick={() => setBinDialogState(true)}><DeleteSweepOutlinedIcon></DeleteSweepOutlinedIcon></Button>
       </Badge>
 
       <List>{scenariosButtonsList}</List>
@@ -237,6 +325,22 @@ export default function ScenariosMenu() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Dialog open={binDialogState} onClose={handleClose}>
+        <DialogTitle id="alert-dialog-title">
+          {"Bin"}
+        </DialogTitle>
+        <DialogContentText id="alert-dialog-description" sx={{padding: 2}}>
+            The scenarios in the bin will be permanently deleted after 15 days.
+          </DialogContentText>
+        <DialogContent>
+          <List>{scenariosBinButtonsList}</List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+
     </>
   );
 }
