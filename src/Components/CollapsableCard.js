@@ -2,16 +2,17 @@ import {
   Card,
   CardContent,
   Collapse,
-  Button,
   Paper,
   Typography,
-  Divider,
   Tooltip,
   Grid,
+  IconButton
 } from "@mui/material";
-import { ArrowDropDown } from "@mui/icons-material";
+import MinimizeIcon from '@mui/icons-material/Minimize';
 import { useState } from "react";
 import HelpCenterIcon from "@mui/icons-material/HelpCenter";
+import CloseIcon from '@mui/icons-material/Close';
+import { motion } from "framer-motion";
 
 export default function CollapsableCard({
   children,
@@ -20,20 +21,19 @@ export default function CollapsableCard({
   subheader,
   collapse,
   toolTipInfo,
+  hiddenCardfunction
 }) {
   const [expand, setExpand] = useState(collapse);
 
   return (
     <div>
-      <Divider sx={{ mt: 1 }} />
-      <Grid container justifyContent="center">
-        <Button
-          fullWidth
-          onClick={() => setExpand(!expand)}
-          sx={{ justifyContent: "flex-start" }}
-        >
-          <Grid item container xs={10} direction="row">
-            <ArrowDropDown />
+            <Card variant="outlined"
+            sx={{ justifyContent: "flex-start", width:'100%', backgroundColor: "black", 
+             borderRadius: "6px 6px 0px 0px", padding: 1, '&:active':{cursor:'default'}
+          }}
+          >
+          <Grid container justifyContent="center">
+          <Grid item container xs={8} direction="row">
             <div style={{ display: "block", textAlign: "left" }}>
               <Typography
                 variant="h6"
@@ -48,25 +48,31 @@ export default function CollapsableCard({
               </Typography>
             </div>
           </Grid>
-          <Grid item container xs={2} alignItems="end" direction="column">
+          <Grid item container xs={4} justifyContent="end" direction="row">
             {toolTipInfo && (
-              <Tooltip
-                placement="top"
+              <Tooltip xs={'auto'}
                 title={<Typography>{toolTipInfo}</Typography>}
               >
                 <HelpCenterIcon />
               </Tooltip>
             )}
+            
+            <IconButton onClick={() => setExpand(!expand)}><MinimizeIcon /></IconButton>
+            <IconButton onClick={e => {e.stopPropagation(); hiddenCardfunction(booli=>!booli)}} ><CloseIcon/></IconButton>
           </Grid>
-        </Button>
-      </Grid>
-      <Paper>
-        <Collapse in={expand}>
-          <Card variant={variant ? variant : "outlined"} sx={{ width: "100%" }}>
-            <CardContent>{children}</CardContent>
-          </Card>
-        </Collapse>
-      </Paper>
+          </Grid>
+        </Card>
+      
+      <motion.div onPointerDownCapture={e => e.stopPropagation()}  >
+        <Paper>
+          <Collapse in={expand}>
+            <Card variant={variant ? variant : "outlined"} sx={{ width: "100%", borderRadius: "0px 0px 6px 6px" }}>
+              <CardContent>{children}</CardContent>
+            </Card>
+          </Collapse>
+        </Paper>
+      </motion.div>
+
     </div>
   );
 }

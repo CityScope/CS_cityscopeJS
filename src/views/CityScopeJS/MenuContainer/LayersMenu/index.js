@@ -76,7 +76,7 @@ function LayersMenu() {
     for (const menuItem in expectedLayers) {
       const moduleName = expectedLayers[menuItem].cityIOmoduleName;
       // if the module name is in the data for this CS instance, make a checkbox
-      if (cityIOkeys.includes(moduleName)) {
+      if (cityIOkeys.includes(moduleName) && cityIOdata[moduleName] !== null) {
         toggleListArr.push(
           <Box key={"box_" + menuItem}>
             <FormControlLabel

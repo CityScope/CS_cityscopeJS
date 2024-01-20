@@ -107,6 +107,7 @@ export default function CityIOdeckGLmap(props) {
       minZoom: 0,
       maxZoom: 19,
       tileSize: 96,
+      opacity: 5,
       renderSubLayers: (props) => {
         const {
           bbox: { west, south, east, north },
