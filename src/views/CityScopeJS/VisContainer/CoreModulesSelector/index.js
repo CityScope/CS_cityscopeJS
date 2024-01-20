@@ -6,6 +6,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useSelector } from "react-redux";
 import { useState } from 'react';
 import useWebSocket from "react-use-websocket"
+import { cityIOSettings } from "../../../../settings/settings";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -15,9 +16,8 @@ export default function CoreModuleSelector() {
     const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
     const [selectedModules, setSelectedModules] = useState([]);
 
-    const WS_URL = "ws://localhost:8080/interface"
     const { sendJsonMessage } = useWebSocket(
-      WS_URL,
+      cityIOSettings.cityIO.websocketURL,
       {
         share: true,
         shouldReconnect: () => true,
