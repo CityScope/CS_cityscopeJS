@@ -66,6 +66,7 @@ export default function CityIOdeckGLmap(props) {
       minZoom: 0,
       maxZoom: 19,
       tileSize: 96,
+      opacity: 5,
       renderSubLayers: (props) => {
         const {
           bbox: { west, south, east, north },
@@ -83,7 +84,7 @@ export default function CityIOdeckGLmap(props) {
       id: "LineLayer",
       data: markerInfo,
       pickable: true,
-      getWidth: zoom < 2 ? 0.5 : 0,
+      getWidth: zoom < 2 ? 0.5 : 0.3,
       getSourcePosition: (d) => d.coord.from,
       getTargetPosition: (d) => d.coord.to,
       getColor: [	33, 150, 243, 100],

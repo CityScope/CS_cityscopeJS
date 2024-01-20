@@ -18,8 +18,8 @@ export default function SearchTablesList(props) {
         disablePortal
         id="combo-box-demo"
         options={tablesList}
-        sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Search CityScope Project..." />}
+        sx={{ width: '20svw', minWidth: '250px', marginTop: 1 }}
+        renderInput={(params) => <TextField {...params} InputLabelProps={{sx: {fontSize:15}}} label="Search CityScope Project..." />}
         onChange={(event, newValue) => {
           setSelectedTable(newValue);
         }}

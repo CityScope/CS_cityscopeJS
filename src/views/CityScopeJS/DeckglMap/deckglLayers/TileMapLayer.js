@@ -2,7 +2,7 @@ import { BitmapLayer, TileLayer } from "deck.gl";
 import { mapSettings } from "../../../../settings/settings";
 
 export default function TileMapLayer() {
-  const mapStyle = mapSettings.map.mapStyles.Dark;
+  const mapStyle = mapSettings.map.mapStyles.Light;
   return new TileLayer({
     // visible: TUIobject?.MAP_STYLE?.active,
     data:

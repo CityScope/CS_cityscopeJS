@@ -1,4 +1,4 @@
-import { Typography, Link } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -7,6 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import {generalSettings} from "../../../settings/settings";
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function SelectedTable(props) {
   const selectedTable = props.clicked;
@@ -33,32 +34,25 @@ export default function SelectedTable(props) {
       aria-labelledby="table-select-dialog-title"
       aria-describedby="table-select-dialog-description"
     >
-      <DialogTitle id="table-select-dialog-title">
+      <DialogTitle id="table-select-dialog-title" variant="h4">
         CityScope {selectedTable.tableName}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="table-select-dialog-description">
           <Typography component={"span"}>
-            <Link
-              href={cityscopeJSendpoint + selectedTable.tableName.toLowerCase()}
-            >
-              Go to project
-            </Link>
-            {", "}
-            <Link
-              href={projectionEndpoint + selectedTable.tableName.toLowerCase()}
-            >
-              project this table to TUI
-            </Link>{" "}
-            or{" "}
-            <Link target={"blank"} href={selectedTable.tableURL}>
-              view raw data on cityIO.
-            </Link>
+          <Button variant="contained" href={cityscopeJSendpoint + selectedTable.tableName.toLowerCase()} 
+              sx={{padding: 1, marginTop: 1, marginLeft: 2}}>Go to project</Button>
+
+            <Button variant="outlined" href={projectionEndpoint + selectedTable.tableName.toLowerCase()}
+              sx={{padding: 1, marginTop: 1, marginLeft: 2}}>project this table to TUI</Button>
+
+            <Button variant="outlined" href={selectedTable.tableURL}
+              sx={{padding: 1, marginTop: 1, marginLeft: 2}}>view raw data on cityIO</Button>
           </Typography>
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>(x) Close</Button>
+        <Button onClick={handleClose} variant="outlined"><CloseIcon/> Close</Button>
       </DialogActions>
     </Dialog>
   );

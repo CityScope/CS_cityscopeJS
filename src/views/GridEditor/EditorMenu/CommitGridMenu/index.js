@@ -9,6 +9,7 @@ import Link from "@mui/material/Link";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 const reqResponseUI = (response, tableName) => {
+  // TODO: use prop
   let cityscopeJSendpoint =
     "https://cityio-beta.media.mit.edu/?cityscope=" + tableName;
   // create the feedback text

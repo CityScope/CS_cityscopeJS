@@ -1,4 +1,4 @@
-import { List, ListItem, Typography, Card, CardContent } from "@mui/material";
+import { List, ListItem, Typography, Card, CardContent, Button } from "@mui/material";
 import ResizableDrawer from "../../../Components/ResizableDrawer";
 import GridPropsMenu from "./GridPropsMenu";
 import GridMakerMenu from "./GridMakerMenu";
@@ -7,7 +7,7 @@ import CommitGridMenu from "./CommitGridMenu";
 
 export default function EditorMenu() {
   const menuItemsArray = [
-    <Typography variant="h2">CityScope Grid Editor</Typography>,
+    <><Typography variant="h2">CityScope Grid Editor</Typography> <Button variant="contained" href="/" sx={{ margin: 1 }}>Head back to CityScopeJS</Button></>,
     <Typography>
       This editor can create and `commit` spatial layouts (`grids`) as a
       baseline for CityScope projects. Use the menus and map to edit girds,
