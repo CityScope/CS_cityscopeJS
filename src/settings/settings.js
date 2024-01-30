@@ -7,8 +7,8 @@ const getServerLocation = () => {
 
   const serverLocation =
     "cityio_local" in parsed
-      ? "http://127.0.0.1:8080/api/"
-      : "https://cityio.media.mit.edu/api/";
+      ? "http://localhost:8080/api/"
+      : "https://cityio-beta.media.mit.edu/cityio/api/";
   console.log("cityIO server location: ", serverLocation);
   return serverLocation;
 };
@@ -20,7 +20,7 @@ const getWebsocketServerLocation = () => {
   const serverLocation =
     "cityio_local" in parsed
       ? "ws://localhost:8080/interface"
-      : "wss://cityio.media.mit.edu/interface";
+      : "wss://cityio-beta.media.mit.edu/cityio/interface";
   console.log("cityIO websocket server location: ", serverLocation);
   return serverLocation;
 };
@@ -31,8 +31,8 @@ const getCSJSLocation = () => {
   const parsed = queryString.parse(location.search);
   const cityscopejs_local_url =
     "cityscopejs_local" in parsed
-      ? "http://localhost:3000/CS_cityscopeJS/"
-      : "https://cityscope.media.mit.edu/CS_cityscopeJS/";
+      ? "http://localhost:3000/"
+      : "https://cityio-beta.media.mit.edu";
   console.log("cityScopeJS location: ", cityscopejs_local_url);
   return cityscopejs_local_url;
 };

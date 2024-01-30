@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { cityIOSettings } from "../../settings/settings";
 import {
   updateCityIOdata,
@@ -6,6 +6,7 @@ import {
 } from "../../redux/reducers/cityIOdataSlice";
 import { useSelector, useDispatch } from "react-redux";
 import useWebSocket, { ReadyState } from "react-use-websocket"
+import LoadingProgressBar from "../LoadingProgressBar";
 
 const CityIO = (props) => {
 
@@ -14,6 +15,7 @@ const CityIO = (props) => {
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const { tableName } = props;
   const possibleModules = cityIOSettings.cityIO.cityIOmodules.map(module => module.name)
+  const [arrLoadingModules, setArrLoadingModules] = useState([]);
 
   // Creation of the websocket connection. TODO: change WS_URL to env or property
   //    sendJsonMessage: function that sends a message through the websocket channel
@@ -38,6 +40,9 @@ const CityIO = (props) => {
           gridId: tableName,
         },
       })
+      setArrLoadingModules([
+        `Loading ${tableName} data.`,
+      ]);
     }
   }, [readyState])
 
@@ -57,6 +62,7 @@ const CityIO = (props) => {
       verbose && console.log(
         ` --- trying to update GEOGRID --- ${JSON.stringify(lastJsonMessage.content)}`
       );
+      setArrLoadingModules([]);
 
       let m = {...cityIOdata, "GEOGRID": lastJsonMessage.content.GEOGRID, "GEOGRIDDATA":lastJsonMessage.content.GEOGRIDDATA, tableName: tableName };
 
@@ -165,6 +171,7 @@ const CityIO = (props) => {
 
   }, [lastJsonMessage])
 
+  return <LoadingProgressBar loadingModules={arrLoadingModules} />;
 
 };
 

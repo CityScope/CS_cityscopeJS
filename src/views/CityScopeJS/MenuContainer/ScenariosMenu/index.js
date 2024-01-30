@@ -19,6 +19,7 @@ import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
 import DeleteIcon from "@mui/icons-material/Delete";
 import RestorePageOutlinedIcon from '@mui/icons-material/RestorePageOutlined';
 import useWebSocket from "react-use-websocket"
+import { cityIOSettings } from "../../../../settings/settings";
 
 export default function ScenariosMenu() {
   const [scenariosButtonsList, setScenariosButtonsList] = useState([]);
@@ -34,9 +35,8 @@ export default function ScenariosMenu() {
   // get cityIO data from redux store
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
 
-  const WS_URL = "ws://localhost:8080/interface"
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
-    WS_URL,
+    cityIOSettings.cityIO.websocketURL,
     {
       share: true,
       shouldReconnect: () => true,
