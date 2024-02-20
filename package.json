@@ -13,7 +13,7 @@
     "@mui/x-data-grid": "^5.17.6",
     "@mui/x-data-grid-generator": "^5.17.6",
     "@reduxjs/toolkit": "^1.8.5",
-    "axios": "^1.1.2",
+    "axios": "^1.6.0",
     "buffer": "^6.0.3",
     "chart.js": "^3.9.1",
     "chartjs-plugin-datalabels": "^2.2.0",
