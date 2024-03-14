@@ -17,8 +17,6 @@ import RadarIcon from '@mui/icons-material/Radar';
 import DataUsageIcon from '@mui/icons-material/DataUsage';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { ExitToApp, Extension } from '@mui/icons-material';
-import Groups2Icon from '@mui/icons-material/Groups2';
-import ChatIcon from '@mui/icons-material/Chat';
 
 function ResponsiveAppBar(props) {
     const pages = [{
