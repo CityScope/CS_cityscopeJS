@@ -10,7 +10,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 const reqResponseUI = (response, tableName) => {
   let cityscopeJSendpoint =
-    "https://cityio-beta.media.mit.edu/?cityscope=" + tableName;
+    "https://cityio.media.mit.edu/?cityscope=" + tableName;
   // create the feedback text
   let resText = (
     <Typography color="textPrimary" variant="caption">
