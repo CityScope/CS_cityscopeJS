@@ -141,6 +141,96 @@ export const expectedLayers = {
     initState: false,
     initSliderValue: 50,
   },
+  ARC_LAYER_CHECKBOX: {
+    displayName: "Arc",
+    cityIOmoduleName: "arc",
+    initState: true,
+    initSliderValue: 50,
+  },
+  COLUMN_LAYER_CHECKBOX: {
+    displayName: "Column",
+    cityIOmoduleName: "column",
+    initState: true,
+    initSliderValue: 50,
+  },
+  CONTOUR_LAYER_CHECKBOX: {
+    displayName: "Contour",
+    cityIOmoduleName: "contours",
+    initState: true,
+    initSliderValue: 50,
+  },
+  GEOJSON_BASE_LAYER_CHECKBOX: {
+    displayName: "GeoJSON",
+    cityIOmoduleName: "geojsonbase",
+    initState: true,
+    initSliderValue: 50,
+  },
+  GRID_BASE_LAYER_CHECKBOX: {
+    displayName: "Grid",
+    cityIOmoduleName: "gridlayer",
+    initState: true,
+    initSliderValue: 50,
+  },
+  GRIDCELL_LAYER_CHECKBOX: {
+    displayName: "Grid cell",
+    cityIOmoduleName: "gridcell",
+    initState: true,
+    initSliderValue: 50,
+  },
+  HEATMAP_LAYER_CHECKBOX: {
+    displayName: "Heatmap",
+    cityIOmoduleName: "heatmap",
+    initState: true,
+    initSliderValue: 50,
+  },
+  HEXAGON_LAYER_CHECKBOX: {
+    displayName: "Hexagon",
+    cityIOmoduleName: "hexagon",
+    initState: true,
+    initSliderValue: 50,
+  },
+  ICON_LAYER_CHECKBOX: {
+    displayName: "Icon",
+    cityIOmoduleName: "icon",
+    initState: true,
+    initSliderValue: 100,
+  },
+  LINE_LAYER_CHECKBOX: {
+    displayName: "Lines",
+    cityIOmoduleName: "lines",
+    initState: true,
+    initSliderValue: 100,
+  },
+  PATH_LAYER_CHECKBOX: {
+    displayName: "Path",
+    cityIOmoduleName: "path",
+    initState: true,
+    initSliderValue: 75,
+  },
+  SCATTER_LAYER_CHECKBOX: {
+    displayName: "Scatter",
+    cityIOmoduleName: "scatterplot",
+    initState: true,
+    initSliderValue: 75,
+  },
+  SCENEGRAPH_LAYER_CHECKBOX: {
+    displayName: "Scene graph",
+    cityIOmoduleName: "scenegraph",
+    initState: true,
+    initSliderValue: 75,
+  },
+  MESH_LAYER_CHECKBOX: {
+    displayName: "Mesh",
+    cityIOmoduleName: "simpleMesh",
+    initState: true,
+    initSliderValue: 50,
+  },
+  TEXT_LAYER_CHECKBOX: {
+    displayName: "Text",
+    cityIOmoduleName: "textLayer",
+    initState: false,
+    initSliderValue: 100,
+  },
 };
 
 export const viewControlCheckboxes = {
