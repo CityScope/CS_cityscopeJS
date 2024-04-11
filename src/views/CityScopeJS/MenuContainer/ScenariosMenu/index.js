@@ -35,7 +35,7 @@ export default function ScenariosMenu() {
   // get cityIO data from redux store
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
 
-  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
+  const { sendJsonMessage } = useWebSocket(
     cityIOSettings.cityIO.websocketURL,
     {
       share: true,
