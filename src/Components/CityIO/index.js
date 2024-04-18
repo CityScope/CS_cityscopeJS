@@ -70,10 +70,14 @@ const CityIO = (props) => {
       Object.keys(lastJsonMessage.content).forEach((key)=>{
         if(possibleModules.includes(key) && key !== 'scenarios' && key !== 'indicators'){
           m[key] = lastJsonMessage.content[key]
-        } 
+        } else if(key === 'deckgl'){
+          lastJsonMessage.content.deckgl
+            .forEach((layer) => {
+              m[layer.type]={ data: layer.data, properties: layer.properties }
+            });
+        }
       }
       );
-
       // When we receive a GRID message, we ask for the scenarios of the table we´re
       //  connected, and for the core modules
       sendJsonMessage({
