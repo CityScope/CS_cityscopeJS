@@ -10,26 +10,33 @@ export default function CityIOviewer() {
   const [tablesList, getTablesList] = useState([]);
   return (
     <>
+      {/* background color black */}
+
       <CityIOdeckGLmap cityIOdata={tablesList} />
 
-      <Box sx={{ width: "100%", padding: 5 }}>
+      <Box sx={{ width: "100%", padding: 10 }}>
         <CityIOlist getTablesList={getTablesList} />
 
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <SearchTablesList tablesList={tablesList} />
-          </Grid>
-          <Grid item xs={12} lg={6} zIndex={10}>
+        <Grid container spacing={5} justifyContent="center">
+          <Grid item xs={12} lg={4} zIndex={10}>
             <Typography variant="h1">MIT CityScope</Typography>
+          </Grid>
+
+          <Grid item xs={12} lg={4} zIndex={10}>
+            {/* max width 50% on large screen */}
+
             <Typography variant="h4">
               MIT CityScope is an open-source urban modeling and simulation
-              platform. CityScope allows users to examine different design
-              alternatives, and observe their impact through multiple layers of
-              urban analytics.
+              platform project developed by the City Science group at the MIT
+              Media Lab
+              {"  "}
               <Link href={"https://github.com/CityScope"} target={"blank"}>
-                Join the CityScope open-source development
-              </Link>  <GitHubIcon fontSize={"small"} /> 
+                <GitHubIcon fontSize={"small"} />
+              </Link>
             </Typography>
+          </Grid>
+          <Grid item xs={12} lg={4} zIndex={10}>
+            <SearchTablesList tablesList={tablesList} />
           </Grid>
         </Grid>
       </Box>

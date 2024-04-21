@@ -8,8 +8,6 @@ import theme from "./theme";
 // views
 import CityScopeJS from "./views/CityScopeJS";
 import CityIOviewer from "./views/CityIOviewer";
-import ProjectionMapping from "./views/ProjectionMapping";
-import GridEditor from "./views/GridEditor";
 
 /**
 get this tab URL and parse as a simple router to show the correct view
@@ -38,7 +36,7 @@ const App = () => {
     }
   };
 
-  // on init, get the adress URL to search for  a table
+  // on init, get the address URL to search for  a table
   useEffect(() => {
     const location = window.location;
     const parsed = queryString.parse(location.search);
@@ -48,10 +46,6 @@ const App = () => {
 
     if (keys.includes("cityscope")) {
       selectView("cityscopejs", parsed.cityscope);
-    } else if (keys.includes("projection")) {
-      selectView("projection", parsed.projection);
-    } else if (keys.includes("editor")) {
-      setViewSelectorState("grideditor");
     } else {
       setViewSelectorState("cityio");
     }
@@ -64,12 +58,9 @@ const App = () => {
       <>
         {/* otherwise show the editor  */}
         {viewSelectorState === "cityscopejs" && <CityScopeJS />}
-        {/* otherwise show the editor  */}
-        {viewSelectorState === "grideditor" && <GridEditor />}
+
         {/* otherwise, show the cityIOviewer */}
         {viewSelectorState === "cityio" && <CityIOviewer />}
-        {/* otherwise, show the projection */}
-        {viewSelectorState === "projection" && <ProjectionMapping />}
       </>
     </ThemeProvider>
   );
