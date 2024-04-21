@@ -39,9 +39,11 @@ export default function CityIOdeckGLmap(props) {
       zoom: 3,
       pitch: 0,
       bearing: 0,
-      transitionDuration: 9000,
+      transitionDuration: 8000,
       transitionInterpolator: new FlyToInterpolator(),
-      transitionEasing: (t) => t * (2 - t),
+      transitionEasing: (t) =>
+        // ease out slow start, fast middle, slow end
+        t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
     });
   };
 
