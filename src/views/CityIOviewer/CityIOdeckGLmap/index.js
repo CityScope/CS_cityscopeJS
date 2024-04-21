@@ -41,6 +41,7 @@ export default function CityIOdeckGLmap(props) {
       bearing: 0,
       transitionDuration: 9000,
       transitionInterpolator: new FlyToInterpolator(),
+      transitionEasing: (t) => t * (2 - t),
     });
   };
 
@@ -115,7 +116,7 @@ export default function CityIOdeckGLmap(props) {
       id: "LineLayer",
       data: markerInfo,
       pickable: true,
-      getWidth: zoom < 2 ? 0.3 : 0,
+      getWidth: zoom < 2 ? 0.3 : 0.1,
       getSourcePosition: (d) => d.coord.from,
       getTargetPosition: (d) => d.coord.to,
       getColor: [255, 255, 255, 100],
@@ -156,7 +157,7 @@ export default function CityIOdeckGLmap(props) {
       },
       getIcon: (d) => "marker",
       sizeScale: 1,
-      getSize: zoom < 5 ? 20 : 10,
+      getSize: zoom < 5 ? 20 : 5,
       getPosition: (d) => [d.coord.to[0], d.coord.to[1], INIT_VIEW.zHeight],
     }),
   ];
