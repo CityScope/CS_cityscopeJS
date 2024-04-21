@@ -14,31 +14,19 @@ export default function CityIOlist(props) {
   }, [tablesList]);
 
   const fetchCityIOtables = async () => {
-    // ! https://stackoverflow.com/questions/37213783/waiting-for-all-promises-called-in-a-loop-to-finish
     const cityIOlistURL =
-      cityIOSettings.cityIO.baseURL + cityIOSettings.cityIO.ListOfTables;
-    // get all URLs
-    const tablesArr = await axios.get(cityIOlistURL);
-    // create array of all requests
-    const requestArr = tablesArr.data.map(async (tableName) => {
-      // const tableName = urlStr.split('/').pop()
-      const url = `${cityIOSettings.cityIO.baseURL}table/${tableName}/`;
-      return axios
-        .get(`${url}GEOGRID/properties/header/`)
-        .then((res) =>
-          setTableList((oldArray) => [
-            ...oldArray,
-            { tableURL: url, tableName: tableName, tableHeader: res.data },
-          ])
-        )
-        .catch((error) => console.log(error.toString()));
-    });
-
-    Promise.all(requestArr).then(() => {
-      setIsLoading(false);
-      return tablesList;
-    });
-  };
+      cityIOSettings.cityIO.baseURL + cityIOSettings.cityIO.headers;
+    // get all table headers
+    let tablesArr = await axios.get(cityIOlistURL);
+    // create array of all headers
+    tablesArr = tablesArr.data.map(table => {
+      const url = `${cityIOSettings.cityIO.baseURL}table/${table.tableName}/`;
+      table = {...table, tableURL: url}
+      return table
+    })
+    setTableList((oldArray) => [...tablesArr]);
+    setIsLoading(false);
+};
 
   useEffect(() => {
     fetchCityIOtables();

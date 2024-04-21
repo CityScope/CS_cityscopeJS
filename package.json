@@ -1,7 +1,7 @@
 {
   "name": "cityscopejs",
   "repository": "https://github.com/CityScope/CS_cityscopeJS",
-  "homepage": "https://cityscope.media.mit.edu/CS_cityscopeJS/",
+  "homepage": "https://cityio.media.mit.edu",
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
@@ -28,6 +28,7 @@
     "react-map-gl": "7.0.19",
     "react-redux": "^8.0.4",
     "react-scripts": "5.0.1",
+    "react-use-websocket": "^4.5.0",
     "redux": "^4.2.0",
     "typescript": "^4.8.4"
   },

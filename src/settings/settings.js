@@ -7,19 +7,32 @@ const getServerLocation = () => {
 
   const serverLocation =
     "cityio_local" in parsed
-      ? "http://127.0.0.1:5000/api/"
-      : "https://cityio.media.mit.edu/api/";
+      ? "http://localhost:8080/api/"
+      : "https://cityio.media.mit.edu/cityio/api/";
   console.log("cityIO server location: ", serverLocation);
   return serverLocation;
 };
+
+const getWebsocketServerLocation = () => {
+  const location = window.location;
+  const parsed = queryString.parse(location.search);
+
+  const serverLocation =
+    "cityio_local" in parsed
+      ? "ws://localhost:8080/interface"
+      : "wss://cityio.media.mit.edu/cityio/interface";
+  console.log("cityIO websocket server location: ", serverLocation);
+  return serverLocation;
+};
+
 // get the location of the app (local or remote)
 const getCSJSLocation = () => {
   const location = window.location;
   const parsed = queryString.parse(location.search);
   const cityscopejs_local_url =
     "cityscopejs_local" in parsed
-      ? "http://localhost:3000/CS_cityscopeJS/"
-      : "https://cityscope.media.mit.edu/CS_cityscopeJS/";
+      ? "http://localhost:3000/"
+      : "https://cityio.media.mit.edu";
   console.log("cityScopeJS location: ", cityscopejs_local_url);
   return cityscopejs_local_url;
 };
@@ -33,8 +46,10 @@ export const cityIOSettings = {
     "https://raw.githubusercontent.com/CityScope/CS_cityscopeJS/master/docs/",
   cityIO: {
     baseURL: getServerLocation(),
+    websocketURL: getWebsocketServerLocation(),
 
-    ListOfTables: "tables/list/",
+    ListOfTables: "table/list/",
+    headers: "table/headers/",
     interval: 500,
     cityIOmodules: [
       { name: "header", expectUpdate: false },
@@ -125,6 +140,96 @@ export const expectedLayers = {
     cityIOmoduleName: "traffic",
     initState: false,
     initSliderValue: 50,
+  },
+  ARC_LAYER_CHECKBOX: {
+    displayName: "Arc",
+    cityIOmoduleName: "arc",
+    initState: true,
+    initSliderValue: 50,
+  },
+  COLUMN_LAYER_CHECKBOX: {
+    displayName: "Column",
+    cityIOmoduleName: "column",
+    initState: true,
+    initSliderValue: 50,
+  },
+  CONTOUR_LAYER_CHECKBOX: {
+    displayName: "Contour",
+    cityIOmoduleName: "contours",
+    initState: true,
+    initSliderValue: 50,
+  },
+  GEOJSON_BASE_LAYER_CHECKBOX: {
+    displayName: "GeoJSON",
+    cityIOmoduleName: "geojsonbase",
+    initState: true,
+    initSliderValue: 50,
+  },
+  GRID_BASE_LAYER_CHECKBOX: {
+    displayName: "Grid",
+    cityIOmoduleName: "gridlayer",
+    initState: true,
+    initSliderValue: 50,
+  },
+  GRIDCELL_LAYER_CHECKBOX: {
+    displayName: "Grid cell",
+    cityIOmoduleName: "gridcell",
+    initState: true,
+    initSliderValue: 50,
+  },
+  HEATMAP_LAYER_CHECKBOX: {
+    displayName: "Heatmap",
+    cityIOmoduleName: "heatmap",
+    initState: true,
+    initSliderValue: 50,
+  },
+  HEXAGON_LAYER_CHECKBOX: {
+    displayName: "Hexagon",
+    cityIOmoduleName: "hexagon",
+    initState: true,
+    initSliderValue: 50,
+  },
+  ICON_LAYER_CHECKBOX: {
+    displayName: "Icon",
+    cityIOmoduleName: "icon",
+    initState: true,
+    initSliderValue: 100,
+  },
+  LINE_LAYER_CHECKBOX: {
+    displayName: "Lines",
+    cityIOmoduleName: "lines",
+    initState: true,
+    initSliderValue: 100,
+  },
+  PATH_LAYER_CHECKBOX: {
+    displayName: "Path",
+    cityIOmoduleName: "path",
+    initState: true,
+    initSliderValue: 75,
+  },
+  SCATTER_LAYER_CHECKBOX: {
+    displayName: "Scatter",
+    cityIOmoduleName: "scatterplot",
+    initState: true,
+    initSliderValue: 75,
+  },
+  SCENEGRAPH_LAYER_CHECKBOX: {
+    displayName: "Scene graph",
+    cityIOmoduleName: "scenegraph",
+    initState: true,
+    initSliderValue: 75,
+  },
+  MESH_LAYER_CHECKBOX: {
+    displayName: "Mesh",
+    cityIOmoduleName: "simpleMesh",
+    initState: true,
+    initSliderValue: 50,
+  },
+  TEXT_LAYER_CHECKBOX: {
+    displayName: "Text",
+    cityIOmoduleName: "textLayer",
+    initState: false,
+    initSliderValue: 100,
   },
 };
 

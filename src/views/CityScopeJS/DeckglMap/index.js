@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import PaintBrush from "../../../Components/PaintBrush";
 import { LayerHoveredTooltip } from "../../../Components/LayerHoveredTooltip";
-import { postToCityIO } from "../../../utils/utils";
 import DeckglBase from "./DeckglBase";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
@@ -14,8 +13,25 @@ import {
   GeojsonLayer,
   TileMapLayer,
   TrafficLayer,
+  ArcBaseLayer,
+  ColumnBaseLayer,
+  ContourBaseLayer,
+  GeoJsonBaseLayer,
+  GridBaseLayer,
+  GridCellBaseLayer,
+  HeatmapBaseLayer,
+  HexagonBaseLayer,
+  IconBaseLayer,
+  LineBaseLayer,
+  PathBaseLayer,
+  ScatterplotBaseLayer,
+  ScenegraphBaseLayer,
+  SimpleMeshBaseLayer,
+  TextBaseLayer
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
+import useWebSocket from "react-use-websocket"
+import { cityIOSettings } from "../../../settings/settings";
 
 export default function DeckGLMap() {
   // get cityio data from redux store
@@ -41,23 +57,37 @@ export default function DeckGLMap() {
 
   const toggleRotateCamera = menuState?.viewSettingsMenuState?.ROTATE_CHECKBOX;
 
-  // update the grid layer with every change to GEOGRIDDATA
-  useEffect(() => {
-    setGEOGRIDDATA(processGridData(cityIOdata));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cityIOdata.GEOGRIDDATA]);
+  const { sendJsonMessage } = useWebSocket(
+    cityIOSettings.cityIO.websocketURL,
+    {
+      share: true,
+      shouldReconnect: () => true,
+    },
+  )
 
-  // post GEOGRIDDATA changes to cityIO
+  // Send changes to cityIO
   useEffect(() => {
     if (!editModeToggle && GEOGRIDDATA) {
       let dataProps = [];
       for (let i = 0; i < GEOGRIDDATA.features.length; i++) {
         dataProps[i] = GEOGRIDDATA.features[i].properties;
       }
-      postToCityIO(dataProps, cityIOdata.tableName, "/GEOGRIDDATA/");
+      sendJsonMessage({
+        type: "UPDATE_GRID",
+        content: {
+          geogriddata: dataProps,
+        },
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editModeToggle]);
+  }, [editModeToggle])
+
+  // update the grid layer with every change to GEOGRIDDATA
+  useEffect(() => {
+    setGEOGRIDDATA(processGridData(cityIOdata));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cityIOdata.GEOGRIDDATA]);
+
 
   const layersKey = {
     TILE_MAP: TileMapLayer(),
@@ -146,9 +176,143 @@ export default function DeckGLMap() {
         layersMenu.TRAFFIC_LAYER_CHECKBOX &&
         layersMenu.TRAFFIC_LAYER_CHECKBOX.slider * 0.01,
     }),
+
+    ARC: ArcBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.ARC_LAYER_CHECKBOX &&
+        layersMenu.ARC_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    COLUMN: ColumnBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.COLUMN_LAYER_CHECKBOX &&
+        layersMenu.COLUMN_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    CONTOUR: ContourBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.CONTOUR_LAYER_CHECKBOX &&
+        layersMenu.CONTOUR_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    GEOJSON_BASE: GeoJsonBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.GEOJSON_BASE_LAYER_CHECKBOX &&
+        layersMenu.GEOJSON_BASE_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    GRID_BASE: GridBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.GRID_BASE_LAYER_CHECKBOX &&
+        layersMenu.GRID_BASE_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    GRID_CELL: GridCellBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.GRIDCELL_LAYER_CHECKBOX &&
+        layersMenu.GRIDCELL_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    HEATMAP: HeatmapBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.HEATMAP_LAYER_CHECKBOX &&
+        layersMenu.HEATMAP_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    HEXAGON: HexagonBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.HEXAGON_LAYER_CHECKBOX &&
+        layersMenu.HEXAGON_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    ICON: IconBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.ICON_LAYER_CHECKBOX &&
+        layersMenu.ICON_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    LINE: LineBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.LINE_LAYER_CHECKBOX &&
+        layersMenu.LINE_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    PATH: PathBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.PATH_LAYER_CHECKBOX &&
+        layersMenu.PATH_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    SCATTERPLOT: ScatterplotBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.SCATTER_LAYER_CHECKBOX &&
+        layersMenu.SCATTER_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    SCENEGRAPH: ScenegraphBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.SCENEGRAPH_LAYER_CHECKBOX &&
+        layersMenu.SCENEGRAPH_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    MESH: SimpleMeshBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.MESH_LAYER_CHECKBOX &&
+        layersMenu.MESH_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
+    TEXT: TextBaseLayer({
+      data: cityIOdata,
+      opacity:
+        layersMenu &&
+        layersMenu.TEXT_LAYER_CHECKBOX &&
+        layersMenu.TEXT_LAYER_CHECKBOX.slider * 0.01,
+    }),
+
   };
 
   const layerOrder = [
+    "TEXT",
+    "ICON",
+    "MESH",
+    "SCENEGRAPH",
+    "SCATTERPLOT",
+    "PATH",
+    "LINE",
+    "GRID_CELL",
+    "GRID_BASE",
+    "GEOJSON_BASE",
+    "CONTOUR",
+    "COLUMN",
+    "ARC",
     "ABM",
     "AGGREGATED_TRIPS",
     "TILE_MAP",
@@ -157,6 +321,8 @@ export default function DeckGLMap() {
     "GEOJSON",
     "ACCESS",
     "TRAFFIC",
+    "HEATMAP",
+    "HEXAGON"
   ];
 
   const renderDeckLayers = () => {
