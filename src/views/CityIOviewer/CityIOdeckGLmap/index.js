@@ -5,10 +5,7 @@ import { TileLayer } from "@deck.gl/geo-layers";
 import { FlyToInterpolator } from "deck.gl";
 import { LineLayer, IconLayer, TextLayer, BitmapLayer } from "@deck.gl/layers";
 import icon from "./legoio.png";
-
 import SelectedTable from "../SelectedTable";
-
-// * draggable pin https://github.com/visgl/react-map-gl/tree/6.1-release/examples/draggable-markers
 
 export default function CityIOdeckGLmap(props) {
   const [markerInfo, setMarkerInfo] = useState([]);
@@ -25,6 +22,7 @@ export default function CityIOdeckGLmap(props) {
 
   const [viewport, setViewport] = useState(INIT_VIEW);
   const [initialViewState, setInitialViewState] = useState(viewport);
+  const [intervalId, setIntervalId] = useState(null);
 
   // boolean for hovering flag
   let isHovering = false;
@@ -55,9 +53,17 @@ export default function CityIOdeckGLmap(props) {
     let interval = setInterval(() => {
       flyToTable();
     }, 10000);
+    setIntervalId(interval);
     return () => clearInterval(interval);
     // eslint-disable-next-line
   }, [markerInfo]);
+
+  useEffect(() => {
+    if (clicked) {
+      clearInterval(intervalId);
+    }
+    // eslint-disable-next-line
+  }, [clicked]);
 
   useEffect(() => {
     // set initial zoom level to reflect layers appearance
@@ -171,7 +177,12 @@ export default function CityIOdeckGLmap(props) {
       width="100%"
       height="100%"
     >
-      {clicked && clicked.object && <SelectedTable clicked={clicked.object} />}
+      {clicked && clicked.object && (
+        <SelectedTable
+          clicked={clicked.object}
+          onClose={() => setClicked(null)}
+        />
+      )}
 
       <DeckGL
         views={new GlobeView()}

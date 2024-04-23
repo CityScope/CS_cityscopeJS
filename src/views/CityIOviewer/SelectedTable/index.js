@@ -2,7 +2,6 @@ import { Typography, Link } from "@mui/material";
 import { useEffect, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import { generalSettings } from "../../../settings/settings";
 
 export default function SelectedTable(props) {
@@ -41,28 +40,26 @@ export default function SelectedTable(props) {
       }}
     >
       <DialogContent>
-        <DialogContentText id="table-select-dialog-description">
-          <Typography id="table-select-dialog-title" variant="h2">
-            {selectedTable.tableName}
-          </Typography>
-          <Typography>
-            <Link
-              href={cityscopeJSendpoint + selectedTable.tableName.toLowerCase()}
-            >
-              Go to project
-            </Link>
-            {", "}
-            <Link
-              href={projectionEndpoint + selectedTable.tableName.toLowerCase()}
-            >
-              project this table to TUI
-            </Link>{" "}
-            or{" "}
-            <Link target={"blank"} href={selectedTable.tableURL}>
-              view raw data on cityIO.
-            </Link>
-          </Typography>
-        </DialogContentText>
+        <Typography id="table-select-dialog-title" variant="h2">
+          {selectedTable.tableName}
+        </Typography>
+        <Typography>
+          <Link
+            href={cityscopeJSendpoint + selectedTable.tableName.toLowerCase()}
+          >
+            Go to project
+          </Link>
+          {", "}
+          <Link
+            href={projectionEndpoint + selectedTable.tableName.toLowerCase()}
+          >
+            project this table to TUI
+          </Link>{" "}
+          or{" "}
+          <Link target={"blank"} href={selectedTable.tableURL}>
+            view raw data on cityIO.
+          </Link>
+        </Typography>
       </DialogContent>
     </Dialog>
   );
