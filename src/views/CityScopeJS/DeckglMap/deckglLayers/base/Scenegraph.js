@@ -8,23 +8,20 @@ import {ScenegraphLayer} from '@deck.gl/mesh-layers';
    * ]
    */
   export default function ScenegraphBaseLayer({data, opacity}){
-    if(data.scenegraph){
-        return new ScenegraphLayer({
-          id: 'scenegraph-layer',
-          data: data.scenegraph.data,
-          pickable: data.scenegraph.properties.pickable || true,
-          scenegraph: data.scenegraph.properties.scenegraph || 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
+
+    return new ScenegraphLayer({
+          id: data.id,
+          data: data.data,
+          pickable: data.properties.pickable || true,
+          scenegraph: data.properties.scenegraph || 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
           getPosition: d => d.coordinates,
           getOrientation: d => [0, Math.random() * 180, 90],
           _animations: {
             '*': {speed: 5}
           },
-          sizeScale: data.scenegraph.properties.sizeScale || 500,
+          sizeScale: data.properties.sizeScale || 500,
           _lighting: 'pbr',
           opacity
         });
       
-      
-      
-    }
   }

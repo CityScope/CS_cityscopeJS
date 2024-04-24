@@ -70,11 +70,9 @@ const CityIO = (props) => {
       Object.keys(lastJsonMessage.content).forEach((key)=>{
         if(possibleModules.includes(key) && key !== 'scenarios' && key !== 'indicators'){
           m[key] = lastJsonMessage.content[key]
-        } else if(key === 'deckgl'){
-          lastJsonMessage.content.deckgl
-            .forEach((layer) => {
-              m[layer.type]={ data: layer.data, properties: layer.properties }
-            });
+        } 
+        if(key === 'deckgl'){
+          m = {...m, "deckgl": lastJsonMessage.content[key] };
         }
       }
       );
@@ -127,11 +125,26 @@ const CityIO = (props) => {
         m = {...m, "heatmap":lastJsonMessage.content.moduleData.heatmap, tableName: tableName };
       }
       if('deckgl' in lastJsonMessage.content.moduleData){
+        
+        var newLayersIds = [];
+        var newLayers = [];
+
         lastJsonMessage.content.moduleData.deckgl
           .forEach((layer) => {
-            m[layer.type]={ data: layer.data, properties: layer.properties }
+            newLayers.push(layer);
+            newLayersIds.push(layer.id)
           });
-      }
+        const currentLayers = m['deckgl']
+        if(currentLayers){
+          currentLayers.forEach((oldLayer)=>{
+            if(!newLayersIds.includes(oldLayer.id)){
+              newLayers.push(oldLayer)
+            }
+          })  
+        }
+
+        m = {...m, "deckgl":newLayers };
+        }
 
       dispatch(updateCityIOdata(m));
       verbose &&

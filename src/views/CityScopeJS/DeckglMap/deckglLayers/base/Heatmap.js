@@ -9,15 +9,13 @@ import {HeatmapLayer} from '@deck.gl/aggregation-layers';
    */
   export default function HeatmapBaseLayer({data, opacity}){
 
-    if(data.heatmap){
-
         return new HeatmapLayer({
-            id: 'heatmapLayer',
-            data: data.heatmap.data,
+            id: data.id,
+            data: data.data,
             getPosition: d => d.coordinates,
             getWeight: d => d.weight,
             aggregation: 'SUM',
             opacity
           });
-    }
+    
   }

@@ -116,6 +116,58 @@ function LayersMenu() {
         );
       }
     }
+    // loop through the keys in deckgl layers
+    if(cityIOdata.deckgl)
+      for (let i = 0; i < cityIOdata.deckgl.length; i++) {
+        const moduleName = cityIOdata.deckgl[i].id;
+        if(!layersMenuState[moduleName]){
+          setLayersMenuState({...layersMenuState, [moduleName]: {
+            isOn: true,
+            slider: 50,
+          }})
+        }
+        console.log(moduleName)
+        // if the module name is in the data for this CS instance, make a checkbox
+        toggleListArr.push(
+          <Box key={"box_" + moduleName}>
+            <FormControlLabel
+              key={"formControl_" + moduleName}
+              control={
+                <Checkbox
+                  checked={
+                    (layersMenuState[moduleName] &&
+                      layersMenuState[moduleName].isOn) ||
+                    false
+                  }
+                  key={"checkbox_" + moduleName}
+                  color="primary"
+                  onChange={(e) =>
+                    handleCheckboxEvent(moduleName, e.target.checked)
+                  }
+                />
+              }
+              label={
+                <Typography variant="caption" key={"label_" + moduleName}>
+                  {moduleName}
+                </Typography>
+              }
+            />
+
+            {layersMenuState[moduleName] && layersMenuState[moduleName].isOn && (
+              <Slider
+                size="small"
+                key={"slider_" + moduleName}
+                valueLabelDisplay="auto"
+                onChangeCommitted={(_, val) => commitSliderVal(moduleName, val)}
+                onChange={(_, val) => updateSliderVal(moduleName, val)}
+                value={sliderVal[moduleName] ?? 50}
+              />
+            )}
+          </Box>
+        );
+        
+      }
+    
     return toggleListArr;
   };
 
