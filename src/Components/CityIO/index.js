@@ -71,8 +71,11 @@ const CityIO = (props) => {
         if(possibleModules.includes(key) && key !== 'scenarios' && key !== 'indicators'){
           m[key] = lastJsonMessage.content[key]
         } 
-        if(key === 'deckgl'){
-          m = {...m, "deckgl": lastJsonMessage.content[key] };
+        else if(key === 'LAYERS'){
+          m = {...m, "layers": lastJsonMessage.content[key] };
+        }
+        else if(key === 'NUMERICINDICATORS'){
+          m = {...m, "indicators": lastJsonMessage.content[key] };
         }
       }
       );
@@ -119,22 +122,36 @@ const CityIO = (props) => {
       );
       let m = {...cityIOdata}
       if('numeric' in lastJsonMessage.content.moduleData){
-        m = {...m, "indicators":lastJsonMessage.content.moduleData.numeric, tableName: tableName };
+        var newIndicatorsNames = [];
+        var newIndicators = [];
+
+        lastJsonMessage.content.moduleData.numeric
+          .forEach((indicator) => {
+            newIndicators.push(indicator);
+            newIndicatorsNames.push(indicator.name)
+          });
+        const currentIndicators = m['indicators']
+        if(currentIndicators){
+          currentIndicators.forEach((oldIndicator)=>{
+            if(!newIndicatorsNames.includes(oldIndicator.name)){
+              newIndicators.push(oldIndicator)
+            }
+          })  
+        }
+
+        m = {...m, "indicators": newIndicators};
       }
-      if('heatmap' in lastJsonMessage.content.moduleData){
-        m = {...m, "heatmap":lastJsonMessage.content.moduleData.heatmap, tableName: tableName };
-      }
-      if('deckgl' in lastJsonMessage.content.moduleData){
+      if('layers' in lastJsonMessage.content.moduleData){
         
         var newLayersIds = [];
         var newLayers = [];
 
-        lastJsonMessage.content.moduleData.deckgl
+        lastJsonMessage.content.moduleData.layers
           .forEach((layer) => {
             newLayers.push(layer);
             newLayersIds.push(layer.id)
           });
-        const currentLayers = m['deckgl']
+        const currentLayers = m['layers']
         if(currentLayers){
           currentLayers.forEach((oldLayer)=>{
             if(!newLayersIds.includes(oldLayer.id)){
@@ -143,7 +160,7 @@ const CityIO = (props) => {
           })  
         }
 
-        m = {...m, "deckgl":newLayers };
+        m = {...m, "layers":newLayers };
         }
 
       dispatch(updateCityIOdata(m));

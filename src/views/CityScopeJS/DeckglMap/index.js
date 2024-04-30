@@ -341,17 +341,17 @@ export default function DeckGLMap() {
         layers.push(layersKey[layerNameString]);
       }
     }
-    if(cityIOdata.deckgl)
-      for (let i = 0; i < cityIOdata.deckgl.length; i++) {
-        const moduleName = cityIOdata.deckgl[i].id;
-        const moduleType = cityIOdata.deckgl[i].type;
+    if(cityIOdata.layers)
+      for (let i = 0; i < cityIOdata.layers.length; i++) {
+        const moduleName = cityIOdata.layers[i].id;
+        const moduleType = cityIOdata.layers[i].type;
 
         if (
           layersMenu &&
           layersMenu[moduleName] &&
           layersMenu[moduleName].isOn
         ) {
-          layers.push(getLayerByType(moduleType, cityIOdata.deckgl[i]));
+          layers.push(getLayerByType(moduleType, cityIOdata.layers[i]));
         }
       }
 

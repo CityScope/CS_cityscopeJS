@@ -15,6 +15,7 @@ import {HeatmapLayer} from '@deck.gl/aggregation-layers';
             getPosition: d => d.coordinates,
             getWeight: d => d.weight,
             aggregation: 'SUM',
+            colorRange: data.properties.colorRange || [[255,255,178],[254,217,118],[254,178,76],[253,141,60],[240,59,32],[189,0,38]],
             opacity
           });
     

@@ -117,9 +117,9 @@ function LayersMenu() {
       }
     }
     // loop through the keys in deckgl layers
-    if(cityIOdata.deckgl)
-      for (let i = 0; i < cityIOdata.deckgl.length; i++) {
-        const moduleName = cityIOdata.deckgl[i].id;
+    if(cityIOdata.layers)
+      for (let i = 0; i < cityIOdata.layers.length; i++) {
+        const moduleName = cityIOdata.layers[i].id;
         if(!layersMenuState[moduleName]){
           setLayersMenuState({...layersMenuState, [moduleName]: {
             isOn: true,
