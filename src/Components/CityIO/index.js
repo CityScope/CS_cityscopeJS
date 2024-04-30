@@ -59,7 +59,7 @@ const CityIO = (props) => {
 
     // If the message is of type GRID, the UI updates the GEOGRID and
     // GEOGRIDDATA, optionally, CityIO can send saved modules
-    if (messageType === 'GRID'){
+    if (messageType === 'TABLE_SNAPSHOT'){
       verbose && console.log(
         ` --- trying to update GEOGRID --- ${JSON.stringify(lastJsonMessage.content)}`
       );
@@ -116,9 +116,9 @@ const CityIO = (props) => {
     // If we receive a INDICATOR (MODULE) message, the UI needs to load
     //  the module data
     // WIP
-    else if (messageType === 'INDICATOR'){
+    else if (messageType === 'MODULE'){
       verbose && console.log(
-        ` --- trying to update INDICATOR --- ${JSON.stringify(lastJsonMessage.content)}`
+        ` --- trying to update MODULE data --- ${JSON.stringify(lastJsonMessage.content)}`
       );
       let m = {...cityIOdata}
       if('numeric' in lastJsonMessage.content.moduleData){
