@@ -9,18 +9,18 @@ import {GridCellLayer} from '@deck.gl/layers';
    * ]
    */
   export default function GridCellBaseLayer({data, opacity}){
-    if(data.gridcell){
-        return new GridCellLayer({
-          id: 'grid-cell-layer',
-          data: data.gridcell.data,
-          pickable: data.gridcell.properties.pickable || true,
-          extruded: data.gridcell.properties.extruded || true,
-          cellSize: data.gridcell.properties.cellSize || 200,
-          elevationScale: data.gridcell.properties.elevationScale || 5000,
+
+    return new GridCellLayer({
+          id: data.id,
+          data: data.data,
+          pickable: data.properties.pickable || true,
+          extruded: data.properties.extruded || true,
+          cellSize: data.properties.cellSize || 200,
+          elevationScale: data.properties.elevationScale || 5000,
           getPosition: d => d.centroid,
           getFillColor: d => [48, 128, d.value * 255, 255],
           getElevation: d => d.value,
           opacity
         });    
-    }
+    
   }

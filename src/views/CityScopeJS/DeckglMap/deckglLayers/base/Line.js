@@ -18,16 +18,16 @@ import {LineLayer} from '@deck.gl/layers';
    * ]
    */
   export default function LineBaseLayer({data, opacity}){
-    if(data.lines){
-        return new LineLayer({
-          id: 'line-layer',
-          data: data.lines.data,
-          pickable: data.lines.properties.pickable || true,
-          getWidth: data.lines.properties.width || 50,
+
+    return new LineLayer({
+          id: data.id,
+          data: data.data,
+          pickable: data.properties.pickable || true,
+          getWidth: data.properties.width || 50,
           getSourcePosition: d => d.from.coordinates,
           getTargetPosition: d => d.to.coordinates,
           getColor: d => d.color || [200, 140, 0],
           opacity
         });
-    }
+    
   }

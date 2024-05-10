@@ -8,14 +8,14 @@ import {ContourLayer} from '@deck.gl/aggregation-layers';
    * ]
    */
 export default function ContourBaseLayer({data, opacity}){
-    if(data.contours){
-        return new ContourLayer({
-          id: 'contourLayer',
-          contours: data.contours.data,
-          cellSize: data.contours.properties.cellSize || 200,
+
+  return new ContourLayer({
+          id: data.id,
+          contours: data.data,
+          cellSize: data.properties.cellSize || 200,
           getPosition: d => d.coordinates,
           opacity
         });
       
-    }
+    
   }

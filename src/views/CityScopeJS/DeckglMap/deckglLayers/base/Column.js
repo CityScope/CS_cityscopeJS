@@ -8,15 +8,15 @@ import {ColumnLayer} from '@deck.gl/layers';
    * ]
    */
   export default function ColumnBaseLayer({data, opacity}){
-    if(data.column){
-      return new ColumnLayer({
-        id: 'column-layer',
-        data: data.column.data,
-        diskResolution: data.column.properties.resolution || 12,
-        radius: data.column.properties.radius || 30,
-        extruded: data.column.properties.extruded || true,
-        pickable: data.column.properties.pickable || true,
-        elevationScale: data.column.properties.elevationScale || 1,
+      
+    return new ColumnLayer({
+        id: data.id,
+        data: data.data,
+        diskResolution: data.properties.resolution || 12,
+        radius: data.properties.radius || 30,
+        extruded: data.properties.extruded || true,
+        pickable: data.properties.pickable || true,
+        elevationScale: data.properties.elevationScale || 1,
         getPosition: d => d.centroid,
         getFillColor: d => [48, 128, d.value * 255, 255],
         getLineColor: [0, 0, 0],
@@ -24,5 +24,5 @@ import {ColumnLayer} from '@deck.gl/layers';
         opacity
       });
           
-    }
+    
   }

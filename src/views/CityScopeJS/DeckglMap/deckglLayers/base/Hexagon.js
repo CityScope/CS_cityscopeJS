@@ -8,16 +8,16 @@ import {HexagonLayer} from '@deck.gl/aggregation-layers';
    * ]
    */
   export default function HexagonBaseLayer({data, opacity}){
-    if(data.hexagon){
-        return new HexagonLayer({
-          id: 'hexagon-layer',
-          data: data.hexagon.data,
-          pickable: data.hexagon.properties.pickable || true,
-          extruded: data.hexagon.properties.extruded || true,
-          radius: data.hexagon.properties.radius || 200,
-          elevationScale: data.hexagon.properties.elevationScale || 4,
+
+    return new HexagonLayer({
+          id: data.id,
+          data: data.data,
+          pickable: data.properties.pickable || true,
+          extruded: data.properties.extruded || true,
+          radius: data.properties.radius || 200,
+          elevationScale: data.properties.elevationScale || 4,
           getPosition: d => d.coordinates,
           opacity
         });
-    }
+    
   }

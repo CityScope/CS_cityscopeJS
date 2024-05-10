@@ -8,10 +8,10 @@ import {ScatterplotLayer} from '@deck.gl/layers';
    * ]
    */
   export default function ScatterplotBaseLayer({data, opacity}){
-    if(data.scatterplot){
-        return new ScatterplotLayer({
-          id: 'scatterplot-layer',
-          data: data.scatterplot.data,
+
+    return new ScatterplotLayer({
+          id: data.id,
+          data: data.data,
           pickable: data.path.properties.pickable || true,
           stroked: data.path.properties.stroked || true,
           filled: data.path.properties.filled || true,
@@ -26,6 +26,4 @@ import {ScatterplotLayer} from '@deck.gl/layers';
           opacity
         });
       
-      
-    }
   }

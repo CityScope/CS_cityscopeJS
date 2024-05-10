@@ -59,7 +59,7 @@ const CityIO = (props) => {
 
     // If the message is of type GRID, the UI updates the GEOGRID and
     // GEOGRIDDATA, optionally, CityIO can send saved modules
-    if (messageType === 'GRID'){
+    if (messageType === 'TABLE_SNAPSHOT'){
       verbose && console.log(
         ` --- trying to update GEOGRID --- ${JSON.stringify(lastJsonMessage.content)}`
       );
@@ -70,11 +70,12 @@ const CityIO = (props) => {
       Object.keys(lastJsonMessage.content).forEach((key)=>{
         if(possibleModules.includes(key) && key !== 'scenarios' && key !== 'indicators'){
           m[key] = lastJsonMessage.content[key]
-        } else if(key === 'deckgl'){
-          lastJsonMessage.content.deckgl
-            .forEach((layer) => {
-              m[layer.type]={ data: layer.data, properties: layer.properties }
-            });
+        } 
+        else if(key === 'LAYERS'){
+          m = {...m, "layers": lastJsonMessage.content[key] };
+        }
+        else if(key === 'NUMERICINDICATORS'){
+          m = {...m, "indicators": lastJsonMessage.content[key] };
         }
       }
       );
@@ -115,23 +116,52 @@ const CityIO = (props) => {
     // If we receive a INDICATOR (MODULE) message, the UI needs to load
     //  the module data
     // WIP
-    else if (messageType === 'INDICATOR'){
+    else if (messageType === 'MODULE'){
       verbose && console.log(
-        ` --- trying to update INDICATOR --- ${JSON.stringify(lastJsonMessage.content)}`
+        ` --- trying to update MODULE data --- ${JSON.stringify(lastJsonMessage.content)}`
       );
       let m = {...cityIOdata}
       if('numeric' in lastJsonMessage.content.moduleData){
-        m = {...m, "indicators":lastJsonMessage.content.moduleData.numeric, tableName: tableName };
-      }
-      if('heatmap' in lastJsonMessage.content.moduleData){
-        m = {...m, "heatmap":lastJsonMessage.content.moduleData.heatmap, tableName: tableName };
-      }
-      if('deckgl' in lastJsonMessage.content.moduleData){
-        lastJsonMessage.content.moduleData.deckgl
-          .forEach((layer) => {
-            m[layer.type]={ data: layer.data, properties: layer.properties }
+        var newIndicatorsNames = [];
+        var newIndicators = [];
+
+        lastJsonMessage.content.moduleData.numeric
+          .forEach((indicator) => {
+            newIndicators.push(indicator);
+            newIndicatorsNames.push(indicator.name)
           });
+        const currentIndicators = m['indicators']
+        if(currentIndicators){
+          currentIndicators.forEach((oldIndicator)=>{
+            if(!newIndicatorsNames.includes(oldIndicator.name)){
+              newIndicators.push(oldIndicator)
+            }
+          })  
+        }
+
+        m = {...m, "indicators": newIndicators};
       }
+      if('layers' in lastJsonMessage.content.moduleData){
+        
+        var newLayersIds = [];
+        var newLayers = [];
+
+        lastJsonMessage.content.moduleData.layers
+          .forEach((layer) => {
+            newLayers.push(layer);
+            newLayersIds.push(layer.id)
+          });
+        const currentLayers = m['layers']
+        if(currentLayers){
+          currentLayers.forEach((oldLayer)=>{
+            if(!newLayersIds.includes(oldLayer.id)){
+              newLayers.push(oldLayer)
+            }
+          })  
+        }
+
+        m = {...m, "layers":newLayers };
+        }
 
       dispatch(updateCityIOdata(m));
       verbose &&

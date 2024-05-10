@@ -18,12 +18,12 @@ import {ArcLayer} from '@deck.gl/layers';
    * ]
    */
   export default function ArcBaseLayer({data, opacity}){
-    if(data.arc){
-        return new ArcLayer({
-          id: 'arc-layer',
-          data: data.arc.data,
+
+    return new ArcLayer({
+          id: data.id,
+          data: data.data,
           pickable: true,
-          getWidth: data.arc.properties.width || 12,
+          getWidth: data.properties.width || 12,
           getSourcePosition: d => d.from.coordinates,
           getTargetPosition: d => d.to.coordinates,
           getSourceColor: d => d.sourceColor || [255, 140, 0],
@@ -31,5 +31,5 @@ import {ArcLayer} from '@deck.gl/layers';
           opacity
         });
       
-    }
+    
   }

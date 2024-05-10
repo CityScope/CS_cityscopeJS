@@ -176,128 +176,131 @@ export default function DeckGLMap() {
         layersMenu.TRAFFIC_LAYER_CHECKBOX &&
         layersMenu.TRAFFIC_LAYER_CHECKBOX.slider * 0.01,
     }),
-
-    ARC: ArcBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.ARC_LAYER_CHECKBOX &&
-        layersMenu.ARC_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    COLUMN: ColumnBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.COLUMN_LAYER_CHECKBOX &&
-        layersMenu.COLUMN_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    CONTOUR: ContourBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.CONTOUR_LAYER_CHECKBOX &&
-        layersMenu.CONTOUR_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    GEOJSON_BASE: GeoJsonBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.GEOJSON_BASE_LAYER_CHECKBOX &&
-        layersMenu.GEOJSON_BASE_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    GRID_BASE: GridBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.GRID_BASE_LAYER_CHECKBOX &&
-        layersMenu.GRID_BASE_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    GRID_CELL: GridCellBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.GRIDCELL_LAYER_CHECKBOX &&
-        layersMenu.GRIDCELL_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    HEATMAP: HeatmapBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.HEATMAP_LAYER_CHECKBOX &&
-        layersMenu.HEATMAP_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    HEXAGON: HexagonBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.HEXAGON_LAYER_CHECKBOX &&
-        layersMenu.HEXAGON_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    ICON: IconBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.ICON_LAYER_CHECKBOX &&
-        layersMenu.ICON_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    LINE: LineBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.LINE_LAYER_CHECKBOX &&
-        layersMenu.LINE_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    PATH: PathBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.PATH_LAYER_CHECKBOX &&
-        layersMenu.PATH_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    SCATTERPLOT: ScatterplotBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.SCATTER_LAYER_CHECKBOX &&
-        layersMenu.SCATTER_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    SCENEGRAPH: ScenegraphBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.SCENEGRAPH_LAYER_CHECKBOX &&
-        layersMenu.SCENEGRAPH_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    MESH: SimpleMeshBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.MESH_LAYER_CHECKBOX &&
-        layersMenu.MESH_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
-    TEXT: TextBaseLayer({
-      data: cityIOdata,
-      opacity:
-        layersMenu &&
-        layersMenu.TEXT_LAYER_CHECKBOX &&
-        layersMenu.TEXT_LAYER_CHECKBOX.slider * 0.01,
-    }),
-
   };
+
+  function getLayerByType(type, content){
+    if(type === 'text'){
+      return TextBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'arc'){
+      return ArcBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'heatmap'){
+      return HeatmapBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'column'){
+      return ColumnBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'contour'){
+      return ContourBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'geojson'){
+      return GeoJsonBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'grid'){
+      return GridBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'gridCell'){
+      return GridCellBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'hexagon'){
+      return HexagonBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'icon'){
+      return IconBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'line'){
+      return LineBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'path'){
+      return PathBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'scatterplot'){
+      return ScatterplotBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'scenegraph'){
+      return ScenegraphBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } else if(type === 'simpleMesh'){
+      return SimpleMeshBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      })
+    } 
+  }
 
   const layerOrder = [
     "TEXT",
@@ -338,6 +341,21 @@ export default function DeckGLMap() {
         layers.push(layersKey[layerNameString]);
       }
     }
+    if(cityIOdata.layers)
+      for (let i = 0; i < cityIOdata.layers.length; i++) {
+        const moduleName = cityIOdata.layers[i].id;
+        const moduleType = cityIOdata.layers[i].type;
+
+        if (
+          layersMenu &&
+          layersMenu[moduleName] &&
+          layersMenu[moduleName].isOn
+        ) {
+          layers.push(getLayerByType(moduleType, cityIOdata.layers[i]));
+        }
+      }
+
+    console.log(layers)
     return layers;
   };
 

@@ -7,11 +7,11 @@ import {TextLayer} from '@deck.gl/layers';
    * ]
    */
   export default function TextBaseLayer({data, opacity}){
-    if(data.textLayer){
-        return new TextLayer({
-          id: 'text-layer',
-          data: data.textLayer.data,
-          pickable: data.textLayer.properties.pickable || true,
+
+    return new TextLayer({
+          id: data.id,
+          data: data.data,
+          pickable: data.properties.pickable || true,
           getPosition: d => [d.coordinates[0],d.coordinates[1],20],
           getText: d => d.text,
           getAngle: 0,
@@ -27,5 +27,5 @@ import {TextLayer} from '@deck.gl/layers';
           opacity
         });
       
-    }
+    
   }
