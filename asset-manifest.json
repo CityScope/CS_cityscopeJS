@@ -1,16 +1,14 @@
 {
   "files": {
-    "main.css": "https://cityio.media.mit.edu/static/css/main.092125b7.css",
-    "main.js": "https://cityio.media.mit.edu/static/js/main.ece3b5a4.js",
-    "static/js/483.6f575d1a.chunk.js": "https://cityio.media.mit.edu/static/js/483.6f575d1a.chunk.js",
+    "main.css": "https://cityio.media.mit.edu/static/css/main.f736318f.css",
+    "main.js": "https://cityio.media.mit.edu/static/js/main.e9113027.js",
     "static/media/legoio.png": "https://cityio.media.mit.edu/static/media/legoio.148c5ab6b7715f0e6c55.png",
     "index.html": "https://cityio.media.mit.edu/index.html",
-    "main.092125b7.css.map": "https://cityio.media.mit.edu/static/css/main.092125b7.css.map",
-    "main.ece3b5a4.js.map": "https://cityio.media.mit.edu/static/js/main.ece3b5a4.js.map",
-    "483.6f575d1a.chunk.js.map": "https://cityio.media.mit.edu/static/js/483.6f575d1a.chunk.js.map"
+    "main.f736318f.css.map": "https://cityio.media.mit.edu/static/css/main.f736318f.css.map",
+    "main.e9113027.js.map": "https://cityio.media.mit.edu/static/js/main.e9113027.js.map"
   },
   "entrypoints": [
-    "static/css/main.092125b7.css",
-    "static/js/main.ece3b5a4.js"
+    "static/css/main.f736318f.css",
+    "static/js/main.e9113027.js"
   ]
 }
