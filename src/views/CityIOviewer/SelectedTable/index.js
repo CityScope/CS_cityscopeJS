@@ -7,8 +7,11 @@ import { generalSettings } from "../../../settings/settings";
 export default function SelectedTable(props) {
   const selectedTable = props.clicked;
 
-  const cityscopeJSendpoint = generalSettings.csjsURL + "?cityscope=";
-  const projectionEndpoint = generalSettings.csjsURL + "?projection=";
+  const cityscopeJSendpoint = generalSettings.csjsURL + "/" + "?cityscope=";
+  // for projection mapping use this endpoint
+  // https://cityscope.media.mit.edu/CS_cityscopeJS_projection_mapping/?cityscope=TABLE NAME
+  const projectionEndpoint =
+    generalSettings.csjsURL + "_projection_mapping/?cityscope=";
 
   const [open, setOpen] = useState(false);
 
