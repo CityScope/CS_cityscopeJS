@@ -1,7 +1,7 @@
 {
   "name": "cityscopejs",
   "repository": "https://github.com/CityScope/CS_cityscopeJS",
-  "homepage": "https://cityio.media.mit.edu",
+  "homepage": "https://cityscope.media.mit.edu/CS_cityscopeJS",
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
@@ -10,8 +10,6 @@
     "@mui/lab": "^5.0.0-alpha.102",
     "@mui/material": "^5.10.8",
     "@mui/utils": "^5.10.6",
-    "@mui/x-data-grid": "^5.17.6",
-    "@mui/x-data-grid-generator": "^5.17.6",
     "@reduxjs/toolkit": "^1.8.5",
     "axios": "^1.1.2",
     "buffer": "^6.0.3",

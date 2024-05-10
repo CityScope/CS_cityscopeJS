@@ -2,16 +2,21 @@ import { useState, useCallback } from "react";
 import { Drawer, Box } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
-const dividerWidth = 10;
+const dividerWidth = 20;
 const maxDrawerWidth =
   Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) -
   10;
-
 const minDrawerWidth = 5;
 
 export default function ResizableDrawer({ children, direction, width }) {
-  const defaultDrawerWidth = Math.floor(maxDrawerWidth / 4);
-  const [drawerWidth, setDrawerWidth] = useState(width || defaultDrawerWidth);
+  const [drawerWidth, setDrawerWidth] = useState(
+    width ||
+      // 50% of the screen width
+      Math.max(
+        document.documentElement.clientWidth || 0,
+        window.innerWidth || 0
+      ) / 2
+  );
 
   const handleMouseDown = (e) => {
     document.addEventListener("mouseup", handleMouseUp, true);
@@ -69,7 +74,8 @@ export default function ResizableDrawer({ children, direction, width }) {
           bottom: direction === "bottom" ? drawerWidth + "px" : undefined,
           zIndex: direction === "bottom" ? 9999 : 100,
           cursor: "move",
-          bgcolor: "secondary.dark",
+          // color
+          backgroundColor: "rgba(0,0,0,0.8)",
         }}
       />
 
@@ -96,10 +102,6 @@ export default function ResizableDrawer({ children, direction, width }) {
             zIndex: 1000,
             borderRadius: "30px",
             cursor: "move",
-            borderColor: "secondary.main",
-            bgcolor: "secondary.dark",
-            borderStyle: "solid",
-            borderWidth: "2px",
           }}
         >
           <Box
@@ -107,11 +109,7 @@ export default function ResizableDrawer({ children, direction, width }) {
               transform: "rotate(90deg)",
               position: "absolute",
               top: "40%",
-              left: "50%",
-     
-
-    
-
+              left: "40%",
             }}
           >
             ...

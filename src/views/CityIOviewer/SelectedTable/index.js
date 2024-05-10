@@ -1,12 +1,8 @@
 import { Typography, Link } from "@mui/material";
 import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import {generalSettings} from "../../../settings/settings";
+import { generalSettings } from "../../../settings/settings";
 
 export default function SelectedTable(props) {
   const selectedTable = props.clicked;
@@ -32,34 +28,39 @@ export default function SelectedTable(props) {
       onClose={handleClose}
       aria-labelledby="table-select-dialog-title"
       aria-describedby="table-select-dialog-description"
+      sx={{
+        background: "rgba(0, 0, 0, 0.5)",
+        "& .MuiPaper-root": {
+          background: "rgba(0, 0, 0, .8)",
+          outline: "1px solid white",
+        },
+        "& .MuiBackdrop-root": {
+          backgroundColor: "transparent", // Try to remove this to see the result
+        },
+      }}
     >
-      <DialogTitle id="table-select-dialog-title">
-        CityScope {selectedTable.tableName}
-      </DialogTitle>
       <DialogContent>
-        <DialogContentText id="table-select-dialog-description">
-          <Typography component={"span"}>
-            <Link
-              href={cityscopeJSendpoint + selectedTable.tableName.toLowerCase()}
-            >
-              Go to project
-            </Link>
-            {", "}
-            <Link
-              href={projectionEndpoint + selectedTable.tableName.toLowerCase()}
-            >
-              project this table to TUI
-            </Link>{" "}
-            or{" "}
-            <Link target={"blank"} href={selectedTable.tableURL}>
-              view raw data on cityIO.
-            </Link>
-          </Typography>
-        </DialogContentText>
+        <Typography id="table-select-dialog-title" variant="h2">
+          {selectedTable.tableName}
+        </Typography>
+        <Typography>
+          <Link
+            href={cityscopeJSendpoint + selectedTable.tableName.toLowerCase()}
+          >
+            Go to project
+          </Link>
+          {", "}
+          <Link
+            href={projectionEndpoint + selectedTable.tableName.toLowerCase()}
+          >
+            project this table to TUI
+          </Link>{" "}
+          or{" "}
+          <Link target={"blank"} href={selectedTable.tableURL}>
+            view raw data on cityIO.
+          </Link>
+        </Typography>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>(x) Close</Button>
-      </DialogActions>
     </Dialog>
   );
 }

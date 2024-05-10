@@ -35,8 +35,15 @@ export default function CollapsableCard({
           <Grid item container xs={10} direction="row">
             <ArrowDropDown />
             <div style={{ display: "block", textAlign: "left" }}>
-              <Typography>{title ? title : ""}</Typography>
-              <Typography color={"secondary.main"} variant="caption">
+              <Typography
+                variant="h6"
+                style={{ color: "white", fontWeight: "bold", fontSize: "10px" }}
+              >
+                {title ? title : ""}
+              </Typography>
+              <Typography
+                style={{ color: "gray",  fontSize: "10px" }}
+              >
                 {subheader ? subheader : ""}
               </Typography>
             </div>
