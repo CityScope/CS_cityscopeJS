@@ -31,8 +31,8 @@ const getCSJSLocation = () => {
   const parsed = queryString.parse(location.search);
   const cityscopejs_local_url =
     "cityscopejs_local" in parsed
-      ? "http://localhost:3000/"
-      : "https://cityscope.media.mit.edu/CS_cityscopeJS/";
+      ? "http://localhost:3000"
+      : "https://cityscope.media.mit.edu/CS_cityscopeJS";
   console.log("cityScopeJS location: ", cityscopejs_local_url);
   return cityscopejs_local_url;
 };
