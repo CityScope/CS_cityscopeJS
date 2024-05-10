@@ -67,7 +67,7 @@ export default function CityIOviewer() {
                 <Typography variant="h3" sx={{ marginTop: 2.5, marginLeft: 2 }}>or</Typography>
               </Grid>
               <Grid item xs={'auto'} sx={{pointerEvents:"all"}}>
-                  <Button variant="contained" href="/?editor=editor" sx={{padding: 2, marginTop: 1, marginLeft: 2}}>Create new project</Button>
+                  <Button variant="contained" href="https://cityscope.media.mit.edu/CS_cityscopeJS_grid_maker/" sx={{padding: 2, marginTop: 1, marginLeft: 2}}>Create new project</Button>
               </Grid>
           </Grid>
           </Grid>
