@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { computeMidGridCell } from "../../../utils/utils";
+import { Map } from "react-map-gl";
 
 export default function DeckglBase({
   layers,
@@ -110,6 +111,11 @@ export default function DeckglBase({
         dragRotate: !draggingWhileEditing,
         keyboard: false,
       }}
-    />
+    >
+      <Map
+        mapStyle="mapbox://styles/relnox/ck0h5xn701bpr1dqs3he2lecq?fresh=true"
+        mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+      />
+    </DeckGL>
   );
 }

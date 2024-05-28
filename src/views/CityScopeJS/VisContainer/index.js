@@ -8,19 +8,9 @@ import CollapsableCard from "../../../Components/CollapsableCard";
 function VisContainer() {
   return (
     <>
-      <ResizableDrawer direction="right" width={window.innerWidth / 3}>
+      <ResizableDrawer direction="right" width={window.innerWidth / 5}>
         <Box p={1}>
           <Grid container spacing={1}>
-            <Grid item xs={12} md={12} lg={12} xl={12}>
-              <CollapsableCard
-                collapse={true}
-                variant="outlined"
-                title="Radar Chart"
-                subheader="Metrics and KPIs"
-              >
-                <RadarChart />
-              </CollapsableCard>
-            </Grid>
             <Grid item xs={12} md={12} lg={12} xl={12}>
               <CollapsableCard
                 collapse={true}
@@ -32,6 +22,16 @@ function VisContainer() {
                 meters per floor)"
               >
                 <AreaCalc />
+              </CollapsableCard>
+            </Grid>
+            <Grid item xs={12} md={12} lg={12} xl={12}>
+              <CollapsableCard
+                collapse={true}
+                variant="outlined"
+                title="Radar Chart"
+                subheader="Metrics and KPIs"
+              >
+                <RadarChart />
               </CollapsableCard>
             </Grid>
             <Grid item xs={12} md={12} lg={12} xl={12}>

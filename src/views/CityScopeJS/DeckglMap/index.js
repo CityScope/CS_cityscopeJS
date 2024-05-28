@@ -27,10 +27,10 @@ import {
   ScatterplotBaseLayer,
   ScenegraphBaseLayer,
   SimpleMeshBaseLayer,
-  TextBaseLayer
+  TextBaseLayer,
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
-import useWebSocket from "react-use-websocket"
+import useWebSocket from "react-use-websocket";
 import { cityIOSettings } from "../../../settings/settings";
 
 export default function DeckGLMap() {
@@ -57,13 +57,10 @@ export default function DeckGLMap() {
 
   const toggleRotateCamera = menuState?.viewSettingsMenuState?.ROTATE_CHECKBOX;
 
-  const { sendJsonMessage } = useWebSocket(
-    cityIOSettings.cityIO.websocketURL,
-    {
-      share: true,
-      shouldReconnect: () => true,
-    },
-  )
+  const { sendJsonMessage } = useWebSocket(cityIOSettings.cityIO.websocketURL, {
+    share: true,
+    shouldReconnect: () => true,
+  });
 
   // Send changes to cityIO
   useEffect(() => {
@@ -80,14 +77,13 @@ export default function DeckGLMap() {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editModeToggle])
+  }, [editModeToggle]);
 
   // update the grid layer with every change to GEOGRIDDATA
   useEffect(() => {
     setGEOGRIDDATA(processGridData(cityIOdata));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityIOdata.GEOGRIDDATA]);
-
 
   const layersKey = {
     TILE_MAP: TileMapLayer(),
@@ -178,128 +174,128 @@ export default function DeckGLMap() {
     }),
   };
 
-  function getLayerByType(type, content){
-    if(type === 'text'){
+  function getLayerByType(type, content) {
+    if (type === "text") {
       return TextBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'arc'){
+      });
+    } else if (type === "arc") {
       return ArcBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'heatmap'){
+      });
+    } else if (type === "heatmap") {
       return HeatmapBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'column'){
+      });
+    } else if (type === "column") {
       return ColumnBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'contour'){
+      });
+    } else if (type === "contour") {
       return ContourBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'geojson'){
+      });
+    } else if (type === "geojson") {
       return GeoJsonBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'grid'){
+      });
+    } else if (type === "grid") {
       return GridBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'gridCell'){
+      });
+    } else if (type === "gridCell") {
       return GridCellBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'hexagon'){
+      });
+    } else if (type === "hexagon") {
       return HexagonBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'icon'){
+      });
+    } else if (type === "icon") {
       return IconBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'line'){
+      });
+    } else if (type === "line") {
       return LineBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'path'){
+      });
+    } else if (type === "path") {
       return PathBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'scatterplot'){
+      });
+    } else if (type === "scatterplot") {
       return ScatterplotBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'scenegraph'){
+      });
+    } else if (type === "scenegraph") {
       return ScenegraphBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } else if(type === 'simpleMesh'){
+      });
+    } else if (type === "simpleMesh") {
       return SimpleMeshBaseLayer({
         data: content,
         opacity:
           layersMenu &&
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
-      })
-    } 
+      });
+    }
   }
 
   const layerOrder = [
@@ -325,12 +321,13 @@ export default function DeckGLMap() {
     "ACCESS",
     "TRAFFIC",
     "HEATMAP",
-    "HEXAGON"
+    "HEXAGON",
   ];
 
   const renderDeckLayers = () => {
     let layers = [];
-    layers.push(layersKey["TILE_MAP"]);
+    // ! [TEST] we stop loading the tile map layer as the base layer and instead use mapbox-gl
+    // layers.push(layersKey["TILE_MAP"]);
     for (var layerNameString of layerOrder) {
       // toggle layers on and off
       if (
@@ -341,7 +338,7 @@ export default function DeckGLMap() {
         layers.push(layersKey[layerNameString]);
       }
     }
-    if(cityIOdata.layers)
+    if (cityIOdata.layers)
       for (let i = 0; i < cityIOdata.layers.length; i++) {
         const moduleName = cityIOdata.layers[i].id;
         const moduleType = cityIOdata.layers[i].type;
@@ -355,7 +352,6 @@ export default function DeckGLMap() {
         }
       }
 
-    console.log(layers)
     return layers;
   };
 
