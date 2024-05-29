@@ -51,6 +51,7 @@ const options = {
     r: {
       ticks: {
         display: false,
+        backdropColor: 'rgba(0, 0, 0, 0)', // transparent background
       },
       angleLines: {
         color: "#696969",
@@ -58,7 +59,7 @@ const options = {
       suggestedMin: 0,
       suggestedMax: 1,
       grid: {
-        color: "#696969",
+        color: "#959595",
         circular: true,
       },
       pointLabels: {
@@ -93,6 +94,7 @@ const optionsNoData = {
       },
       ticks: {
         color: "#363636",
+        backdropColor: 'rgba(0, 0, 0, 0)', // transparent background
       },
     },
   },
@@ -102,10 +104,10 @@ const noData = {
   labels: [null, null, null],
   datasets: [
     {
-      label: "No indicator data...",
+      label: "Waiting for data...",
       data: [null, null, null],
-      backgroundColor: "#363636",
-      borderColor: "#363636",
+      backgroundColor: "#00000000",
+      borderColor: "#00000000",
       borderWidth: 1,
     },
   ],
