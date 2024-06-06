@@ -8,8 +8,8 @@ import {GeoJsonLayer} from '@deck.gl/layers';
 export default function GeoJsonBaseLayer({data, opacity}){
   if(data){
       return new GeoJsonLayer({
-        id: data.id || Math.random().toString().split('.')[1],
-        data: data,
+        id: data.id,
+        data: data.data,
         opacity: opacity || 0.5,
         pickable: data.properties?.pickable || true,
         stroked: data.properties?.stroked || false,
