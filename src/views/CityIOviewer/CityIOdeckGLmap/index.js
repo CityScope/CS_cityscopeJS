@@ -79,20 +79,21 @@ export default function CityIOdeckGLmap(props) {
     let markersArr = [];
 
     props.cityIOdata.forEach((table, index) => {
-      markersArr.push({
-        tableURL: table.tableURL,
-        tableName: table.tableName,
-        index: index,
-        tableHeader: table.tableHeader,
-        coord: {
-          from: [table.tableHeader.longitude, table.tableHeader.latitude],
-          to: [
-            table.tableHeader.longitude + index / 10,
-            table.tableHeader.latitude + index / 10,
-            INIT_VIEW.zHeight,
-          ],
-        },
-      });
+      if(table.tableHeader.cs_project)
+        markersArr.push({
+          tableURL: table.tableURL,
+          tableName: table.tableName,
+          index: index,
+          tableHeader: table.tableHeader,
+          coord: {
+            from: [table.tableHeader.longitude, table.tableHeader.latitude],
+            to: [
+              table.tableHeader.longitude + index / 10,
+              table.tableHeader.latitude + index / 10,
+              INIT_VIEW.zHeight,
+            ],
+          },
+        });
     });
 
     setMarkerInfo(markersArr);
