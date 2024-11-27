@@ -215,7 +215,7 @@ export default function DeckGLMap() {
           layersMenu[content.id] &&
           layersMenu[content.id].slider * 0.01,
       });
-    } else if (type === "geojson") {
+    } else if (type === "geojsonbase") {
       return GeoJsonBaseLayer({
         data: content,
         opacity:
