@@ -28,6 +28,8 @@ import {
   ScenegraphBaseLayer,
   SimpleMeshBaseLayer,
   TextBaseLayer,
+  H3ClusterBaseLayer,
+  H3HexagonBaseLayer,
 } from "./deckglLayers";
 import { processGridData } from "./deckglLayers/GridLayer";
 import useWebSocket from "react-use-websocket";
@@ -289,6 +291,22 @@ export default function DeckGLMap() {
       });
     } else if (type === "simpleMesh") {
       return SimpleMeshBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      });
+    } else if (type === "H3Cluster") {
+      return H3ClusterBaseLayer({
+        data: content,
+        opacity:
+          layersMenu &&
+          layersMenu[content.id] &&
+          layersMenu[content.id].slider * 0.01,
+      });
+    } else if (type === "H3Hexagon") {
+      return H3HexagonBaseLayer({
         data: content,
         opacity:
           layersMenu &&
