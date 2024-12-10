@@ -126,7 +126,6 @@ function LayersMenu() {
             slider: 50,
           }})
         }
-        console.log(moduleName)
         // if the module name is in the data for this CS instance, make a checkbox
         toggleListArr.push(
           <Box key={"box_" + moduleName}>
