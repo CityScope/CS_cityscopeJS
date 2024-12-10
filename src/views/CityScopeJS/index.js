@@ -19,7 +19,9 @@ export default function CityScopeJS() {
       {/* if cityIO module is done loading, start the CSjs app */}
       {cityIOisDone && (
         <>
-          <DeckGLMap />
+          <div  style={{ height: '100vh', width: '100vw', position: 'relative', overflow: 'hidden' }}>
+            <DeckGLMap />
+          </div>
           <MenuContainer />
           <VisContainer />
         </>
