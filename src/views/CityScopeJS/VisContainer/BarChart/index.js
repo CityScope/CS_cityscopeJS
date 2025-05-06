@@ -98,13 +98,15 @@ export const noData = {
 export default function BarChart() {
   const cityIOdata = useSelector((state) => state.cityIOdataState.cityIOdata);
   const [barChartData, setBarChartData] = useState();
+  const [givenOptions, setOptions] = useState(options);
 
   useEffect(() => {
     if (!cityIOdata.indicators) {
       setBarChartData(noData);
     } else {
-      const d = createBarChartData(cityIOdata.indicators);
+      const { d, o } = createBarChartData(cityIOdata.indicators);
       setBarChartData(d);
+      setOptions({ ...o });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityIOdata]);
@@ -124,7 +126,7 @@ export default function BarChart() {
         },
       ],
     };
-
+    let new_options = { ...options };
     for (let i = 0; i < indicators.length; i++) {
       if (indicators[i].viz_type === "bar") {
         barChartData.labels.push(indicators[i].name);
@@ -146,14 +148,42 @@ export default function BarChart() {
               "No description available"
             );
       }
+      if (indicators[i].viz_config === "bar") {
+        if (indicators[i].style === "raw") {
+          new_options = {
+            ...new_options,
+            plugins: {
+              ...new_options.plugins,
+              tooltip: {},
+            },
+            scales: {
+              ...new_options.scales,
+              y: {
+                ...new_options.scales.y,
+                ticks: {
+                  ...new_options.scales.y.ticks,
+                  format: {
+                    style: "decimal",
+                  },
+                },
+              },
+            },
+          };
+                  }
+      }
     }
-    return barChartData;
+
+    return { d: barChartData, o: new_options };
   };
 
   return (
     <>
       {barChartData && (
-        <Bar options={options} data={barChartData ? barChartData : noData} />
+        <Bar
+          options={givenOptions}
+          data={barChartData ? barChartData : noData}
+          key={JSON.stringify(givenOptions)} // to force re-render on options change
+        />
       )}
     </>
   );
